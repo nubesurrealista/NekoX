@@ -3845,7 +3845,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                     filter.neverShow.add(selectedDialogs.get(a));
                                     filter.alwaysShow.remove(selectedDialogs.get(a));
                                 }
-                                FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.name, filter.color, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, null);
+                                FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.emoticon, filter.name, filter.color, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, null);
                                 long did;
                                 if (selectedDialogs.size() == 1) {
                                     did = selectedDialogs.get(0);
@@ -3862,7 +3862,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                         filter.neverShow.remove(alwaysShow.get(a));
                                     }
                                     filter.alwaysShow.addAll(alwaysShow);
-                                    FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.name, filter.color, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, null);
+                                    FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.emoticon, filter.name, filter.color, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, null);
                                 }
                                 long did;
                                 if (alwaysShow.size() == 1) {
@@ -3905,7 +3905,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         if (filter.isChatlist()) {
                             filter.neverShow.clear();
                         }
-                        FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.name, filter.color, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, false, false, true, false, false, DialogsActivity.this, null);
+                        FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.emoticon, filter.name, filter.color, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, false, false, true, false, false, DialogsActivity.this, null);
                     }
                     long did;
                     if (neverShow.size() == 1) {
@@ -6738,17 +6738,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 for (int a = 0, N = filters.size(); a < N; a++) {
                     MessagesController.DialogFilter dialogFilter = filters.get(a);
                     if (filters.get(a).isDefault()) {
-                        filterTabsView.addTab(a, 0, LocaleController.getString(R.string.FilterAllChats), true, filters.get(a).locked);
+                        filterTabsView.addTab(a, 0, LocaleController.getString(R.string.FilterAllChats), dialogFilter.emoticon, true, filters.get(a).locked);
                     } else {
                         switch (NekoConfig.tabsTitleType.Int()) {
                             case NekoXConfig.TITLE_TYPE_TEXT:
-                                filterTabsView.addTab(a, filters.get(a).localId, dialogFilter.name, false, false);
+                                filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.name, false, false);
                                 break;
                             case NekoXConfig.TITLE_TYPE_ICON:
-                                filterTabsView.addTab(a, filters.get(a).localId, dialogFilter.emoticon != null ? dialogFilter.emoticon : "📂", false, false);
+                                filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.emoticon != null ? dialogFilter.emoticon : "📂", false, false);
                                 break;
                             case NekoXConfig.TITLE_TYPE_MIX:
-                                filterTabsView.addTab(a, filters.get(a).localId, dialogFilter.emoticon != null ? dialogFilter.emoticon + " " + dialogFilter.name : "📂 " + dialogFilter.name, false, false);
+                                filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.emoticon != null ? dialogFilter.emoticon : "\uD83D\uDCC1 " + dialogFilter.name, false, false);
                                 break;
                         }
                     }
@@ -8527,13 +8527,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                 folder.neverShow.remove(alwaysShow.get(a));
                             }
                             folder.alwaysShow.addAll(alwaysShow);
-                            FilterCreateActivity.saveFilterToServer(folder, folder.flags, folder.name, folder.color, folder.alwaysShow, folder.neverShow, folder.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, null);
+                            FilterCreateActivity.saveFilterToServer(folder, folder.flags, folder.emoticon, folder.name, folder.color, folder.alwaysShow, folder.neverShow, folder.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, null);
                         }
                         getUndoView().showWithAction(dialogId, UndoView.ACTION_ADDED_TO_FOLDER, alwaysShow.size(), folder, null, null);
                     } else {
                         folder.alwaysShow.remove(dialogId);
                         folder.neverShow.add(dialogId);
-                        FilterCreateActivity.saveFilterToServer(folder, folder.flags, folder.name, folder.color, folder.alwaysShow, folder.neverShow, folder.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, null);
+                        FilterCreateActivity.saveFilterToServer(folder, folder.flags, folder.emoticon, folder.name, folder.color, folder.alwaysShow, folder.neverShow, folder.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, null);
                         getUndoView().showWithAction(dialogId, UndoView.ACTION_REMOVED_FROM_FOLDER, alwaysShow.size(), folder, null, null);
                     }
                     hideActionMode(true);
@@ -8719,7 +8719,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         undoView.showWithAction(0, UndoView.ACTION_UNPIN_DIALOGS, 1, 1600, null, null);
                     }
                     if (filter != null) {
-                        FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.name, filter.color, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, null);
+                        FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.emoticon, filter.name, filter.color, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, null);
                     }
                     getMessagesController().reorderPinnedDialogs(folderId, null, 0);
                     updateCounters(true);
@@ -9018,7 +9018,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (!movingDialogFilters.isEmpty()) {
             for (int a = 0, N = movingDialogFilters.size(); a < N; a++) {
                 MessagesController.DialogFilter filter = movingDialogFilters.get(a);
-                FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.name, filter.color, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, null);
+                FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.emoticon, filter.name, filter.color, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, null);
             }
             movingDialogFilters.clear();
         }
@@ -9430,7 +9430,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
         if (action == pin || action == pin2) {
             if (filter != null) {
-                FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.name, filter.color, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, null);
+                FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.emoticon, filter.name, filter.color, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, null);
             } else {
                 getMessagesController().reorderPinnedDialogs(folderId, null, 0);
             }

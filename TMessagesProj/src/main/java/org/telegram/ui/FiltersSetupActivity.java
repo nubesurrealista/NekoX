@@ -67,6 +67,7 @@ import org.telegram.ui.Components.UndoView;
 
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.folder.FolderIconHelper;
 import tw.nekomimi.nekogram.NekoConfig;
 
 public class FiltersSetupActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -1000,7 +1001,9 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                         if (suggested.filter.exclude_muted) {
                             filter.flags |= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED;
                         }
-                        FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.name, filter.color, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, true, true, true, true, true, FiltersSetupActivity.this, () -> {
+                        filter.emoticon = TextUtils.isEmpty(suggested.filter.emoticon) ? FolderIconHelper.getEmoticonFromFlags(filter.flags).second : suggested.filter.emoticon;
+                        ignoreUpdates = true;
+                        FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.emoticon, filter.name, filter.color, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, true, true, true, true, true, FiltersSetupActivity.this, () -> {
                             getMessagesController().suggestedFilters.remove(suggested);
                             getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
                         });
