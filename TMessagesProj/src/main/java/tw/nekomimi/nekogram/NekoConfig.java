@@ -289,6 +289,7 @@ public class NekoConfig {
     public static ConfigItem smallerEmojiInChooser = addConfig(R.string.SmallerEmojisInChooser , "SmallerEmojisInChooser", configTypeBool, true);
     public static ConfigItem chatNameOverride = addConfig(R.string.ChatNameOverride , "ChatNameOverride", configTypeBool, false);
     public static ConfigItem nameAsTitleText = addConfig(R.string.NameAsTitleText , "NameAsTitleText", configTypeBool, GENERAL, false);
+    public static ConfigItem enableUnifiedPush = addConfig(R.string.EnableUnifiedPush , "EnableUnifiedPush", configTypeBool, GENERAL, true);
 
     public static ConfigItem customGetQueryBlacklist = addConfig(R.string.BlacklistUrlQueryTitle, "BlacklistUrlQueryTitle", configTypeString, "");
     public static ArrayList<String> customGetQueryBlacklistData = new ArrayList<>();
