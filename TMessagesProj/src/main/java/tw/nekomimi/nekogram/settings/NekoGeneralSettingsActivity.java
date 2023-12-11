@@ -153,6 +153,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell dividerFolder = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header_notification = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.NekoGeneralNotification)));
+    private final AbstractConfigCell enableUnifiedPushRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.enableUnifiedPush));
     private final AbstractConfigCell disableNotificationBubblesRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableNotificationBubbles));
     private final AbstractConfigCell divider_notification = cellGroup.appendCell(new ConfigCellDivider());
 

@@ -34,6 +34,17 @@ void setupPlay(boolean beta) {
     }
 }
 
+repositories {
+    mavenCentral()
+    google()
+    maven {
+        url 'https://www.jitpack.io'
+        content {
+            includeModule 'com.github.UnifiedPush', 'android-connector'
+        }
+    }
+}
+
 configurations {
     compile.exclude module: "support-v4"
 }
@@ -169,14 +180,14 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
 
         coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     testOptions {
@@ -371,6 +382,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.10"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1"
 
+    implementation 'com.github.UnifiedPush:android-connector:2.3.1'
     implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.10"
     implementation 'com.neovisionaries:nv-websocket-client:2.14'
     implementation 'dnsjava:dnsjava:3.4.1'
