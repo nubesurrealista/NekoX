@@ -50,6 +50,9 @@ import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.ChatActivity;
+import org.telegram.ui.Components.Bulletin;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
@@ -59,6 +62,7 @@ import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class MessageDetailsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -70,6 +74,10 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
     private TLRPC.User fromUser;
     private String filePath;
     private String fileName;
+    private String messageDetailsJson;
+    private String messageDetailsPrettyJsonHead;
+    private String messageDetailsPrettyJson;
+    private boolean detailExpanded = false;
 
     private int rowCount;
 
@@ -90,12 +98,19 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
     private int dcRow;
     private int buttonsRow;
     private int emptyRow;
+    private int rawRow;
+    private int emptyRow2;
     private int exportRow;
     private int endRow;
 
     private UndoView copyTooltip;
 
     public static final Gson gson = new GsonBuilder()
+            .setExclusionStrategies(new Exclusion())
+            .registerTypeHierarchyAdapter(byte[].class, new ByteArrayToBase64TypeAdapter()).create();
+
+    public static final Gson prettyGson = new GsonBuilder()
+            .setPrettyPrinting()
             .setExclusionStrategies(new Exclusion())
             .registerTypeHierarchyAdapter(byte[].class, new ByteArrayToBase64TypeAdapter()).create();
 
@@ -115,7 +130,7 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
         }
 
         public boolean shouldSkipField(FieldAttributes f) {
-            return f.getName().equals("disableFree") || f.getName().equals("networkType");
+            return f.getName().equals("disableFree") || f.getName().equals("networkType") || f.getDeclaringClass() == android.content.res.ColorStateList.class;
         }
     }
 
@@ -126,7 +141,7 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
         } else if (messageObject.messageOwner.peer_id != null && messageObject.messageOwner.peer_id.chat_id != 0) {
             fromChat = getMessagesController().getChat(messageObject.messageOwner.peer_id.chat_id);
         }
-        if (messageObject.messageOwner.from_id.user_id != 0) {
+        if (messageObject.messageOwner.from_id != null && messageObject.messageOwner.from_id.user_id != 0) {
             fromUser = getMessagesController().getUser(messageObject.messageOwner.from_id.user_id);
         }
         filePath = messageObject.messageOwner.attachPath;
@@ -162,6 +177,24 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
             }
         }
 
+        try {
+            messageDetailsJson = "failed to generate json";
+            try {
+                messageDetailsJson = gson.toJson(messageObject.messageOwner);
+                messageDetailsPrettyJson = prettyGson.toJson(messageObject.messageOwner);
+                String[] spl = messageDetailsPrettyJson.split("\n");
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < 3; ++i) sb.append(spl[i]).append("\n");
+                sb.append("...");
+                messageDetailsPrettyJsonHead = sb.toString();
+            } catch (Exception e) {
+                messageDetailsJson += (", " + e.getMessage());
+                messageDetailsPrettyJson = messageDetailsJson;
+                FileLog.e(e);
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
     }
 
     @Override
@@ -205,17 +238,22 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener((view, position, x, y) -> {
             if (position == exportRow) {
-                try {
-                    AndroidUtilities.addToClipboard(gson.toJson(messageObject.messageOwner));
-                    copyTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
-                } catch (Exception e) {
-                    FileLog.e(e);
+                if (AndroidUtilities.addToClipboard(messageDetailsJson)) {
+                    copyTooltip.setInfoText(LocaleController.getString("TextCopied", R.string.TextCopied));
+                    copyTooltip.showWithAction(0, UndoView.ACTION_TEXT_COPIED, null, null);
+                } else {
+                    copyTooltip.setInfoText(LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred));
+                    copyTooltip.showWithAction(0, UndoView.ACTION_GIGAGROUP_CANCEL, null, null);
                 }
+            } else if (position == rawRow) {
+                ((TextDetailSettingsCell) view).setValue(detailExpanded ? messageDetailsPrettyJsonHead : messageDetailsPrettyJson);
+                detailExpanded = !detailExpanded;
             } else if (position != endRow && position != emptyRow) {
                 TextDetailSettingsCell textCell = (TextDetailSettingsCell) view;
                 try {
-                    AndroidUtilities.addToClipboard(textCell.getValueTextView().getText());
-                    copyTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
+                    if (AndroidUtilities.addToClipboard(textCell.getValueTextView().getText())) {
+                        copyTooltip.showWithAction(0, UndoView.ACTION_TEXT_COPIED, null, null);
+                    }
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
@@ -252,6 +290,11 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                     args.putLong("user_id", fromUser.id);
                     ProfileActivity fragment = new ProfileActivity(args);
                     presentFragment(fragment);
+                }
+            } else if (position == rawRow) {
+                if (AndroidUtilities.addToClipboard(messageDetailsPrettyJson)) {
+                    copyTooltip.setInfoText(LocaleController.getString("TextCopied", R.string.TextCopied));
+                    copyTooltip.showWithAction(0, UndoView.ACTION_TEXT_COPIED, null, null);
                 }
             } else {
                 return false;
@@ -300,6 +343,8 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
         }
         buttonsRow = messageObject.messageOwner.reply_markup instanceof TLRPC.TL_replyInlineMarkup ? rowCount++ : -1;
         emptyRow = rowCount++;
+        rawRow = rowCount++;
+        emptyRow2 = rowCount++;
         exportRow = rowCount++;
         endRow = rowCount++;
         if (listAdapter != null) {
@@ -462,6 +507,13 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                                 builder.append(messageObject.messageOwner.fwd_from.from_name);
                             }
                         }
+
+                        long original_date = (long) messageObject.messageOwner.fwd_from.date * 1000;
+                        String year = LocaleController.getInstance().formatterYear.format(new Date(original_date));
+                        String day = LocaleController.getInstance().formatterDay.format(new Date(original_date));
+                        builder.append("\n")
+                                .append(LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, year, day));
+
                         textCell.setTextAndValue("Forward from", builder.toString(), divider);
                     } else if (position == fileNameRow) {
                         textCell.setTextAndValue("File name", fileName, divider);
@@ -479,6 +531,8 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                         textCell.setTextAndValue("Scheduled", "Yes", divider);
                     } else if (position == buttonsRow) {
                         textCell.setTextAndValue("Buttons", gson.toJson(messageObject.messageOwner.reply_markup), divider);
+                    } else if (position == rawRow) {
+                        textCell.setTextAndValue("Raw JSON", messageDetailsPrettyJsonHead, divider);
                     }
                     break;
                 }
@@ -522,7 +576,7 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
 
         @Override
         public int getItemViewType(int position) {
-            if (position == endRow || position == emptyRow) {
+            if (position == endRow || position == emptyRow || position == emptyRow2) {
                 return 1;
             } else if (position == exportRow) {
                 return 3;

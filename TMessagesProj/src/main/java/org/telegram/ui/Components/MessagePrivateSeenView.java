@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.text.Layout;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -23,11 +24,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
@@ -41,7 +44,9 @@ import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PremiumPreviewFragment;
 import org.telegram.ui.Stories.recorder.ButtonWithCounterView;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class MessagePrivateSeenView extends FrameLayout {
 
@@ -152,6 +157,8 @@ public class MessagePrivateSeenView extends FrameLayout {
         sheet.fixNavigationBar(Theme.getColor(Theme.key_dialogBackground, resourcesProvider));
 
         final boolean premiumLocked = MessagesController.getInstance(currentAccount).premiumFeaturesBlocked();
+        final ContactsController contactsController = ContactsController.getInstance(currentAccount);
+        contactsController.loadPrivacySettings();
 
         LinearLayout layout = new LinearLayout(context);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -191,9 +198,16 @@ public class MessagePrivateSeenView extends FrameLayout {
         button1.setOnClickListener(v -> {
             button1.setLoading(true);
             if (lastSeen) {
+                // 030: only allow current user instead of allow all
+                if (contactsController.allowUserWithLastSeen(dialogId, updated)) {
+                    sheet.dismiss();
+                    return;
+                }
+
                 TLRPC.TL_account_setPrivacy req = new TLRPC.TL_account_setPrivacy();
                 req.key = new TLRPC.TL_inputPrivacyKeyStatusTimestamp();
                 req.rules.add(new TLRPC.TL_inputPrivacyValueAllowAll());
+
                 ConnectionsManager.getInstance(currentAccount).sendRequest(req, (res, err) -> AndroidUtilities.runOnUIThread(() -> {
                     if (err != null) {
                         BulletinFactory.global().showForError(err);
