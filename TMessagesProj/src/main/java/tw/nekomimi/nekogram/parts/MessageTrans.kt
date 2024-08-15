@@ -1,5 +1,6 @@
 package tw.nekomimi.nekogram.parts
 
+import android.util.Log
 import kotlinx.coroutines.*
 import org.telegram.messenger.MessageObject
 import org.telegram.tgnet.TLRPC
@@ -59,7 +60,7 @@ fun MessageObject.translateFinished(locale: Locale): Int {
 
             val answer = db.query(it.text.text) ?: return 0
 
-            it.translatedText = it.text.text + " | " + answer
+            it.translatedText = answer + " | " + it.text.text
 
         }
 
@@ -89,6 +90,8 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
                                    , messages: List<MessageObject> = messageForTranslate?.let { listOf(it) }
         ?: selectedObjectGroup?.messages
         ?: emptyList()) {
+
+    Log.d("nx-trans", Thread.currentThread().stackTrace.contentToString())
 
     // TODO: Fix file group
 
@@ -169,6 +172,7 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
                             question = Translator.translate(target, pool.question.text)
 
                         }.onFailure {
+                            Log.e("nx-trans", "error occurred when translating", it)
 
                             status.uDismiss()
 
@@ -177,7 +181,7 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
                             if (parentActivity != null && !cancel.get()) {
 
                                 AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, it.message
-                                        ?: it.javaClass.simpleName) {
+                                        ?: it.javaClass.simpleName, it) {
 
                                     translateMessages(target, messages)
 
@@ -214,7 +218,7 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
                                 if (parentActivity != null && !cancel.get()) {
 
                                     AlertUtil.showTransFailedDialog(parentActivity, e is UnsupportedOperationException, e.message
-                                            ?: e.javaClass.simpleName) {
+                                            ?: e.javaClass.simpleName, e) {
 
                                         translateMessages(target, messages)
 
@@ -228,7 +232,8 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
 
                         }
 
-                        it.translatedText = answer + " | " + it.text
+                        val result = if (it is TLRPC.PollAnswer) it.text.text else it.text
+                        it.translatedText = "$answer | $result"
 
                     }
 
@@ -251,7 +256,7 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
                             if (parentActivity != null && !cancel.get()) {
 
                                 AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, it.message
-                                        ?: it.javaClass.simpleName) {
+                                        ?: it.javaClass.simpleName, it) {
 
                                     translateMessages(target, messages)
 

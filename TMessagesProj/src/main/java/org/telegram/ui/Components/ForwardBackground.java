@@ -22,6 +22,7 @@ public class ForwardBackground {
     public final Rect bounds = new Rect();
     public final ButtonBounce bounce;
     private final RectF r = new RectF();
+    private boolean extendedHeight = false;
 
     public ForwardBackground(View view) {
         this.view = view;
@@ -31,8 +32,14 @@ public class ForwardBackground {
     private int rippleDrawableColor;
     private Drawable rippleDrawable;
 
+    public void setExtendedHeight(boolean val) {
+        extendedHeight = val;
+    }
+
     public void set(StaticLayout[] layout, boolean topLeftRad) {
-        final int h = dp(4) + (int) Theme.chat_forwardNamePaint.getTextSize() * 2;
+        int lineCount = Math.max(layout[0].getLineCount(), layout[1].getLineCount());
+        extendedHeight &= (lineCount > 1);
+        final int h = (int) Math.ceil(dp(4) + Theme.chat_forwardNamePaint.getTextSize() * (extendedHeight ? 3.2F : 2F));
 
         float pinnedR = Math.max(0, Math.min(6, SharedConfig.bubbleRadius) - 1);
         float R = Math.min(9, SharedConfig.bubbleRadius);
@@ -138,14 +145,45 @@ public class ForwardBackground {
         view.invalidate();
     }
 
-    public void draw(Canvas canvas) {
+    private LoadingDrawable loadingDrawable;
+
+    public void draw(Canvas canvas, boolean loading) {
         canvas.save();
         canvas.clipPath(path);
         if (rippleDrawable != null) {
             rippleDrawable.setBounds(bounds);
             rippleDrawable.draw(canvas);
         }
+
+        if (loading) {
+            if (loadingDrawable == null) {
+                loadingDrawable = new LoadingDrawable();
+                loadingDrawable.setAppearByGradient(true);
+            } else if (loadingDrawable.isDisappeared() || loadingDrawable.isDisappearing()) {
+                loadingDrawable.reset();
+                loadingDrawable.resetDisappear();
+            }
+        } else if (loadingDrawable != null && !loadingDrawable.isDisappearing() && !loadingDrawable.isDisappeared()) {
+            loadingDrawable.disappear();
+        }
+
         canvas.restore();
+
+        if (loadingDrawable != null && !loadingDrawable.isDisappeared()) {
+            loadingDrawable.usePath(path);
+            loadingDrawable.setColors(
+                Theme.multAlpha(rippleDrawableColor, .7f),
+                Theme.multAlpha(rippleDrawableColor, 1.3f),
+                Theme.multAlpha(rippleDrawableColor, 1.5f),
+                Theme.multAlpha(rippleDrawableColor, 2f)
+            );
+            loadingDrawable.setBounds(bounds);
+            canvas.save();
+            loadingDrawable.draw(canvas);
+            canvas.restore();
+            view.invalidate();
+        }
+
     }
 
 }

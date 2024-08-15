@@ -730,7 +730,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 object.size = -1;
                 object.radius = avatarImage.getImageReceiver().getRoundRadius(true);
                 object.scale = avatarContainer.getScaleX();
-                object.canEdit = userId == getUserConfig().clientUserId;
+                object.canEdit = userId == getUserConfig().clientUserId || ChatObject.canChangeChatInfo(currentChat);
                 return object;
             }
             return null;
@@ -1411,25 +1411,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         public void onRelease() {
             Arrays.fill(pressedOverlayVisible, false);
             postInvalidateOnAnimation();
-        }
-
-        @Override
-        public void onClick() {
-            if (imageUpdater != null) {
-                TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(UserConfig.getInstance(currentAccount).getClientUserId());
-                if (user == null) {
-                    user = UserConfig.getInstance(currentAccount).getCurrentUser();
-                }
-                if (user == null) {
-                    return;
-                }
-                imageUpdater.openMenu(
-                        user.photo != null && user.photo.photo_big != null && !(user.photo instanceof TLRPC.TL_userProfilePhotoEmpty),
-                        () -> MessagesController.getInstance(currentAccount).deleteUserPhoto(null), dialog -> {},
-                        ImageUpdater.TYPE_DEFAULT);
-            } else {
-                openAvatar();
-            }
         }
 
         @Override
@@ -3257,7 +3238,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
             @Override
             protected int getInitialTab() {
-                return TAB_STORIES;
+                return NekoConfig.showSharedMediaOnOpeningProfile.Bool() ? TAB_PHOTOVIDEO : TAB_STORIES;
             }
 
             @Override
@@ -4257,7 +4238,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? (!SharedConfig.isUsingCamera2(currentAccount) ? "Use Camera 2 API" : "Use old Camera 1 API") : null,
                                 BuildVars.DEBUG_VERSION ? "Clear bot biometry data" : null,
                                 BuildVars.DEBUG_PRIVATE_VERSION ? "Clear all login tokens" : null,
-                                SharedConfig.canBlurChat() && Build.VERSION.SDK_INT >= 31 ? (SharedConfig.useNewBlur ? "back to cpu blur" : "use new gpu blur") : null
+                                SharedConfig.canBlurChat() && Build.VERSION.SDK_INT >= 31 ? (SharedConfig.useNewBlur ? "back to cpu blur" : "use new gpu blur") : null,
+                                BuildVars.DEBUG_PRIVATE_VERSION ? (SharedConfig.botTabs3DEffect ? "disable tabs 3d effect" : "enable tabs 3d effect") : null
                         };
 
                         builder.setItems(items, (dialog, which) -> {
@@ -4550,7 +4532,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             } else if (which == 23) {
                                 SharedConfig.toggleSurfaceInStories();
                                 for (int i = 0; i < getParentLayout().getFragmentStack().size(); i++) {
-                                    getParentLayout().getFragmentStack().get(i).clearStoryViewers();
+                                    getParentLayout().getFragmentStack().get(i).clearSheets();
                                 }
                             } else if (which == 24) {
                                 SharedConfig.togglePhotoViewerBlur();
@@ -4566,6 +4548,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 AuthTokensHelper.clearLogInTokens();
                             } else if (which == 30) {
                                 SharedConfig.toggleUseNewBlur();
+                            } else if (which == 31) {
+                                SharedConfig.setBotTabs3DEffect(!SharedConfig.botTabs3DEffect);
                             }
                         });
                         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -4918,7 +4902,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 return;
             }
-            if (expandAvatar()) {
+            if (!NekoConfig.openAvatarInsteadOfExpand.Bool() && expandAvatar()) {
                 return;
             }
             openAvatar();
@@ -5154,6 +5138,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     getOrCreateStoryViewer().open(context, userInfo.stories, provider);
                 } else if (chatInfo != null && chatInfo.stories != null && !chatInfo.stories.stories.isEmpty()) {
                     getOrCreateStoryViewer().open(context, chatInfo.stories, provider);
+                } else if (NekoConfig.openAvatarInsteadOfExpand.Bool()) {
+                    openAvatar();
                 } else {
                     expandAvatar();
                 }
@@ -6051,13 +6037,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     user.photo.photo_big.dc_id = user.photo.dc_id;
                 }
                 PhotoViewer.getInstance().openPhoto(user.photo.photo_big, provider);
-            } else {
-                // NekoX: move openMenu from avatarImage.setOnClickListener to here.
-                // avatarImage's onClick event should call this openAvatar method.
-                if (userId == UserConfig.getInstance(currentAccount).getClientUserId() && imageUpdater != null) {
-                    imageUpdater.openMenu(false, () -> MessagesController.getInstance(currentAccount).deleteUserPhoto(null), dialog -> {
-                    }, ImageUpdater.TYPE_DEFAULT);
-                }
             }
         } else if (chatId != 0) {
             TLRPC.Chat chat = getMessagesController().getChat(chatId);
@@ -6103,7 +6082,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         cameraDrawable.setCurrentFrame(0, false);
                         cellCameraDrawable.setCurrentFrame(0, false);
                     }
-                }, 0);
+                }, ImageUpdater.TYPE_DEFAULT);
                 cameraDrawable.setCurrentFrame(0);
                 cameraDrawable.setCustomEndFrame(43);
                 cellCameraDrawable.setCurrentFrame(0);
@@ -6113,7 +6092,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     setAvatarCell.getImageView().playAnimation();
                 }
             } else {
-                if (playProfileAnimation != 0 && parentLayout.getFragmentStack().get(parentLayout.getFragmentStack().size() - 2) instanceof ChatActivity) {
+                if (playProfileAnimation != 0 && parentLayout != null && parentLayout.getFragmentStack() != null && parentLayout.getFragmentStack().size() >= 2 && parentLayout.getFragmentStack().get(parentLayout.getFragmentStack().size() - 2) instanceof ChatActivity) {
                     finishFragment();
                 } else {
                     TLRPC.User user = getMessagesController().getUser(userId);
@@ -6413,7 +6392,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 obj = getMessagesController().getChat(chatId);
                             }
                             final String usernameStr = "@" + usernameObj.username;
-                            final String date = LocaleController.getInstance().formatterBoostExpired.format(new Date(info.purchase_date * 1000L));
+                            final String date = LocaleController.getInstance().getFormatterBoostExpired().format(new Date(info.purchase_date * 1000L));
                             final String cryptoAmount = BillingController.getInstance().formatCurrency(info.crypto_amount, info.crypto_currency);
                             final String amount = BillingController.getInstance().formatCurrency(info.amount, info.currency);
                             BulletinFactory.of(shareAlert.bulletinContainer2, resourcesProvider)
@@ -8233,7 +8212,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     public boolean onBackPressed() {
-        if (closeStoryViewer()) {
+        if (closeSheet()) {
             return false;
         }
         return actionBar.isEnabled() && (sharedMediaRow == -1 || sharedMediaLayout == null || !sharedMediaLayout.closeActionMode());
@@ -9007,10 +8986,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 //                if (!getMessagesController().premiumFeaturesBlocked()) {
 //                    businessRow = rowCount++;
 //                }
-//                if (premiumRow >= -1 || starsRow >= 0 || businessRow >= 0) {
+//                if (!getMessagesController().premiumPurchaseBlocked()) {
 //                    premiumGiftingRow = rowCount++;
 //                }
-                if (premiumRow >= 0 || premiumGiftingRow >= 0) {
+                if (premiumRow >= 0 || starsRow >= 0 || businessRow >= 0 || premiumGiftingRow >= 0) {
                     premiumSectionsRow = rowCount++;
                 }
                 helpHeaderRow = rowCount++;
@@ -10940,7 +10919,23 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
                     }
                     if (finished[0]) {
-                        ShareUtil.shareFile(activity, zipFile);
+                        Uri uri;
+                        if (Build.VERSION.SDK_INT >= 24) {
+                            uri = FileProvider.getUriForFile(activity, ApplicationLoader.getApplicationId() + ".provider", zipFile);
+                        } else {
+                            uri = Uri.fromFile(zipFile);
+                        }
+
+                        Intent i = new Intent(Intent.ACTION_SEND);
+                        if (Build.VERSION.SDK_INT >= 24) {
+                            i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        }
+                        i.setType("message/rfc822");
+                        i.putExtra(Intent.EXTRA_EMAIL, "");
+                        i.putExtra(Intent.EXTRA_SUBJECT, "Logs from " + LocaleController.getInstance().getFormatterStats().format(System.currentTimeMillis()));
+                        i.putExtra(Intent.EXTRA_STREAM, uri);
+                        i.setClass(activity, LaunchActivity.class);
+                        activity.startActivity(i);
                     } else {
                         if (activity != null) {
                             Toast.makeText(activity, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred), Toast.LENGTH_SHORT).show();
@@ -13310,11 +13305,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     //  onlineTextView[1].setAlpha(1f - expandProgress);
                     onlineTextView[1].setTranslationX(onlineX + customPhotoOffset);
                     avatarContainer2.invalidate();
+                    if (showStatusButton != null) {
+                        showStatusButton.setAlpha2(1f - currentExpandAnimatorValue);
+                    }
                 }
             } else {
                 if (onlineTextView[2] != null) {
                     onlineTextView[2].setAlpha(0);
                     onlineTextView[3].setAlpha(0);
+                }
+                if (showStatusButton != null) {
+                    showStatusButton.setAlpha2(1f);
                 }
             }
 
@@ -13323,12 +13324,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (onlineTextView[2] != null) {
                     onlineTextView[2].setAlpha(photoDescriptionProgress);
                 }
+                if (showStatusButton != null) {
+                    showStatusButton.setAlpha2(1f - photoDescriptionProgress);
+                }
             } else {
                 if (onlineTextView[2] != null) {
                     onlineTextView[2].setAlpha(0);
                 }
+                if (showStatusButton != null) {
+                    showStatusButton.setAlpha2(1f);
+                }
             }
-
         }
     }
 
@@ -13525,6 +13531,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         @Override
         public void draw(@NonNull Canvas canvas) {
+            final float alpha = this.alpha * this.alpha2;
             if (alpha <= 0) return;
             AndroidUtilities.rectTmp.set(getBounds());
             canvas.save();
@@ -13541,10 +13548,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             canvas.restore();
         }
 
-        private float alpha = 1f;
+        private float alpha = 1f, alpha2 = 1f;
         @Override
         public void setAlpha(int alpha) {
             this.alpha = alpha / 255f;
+            invalidateSelf();
+        }
+
+        public void setAlpha2(float alpha) {
+            this.alpha2 = alpha;
             invalidateSelf();
         }
 

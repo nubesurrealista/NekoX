@@ -141,6 +141,7 @@ import kotlin.Unit;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.UrlUtil;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class AlertsCreator {
@@ -1204,20 +1205,29 @@ public class AlertsCreator {
             return;
         }
         long inlineReturn = (fragment instanceof ChatActivity) ? ((ChatActivity) fragment).getInlineReturn() : 0;
+        Uri uri = null;
+        try {
+            uri = Uri.parse(url);
+            if (NekoConfig.patchAndCleanupLinks.Bool()) {
+                uri = UrlUtil.cleanUrl(uri);
+            }
+        } catch (Exception e) {
+            FileLog.e(e, false);
+        }
+
         if (Browser.isInternalUrl(url, null) || !ask) {
-            Browser.openUrl(fragment.getParentActivity(), Uri.parse(url), inlineReturn == 0, tryTelegraph, forceNotInternalForApps && checkInternalBotApp(url), progress);
+            Browser.openUrl(fragment.getParentActivity(), uri, inlineReturn == 0, tryTelegraph, forceNotInternalForApps && checkInternalBotApp(url), progress, null);
         } else {
             String urlFinal;
             if (punycode) {
                 try {
-                    Uri uri = Uri.parse(url);
                     urlFinal = Browser.replaceHostname(uri, IDN.toUnicode(uri.getHost(), IDN.ALLOW_UNASSIGNED));
                 } catch (Exception e) {
                     FileLog.e(e, false);
-                    urlFinal = url;
+                    urlFinal = uri != null ? uri.toString() : url;
                 }
             } else {
-                urlFinal = url;
+                urlFinal = uri != null ? uri.toString() : url;
             }
             Runnable open = () -> Browser.openUrl(fragment.getParentActivity(), Uri.parse(url), inlineReturn == 0, tryTelegraph, progress);
             AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity(), resourcesProvider);
@@ -1252,6 +1262,56 @@ public class AlertsCreator {
             });
             fragment.showDialog(dialog[0] = builder.create());
         }
+    }
+
+    public static void showOpenUrlAlert(Activity activity, String url, Theme.ResourcesProvider resourcesProvider) {
+        if (activity == null) {
+            return;
+        }
+        Uri uri = null;
+        try {
+            uri = Uri.parse(url);
+            if (NekoConfig.patchAndCleanupLinks.Bool()) {
+                uri = UrlUtil.cleanUrl(uri);
+            }
+        } catch (Exception e) {
+            FileLog.e(e, false);
+        }
+
+        String urlFinal = uri != null ? uri.toString() : url;
+        Runnable open = () -> Browser.openUrl(activity, Uri.parse(url), true, false, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, resourcesProvider);
+        builder.setTitle(LocaleController.getString("OpenUrlTitle", R.string.OpenUrlTitle));
+        AlertDialog[] dialog = new AlertDialog[1];
+        SpannableString link = new SpannableString(urlFinal);
+        link.setSpan(new URLSpan(urlFinal) {
+            @Override
+            public void onClick(View widget) {
+                open.run();
+                if (dialog[0] != null) {
+                    dialog[0].dismiss();
+                }
+            }
+        }, 0, link.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(LocaleController.getString("OpenUrlAlert2", R.string.OpenUrlAlert2));
+        int index = stringBuilder.toString().indexOf("%1$s");
+        if (index >= 0) {
+            stringBuilder.replace(index, index + 4, link);
+        }
+        builder.setMessage(stringBuilder);
+        builder.setMessageTextViewClickable(false);
+        builder.setPositiveButton(LocaleController.getString("Open", R.string.Open), (dialogInterface, i) -> open.run());
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setNeutralButton(LocaleController.getString("Copy", R.string.Copy), (dialogInterface, i) -> {
+            try {
+                AndroidUtilities.addToClipboard(url);
+                Toast.makeText(activity, LocaleController.getString("LinkCopied", R.string.LinkCopied), Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+        dialog[0] = builder.create();
+        dialog[0].show();
     }
 
     private static boolean checkInternalBotApp(String url) {
@@ -3061,7 +3121,7 @@ public class AlertsCreator {
             } else if (type == 3) {
                 num += 9;
             }
-            button.setText(LocaleController.getInstance().formatterScheduleSend[num].format(time));
+            button.setText(LocaleController.getInstance().getFormatterScheduleSend(num).format(time));
         }
         if (infoText != null) {
             int diff = (int) ((time - systemTime) / 1000);
@@ -3309,12 +3369,12 @@ public class AlertsCreator {
                 int year = calendar.get(Calendar.YEAR);
                 if (year == currentYear) {
                     return (
-                        LocaleController.getInstance().formatterWeek.format(date) +
+                        LocaleController.getInstance().getFormatterWeek().format(date) +
                         ", " +
-                        LocaleController.getInstance().formatterScheduleDay.format(date)
+                        LocaleController.getInstance().getFormatterScheduleDay().format(date)
                     );
                 } else {
-                    return LocaleController.getInstance().formatterScheduleYear.format(date);
+                    return LocaleController.getInstance().getFormatterScheduleYear().format(date);
                 }
             }
         });
@@ -3493,9 +3553,9 @@ public class AlertsCreator {
                 calendar.setTimeInMillis(date);
                 int year = calendar.get(Calendar.YEAR);
                 if (year == currentYear) {
-                    return LocaleController.getInstance().formatterScheduleDay.format(date);
+                    return LocaleController.getInstance().getFormatterScheduleDay().format(date);
                 } else {
-                    return LocaleController.getInstance().formatterScheduleYear.format(date);
+                    return LocaleController.getInstance().getFormatterScheduleYear().format(date);
                 }
             }
         });
@@ -3923,11 +3983,11 @@ public class AlertsCreator {
                 int year = calendar.get(Calendar.YEAR);
                 int yearDay = calendar.get(Calendar.DAY_OF_YEAR);
                 if (year == currentYear && yearDay < currentDayYear + 7) {
-                    return LocaleController.getInstance().formatterWeek.format(date) + ", " + LocaleController.getInstance().formatterScheduleDay.format(date);
+                    return LocaleController.getInstance().getFormatterWeek().format(date) + ", " + LocaleController.getInstance().getFormatterScheduleDay().format(date);
                 } else if (year == currentYear) {
-                    return LocaleController.getInstance().formatterScheduleDay.format(date);
+                    return LocaleController.getInstance().getFormatterScheduleDay().format(date);
                 } else {
-                    return LocaleController.getInstance().formatterScheduleYear.format(date);
+                    return LocaleController.getInstance().getFormatterScheduleYear().format(date);
                 }
             }
         });
@@ -6373,7 +6433,7 @@ public class AlertsCreator {
             if (isActiveGiveawayAndOwner) {
                 TLRPC.TL_messageMediaGiveaway giveaway = (TLRPC.TL_messageMediaGiveaway) selectedMessage.messageOwner.media;
                 long untilDate = giveaway.until_date * 1000L;
-                giveawayEndDate = LocaleController.getInstance().formatterGiveawayMonthDayYear.format(new Date(untilDate));
+                giveawayEndDate = LocaleController.getInstance().getFormatterGiveawayMonthDayYear().format(new Date(untilDate));
                 isActiveGiveawayAndOwner = System.currentTimeMillis() < untilDate;
             }
         } else if (count == 1) {
@@ -6384,7 +6444,7 @@ public class AlertsCreator {
                     if (isActiveGiveawayAndOwner) {
                         TLRPC.TL_messageMediaGiveaway giveaway = (TLRPC.TL_messageMediaGiveaway) msg.messageOwner.media;
                         long untilDate = giveaway.until_date * 1000L;
-                        giveawayEndDate = LocaleController.getInstance().formatterGiveawayMonthDayYear.format(new Date(untilDate));
+                        giveawayEndDate = LocaleController.getInstance().getFormatterGiveawayMonthDayYear().format(new Date(untilDate));
                         isActiveGiveawayAndOwner = System.currentTimeMillis() < untilDate;
                     }
                 }

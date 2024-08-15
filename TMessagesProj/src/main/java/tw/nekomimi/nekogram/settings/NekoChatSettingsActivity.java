@@ -85,6 +85,9 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     }));
     private final AbstractConfigCell disableCustomWallpaperUserRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableCustomWallpaperUser));
     private final AbstractConfigCell disableCustomWallpaperChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableCustomWallpaperChannel));
+    private final AbstractConfigCell appendOriginalTimestampRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.appendOriginalTimestamp));
+    private final AbstractConfigCell alwaysShowBotCommandButtonRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.alwaysShowBotCommandButton));
+    private final AbstractConfigCell alwaysHideBotCommandButtonRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.alwaysHideBotCommandButton));
     private final AbstractConfigCell dividerChat = cellGroup.appendCell(new ConfigCellDivider());
 
     // Interactions
@@ -137,6 +140,11 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final AbstractConfigCell disableStoriesRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableStories));
     private final AbstractConfigCell disableSendReadStoriesRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableSendReadStories));
     private final AbstractConfigCell dividerStory = cellGroup.appendCell(new ConfigCellDivider());
+
+    private final AbstractConfigCell headerLinks = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Links")));
+    private final AbstractConfigCell forceAllowChooseBrowserRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.forceAllowChooseBrowser, LocaleController.getString("ForceAllowChooseBrowserDesc")));
+    private final AbstractConfigCell patchAndCleanupLinksRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.patchAndCleanupLinks, LocaleController.getString("PatchAndCleanupLinksDesc")));
+    private final AbstractConfigCell dividerLinks = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell ignoreBlockedRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.ignoreBlocked, LocaleController.getString("IgnoreBlockedAbout")));
     private final AbstractConfigCell disableChatActionRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableChatAction));

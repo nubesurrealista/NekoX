@@ -197,10 +197,30 @@ public class NekoConfig {
     public static ConfigItem showCopyPhoto = addConfig("CopyPhoto", ConfigItem.configTypeBool, false);
     public static ConfigItem increasedMaxPhotoResolution = addConfig("IncreasedMaxPhotoResolution", ConfigItem.configTypeBool, false);
     public static ConfigItem showSelfInsteadOfSavedMessages = addConfig("ShowSelfInsteadOfSavedMessages", ConfigItem.configTypeBool, false);
+    public static ConfigItem closeWebViewWithoutConfirmation = addConfig("CloseWebViewWithoutConfirmation", ConfigItem.configTypeBool, false);
+    public static ConfigItem openWebViewTabWithoutBot = addConfig("OpenWebViewTabWithoutBot", ConfigItem.configTypeBool, false);
+    public static ConfigItem showBotWebViewSettings = addConfig("ShowBotWebViewSettings", ConfigItem.configTypeBool, false);
+    public static ConfigItem disableWebViewGeolocation = addConfig("DisableWebViewGeolocation", ConfigItem.configTypeBool, false);
+    public static ConfigItem hideWebViewTabOverlayWhenSharing = addConfig("HideWebViewTabOverlayWhenSharing", ConfigItem.configTypeBool, true);
+    public static ConfigItem hideWebViewTabOverlayInChat = addConfig("HideWebViewTabOverlayInChat", ConfigItem.configTypeBool, true);
+    public static ConfigItem preventPullDownWebview = addConfig("PreventPullDownWebview", ConfigItem.configTypeBool, false);
+    public static ConfigItem useBotWebviewForGames = addConfig("UseBotWebviewForGames", ConfigItem.configTypeBool, false);
+    public static ConfigItem confirmOpenLinkInWebView = addConfig("ConfirmOpenLinkInWebView", ConfigItem.configTypeBool, false);
     public static ConfigItem disableCustomWallpaperUser = addConfig("DisableCustomWallpaperUser", ConfigItem.configTypeBool, false);
     public static ConfigItem disableCustomWallpaperChannel = addConfig("DisableCustomWallpaperChannel", ConfigItem.configTypeBool, false);
     public static ConfigItem fasterReconnectHack = addConfig("FasterReconnectHack", ConfigItem.configTypeBool, false);
     public static ConfigItem autoArchiveAndMute = addConfig("AutoArchiveAndMute", ConfigItem.configTypeBool, false);
+    public static ConfigItem appendOriginalTimestamp = addConfig("AppendOriginalTimestamp", ConfigItem.configTypeBool, false);
+    public static ConfigItem alwaysShowDownloads = addConfig("AlwaysShowDownloads", ConfigItem.configTypeBool, false);
+    public static ConfigItem openAvatarInsteadOfExpand = addConfig("OpenAvatarInsteadOfExpand", ConfigItem.configTypeBool, false);
+    public static ConfigItem customTitleText = addConfig("CustomTitleText", configTypeString, "Nekogram X");
+    public static ConfigItem forceAllowChooseBrowser = addConfig("ForceAllowChooseBrowser", configTypeBool, false);
+    public static ConfigItem patchAndCleanupLinks = addConfig("PatchAndCleanupLinks", configTypeBool, false);
+    public static ConfigItem showSharedMediaOnOpeningProfile = addConfig("ShowSharedMediaOnOpeningProfile", configTypeBool, false);
+    public static ConfigItem disableAddBirthdayReminder = addConfig("DisableAddBirthdayReminder", configTypeBool, false);
+    public static ConfigItem disableBirthdayReminder = addConfig("DisableBirthdayReminder", configTypeBool, false);
+    public static ConfigItem alwaysHideBotCommandButton = addConfig("AlwaysHideBotCommandButton", configTypeBool, false);
+    public static ConfigItem alwaysShowBotCommandButton = addConfig("AlwaysShowBotCommandButton", configTypeBool, false);
 
     static {
         loadConfig(false);

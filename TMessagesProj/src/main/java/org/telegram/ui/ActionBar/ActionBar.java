@@ -574,6 +574,7 @@ public class ActionBar extends FrameLayout {
     }
 
     public ImageView getBackButton() {
+        if (backButtonImageView == null) createBackButtonImage(); // prevent NPE
         return backButtonImageView;
     }
 
@@ -1645,6 +1646,10 @@ public class ActionBar extends FrameLayout {
     }
 
     public void setCastShadows(boolean value) {
+        if (castShadows != value && getParent() instanceof View) {
+            ((View) getParent()).invalidate();
+            invalidate();
+        }
         castShadows = value;
     }
 

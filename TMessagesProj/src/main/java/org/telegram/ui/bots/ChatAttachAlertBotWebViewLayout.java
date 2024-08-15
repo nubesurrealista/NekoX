@@ -12,6 +12,7 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextPaint;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -42,6 +43,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserObject;
+import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -59,6 +61,8 @@ import org.telegram.ui.Components.ChatAttachAlert;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SimpleFloatPropertyCompat;
+
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlertLayout implements NotificationCenter.NotificationCenterDelegate {
     private final static int POLL_PERIOD = 60000;
@@ -171,6 +175,16 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
             MediaDataController.getInstance(currentAccount).installShortcut(botId, MediaDataController.SHORTCUT_TYPE_ATTACHED_BOT);
         } else if (id == R.id.menu_tos_bot) {
             Browser.openUrl(getContext(), LocaleController.getString(R.string.BotWebViewToSLink));
+        } else if (id == R.id.menu_copy_url) {
+            try {
+                if (AndroidUtilities.addToClipboard(webViewContainer.getWebView().getUrl())) {
+                    AndroidUtilities.runOnUIThread(() -> BulletinFactory.of(parentAlert.baseFragment)
+                            .createSimpleBulletin(R.raw.copy, LocaleController.getString(R.string.LinkCopied)).show(), 250);
+                }
+            } catch (Exception ex) {
+                AndroidUtilities.runOnUIThread(() -> BulletinFactory.of(parentAlert.baseFragment)
+                        .createSimpleBulletin(R.raw.error, LocaleController.getString(R.string.ErrorOccurred)).show(), 250);
+            }
         }
     }
 
@@ -181,12 +195,14 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
         otherItem = menu.addItem(0, R.drawable.ic_ab_other);
         otherItem.addSubItem(R.id.menu_open_bot, R.drawable.msg_bot, LocaleController.getString(R.string.BotWebViewOpenBot));
         settingsItem = otherItem.addSubItem(R.id.menu_settings, R.drawable.msg_settings, LocaleController.getString(R.string.BotWebViewSettings));
-        settingsItem.setVisibility(View.GONE);
+        if (!NekoConfig.showBotWebViewSettings.Bool()) settingsItem.setVisibility(View.GONE);
         otherItem.addSubItem(R.id.menu_reload_page, R.drawable.msg_retry, LocaleController.getString(R.string.BotWebViewReloadPage));
         addToHomeScreenItem = otherItem.addSubItem(R.id.menu_add_to_home_screen_bot, R.drawable.msg_home, LocaleController.getString(R.string.AddShortcut));
         addToHomeScreenItem.setVisibility(View.GONE);
         otherItem.addSubItem(R.id.menu_tos_bot, R.drawable.menu_intro, LocaleController.getString(R.string.BotWebViewToS));
         otherItem.addSubItem(R.id.menu_delete_bot, R.drawable.msg_delete, LocaleController.getString(R.string.BotWebViewDeleteBot));
+
+        otherItem.addSubItem(R.id.menu_copy_url, R.drawable.msg_copy, LocaleController.getString(R.string.CopyLink));
 
         webViewContainer = new BotWebViewContainer(context, resourcesProvider, getThemedColor(Theme.key_dialogBackground)) {
             @Override
@@ -260,7 +276,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
     }
 
     public boolean onCheckDismissByUser() {
-        if (needCloseConfirmation) {
+        if (needCloseConfirmation && !NekoConfig.closeWebViewWithoutConfirmation.Bool()) {
             String botName = null;
             TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(botId);
             if (user != null) {
@@ -696,7 +712,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
     public static class WebViewSwipeContainer extends FrameLayout {
         public final static SimpleFloatPropertyCompat<WebViewSwipeContainer> SWIPE_OFFSET_Y = new SimpleFloatPropertyCompat<>("swipeOffsetY", WebViewSwipeContainer::getSwipeOffsetY, WebViewSwipeContainer::setSwipeOffsetY);
 
-        private GestureDetectorCompat gestureDetector;
+        private final GestureDetectorCompat gestureDetector;
         private boolean isScrolling;
         private boolean isSwipeDisallowed;
 
@@ -723,6 +739,23 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
 
         private GenericProvider<Void, Boolean> isKeyboardVisible = obj -> false;
 
+        public boolean forceExpanded = false;
+
+        private boolean fullsize;
+        public boolean opened;
+        public void setFullSize(boolean fullsize) {
+            if (this.fullsize != fullsize) {
+                this.fullsize = fullsize;
+                if (fullsize) {
+                    if (opened) {
+                        stickTo(-getOffsetY() + getTopActionBarOffsetY());
+                    }
+                } else {
+                    stickTo(0);
+                }
+            }
+        }
+
         public WebViewSwipeContainer(@NonNull Context context) {
             super(context);
 
@@ -730,8 +763,12 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
             gestureDetector = new GestureDetectorCompat(context, new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                    if (isSwipeDisallowed) {
+                    if (isSwipeDisallowed || fullsize) {
                         return false;
+                    }
+                    if (NekoConfig.preventPullDownWebview.Bool()) {
+                        stickTo(-offsetY + topActionBarOffsetY);
+                        return true;
                     }
                     if (velocityY >= 700 && (webView == null || webView.getScrollY() == 0)) {
                         flingInProgress = true;
@@ -754,6 +791,10 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
 
                 @Override
                 public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                    if (NekoConfig.preventPullDownWebview.Bool()) {
+                        stickTo(-offsetY + topActionBarOffsetY);
+                        return false;
+                    }
                     if (!isScrolling && !isSwipeDisallowed) {
                         if (isKeyboardVisible.provide(null) && swipeOffsetY == -offsetY + topActionBarOffsetY) {
                             isSwipeDisallowed = true;
@@ -795,6 +836,9 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
                         }
 
                         swipeOffsetY = MathUtils.clamp(swipeOffsetY, -offsetY + topActionBarOffsetY, getHeight() - offsetY + topActionBarOffsetY);
+                        if (fullsize) {
+                            swipeOffsetY = Math.min(swipeOffsetY, -offsetY + topActionBarOffsetY);
+                        }
                         invalidateTranslation();
                         return true;
                     }
@@ -882,7 +926,11 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
                             float progress = (value - wasOffsetY) / deltaOffsetY;
 
                             if (wasOnTop) {
-                                swipeOffsetY = MathUtils.clamp(swipeOffsetY - progress * Math.max(0, deltaOffsetY), -this.offsetY + topActionBarOffsetY, getHeight() - this.offsetY + topActionBarOffsetY);
+                                swipeOffsetY = MathUtils.clamp(
+                                    swipeOffsetY - progress * Math.max(0, deltaOffsetY),
+                                    -this.offsetY + topActionBarOffsetY,
+                                    getHeight() - this.offsetY + topActionBarOffsetY
+                                );
                             }
                             if (scrollAnimator != null && scrollAnimator.getSpring().getFinalPosition() == -wasOffsetY + topActionBarOffsetY) {
                                 scrollAnimator.getSpring().setFinalPosition(-offsetY + topActionBarOffsetY);
@@ -904,7 +952,11 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
                 this.offsetY = offsetY;
 
                 if (wasOnTop) {
-                    swipeOffsetY = MathUtils.clamp(swipeOffsetY - Math.max(0, deltaOffsetY), -this.offsetY + topActionBarOffsetY, getHeight() - this.offsetY + topActionBarOffsetY);
+                    swipeOffsetY = MathUtils.clamp(
+                        swipeOffsetY - Math.max(0, deltaOffsetY),
+                        -this.offsetY + topActionBarOffsetY,
+                        getHeight() - this.offsetY + topActionBarOffsetY
+                    );
                 }
                 invalidateTranslation();
             }
@@ -959,9 +1011,11 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
                 isSwipeDisallowed = false;
                 isScrolling = false;
 
-                if (flingInProgress) {
+                if (fullsize) {
+
+                } else if (flingInProgress) {
                     flingInProgress = false;
-                } else {
+                } else if (!NekoConfig.preventPullDownWebview.Bool()) {
                     if (swipeOffsetY <= -swipeStickyRange) {
                         stickTo(-offsetY + topActionBarOffsetY);
                     } else if (swipeOffsetY > -swipeStickyRange && swipeOffsetY <= swipeStickyRange) {
@@ -986,6 +1040,9 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
         }
 
         public void stickTo(float offset, Runnable callback) {
+            if (fullsize || NekoConfig.preventPullDownWebview.Bool() || forceExpanded) {
+                offset = -getOffsetY() + getTopActionBarOffsetY();
+            }
             if (swipeOffsetY == offset || scrollAnimator != null && scrollAnimator.getSpring().getFinalPosition() == offset) {
                 if (callback != null) {
                     callback.run();
@@ -1005,7 +1062,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
             }
             scrollAnimator = new SpringAnimation(this, SWIPE_OFFSET_Y, offset)
                     .setSpring(new SpringForce(offset)
-                            .setStiffness(1400)
+                            .setStiffness(1200)
                             .setDampingRatio(SpringForce.DAMPING_RATIO_NO_BOUNCY))
                     .addEndListener((animation, canceled, value, velocity) -> {
                         if (animation == scrollAnimator) {

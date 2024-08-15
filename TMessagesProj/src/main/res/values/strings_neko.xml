@@ -28,7 +28,7 @@
     <string name="TransparentStatusBar">Transparent status bar</string>
     <string name="EnableResidentNotification">Show a resident notification</string>
     <string name="DisableResidentNotification">Disable resident notification</string>
-    <string name="NekogramRunning">Nekogram is running</string>
+    <string name="NekogramRunning">NekogramX is running</string>
     <string name="EventType">Sidebar icon set</string>
     <string name="ChristmasHat">Show santa hat every day</string>
     <string name="ActionBarDecoration">Title bar decoration</string>
@@ -164,4 +164,28 @@
     <string name="IncreasedMaxPhotoResolution">Increased max photo resolution width (2560px)</string>
     <string name="AutoArchiveAndMute">Automatically archive and mute previously unknown PM</string>
     <string name="AutoArchiveAndMuteAbout">Side effect: This uses local database to check, and it\'s not 100% accurate, in other words, might have FALSE POSITIVE</string>
+    <string name="CloseWebViewWithoutConfirmation">Always close web app without confirmation</string>
+    <string name="OpenWebViewTabWithoutBot">Re-open web app tab without bot</string>
+    <string name="ShowBotWebViewSettings">Show bot webview settings</string>
+    <string name="DisableWebViewGeolocation">Disable geolocation for webview</string>
+    <string name="HideWebViewTabOverlayWhenSharing">Hide webview tab overlay when sharing</string>
+    <string name="HideWebViewTabOverlayInChat">Hide webview tab overlay when in chat</string>
+    <string name="PreventPullDownWebview">Prevent webview being resized or closed when pulling down</string>
+    <string name="UseBotWebviewForGames">Use bot webview for games and maybe other web apps</string>
+    <string name="AppendOriginalTimestamp">Append original timestamp for forwarded messages</string>
+    <string name="AlwaysShowDownloads">Always show downloads button</string>
+    <string name="OpenAvatarInsteadOfExpand">Open avatar instead of expand inplace when tapped</string>
+    <string name="OpenAvatarInsteadOfExpandDesc">Or long click on avatar before expand to open</string>
+    <string name="CustomTitleText">Custom title text</string>
+    <string name="Links">Links</string>
+    <string name="ForceAllowChooseBrowser">Force allow choose browser when opening links</string>
+    <string name="ForceAllowChooseBrowserDesc">Only work for URLs without "open by default" apps set</string>
+    <string name="PatchAndCleanupLinks">Clean up URLs in chat</string>
+    <string name="PatchAndCleanupLinksDesc">Such as replace all Twitter-related domains to twitter.com and some of the tracking queries</string>
+    <string name="ShowSharedMediaOnOpeningProfile">Show shared media on opening profile instead of stories</string>
+    <string name="ConfirmOpenLinkInWebView">Confirm before opening external links from WebView</string>
+    <string name="DisableAddBirthdayReminder">Disable the reminder to set birthday</string>
+    <string name="DisableBirthdayReminder">Disable the reminder of your contacts\' birthday</string>
+    <string name="AlwaysShowBotCommandButton">Always show bot command button</string>
+    <string name="AlwaysHideBotCommandButton">Always hide bot command button</string>
 </resources>

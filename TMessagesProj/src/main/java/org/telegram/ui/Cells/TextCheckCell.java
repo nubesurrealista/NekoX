@@ -8,6 +8,8 @@
 
 package org.telegram.ui.Cells;
 
+import static org.telegram.messenger.AndroidUtilities.dp;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
@@ -21,6 +23,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Property;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -109,7 +112,7 @@ public class TextCheckCell extends FrameLayout {
         textView.setTextColor(Theme.getColor(dialog ? Theme.key_dialogTextBlack : Theme.key_windowBackgroundWhiteBlackText, resourcesProvider));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
-        addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 70 : padding, 0, LocaleController.isRTL ? padding : 70, 0));
+        addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 70 : padding, 0, LocaleController.isRTL ? padding : 70, 0));
 
         valueTextView = new TextView(context);
         valueTextView.setTextColor(Theme.getColor(dialog ? Theme.key_dialogIcon : Theme.key_windowBackgroundWhiteGrayText2, resourcesProvider));
@@ -149,8 +152,26 @@ public class TextCheckCell extends FrameLayout {
         if (isMultiline) {
             super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
         } else {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(valueTextView.getVisibility() == VISIBLE ? 64 : height) + (needDivider ? 3 : 0), MeasureSpec.EXACTLY));
+            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(dp(valueTextView.getVisibility() == VISIBLE ? 64 : height) + (needDivider ? 3 : 0), MeasureSpec.EXACTLY));
         }
+
+        // workaround long text height
+        if (getVisibility() != View.VISIBLE || textView.getVisibility() != View.VISIBLE
+                || valueTextView.getVisibility() != View.VISIBLE || valueTextView.getMeasuredHeight() == 0)
+            return;
+
+        String desc = valueTextView.getText().toString().trim();
+        int viewHeight = textView.getMeasuredHeight();
+        if (desc.isEmpty() || viewHeight < (textView.getTextSize() * 2) || viewHeight >= AndroidUtilities.ydpi) {
+            return;
+        }
+        textView.setSingleLine(true);
+        textView.setEllipsize(TextUtils.TruncateAt.END);
+        // somehow truncated text moves itself....
+        removeView(textView);
+        addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT,
+                (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP,
+                LocaleController.isRTL ? 70 : padding, -dp(0.5F), LocaleController.isRTL ? padding : 70, 0));
     }
 
     @Override
@@ -191,7 +212,7 @@ public class TextCheckCell extends FrameLayout {
 
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         removeView(textView);
-        addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 70 : padding, 0, LocaleController.isRTL ? padding : 70, 0));
+        addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 70 : padding, 0, LocaleController.isRTL ? padding : 70, 0));
 
         valueTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         removeView(valueTextView);
@@ -245,7 +266,7 @@ public class TextCheckCell extends FrameLayout {
             valueTextView.setMaxLines(0);
             valueTextView.setSingleLine(false);
             valueTextView.setEllipsize(null);
-            valueTextView.setPadding(0, 0, 0, AndroidUtilities.dp(11));
+            valueTextView.setPadding(0, 0, 0, dp(11));
         } else {
             valueTextView.setLines(1);
             valueTextView.setMaxLines(1);
@@ -255,7 +276,7 @@ public class TextCheckCell extends FrameLayout {
         }
         LayoutParams layoutParams = (LayoutParams) textView.getLayoutParams();
         layoutParams.height = LayoutParams.WRAP_CONTENT;
-        layoutParams.topMargin = AndroidUtilities.dp(10);
+        layoutParams.topMargin = dp(10);
         textView.setLayoutParams(layoutParams);
         setWillNotDraw(!divider);
     }
@@ -273,7 +294,7 @@ public class TextCheckCell extends FrameLayout {
             valueTextView.setMaxLines(0);
             valueTextView.setSingleLine(false);
             valueTextView.setEllipsize(null);
-            valueTextView.setPadding(0, 0, 0, AndroidUtilities.dp(11));
+            valueTextView.setPadding(0, 0, 0, dp(11));
         } else {
             valueTextView.setLines(1);
             valueTextView.setMaxLines(1);
@@ -283,7 +304,7 @@ public class TextCheckCell extends FrameLayout {
         }
         LayoutParams layoutParams = (LayoutParams) textView.getLayoutParams();
         layoutParams.height = LayoutParams.WRAP_CONTENT;
-        layoutParams.topMargin = AndroidUtilities.dp(10);
+        layoutParams.topMargin = dp(10);
         textView.setLayoutParams(layoutParams);
         setWillNotDraw(!divider);
     }
@@ -363,7 +384,7 @@ public class TextCheckCell extends FrameLayout {
     private void setAnimationProgress(float value) {
         animationProgress = value;
         float tx = getLastTouchX();
-        float rad = Math.max(tx, getMeasuredWidth() - tx) + AndroidUtilities.dp(40);
+        float rad = Math.max(tx, getMeasuredWidth() - tx) + dp(40);
         float cx = tx;
         int cy = getMeasuredHeight() / 2;
         float animatedRad = rad * animationProgress;
@@ -397,14 +418,14 @@ public class TextCheckCell extends FrameLayout {
     }
 
     private float getLastTouchX() {
-        return isAnimatingToThumbInsteadOfTouch ? (LocaleController.isRTL ? AndroidUtilities.dp(22) : getMeasuredWidth() - AndroidUtilities.dp(42)) : lastTouchX;
+        return isAnimatingToThumbInsteadOfTouch ? (LocaleController.isRTL ? dp(22) : getMeasuredWidth() - dp(42)) : lastTouchX;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         if (animatedColorBackground != 0) {
             float tx = getLastTouchX();
-            float rad = Math.max(tx, getMeasuredWidth() - tx) + AndroidUtilities.dp(40);
+            float rad = Math.max(tx, getMeasuredWidth() - tx) + dp(40);
             float cx = tx;
             int cy = getMeasuredHeight() / 2;
             float animatedRad = rad * animationProgress;
@@ -416,7 +437,7 @@ public class TextCheckCell extends FrameLayout {
                 if (imageView != null) {
                     canvas.drawLine(LocaleController.isRTL ? 0 : padding, getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? padding : 0), getMeasuredHeight() - 1, dividerPaint);
                 } else {
-                    canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(20), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20) : 0), getMeasuredHeight() - 1, dividerPaint);
+                    canvas.drawLine(LocaleController.isRTL ? 0 : dp(20), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? dp(20) : 0), getMeasuredHeight() - 1, dividerPaint);
                 }
             }
         }
@@ -460,14 +481,14 @@ public class TextCheckCell extends FrameLayout {
             imageView = new RLottieImageView(getContext());
             imageView.setScaleType(ImageView.ScaleType.CENTER);
             addView(imageView, LayoutHelper.createFrame(29, 29, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, 19, 0, 19, 0));
-            padding = AndroidUtilities.dp(65);
+            padding = dp(65);
             ((MarginLayoutParams)textView.getLayoutParams()).leftMargin = LocaleController.isRTL ? 70 : padding;
             ((MarginLayoutParams)textView.getLayoutParams()).rightMargin = LocaleController.isRTL ? padding: 70;
         }
         imageView.setVisibility(VISIBLE);
-        imageView.setPadding(AndroidUtilities.dp(2), AndroidUtilities.dp(2), AndroidUtilities.dp(2), AndroidUtilities.dp(2));
+        imageView.setPadding(dp(2), dp(2), dp(2), dp(2));
         imageView.setImageResource(resId);
         imageView.setColorFilter(new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN));
-        imageView.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(9), color));
+        imageView.setBackground(Theme.createRoundRectDrawable(dp(9), color));
     }
 }

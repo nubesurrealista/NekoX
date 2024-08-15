@@ -157,6 +157,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
     private final AbstractConfigCell header5 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Appearance")));
     private final AbstractConfigCell typefaceRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.typeface));
+    private final AbstractConfigCell customTitleTextRow = cellGroup.appendCell(new ConfigCellTextInput(null, NekoConfig.customTitleText, "Nekogram X", null));
     private final AbstractConfigCell transparentStatusBarRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.transparentStatusBar));
     private final AbstractConfigCell appBarShadowRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAppBarShadow));
     private final AbstractConfigCell newYearRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.newYear));
@@ -192,6 +193,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell hideSponsoredMessageRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideSponsoredMessage));
     private final AbstractConfigCell autoPauseVideoRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.autoPauseVideo, LocaleController.getString("AutoPauseVideoAbout")));
     private final AbstractConfigCell disableNumberRoundingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableNumberRounding, "4.8K -> 4777"));
+    private final AbstractConfigCell openAvatarInsteadOfExpandRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.openAvatarInsteadOfExpand, LocaleController.getString("OpenAvatarInsteadOfExpandDesc")));
     private final AbstractConfigCell nameOrderRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.nameOrder, new String[]{
             LocaleController.getString("LastFirst", R.string.LastFirst),
             LocaleController.getString("FirstLast", R.string.FirstLast)
@@ -199,7 +201,23 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell usePersianCalendarRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.usePersianCalendar, LocaleController.getString("UsePersiancalendarInfo")));
     private final AbstractConfigCell displayPersianCalendarByLatinRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.displayPersianCalendarByLatin));
     private final AbstractConfigCell showSelfInsteadOfSavedMessagesRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showSelfInsteadOfSavedMessages));
+    private final AbstractConfigCell alwaysShowDownloadsRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.alwaysShowDownloads));
+    private final AbstractConfigCell showSharedMediaOnOpeningProfileRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showSharedMediaOnOpeningProfile));
+    private final AbstractConfigCell disableSetBirthdayReminderRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAddBirthdayReminder));
+    private final AbstractConfigCell disableBirthdayReminderRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableBirthdayReminder));
     private final AbstractConfigCell divider7 = cellGroup.appendCell(new ConfigCellDivider());
+
+    private final AbstractConfigCell header8 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("ChannelBots")));
+    private final AbstractConfigCell closeWebViewWithoutConfirmationRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.closeWebViewWithoutConfirmation));
+    private final AbstractConfigCell openWebViewTabWithoutBotRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.openWebViewTabWithoutBot));
+    private final AbstractConfigCell disableWebViewGeolocationRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableWebViewGeolocation));
+    private final AbstractConfigCell hideWebViewTabOverlayWhenSharingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideWebViewTabOverlayWhenSharing));
+    private final AbstractConfigCell hideWebViewTabOverlayInChatRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideWebViewTabOverlayInChat));
+    private final AbstractConfigCell preventPullDownWebviewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.preventPullDownWebview));
+    private final AbstractConfigCell useBotWebviewForGamesRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useBotWebviewForGames));
+    private final AbstractConfigCell confirmOpenLinkInWebViewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.confirmOpenLinkInWebView));
+    // private final AbstractConfigCell showBotWebViewSettingsRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showBotWebViewSettings)); // this currently has no use
+    private final AbstractConfigCell divider8 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell headerAutoDownload = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("AutoDownload")));
     private final AbstractConfigCell win32Row = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAutoDownloadingWin32Executable));
