@@ -340,6 +340,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private Paint surfaceBlackoutPaint;
 
     public boolean waitingForTranslation = false;
+    public boolean createMessagesList = false;
 
     public TextureView getVideoTextureView() {
         return videoTextureView;
@@ -666,7 +667,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
         private String getOf() {
             lng = LocaleController.getInstance().getCurrentLocaleInfo().shortName;
-            String text = getString("Of"); // %1$d of %2$d
+            String text = getString(R.string.Of); // %1$d of %2$d
             text = text.replace("%1$d", "");
             text = text.replace("%2$d", "");
             return text;
@@ -16039,9 +16040,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
         // 030: why gib null value...
         ArrayList<MessageObject> currentMessages = messages;
-        if (messageObject != null && (messages == null || messages.isEmpty())) {
+        if (createMessagesList && messageObject != null && messages == null) {
             currentMessages = new ArrayList<>();
             currentMessages.add(messageObject);
+            createMessagesList = false;
         }
 
         if (object != null) {
