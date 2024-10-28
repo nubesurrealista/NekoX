@@ -68,4 +68,9 @@ object StrUtil {
         return text.substring(llen, rlen)
     }
 
+    @JvmStatic
+    fun get030Tag(obj: Any): String {
+        return "030-${obj.javaClass.simpleName}"
+    }
+
 }
