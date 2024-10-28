@@ -243,4 +243,8 @@
     <string name="ForceAllowChooseBrowserDesc">デフォルトアプリが指定されていないリンクにのみ有効</string>
     <string name="SearchBlacklistShort">検索から排除</string>
     <string name="SearchBlacklistRevert">検査から排除しない</string>
+    <string name="CleanupLeftovers">残存ファイルを削除</string>
+    <string name="CleanupLeftoversDetail">使ってないキャッシュディレクトリとアップロードキャッシュを削除する.</string>
+    <string name="CleanupLeftoversResults">%1$.2f KB の空間を解放しました.</string>
+    <string name="CleanupLeftoversResultsMB">%1$.2f MB の空間を解放しました.</string>
 </resources>

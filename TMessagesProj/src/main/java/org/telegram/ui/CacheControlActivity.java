@@ -156,10 +156,13 @@ import java.util.Objects;
 
 import cn.hutool.core.thread.ThreadUtil;
 import kotlin.Unit;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.IoUtil;
+import tw.nekomimi.nekogram.utils.StrUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class CacheControlActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -247,6 +250,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
     private static final int other_id = 2;
     private static final int clear_database_id = 3;
     private static final int reset_database_id = 4;
+    private static final int cleanup_leftovers_id = 1001;
     private boolean loadingDialogs;
     private NestedSizeNotifierLayout nestedSizeNotifierLayout;
 
@@ -260,6 +264,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
 
     private ActionBarMenuSubItem clearDatabaseItem;
     private ActionBarMenuSubItem resetDatabaseItem;
+    private ActionBarMenuSubItem cleanupLeftoversItem;
     private void updateDatabaseItemSize() {
         if (clearDatabaseItem != null) {
             SpannableStringBuilder string = new SpannableStringBuilder();
@@ -1303,6 +1308,8 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                     clearDatabase(false);
                 } else if (id == reset_database_id) {
                     clearDatabase(true);
+                } else if (id == cleanup_leftovers_id) {
+                    cleanupLeftovers();
                 }
             }
         });
@@ -1344,6 +1351,10 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         clearDatabaseItem.setIconColor(Theme.getColor(Theme.key_text_RedRegular));
         clearDatabaseItem.setTextColor(Theme.getColor(Theme.key_text_RedBold));
         clearDatabaseItem.setSelectorColor(Theme.multAlpha(Theme.getColor(Theme.key_text_RedRegular), .12f));
+
+        cleanupLeftoversItem = otherItem.addSubItem(cleanup_leftovers_id, R.drawable.baseline_delete_sweep_24, LocaleController.getString(R.string.CleanupLeftovers));
+        cleanupLeftoversItem.setIconColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
+        cleanupLeftoversItem.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
 
         if (BuildVars.DEBUG_PRIVATE_VERSION) {
             resetDatabaseItem = otherItem.addSubItem(reset_database_id, R.drawable.msg_delete, "Full Reset Database");
@@ -1677,6 +1688,51 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
     @RequiresApi(api = Build.VERSION_CODES.R)
     private void migrateOldFolder() {
         FilesMigrationService.checkBottomSheet(this);
+    }
+
+    private void cleanupLeftovers() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        builder.setTitle(LocaleController.getString(R.string.CleanupLeftovers));
+        builder.setMessage(LocaleController.getString(R.string.CleanupLeftoversDetail));
+        builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
+        builder.setPositiveButton(LocaleController.getString(R.string.CacheClear), (dialogInterface, i) -> {
+            String tag = StrUtil.get030Tag(this);
+            String currentPath = NekoConfig.cachePath.String();
+            double claimedSpace = 0;
+            for (String path : EnvUtil.getAvailableDirectories()) {
+                Log.d(tag, "cleanup for " + path);
+                if (path.contains(currentPath)) {
+                    File uploadCachePath = new File(currentPath + "/caches/sharing");
+                    if (uploadCachePath.exists() && uploadCachePath.isDirectory()) {
+                        try {
+                            claimedSpace += IoUtil.deleteRecursively(uploadCachePath);
+                        } catch (Exception ex) {
+                            Log.e(tag, "failed to cleanup upload cache", ex);
+                        }
+                    }
+                    continue;
+                }
+                File target = new File(path);
+                if (target.isDirectory()) {
+                    try {
+                        claimedSpace += IoUtil.deleteRecursively(target);
+                    } catch (Exception ex) {
+                        Log.e(tag, "failed to cleanup " + target.getPath(), ex);
+                    }
+                }
+                Log.d(tag, "freed " + claimedSpace);
+                AlertDialog resultDlg = new AlertDialog.Builder(getParentActivity())
+                        .setTitle(LocaleController.getString(R.string.CleanupLeftovers))
+                        .setMessage(String.format(LocaleController.formatString(
+                                claimedSpace < 1024 ? R.string.CleanupLeftoversResults : R.string.CleanupLeftoversResultsMB,
+                                claimedSpace < 1024 ? claimedSpace : (claimedSpace / 1024))))
+                        .setPositiveButton(LocaleController.getString(R.string.OK), null)
+                        .create();
+                showDialog(resultDlg);
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        showDialog(alertDialog);
     }
 
     private void clearDatabase(boolean fullReset) {

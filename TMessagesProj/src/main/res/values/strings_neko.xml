@@ -255,4 +255,8 @@
     <string name="DisableAutoWebLogin">Disable auto login with Telegram account</string>
     <string name="ForceHideShowAsList">Hide \"Show as List\" text when searching</string>
     <string name="IgnoreFilterEmoticonUpdate">Ignore folder icon updates from server</string>
+    <string name="CleanupLeftovers">Cleanup Leftovers</string>
+    <string name="CleanupLeftoversDetail">Cleanup leftovers in unused cache path and upload cache.</string>
+    <string name="CleanupLeftoversResults">Freed %1$.2f KB of storage.</string>
+    <string name="CleanupLeftoversResultsMB">Freed %1$.2f MB of storage.</string>
 </resources>
