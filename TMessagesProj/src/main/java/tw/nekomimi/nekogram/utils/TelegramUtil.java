@@ -8,6 +8,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 
+import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
 
@@ -87,5 +88,9 @@ public class TelegramUtil {
         else if (!isConnecting()) return;
         toggleProxyOnOffThread = new Thread(toggleProxyOnOffRunnable);
         toggleProxyOnOffThread.start();
+    }
+
+    public static String getStackTraceAsString(Thread t) {
+        return Arrays.toString(Arrays.stream(Thread.currentThread().getStackTrace()).skip(3).toArray());
     }
 }
