@@ -43,6 +43,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.ArticleViewer;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.NotificationsCheckCell;
@@ -221,7 +222,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell searchBlacklistRow = cellGroup.appendCell(new ConfigCellTextInput(null, NekoConfig.searchBlacklist, null, null, NekoConfig::applySearchBlacklist));
     private final AbstractConfigCell divider7 = cellGroup.appendCell(new ConfigCellDivider());
 
-    private final AbstractConfigCell header8 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.ChannelBots)));
+    private final String instantViewAndBots = String.format("%s / %s", LocaleController.getString(R.string.ChannelBots), LocaleController.getString(R.string.OpenInstantView));
+    private final AbstractConfigCell header8 = cellGroup.appendCell(new ConfigCellHeader(instantViewAndBots));
     private final AbstractConfigCell alwaysDisableSafeBrowsingInWebViewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.alwaysDisableSafeBrowsingInWebView));
     private final AbstractConfigCell closeWebViewWithoutConfirmationRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.closeWebViewWithoutConfirmation));
     private final AbstractConfigCell openWebViewTabWithoutBotRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.openWebViewTabWithoutBot));
@@ -231,7 +233,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell preventPullDownWebviewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.preventPullDownWebview));
     private final AbstractConfigCell useBotWebviewForGamesRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useBotWebviewForGames));
     private final AbstractConfigCell confirmOpenLinkInWebViewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.confirmOpenLinkInWebView));
-    // private final AbstractConfigCell showBotWebViewSettingsRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showBotWebViewSettings)); // this currently has no use
+    private final AbstractConfigCell articleViewerBottomActionBar = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.articleViewerBottomActionBar));
     private final AbstractConfigCell divider8 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell headerAutoDownload = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.AutoDownload)));
@@ -456,6 +458,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     cell.setEnabled(true);
                 }
                 listAdapter.notifyItemChanged(cellGroup.rows.indexOf(translationProviderRow));
+            } else if (key.equals(NekoConfig.articleViewerBottomActionBar.getKey())) {
+                ArticleViewer.BOTTOM_ACTION_BAR = (boolean) newValue;
             }
         };
 

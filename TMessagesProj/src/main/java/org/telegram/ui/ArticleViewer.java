@@ -234,7 +234,7 @@ import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 public class ArticleViewer implements NotificationCenter.NotificationCenterDelegate {
 
-    public static final boolean BOTTOM_ACTION_BAR = false;
+    public static boolean BOTTOM_ACTION_BAR = NekoConfig.articleViewerBottomActionBar.Bool();
 
     public final boolean isSheet;
     public final ArticleViewer.Sheet sheet;

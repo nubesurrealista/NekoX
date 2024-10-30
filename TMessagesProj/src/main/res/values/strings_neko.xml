@@ -259,4 +259,5 @@
     <string name="CleanupLeftoversDetail">Cleanup leftovers in unused cache path and upload cache.</string>
     <string name="CleanupLeftoversResults">Freed %1$.2f KB of storage.</string>
     <string name="CleanupLeftoversResultsMB">Freed %1$.2f MB of storage.</string>
+    <string name="ArticleViewerBottomActionBar">Move article viewer action bar to bottom</string>
 </resources>
