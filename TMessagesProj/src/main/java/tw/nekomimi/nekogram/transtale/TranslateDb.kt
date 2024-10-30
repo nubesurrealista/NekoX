@@ -1,10 +1,12 @@
 package tw.nekomimi.nekogram.transtale
 
+import android.util.Log
 import org.dizitart.no2.filters.FluentFilter
 import org.dizitart.no2.repository.ObjectRepository
 import org.telegram.messenger.LocaleController
 import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.database.mkDatabase
+import tw.nekomimi.nekogram.utils.StrUtil
 import tw.nekomimi.nekogram.utils.UIUtil
 import java.util.*
 import kotlin.collections.HashMap
@@ -31,10 +33,40 @@ class TranslateDb(val code: String) {
         }
 
         @JvmStatic
+        fun getChatLanguage(chatId: Long): ChatLanguage? {
+            val cursor = chat.find(FluentFilter.where("chatId").eq(chatId))
+            cursor.forEach { return it }
+            return null
+        }
+
+        @JvmStatic
         fun saveChatLanguage(chatId: Long, locale: Locale) = UIUtil.runOnIoDispatcher {
+            Log.d(StrUtil.get030Tag(TranslateDb), "saveLang: ${locale.locale2code}")
+            val lang = getChatLanguage(chatId)
+            val alwaysTranslateBeforeSend = lang?.alwaysTranslateBeforeSend
 
-            chat.update(ChatLanguage(chatId, locale.locale2code), true)
+            chat.update(ChatLanguage(chatId, locale.locale2code, alwaysTranslateBeforeSend == true), true)
 
+        }
+
+        @JvmStatic
+        fun getTranslateBeforeSend(chatId: Long): Boolean {
+            val cursor = chat.find(FluentFilter.where("chatId").eq(chatId))
+            cursor.forEach {
+                return it.alwaysTranslateBeforeSend
+            }
+            return false
+        }
+
+        @JvmStatic
+        fun setTranslateBeforeSend(chatId: Long, value: Boolean) = UIUtil.runOnIoDispatcher {
+            val cursor = chat.find(FluentFilter.where("chatId").eq(chatId))
+            cursor.forEach {
+                it.alwaysTranslateBeforeSend = value
+                chat.update(it, true)
+                return@runOnIoDispatcher
+            }
+            chat.update(ChatLanguage(chatId, "en", value), true)
         }
 
         @JvmStatic

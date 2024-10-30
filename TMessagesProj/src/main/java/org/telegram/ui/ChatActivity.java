@@ -29496,7 +29496,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     && (currentChat != null && !currentChat.broadcast && message.isFromUser());
 
                             if (NekoConfig.showDeleteDownloadedFile.Bool() && TelegramUtil.messageObjectIsFile(type, selectedObject)) {
-                                items.add(LocaleController.getString("DeleteDownloadedFile", R.string.DeleteDownloadedFile));
+                                items.add(LocaleController.getString(R.string.DeleteDownloadedFile));
                                 options.add(nkbtn_deldlcache);
                                 icons.add(R.drawable.baseline_delete_sweep_24);
                             }

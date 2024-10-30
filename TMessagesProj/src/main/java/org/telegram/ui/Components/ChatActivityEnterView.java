@@ -218,6 +218,7 @@ import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.PGPUtil;
+import tw.nekomimi.nekogram.utils.TelegramUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class ChatActivityEnterView extends BlurredFrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate, StickersAlert.StickersAlertDelegate, SuggestEmojiView.AnchorViewDelegate {
@@ -795,6 +796,8 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
     private Drawable doneCheckDrawable;
     boolean doneButtonEnabled = true;
     private ValueAnimator doneButtonColorAnimator;
+
+    private boolean isTranslatedBeforeSend = false;
 
     private Runnable openKeyboardRunnable = new Runnable() {
         @Override
@@ -3216,6 +3219,23 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             if ((messageSendPreview != null && messageSendPreview.isShowing()) || (runningAnimationAudio != null && runningAnimationAudio.isRunning()) || moveToSendStateRunnable != null) {
                 return;
             }
+
+            // 030: is always translate before send enabled?
+            // TODO: how to prevent repeated msg when fwd (translated and fwd with quote
+            if (NekoConfig.dontSendRightAfterTranslated.Bool() && isTranslatedBeforeSend) {
+                isTranslatedBeforeSend = false;
+                sendMessage();
+                return;
+            }
+
+            if (TranslateDb.getTranslateBeforeSend(dialog_id) && messageEditText != null) {
+                Locale toDefault = TranslatorKt.getCode2Locale("en");
+                Translator.translateMessageBeforeSent(currentAccount, messageEditText.lastText,
+                        TranslatorKt.getLocale2code(TranslateDb.getChatLanguage(dialog_id, toDefault)),
+                        true, parentFragment);
+                return;
+            }
+
             sendMessage();
         });
         sendButton.setOnLongClickListener(this::onSendLongClick);
@@ -4533,7 +4553,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         }
 
         if (dlps > 0) {
-            cell = new ActionBarMenuSubItem(getContext(), false, true);
+            cell = new ActionBarMenuSubItem(getContext(), false, false);
 
             cell.setTextAndIcon(dlps != 1 ?
                     LocaleController.getString("ChatAttachEnterMenuEnableLinkPreview", R.string.ChatAttachEnterMenuEnableLinkPreview) :
@@ -4552,6 +4572,35 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         LocaleController.getString("ChatAttachEnterMenuEnableLinkPreview", R.string.ChatAttachEnterMenuEnableLinkPreview) :
                         LocaleController.getString("ChatAttachEnterMenuDisableLinkPreview", R.string.ChatAttachEnterMenuDisableLinkPreview), R.drawable.baseline_link_24);
 
+            });
+
+            cell.setMinimumWidth(AndroidUtilities.dp(196));
+            menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
+        }
+
+        // always translate for current chat toggle
+        {
+            boolean autoTranslateBeforeSend = TranslateDb.getTranslateBeforeSend(dialog_id);
+            cell = new ActionBarMenuSubItem(getContext(), false, true);
+            cell.setTextAndIcon(LocaleController.getString(R.string.AlwaysTranslateBeforeSend),
+                    autoTranslateBeforeSend ? R.drawable.baseline_check_24 : R.drawable.baseline_close_24);
+
+            ActionBarMenuSubItem finalCell = cell;
+            cell.setOnClickListener(v -> {
+                if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                    menuPopupWindow.dismiss();
+                }
+                boolean autoTranslateBeforeSend2 = !TranslateDb.getTranslateBeforeSend(dialog_id);
+
+                TranslateDb.setTranslateBeforeSend(dialog_id, autoTranslateBeforeSend2);
+                finalCell.setTextAndIcon(LocaleController.getString(R.string.AlwaysTranslateBeforeSend),
+                        autoTranslateBeforeSend2 ? R.drawable.baseline_check_24 : R.drawable.baseline_close_24);
+
+                if (autoTranslateBeforeSend2) {
+                    BulletinFactory.of(parentFragment)
+                            .createSimpleBulletin(R.raw.info, LocaleController.getString(R.string.AlwaysTranslateBeforeSendNote))
+                            .show(false);
+                }
             });
 
             cell.setMinimumWidth(AndroidUtilities.dp(196));
@@ -12519,8 +12568,9 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         } else if (id == NotificationCenter.didUpdatePremiumGiftFieldIcon) {
             updateGiftButton(true);
         } else if (id == NotificationCenter.outgoingMessageTranslated) {
-            Log.d("030-tx", "NotificationCenter.outgoingMessageTranslated");
-            boolean dontSend = NekoConfig.dontSendRightAfterTranslated.Bool();
+            Log.d("030-tx", String.format("outgoingMessageTranslated %d %s", dialog_id, parentFragment.isFullyVisible));
+            if (!parentFragment.isFullyVisible) return;
+            boolean dontSend = isTranslatedBeforeSend = NekoConfig.dontSendRightAfterTranslated.Bool();
             CharSequence translated = (CharSequence) args[0];
             if (parentFragment.chatAttachAlert != null && parentFragment.chatAttachAlert.hasSelectedItem()) {
                 // media selector opened
@@ -12545,6 +12595,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             }
         } else if (id == NotificationCenter.forwardingMessageTranslated) {
             if (sendPopupWindow != null) sendPopupWindow.dismiss();
+            if (!parentFragment.isFullyVisible) return;
 
             if (parentFragment.messagePreviewParamsForTranslate == null) {
                 BulletinFactory.of(parentFragment).createErrorBulletin(getString(R.string.ErrorOccurred)).show();

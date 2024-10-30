@@ -260,4 +260,5 @@
     <string name="CleanupLeftoversDetail">清理非使用中的暫存路徑及上傳用的暫存快取.</string>
     <string name="CleanupLeftoversResults">釋出了 %1$.2f KB 的空間.</string>
     <string name="CleanupLeftoversResultsMB">釋出了 %1$.2f MB 的空間.</string>
+    <string name="AlwaysTranslateBeforeSend">總是送出前翻譯</string>
 </resources>

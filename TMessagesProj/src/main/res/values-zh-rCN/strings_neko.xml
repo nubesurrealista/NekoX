@@ -260,4 +260,5 @@
     <string name="CleanupLeftoversDetail">清理非使用中的缓存路径及上传用的缓存.</string>
     <string name="CleanupLeftoversResults">释放了 %1$.2f KB 的空间.</string>
     <string name="CleanupLeftoversResultsMB">释放了 %1$.2f MB 的空间.</string>
+    <string name="AlwaysTranslateBeforeSend">总是送出前翻译</string>
 </resources>

@@ -1,7 +1,5 @@
 package tw.nekomimi.nekogram.utils
 
-import android.util.Log
-import tw.nekomimi.nekogram.utils.StrUtil.get030Tag
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
@@ -48,7 +46,8 @@ object IoUtil {
     @JvmStatic
     fun deleteRecursively(path: File): Long {
         var claimedSpace = 0L
-        for (child in path.listFiles()) {
+        val children = path.listFiles() ?: return 0
+        for (child in children) {
             if (child.isDirectory) {
                 claimedSpace += deleteRecursively(child)
                 child.delete()

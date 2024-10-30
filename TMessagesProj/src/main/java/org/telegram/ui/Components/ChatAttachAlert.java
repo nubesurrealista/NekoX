@@ -2763,6 +2763,16 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 }
                 return;
             }
+
+            // 030: translate before send enabled?
+            if (TranslateDb.getTranslateBeforeSend(dialogId) && commentTextView != null &&
+                    commentTextView.getText() != null && commentTextView.getText().length() > 0) {
+                CharSequence text = commentTextView.getText();
+                Locale toDefault = TranslatorKt.getCode2Locale("en");
+                Translator.translateMessageBeforeSent(currentAccount, commentTextView.getText(),
+                        TranslatorKt.getLocale2code(TranslateDb.getChatLanguage(dialogId, toDefault)));
+            }
+
             if (editingMessageObject == null && baseFragment instanceof ChatActivity && ((ChatActivity) baseFragment).isInScheduleMode()) {
                 AlertsCreator.createScheduleDatePickerDialog(getContext(), ((ChatActivity) baseFragment).getDialogId(), (notify, scheduleDate) -> {
                     if (currentAttachLayout == photoLayout || currentAttachLayout == photoPreviewLayout) {
