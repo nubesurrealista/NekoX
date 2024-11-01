@@ -19076,7 +19076,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
                 if (NekoConfig.appendOriginalTimestamp.Bool()) {
                     boolean ok = !currentMessageObject.isAnyKindOfSticker();
-                    if (!ok) {
+                    if (!ok && forwardedNameLayout[0] != null && forwardedNameLayout[1] != null) {
                         int lineCount = Math.max(forwardedNameLayout[0].getLineCount(), forwardedNameLayout[1].getLineCount());
                         ok = lineCount > 1;
                     }
