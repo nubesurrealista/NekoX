@@ -249,4 +249,5 @@
     <string name="CleanupLeftoversResults">%1$.2f KB の空間を解放しました.</string>
     <string name="CleanupLeftoversResultsMB">%1$.2f MB の空間を解放しました.</string>
     <string name="AlwaysTranslateBeforeSend">常に翻訳する</string>
+    <string name="AlwaysTranslateBeforeSendNote">転送されたメッセージはテキストのみになります</string>
 </resources>

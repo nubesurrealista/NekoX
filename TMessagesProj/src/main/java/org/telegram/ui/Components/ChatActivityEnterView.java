@@ -3224,15 +3224,20 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             // TODO: how to prevent repeated msg when fwd (translated and fwd with quote
             if (NekoConfig.dontSendRightAfterTranslated.Bool() && isTranslatedBeforeSend) {
                 isTranslatedBeforeSend = false;
-                sendMessage();
+                if (parentFragment.messagePreviewParamsForTranslate != null) {
+                    sendTranslatedForwardingMessages();
+                } else {
+                    sendMessage();
+                }
                 return;
             }
 
             if (TranslateDb.getTranslateBeforeSend(dialog_id) && messageEditText != null) {
+                sendButton.setLoading(true, SendButton.INFINITE_LOADING);
                 Locale toDefault = TranslatorKt.getCode2Locale("en");
                 Translator.translateMessageBeforeSent(currentAccount, messageEditText.lastText,
                         TranslatorKt.getLocale2code(TranslateDb.getChatLanguage(dialog_id, toDefault)),
-                        true, parentFragment);
+                        !parentFragment.isForwarding(), parentFragment); // ignores fwd msgs by setting the flag to true
                 return;
             }
 
@@ -12569,6 +12574,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             updateGiftButton(true);
         } else if (id == NotificationCenter.outgoingMessageTranslated) {
             Log.d("030-tx", String.format("outgoingMessageTranslated %d %s", dialog_id, parentFragment.isFullyVisible));
+            sendButton.setLoading(false, SendButton.INFINITE_LOADING);
             if (!parentFragment.isFullyVisible) return;
             boolean dontSend = isTranslatedBeforeSend = NekoConfig.dontSendRightAfterTranslated.Bool();
             CharSequence translated = (CharSequence) args[0];
@@ -12594,6 +12600,8 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 sendMessageInternal(true, 0, false);
             }
         } else if (id == NotificationCenter.forwardingMessageTranslated) {
+            Log.d("030-tx", String.format("forwardingMessageTranslated %d %s", dialog_id, parentFragment.isFullyVisible));
+            sendButton.setLoading(false, SendButton.INFINITE_LOADING);
             if (sendPopupWindow != null) sendPopupWindow.dismiss();
             if (!parentFragment.isFullyVisible) return;
 
@@ -12601,6 +12609,21 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 BulletinFactory.of(parentFragment).createErrorBulletin(getString(R.string.ErrorOccurred)).show();
                 return;
             }
+
+            if (NekoConfig.dontSendRightAfterTranslated.Bool() && !(messageEditText == null || messageEditText.getText().length() == 0)) {
+                isTranslatedBeforeSend = true;
+                CharSequence translated = (args.length == 0) ? null : (CharSequence) args[0];
+                if (translated != null)  setFieldText(translated, false, true);
+                return;
+            }
+
+            sendTranslatedForwardingMessages(args);
+        }
+    }
+
+    private void sendTranslatedForwardingMessages(Object... args) {
+        if (parentFragment.messagePreviewParamsForTranslate != null &&
+                parentFragment.messagePreviewParamsForTranslate.forwardMessages != null) {
             for (MessageObject obj : parentFragment.messagePreviewParamsForTranslate.forwardMessages.messages) {
                 CharSequence text = obj.caption != null ? obj.caption : "";
                 if (text.length() == 0) text = obj.messageText;
@@ -12619,37 +12642,38 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         params.document = document;
                     }
                     parentFragment.getSendMessagesHelper().sendMessage(params);
-                } else if (obj.isDocument() || obj.getDocument() != null) {
-                    SendMessagesHelper.SendMessageParams params = new SendMessagesHelper.SendMessageParams();
-                    if (text != null && text.length() > 0) params.caption = text.toString();
+                } else /* if (obj.isDocument() || obj.getDocument() != null) */ {
+                    SendMessagesHelper.SendMessageParams params = SendMessagesHelper.SendMessageParams.of(obj);
+//                    SendMessagesHelper.SendMessageParams params = new SendMessagesHelper.SendMessageParams();
+//                    if (text != null && text.length() > 0) params.caption = text.toString();
                     params.peer = dialog_id;
-                    params.replyToMsg = obj.replyMessageObject;
-                    params.replyToTopMsg = getThreadMessage();
-                    TLRPC.Document doc = obj.getDocument();
-                    TLRPC.TL_document document = new TLRPC.TL_document();
-                    document.id = doc.id;
-                    document.mime_type = obj.isSticker() ? "image/webp" : "video/webm";
-                    document.access_hash = doc.access_hash;
-                    document.file_reference = (doc.file_reference != null ? doc.file_reference : new byte[0]);
-                    params.document = document;
+//                    params.replyToMsg = obj.replyMessageObject;
+//                    params.replyToTopMsg = getThreadMessage();
+//                    TLRPC.Document doc = obj.getDocument();
+//                    TLRPC.TL_document document = new TLRPC.TL_document();
+//                    document.id = doc.id;
+//                    document.mime_type = obj.isSticker() ? "image/webp" : "video/webm";
+//                    document.access_hash = doc.access_hash;
+//                    document.file_reference = (doc.file_reference != null ? doc.file_reference : new byte[0]);
+//                    params.document = document;
                     SendMessagesHelper.getInstance(currentAccount).sendMessage(params);
                 }
             }
-            if (args.length == 0) return;
-            CharSequence translated = (CharSequence) args[0];
-            AndroidUtilities.runOnUIThread(() -> {
-                parentFragment.messagePreviewParams = null;
-                parentFragment.hideFieldPanel(true);
-                setFieldText(translated, false, true);
-                if (messageSendPreview != null) {
-                    messageSendPreview.dismiss(true);
-                    messageSendPreview = null;
-                }
-            }, 30);
-
-            if (translated == null || translated.length() == 0) return;
-            sendMessageInternal(true, 0, false);
         }
+
+        AndroidUtilities.runOnUIThread(() -> {
+            parentFragment.messagePreviewParams = null;
+            parentFragment.hideFieldPanel(true);
+            CharSequence translated = (args.length == 0) ? null : (CharSequence) args[0];
+            if (translated != null)  setFieldText(translated, false, true);
+            if (messageSendPreview != null) {
+                messageSendPreview.dismiss(true);
+                messageSendPreview = null;
+            }
+            sendMessageInternal(true, 0, false);
+            parentFragment.messagePreviewParamsForTranslate = null;
+            isTranslatedBeforeSend = false;
+        }, 30);
     }
 
     public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {

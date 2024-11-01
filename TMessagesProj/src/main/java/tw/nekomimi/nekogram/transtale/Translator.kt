@@ -22,6 +22,7 @@ import tw.nekomimi.nekogram.cc.CCConverter
 import tw.nekomimi.nekogram.cc.CCTarget
 import tw.nekomimi.nekogram.transtale.source.*
 import tw.nekomimi.nekogram.ui.PopupBuilder
+import tw.nekomimi.nekogram.utils.TelegramUtil
 import tw.nekomimi.nekogram.utils.UIUtil
 import tw.nekomimi.nekogram.utils.receive
 import tw.nekomimi.nekogram.utils.receiveLazy
@@ -328,7 +329,12 @@ interface Translator {
                             text = it.messageText
                         }
 
-                        if (text.isNullOrBlank()) return@forEach
+                        // doc & media messages can't be tampered
+                        if (text.isNullOrBlank() || it.isDocument || it.isSticker || it.isVideo || it.isMusic || it.isGif) {
+                            Log.d("030-tx", "null text or doc")
+                            --msgCount
+                            return@forEach
+                        }
 
                         doTranslateWithOfficialApi(currentAccount, text, targetLang, { result ->
                             // Log.d("030-tx", "fwd: $text -> $result")

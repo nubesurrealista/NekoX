@@ -146,6 +146,8 @@ import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
 import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.StrUtil;
+
 import java.util.Objects;
 
 public class ChatAttachAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate, BottomSheet.BottomSheetDelegateInterface {
@@ -178,6 +180,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     private boolean overrideBackgroundColor;
 
     public boolean captionAbove;
+    private boolean triggeredTranslate = false;
 
     public TLRPC.Chat getChat() {
         if (baseFragment instanceof ChatActivity) {
@@ -2765,12 +2768,23 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             }
 
             // 030: translate before send enabled?
-            if (TranslateDb.getTranslateBeforeSend(dialogId) && commentTextView != null &&
+            boolean shouldTranslate = triggeredTranslate;
+            if (!triggeredTranslate) {
+                if (parentFragment instanceof ChatActivity) {
+                    ChatActivity parent = (ChatActivity) parentFragment;
+                    shouldTranslate = TranslateDb.getTranslateBeforeSend(parent.getDialogId());
+                } else {
+                    shouldTranslate = TranslateDb.getTranslateBeforeSend(dialogId);
+                }
+            }
+            if (shouldTranslate && !triggeredTranslate && commentTextView != null &&
                     commentTextView.getText() != null && commentTextView.getText().length() > 0) {
+                triggeredTranslate = true;
                 CharSequence text = commentTextView.getText();
                 Locale toDefault = TranslatorKt.getCode2Locale("en");
-                Translator.translateMessageBeforeSent(currentAccount, commentTextView.getText(),
+                Translator.translateMessageBeforeSent(currentAccount, text,
                         TranslatorKt.getLocale2code(TranslateDb.getChatLanguage(dialogId, toDefault)));
+                return;
             }
 
             if (editingMessageObject == null && baseFragment instanceof ChatActivity && ((ChatActivity) baseFragment).isInScheduleMode()) {
