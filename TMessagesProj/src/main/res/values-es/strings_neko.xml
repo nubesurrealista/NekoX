@@ -254,4 +254,10 @@
     <string name="DisableAutoWebLogin">Deshabilitar el inicio de sesión automático en Telegram</string>
     <string name="ForceHideShowAsList">Ocultar \"Mostrar como lista\" al buscar</string>
     <string name="IgnoreFilterEmoticonUpdate">No sincronizar iconos con el servidor</string>
+    <string name="CleanupLeftoversDetail">Limpia los restos en la caché no utilizada y la caché de carga.</string>
+    <string name="AutoArchiveAndMuteNoCommonGroupOnly">Archivar y silenciar únicamente usuarios sin grupos comunes</string>
+    <string name="AutoArchiveAndMuteNoCommonGroupOnlyAbout">Requiere consultar al servidor remoto, puede provocar latencia antes de la acción.</string>
+    <string name="CleanupLeftovers">Limpiar los restos</string>
+    <string name="CleanupLeftoversResults">Liberado %1$.2f KB de almacenamiento.</string>
+    <string name="CleanupLeftoversResultsMB">Liberados %1$.2f MB de almacenamiento.</string>
 </resources>
