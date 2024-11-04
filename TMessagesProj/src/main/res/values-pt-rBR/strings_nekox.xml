@@ -204,4 +204,16 @@
     <string name="StickerSettings">Sticker</string>
     <string name="InteractionSettings">Interação</string>
     <string name="ConfirmSettings">Confirmação</string>
+    <string name="UnsupportedProxy">Proxy não suportado</string>
+    <string name="doubleTapDisable">Desativar</string>
+    <string name="ReactionSettings">Reação</string>
+    <string name="doubleTapAndReactions">Toque duplo</string>
+    <string name="doubleTapShowReactionsMenu">Mostrar menu de reações</string>
+    <string name="doubleTapSendReaction">Enviar reação</string>
+    <string name="disableReactionsWhenSelecting">Ocultar reações ao selecionar</string>
+    <string name="ShowSelfInsteadOfSavedMessages">Exibir como eu em vez de Mensagens Salvas</string>
+    <string name="DisableCustomWallpaperUser">Desativar papel de parede personalizado do usuário</string>
+    <string name="DisableCustomWallpaperChannel">Desativar o papel de parede personalizado do canal</string>
+    <string name="FasterReconnectHack">Reconexão mais rápida ao alternar proxy ativado/desativado</string>
+    <string name="FasterReconnectHackAbout">Este hack só funciona em uma boa rede.</string>
 </resources>
