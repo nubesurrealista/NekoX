@@ -22,9 +22,15 @@ public class ConfigItem {
     public static final int configTypeLong = 5;
     public static final int configTypeFloat = 6;
 
+    public static final int UNSET = 0;
+    public static final int GENERAL = 1;
+    public static final int CHAT = 2;
+    public static final int EXPERIMENTAL = 3;
+
     public final String key;
     public final int id;
     public final int type;
+    public final int page;
     public final Object defaultValue;
 
     public Object value;
@@ -34,12 +40,30 @@ public class ConfigItem {
         this.type = type;
         this.defaultValue = defaultValue;
         id = 0;
+        page = 0;
+    }
+
+    public ConfigItem(String key, int type, int page, Object defaultValue) {
+        this.key = key;
+        this.type = type;
+        this.page = page;
+        this.defaultValue = defaultValue;
+        id = 0;
     }
 
     public ConfigItem(int id, String key, int type, Object defaultValue) {
         this.id = id;
         this.key = key;
         this.type = type;
+        this.defaultValue = defaultValue;
+        this.page = 0;
+    }
+
+    public ConfigItem(int id, String key, int type, int page, Object defaultValue) {
+        this.id = id;
+        this.key = key;
+        this.type = type;
+        this.page = page;
         this.defaultValue = defaultValue;
     }
 

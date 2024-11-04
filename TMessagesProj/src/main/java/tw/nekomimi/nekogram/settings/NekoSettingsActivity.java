@@ -474,7 +474,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     } else if (position == experimentRow) {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.Experiment), R.drawable.baseline_star_24, true);
                     } else if (position == accountRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Account", R.string.Account), R.drawable.baseline_person_24, true);
+                        textCell.setTextAndIcon(LocaleController.getString(R.string.Account), R.drawable.baseline_person_24, true);
                     }
                     break;
                 }

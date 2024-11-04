@@ -70,6 +70,7 @@ import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.util.Property;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -297,6 +298,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
@@ -309,7 +311,11 @@ import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.config.ConfigItem;
 import tw.nekomimi.nekogram.parts.DialogTransKt;
+import tw.nekomimi.nekogram.settings.NekoChatSettingsActivity;
+import tw.nekomimi.nekogram.settings.NekoExperimentalSettingsActivity;
+import tw.nekomimi.nekogram.settings.NekoGeneralSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoXSettingActivity;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
@@ -12452,7 +12458,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
 
         private SearchResult[] onCreateSearchArray() {
-            return new SearchResult[]{
+            SearchResult[] defaults = new SearchResult[]{
                 new SearchResult(500, getString(R.string.EditName), 0, () -> presentFragment(new ChangeNameActivity(resourcesProvider))),
                 new SearchResult(501, getString(R.string.ChangePhoneNumber), 0, () -> presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER))),
                 new SearchResult(502, getString(R.string.AddAnotherAccount), 0, () -> {
@@ -12716,6 +12722,44 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 new SearchResult(403, getString(R.string.TelegramFAQ), getString(R.string.SettingsHelp), R.drawable.msg2_help, () -> Browser.openUrl(getParentActivity(), getString(R.string.TelegramFaqUrl))),
                 new SearchResult(404, getString(R.string.PrivacyPolicy), getString(R.string.SettingsHelp), R.drawable.msg2_help, () -> Browser.openUrl(getParentActivity(), getString(R.string.PrivacyPolicyUrl))),
             };
+            if (!NekoConfig.searchNekoSettings.Bool()) {
+                return defaults;
+            }
+
+            int g = 9999;
+            ArrayList<SearchResult> inclNekoSettings = new ArrayList<>();
+            for (SearchResult sr : defaults) if (sr != null) inclNekoSettings.add(sr);
+            HashMap<Integer, ArrayList<String>> strMap = NekoConfig.getStringsForSearch();
+            String nekoSettings = LocaleController.getString(R.string.NekoSettings);
+            String[] pageNames = {
+                    null,
+                    String.format("%s - %s", nekoSettings, LocaleController.getString(R.string.General)),
+                    String.format("%s - %s", nekoSettings, LocaleController.getString(R.string.Chat)),
+                    String.format("%s - %s", nekoSettings, LocaleController.getString(R.string.Experiment)),
+            };
+            for (Map.Entry<Integer, ArrayList<String>> e : strMap.entrySet()) {
+                for (String str : e.getValue()) {
+                    if (str == null) continue;
+                    inclNekoSettings.add(new SearchResult(++g, str, pageNames[e.getKey()],
+                            R.drawable.notification, () -> {
+                        switch (e.getKey()) {
+                            case ConfigItem.GENERAL:
+                                presentFragment(new NekoGeneralSettingsActivity());
+                                break;
+                            case ConfigItem.CHAT:
+                                presentFragment(new NekoChatSettingsActivity());
+                                break;
+                            case ConfigItem.EXPERIMENTAL:
+                                presentFragment(new NekoExperimentalSettingsActivity());
+                                break;
+                            default:
+                                break;
+                        }
+                    }));
+                }
+            }
+
+            return inclNekoSettings.toArray(new SearchResult[0]);
         }
 
         private boolean isPremiumFeatureAvailable(int feature) {
@@ -12983,6 +13027,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     SearchResult result = searchArray[a];
                     if (result == null) {
                         continue;
+                    }
+                    if (result.searchTitle == null) {
+                        Log.d("030-sr", String.format("searchTitle is NULL: %d %s",
+                                result.guid, result.rowName != null ? result.rowName : "NULL"));
                     }
                     String title = " " + result.searchTitle.toLowerCase();
                     SpannableStringBuilder stringBuilder = null;
