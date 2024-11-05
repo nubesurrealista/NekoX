@@ -67,7 +67,7 @@
     <string name="DisablePhotoViewerSideAction">No cambiar de imagen con toques</string>
     <string name="BotToken">Token</string>
     <string name="UnlimitedPinnedDialogs">Chats fijados ilimitados</string>
-    <string name="UnlimitedPinnedDialogsAbout">Ancla tantos chats como quieras, pero desactiva su sincronización.</string>
+    <string name="UnlimitedPinnedDialogsAbout">Fija tantos chats como quieras, pero desactiva su sincronización.</string>
     <string name="OpenArchiveOnPull">Abrir archivados al deslizar hacia abajo</string>
     <string name="HideKeyboardOnChatScroll">Ocultar teclado al desplazar el chat</string>
     <string name="UserRestrictionsSendStickers2">Enviar Stickers</string>
@@ -255,7 +255,7 @@
     <string name="ForceHideShowAsList">Ocultar \"Mostrar como lista\" al buscar</string>
     <string name="IgnoreFilterEmoticonUpdate">No sincronizar iconos con el servidor</string>
     <string name="CleanupLeftoversDetail">Limpia los restos en la caché no utilizada y la caché de carga.</string>
-    <string name="AutoArchiveAndMuteNoCommonGroupOnly">Archivar y silenciar únicamente usuarios sin grupos comunes</string>
+    <string name="AutoArchiveAndMuteNoCommonGroupOnly">Solo archivar y silenciar usuarios sin grupos mutuos</string>
     <string name="AutoArchiveAndMuteNoCommonGroupOnlyAbout">Requiere consultar al servidor remoto, puede provocar latencia antes de la acción.</string>
     <string name="CleanupLeftovers">Limpiar los restos</string>
     <string name="CleanupLeftoversResults">Liberado %1$.2f KB de almacenamiento.</string>
