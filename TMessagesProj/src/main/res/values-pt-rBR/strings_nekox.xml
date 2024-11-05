@@ -189,7 +189,7 @@
     <string name="useCustomEmoji">Usar emoji personalizado</string>
     <string name="useCustomEmojiInvalid">Arquivo zip de emojis inválido.</string>
     <string name="unreadBadgeOnBackButton">Selo de não lido no botão de voltar</string>
-    <string name="showSeconds">Mostrar carimbo de data/hora em segundos</string>
+    <string name="showSeconds">Mostrar a data/hora em segundos</string>
     <string name="rememberAllBackMessages">Lembrar de todas as respostas clicadas</string>
     <string name="DisableInstantCamera">Desativar câmera instantânea</string>
     <string name="DeleteDownloadedFileExternal">O arquivo externo é ignorado.</string>
