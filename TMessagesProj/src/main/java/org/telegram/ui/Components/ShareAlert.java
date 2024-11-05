@@ -35,9 +35,11 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.TypedValue;
+import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1392,6 +1394,14 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             private int messageEditTextPredrawHeigth;
             private int messageEditTextPredrawScrollY;
             private ValueAnimator messageEditTextAnimator;
+
+            @Override
+            protected void extendActionMode(ActionMode actionMode, Menu menu) {
+                if (fragment != null) {
+                    ChatActivity.fillActionModeMenu(menu, fragment.getCurrentEncryptedChat(), true);
+                }
+                super.extendActionMode(actionMode, menu);
+            }
 
             @Override
             protected void dispatchDraw(Canvas canvas) {
