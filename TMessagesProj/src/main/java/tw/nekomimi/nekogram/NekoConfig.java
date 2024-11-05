@@ -584,6 +584,8 @@ public class NekoConfig {
             getString(R.string.Translate),
             getString(R.string.Reply),
             getString(R.string.AddToSavedMessages),
+            getString(R.string.Forward),
+            getString(R.string.NoQuoteForward),
         };
     }
 

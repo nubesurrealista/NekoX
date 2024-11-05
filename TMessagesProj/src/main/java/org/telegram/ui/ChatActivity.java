@@ -1832,6 +1832,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                     case 4: processSelectedOption(OPTION_REPLY); break;
                     case 5: nkbtn_onclick(nkbtn_savemessage); break;
+                    case 6: processSelectedOption(OPTION_FORWARD); break;
+                    case 7: nkbtn_onclick(nkbtn_forward_noquote); break;
                 }
                 return;
             }
