@@ -8,7 +8,6 @@ import static org.telegram.ui.ActionBar.Theme.key_chat_inTextSelectionHighlight;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.CornerPathEffect;
@@ -54,7 +53,6 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
-import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.FloatingActionMode;
 import org.telegram.ui.ActionBar.FloatingToolbar;
 import org.telegram.ui.ActionBar.Theme;
@@ -63,7 +61,6 @@ import org.telegram.ui.Components.AnimatedEmojiSpan;
 import org.telegram.ui.Components.CornerPath;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.Components.TranslateAlert2;
 import org.telegram.ui.RestrictedLanguagesSelectActivity;
 
 import java.util.ArrayList;
@@ -1780,15 +1777,8 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
 
 
     public static class Callback {
-        public void onStateChanged(boolean isSelected) {
-        }
-
-        ;
-
-        public void onTextCopied() {
-        }
-
-        ;
+        public void onStateChanged(boolean isSelected){};
+        public void onTextCopied(){};
     }
 
     protected void fillLayoutForOffset(int offset, LayoutBlock layoutBlock) {

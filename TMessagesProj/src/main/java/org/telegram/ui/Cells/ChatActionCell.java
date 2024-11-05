@@ -322,7 +322,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     private TextLayout giftPremiumText;
     private int giftPremiumTextMoreX, giftPremiumTextMoreY, giftPremiumTextMoreH;
     private Text giftPremiumTextMore;
-    
+
     class TextLayout {
         public float x, y;
         public int width;
@@ -352,7 +352,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             AnimatedEmojiSpan.release(ChatActionCell.this, emoji);
         }
     }
-    
+
     private StaticLayout giftPremiumButtonLayout;
     private boolean buttonClickableAsImage = true;
     TextPaint settingWallpaperPaint;

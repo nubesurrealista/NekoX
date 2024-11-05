@@ -330,13 +330,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             mapMarker.setTranslationY(-dp(12));
             final int w = (int) ((mapPreview.getMeasuredWidth() <= 0 ? AndroidUtilities.displaySize.x : mapPreview.getMeasuredWidth()) / AndroidUtilities.density);
             final int h = 240;
-//<<<<<<< HEAD
-//            String url = AndroidUtilities.formapMapUrl(false, geo.lat, geo._long, w, h, false, 15);
-//            mapPreview.setImage(url, w + "_" + h, mapLoadingDrawable);
-//=======
             final int scale = Math.min(2, (int) Math.ceil(AndroidUtilities.density));
             mapPreview.setImage(ImageLocation.getForWebFile(WebFile.createWithGeoPoint(geo.lat, geo._long, 0, scale * w, scale * h, 15, scale)), w + "_" + h, mapLoadingDrawable, 0, null);
-//>>>>>>> 3a822b15f (update to 10.10.0 (4571))
         } else {
             mapPreview.setImageBitmap(null);
         }

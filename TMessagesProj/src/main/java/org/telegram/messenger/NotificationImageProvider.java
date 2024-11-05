@@ -44,7 +44,9 @@ public class NotificationImageProvider extends ContentProvider implements Notifi
 			matcher.addURI(getAuthority(), "msg_media_raw/#/*", 1); // content://org.telegram..../msg_media_raw/account/filename.ext
 		}
 		return matcher;
-	}@Override
+	}
+
+    @Override
     public boolean onCreate() {
         Utilities.stageQueue.postRunnable(() -> {
             SharedConfig.loadConfig();

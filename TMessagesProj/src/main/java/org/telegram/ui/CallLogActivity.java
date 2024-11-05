@@ -435,48 +435,48 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 					if (actionBar.isActionModeShowed()) {
 						hideActionMode(true);
 					} else {
-                    finishFragment();
-                }
+						finishFragment();
+					}
 				} else if (id == delete_all_calls) {
 					showDeleteAlert(true);
 				} else if (id == delete) {
 					showDeleteAlert(false);
 				}
-            }
-        });
+			}
+		});
 
 		ActionBarMenu menu = actionBar.createMenu();
 		otherItem = menu.addItem(10, R.drawable.ic_ab_other);
 		otherItem.setContentDescription(LocaleController.getString(R.string.AccDescrMoreOptions));
 		otherItem.addSubItem(delete_all_calls, R.drawable.baseline_delete_sweep_24, LocaleController.getString(R.string.DeleteAllCalls));
 
-        fragmentView = new FrameLayout(context);
-        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
-        FrameLayout frameLayout = (FrameLayout) fragmentView;
+		fragmentView = new FrameLayout(context);
+		fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+		FrameLayout frameLayout = (FrameLayout) fragmentView;
 
 		flickerLoadingView = new FlickerLoadingView(context);
 		flickerLoadingView.setViewType(FlickerLoadingView.CALL_LOG_TYPE);
 		flickerLoadingView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
 		flickerLoadingView.showDate(false);
 		emptyView = new EmptyTextProgressView(context, flickerLoadingView);
-        frameLayout.addView(emptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+		frameLayout.addView(emptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        listView = new RecyclerListView(context);
-        listView.setEmptyView(emptyView);
-        listView.setLayoutManager(layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        listView.setAdapter(listViewAdapter = new ListAdapter(context));
-        listView.setVerticalScrollbarPosition(LocaleController.isRTL ? RecyclerListView.SCROLLBAR_POSITION_LEFT : RecyclerListView.SCROLLBAR_POSITION_RIGHT);
-        frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+		listView = new RecyclerListView(context);
+		listView.setEmptyView(emptyView);
+		listView.setLayoutManager(layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+		listView.setAdapter(listViewAdapter = new ListAdapter(context));
+		listView.setVerticalScrollbarPosition(LocaleController.isRTL ? RecyclerListView.SCROLLBAR_POSITION_LEFT : RecyclerListView.SCROLLBAR_POSITION_RIGHT);
+		frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         listView.setOnItemClickListener((view, position) -> {
 			if (view instanceof CallCell) {
 				CallLogRow row = calls.get(position - listViewAdapter.callsStartRow);
 				if (actionBar.isActionModeShowed()) {
 					addOrRemoveSelectedDialog(row.calls, (CallCell) view);
-			} else {
-            Bundle args = new Bundle();
-            args.putLong("user_id", row.user.id);
-            args.putInt("message_id", row.calls.get(0).id);
+				} else {
+					Bundle args = new Bundle();
+					args.putLong("user_id", row.user.id);
+					args.putInt("message_id", row.calls.get(0).id);
 					getNotificationCenter().postNotificationName(NotificationCenter.closeChats);
 					presentFragment(new ChatActivity(args), true);
 				}
@@ -485,13 +485,13 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 				Bundle args = new Bundle();
 				args.putLong("chat_id", cell.currentChat.id);
 				getNotificationCenter().postNotificationName(NotificationCenter.closeChats);
-            presentFragment(new ChatActivity(args), true);
+				presentFragment(new ChatActivity(args), true);
 			}
-        });
-        listView.setOnItemLongClickListener((view, position) -> {
+		});
+		listView.setOnItemLongClickListener((view, position) -> {
 			if (view instanceof CallCell) {
 				addOrRemoveSelectedDialog(calls.get(position - listViewAdapter.callsStartRow).calls, (CallCell) view);
-            return true;
+				return true;
 			}
 			return false;
         });

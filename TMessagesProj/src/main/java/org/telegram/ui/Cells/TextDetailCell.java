@@ -62,10 +62,6 @@ public class TextDetailCell extends FrameLayout {
         super(context);
         this.resourcesProvider = resourcesProvider;
 
-//<<<<<<< HEAD
-//        textView = new EmojiTextView(context);
-//        textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider));
-//=======
         textView = new LinkSpanDrawable.LinksTextView(context, resourcesProvider) {
             @Override
             protected int processColor(int color) {
@@ -85,7 +81,6 @@ public class TextDetailCell extends FrameLayout {
                 span.onClick(textView);
             }
         });
-//>>>>>>> 3a822b15f (update to 10.10.0 (4571))
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         textView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         textView.setLines(1);
