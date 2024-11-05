@@ -34,6 +34,7 @@ import java.util.Set;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
+import tw.nekomimi.nekogram.utils.TelegramUtil;
 
 public class TranslateController extends BaseController {
 
@@ -130,12 +131,13 @@ public class TranslateController extends BaseController {
         if (hideTranslateDialogs.contains(dialogId)) {
             return true;
         }
+        boolean isPremium = UserConfig.getInstance(currentAccount).isPremium();
         TLRPC.ChatFull chatFull = getMessagesController().getChatFull(-dialogId);
-        if (chatFull != null) {
+        if (chatFull != null && isPremium) {
             return chatFull.translations_disabled;
         }
         TLRPC.UserFull userFull = getMessagesController().getUserFull(dialogId);
-        if (userFull != null) {
+        if (userFull != null && isPremium) {
             return userFull.translations_disabled;
         }
         return false;
@@ -233,12 +235,13 @@ public class TranslateController extends BaseController {
         final boolean wasHidden = hideTranslateDialogs.contains(dialogId);
 
         boolean hidden = false;
+        boolean isPremium = UserConfig.getInstance(currentAccount).isPremium();
         TLRPC.ChatFull chatFull = getMessagesController().getChatFull(-dialogId);
-        if (chatFull != null) {
+        if (chatFull != null && isPremium) {
             hidden = chatFull.translations_disabled;
         } else {
             TLRPC.UserFull userFull = getMessagesController().getUserFull(dialogId);
-            if (userFull != null) {
+            if (userFull != null && isPremium) {
                 hidden = userFull.translations_disabled;
             }
         }
@@ -263,18 +266,21 @@ public class TranslateController extends BaseController {
     }
 
     public void setHideTranslateDialog(long dialogId, boolean hide, boolean doNotNotify) {
-        TLRPC.TL_messages_togglePeerTranslations req = new TLRPC.TL_messages_togglePeerTranslations();
-        req.peer = getMessagesController().getInputPeer(dialogId);
-        req.disabled = hide;
-        getConnectionsManager().sendRequest(req, null);
+        boolean isPremium = UserConfig.getInstance(currentAccount).isPremium();
+        if (isPremium) {
+            TLRPC.TL_messages_togglePeerTranslations req = new TLRPC.TL_messages_togglePeerTranslations();
+            req.peer = getMessagesController().getInputPeer(dialogId);
+            req.disabled = hide;
+            getConnectionsManager().sendRequest(req, null);
+        }
 
         TLRPC.ChatFull chatFull = getMessagesController().getChatFull(-dialogId);
-        if (chatFull != null) {
+        if (chatFull != null && isPremium) {
             chatFull.translations_disabled = hide;
             getMessagesStorage().updateChatInfo(chatFull, true);
         }
         TLRPC.UserFull userFull = getMessagesController().getUserFull(dialogId);
-        if (userFull != null) {
+        if (userFull != null && isPremium) {
             userFull.translations_disabled = hide;
             getMessagesStorage().updateUserInfo(userFull, true);
         }
@@ -993,7 +999,7 @@ public class TranslateController extends BaseController {
             String from = langs[0], to = langs[1];
             if ("null".equals(from)) from = null;
             if ("null".equals(to)) to = null;
-            if (from != null) {
+            if (true || from != null) { // from is always null cuz lack of lang detector
                 detectedDialogLanguage.put(did, from);
                 if (!restricted.contains(from)) {
                     translatingDialogs.add(did);
