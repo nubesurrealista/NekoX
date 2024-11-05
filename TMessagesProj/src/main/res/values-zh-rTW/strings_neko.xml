@@ -262,5 +262,4 @@
     <string name="CleanupLeftoversResultsMB">釋出了 %1$.2f MB 的空間.</string>
     <string name="AlwaysTranslateBeforeSend">總是送出前翻譯</string>
     <string name="AlwaysTranslateBeforeSendNote">轉發的訊息將只剩下文字部份</string>
-    <string name="NekoExperimentSearchNekoSettings">搜尋設定範圍包含貓設定</string>
 </resources>

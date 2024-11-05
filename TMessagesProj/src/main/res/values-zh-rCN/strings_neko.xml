@@ -262,5 +262,4 @@
     <string name="CleanupLeftoversResultsMB">释放了 %1$.2f MB 的空间.</string>
     <string name="AlwaysTranslateBeforeSend">总是送出前翻译</string>
     <string name="AlwaysTranslateBeforeSendNote">转发的讯息将只剩下文字部份</string>
-    <string name="NekoExperimentSearchNekoSettings">搜索设定范围包含猫设定</string>
 </resources>

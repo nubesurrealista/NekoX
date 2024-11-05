@@ -250,5 +250,4 @@
     <string name="CleanupLeftoversResultsMB">%1$.2f MB の空間を解放しました.</string>
     <string name="AlwaysTranslateBeforeSend">常に翻訳する</string>
     <string name="AlwaysTranslateBeforeSendNote">転送されたメッセージはテキストのみになります</string>
-    <string name="NekoExperimentSearchNekoSettings">設定を検索する時に猫設定も含める</string>
 </resources>

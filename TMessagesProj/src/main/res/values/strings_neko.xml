@@ -262,5 +262,4 @@
     <string name="ArticleViewerBottomActionBar">Move article viewer action bar to bottom</string>
     <string name="AlwaysTranslateBeforeSend">Always translate</string>
     <string name="AlwaysTranslateBeforeSendNote">Only text will be retained for forwarded messages</string>
-    <string name="NekoExperimentSearchNekoSettings">Enable search indexing for Neko settings</string>
 </resources>

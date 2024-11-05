@@ -12722,9 +12722,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 new SearchResult(403, getString(R.string.TelegramFAQ), getString(R.string.SettingsHelp), R.drawable.msg2_help, () -> Browser.openUrl(getParentActivity(), getString(R.string.TelegramFaqUrl))),
                 new SearchResult(404, getString(R.string.PrivacyPolicy), getString(R.string.SettingsHelp), R.drawable.msg2_help, () -> Browser.openUrl(getParentActivity(), getString(R.string.PrivacyPolicyUrl))),
             };
-            if (!NekoConfig.searchNekoSettings.Bool()) {
-                return defaults;
-            }
 
             int g = 9999;
             ArrayList<SearchResult> inclNekoSettings = new ArrayList<>();
@@ -12742,6 +12739,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     if (str == null) continue;
                     inclNekoSettings.add(new SearchResult(++g, str, pageNames[e.getKey()],
                             R.drawable.notification, () -> {
+                        // TODO: scroll to the section where target toggle is located
                         switch (e.getKey()) {
                             case ConfigItem.GENERAL:
                                 presentFragment(new NekoGeneralSettingsActivity());
