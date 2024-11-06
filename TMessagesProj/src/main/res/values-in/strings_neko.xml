@@ -252,4 +252,12 @@
     <string name="LingvaInstanceNotConfigured">Contoh Lingva tidak diatur, terjemahan tidak tersedia.</string>
     <string name="DisableAutoWebLogin">Matikan masuk otomatis dengan akun Telegram</string>
     <string name="LingvaInstanceNote">Cari online untuk contoh publik atau host sendiri, perhatikan bahwa penerjemah Lingva tidak akan bekerja dengan terjemahan otomatis.</string>
+    <string name="CleanupLeftoversDetail">Bersihkan sisa-sisa cache di jalur cache yang tidak digunakan dan unggah cache.</string>
+    <string name="AutoArchiveAndMuteNoCommonGroupOnly">Hanya arsipkan dan nonaktifkan pengguna tanpa grup umum</string>
+    <string name="AutoArchiveAndMuteNoCommonGroupOnlyAbout">Hanya arsipkan dan nonaktifkan pengguna tanpa grup umum.</string>
+    <string name="ForceHideShowAsList">Sembunyikan teks \"Tampilkan sebagai Daftar\" saat mencari</string>
+    <string name="CleanupLeftovers">Membersihkan Sisa Makanan</string>
+    <string name="CleanupLeftoversResults">Membebaskan penyimpanan sebesar %1$.2f KB.</string>
+    <string name="CleanupLeftoversResultsMB">Membebaskan %1$.2f MB penyimpanan.</string>
+    <string name="IgnoreFilterEmoticonUpdate">Abaikan pembaruan ikon folder dari server</string>
 </resources>
