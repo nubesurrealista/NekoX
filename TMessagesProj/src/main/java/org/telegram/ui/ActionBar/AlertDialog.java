@@ -1487,7 +1487,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
     @Override
     public void invalidateDrawable(Drawable who) {
         contentScrollView.invalidate();
-        scrollContainer.invalidate();
+        if (scrollContainer != null) scrollContainer.invalidate();
     }
 
     @Override
