@@ -544,12 +544,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private final static int statistics = 19;
     private final static int start_secret_chat = 20;
     private final static int gallery_menu_save = 21;
-    private final static int event_log = 42;
+    private final static int event_log = 25;
     private final static int view_discussion = 22;
     private final static int delete_topic = 23;
     private final static int report = 24;
 
-    private final static int aliasChannelName = 43;
     private final static int edit_info = 30;
     private final static int logout = 31;
     private final static int search_button = 32;
@@ -569,6 +568,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private final static int clear_cache = 1001;
     private final static int block_from_search = 1002;
     private final static int add_to_folder = 1003;
+    private final static int aliasChannelName = 1004;
 
     private Rect rect = new Rect();
 
