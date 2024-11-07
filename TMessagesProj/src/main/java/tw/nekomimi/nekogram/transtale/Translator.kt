@@ -7,6 +7,7 @@ import cn.hutool.core.util.ArrayUtil
 import cn.hutool.core.util.StrUtil
 import org.apache.commons.lang3.LocaleUtils
 import org.telegram.messenger.AndroidUtilities
+import org.telegram.messenger.FileLog
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.MessageObject
 import org.telegram.messenger.NotificationCenter
@@ -313,7 +314,7 @@ interface Translator {
             if (!isSelfOutgoingMessage) {
                 val chatActivity = maybeChatActivity!!
                 if (chatActivity.messagePreviewParams == null) {
-                    Log.d("030-tx", "not forwarding, fix state")
+                    FileLog.d("030-tx: not forwarding, fix state")
                     localIsSelfOutgoing = true
                 } else {
                     chatActivity.messagePreviewParamsForTranslate = chatActivity.messagePreviewParams
@@ -331,7 +332,7 @@ interface Translator {
 
                         // doc & media messages can't be tampered
                         if (text.isNullOrBlank() || it.isDocument || it.isSticker || it.isVideo || it.isMusic || it.isGif) {
-                            Log.d("030-tx", "null text or doc")
+                            FileLog.d("030-tx: null text or doc")
                             --msgCount
                             return@forEach
                         }
@@ -376,7 +377,7 @@ interface Translator {
                 t.start()
             }, {
                 if (localIsSelfOutgoing) {
-                    Log.d("030-tx", "showing err toast")
+                    FileLog.d("030-tx: showing err toast")
                     AndroidUtilities.runOnUIThread {
                         NotificationCenter.getGlobalInstance().postNotificationName(
                             NotificationCenter.showBulletin,
@@ -440,11 +441,11 @@ interface Translator {
                             throw NullPointerException("null translated string")
                         }
                     } else {
-                        Log.d("030-tx", "response exists? ${res != null}")
+                        FileLog.d("030-tx: response exists? ${res != null}")
                         var errMsg = " NULL"
                         if (err != null) {
                             errMsg = " ${err.code} - ${err.text}"
-                            Log.e("030-tx", errMsg)
+                            FileLog.e("030-tx $errMsg")
                         }
 
                         if (onFailure != null) {

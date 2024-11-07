@@ -9544,7 +9544,6 @@ public class MediaDataController extends BaseController {
             case ChatActivity.SEARCH_FILTER_GEO:
                 return new TLRPC.TL_inputMessagesFilterGeo();
         }
-        Log.d("030-fl", "filter not set");
         return null;
     }
 

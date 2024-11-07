@@ -1343,7 +1343,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         }
                     } else if (!useTabsView && initialDialogsType == DIALOGS_TYPE_FORWARD) {
                         // 030: fix top padding for accounts with no folders/filters
-                        Log.d("030-ui", "workaround, using getMeasuredHeight");
+                        FileLog.d("030-ui: workaround, using getMeasuredHeight");
                         childTop = actionBar.getMeasuredHeight();
                     }
                     childTop += topPadding;

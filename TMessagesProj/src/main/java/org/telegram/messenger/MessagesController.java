@@ -18210,7 +18210,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         dbUsers.add(toDbUser);
                     } else if (baseUpdate instanceof TLRPC.TL_updateDialogPinned) {
                         if (NekoConfig.unlimitedPinnedDialogs.Bool()) {
-                            Log.w("030-pin", "ignore TL_updateDialogPinned for unlimited pinned dlgs");
+                            FileLog.w("030-pin: ignore TL_updateDialogPinned for unlimited pinned dlgs");
                         } else {
                             TLRPC.TL_updateDialogPinned update = (TLRPC.TL_updateDialogPinned) baseUpdate;
                             long did;
@@ -18229,7 +18229,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     } else if (baseUpdate instanceof TLRPC.TL_updatePinnedDialogs) {
                         TLRPC.TL_updatePinnedDialogs update = (TLRPC.TL_updatePinnedDialogs) baseUpdate;
                         if (NekoConfig.unlimitedPinnedDialogs.Bool()) {
-                            Log.w("030-pin", "ignore status update of TL_updatePinnedDialogs for unlimited pinned dlgs");
+                            FileLog.w("030-pin: ignore status update of TL_updatePinnedDialogs for unlimited pinned dlgs");
                         } else {
                             getUserConfig().setPinnedDialogsLoaded(update.folder_id, false);
                             getUserConfig().saveConfig(false);

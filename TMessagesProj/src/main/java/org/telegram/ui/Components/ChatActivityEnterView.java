@@ -6031,7 +6031,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
         builder.addTitle(LocaleController.getString("ReplaceText", R.string.ReplaceText), true);
 
-        TextCheckCell regex = builder.addCheckItem(LocaleController.getString("ReplaceRegex", R.string.ReplaceRegex), false, false, null);
+        TextCheckCell regex = builder.addCheckItem(LocaleController.getString(R.string.ReplaceRegex), false, false, null);
         EditText origin = builder.addEditText(LocaleController.getString("TextOrigin", R.string.TextOrigin));
         EditText replace = builder.addEditText(LocaleController.getString("TextReplace", R.string.TextReplace));
 
@@ -6213,7 +6213,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     sendNextMessageRunnable = null;
                     parentFragment.shouldShowAutoSendHint = false;
                 });
-                Log.d("030-slow", "ok");
+                FileLog.d("030-slow: ok");
             }
         }
     }
@@ -12573,7 +12573,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         } else if (id == NotificationCenter.didUpdatePremiumGiftFieldIcon) {
             updateGiftButton(true);
         } else if (id == NotificationCenter.outgoingMessageTranslated) {
-            Log.d("030-tx", String.format("outgoingMessageTranslated %d %s", dialog_id, parentFragment.isFullyVisible));
+            FileLog.d(String.format("030-tx: outgoingMessageTranslated %d %s", dialog_id, parentFragment.isFullyVisible));
             sendButton.setLoading(false, SendButton.INFINITE_LOADING);
             if (!parentFragment.isFullyVisible) return;
             boolean dontSend = isTranslatedBeforeSend = NekoConfig.dontSendRightAfterTranslated.Bool();

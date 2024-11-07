@@ -1,8 +1,7 @@
 package tw.nekomimi.nekogram.utils;
 
 
-import android.util.Log;
-
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -59,7 +58,7 @@ public class TelegramUtil {
                     Thread.sleep(1000);
                     suc = true;
                 } catch (InterruptedException e) {
-                    Log.w("030-conn", "interrupted");
+                    FileLog.w("sleep in proxy toggle hack was interrupted");
                     if (!isConnecting())
                         return;
                 }

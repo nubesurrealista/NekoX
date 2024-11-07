@@ -4,6 +4,7 @@ import android.util.Log
 import cn.hutool.core.util.XmlUtil
 import cn.hutool.http.HttpUtil
 import org.json.JSONObject
+import org.telegram.messenger.FileLog
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import org.w3c.dom.Node
@@ -30,7 +31,7 @@ object LingvaTranslator : Translator {
                 val path = res.body().split("/_buildManifest.js")[0].split("/").last()
                 randomPathMap[instance] = path
             } catch (ex: Exception) {
-                Log.e("030-lv", "error getting path for translation api", ex)
+                FileLog.e("lingva err: failed to get path for translation api", ex)
                 error(ex)
             }
         }
@@ -42,15 +43,15 @@ object LingvaTranslator : Translator {
         val res = req.execute()
 
         if (res.status != 200) {
-            Log.d("030-lv-url", "$instance/_next/data/$path/$from/$to/${processedQuery}.json")
-            Log.e("030-lv-err", "HTTP ${res.status} : ${res.body()}")
+            FileLog.e("lingva err: $instance/_next/data/$path/$from/$to/${processedQuery}.json")
+            FileLog.e("lingva err: HTTP ${res.status} : ${res.body()}")
             error("HTTP ${res.status} : ${res.body()}")
         }
 
         val respObj = JSONObject(res.body())
 
         if (respObj.optString("error", "").isNotBlank()) {
-            Log.d("030-lv", respObj.toString(2))
+            FileLog.e("lingva err: " + respObj.toString(2))
             error(respObj.toString(4))
         }
 

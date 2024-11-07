@@ -13026,10 +13026,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     if (result == null) {
                         continue;
                     }
-                    if (result.searchTitle == null) {
-                        Log.d("030-sr", String.format("searchTitle is NULL: %d %s",
-                                result.guid, result.rowName != null ? result.rowName : "NULL"));
-                    }
                     String title = " " + result.searchTitle.toLowerCase();
                     SpannableStringBuilder stringBuilder = null;
                     for (int i = 0; i < searchArgs.length; i++) {
