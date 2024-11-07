@@ -496,13 +496,17 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             req.banned_rights.invite_users = true;
             req.banned_rights.change_info = true;
             ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
+                BulletinFactory bulletinFactory = allImporters.isEmpty() ? BulletinFactory.of(fragment)
+                        : BulletinFactory.of(layoutContainer, fragment.getResourceProvider());
                 if (error == null) {
                     hideChatJoinRequest(importer, false, false);
-                    AndroidUtilities.runOnUIThread(() -> BulletinFactory.of(fragment).createSimpleBulletin(R.raw.done,
+                    AndroidUtilities.runOnUIThread(() -> bulletinFactory.createSimpleBulletin(R.raw.done,
                             LocaleController.formatString(R.string.EventLogChannelRestricted, user.first_name)).show());
                 } else {
-                    String err = String.format("%d - %s", error.code, error.text);
-                    BulletinFactory.of(fragment).createSimpleBulletin(R.raw.error, err).show();
+                    AndroidUtilities.runOnUIThread(() -> {
+                        String err = String.format("%d - %s", error.code, error.text);
+                        bulletinFactory.createSimpleBulletin(R.raw.error, err).show(true);
+                    });
                 }
             });
             return;
