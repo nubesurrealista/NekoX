@@ -63,6 +63,7 @@ import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.util.Pair;
 import android.util.Property;
 import android.util.SparseArray;
@@ -145,7 +146,6 @@ import org.telegram.ui.Components.CheckBoxBase;
 import org.telegram.ui.Components.ClipRoundedDrawable;
 import org.telegram.ui.Components.ColoredImageSpan;
 import org.telegram.ui.Components.CubicBezierInterpolator;
-import org.telegram.ui.Components.Easings;
 import org.telegram.ui.Components.EmptyStubSpan;
 import org.telegram.ui.Components.FloatSeekBarAccessibilityDelegate;
 import org.telegram.ui.Components.Forum.MessageTopicButton;
@@ -8683,6 +8683,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         }
                     }
                     photoHeight = photoWidth + AndroidUtilities.dp(100);
+                    if (NekoConfig.imageMessageSizeTweak.Bool()) photoHeight += AndroidUtilities.dp(50);
                     if (!useFullWidth) {
                         if (messageObject.type != MessageObject.TYPE_ROUND_VIDEO && checkNeedDrawShareButton(messageObject)) {
                             photoWidth -= AndroidUtilities.dp(20);
@@ -8805,6 +8806,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
                     if (w == 0 || h == 0) {
                         w = h = AndroidUtilities.dp(150);
+                        if (messageObject.type == MessageObject.TYPE_PHOTO && NekoConfig.imageMessageSizeTweak.Bool()) {
+                            h += AndroidUtilities.dp(50);
+                        }
                     }
                     if (messageObject.type == MessageObject.TYPE_VIDEO) {
                         if (w < infoWidth + AndroidUtilities.dp(16 + 24)) {
@@ -8854,12 +8858,14 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         photoImage.setRoundRadius(w / 2);
                         canChangeRadius = false;
                     } else if (messageObject.needDrawBluredPreview() && !messageObject.hasExtendedMediaPreview()) {
+                        float wFactor = NekoConfig.imageMessageSizeTweak.Bool() ? 0.65f : 0.6f;
+                        float hFactor = NekoConfig.imageMessageSizeTweak.Bool() ? 0.72f : 0.61f;
                         if (AndroidUtilities.isTablet()) {
-                            w = (int) (AndroidUtilities.getMinTabletSide() * 0.6f);
+                            w = (int) (AndroidUtilities.getMinTabletSide() * wFactor);
                         } else {
-                            w = (int) (Math.min(getParentWidth(), AndroidUtilities.displaySize.y) * 0.6f);
+                            w = (int) (Math.min(getParentWidth(), AndroidUtilities.displaySize.y) * wFactor);
                         }
-                        h = (int) (0.61f * w);
+                        h = (int) (hFactor * w);
                     }
 
                     int widthForCaption = 0;
@@ -9003,11 +9009,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             if (fixPhotoWidth) {
                                 captionWidth = captionLayout.textWidth;
                                 // feature: blur on sides, instead of cropping photo
-//                                if (!currentMessageObject.isVideo() && !currentMessageObject.isGif() && captionWidth > photoWidth - AndroidUtilities.dp(10)) {
-//                                    fitPhotoImage = true;
-//                                    photoImage.setAspectFit(true);
-//                                    photoImage.setRoundRadiusEnabled(false);
-//                                }
+                                if (NekoConfig.imageMessageSizeTweak.Bool())
+                                if (!currentMessageObject.isVideo() && !currentMessageObject.isGif() && captionWidth > photoWidth - AndroidUtilities.dp(10)) {
+                                    fitPhotoImage = true;
+                                    photoImage.setAspectFit(true);
+                                    photoImage.setRoundRadiusEnabled(false);
+                                }
                                 if (captionWidth > widthForCaption) {
                                     captionWidth = widthForCaption;
                                 }
@@ -22743,6 +22750,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
 
             photoHeight = photoWidth + AndroidUtilities.dp(100);
+            if (NekoConfig.imageMessageSizeTweak.Bool() && photoHeight < imageH) {
+                photoHeight = imageH;
+            }
 
             if (photoWidth > AndroidUtilities.getPhotoSize()) {
                 photoWidth = AndroidUtilities.getPhotoSize();
@@ -22753,6 +22763,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
 
         float scale = (float) imageW / (float) photoWidth;
+        if (NekoConfig.imageMessageSizeTweak.Bool() && imageW < imageH) {
+            float scale2 = (float) imageH / (float) photoHeight;
+            scale = (scale * 2 + scale2) / 3;
+        }
         int w = (int) (imageW / scale);
         int h = (int) (imageH / scale);
         if (w == 0) {
