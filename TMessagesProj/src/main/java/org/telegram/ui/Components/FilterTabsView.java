@@ -48,6 +48,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -116,11 +117,17 @@ public class FilterTabsView extends FrameLayout {
         public int counter;
         public boolean isDefault;
         public boolean isLocked;
+        public int localTitleType;
 
         public Tab(int i, String t, String e) {
+            localTitleType = NekoConfig.tabsTitleType.Int();
             id = i;
             title = NekoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON ? t : "";
             emoticon = i != Integer.MAX_VALUE ? e : "\uD83D\uDCAC";
+            if (!FolderIconHelper.isIconAvailable(e) && localTitleType != NekoXConfig.TITLE_TYPE_TEXT) {
+                localTitleType = NekoXConfig.TITLE_TYPE_TEXT;
+                title = emoticon + " " + title;
+            }
         }
 
         public int getWidth(boolean store) {
@@ -360,9 +367,19 @@ public class FilterTabsView extends FrameLayout {
             } else {
                 tabWidth = currentTab.iconWidth + ((countWidth != 0 && !animateCounterRemove) ? countWidth + AndroidUtilities.dp(6 * (counterText != null ? 1.0f : editingStartAnimationProgress)) : 0);
             }
+
+            boolean fixTextX = false;
+            if (currentTab.localTitleType == NekoXConfig.TITLE_TYPE_TEXT && currentTab.localTitleType != NekoConfig.tabsTitleType.Int()) {
+                tabWidth -= currentTab.iconWidth;
+                currentTab.iconWidth = 0;
+                fixTextX = true;
+            }
+
             float textX = ((getMeasuredWidth() - tabWidth) / 2f) + currentTab.iconWidth;
-            if (animateTextX) {
+            if (animateTextX && !fixTextX) {
                 textX = textX * changeProgress + animateFromTextX * (1f - changeProgress);
+            } else if (fixTextX) {
+                textX *= 0.75f;
             }
 
             if (!TextUtils.equals(currentTab.title, currentText)) {
@@ -410,15 +427,16 @@ public class FilterTabsView extends FrameLayout {
             }
 
             int iconX = 0;
-            if (NekoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_TEXT) {
+            if (currentTab.localTitleType != NekoXConfig.TITLE_TYPE_TEXT) {
                 int emoticonSize = FolderIconHelper.getIconWidth();
-                if (!TextUtils.equals(currentTab.emoticon, currentEmoticon)) {
+                boolean iconAvailable = FolderIconHelper.isIconAvailable(currentTab.emoticon);
+                if (iconAvailable && !TextUtils.equals(currentTab.emoticon, currentEmoticon)) {
                     currentEmoticon = currentTab.emoticon;
                     android.graphics.Rect bounds = new android.graphics.Rect(0, 0, emoticonSize, emoticonSize);
                     icon = getResources().getDrawable(FolderIconHelper.getTabIcon(currentTab.emoticon)).mutate();
                     icon.setBounds(bounds);
                 }
-                if (Build.VERSION.SDK_INT > 21 && icon != null) {
+                if (BuildVars.hasTintSupport && icon != null) {
                     icon.setTint(textPaint.getColor());
                 }
                 iconX = (int) ((getMeasuredWidth() - tabWidth) / 2f);
@@ -716,7 +734,7 @@ public class FilterTabsView extends FrameLayout {
                 }
             }
 
-            if (NekoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_TEXT) {
+            if (currentTab.localTitleType != NekoXConfig.TITLE_TYPE_TEXT) {
                 int iconX = (int) ((getMeasuredWidth() - tabWidth) / 2f);
 
                 if (iconX != lastIconX) {
@@ -731,10 +749,10 @@ public class FilterTabsView extends FrameLayout {
                     boolean active = selectedTabId == currentTab.id;
                     android.graphics.Rect bounds = new android.graphics.Rect(0, 0, emoticonWidth, emoticonWidth);
                     iconAnimateOutDrawable = getResources().getDrawable(FolderIconHelper.getTabIcon(lastEmoticon)).mutate();
-                    iconAnimateOutDrawable.setTint(Theme.getColor(active ? activeTextColorKey : unactiveTextColorKey));
+                    if (BuildVars.hasTintSupport) iconAnimateOutDrawable.setTint(Theme.getColor(active ? activeTextColorKey : unactiveTextColorKey));
                     iconAnimateOutDrawable.setBounds(bounds);
                     iconAnimateInDrawable = getResources().getDrawable(FolderIconHelper.getTabIcon(currentTab.emoticon)).mutate();
-                    iconAnimateInDrawable.setTint(Theme.getColor(active ? activeTextColorKey : unactiveTextColorKey));
+                    if (BuildVars.hasTintSupport) iconAnimateInDrawable.setTint(Theme.getColor(active ? activeTextColorKey : unactiveTextColorKey));
                     iconAnimateInDrawable.setBounds(bounds);
                     animateIconChange = true;
                     changed = true;

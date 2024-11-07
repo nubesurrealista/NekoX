@@ -225,6 +225,10 @@ public class PollEditTextCell extends FrameLayout implements SuggestEmojiView.An
     }
 
     public void setIcon(int icon, String name) {
+        if (icon == -1) {
+            iconImageView.setImageResource(R.drawable.baseline_emoticon_outline_24);
+            return;
+        }
         iconImageView.setImageResource(icon);
     }
 

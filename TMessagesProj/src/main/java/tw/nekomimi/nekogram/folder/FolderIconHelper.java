@@ -140,6 +140,10 @@ public class FolderIconHelper {
                 return folderIcon;
             }
         }
-        return R.drawable.filter_custom;
+        return NekoConfig.ignoreFilterEmoticonUpdate.Bool() ? -1 : R.drawable.filter_custom;
+    }
+
+    public static boolean isIconAvailable(String emoji) {
+        return folderIcons.containsKey(emoji);
     }
 }

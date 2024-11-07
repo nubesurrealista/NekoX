@@ -28,6 +28,7 @@ import android.text.TextWatcher;
 import android.text.style.DynamicDrawableSpan;
 import android.text.style.ImageSpan;
 import android.text.style.ReplacementSpan;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -137,6 +138,12 @@ public class FilterCreateActivity extends BaseFragment {
         if (oldEmoticon == null) oldEmoticon = filter.emoticon;
         BottomBuilder builder = new BottomBuilder(getParentActivity());
         builder.addTitle(LocaleController.getString(R.string.TabTitleTypeIcon));
+        boolean ignoreUpdate = NekoConfig.ignoreFilterEmoticonUpdate.Bool();
+        builder.addCheckItem(LocaleController.getString(R.string.IgnoreFilterEmoticonUpdate),
+                ignoreUpdate, ignoreUpdate, (__, checked) -> {
+            NekoConfig.ignoreFilterEmoticonUpdate.setConfigBool(true);
+            return Unit.INSTANCE;
+        });
         EditText input = builder.addEditText(LocaleController.getString(R.string.Emoji));
         if (StrUtil.isNotBlank(filter.emoticon)) {
             oldEmoticon = filter.emoticon;
@@ -145,8 +152,10 @@ public class FilterCreateActivity extends BaseFragment {
         builder.addCancelButton();
         builder.addOkButton((it) -> {
             String emoticon = input.getText().toString();
+            if (emoticon.length() > 2) emoticon = emoticon.substring(0, 2);
             if (StrUtil.isBlank(emoticon)) return Unit.INSTANCE;
             filter.emoticon = emoticon;
+            newFilterEmoticon = emoticon;
             checkDoneButton(true);
             return Unit.INSTANCE;
         });

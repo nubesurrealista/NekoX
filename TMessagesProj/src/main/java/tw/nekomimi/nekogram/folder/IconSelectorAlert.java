@@ -18,6 +18,8 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.ExtendedGridLayoutManager;
 import org.telegram.ui.Components.RecyclerListView;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class IconSelectorAlert {
 
     public static void show(BaseFragment fragment, OnIconSelectedListener onIconSelectedListener) {
@@ -64,8 +66,13 @@ public class IconSelectorAlert {
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             var imageView = (ImageView) holder.itemView;
+
+            int emotionDrawable = FolderIconHelper.getTabIcon(icons[position]);
+            if (emotionDrawable == -1)
+                emotionDrawable = R.drawable.filter_custom;
+
             imageView.setTag(icons[position]);
-            imageView.setImageResource(FolderIconHelper.getTabIcon(icons[position]));
+            imageView.setImageResource(emotionDrawable);
         }
 
         @Override
