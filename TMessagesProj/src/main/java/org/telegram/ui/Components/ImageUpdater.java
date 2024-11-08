@@ -11,6 +11,7 @@ package org.telegram.ui.Components;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,6 +23,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 
@@ -661,6 +663,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             parentFragment.startActivityForResult(takePictureIntent, 13);
         } catch (Exception e) {
             FileLog.e(e);
+            BulletinFactory.of(parentFragment).createSimpleBulletin(R.raw.error, e.getMessage()).show();
         }
     }
 
@@ -692,6 +695,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             parentFragment.startActivityForResult(takeVideoIntent, 15);
         } catch (Exception e) {
             FileLog.e(e);
+            BulletinFactory.of(parentFragment).createSimpleBulletin(R.raw.error, e.getMessage()).show();
         }
     }
 
