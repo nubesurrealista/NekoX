@@ -140,6 +140,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell openArchiveOnPullRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.openArchiveOnPull));
     private final AbstractConfigCell ignoreMutedCountRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.ignoreMutedCount));
     private final AbstractConfigCell ignoreFilterEmoticonUpdateRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.ignoreFilterEmoticonUpdate));
+    private final AbstractConfigCell hideUnreadCounterOnFolderTabsRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideUnreadCounterOnFolderTabs));
     private final AbstractConfigCell tabsTitleTypeRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.tabsTitleType,
             new String[]{
                     LocaleController.getString(R.string.TabTitleTypeText),
@@ -415,6 +416,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             } else if (key.equals(NekoConfig.usePersianCalendar.getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NekoConfig.displayPersianCalendarByLatin.getKey())) {
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+            } else if (key.equals(NekoConfig.hideUnreadCounterOnFolderTabs.getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NekoConfig.disableSystemAccount.getKey())) {
                 if ((boolean) newValue) {

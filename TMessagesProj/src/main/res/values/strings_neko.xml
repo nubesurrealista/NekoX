@@ -266,4 +266,5 @@
     <string name="ImageMessageSizeTweak">Make max size of messages with image larger and enable aspect fit</string>
     <string name="CopySticker">Copy Sticker</string>
     <string name="CopyPhotoSticker">Copy Photo/Sticker</string>
+    <string name="HideUnreadCounterOnFolderTabs">Hide unread counter on folder tabs</string>
 </resources>

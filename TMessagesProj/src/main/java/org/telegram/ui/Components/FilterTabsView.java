@@ -135,7 +135,7 @@ public class FilterTabsView extends FrameLayout {
             int width = titleWidth = (int) Math.ceil(textPaint.measureText(title));
             width += iconWidth;
             int c;
-            if (store) {
+            if (!NekoConfig.hideUnreadCounterOnFolderTabs.Bool() && store) {
                 c = delegate.getTabCounter(id);
                 if (c < 0) {
                     c = 0;
