@@ -27,7 +27,7 @@
     <string name="DisableResidentNotification">Desativar notificação persistente</string>
     <string name="NekogramRunning">NekogramX está em execução</string>
     <string name="EventType">Pacote de ícones da barra lateral</string>
-    <string name="ChristmasHat">Mostrar chapéu de papai noel todos os dias</string>
+    <string name="ChristmasHat">Mostrar chapéu de Papai Noel todos os dias</string>
     <string name="ActionBarDecoration">Decoração da barra de título</string>
     <string name="DependsOnDate">Depende da data</string>
     <string name="Christmas">Yule</string>
@@ -203,7 +203,7 @@
     <string name="DisableAddBirthdayReminder">Desativar o lembrete para definir a data de aniversário</string>
     <string name="DisableBirthdayReminder">Desativar o lembrete do aniversário dos seus contatos</string>
     <string name="PatchAndCleanupLinksDesc">Como substituir todos os domínios relacionados ao Twitter por twitter.com e algumas das consultas de rastreamento</string>
-    <string name="RemovePremiumAnnoyance">Remova mais algumas incômodas promoções de premium</string>
+    <string name="RemovePremiumAnnoyance">Remover mais alguns incômodos de promoção premium</string>
     <string name="AlwaysShowBotCommandButton">Sempre mostrar o botão de comando do bot</string>
     <string name="AlwaysHideBotCommandButton">Sempre ocultar o botão de comando do bot</string>
     <string name="AlwaysDisableSafeBrowsingInWebView">Nunca usar o Google Safe Browsing</string>
@@ -228,7 +228,7 @@
     <string name="CopyPhoto">Copiar foto</string>
     <string name="CustomSearchEngine">Motor de busca personalizado</string>
     <string name="SearchBlacklistRevert">Remover da lista de bloqueio</string>
-    <string name="AlwaysUseSpoilerForMediaDesc">Separe os IDs de bate-papo com vírgulas, por exemplo: chat_id1,chat_id2…</string>
+    <string name="AlwaysUseSpoilerForMediaDesc">Divida o ID do chat com vírgulas, ex: chat_id1, chat_id2…</string>
     <string name="CleanupLeftoversResultsMB">Liberados %1$.2f MB de armazenamento.</string>
     <string name="CleanupLeftoversDetail">Limpar os arquivos do cache não utilizado e enviar o cache.</string>
     <string name="LingvaInstanceNote">Pesquise on-line por uma instância pública ou hospede uma você mesmo. Observe que o tradutor Lingva não funciona com tradução automática.</string>
@@ -240,7 +240,7 @@
     <string name="AccDescrShowKeyboard">Mostrar teclado</string>
     <string name="NoFilesInfo">A pasta está vazia</string>
     <string name="AutoSendAfterSlowModeHint">Programado para enviar após o temporizador do modo lento</string>
-    <string name="DontShareNumberWhenAddContactByDefault">Desmarcar a opção de compartilhar número ao adicionar contatos por padrão</string>
+    <string name="DontShareNumberWhenAddContactByDefault">Desativar a opção de compartilhar número ao adicionar contatos por padrão</string>
     <string name="UpgradeGroup">Atualizar para supergrupo</string>
     <string name="ConvertGroupAlert">Esta ação é irreversível. É impossível converter o supergrupo de volta para o grupo normal.</string>
     <string name="DebugMenuDisablePauseMusic">Desativar a reprodução em pausa durante a gravação</string>
