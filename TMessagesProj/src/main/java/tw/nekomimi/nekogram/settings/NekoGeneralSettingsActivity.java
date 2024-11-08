@@ -394,13 +394,13 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 }
             } else if (key.equals(NekoConfig.inappCamera.getKey())) {
                 SharedConfig.setInappCamera((boolean) newValue);
-                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (key.equals(NekoConfig.hidePhone.getKey())) {
                 parentLayout.rebuildAllFragmentViews(false, false);
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
                 listAdapter.notifyItemChanged(cellGroup.rows.indexOf(profilePreviewRow));
             } else if (key.equals(NekoConfig.transparentStatusBar.getKey())) {
-                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (key.equals(NekoConfig.hideProxySponsorChannel.getKey())) {
                 for (int a : SharedConfig.activeAccounts) {
                     if (UserConfig.getInstance(a).isClientActivated()) {
@@ -408,17 +408,17 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     }
                 }
             } else if (key.equals(NekoConfig.actionBarDecoration.getKey())) {
-                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (key.equals(NekoConfig.tabletMode.getKey())) {
-                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (key.equals(NekoConfig.newYear.getKey())) {
-                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (key.equals(NekoConfig.usePersianCalendar.getKey())) {
-                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (key.equals(NekoConfig.displayPersianCalendarByLatin.getKey())) {
-                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (key.equals(NekoConfig.hideUnreadCounterOnFolderTabs.getKey())) {
-                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (key.equals(NekoConfig.disableSystemAccount.getKey())) {
                 if ((boolean) newValue) {
                     getContactsController().deleteUnknownAppAccounts();

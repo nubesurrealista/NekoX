@@ -102,7 +102,7 @@ public class NekoAccountSettingsActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(!getUserConfig().deviceInfo);
                 }
-                tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+                tooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (position == deleteAccountRow) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                 builder.setMessage(LocaleController.getString(R.string.TosDeclineDeleteAccount));

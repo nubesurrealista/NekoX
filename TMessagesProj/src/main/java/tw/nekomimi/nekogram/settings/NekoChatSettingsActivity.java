@@ -283,7 +283,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
             } else if (key.equals(NekoConfig.disableProximityEvents.getKey())) {
                 MediaController.getInstance().recreateProximityWakeLock();
             } else if (key.equals(NekoConfig.showSeconds.getKey())) {
-                tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+                tooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             }
         };
 

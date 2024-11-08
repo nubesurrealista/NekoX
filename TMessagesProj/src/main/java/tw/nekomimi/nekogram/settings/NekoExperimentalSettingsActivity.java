@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -24,7 +23,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.R;
-import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -231,7 +229,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
             } else if (key.equals(NekoConfig.useCustomEmoji.getKey())) {
                 // Check
                 if (!(boolean) newValue) {
-                    tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+                    tooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
                     return;
                 }
                 NekoConfig.useCustomEmoji.setConfigBool(false);
@@ -287,7 +285,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                 NekoConfig.useCustomEmoji.setConfigBool(false);
                 Toast.makeText(ApplicationLoader.applicationContext, "Failed: " + e.toString(), Toast.LENGTH_LONG).show();
             }
-            tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+            tooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
 //            listAdapter.notifyItemChanged(cellGroup.rows.indexOf(useCustomEmojiRow));
         }
     }
