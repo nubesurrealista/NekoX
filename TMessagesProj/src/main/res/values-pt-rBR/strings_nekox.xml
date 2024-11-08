@@ -28,7 +28,7 @@
     <string name="Install">Instalar</string>
     <string name="Ignore">Ignorar</string>
     <string name="UpdateDownloaded">Uma atualização acabou de ser baixada.</string>
-    <string name="ProxyAutoSwitch">Alternador automático de proxy</string>
+    <string name="ProxyAutoSwitch">Trocar proxy automaticamente</string>
     <string name="LinkedGroupChat">Grupo Vinculado</string>
     <string name="LinkedChannelChat">Canal Vinculado</string>
     <string name="DevModeTitle">**Sua conta do Telegram pode ser banida**</string>
@@ -82,7 +82,7 @@
     <string name="NekoXPushService">Serviço de Notificação NekoX</string>
     <string name="DisableUndo">Desativar Desfazer</string>
     <string name="DisableSystemAccount">Desativar Conta do Sistema</string>
-    <string name="UseProxyItem">Use o proxy pela barra lateral em vez do botão</string>
+    <string name="UseProxyItem">Usar o item de proxy na barra lateral em vez do botão</string>
     <string name="HideProxyByDefault">Ocultar configurações de proxy por padrão</string>
     <string name="SkipOpenLinkConfirm">Ignorar confirmação para abrir links</string>
     <string name="UnblockAll">Desbloquear Tudo</string>
