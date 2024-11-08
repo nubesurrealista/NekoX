@@ -49,6 +49,7 @@ public class TranslateController extends BaseController {
     private static final int GROUPING_TRANSLATIONS_TIMEOUT = 80;
 
     private final Set<Long> translatingDialogs = new HashSet<>();
+    private final Set<Long> wasTranslatingDialogs = new HashSet<>();
     private final Set<Long> translatableDialogs = new HashSet<>();
     private final HashMap<Long, TranslatableDecision> translatableDialogMessages = new HashMap<>();
     private final HashMap<Long, String> translateDialogLanguage = new HashMap<>();
@@ -145,6 +146,10 @@ public class TranslateController extends BaseController {
 
     public boolean isTranslatingDialog(long dialogId) {
         return isFeatureAvailable() && translatingDialogs.contains(dialogId);
+    }
+
+    public boolean wasTranslatingDialog(long dialogId) {
+        return isFeatureAvailable() && wasTranslatingDialogs.contains(dialogId);
     }
 
     public void toggleTranslatingDialog(long dialogId) {
@@ -289,8 +294,10 @@ public class TranslateController extends BaseController {
             if (hide) {
                 hideTranslateDialogs.add(dialogId);
                 translatingDialogs.remove(dialogId);
+                wasTranslatingDialogs.remove(dialogId);
             } else {
                 hideTranslateDialogs.remove(dialogId);
+                wasTranslatingDialogs.add(dialogId);
             }
         }
         saveTranslatingDialogsCache();
@@ -980,6 +987,15 @@ public class TranslateController extends BaseController {
         }
 
         String translatingDialogsCache = messagesController.getMainSettings().getString("translating_dialog_languages2", null);
+
+        String[] wasTranslatingDialogsCache = messagesController.getMainSettings().getString("was_translating_dialog_languages", "").split(";");
+        if (wasTranslatingDialogsCache.length > 1) {
+            for (String s : wasTranslatingDialogsCache) {
+                if (s.isBlank()) continue;
+                wasTranslatingDialogs.add(Long.parseLong(s));
+            }
+        }
+
         if (translatingDialogsCache == null) {
             return;
         }
@@ -1003,6 +1019,7 @@ public class TranslateController extends BaseController {
                 detectedDialogLanguage.put(did, from);
                 if (!restricted.contains(from)) {
                     translatingDialogs.add(did);
+                    wasTranslatingDialogs.add(did);
                     translatableDialogs.add(did);
                 }
                 if (to != null) {
@@ -1026,7 +1043,9 @@ public class TranslateController extends BaseController {
 
     private void saveTranslatingDialogsCache() {
         StringBuilder langset = new StringBuilder();
+        StringBuilder langset2 = new StringBuilder();
         Iterator<Long> i = translatingDialogs.iterator();
+        Iterator<Long> i2 = wasTranslatingDialogs.iterator();
         boolean first = true;
         while (i.hasNext()) {
             try {
@@ -1048,6 +1067,18 @@ public class TranslateController extends BaseController {
                 langset.append(did).append("=").append(lang).append(">").append(tolang);
             } catch (Exception e) {}
         }
+        first = true;
+        while (i2.hasNext()) {
+            try {
+                long did = i2.next();
+                if (!first) {
+                    langset2.append(";");
+                } else {
+                    first = false;
+                }
+                langset2.append(did);
+            } catch (Exception ignored) {}
+        }
 
         Set<String> hidden = new HashSet<>();
         i = hideTranslateDialogs.iterator();
@@ -1058,7 +1089,10 @@ public class TranslateController extends BaseController {
                 FileLog.e(e);
             }
         }
-        MessagesController.getMainSettings(currentAccount).edit().putString("translating_dialog_languages2", langset.toString()).putStringSet("hidden_translation_at", hidden).apply();
+        MessagesController.getMainSettings(currentAccount).edit()
+                .putString("translating_dialog_languages2", langset.toString())
+                .putString("was_translating_dialog_languages", langset2.toString())
+                .putStringSet("hidden_translation_at", hidden).apply();
     }
 
     private void resetTranslatingDialogsCache() {

@@ -180,6 +180,7 @@ import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.Timer;
+import org.telegram.messenger.TranslateController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
@@ -27440,7 +27441,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
         }
         if (showTranslate) {
-            if (getMessagesController().getTranslateController().isTranslatingDialog(getDialogId())) {
+            TranslateController translateController = getMessagesController().getTranslateController();
+            if (translateController.wasTranslatingDialog(did) || translateController.isTranslatingDialog(did)) {
                 createTranslateButton();
             }
             if (translateButton != null) {
