@@ -415,7 +415,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                     break;
                 }
                 case 11: {
-                    textCell.setTextAndCheck(LocaleController.getString(R.string.CopyPhoto), NekoConfig.showCopyPhoto.Bool(), false);
+                    textCell.setTextAndCheck(LocaleController.getString(R.string.CopyPhotoSticker), NekoConfig.showCopyPhoto.Bool(), false);
                 }
             }
             textCell.setTag(a);

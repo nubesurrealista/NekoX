@@ -18652,7 +18652,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
                 if (starItem != null) {
 //                    starItem.setIcon(hasUnfavedSelected ? R.drawable.msg_fave : R.drawable.msg_unfave);
-                    starItem.setText(hasUnfavedSelected ? LocaleController.getString("AddToFavorites", R.string.AddToFavorites) : LocaleController.getString("DeleteFromFavorites", R.string.DeleteFromFavorites));
+                    starItem.setText(hasUnfavedSelected ? LocaleController.getString("AddToFavorites", R.string.AddToFavorites) : LocaleController.getString(R.string.DeleteFromFavorites));
                 }
                 final int newEditVisibility = canEditMessagesCount == 1 && selectedCount == 1 ? View.VISIBLE : View.GONE;
                 createBottomMessagesActionButtons();
@@ -29338,10 +29338,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                         options.add(OPTION_SAVE_TO_GALLERY);
                                         icons.add(R.drawable.baseline_image_24);
                                         if (NekoConfig.showCopyPhoto.Bool()){
-                                            items.add(LocaleController.getString("CopyPhoto", R.string.CopyPhoto));
+                                            items.add(LocaleController.getString(R.string.CopyPhoto));
                                             options.add(OPTION_COPY_PHOTO);
                                             icons.add(R.drawable.msg_copy);
-                                            items.add(LocaleController.getString("CopyPhotoAsSticker", R.string.CopyPhotoAsSticker));
+                                            items.add(LocaleController.getString(R.string.CopyPhotoAsSticker));
                                             options.add(OPTION_COPY_PHOTO_AS_STICKER);
                                             icons.add(R.drawable.msg_copy);
                                         }
@@ -29404,6 +29404,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     items.add(LocaleController.getString(R.string.SaveToGallery));
                                     options.add(nkbtn_stickerdl);
                                     icons.add(R.drawable.baseline_image_24);
+
+                                    if (NekoConfig.showCopyPhoto.Bool()){
+                                        items.add(LocaleController.getString(R.string.CopySticker));
+                                        options.add(OPTION_COPY_PHOTO);
+                                        icons.add(R.drawable.msg_copy);
+                                    }
                                 }
                                 items.add(LocaleController.getString(R.string.AddToStickers));
                                 options.add(OPTION_ADD_TO_STICKERS_OR_MASKS);
@@ -29447,6 +29453,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
                                 options.add(nkbtn_stickerdl);
                                 icons.add(R.drawable.baseline_image_24);
+
+                                if (NekoConfig.showCopyPhoto.Bool()){
+                                    items.add(LocaleController.getString(R.string.CopySticker));
+                                    options.add(OPTION_COPY_PHOTO);
+                                    icons.add(R.drawable.msg_copy);
+                                }
                             }
                             TLRPC.Document document = selectedObject.getDocument();
                             if (!getMediaDataController().isStickerInFavorites(document)) {

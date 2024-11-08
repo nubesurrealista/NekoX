@@ -264,4 +264,6 @@
     <string name="AlwaysTranslateBeforeSendNote">Only text will be retained for forwarded messages</string>
     <string name="SelectAnIcon">Choose an icon</string>
     <string name="ImageMessageSizeTweak">Make max size of messages with image larger and enable aspect fit</string>
+    <string name="CopySticker">Copy Sticker</string>
+    <string name="CopyPhotoSticker">Copy Photo/Sticker</string>
 </resources>
