@@ -7857,6 +7857,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         if (chooseQualityLayout.update(videoPlayer)) {
             qualityItem.setVisibility(View.VISIBLE);
             if (videoPlayer.getSelectedQuality() == VideoPlayer.QUALITY_AUTO) {
+                if (NekoConfig.chooseBestVideoQualityByDefault.Bool()) {
+                    videoPlayer.setSelectedQuality(videoPlayer.getHighestQualityIndex(null));
+                    return;
+                }
                 qualityItem.setSubtext(getString(R.string.QualityAuto));
             } else {
                 final VideoPlayer.Quality q = videoPlayer.getQuality(videoPlayer.getSelectedQuality());

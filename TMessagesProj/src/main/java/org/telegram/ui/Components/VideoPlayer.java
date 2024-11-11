@@ -98,6 +98,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 @SuppressLint("NewApi")
 public class VideoPlayer implements Player.Listener, VideoListener, AnalyticsListener, NotificationCenter.NotificationCenterDelegate {
 
@@ -380,6 +382,11 @@ public class VideoPlayer implements Player.Listener, VideoListener, AnalyticsLis
         mixedAudio = false;
         currentUri = null;
         isStreaming = true;
+
+        if (NekoConfig.chooseBestVideoQualityByDefault.Bool()) {
+            this.videoQualityToSelect = getHighestQuality(null);
+        }
+
         ensurePlayerCreated();
 
         currentStreamIsHls = false;
