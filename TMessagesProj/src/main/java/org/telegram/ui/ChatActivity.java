@@ -365,6 +365,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int nkbtn_PGPImport = 2024;
     private final static int nkbtn_copy_link_in_pm = 2025;
 
+    private final static int nkheaderbtn_recent_actions = 3001;
+
     public int shareAlertDebugMode = DEBUG_SHARE_ALERT_MODE_NORMAL;
     public boolean shareAlertDebugTopicsSlowMotion;
 
@@ -4186,6 +4188,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             boolean allowShowPinned;
             if (currentChat != null) {
                 allowShowPinned = ChatObject.canUserDoAction(currentChat, ChatObject.ACTION_PIN) || ChatObject.isChannel(currentChat);
+
+                if (ChatObject.hasAdminRights(currentChat)) {
+                    headerItem.lazilyAddSubItem(nkheaderbtn_recent_actions, R.drawable.msg_log, LocaleController.getString(R.string.EventLog));
+                }
             } else if (currentUser != null && currentUser.self) {
                 allowShowPinned = true;
             } else if (userInfo != null) {
@@ -4194,7 +4200,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 allowShowPinned = false;
             }
             if (allowShowPinned) {
-                headerItem.lazilyAddSubItem(nkheaderbtn_show_pinned, R.drawable.deproko_baseline_pin_24, LocaleController.getString("PinnedMessage", R.string.PinnedMessage));
+                headerItem.lazilyAddSubItem(nkheaderbtn_show_pinned, R.drawable.deproko_baseline_pin_24, LocaleController.getString(R.string.PinnedMessage));
             }
             // NekoX - end
             if (ChatObject.isBoostSupported(currentChat) && (getUserConfig().isPremium() || ChatObject.isBoosted(chatInfo) || ChatObject.hasAdminRights(currentChat))) {
@@ -41093,6 +41099,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("PhotoCopied", R.string.PhotoCopied)).show();
                 }
             });
+        } else if (id == nkheaderbtn_recent_actions) {
+            presentFragment(new ChannelAdminLogActivity(currentChat));
         }
     }
 
