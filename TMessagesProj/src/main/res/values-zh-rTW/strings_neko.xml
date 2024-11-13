@@ -265,4 +265,7 @@
     <string name="CopySticker">複製貼圖</string>
     <string name="CopyPhotoSticker">複製圖片/貼圖</string>
     <string name="ChooseBestVideoQualityByDefault">預設選擇最高影片畫質</string>
+    <string name="CrashDialogTitle">NekoX 發生錯誤 &lt;&gt;</string>
+    <string name="CrashDialogMessage">是否願意分享除錯資訊以利開發者解決問題?</string>
+    <string name="TriggerCrash">觸發閃退</string>
 </resources>

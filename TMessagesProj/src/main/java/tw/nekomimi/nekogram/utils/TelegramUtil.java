@@ -89,7 +89,9 @@ public class TelegramUtil {
         toggleProxyOnOffThread.start();
     }
 
-    public static String getStackTraceAsString(Thread t) {
-        return Arrays.toString(Arrays.stream(Thread.currentThread().getStackTrace()).skip(3).toArray());
+    public static String getStackTraceAsString(StackTraceElement[] stackTrace) {
+        StackTraceElement[] st = (stackTrace == null) ?
+                (StackTraceElement[]) Arrays.stream(Thread.currentThread().getStackTrace()).skip(3).toArray() : stackTrace;
+        return Arrays.toString(st);
     }
 }

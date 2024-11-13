@@ -27,6 +27,7 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -39,6 +40,8 @@ import androidx.multidex.MultiDex;
 
 import androidx.multidex.MultiDex;
 
+import com.jakewharton.processphoenix.ProcessPhoenix;
+
 import org.json.JSONObject;
 import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.tgnet.ConnectionsManager;
@@ -48,13 +51,16 @@ import org.telegram.ui.Adapters.DrawerLayoutAdapter;
 import org.telegram.ui.Components.ForegroundDetector;
 import org.telegram.ui.Components.Premium.boosts.BoostRepository;
 import org.telegram.ui.IUpdateLayout;
+import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.LauncherIconController;
 
 import java.io.File;
 import java.util.LinkedList;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.parts.SignturesKt;
 import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.TelegramUtil;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -99,6 +105,9 @@ public class ApplicationLoader extends Application {
         }
         Thread.currentThread().setUncaughtExceptionHandler((thread, error) -> {
             Log.e("nekox", "from " + thread.toString(), error);
+            String errStr = String.format("%s\n%s", error.getMessage(), TelegramUtil.getStackTraceAsString(error.getStackTrace()));
+            NekoConfig.lastCrashError.setConfigString(errStr);
+            ProcessPhoenix.triggerRebirth(applicationContext, new Intent(applicationContext, LaunchActivity.class));
         });
     }
 

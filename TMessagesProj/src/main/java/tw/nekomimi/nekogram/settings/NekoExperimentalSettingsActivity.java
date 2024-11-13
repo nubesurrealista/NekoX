@@ -101,6 +101,11 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private final AbstractConfigCell overrideSettingFloatRow = cellGroup.appendCell(new ConfigCellTextInput(null, NekoConfig.overrideSettingFloat, LocaleController.getString(R.string.OverrideSettingHint), null, NekoConfig::applyOverriddenValue));
     private final AbstractConfigCell divider1 = cellGroup.appendCell(new ConfigCellDivider());
 
+    private final AbstractConfigCell header3 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.DebugMenu)));
+    private final AbstractConfigCell triggerCrashRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.TriggerCrash), null, null,
+            () -> AndroidUtilities.runOnUIThread(() -> { int[] arr = new int[0]; arr[1] = 0;})));
+    private final AbstractConfigCell divider2 = cellGroup.appendCell(new ConfigCellDivider());
+
     private UndoView tooltip;
 
     @Override

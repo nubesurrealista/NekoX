@@ -13,23 +13,33 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.LaunchActivity;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import android.util.Base64;
 import android.util.Log;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.config.ConfigItem;
+import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.ShareUtil;
 
 import static tw.nekomimi.nekogram.config.ConfigItem.*;
 
@@ -269,6 +279,7 @@ public class NekoConfig {
     public static ConfigItem imageMessageSizeTweak = addConfig(R.string.ImageMessageSizeTweak, "ImageMessageSizeTweak", configTypeBool, CHAT, false);
     public static ConfigItem hideUnreadCounterOnFolderTabs = addConfig(R.string.HideUnreadCounterOnFolderTabs, "HideUnreadCounterOnFolderTabs", configTypeBool, GENERAL, false);
     public static ConfigItem chooseBestVideoQualityByDefault = addConfig(R.string.ChooseBestVideoQualityByDefault, "ChooseBestVideoQualityByDefault", configTypeBool, CHAT, false);
+    public static ConfigItem lastCrashError = addConfig("LastCrashError", configTypeString, null);
 
     public static ConfigItem customGetQueryBlacklist = addConfig(R.string.BlacklistUrlQueryTitle, "BlacklistUrlQueryTitle", configTypeString, "");
     public static ArrayList<String> customGetQueryBlacklistData = new ArrayList<>();
@@ -709,6 +720,28 @@ public class NekoConfig {
     public static void init() {
         initStrings();
         try {
+            if (lastCrashError.String() != null && !lastCrashError.String().isBlank()) {
+                final String errStr = lastCrashError.String();
+                AndroidUtilities.runOnUIThread(() -> {
+                    Context context = LaunchActivity.getLastFragment().getContext();
+                    new AlertDialog.Builder(context)
+                            .setTitle(LocaleController.getString(R.string.CrashDialogTitle))
+                            .setMessage(LocaleController.getString(R.string.CrashDialogMessage))
+                            .setNeutralButton(LocaleController.getString(R.string.Copy), (__, ___) -> {
+                                AndroidUtilities.addToClipboard(errStr);
+                                lastCrashError.setConfigString(null);
+                            })
+                            .setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) -> {
+                                String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss"));
+                                File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), timestamp + ".nekox-crash.txt");
+                                FileUtil.writeUtf8String(errStr, cacheFile);
+                                ShareUtil.shareFile(context, cacheFile);
+                            })
+                            .setNegativeButton(LocaleController.getString(R.string.Cancel), (__, ___) -> lastCrashError.setConfigString(null))
+                            .create().show();
+                });
+                lastCrashError.setConfigString(null);
+            }
             updateUseSpoilerMediaChatList();
             updatePreferredTranslateTargetLangList();
             applyCustomGetQueryBlacklist();

@@ -253,4 +253,7 @@
     <string name="CopySticker">ステッカーをコピー</string>
     <string name="CopyPhotoSticker">画像/ステッカーをコピー</string>
     <string name="ChooseBestVideoQualityByDefault">自動的に最高の動画解像度を選ぶ</string>
+    <string name="CrashDialogTitle">NekoX はクラッシュしちゃった!</string>
+    <string name="CrashDialogMessage">デバッグインフォをシェアするで開発者を手伝えしますか?</string>
+    <string name="TriggerCrash">アプリをクラッシュする</string>
 </resources>

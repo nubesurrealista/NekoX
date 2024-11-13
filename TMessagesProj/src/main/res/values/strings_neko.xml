@@ -268,4 +268,7 @@
     <string name="CopyPhotoSticker">Copy Photo/Sticker</string>
     <string name="HideUnreadCounterOnFolderTabs">Hide unread counter on folder tabs</string>
     <string name="ChooseBestVideoQualityByDefault">Choose best video quality by default</string>
+    <string name="CrashDialogTitle">NekoX crashed!</string>
+    <string name="CrashDialogMessage">Help the developer solve this problem by sharing related info?</string>
+    <string name="TriggerCrash">Trigger crash</string>
 </resources>
