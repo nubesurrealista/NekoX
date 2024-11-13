@@ -1134,14 +1134,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     }
 
     public void checkSingleProxy(SharedConfig.ProxyInfo proxyInfo, int repeat, Runnable callback) {
-        if (SharedConfig.activeAccounts.isEmpty() && proxyInfo instanceof SharedConfig.WsProxy) {
-            proxyInfo.availableCheckTime = SystemClock.elapsedRealtime();
-            proxyInfo.checking = false;
-            proxyInfo.available = false;
-            proxyInfo.ping = 0;
-            callback.run();
-            return;
-        }
         proxyInfo.ensureStarted(() -> proxyInfo.proxyCheckPingId = ConnectionsManager.getInstance(currentAccount).checkProxy(proxyInfo.address, proxyInfo.port, proxyInfo.username, proxyInfo.password, proxyInfo.secret, time -> AndroidUtilities.runOnUIThread(() -> {
             if (time == -1) {
                 if (repeat > 0) {

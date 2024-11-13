@@ -61,10 +61,6 @@ import java.util.stream.Collectors;
 
 import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.proxy.ProxyManager;
-import tw.nekomimi.nekogram.proxy.tcp2ws.WsLoader;
-import tw.nekomimi.nekogram.proxynext.ProxyConfig;
-import tw.nekomimi.nekogram.proxynext.SingProxyManager;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
@@ -491,125 +487,6 @@ public class SharedConfig {
 
         public String getHash() {
             return "";
-        }
-    }
-
-    public static class WsProxy extends ProxyInfo {
-
-        public WsLoader.Bean bean;
-        public WsLoader loader;
-
-        public WsProxy(String url) {
-            this(WsLoader.Companion.parse(url));
-        }
-
-        public WsProxy(WsLoader.Bean bean) {
-            super("127.0.0.1", ProxyManager.mkPort(), "", "", "");
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                throw new RuntimeException(LocaleController.getString("MinApi21Required", R.string.MinApi21Required));
-            }
-
-            this.bean = bean;
-        }
-
-        @Override
-        public String getLink() {
-            return bean.toString();
-        }
-
-        @Override
-        public int getProxyType() {
-            return PROXY_TYPE_WSRELAY;
-        }
-
-        @Override
-        public void ensureStarted(Runnable runnable) {
-            if (loader != null) {
-                runnable.run();
-                return;
-            }
-            UIUtil.runOnIoDispatcher(() -> {
-                synchronized (this) {
-                    if (loader == null) {
-                        loader = new WsLoader();
-                        loader.init(bean, port);
-                        loader.start();
-                    }
-                }
-                runnable.run();
-            });
-        }
-
-        @Override
-        public void stop() {
-            if (loader == null) return;
-            UIUtil.runOnIoDispatcher(() -> {
-                synchronized (this) {
-                    if (loader == null)
-                        return;
-                    loader.stop();
-                    loader = null;
-                }
-            });
-        }
-
-        @Override
-        public String getHash() {
-            return Utilities.MD5(getLink());
-        }
-
-        @Override
-        public String getRemarks() {
-            return bean.getRemarks();
-        }
-
-        @Override
-        public void setRemarks(String remarks) {
-            bean.setRemarks(remarks);
-        }
-    }
-
-    public static class SingProxyInfo extends ProxyInfo {
-        public final ProxyConfig.SingProxyBean singProxyBean;
-
-        public SingProxyInfo(int internalPort, ProxyConfig.SingProxyBean bean) {
-            super("127.0.0.1", internalPort, "", "", "");
-            this.singProxyBean = bean;
-        }
-
-        public ProxyConfig.SingProxyBean getProxyBean() {
-            return singProxyBean;
-        }
-
-        @Override
-        public String getHash() {
-            return singProxyBean.getHash();
-        }
-
-        @Override
-        public String getLink() {
-            return singProxyBean.generateLink();
-        }
-
-        @Override
-        public void setRemarks(String remarks) {
-            super.setRemarks(remarks);
-            this.singProxyBean.setRemarks(remarks);
-        }
-
-        @Override
-        public int getProxyType() {
-            return PROXY_TYPE_SING;
-        }
-
-        @Override
-        public void ensureStarted(Runnable runnable) {
-            UIUtil.runOnIoDispatcher(runnable);
-        }
-
-        @Override
-        public void stop() {
-            super.stop();
         }
     }
 
@@ -1720,18 +1597,6 @@ public class SharedConfig {
                 info.group = obj.optInt("group", 0);
                 break;
             }
-            case "vmess":
-            case "shadowsocks":
-            case "shadowsocksr": {
-                ProxyConfig.SingProxyBean config = ProxyConfig.parseSingBoxConfig(obj.optString("link"));
-                if (config == null) return null;
-                info = new SingProxyInfo(11451, config);
-                break;
-            }
-            case "ws": {
-                info = new WsProxy(obj.optString("link"));
-                break;
-            }
             default: {
                 return null;
             }
@@ -1896,13 +1761,6 @@ public class SharedConfig {
             return info;
         }
 
-        try {
-            ProxyConfig.SingProxyBean boxConfig = ProxyConfig.parseSingBoxConfig(url);
-            if (boxConfig == null) return null;
-            return SingProxyManager.Companion.getMainInstance().registerProxy(boxConfig);
-        } catch (Exception ex) {
-            FileLog.e(ex);
-        }
         return null;
     }
 
@@ -1918,21 +1776,6 @@ public class SharedConfig {
         proxyList.add(0, proxyInfo);
         saveProxyList();
         return proxyInfo;
-    }
-
-    public static ProxyInfo addProxy(ProxyConfig.SingProxyBean singBean) {
-        loadProxyList();
-        SingProxyInfo info = SingProxyManager.Companion.getMainInstance().registerProxy(singBean);
-        proxyList.add(0, info);
-        saveProxyList();
-        return info;
-    }
-
-    public static ProxyInfo addProxy(WsProxy wsProxy) {
-        loadProxyList();
-        proxyList.add(0, wsProxy);
-        saveProxyList();
-        return wsProxy;
     }
 
 
