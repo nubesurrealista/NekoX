@@ -8402,12 +8402,17 @@ public class Theme {
             dialogs_tagPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         }
 
-        dialogs_countTextPaint.setTextSize(dp(13));
+        boolean overrideSize = NekoConfig.chatListFontSizeFollowChat.Bool();
+        dialogs_countTextPaint.setTextSize(dp(overrideSize ? (SharedConfig.fontSize + 1) : 13));
     }
 
     public static void createDialogsResources(Context context) {
         createCommonResources(context);
         createCommonDialogResources(context);
+        boolean overrideSize = NekoConfig.chatListFontSizeFollowChat.Bool();
+        int dp1 = overrideSize ? dp(SharedConfig.fontSize + 1) : 0;
+        int dp2 = overrideSize ? dp(SharedConfig.fontSize + 2) : 0;
+
         if (dialogs_namePaint == null) {
             Resources resources = context.getResources();
 
@@ -8422,6 +8427,11 @@ public class Theme {
                 dialogs_nameEncryptedPaint[a].setTypeface(AndroidUtilities.bold());
                 dialogs_messagePaint[a] = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
                 dialogs_messagePrintingPaint[a] = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
+                if (overrideSize) {
+                    dialogs_namePaint[a].setTextSize(dp2);
+                    dialogs_messagePaint[a].setTextSize(dp1);
+                    dialogs_messagePrintingPaint[a].setTextSize(dp1);
+                }
             }
             dialogs_searchNamePaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
             dialogs_searchNamePaint.setTypeface(AndroidUtilities.bold());
@@ -8429,6 +8439,7 @@ public class Theme {
             dialogs_searchNameEncryptedPaint.setTypeface(AndroidUtilities.bold());
             dialogs_messageNamePaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
             dialogs_messageNamePaint.setTypeface(AndroidUtilities.bold());
+            if (overrideSize) Theme.dialogs_messageNamePaint.setTextSize(dp1);
             dialogs_timePaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
             dialogs_archiveTextPaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
             dialogs_archiveTextPaint.setTypeface(AndroidUtilities.bold());
@@ -8488,8 +8499,8 @@ public class Theme {
             applyDialogsTheme();
         }
 
-        dialogs_messageNamePaint.setTextSize(dp(14));
-        dialogs_timePaint.setTextSize(dp(13));
+        dialogs_messageNamePaint.setTextSize(overrideSize ? dp1 : dp(14));
+        dialogs_timePaint.setTextSize(overrideSize ? dp1 : dp(13));
         dialogs_archiveTextPaint.setTextSize(dp(13));
         dialogs_archiveTextPaintSmall.setTextSize(dp(11));
         dialogs_onlinePaint.setTextSize(dp(15));

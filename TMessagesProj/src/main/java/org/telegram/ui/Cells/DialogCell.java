@@ -998,24 +998,28 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
         }
 
         if (useForceThreeLines || SharedConfig.useThreeLinesLayout) {
-            Theme.dialogs_namePaint[0].setTextSize(dp(17));
-            Theme.dialogs_nameEncryptedPaint[0].setTextSize(dp(17));
-            Theme.dialogs_messagePaint[0].setTextSize(dp(16));
-            Theme.dialogs_messagePrintingPaint[0].setTextSize(dp(16));
+            if (!NekoConfig.chatListFontSizeFollowChat.Bool()) {
+                Theme.dialogs_namePaint[0].setTextSize(dp(17));
+                Theme.dialogs_nameEncryptedPaint[0].setTextSize(dp(17));
+                Theme.dialogs_messagePaint[0].setTextSize(dp(16));
+                Theme.dialogs_messagePrintingPaint[0].setTextSize(dp(16));
 
-            Theme.dialogs_namePaint[1].setTextSize(dp(16));
-            Theme.dialogs_nameEncryptedPaint[1].setTextSize(dp(16));
-            Theme.dialogs_messagePaint[1].setTextSize(dp(15));
-            Theme.dialogs_messagePrintingPaint[1].setTextSize(dp(15));
+                Theme.dialogs_namePaint[1].setTextSize(dp(16));
+                Theme.dialogs_nameEncryptedPaint[1].setTextSize(dp(16));
+                Theme.dialogs_messagePaint[1].setTextSize(dp(15));
+                Theme.dialogs_messagePrintingPaint[1].setTextSize(dp(15));
+            }
 
             Theme.dialogs_messagePaint[1].setColor(Theme.dialogs_messagePaint[1].linkColor = Theme.getColor(Theme.key_chats_message_threeLines, resourcesProvider));
             paintIndex = 1;
             thumbSize = 18;
         } else {
-            Theme.dialogs_namePaint[0].setTextSize(dp(17));
-            Theme.dialogs_nameEncryptedPaint[0].setTextSize(dp(17));
-            Theme.dialogs_messagePaint[0].setTextSize(dp(16));
-            Theme.dialogs_messagePrintingPaint[0].setTextSize(dp(16));
+            if (!NekoConfig.chatListFontSizeFollowChat.Bool()) {
+                Theme.dialogs_namePaint[0].setTextSize(dp(17));
+                Theme.dialogs_nameEncryptedPaint[0].setTextSize(dp(17));
+                Theme.dialogs_messagePaint[0].setTextSize(dp(16));
+                Theme.dialogs_messagePrintingPaint[0].setTextSize(dp(16));
+            }
 
             Theme.dialogs_messagePaint[0].setColor(Theme.dialogs_messagePaint[0].linkColor = Theme.getColor(Theme.key_chats_message, resourcesProvider));
             paintIndex = 0;
@@ -1921,11 +1925,6 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
 
         int timeWidth;
         if (drawTime) {
-            float oldTextSize = Theme.dialogs_timePaint.getTextSize();
-            float desiredSize = NekoConfig.chatListFontSizeFollowChat.Bool() ? dp(SharedConfig.fontSize + 1) : oldTextSize;
-            if (oldTextSize != desiredSize) {
-                Theme.dialogs_timePaint.setTextSize(desiredSize);
-            }
             timeWidth = (int) Math.ceil(Theme.dialogs_timePaint.measureText(timeString));
             timeLayout = new StaticLayout(timeString, Theme.dialogs_timePaint, timeWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             if (!LocaleController.isRTL) {
@@ -2021,11 +2020,6 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             if (LocaleController.isRTL) {
                 nameLeft += w;
             }
-        }
-        float oldTextSize = Theme.dialogs_namePaint[paintIndex].getTextSize();
-        float desiredSize = NekoConfig.chatListFontSizeFollowChat.Bool() ? dp(SharedConfig.fontSize + 2) : oldTextSize;
-        if (oldTextSize != desiredSize) {
-            Theme.dialogs_namePaint[paintIndex].setTextSize(desiredSize);
         }
         try {
             int ellipsizeWidth = nameWidth - dp(12);
@@ -2152,11 +2146,6 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             }
         } else if (countString != null || mentionString != null || drawReactionMention) {
             if (countString != null) {
-                oldTextSize = Theme.dialogs_countTextPaint.getTextSize();
-                desiredSize = NekoConfig.chatListFontSizeFollowChat.Bool() ? dp(SharedConfig.fontSize + 1) : oldTextSize;
-                if (oldTextSize != desiredSize) {
-                    Theme.dialogs_countTextPaint.setTextSize(desiredSize);
-                }
                 countWidth = Math.max(dp(12), (int) Math.ceil(Theme.dialogs_countTextPaint.measureText(countString)));
                 countLayout = new StaticLayout(countString, Theme.dialogs_countTextPaint, countWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                 int w = countWidth + dp(18);
@@ -2234,13 +2223,6 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             }
             drawCount = false;
             drawMention = false;
-        }
-
-        oldTextSize = Theme.dialogs_messagePaint[paintIndex].getTextSize();
-        desiredSize = NekoConfig.chatListFontSizeFollowChat.Bool() ? dp(SharedConfig.fontSize + 1) : oldTextSize;
-        if (oldTextSize != desiredSize) {
-            Theme.dialogs_messagePaint[paintIndex].setTextSize(desiredSize);
-            Theme.dialogs_messageNamePaint.setTextSize(desiredSize);
         }
 
         if (checkMessage) {
@@ -2329,11 +2311,6 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
         animatedEmojiStack3 = AnimatedEmojiSpan.update(AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES, this, animatedEmojiStack3, buttonLayout);
 
         try {
-            oldTextSize = Theme.dialogs_messagePrintingPaint[paintIndex].getTextSize();
-            desiredSize = NekoConfig.chatListFontSizeFollowChat.Bool() ? dp(SharedConfig.fontSize + 1) : oldTextSize;
-            if (oldTextSize != desiredSize) {
-                Theme.dialogs_messagePrintingPaint[paintIndex].setTextSize(desiredSize);
-            }
             if (!TextUtils.isEmpty(typingString)) {
                 if ((useForceThreeLines || SharedConfig.useThreeLinesLayout) && !hasTags()) {
                     typingLayout = StaticLayoutEx.createStaticLayout(typingString, Theme.dialogs_messagePrintingPaint[paintIndex], messageWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, dp(1), false, TextUtils.TruncateAt.END, messageWidth, typingString != null ? 1 : 2);
