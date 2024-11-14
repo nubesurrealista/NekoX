@@ -10,6 +10,7 @@ import android.content.IntentSender;
 import android.content.pm.ResolveInfo;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Build;
 import android.text.TextPaint;
 import android.transition.TransitionManager;
 import android.util.Log;
@@ -238,6 +239,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell divider8 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell headerAutoDownload = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.AutoDownload)));
+    private final AbstractConfigCell mapMobileDataSaverToRoamingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.mapMobileDataSaverToRoaming, LocaleController.getString(R.string.MapMobileDataSaverToRoamingNote)));
     private final AbstractConfigCell win32Row = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAutoDownloadingWin32Executable));
     private final AbstractConfigCell archiveRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAutoDownloadingArchive));
     private final AbstractConfigCell dividerAutoDownload = cellGroup.appendCell(new ConfigCellDivider());
@@ -851,6 +853,10 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         enabled = NekoConfig.largeAvatarInDrawer.Int() > 0;
         ((ConfigCellTextCheck) avatarBackgroundBlurRow).setEnabled(enabled);
         ((ConfigCellTextCheck) avatarBackgroundDarkenRow).setEnabled(enabled);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            ((ConfigCellTextCheck) mapMobileDataSaverToRoamingRow).setEnabled(false);
+        }
     }
 
     //Custom dialogs

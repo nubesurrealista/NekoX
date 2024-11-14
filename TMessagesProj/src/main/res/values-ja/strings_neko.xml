@@ -256,4 +256,6 @@
     <string name="CrashDialogTitle">NekoX はクラッシュしちゃった!</string>
     <string name="CrashDialogMessage">デバッグインフォをシェアするで開発者を手伝えしますか?</string>
     <string name="TriggerCrash">アプリをクラッシュする</string>
+    <string name="MapMobileDataSaverToRoaming">データセーバーがオンの時にローミング設定を使用する</string>
+    <string name="MapMobileDataSaverToRoamingNote">Android 9 以降でのみ動作します</string>
 </resources>

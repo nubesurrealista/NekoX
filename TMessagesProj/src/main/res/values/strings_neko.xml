@@ -271,4 +271,6 @@
     <string name="CrashDialogTitle">NekoX crashed!</string>
     <string name="CrashDialogMessage">Help the developer solve this problem by sharing related info?</string>
     <string name="TriggerCrash">Trigger crash</string>
+    <string name="MapMobileDataSaverToRoaming">Use roaming preset when data saver is on</string>
+    <string name="MapMobileDataSaverToRoamingNote">Only works on Android 9 or newer versions</string>
 </resources>

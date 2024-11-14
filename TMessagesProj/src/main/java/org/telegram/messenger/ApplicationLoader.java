@@ -481,6 +481,21 @@ public class ApplicationLoader extends Application {
         return false;
     }
 
+    public static boolean isDataSaverEnabled() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) return false;
+        try {
+            ConnectivityManager cm = (ConnectivityManager) applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+            boolean ret = (cm != null && cm.getRestrictBackgroundStatus() == ConnectivityManager.RESTRICT_BACKGROUND_STATUS_ENABLED);
+            if (ret) {
+                FileLog.d("data saver is enabled");
+                return true;
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return false;
+    }
+
     public static boolean isConnectedOrConnectingToWiFi() {
         try {
             ensureCurrentNetworkGet(false);
@@ -538,7 +553,8 @@ public class ApplicationLoader extends Application {
                     return lastKnownNetworkType;
                 }
                 if (connectivityManager.isActiveNetworkMetered()) {
-                    lastKnownNetworkType = StatsController.TYPE_MOBILE;
+                    lastKnownNetworkType = (NekoConfig.mapMobileDataSaverToRoaming.Bool() && isDataSaverEnabled()) ?
+                            StatsController.TYPE_ROAMING : StatsController.TYPE_MOBILE;
                 } else {
                     lastKnownNetworkType = StatsController.TYPE_WIFI;
                 }
@@ -551,7 +567,8 @@ public class ApplicationLoader extends Application {
         } catch (Exception e) {
             FileLog.e(e);
         }
-        return StatsController.TYPE_MOBILE;
+        return (NekoConfig.mapMobileDataSaverToRoaming.Bool() && isDataSaverEnabled()) ?
+                StatsController.TYPE_ROAMING : StatsController.TYPE_MOBILE;
     }
 
     public static int getCurrentNetworkType() {
