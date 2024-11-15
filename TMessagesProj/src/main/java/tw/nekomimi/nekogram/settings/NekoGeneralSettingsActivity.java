@@ -222,6 +222,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell dontShareNumberWhenAddContactByDefaultRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.dontShareNumberWhenAddContactByDefault));
     private final AbstractConfigCell customSearchEngineRow = cellGroup.appendCell(new ConfigCellTextInput(null, NekoConfig.customSearchEngine, null, null, SearchEngine::refreshSearchEngines));
     private final AbstractConfigCell searchBlacklistRow = cellGroup.appendCell(new ConfigCellTextInput(null, NekoConfig.searchBlacklist, null, null, NekoConfig::applySearchBlacklist));
+    private final AbstractConfigCell overridePerformanceClassRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.OverridePerformanceClass),
+            NekoConfig.perfClassOverride, NekoConfig.perfClassOverrideOptions, null));
     private final AbstractConfigCell divider7 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final String instantViewAndBots = String.format("%s / %s", LocaleController.getString(R.string.ChannelBots), LocaleController.getString(R.string.OpenInstantView));
@@ -465,6 +467,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 listAdapter.notifyItemChanged(cellGroup.rows.indexOf(translationProviderRow));
             } else if (key.equals(NekoConfig.articleViewerBottomActionBar.getKey())) {
                 ArticleViewer.BOTTOM_ACTION_BAR = (boolean) newValue;
+            } else if (key.equals(NekoConfig.perfClassOverride.getKey())) {
+                NekoConfig.applyPerformanceClassOverride((Integer) newValue);
             }
         };
 

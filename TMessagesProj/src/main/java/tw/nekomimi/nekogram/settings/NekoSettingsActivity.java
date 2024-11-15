@@ -83,7 +83,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
     private int aboutRow;
     private int channelRow;
-    private int fdroidRow;
+    private int fdroidRow = -1;
     private int googlePlayRow;
     private int sourceCodeRow;
     private int translationRow;

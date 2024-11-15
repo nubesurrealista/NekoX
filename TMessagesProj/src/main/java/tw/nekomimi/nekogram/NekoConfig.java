@@ -13,6 +13,7 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.LaunchActivity;
 
@@ -287,6 +288,9 @@ public class NekoConfig {
 
     public static ConfigItem searchBlacklist = addConfig(R.string.SearchBlacklist, "searchBlackList", configTypeString, "");
     public static ArrayList<Long> searchBlacklistData = new ArrayList<>();
+
+    public static ConfigItem perfClassOverride = addConfig(R.string.OverridePerformanceClass, "perfClassOverride", configTypeInt, GENERAL, 0);
+    public static String[] perfClassOverrideOptions = null;
 
     static {
         loadConfig(false);
@@ -602,6 +606,12 @@ public class NekoConfig {
             getString(R.string.Forward),
             getString(R.string.NoQuoteForward),
         };
+        perfClassOverrideOptions = new String[] {
+                getString(R.string.Default),
+                getString(R.string.AutoDownloadLow),
+                getString(R.string.AutoDownloadMedium),
+                getString(R.string.AutoDownloadHigh),
+        };
     }
 
     public static void updateUseSpoilerMediaChatList() {
@@ -718,6 +728,11 @@ public class NekoConfig {
         searchBlacklist.setConfigString(str.substring(1, str.length() - 1));
     }
 
+    public static void applyPerformanceClassOverride(Integer c) {
+        if (c == null && (c = NekoConfig.perfClassOverride.Int()) == -1) return;
+        SharedConfig.overrideDevicePerformanceClass((c == 0) ? -1 : (c - 1));
+    }
+
     public static void init() {
         initStrings();
         try {
@@ -747,6 +762,7 @@ public class NekoConfig {
             updatePreferredTranslateTargetLangList();
             applyCustomGetQueryBlacklist();
             applySearchBlacklist();
+            applyPerformanceClassOverride(null);
         } catch (Exception ex) {
             Log.e("030-neko", "failed to load part of neko config", ex);
         }

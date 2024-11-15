@@ -273,4 +273,5 @@
     <string name="TriggerCrash">Trigger crash</string>
     <string name="MapMobileDataSaverToRoaming">Use roaming preset when data saver is on</string>
     <string name="MapMobileDataSaverToRoamingNote">Only works on Android 9 or newer versions</string>
+    <string name="OverridePerformanceClass">Override device performance class</string>
 </resources>
