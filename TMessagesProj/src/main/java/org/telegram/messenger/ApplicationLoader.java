@@ -104,7 +104,7 @@ public class ApplicationLoader extends Application {
         } catch (Throwable ignore) {
         }
         Thread.currentThread().setUncaughtExceptionHandler((thread, error) -> {
-            Log.e("nekox", "from " + thread.toString(), error);
+            Log.e("nekox", "from " + thread, error);
             String errStr = String.format("%s\n%s", error.getMessage(), TelegramUtil.getStackTraceAsString(error.getStackTrace()));
             NekoConfig.lastCrashError.setConfigString(errStr);
             ProcessPhoenix.triggerRebirth(applicationContext, new Intent(applicationContext, LaunchActivity.class));
@@ -642,18 +642,6 @@ public class ApplicationLoader extends Application {
         }
         return result;
     }
-
-//    public static void startAppCenter(Activity context) {
-//        applicationLoaderInstance.startAppCenterInternal(context);
-//    }
-//
-//    public static void checkForUpdates() {
-//        applicationLoaderInstance.checkForUpdatesInternal();
-//    }
-//
-//    public static void appCenterLog(Throwable e) {
-//        applicationLoaderInstance.appCenterLogInternal(e);
-//    }
 
     protected void appCenterLogInternal(Throwable e) {
 

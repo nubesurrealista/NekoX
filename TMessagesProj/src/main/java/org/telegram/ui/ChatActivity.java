@@ -3665,6 +3665,37 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         return;
                     }
                     boolean canDeleteHistory = chatInfo != null && chatInfo.can_delete_channel;
+
+                    // Neko.030
+                    TLObject cachedObject = userInfo == null ? null : getMessagesController().getUserOrChat(userInfo.id);
+                    TLRPC.User user = (cachedObject instanceof TLRPC.User) ? (TLRPC.User) cachedObject : null;
+                    if (id == delete_chat && user != null && user.bot && NekoConfig.keepBlockedBotChatHistory.Bool()) {
+                        if (userBlocked) {
+                            getMessagesController().unblockPeer(user.id);
+                            if (BulletinFactory.canShowBulletin(ChatActivity.this)) {
+                                BulletinFactory.createBanBulletin(ChatActivity.this, false).show();
+                            }
+                        } else {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity(), getResourceProvider());
+                            builder.setTitle(LocaleController.getString(R.string.BlockUser));
+                            builder.setMessage(AndroidUtilities.replaceTags(formatString("AreYouSureBlockContact2", R.string.AreYouSureBlockContact2, ContactsController.formatName(user.first_name, user.last_name))));
+                            builder.setPositiveButton(LocaleController.getString(R.string.BlockContact), (dialogInterface, i) -> {
+                                getMessagesController().blockPeer(user.id);
+                                if (BulletinFactory.canShowBulletin(ChatActivity.this)) {
+                                    BulletinFactory.createBanBulletin(ChatActivity.this, true).show();
+                                }
+                            });
+                            builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
+                            AlertDialog dialog = builder.create();
+                            showDialog(dialog);
+                            TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                            if (button != null) {
+                                button.setTextColor(getThemedColor(Theme.key_text_RedBold));
+                            }
+                        }
+                        return;
+                    }
+
                     if (id == auto_delete_timer || id == clear_history && currentEncryptedChat == null && ((currentUser != null && !UserObject.isUserSelf(currentUser) && !UserObject.isDeleted(currentUser)) || (chatInfo != null && chatInfo.can_delete_channel))) {
                         AlertsCreator.createClearDaysDialogAlert(ChatActivity.this, -1, currentUser, currentChat, canDeleteHistory, new MessagesStorage.BooleanCallback() {
                             @Override
@@ -4270,7 +4301,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         if (!MessagesController.isSupportUser(currentUser)) {
                             headerItem.lazilyAddSubItem(report, R.drawable.msg_report, LocaleController.getString(R.string.ReportBot)).setColors(getThemedColor(Theme.key_text_RedRegular), getThemedColor(Theme.key_text_RedRegular));
                         }
-                        headerItem.lazilyAddSubItem(delete_chat, R.drawable.msg_block2, LocaleController.getString(R.string.DeleteAndBlock)).setColors(getThemedColor(Theme.key_text_RedRegular), getThemedColor(Theme.key_text_RedRegular));
+                        String blockStr = LocaleController.getString(NekoConfig.keepBlockedBotChatHistory.Bool() ? R.string.BlockBot : R.string.DeleteAndBlock);
+                        headerItem.lazilyAddSubItem(delete_chat, R.drawable.msg_block2, blockStr).setColors(getThemedColor(Theme.key_text_RedRegular), getThemedColor(Theme.key_text_RedRegular));
                         updateBotButtons();
                     } else {
                         headerItem.lazilyAddSubItem(delete_chat, R.drawable.msg_delete, LocaleController.getString(R.string.DeleteChatUser));
@@ -41516,7 +41548,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     if (currentChat != null) {
                         headerItem.lazilyAddSubItem(delete_chat, R.drawable.msg_leave, LocaleController.getString(R.string.DeleteAndExit));
                     } else if (currentUser != null && currentUser.bot) {
-                        headerItem.lazilyAddSubItem(delete_chat, R.drawable.msg_block2, LocaleController.getString(R.string.DeleteAndBlock)).setColors(getThemedColor(Theme.key_text_RedRegular), getThemedColor(Theme.key_text_RedRegular));
+                        headerItem.lazilyAddSubItem(delete_chat, R.drawable.msg_block2,
+                                LocaleController.getString(NekoConfig.keepBlockedBotChatHistory.Bool() ? R.string.BlockBot : R.string.DeleteAndBlock))
+                                .setColors(getThemedColor(Theme.key_text_RedRegular), getThemedColor(Theme.key_text_RedRegular));
                     } else {
                         headerItem.lazilyAddSubItem(delete_chat, R.drawable.msg_delete, LocaleController.getString(R.string.DeleteChatUser));
                     }

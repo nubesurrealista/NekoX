@@ -2213,7 +2213,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     if (user == null) {
                         return;
                     }
-                    if (!isBot || MessagesController.isSupportUser(user)) {
+                    if (!isBot || NekoConfig.keepBlockedBotChatHistory.Bool() || MessagesController.isSupportUser(user)) {
                         if (userBlocked) {
                             getMessagesController().unblockPeer(userId);
                             if (BulletinFactory.canShowBulletin(ProfileActivity.this)) {
@@ -10386,7 +10386,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 otherItem.hideSubItem(bot_privacy);
                             }
                             otherItem.addSubItem(report, R.drawable.msg_report, LocaleController.getString(R.string.ReportBot)).setColors(getThemedColor(Theme.key_text_RedRegular), getThemedColor(Theme.key_text_RedRegular));
-                            if (!userBlocked) {
+                            if (NekoConfig.keepBlockedBotChatHistory.Bool()) {
+                                otherItem.addSubItem(block_contact, R.drawable.baseline_block_24, !userBlocked ? LocaleController.getString(R.string.BlockBot) : LocaleController.getString(R.string.Unblock));
+                            } else if (!userBlocked) {
                                 otherItem.addSubItem(block_contact, R.drawable.baseline_block_24, LocaleController.getString(R.string.DeleteAndBlock)).setColors(getThemedColor(Theme.key_text_RedRegular), getThemedColor(Theme.key_text_RedRegular));
                             } else {
                                 otherItem.addSubItem(block_contact, R.drawable.baseline_replay_24, LocaleController.getString(R.string.BotRestart));
