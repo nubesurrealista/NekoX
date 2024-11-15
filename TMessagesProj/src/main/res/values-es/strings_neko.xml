@@ -260,4 +260,20 @@
     <string name="CleanupLeftovers">Limpiar los restos</string>
     <string name="CleanupLeftoversResults">Liberado %1$.2f KB de almacenamiento.</string>
     <string name="CleanupLeftoversResultsMB">Liberados %1$.2f MB de almacenamiento.</string>
+    <string name="SelectAnIcon">Elige un icono</string>
+    <string name="ImageMessageSizeTweak">Aumentar el tamaño máximo de los mensajes con imagen y permitir el ajuste del aspecto</string>
+    <string name="CopySticker">Copiar Sticker</string>
+    <string name="CopyPhotoSticker">Copiar foto/sticker</string>
+    <string name="HideUnreadCounterOnFolderTabs">Ocultar contador de no leídos en pestañas de carpetas</string>
+    <string name="CrashDialogTitle">¡NekoX falló!</string>
+    <string name="CrashDialogMessage">¿Ayudar al desarrollador a resolver este problema compartiendo información relacionada?</string>
+    <string name="TriggerCrash">Desencadenante del error</string>
+    <string name="ArticleViewerBottomActionBar">Mover la barra de acciones del visor de artículos hacia la parte inferior</string>
+    <string name="MapMobileDataSaverToRoamingNote">Solo es compatible con Android 9 o versiones más recientes</string>
+    <string name="AlwaysTranslateBeforeSend">Traducir siempre</string>
+    <string name="AlwaysTranslateBeforeSendNote">Solo se conservará el texto de los mensajes reenviados</string>
+    <string name="ChooseBestVideoQualityByDefault">Elige la mejor calidad de vídeo por defecto</string>
+    <string name="MapMobileDataSaverToRoaming">Utilizar la itinerancia preestablecida cuando el ahorro de datos está activado</string>
+    <string name="KeepBlockedBotChatHistory">Mantener el historial de bots tras el bloqueo</string>
+    <string name="DontSendStartCmdOnUnblockBot">No enviar/iniciar después de desbloquear</string>
 </resources>
