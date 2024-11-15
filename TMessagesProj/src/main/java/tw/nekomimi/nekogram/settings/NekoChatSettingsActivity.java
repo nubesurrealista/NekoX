@@ -95,6 +95,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final AbstractConfigCell forceHideShowAsListRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.forceHideShowAsList));
     private final AbstractConfigCell largerImageMessageRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.imageMessageSizeTweak));
     private final AbstractConfigCell keepBlockedBotChatHistoryRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.keepBlockedBotChatHistory));
+    private final AbstractConfigCell dontSendStartCmdOnUnblockBotRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.dontSendStartCmdOnUnblockBot));
     private final AbstractConfigCell dividerChat = cellGroup.appendCell(new ConfigCellDivider());
 
     // Interactions

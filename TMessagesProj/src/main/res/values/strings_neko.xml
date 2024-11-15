@@ -275,4 +275,5 @@
     <string name="MapMobileDataSaverToRoamingNote">Only works on Android 9 or newer versions</string>
     <string name="OverridePerformanceClass">Override device performance class</string>
     <string name="KeepBlockedBotChatHistory">Keep bot history after block</string>
+    <string name="DontSendStartCmdOnUnblockBot">Don\'t send /start after unblock</string>
 </resources>
