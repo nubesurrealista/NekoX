@@ -12527,7 +12527,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 replyingMessageObject = null;
             }
             replyingQuote = null;
-            chatActivityEnterView.setReplyingMessageObject(null, null);
+            if (chatActivityEnterView != null)
+                chatActivityEnterView.setReplyingMessageObject(null, null);
         }
         hideFieldPanel(false);
         if (chatMode == 0) {
