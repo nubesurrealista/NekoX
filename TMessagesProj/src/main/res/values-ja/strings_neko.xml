@@ -258,4 +258,6 @@
     <string name="TriggerCrash">アプリをクラッシュする</string>
     <string name="MapMobileDataSaverToRoaming">データセーバーがオンの時にローミング設定を使用する</string>
     <string name="MapMobileDataSaverToRoamingNote">Android 9 以降でのみ動作します</string>
+    <string name="ImageMessageSizeTweak">画像メッセの最大サイズを大きくする</string>
+    <string name="KeepBlockedBotChatHistory">ボットをブロック時はチャットを削除しない</string>
 </resources>

@@ -270,4 +270,6 @@
     <string name="TriggerCrash">触发闪退</string>
     <string name="MapMobileDataSaverToRoaming">在启用省流模式时使用漫游设定</string>
     <string name="MapMobileDataSaverToRoamingNote">仅适用于 Android 9 或更新版本的系统</string>
+    <string name="ImageMessageSizeTweak">調整圖片訊息的最大大小並啟用比例縮放</string>
+    <string name="KeepBlockedBotChatHistory">封鎖後保留與機器人的對話記錄</string>
 </resources>
