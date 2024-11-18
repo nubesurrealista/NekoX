@@ -34498,17 +34498,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 builder.addItems(
                         hasQueries ?
                             new String[]{
-                                    LocaleController.getString("Open", R.string.Open),
-                                    LocaleController.getString("Copy", R.string.Copy),
-                                    LocaleController.getString("ShareQRCode", R.string.ShareQRCode),
-                                    LocaleController.getString("ShareMessages", R.string.ShareMessages),
-                                    LocaleController.getString("BlacklistUrlQueryAdd", R.string.BlacklistUrlQueryAdd)
+                                    LocaleController.getString(R.string.Open),
+                                    LocaleController.getString(R.string.Copy),
+                                    LocaleController.getString(R.string.ShareQRCode),
+                                    LocaleController.getString(R.string.ShareMessages),
+                                    LocaleController.getString(R.string.BlacklistUrlQueryAdd)
                             } :
                             new String[]{
-                                    LocaleController.getString("Open", R.string.Open),
-                                    LocaleController.getString("Copy", R.string.Copy),
-                                    LocaleController.getString("ShareQRCode", R.string.ShareQRCode),
-                                    LocaleController.getString("ShareMessages", R.string.ShareMessages)
+                                    LocaleController.getString(R.string.Open),
+                                    LocaleController.getString(R.string.Copy),
+                                    LocaleController.getString(R.string.ShareQRCode),
+                                    LocaleController.getString(R.string.ShareMessages)
                             },
                         hasQueries ?
                             new int[]{
@@ -34539,14 +34539,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     url1 = url1.substring(4);
                                     tel = true;
                                 }
+                                if (!tel && !mail && NekoConfig.patchAndCleanupLinks.Bool()) {
+                                    url1 = UrlUtil.cleanUrl(url1);
+                                }
                                 if (which == 1) {
                                     // Copy
                                     AndroidUtilities.addToClipboard(url1);
                                     createUndoView();
-                        if (undoView == null) {
-                            return Unit.INSTANCE;
-                        }
-                        if (mail) {
+                                    if (undoView == null) {
+                                        return Unit.INSTANCE;
+                                    }
+                                    if (mail) {
                                         undoView.showWithAction(0, UndoView.ACTION_EMAIL_COPIED, null);
                                     } else if (tel) {
                                         undoView.showWithAction(0, UndoView.ACTION_PHONE_COPIED, null);
