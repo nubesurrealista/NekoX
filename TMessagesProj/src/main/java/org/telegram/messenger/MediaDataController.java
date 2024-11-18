@@ -105,6 +105,7 @@ import java.util.regex.Pattern;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.ui.PinnedStickerHelper;
+import tw.nekomimi.nekogram.utils.TelegramUtil;
 
 @SuppressWarnings("unchecked")
 public class MediaDataController extends BaseController {
@@ -2848,7 +2849,8 @@ public class MediaDataController extends BaseController {
                     }
                 });
             });
-        } else if(!getUserConfig().getCurrentUser().bot)  {
+        } else if (getUserConfig().getCurrentUser() != null)  {
+            if (getUserConfig().getCurrentUser().bot) return;
             if (type == TYPE_FEATURED || type == TYPE_FEATURED_EMOJIPACKS) {
                 final boolean emoji = type == TYPE_FEATURED_EMOJIPACKS;
                 TLRPC.TL_messages_allStickers response = new TLRPC.TL_messages_allStickers();
@@ -2911,6 +2913,9 @@ public class MediaDataController extends BaseController {
                     }
                 }));
             }
+        } else {
+            Log.e("loadStickers", String.format("unexpected condition! type=%d, cache=%s, scheduleIfLoading=%s, onFinishCallbackExists=%s\n%s",
+                    type, cache, force, scheduleIfLoading, onFinish != null, TelegramUtil.getStackTraceAsString(null)));
         }
     }
 
