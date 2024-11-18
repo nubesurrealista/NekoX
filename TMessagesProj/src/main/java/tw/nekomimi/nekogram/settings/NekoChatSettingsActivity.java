@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.text.TextPaint;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import cn.hutool.core.util.ReflectUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.ui.PopupBuilder;
@@ -296,6 +298,12 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         tooltip = new UndoView(context);
         frameLayout.addView(tooltip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
 
+        if (scrollToIndex > -1) {
+            AndroidUtilities.runOnUIThread(() -> listView.post(() -> {
+                listView.smoothScrollToPosition(scrollToIndex);
+            }));
+        }
+
         return fragmentView;
     }
 
@@ -352,6 +360,21 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
 
         return themeDescriptions;
+    }
+
+    private int scrollToIndex = -1;
+    public NekoChatSettingsActivity setScrollTo(String str) {
+        if (str == null) return this;
+        for (int i = 0; i < cellGroup.rows.size(); ++i) {
+            AbstractConfigCell c = cellGroup.rows.get(i);
+            if (!ReflectUtil.hasField(c.getClass(), "title")) continue;
+            String cmp = (String) ReflectUtil.getFieldValue(c, "title");
+            if (str.equals(cmp)) {
+                scrollToIndex = i;
+                return this;
+            }
+        }
+        return this;
     }
 
     private void showMessageMenuAlert() {

@@ -63,6 +63,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
@@ -478,6 +479,12 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         restartTooltip = new UndoView(context);
         frameLayout.addView(restartTooltip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
 
+        if (scrollToIndex > -1) {
+            AndroidUtilities.runOnUIThread(() -> listView.post(() -> {
+                listView.smoothScrollToPosition(scrollToIndex);
+            }));
+        }
+
         return fragmentView;
     }
 
@@ -861,6 +868,21 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             ((ConfigCellTextCheck) mapMobileDataSaverToRoamingRow).setEnabled(false);
         }
+    }
+
+    private int scrollToIndex = -1;
+    public NekoGeneralSettingsActivity setScrollTo(String str) {
+        if (str == null) return this;
+        for (int i = 0; i < cellGroup.rows.size(); ++i) {
+            AbstractConfigCell c = cellGroup.rows.get(i);
+            if (!ReflectUtil.hasField(c.getClass(), "title")) continue;
+            String cmp = (String) ReflectUtil.getFieldValue(c, "title");
+            if (str.equals(cmp)) {
+                scrollToIndex = i;
+                return this;
+            }
+        }
+        return this;
     }
 
     //Custom dialogs

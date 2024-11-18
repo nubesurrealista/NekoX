@@ -12744,13 +12744,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         // TODO: scroll to the section where target toggle is located
                         switch (e.getKey()) {
                             case ConfigItem.GENERAL:
-                                presentFragment(new NekoGeneralSettingsActivity());
+                                presentFragment(new NekoGeneralSettingsActivity().setScrollTo(str));
                                 break;
                             case ConfigItem.CHAT:
-                                presentFragment(new NekoChatSettingsActivity());
+                                presentFragment(new NekoChatSettingsActivity().setScrollTo(str));
                                 break;
                             case ConfigItem.EXPERIMENTAL:
-                                presentFragment(new NekoExperimentalSettingsActivity());
+                                presentFragment(new NekoExperimentalSettingsActivity().setScrollTo(str));
                                 break;
                             default:
                                 break;
