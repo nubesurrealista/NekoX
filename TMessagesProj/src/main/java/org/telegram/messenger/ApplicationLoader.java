@@ -105,7 +105,10 @@ public class ApplicationLoader extends Application {
         }
         Thread.currentThread().setUncaughtExceptionHandler((thread, error) -> {
             Log.e("nekox", "from " + thread, error);
-            String errStr = String.format("%s\n%s", error.getMessage(), TelegramUtil.getStackTraceAsString(error.getStackTrace()));
+            String errStr = String.format("%s\n%s: %s | %s\n%s",
+                    AndroidUtilities.getSystemProperty("ro.build.fingerprint"),
+                    error.getClass().getName(), error.getMessage(), error.getCause(),
+                    TelegramUtil.getStackTraceAsString(error.getStackTrace()));
             NekoConfig.lastCrashError.setConfigString(errStr);
             ProcessPhoenix.triggerRebirth(applicationContext, new Intent(applicationContext, LaunchActivity.class));
         });
