@@ -752,7 +752,7 @@ public class NekoConfig {
                             .setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) -> {
                                 String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss"));
                                 File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), timestamp + ".nekox-crash.txt");
-                                FileUtil.writeUtf8String(errStr, cacheFile);
+                                FileUtil.writeUtf8String(errStr + getNekoConfigValuesAsString(), cacheFile);
                                 ShareUtil.shareFile(context, cacheFile);
                             })
                             .setNegativeButton(LocaleController.getString(R.string.Cancel), (__, ___) -> lastCrashError.setConfigString(null))
@@ -793,6 +793,26 @@ public class NekoConfig {
             }
         }
         return nekoConfigStrings = ret;
+    }
+
+    public static String getNekoConfigValuesAsString() {
+        StringBuilder sb = new StringBuilder("\n\nNekoConfig:");
+        for (Field f : NekoConfig.class.getDeclaredFields()) {
+            if (f.getType() == ConfigItem.class && Modifier.isStatic(f.getModifiers())) {
+                try {
+                    ConfigItem item = (ConfigItem) f.get(null);
+                    if (item == null) {
+                        sb.append(String.format("(failed to get %s)\n", f.getName()));
+                    } else {
+                        sb.append(String.format("%s = %s\n", f.getName(), item.value));
+                    }
+                } catch (IllegalAccessException e) {
+                    sb.append(String.format("(failed to get %s, %s: %s | %s)\n",
+                            f.getName(), e.getClass().getName(), e.getMessage(), e.getCause()));
+                }
+            }
+        }
+        return sb.toString();
     }
 
 }
