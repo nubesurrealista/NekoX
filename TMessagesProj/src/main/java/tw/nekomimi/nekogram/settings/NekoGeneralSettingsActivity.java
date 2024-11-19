@@ -415,6 +415,11 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             } else if (key.equals(NekoConfig.actionBarDecoration.getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (key.equals(NekoConfig.tabletMode.getKey())) {
+                // default or enable = set force disable to false, otherwise true
+                if ((NekoConfig.tabletMode.Int() < 2 && SharedConfig.forceDisableTabletMode) ||
+                        (NekoConfig.tabletMode.Int() == 2 && !SharedConfig.forceDisableTabletMode)) {
+                    SharedConfig.toggleForceDisableTabletMode();
+                }
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (key.equals(NekoConfig.newYear.getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);

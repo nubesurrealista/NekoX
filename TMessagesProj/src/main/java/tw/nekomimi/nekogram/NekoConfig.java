@@ -56,6 +56,7 @@ public class NekoConfig {
 
     // Configs
     public static ConfigItem migrate = addConfig("NekoConfigMigrate", configTypeBool, false);
+    public static ConfigItem migrate030 = addConfig("NekoConfigMigrate2", configTypeInt, 0);
     public static ConfigItem largeAvatarInDrawer = addConfig(R.string.AvatarAsBackground, "AvatarAsBackground", configTypeInt, GENERAL, 0); // 0:TG Default 1:NekoX Default 2:Large Avatar
     public static ConfigItem unreadBadgeOnBackButton = addConfig(R.string.unreadBadgeOnBackButton, "unreadBadgeOnBackButton", configTypeBool, CHAT, false);
 //    public static ConfigItem customPublicProxyIP = addConfig("customPublicProxyIP", configTypeString, "");
@@ -380,6 +381,15 @@ public class NekoConfig {
     }
 
     public static void checkMigrate(boolean force) {
+        if (migrate030.Int() < 1) {
+            // fix tablet mode not applied properly when tablet mode is already on by default
+            if ((NekoConfig.tabletMode.Int() < 2 && SharedConfig.forceDisableTabletMode) ||
+                    (NekoConfig.tabletMode.Int() == 2 && !SharedConfig.forceDisableTabletMode)) {
+                SharedConfig.toggleForceDisableTabletMode();
+            }
+            migrate030.setConfigInt(1);
+        }
+
         // TODO remove this after some versions.
         if (migrate.Bool() || force)
             return;
