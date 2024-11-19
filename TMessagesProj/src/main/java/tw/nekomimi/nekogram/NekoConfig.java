@@ -806,7 +806,7 @@ public class NekoConfig {
     }
 
     public static String getNekoConfigValuesAsString() {
-        StringBuilder sb = new StringBuilder("\n\nNekoConfig:");
+        StringBuilder sb = new StringBuilder("\n\nNekoConfig:\n");
         for (Field f : NekoConfig.class.getDeclaredFields()) {
             if (f.getType() == ConfigItem.class && Modifier.isStatic(f.getModifiers())) {
                 try {
