@@ -226,10 +226,16 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
             if (i < accountNumbers.size()) {
                 return 4;
             } else {
-                if (i == accountNumbers.size()) {
-                    return 5;
-                } else if (i == accountNumbers.size() + 1) {
-                    return 2;
+                if (accountNumbers.size() < UserConfig.MAX_ACCOUNT_COUNT) {
+                    if (i == accountNumbers.size()){
+                        return 5;
+                    } else if (i == accountNumbers.size() + 1) {
+                        return 2;
+                    }
+                } else {
+                    if (i == accountNumbers.size()) {
+                        return 2;
+                    }
                 }
             }
             i -= getAccountRowsCount();
