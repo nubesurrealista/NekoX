@@ -191,7 +191,10 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
             int usableViewHeight = rootView.getHeight() - (rect.top != 0 ? AndroidUtilities.statusBarHeight : 0) - AndroidUtilities.getViewInset(rootView);
             boolean isKeyboardVisible = usableViewHeight - (rect.bottom - rect.top) > 0;
 
-            int bottomTabsHeight = (isKeyboardVisible || shouldHideTabs()) ? 0 : getBottomTabsHeight(false);
+            if (bottomSheetTabs != null) {
+                bottomSheetTabs.updateCurrentAccount();
+            }
+            final int bottomTabsHeight = (isKeyboardVisible || shouldHideTabs()) ? 0 : getBottomTabsHeight(false);
 
             for (int a = 0; a < count; a++) {
                 View child = getChildAt(a);
@@ -410,6 +413,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
     private DrawerLayoutContainer drawerLayoutContainer;
     private ActionBar currentActionBar;
     private BottomSheetTabs bottomSheetTabs;
+    private BottomSheetTabs.ClipTools bottomSheetTabsClip;
 
     private EmptyBaseFragment sheetFragment;
     public EmptyBaseFragment getSheetFragment() {
@@ -525,14 +529,17 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
     public void setFragmentStack(List<BaseFragment> stack) {
         this.fragmentsStack = stack;
 
+        if (bottomSheetTabs != null) {
+            bottomSheetTabs.stopListening(this::invalidate, this::relayout);
+            AndroidUtilities.removeFromParent(bottomSheetTabs);
+            bottomSheetTabs = null;
+        }
+
         LayoutParams layoutParams;
         if (main) {
-            if (bottomSheetTabs != null) {
-                AndroidUtilities.removeFromParent(bottomSheetTabs);
-                bottomSheetTabs = null;
-            }
-
             bottomSheetTabs = new BottomSheetTabs(parentActivity, this);
+            bottomSheetTabsClip = new BottomSheetTabs.ClipTools(bottomSheetTabs);
+            bottomSheetTabs.listen(this::invalidate, this::relayout);
             layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(68 + 8));
             layoutParams.gravity = Gravity.BOTTOM | Gravity.FILL_HORIZONTAL;
             addView(bottomSheetTabs, layoutParams);
@@ -574,7 +581,19 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         layoutParams.height = LayoutHelper.MATCH_PARENT;
         layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
         sheetContainer.setLayoutParams(layoutParams);
-
+        if (sheetFragment != null) {
+            sheetFragment.setParentLayout(this);
+            View fragmentView = sheetFragment.fragmentView;
+            if (fragmentView == null) {
+                fragmentView = sheetFragment.createView(parentActivity);
+            }
+            if (fragmentView.getParent() != sheetContainer) {
+                AndroidUtilities.removeFromParent(fragmentView);
+                sheetContainer.addView(fragmentView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+            }
+            sheetFragment.onResume();
+            sheetFragment.onBecomeFullyVisible();
+        }
 
         for (BaseFragment fragment : fragmentsStack) {
             fragment.setParentLayout(this);
@@ -872,8 +891,8 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         }
 
         final int restoreCount2 = canvas.save();
-        if (child != bottomSheetTabs) {
-            clipBottomSheetTabs(canvas, withShadow);
+        if (child != bottomSheetTabs && bottomSheetTabsClip != null) {
+            bottomSheetTabsClip.clip(canvas, withShadow, isKeyboardVisible, getWidth(), (int) getY() + getHeight(), 1.0f);
             withShadow = false;
         }
 
@@ -916,34 +935,6 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
             bottomSheetTabs.draw(canvas);
             canvas.restore();
         }
-    }
-
-    private final RectF clipRect = new RectF();
-    private final float[] clipRadius = new float[8];
-    private final Path clipPath = new Path();
-    private final Paint clipShadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
-    public void clipBottomSheetTabs(Canvas canvas, boolean withShadow) {
-        if (bottomSheetTabs == null)
-            return;
-        final int bottomSheetHeight = (isKeyboardVisible || shouldHideTabs()) ? 0 : getBottomTabsHeight(true);
-        final int bottomRadius = Math.min(1, bottomSheetHeight / dp(60)) * dp(10);
-        if (bottomSheetHeight <= 0)
-            return;
-
-        clipRadius[0] = clipRadius[1] = clipRadius[2] = clipRadius[3] = 0; // top
-        clipRadius[4] = clipRadius[5] = clipRadius[6] = clipRadius[7] = bottomRadius; // bottom
-
-        clipPath.rewind();
-        clipRect.set(0, 0, getWidth(), bottomSheetTabs.getY() + bottomSheetTabs.getHeight() - bottomSheetHeight);
-        clipPath.addRoundRect(clipRect, clipRadius, Path.Direction.CW);
-
-        clipShadowPaint.setAlpha(0);
-        if (withShadow) {
-            clipShadowPaint.setShadowLayer(dp(2), 0, dp(1), 0x10000000);
-            canvas.drawPath(clipPath, clipShadowPaint);
-        }
-        canvas.clipPath(clipPath);
     }
 
     public void setOverrideWidthOffset(int overrideWidthOffset) {
@@ -2988,8 +2979,6 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         }
     }
 
-    private ValueAnimator bottomTabsAnimator;
-    public float bottomTabsProgress;
     public int bottomTabsHeight;
 
     public void updateBottomTabsVisibility(boolean animated) {
@@ -3000,11 +2989,6 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         if (bottomSheetTabs == null) {
             return;
         }
-        if (bottomTabsAnimator != null) {
-            ValueAnimator prev = bottomTabsAnimator;
-            bottomTabsAnimator = null;
-            prev.cancel();
-        }
         if (bottomTabsHeight == bottomSheetTabs.getExpandedHeight())
             return;
 
@@ -3013,42 +2997,20 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         } else if (forceHide && bottomTabsHeight > 0) {
             bottomTabsHeight = 0;
         }
+    }
 
+    public void relayout() {
         requestLayout();
         containerView.requestLayout();
         containerViewBack.requestLayout();
         sheetContainer.requestLayout();
-        if (animated) {
-            bottomTabsAnimator = ValueAnimator.ofFloat(bottomTabsProgress, bottomTabsHeight);
-            bottomTabsAnimator.addUpdateListener(anm -> {
-                bottomTabsProgress = (float) anm.getAnimatedValue();
-                invalidate();
-            });
-            bottomTabsAnimator.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    if (bottomTabsAnimator == animation) {
-                        bottomTabsProgress = bottomTabsHeight;
-                        invalidate();
-                    }
-                }
-            });
-            bottomTabsAnimator.setDuration(AdjustPanLayoutHelper.keyboardDuration);
-            bottomTabsAnimator.setInterpolator(AdjustPanLayoutHelper.keyboardInterpolator);
-            bottomTabsAnimator.start();
-        } else {
-            bottomTabsProgress = bottomTabsHeight;
-        }
     }
 
     @Override
     public int getBottomTabsHeight(boolean animated) {
-        if (!main || shouldHideTabs()) return 0;
-        if (animated) {
-            return (int) bottomTabsProgress;
-        } else {
-            return bottomTabsHeight;
-        }
+        if (main && bottomSheetTabs != null && !shouldHideTabs())
+            return bottomSheetTabs.getHeight(animated);
+        return 0;
     }
 
     private boolean shouldHideTabs() {

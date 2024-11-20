@@ -4,6 +4,9 @@ import static org.telegram.messenger.AndroidUtilities.dp;
 import static org.telegram.messenger.AndroidUtilities.lerp;
 import static org.telegram.messenger.LocaleController.getString;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -46,6 +49,7 @@ import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.Text;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.bots.BotButtons;
+import org.telegram.ui.bots.BotSensors;
 import org.telegram.ui.bots.BotWebViewAttachedSheet;
 import org.telegram.ui.web.BotWebViewContainer;
 import org.telegram.ui.bots.BotWebViewSheet;
@@ -53,6 +57,7 @@ import org.telegram.ui.bots.WebViewRequestProps;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import tw.nekomimi.nekogram.NekoConfig;
 
@@ -70,26 +75,8 @@ public class BottomSheetTabs extends FrameLayout {
 
         setNavigationBarColor(Theme.getColor(Theme.key_windowBackgroundGray));
 
-        setOnClickListener(v -> {
-            if (!drawTabs) return;
-            final ArrayList<WebTabData> tabs = getTabs();
-
-            final int count = tabs.size();
-            if (count == 0) return;
-            WebTabData lastTab = tabs.get(tabs.size() - 1);
-            BottomSheetTabsOverlay overlay = LaunchActivity.instance == null ? null : LaunchActivity.instance.getBottomSheetTabsOverlay();
-            if (overlay != null) {
-                overlay.stopAnimations();
-            }
-
-            if (count == 1 || overlay == null) {
-                openTab(lastTab);
-            } else {
-                overlay.openTabsView();
-            }
-        });
-
         updateMultipleTitle();
+        updateVisibility(false);
     }
 
     public void setTabSheetVisibility(boolean value) {
@@ -135,23 +122,23 @@ public class BottomSheetTabs extends FrameLayout {
             if (fragment.getContext() == null || fragment.getParentActivity() == null) {
                 return;
             }
-            if (AndroidUtilities.isTablet() && !tab.isWeb) {
+//            if (AndroidUtilities.isTablet() && !tab.isWeb || true) {
                 BotWebViewSheet sheet = new BotWebViewSheet(fragment.getContext(), fragment.getResourceProvider());
                 sheet.setParentActivity(fragment.getParentActivity());
                 if (sheet.restoreState(fragment, tab)) {
                     removeTab(tab, false);
                     sheet.show();
                 }
-            } else {
-                BaseFragment sheetFragment = actionBarLayout.getSheetFragment();
-                if (sheetFragment == null) return;
-                BotWebViewAttachedSheet webViewSheet = sheetFragment.createBotViewer();
-                webViewSheet.setParentActivity(fragment.getParentActivity());
-                if (webViewSheet.restoreState(fragment, tab)) {
-                    removeTab(tab, false);
-                    webViewSheet.show(closed);
-                }
-            }
+//            } else {
+//                BaseFragment sheetFragment = actionBarLayout.getSheetFragment();
+//                if (sheetFragment == null) return;
+//                BotWebViewAttachedSheet webViewSheet = sheetFragment.createBotViewer();
+//                webViewSheet.setParentActivity(fragment.getParentActivity());
+//                if (webViewSheet.restoreState(fragment, tab)) {
+//                    removeTab(tab, false);
+//                    webViewSheet.show(closed);
+//                }
+//            }
         };
         boolean needsContextOverride = tab.needsContext && !NekoConfig.openWebViewTabWithoutBot.Bool();
         open.run(lastFragment);
@@ -286,8 +273,8 @@ public class BottomSheetTabs extends FrameLayout {
     }
 
     public int currentAccount = UserConfig.selectedAccount;
-    public final HashMap<Integer, ArrayList<WebTabData>> tabs = new HashMap<>();
-    public final HashMap<Integer, ArrayList<TabDrawable>> tabDrawables = new HashMap<>();
+    public static final HashMap<Integer, ArrayList<WebTabData>> tabs = new HashMap<>();
+    public static final HashMap<Integer, ArrayList<TabDrawable>> tabDrawables = new HashMap<>();
 
     public void updateCurrentAccount() {
         setCurrentAccount(UserConfig.selectedAccount);
@@ -297,7 +284,7 @@ public class BottomSheetTabs extends FrameLayout {
         if (currentAccount != account) {
             currentAccount = account;
 
-            actionBarLayout.updateBottomTabsVisibility(false);
+            updateVisibility(false);
             invalidate();
         }
     }
@@ -326,14 +313,14 @@ public class BottomSheetTabs extends FrameLayout {
     }
 
     public ArrayList<WebTabData> getTabs(int currentAccount) {
-        ArrayList<WebTabData> tabs = this.tabs.get(currentAccount);
-        if (tabs == null) this.tabs.put(currentAccount, tabs = new ArrayList<>());
+        ArrayList<WebTabData> tabs = BottomSheetTabs.tabs.get(currentAccount);
+        if (tabs == null) BottomSheetTabs.tabs.put(currentAccount, tabs = new ArrayList<>());
         return tabs;
     }
 
     public ArrayList<TabDrawable> getTabDrawables(int currentAccount) {
-        ArrayList<TabDrawable> tabDrawables = this.tabDrawables.get(currentAccount);
-        if (tabDrawables == null) this.tabDrawables.put(currentAccount, tabDrawables = new ArrayList<>());
+        ArrayList<TabDrawable> tabDrawables = BottomSheetTabs.tabDrawables.get(currentAccount);
+        if (tabDrawables == null) BottomSheetTabs.tabDrawables.put(currentAccount, tabDrawables = new ArrayList<>());
         return tabDrawables;
     }
 
@@ -368,7 +355,7 @@ public class BottomSheetTabs extends FrameLayout {
         }
         updateMultipleTitle();
 
-        actionBarLayout.updateBottomTabsVisibility(true);
+        updateVisibility(true);
 
         invalidate();
         return tabDrawable;
@@ -430,7 +417,7 @@ public class BottomSheetTabs extends FrameLayout {
             drawable.index = -1;
         }
         updateMultipleTitle();
-        actionBarLayout.updateBottomTabsVisibility(true);
+        updateVisibility(true);
         invalidate();
         return tabs.isEmpty();
     }
@@ -526,33 +513,41 @@ public class BottomSheetTabs extends FrameLayout {
             }
             invalidate();
         }, 320);
-        actionBarLayout.updateBottomTabsVisibility(true);
+        updateVisibility(true);
         invalidate();
         return tabs.isEmpty();
     }
 
     private boolean closeRippleHit;
+    private boolean hit;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        return touchEvent(event.getAction(), event.getX(), event.getY()) || super.onTouchEvent(event);
+    }
+
+    public boolean touchEvent(int action, float x, float y) {
         final ArrayList<WebTabData> tabs = getTabs();
         final ArrayList<TabDrawable> tabDrawables = getTabDrawables();
 
         if (drawTabs) {
-
             WebTabData lastTab = tabs.isEmpty() ? null : tabs.get(0);
             TabDrawable drawable = findTabDrawable(lastTab);
 
             if (drawable != null) {
                 getTabBounds(rect, drawable.getPosition());
-                final boolean closeHit = drawable.closeRipple.getBounds().contains((int) (event.getX() - rect.left), (int) (event.getY() - rect.centerY()));
-                if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
-                    closeRippleHit = closeHit;
-                    drawable.closeRipple.setState(closeHit ? new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled} : new int[] {});
-                } else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    if (closeRippleHit && event.getAction() == MotionEvent.ACTION_UP) {
+                if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE) {
+                    closeRippleHit = drawable.closeRipple.getBounds().contains((int) (x - rect.left), (int) (y - rect.centerY()));
+                    hit = !closeRippleHit && rect.contains(x, y);
+                    drawable.closeRipple.setState(closeRippleHit ? new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled} : new int[] {});
+                } else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
+                    if (hit && action == MotionEvent.ACTION_UP) {
+                        click();
+                    } else if (closeRippleHit && action == MotionEvent.ACTION_UP) {
                         removeTab(lastTab, success -> {});
                     }
                     closeRippleHit = false;
+                    hit = false;
                     drawable.closeRipple.setState(new int[] {});
                 }
                 for (int i = 0; i < tabDrawables.size(); ++i) {
@@ -561,11 +556,32 @@ public class BottomSheetTabs extends FrameLayout {
                     }
                 }
             } else {
+                hit = false;
                 closeRippleHit = false;
             }
+        } else {
+            hit = false;
+            closeRippleHit = false;
         }
-        if (closeRippleHit) return true;
-        return super.onTouchEvent(event);
+        return hit || closeRippleHit;
+    }
+
+    public void click() {
+        final ArrayList<WebTabData> tabs = getTabs();
+
+        final int count = tabs.size();
+        if (count == 0) return;
+        WebTabData lastTab = tabs.get(tabs.size() - 1);
+        BottomSheetTabsOverlay overlay = LaunchActivity.instance == null ? null : LaunchActivity.instance.getBottomSheetTabsOverlay();
+        if (overlay != null) {
+            overlay.stopAnimations();
+        }
+
+        if (count == 1 || overlay == null) {
+            openTab(lastTab);
+        } else {
+            overlay.openTabsView();
+        }
     }
 
     private final RectF rect = new RectF();
@@ -576,7 +592,7 @@ public class BottomSheetTabs extends FrameLayout {
         final ArrayList<TabDrawable> tabDrawables = getTabDrawables();
 
         final boolean forceDraw = (NekoConfig.hideWebViewTabOverlayInChat.Bool() || NekoConfig.hideWebViewTabOverlayWhenSharing.Bool()) && drawTabs;
-        if (actionBarLayout != null && actionBarLayout.bottomTabsProgress <= 0 && !forceDraw) {
+        if (bottomTabsProgress <= 0 && !forceDraw) {
             return;
         }
 
@@ -854,6 +870,7 @@ public class BottomSheetTabs extends FrameLayout {
         public Object previewNode;
 
         public boolean overrideActionBarColor;
+        public boolean overrideBackgroundColor;
         public int actionBarColorKey;
         public int actionBarColor;
         public int backgroundColor;
@@ -868,6 +885,7 @@ public class BottomSheetTabs extends FrameLayout {
         public String lastUrl;
         public boolean confirmDismiss;
 
+        public boolean fullscreen;
         public boolean fullsize;
         public boolean needsContext;
 
@@ -885,6 +903,10 @@ public class BottomSheetTabs extends FrameLayout {
 
         public float articleProgress;
         public ArticleViewer articleViewer;
+
+        public BotSensors sensors;
+
+        public boolean orientationLocked;
 
         public long getBotId() {
             if (props == null) return 0;
@@ -920,6 +942,102 @@ public class BottomSheetTabs extends FrameLayout {
             return UserObject.getUserName(user);
         }
 
+    }
+
+    private ValueAnimator bottomTabsAnimator;
+    public float bottomTabsProgress;
+    public int bottomTabsHeight;
+
+    public void updateVisibility(boolean animated) {
+        if (bottomTabsHeight == getExpandedHeight())
+            return;
+        if (bottomTabsAnimator != null) {
+            ValueAnimator prev = bottomTabsAnimator;
+            bottomTabsAnimator = null;
+            prev.cancel();
+        }
+        bottomTabsHeight = getExpandedHeight();
+        for (Runnable l : relayoutListeners)
+            l.run();
+        if (animated) {
+            bottomTabsAnimator = ValueAnimator.ofFloat(bottomTabsProgress, bottomTabsHeight);
+            bottomTabsAnimator.addUpdateListener(anm -> {
+                bottomTabsProgress = (float) anm.getAnimatedValue();
+                for (Runnable l : invalidateListeners)
+                    l.run();
+                invalidate();
+            });
+            bottomTabsAnimator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if (bottomTabsAnimator == animation) {
+                        bottomTabsProgress = bottomTabsHeight;
+                        for (Runnable l : invalidateListeners)
+                            l.run();
+                    }
+                }
+            });
+            bottomTabsAnimator.setDuration(AdjustPanLayoutHelper.keyboardDuration);
+            bottomTabsAnimator.setInterpolator(AdjustPanLayoutHelper.keyboardInterpolator);
+            bottomTabsAnimator.start();
+        } else {
+            bottomTabsProgress = bottomTabsHeight;
+            invalidate();
+        }
+    }
+
+    public static class ClipTools {
+
+        private final BottomSheetTabs tabs;
+        private final RectF clipRect = new RectF();
+        private final float[] clipRadius = new float[8];
+        private final Path clipPath = new Path();
+        private final Paint clipShadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        public ClipTools(BottomSheetTabs tabs) {
+            this.tabs = tabs;
+        }
+
+        public void clip(Canvas canvas, boolean withShadow, boolean isKeyboardVisible, int width, int height, float visible) {
+            final int bottomSheetHeight = (int) ((isKeyboardVisible ? 0 : tabs.getHeight(true)) * visible);
+            final int bottomRadius = Math.min(1, bottomSheetHeight / dp(60)) * dp(10);
+            if (bottomSheetHeight <= 0)
+                return;
+
+            clipRadius[0] = clipRadius[1] = clipRadius[2] = clipRadius[3] = 0; // top
+            clipRadius[4] = clipRadius[5] = clipRadius[6] = clipRadius[7] = bottomRadius; // bottom
+
+            clipPath.rewind();
+            clipRect.set(0, 0, width, tabs.getY() + tabs.getHeight() - bottomSheetHeight);
+            clipPath.addRoundRect(clipRect, clipRadius, Path.Direction.CW);
+
+            clipShadowPaint.setAlpha(0);
+            if (withShadow) {
+                clipShadowPaint.setShadowLayer(dp(2), 0, dp(1), 0x10000000);
+                canvas.drawPath(clipPath, clipShadowPaint);
+            }
+            canvas.clipPath(clipPath);
+        }
+
+    }
+
+    public int getHeight(boolean animated) {
+        if (animated) {
+            return (int) bottomTabsProgress;
+        } else {
+            return bottomTabsHeight;
+        }
+    }
+
+    private final HashSet<Runnable> invalidateListeners = new HashSet<>();
+    private final HashSet<Runnable> relayoutListeners = new HashSet<>();
+    public void listen(Runnable invalidate, Runnable relayout) {
+        invalidateListeners.add(invalidate);
+        relayoutListeners.add(relayout);
+    }
+    public void stopListening(Runnable invalidate, Runnable relayout) {
+        invalidateListeners.remove(invalidate);
+        relayoutListeners.remove(relayout);
     }
 
 }

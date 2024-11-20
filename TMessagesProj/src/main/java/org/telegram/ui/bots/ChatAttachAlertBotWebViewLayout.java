@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.RenderNode;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextPaint;
@@ -216,8 +217,9 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
             }
 
             @Override
-            public void onWebViewCreated() {
-                swipeContainer.setWebView(webViewContainer.getWebView());
+            public void onWebViewCreated(MyWebView webView) {
+                super.onWebViewCreated(webView);
+                swipeContainer.setWebView(webView);
             }
         };
         swipeContainer = new WebViewSwipeContainer(context) {
@@ -233,7 +235,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
             lastSwipeTime = System.currentTimeMillis();
         });
         swipeContainer.setScrollEndListener(()-> webViewContainer.invalidateViewPortHeight(true));
-        swipeContainer.setDelegate(() -> {
+        swipeContainer.setDelegate(byTap -> {
             if (!onCheckDismissByUser()) {
                 swipeContainer.stickTo(0);
             }
@@ -715,6 +717,36 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
     public static class WebViewSwipeContainer extends FrameLayout {
         public final static SimpleFloatPropertyCompat<WebViewSwipeContainer> SWIPE_OFFSET_Y = new SimpleFloatPropertyCompat<>("swipeOffsetY", WebViewSwipeContainer::getSwipeOffsetY, WebViewSwipeContainer::setSwipeOffsetY);
 
+        private Object renderNode;
+        public Object getRenderNode() {
+            if (renderNode == null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    renderNode = new RenderNode("WebViewSwipeContainer");
+                }
+            }
+            return renderNode;
+        }
+
+        @Override
+        protected void dispatchDraw(@NonNull Canvas canvas) {
+            if (canvas.isHardwareAccelerated()) {
+                Canvas drawingCanvas = canvas;
+                if (renderNode != null) {
+                    final RenderNode node = (RenderNode) renderNode;
+                    node.setPosition(0, 0, getWidth(), getHeight());
+                    drawingCanvas = node.beginRecording();
+                }
+                super.dispatchDraw(drawingCanvas);
+                if (renderNode != null) {
+                    final RenderNode node = (RenderNode) renderNode;
+                    node.endRecording();
+                    canvas.drawRenderNode(node);
+                }
+            } else {
+                super.dispatchDraw(canvas);
+            }
+        }
+
         private final GestureDetectorCompat gestureDetector;
         public boolean isScrolling;
         private boolean isSwipeDisallowed;
@@ -757,6 +789,10 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
                     stickTo(0);
                 }
             }
+        }
+
+        public boolean isFullSize() {
+            return fullsize;
         }
 
         private boolean allowFullSizeSwipe;
@@ -809,7 +845,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
                             if (fullsize && allowFullSizeSwipe && drawnSwipeOffsetY == -offsetY + topActionBarOffsetY) {
                                 stickTo(-offsetY + topActionBarOffsetY);
                             } else if (delegate != null) {
-                                delegate.onDismiss();
+                                delegate.onDismiss(false);
                             }
                         } else {
                             stickTo(0);
@@ -935,6 +971,11 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
             invalidateTranslation();
         }
 
+        public void setForceOffsetY(float offsetY) {
+            this.offsetY = offsetY;
+            invalidateTranslation();
+        }
+
         public void setOffsetY(float offsetY) {
             if (pendingSwipeOffsetY != Integer.MIN_VALUE) {
                 pendingOffsetY = offsetY;
@@ -1002,7 +1043,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
             drawnSwipeOffsetY = swipeOffsetY;
         }
 
-        private void invalidateTranslation() {
+        public void invalidateTranslation() {
             setTranslationY(Math.max(topActionBarOffsetY, offsetY + swipeOffsetY));
             AndroidUtilities.cancelRunOnUIThread(this::updateDrawn);
             AndroidUtilities.runOnUIThread(this::updateDrawn);
@@ -1014,6 +1055,11 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
                 Bulletin bulletin = Bulletin.getVisibleBulletin();
                 bulletin.updatePosition();
             }
+        }
+
+        @Override
+        public void setTranslationY(float translationY) {
+            super.setTranslationY(translationY);
         }
 
         public float getTopActionBarOffsetY() {
@@ -1058,6 +1104,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
             rawEvent.recycle();
 
             if (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_CANCEL) {
+                final boolean wasScrolling = isScrolling;
                 isSwipeDisallowed = false;
                 isScrolling = false;
 
@@ -1070,13 +1117,13 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
                         if (stickToEdges) {
                             stickTo(-offsetY + topActionBarOffsetY);
                         }
-                    } else if (swipeOffsetY > -swipeStickyRange && swipeOffsetY <= swipeStickyRange && !fullsize) {
+                    } else if (swipeOffsetY > -swipeStickyRange && swipeOffsetY <= swipeStickyRange) {
                         if (stickToEdges) {
                             stickTo(0);
                         }
                     } else {
                         if (delegate != null) {
-                            delegate.onDismiss();
+                            delegate.onDismiss(!wasScrolling);
                         }
                     }
                 }
@@ -1094,8 +1141,21 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
             stickTo(offset, null);
         }
 
+        public void cancelStickTo() {
+            if (offsetYAnimator != null) {
+                offsetYAnimator.cancel();
+            }
+            if (scrollAnimator != null) {
+                scrollAnimator.cancel();
+            }
+        }
+
         public void stickTo(float offset, Runnable callback) {
-            if (fullsize || NekoConfig.preventPullDownWebview.Bool() || forceExpanded) {
+            stickTo(offset, false, callback);
+        }
+
+        public void stickTo(float offset, boolean force, Runnable callback) {
+            if ((fullsize || NekoConfig.preventPullDownWebview.Bool() || forceExpanded) && !force) {
                 offset = -getOffsetY() + getTopActionBarOffsetY();
             }
             if (swipeOffsetY == offset || scrollAnimator != null && scrollAnimator.getSpring().getFinalPosition() == offset) {
@@ -1152,7 +1212,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
             /**
              * Called to dismiss parent layout
              */
-            void onDismiss();
+            void onDismiss(boolean byTap);
         }
     }
 
