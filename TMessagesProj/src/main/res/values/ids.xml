@@ -41,6 +41,7 @@
     <item name="menu_collapse_bot" type="id"/>
     <item name="menu_share_bot" type="id"/>
     <item name="menu_copy_url" type="id"/>
+    <item name="menu_bot_options" type="id"/>
 
     <!-- there are required for focusing order customization on the passcode screen -->
     <item name="passcode_btn_1" type="id"/>
