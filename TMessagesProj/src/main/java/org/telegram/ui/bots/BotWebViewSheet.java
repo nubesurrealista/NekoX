@@ -232,8 +232,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
     private ActionBar actionBar;
     private FrameLayout.LayoutParams actionBarLayoutParams;
     private Drawable actionBarShadow;
-    private ActionBarMenuSubItem settingsItem;
-    private ActionBarMenuSubItem optionsItem;
+    private ActionBarMenuItem optionsItem;
     private BotFullscreenButtons.OptionsIcon optionsIcon;
     private boolean hasSettings;
     private TLRPC.BotApp currentWebApp;
@@ -883,7 +882,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
             forceExpnaded = true;
             dismiss(true, null);
         });
-        fullscreenButtons.setOnMenuClickListener(this::openOptions);
+        fullscreenButtons.setOnMenuClickListener(() -> openOptions(null));
 
         bulletinContainer = new FrameLayout(context);
         windowView.addView(bulletinContainer, bulletinContainerLayoutParams = LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 200, Gravity.TOP | Gravity.FILL_HORIZONTAL));
@@ -1367,79 +1366,22 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
         }
 
         menu.addItem(R.id.menu_collapse_bot, R.drawable.arrow_more);
-        ActionBarMenuItem otherItem = menu.addItem(0, R.drawable.ic_ab_other);
-        otherItem.addSubItem(R.id.menu_open_bot, R.drawable.msg_bot, LocaleController.getString(R.string.BotWebViewOpenBot));
-        settingsItem = otherItem.addSubItem(R.id.menu_settings, R.drawable.msg_settings, LocaleController.getString(R.string.BotWebViewSettings));
-        if (!NekoConfig.showBotWebViewSettings.Bool()) settingsItem.setVisibility(View.GONE);
-        otherItem.addSubItem(R.id.menu_reload_page, R.drawable.msg_retry, LocaleController.getString(R.string.BotWebViewReloadPage));
-        if (currentBot != null && MediaDataController.getInstance(currentAccount).canCreateAttachedMenuBotShortcut(currentBot.bot_id)) {
-            otherItem.addSubItem(R.id.menu_add_to_home_screen_bot, R.drawable.msg_home, LocaleController.getString(R.string.AddShortcut));
-        }
-        otherItem.addSubItem(R.id.menu_tos_bot, R.drawable.menu_intro, LocaleController.getString(R.string.BotWebViewToS));
-        if (currentBot != null && (currentBot.show_in_side_menu || currentBot.show_in_attach_menu)) {
-            otherItem.addSubItem(R.id.menu_delete_bot, R.drawable.msg_delete, LocaleController.getString(R.string.BotWebViewDeleteBot));
-        }
-        // 030: onClick for options moved to setActionBarMenuOnItemClick
-        optionsItem = otherItem.addSubItem(R.id.menu_bot_options, 0, (optionsIcon = new BotFullscreenButtons.OptionsIcon(getContext())).getCurrent(),
-                LocaleController.getString(R.string.OptionHint), true, false);
-
-        otherItem.addSubItem(R.id.menu_copy_url, R.drawable.msg_copy, LocaleController.getString(R.string.CopyLink));
+        optionsItem = menu.addItem(0, optionsIcon = new BotFullscreenButtons.OptionsIcon(getContext()));
+        optionsItem.setOnClickListener(v -> {
+            openOptions(fragment);
+        });
 
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+            // 030: moved to openOptions
             @Override
             public void onItemClick(int id) {
                 if (id == -1) {
                     if (!webViewContainer.onBackPressed()) {
                         onCheckDismissByUser();
                     }
-                } else if (id == R.id.menu_open_bot) {
-                    Bundle bundle = new Bundle();
-                    bundle.putLong("user_id", botId);
-                    if (parentActivity instanceof LaunchActivity) {
-                        ((LaunchActivity) parentActivity).presentFragment(new ChatActivity(bundle));
-                    }
-                    dismiss(true, null);
-                    if (NekoConfig.hideWebViewTabOverlayInChat.Bool()) {
-                        BottomSheetTabsOverlay overlay = LaunchActivity.instance.getBottomSheetTabsOverlay();
-                        BottomSheetTabs tabs = overlay.tabsView;
-                        if (tabs != null) tabs.setTabSheetVisibility(false);
-                    }
-                } else if (id == R.id.menu_tos_bot) {
-                    Browser.openUrl(getContext(), LocaleController.getString(R.string.BotWebViewToSLink));
-                } else if (id == R.id.menu_reload_page) {
-                    if (webViewContainer.getWebView() != null) {
-                        webViewContainer.getWebView().animate().cancel();
-                        webViewContainer.getWebView().animate().alpha(0).start();
-                    }
-
-                    progressView.setLoadProgress(0);
-                    progressView.setAlpha(1f);
-                    progressView.setVisibility(View.VISIBLE);
-
-                    webViewContainer.setBotUser(MessagesController.getInstance(currentAccount).getUser(botId));
-                    webViewContainer.loadFlickerAndSettingsItem(currentAccount, botId, settingsItem);
-                    webViewContainer.reload();
-                } else if (id == R.id.menu_settings) {
-                    webViewContainer.onSettingsButtonPressed();
-                } else if (id == R.id.menu_delete_bot) {
-                    deleteBot(currentAccount, botId, () -> dismiss());
-                } else if (id == R.id.menu_add_to_home_screen_bot) {
-                    MediaDataController.getInstance(currentAccount).installShortcut(botId, MediaDataController.SHORTCUT_TYPE_ATTACHED_BOT);
                 } else if (id == R.id.menu_collapse_bot) {
                     forceExpnaded = true;
                     dismiss(true, null);
-                } else if (id == R.id.menu_copy_url) {
-                    try {
-                        if (AndroidUtilities.addToClipboard(webViewContainer.getWebView().getUrl())) {
-                            AndroidUtilities.runOnUIThread(() -> BulletinFactory.of(fragment)
-                                    .createSimpleBulletin(R.raw.copy, LocaleController.getString(R.string.LinkCopied)).show(), 250);
-                        }
-                    } catch (Exception ex) {
-                        AndroidUtilities.runOnUIThread(() -> BulletinFactory.of(fragment)
-                                .createSimpleBulletin(R.raw.error, LocaleController.getString(R.string.ErrorOccurred)).show(), 250);
-                    }
-                } else if (id == R.id.menu_bot_options) {
-                    openOptions();
                 }
             }
         });
@@ -1620,7 +1562,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
 
     private HashMap<BotDownloads.FileDownload, ActionBarMenuSubItem> fileItems = new HashMap<>();
     private ItemOptions options;
-    private void openOptions() {
+    private void openOptions(BaseFragment fragment) {
         final TLRPC.User userbot = MessagesController.getInstance(currentAccount).getUser(botId);
         TLRPC.TL_attachMenuBot currentBot = null;
         for (TLRPC.TL_attachMenuBot bot : MediaDataController.getInstance(currentAccount).getAttachMenuBots().bots) {
@@ -1683,6 +1625,21 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
             })
             .addIf(currentBot != null && (currentBot.show_in_side_menu || currentBot.show_in_attach_menu), R.drawable.msg_delete, LocaleController.getString(R.string.BotWebViewDeleteBot), () -> {
                 deleteBot(currentAccount, botId, () -> dismiss());
+            })
+            .add(R.drawable.msg_copy, LocaleController.getString(R.string.CopyLink), () -> {
+                try {
+                    if (AndroidUtilities.addToClipboard(webViewContainer.getWebView().getUrl()) && fragment != null) {
+                        AndroidUtilities.runOnUIThread(() -> BulletinFactory.of(fragment)
+                                .createSimpleBulletin(R.raw.copy, LocaleController.getString(R.string.LinkCopied)).show(), 250);
+                    }
+                } catch (Exception ex) {
+                    if (fragment != null) {
+                        AndroidUtilities.runOnUIThread(() -> BulletinFactory.of(fragment)
+                                .createSimpleBulletin(R.raw.error, LocaleController.getString(R.string.ErrorOccurred)).show(), 250);
+                    } else {
+                        Toast.makeText(getContext(), LocaleController.getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
+                    }
+                }
             })
             .setGravity(Gravity.RIGHT)
             .translate(-insets.right, 0)
