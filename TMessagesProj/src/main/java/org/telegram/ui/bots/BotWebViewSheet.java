@@ -1806,7 +1806,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
             TLRPC.TL_webViewResultUrl resultUrl = (TLRPC.TL_webViewResultUrl) requestProps.response;
             queryId = resultUrl.query_id;
             url = resultUrl.url;
-            fullsize = resultUrl.fullsize || NekoConfig.preventPullDownWebview.Bool();;
+            fullsize = resultUrl.fullsize || NekoConfig.preventPullDownWebview.Bool();
             if (!fromTab) {
                 setFullscreen(resultUrl.fullscreen, !fromTab);
             }

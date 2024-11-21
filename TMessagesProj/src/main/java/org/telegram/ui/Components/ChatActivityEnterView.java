@@ -4122,7 +4122,6 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
     private void openWebViewMenu() {
         boolean preventPulldown = NekoConfig.preventPullDownWebview.Bool();
-        if (!preventPulldown) createBotWebViewMenuContainer();
         Runnable onRequestWebView = () -> {
             AndroidUtilities.hideKeyboard(this);
             WebViewRequestProps props = WebViewRequestProps.of(currentAccount, dialog_id, dialog_id, botMenuWebViewTitle, botMenuWebViewUrl, BotWebViewAttachedSheet.TYPE_BOT_MENU_BUTTON, 0, false, null, false, null, null, 0, false, false);

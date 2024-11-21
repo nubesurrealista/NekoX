@@ -1022,6 +1022,7 @@ public class BottomSheetTabs extends FrameLayout {
     }
 
     public int getHeight(boolean animated) {
+        if (!drawTabs) return 0;
         if (animated) {
             return (int) bottomTabsProgress;
         } else {
