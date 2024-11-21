@@ -343,6 +343,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private TextSelectionHelper.SimpleTextSelectionHelper textSelectionHelper;
     private boolean firstFrameRendered;
     private Paint surfaceBlackoutPaint;
+    private boolean bestVideoQualityChosenByNekoConfig = !NekoConfig.chooseBestVideoQualityByDefault.Bool();
 
     public boolean waitingForTranslation = false;
     public boolean createMessagesList = false;
@@ -7906,6 +7907,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             videoItemIcon.bottomText.setText("", true);
             return;
         }
+        if (!bestVideoQualityChosenByNekoConfig) {
+            bestVideoQualityChosenByNekoConfig = true;
+            chooseQuality(videoPlayer.getHighestQualityIndex(null));
+            return;
+        }
         galleryButton.setRightIcon(R.drawable.msg_arrowright);
 //        videoItem.setVisibility(View.VISIBLE);
         chooseSpeedLayout.setVisibility(View.GONE);
@@ -9729,6 +9735,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         if (parentActivity == null) {
             return;
         }
+        bestVideoQualityChosenByNekoConfig = !NekoConfig.chooseBestVideoQualityByDefault.Bool();
         streamingAlertShown = false;
         startedPlayTime = SystemClock.elapsedRealtime();
         currentVideoFinishedLoading = false;
