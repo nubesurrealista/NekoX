@@ -279,6 +279,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.IDN;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30912,32 +30913,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     popupLayout.addView(messagePrivateSeenView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 36));
                     addGap = true;
                 }
-                if (showPrivateMessageEdit) {
+                if (showPrivateMessageEdit || showEditTimestamp) {
                     MessagePrivateSeenView messagePrivateSeenView = new MessagePrivateSeenView(getContext(), MessagePrivateSeenView.TYPE_EDIT, message, () -> {
                         closeMenu(true);
                     }, themeDelegate);
                     popupLayout.addView(messagePrivateSeenView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 36));
                     addGap = true;
                 }
-                if (showPrivateMessageFwdOriginal) {
+                if (showPrivateMessageFwdOriginal || showForwardTimestamp) {
                     MessagePrivateSeenView messagePrivateSeenView = new MessagePrivateSeenView(getContext(), MessagePrivateSeenView.TYPE_FORWARD, message, () -> {
                         closeMenu(true);
                     }, themeDelegate);
                     popupLayout.addView(messagePrivateSeenView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 36));
-                    addGap = true;
-                }
-                if (showEditTimestamp) {
-                    MessagePrivateSeenView editedTimestampView = new MessagePrivateSeenView(getContext(), message, () -> {
-                        closeMenu(true);
-                    }, themeDelegate, MessagePrivateSeenView.CUSTOM_TYPE_EDITED);
-                    popupLayout.addView(editedTimestampView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 36));
-                    addGap = true;
-                }
-                if (showForwardTimestamp) {
-                    MessagePrivateSeenView editedTimestampView = new MessagePrivateSeenView(getContext(), message, () -> {
-                        closeMenu(true);
-                    }, themeDelegate, MessagePrivateSeenView.CUSTOM_TYPE_FORWARDED);
-                    popupLayout.addView(editedTimestampView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 36));
                     addGap = true;
                 }
                 boolean showRateTranscription = selectedObject != null && selectedObject.isVoice() && selectedObject.messageOwner != null && getUserConfig().isPremium() && !TextUtils.isEmpty(selectedObject.messageOwner.voiceTranscription) && selectedObject.messageOwner != null && !selectedObject.messageOwner.voiceTranscriptionRated && selectedObject.messageOwner.voiceTranscriptionId != 0 && selectedObject.messageOwner.voiceTranscriptionOpen;
