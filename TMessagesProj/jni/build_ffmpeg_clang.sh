@@ -19,7 +19,7 @@ function build_one {
 	CXX=${CC_PREFIX}clang++
 	CROSS_PREFIX=${PREBUILT}/bin/${ARCH_NAME}-linux-${BIN_MIDDLE}-
 	
-	INCLUDES=" -I./${LIBVPXPREFIX}/include"
+	INCLUDES=" -I./${LIBVPXPREFIX}/include -I/usr/include"
 	LIBS=" -L./${LIBVPXPREFIX}/lib"
 
 	echo "Cleaning..."
@@ -91,8 +91,8 @@ function build_one {
 	--enable-demuxer=ogg \
 	--enable-demuxer=matroska \
 	--enable-hwaccels \
+	--enable-libdav1d \
 	$ADDITIONAL_CONFIGURE_FLAG
-	# --enable-libdav1d \ # tmp disabled
 
 	#echo "continue?"
 	#read
