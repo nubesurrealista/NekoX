@@ -344,6 +344,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private boolean firstFrameRendered;
     private Paint surfaceBlackoutPaint;
     private boolean bestVideoQualityChosenByNekoConfig = !NekoConfig.chooseBestVideoQualityByDefault.Bool();
+    public static boolean tempDisableGifAsVideo = false;
 
     public boolean waitingForTranslation = false;
     public boolean createMessagesList = false;
@@ -9884,13 +9885,19 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     if (videoPlayer != player) {
                         return;
                     }
+                    if (currentMessageObject.isGif() && NekoConfig.takeGIFasVideo.Bool()) {
+                        closePhoto(false, false);
+                        tempDisableGifAsVideo = true;
+                        openPhoto(currentMessageObject, parentChatActivity, currentDialogId, mergeDialogId, topicId, placeProvider);
+                        return;
+                    }
                     FileLog.e(e);
                     if (!menuItem.isSubItemVisible(gallery_menu_openin)) {
                         return;
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity, resourcesProvider);
                     builder.setTitle(getString("AppName", R.string.AppName));
-                    builder.setMessage(getString("CantPlayVideo", R.string.CantPlayVideo));
+                    builder.setMessage(getString(R.string.CantPlayVideo));
                     builder.setPositiveButton(getString("Open", R.string.Open), (dialog, which) -> {
                         try {
                             AndroidUtilities.openForView(currentMessageObject, parentActivity, resourcesProvider, true);
@@ -13524,6 +13531,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         if (!init && switchingToIndex == index) {
             return;
         }
+        tempDisableGifAsVideo = false;
         boolean animateCaption = animated;
         final boolean forward = index >= switchingToIndex;
         int wasIndex = switchingToIndex;
@@ -13728,13 +13736,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 if (isEmbedVideo) {
                     title = "YouTube";
                 } else if (newMessageObject.canPreviewDocument()) {
-                    title = getString("AttachDocument", R.string.AttachDocument);
+                    title = getString(R.string.AttachDocument);
                 } else if (newMessageObject.isVideo()) {
-                    title = getString("AttachVideo", R.string.AttachVideo);
+                    title = getString(R.string.AttachVideo);
                 } else if (newMessageObject.isGif()) {
-                    title = getString("AttachGif", R.string.AttachGif);
+                    title = getString(R.string.AttachGif);
                 } else {
-                    title = getString("AttachPhoto", R.string.AttachPhoto);
+                    title = getString(R.string.AttachPhoto);
                 }
             } else if (isInvoice) {
                 if (countView != null) {
@@ -13745,17 +13753,17 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 if (countView != null) {
                     countView.updateShow(false, animated);
                 }
-                title = getString("AttachVideo", R.string.AttachVideo);
+                title = getString(R.string.AttachVideo);
             } else if (newMessageObject.isGif()) {
                 if (countView != null) {
                     countView.updateShow(false, animated);
                 }
-                title = getString("AttachGif", R.string.AttachGif);
+                title = getString(R.string.AttachGif);
             } else if (newMessageObject.getDocument() != null) {
                 if (countView != null) {
                     countView.updateShow(false, animated);
                 }
-                title = getString("AttachDocument", R.string.AttachDocument);
+                title = getString(R.string.AttachDocument);
             }
             if (DialogObject.isEncryptedDialog(currentDialogId) && !isEmbedVideo || noforwards) {
                 setItemVisible(sendItem, false, false);
@@ -16771,6 +16779,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     public void closePhoto(boolean animated, boolean fromEditMode) {
+        tempDisableGifAsVideo = false;
         if (stickerMakerView != null) {
             stickerMakerView.isThanosInProgress = false;
             if (cutOutBtn.isCancelState()) {
