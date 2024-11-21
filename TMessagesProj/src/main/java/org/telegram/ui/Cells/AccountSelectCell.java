@@ -37,8 +37,8 @@ import org.telegram.ui.Components.LayoutHelper;
 
 public class AccountSelectCell extends FrameLayout {
 
-    // private SimpleTextView textView;
-    private EmojiTextView textView;
+    private SimpleTextView textView;
+//    private EmojiTextView textView;
     private TextView infoTextView;
     private BackupImageView imageView;
     private ImageView checkImageView;
@@ -57,8 +57,8 @@ public class AccountSelectCell extends FrameLayout {
         imageView.setRoundRadius(dp(18));
         addView(imageView, LayoutHelper.createFrame(36, 36, Gravity.LEFT | Gravity.TOP, 10, 10, 0, 0));
 
-        textView = new EmojiTextView(context);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+        textView = new SimpleTextView(context);
+        textView.setTextSize(15);
         textView.setTypeface(AndroidUtilities.bold());
         textView.setMaxLines(1);
         textView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
