@@ -77,6 +77,7 @@ import org.telegram.ui.Components.URLSpanUserMention;
 import org.telegram.ui.Components.VideoPlayer;
 import org.telegram.ui.Components.spoilers.SpoilerEffect;
 import org.telegram.ui.PeerColorActivity;
+import org.telegram.ui.PhotoViewer;
 import org.telegram.ui.Stars.StarsController;
 import org.telegram.ui.Stars.StarsIntroActivity;
 import org.telegram.ui.Stories.StoriesController;
@@ -8768,7 +8769,7 @@ public class MessageObject {
             isVideo = true;
         }
         boolean ret = isVideo && !isAnimated; // || (NekoConfig.takeGIFasVideo.Bool() && document.mime_type.startsWith("video/"));
-        if (ret || !NekoConfig.takeGIFasVideo.Bool()) return ret;
+        if (ret || PhotoViewer.tempDisableGifAsVideo || !NekoConfig.takeGIFasVideo.Bool()) return ret;
         return isGifDocument(document);
     }
 
