@@ -92,6 +92,7 @@ function build_one {
 	--enable-demuxer=matroska \
 	--enable-hwaccels \
 	$ADDITIONAL_CONFIGURE_FLAG
+	# --enable-libdav1d \ # tmp disabled
 
 	#echo "continue?"
 	#read
@@ -221,6 +222,8 @@ function build {
 		esac
 	done
 }
+
+export PKG_CONFIG_PATH=/usr/lib/pkgconfig:$PKG_CONFIG_PATH
 
 if (( $# == 0 )); then
 	build x86_64 arm64 arm x86

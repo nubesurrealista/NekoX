@@ -58,8 +58,9 @@ set_target_properties(ssl PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/b
 add_library(libvpx STATIC IMPORTED)
 set_target_properties(libvpx PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/libvpx/build/${ANDROID_ABI}/lib/libvpx.a)
 
-add_library(libdav1d STATIC IMPORTED)
-set_target_properties(libdav1d PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/ffmpeg/${ANDROID_ABI}/libdav1d.a)
+# tmp nuked
+#add_library(libdav1d STATIC IMPORTED)
+#set_target_properties(libdav1d PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/ffmpeg/${ANDROID_ABI}/libdav1d.a)
 
 #tgnet
 #add_library(mozjpeg STATIC
@@ -627,6 +628,7 @@ target_include_directories(${NATIVE_LIB} PUBLIC
         opus/opusfile
         third_party/libyuv/include
         boringssl/include
+        ffmpeg/
         ffmpeg/build/${ANDROID_ABI}/include
         libvpx/build/${ANDROID_ABI}/include
         emoji
@@ -653,7 +655,7 @@ target_link_libraries(${NATIVE_LIB}
         avresample
         swresample
         libvpx
-        libdav1d
+#        libdav1d
         avutil
         ssl
         crypto
