@@ -154,6 +154,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     private final static int TAB_GIFS = 1;
     private final static int TAB_STICKERS = 2;
 
+    public static boolean smallerEmoji = NekoConfig.smallerEmojiInChooser.Bool();
+
     public int emojiCacheType = AnimatedEmojiDrawable.CACHE_TYPE_KEYBOARD;
 
     private ArrayList<Tab> allTabs = new ArrayList<>();
@@ -1459,7 +1461,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 pressedProgress = Utilities.clamp(pressedProgress, 1f, 0);
                 invalidate();
             }
-            float s = 0.8f + 0.2f * (1f - pressedProgress);
+            float s = (smallerEmoji ? 0.6f : 0.8f) + 0.2f * (1f - pressedProgress);
             canvas.save();
             canvas.scale(s, s, getMeasuredWidth() / 2f, getMeasuredHeight() / 2f);
             super.onDraw(canvas);
@@ -1473,6 +1475,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         this.fragment = fragment;
         this.allowAnimatedEmoji = needAnimatedEmoji;
         this.resourcesProvider = resourcesProvider;
+
+        smallerEmoji = NekoConfig.smallerEmojiInChooser.Bool();
 
         if (frozenAtStart) {
             freeze(true);
@@ -3152,7 +3156,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                         AndroidUtilities.rectTmp2.set(imageView.getLeft() + imageView.getPaddingLeft(), topOffset, imageView.getRight() - imageView.getPaddingRight(), topOffset + imageView.getMeasuredHeight() - imageView.getPaddingBottom() - imageView.getPaddingTop());
                         float scale = 1;
                         if (imageView.pressedProgress != 0) {
-                            scale *= 0.8f + 0.2f * (1f - imageView.pressedProgress);
+                            scale *= (smallerEmoji ? 0.6f : 0.8f) + 0.2f * (1f - imageView.pressedProgress);
                         }
                         boolean animatedExpandIn = animateExpandStartTime > 0 && (SystemClock.elapsedRealtime() - animateExpandStartTime) < animateExpandDuration();
                         if (animatedExpandIn && animateExpandFromPosition >= 0 && animateExpandToPosition >= 0 && animateExpandStartTime > 0) {

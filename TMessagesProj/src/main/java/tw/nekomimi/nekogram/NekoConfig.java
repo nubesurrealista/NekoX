@@ -285,6 +285,7 @@ public class NekoConfig {
     public static ConfigItem mapMobileDataSaverToRoaming = addConfig(R.string.MapMobileDataSaverToRoaming , "MapMobileDataSaverToRoaming", configTypeBool, false);
     public static ConfigItem keepBlockedBotChatHistory = addConfig(R.string.KeepBlockedBotChatHistory , "KeepBlockedBotChatHistory", configTypeBool, false);
     public static ConfigItem dontSendStartCmdOnUnblockBot = addConfig(R.string.DontSendStartCmdOnUnblockBot , "DontSendStartCmdOnUnblockBot", configTypeBool, false);
+    public static ConfigItem smallerEmojiInChooser = addConfig(R.string.SmallerEmojisInChooser , "SmallerEmojisInChooser", configTypeBool, true);
 
     public static ConfigItem customGetQueryBlacklist = addConfig(R.string.BlacklistUrlQueryTitle, "BlacklistUrlQueryTitle", configTypeString, "");
     public static ArrayList<String> customGetQueryBlacklistData = new ArrayList<>();
