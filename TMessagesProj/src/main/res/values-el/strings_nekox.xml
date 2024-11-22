@@ -204,4 +204,16 @@
     <string name="AutoCheckUpdateStable">Σταθερή</string>
     <string name="AutoCheckUpdateRc">Υποψήφια έκδοση</string>
     <string name="nekoXPaymentRemovedToast">Η λειτουργία πληρωμής έχει αφαιρεθεί.</string>
+    <string name="DisableCustomWallpaperUser">Απενεργ/ση προσαρμογής ταπετσαρίας χρήστη</string>
+    <string name="FasterReconnectHackAbout">Αυτό το hack λειτουργεί μόνο με καλό περιβάλλον δικτύου.</string>
+    <string name="UnsupportedProxy">Μη υποστηριζόμενο Proxy</string>
+    <string name="ShowSelfInsteadOfSavedMessages">Εμφάνιση ως εαυτός αντί για Αποθηκ Μηνύματα</string>
+    <string name="disableReactionsWhenSelecting">Απόκρυψη αντιδράσεων ενώ επιλέγετε</string>
+    <string name="DisableCustomWallpaperChannel">Απενεργ/ση προσαρμογής ταπετσαρίας καναλιού</string>
+    <string name="FasterReconnectHack">Ταχύτερη επανασύνδεση με on/off του proxy</string>
+    <string name="doubleTapAndReactions">Διπλό πάτημα</string>
+    <string name="ReactionSettings">Αντίδραση</string>
+    <string name="doubleTapShowReactionsMenu">Εμφάνιση μενού αντιδράσεων</string>
+    <string name="doubleTapSendReaction">Αποστολή αντίδρασης</string>
+    <string name="doubleTapDisable">Απενεργοποίηση</string>
 </resources>
