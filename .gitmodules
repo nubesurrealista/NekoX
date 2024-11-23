@@ -18,3 +18,6 @@
 [submodule "nekox-sing-box/sing-box"]
 	path = nekox-sing-box/sing-box
 	url = https://github.com/SagerNet/sing-box.git
+[submodule "TMessagesProj/jni/dav1d"]
+	path = TMessagesProj/jni/dav1d
+	url = https://code.videolan.org/videolan/dav1d
