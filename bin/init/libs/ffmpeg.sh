@@ -10,5 +10,6 @@ git reset --hard
 git clean -fdx
 cd ..
 
+./build_dav1d.sh || exit 1
 ./build_ffmpeg_clang.sh || exit 1
 ./patch_ffmpeg.sh || exit 1
