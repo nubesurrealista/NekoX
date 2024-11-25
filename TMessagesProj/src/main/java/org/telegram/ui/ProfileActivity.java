@@ -574,6 +574,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private final static int block_from_search = 1002;
     private final static int add_to_folder = 1003;
     private final static int aliasChannelName = 1004;
+    private final static int overrideName = 1005;
 
     private Rect rect = new Rect();
 
@@ -2335,6 +2336,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     presentFragment(new ChannelAdminLogActivity(currentChat));
                 } else if (id == aliasChannelName) {
                     setChannelAlias();
+                } else if (id == overrideName) {
+                    setNameOverride();
                 } else if (id == delete_topic) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle(LocaleController.getPluralString("DeleteTopics", 1));
@@ -6932,7 +6935,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     private void setChannelAlias() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(LocaleController.getString("setChannelAliasName", R.string.setChannelAliasName));
+        builder.setTitle(LocaleController.getString(R.string.setChannelAliasName));
 
         final EditTextBoldCursor editText = new EditTextBoldCursor(getParentActivity()) {
             @Override
@@ -6944,7 +6947,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         editText.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
         editText.setHintText(
-            LocaleController.getString("Name", R.string.Name));
+                LocaleController.getString(R.string.Name));
         if (NekoXConfig.getChannelAlias(getCurrentChat().id) != null) {
             editText.setText(NekoXConfig.getChannelAlias(getCurrentChat().id));
         }
@@ -6961,7 +6964,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         editText.setPadding(0, 0, 0, 0);
         builder.setView(editText);
 
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK),
+        builder.setPositiveButton(LocaleController.getString(R.string.OK),
             (dialogInterface, i) -> {
                 if (editText.getText().toString().trim().equals("")) {
                     NekoXConfig.emptyChannelAlias(getCurrentChat().id);
@@ -6969,7 +6972,63 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     NekoXConfig.setChannelAlias(getCurrentChat().id, editText.getText().toString());
                 }
             });
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
+        builder.show().setOnShowListener(dialog -> {
+            editText.requestFocus();
+            AndroidUtilities.showKeyboard(editText);
+        });
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) editText.getLayoutParams();
+        if (layoutParams != null) {
+            if (layoutParams instanceof FrameLayout.LayoutParams) {
+                ((FrameLayout.LayoutParams) layoutParams).gravity = Gravity.CENTER_HORIZONTAL;
+            }
+            layoutParams.rightMargin = layoutParams.leftMargin = AndroidUtilities.dp(24);
+            layoutParams.height = AndroidUtilities.dp(36);
+            editText.setLayoutParams(layoutParams);
+        }
+        editText.setSelection(0, editText.getText().length());
+    }
+
+    private void setNameOverride() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        builder.setTitle(LocaleController.getString(R.string.ChatNameOverride));
+
+        final EditTextBoldCursor editText = new EditTextBoldCursor(getParentActivity()) {
+            @Override
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                super.onMeasure(widthMeasureSpec,
+                        MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64), MeasureSpec.EXACTLY));
+            }
+        };
+        editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+        editText.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
+        editText.setHintText(
+                LocaleController.getString(R.string.Name));
+        if (NekoXConfig.getChatNameOverride(getCurrentChat().id) != null) {
+            editText.setText(NekoXConfig.getChatNameOverride(getCurrentChat().id));
+        }
+        editText.setHeaderHintColor(getThemedColor(Theme.key_windowBackgroundWhiteBlueHeader));
+        editText.setSingleLine(true);
+        editText.setFocusable(true);
+        editText.setTransformHintToHeader(true);
+        editText.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField),
+                getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated),
+                getThemedColor(Theme.key_windowBackgroundWhiteRedText2));
+        editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editText.setBackgroundDrawable(null);
+        editText.requestFocus();
+        editText.setPadding(0, 0, 0, 0);
+        builder.setView(editText);
+
+        builder.setPositiveButton(LocaleController.getString(R.string.OK),
+                (dialogInterface, i) -> {
+                    if (editText.getText().toString().trim().equals("")) {
+                        NekoXConfig.emptyChatNameOverride(getCurrentChat().id);
+                    } else {
+                        NekoXConfig.setChatNameOverride(getCurrentChat().id, editText.getText().toString());
+                    }
+                });
+        builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
         builder.show().setOnShowListener(dialog -> {
             editText.requestFocus();
             AndroidUtilities.showKeyboard(editText);
@@ -10529,6 +10588,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 otherItem.addSubItem(view_discussion, R.drawable.baseline_layers_24, text);
             }
+
+            if (NekoConfig.chatNameOverride.Bool()) {
+                otherItem.addSubItem(overrideName, R.drawable.baseline_edit_24, LocaleController.getString(R.string.ChatNameOverrideMenu));
+            }
+
             if (ChatObject.isChannel(chat)) {
                 if (isTopic) {
                     if (ChatObject.canManageTopic(currentAccount, chat, topicId)) {

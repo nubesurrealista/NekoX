@@ -277,4 +277,7 @@
     <string name="KeepBlockedBotChatHistory">Keep bot history after block</string>
     <string name="DontSendStartCmdOnUnblockBot">Don\'t send /start after unblock</string>
     <string name="SmallerEmojisInChooser">Smaller emojis in chooser</string>
+    <string name="ChatNameOverride">Override chat name</string>
+    <string name="ChatNameOverrideDesc">Use "Override name" in chat profile menu</string>
+    <string name="ChatNameOverrideMenu">Override name</string>
 </resources>
