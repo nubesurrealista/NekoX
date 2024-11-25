@@ -3,6 +3,8 @@
 set -e
 
 patch -d ffmpeg -p1 < patches/ffmpeg/0001-compilation-magic.patch
+patch -d ffmpeg -p1 < patches/ffmpeg/0001-PATCH-remove-deprecated-register-keyword.patch
+patch -d ffmpeg -p1 < patches/ffmpeg/0001-PATCH-replace-SUINT-with-unsigned.patch
 # patch -d ffmpeg -p1 < patches/ffmpeg/0002-compilation-magic-2.patch
 
 function cp {
