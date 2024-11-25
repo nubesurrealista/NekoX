@@ -14,9 +14,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -51,6 +53,7 @@ public class TextSettingsCell extends FrameLayout {
     private boolean canDisable;
     private boolean drawLoading;
     private int padding;
+    private boolean valueTextTrimmed;
 
     private boolean incrementLoadingProgress;
     private float loadingProgress;
@@ -207,6 +210,20 @@ public class TextSettingsCell extends FrameLayout {
         textView.setText(text);
         valueImageView.setVisibility(INVISIBLE);
         if (value != null) {
+            Point size = AndroidUtilities.getRealScreenSize();
+
+            if (paint == null) {
+                paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                paint.setColor(Theme.getColor(Theme.key_dialogSearchBackground, resourcesProvider));
+            }
+            float w = paint.measureText(value.toString());
+            float max = ((float) Math.min(size.x, size.y) / 4);
+            if (w > max) {
+                float cw = Math.max(1, (w / value.length()));
+                int c = (int) Math.floor(max / cw);
+                value = value.subSequence(0, c - 3) + "...";
+            }
+
             valueTextView.setText(value, animated);
             valueTextView.setVisibility(VISIBLE);
         } else {
