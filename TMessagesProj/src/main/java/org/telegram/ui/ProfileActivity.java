@@ -7027,6 +7027,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else {
                         NekoXConfig.setChatNameOverride(getCurrentChat().id, editText.getText().toString());
                     }
+                    new AlertDialog.Builder(getParentActivity())
+                            .setTitle(LocaleController.getString(R.string.NekoX))
+                            .setMessage(LocaleController.getString(R.string.RestartAppToTakeEffect))
+                            .setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) ->
+                                ProcessPhoenix.triggerRebirth(getContext(), new Intent(getContext(), LaunchActivity.class)))
+                            .setNegativeButton(LocaleController.getString(R.string.Cancel), null)
+                            .create().show();
                 });
         builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
         builder.show().setOnShowListener(dialog -> {

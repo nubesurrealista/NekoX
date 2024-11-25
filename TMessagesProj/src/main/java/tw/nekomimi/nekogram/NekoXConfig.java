@@ -14,6 +14,7 @@ import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
@@ -231,10 +232,12 @@ public class NekoXConfig {
 
     public static void setChatNameOverride(long chatId, String name) {
         preferences.edit().putString(NekoConfig.chatNameOverridePrefix + chatId, name).apply();
+        MessagesController.overrideNameCache.put(chatId, name);
     }
 
     public static void emptyChatNameOverride(long chatId) {
         preferences.edit().remove(NekoConfig.chatNameOverridePrefix + chatId).apply();
+        MessagesController.overrideNameCache.put(chatId, "");
     }
 
     public static String getChatNameOverride(long chatId) {
