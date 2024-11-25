@@ -273,4 +273,8 @@
     <string name="ImageMessageSizeTweak">調整圖片訊息的最大大小並啟用比例縮放</string>
     <string name="KeepBlockedBotChatHistory">封鎖後保留與機器人的對話記錄</string>
     <string name="DontSendStartCmdOnUnblockBot">解除封锁机器人后不发送 /start</string>
+    <string name="SmallerEmojisInChooser">输入时使用较小的颜文字</string>
+    <string name="ChatNameOverride">使用本地自定对话名称</string>
+    <string name="ChatNameOverrideDesc">在对话信息页选单使用"自定对话名称"设定名称</string>
+    <string name="ChatNameOverrideMenu">自定对话名称</string>
 </resources>
