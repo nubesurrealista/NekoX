@@ -9872,7 +9872,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.msg_delete, AndroidUtilities.dp(54), LocaleController.getString(R.string.Delete)));
             // NekoX - start
             actionModeViews.add(actionModeOtherItem = actionMode.addItemWithWidth(nkactionbarbtn_action_mode_other, R.drawable.ic_ab_other, AndroidUtilities.dp(54), LocaleController.getString(R.string.MessageMenu)));
-            boolean noforward = getMessagesController().isChatNoForwardsWithOverride(currentChat);
+            boolean noforward = getMessagesController().isChatNoForwards(currentChat);
             if (currentEncryptedChat == null || !noforward) {
                 actionModeOtherItem.addSubItem(nkbtn_forward_noquote, R.drawable.baseline_fast_forward_24, LocaleController.getString(R.string.NoQuoteForward));
                 actionModeOtherItem.addSubItem(star, R.drawable.baseline_star_24, LocaleController.getString(R.string.AddToFavorites));
@@ -9885,8 +9885,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             actionModeOtherItem.addSubItem(nkbtn_unpin, R.drawable.deproko_baseline_pin_undo_24, LocaleController.getString(R.string.UnpinMessage));
             if (!noforward) {
                 actionModeOtherItem.addSubItem(nkbtn_savemessage, R.drawable.baseline_bookmark_24, LocaleController.getString(R.string.AddToSavedMessages));
-                actionModeOtherItem.addSubItem(nkbtn_copy_photo, R.drawable.msg_copy, LocaleController.getString(R.string.Copy));
             }
+            actionModeOtherItem.addSubItem(nkbtn_copy_photo, R.drawable.msg_copy, LocaleController.getString(R.string.Copy));
             if (NekoConfig.showRepeat.Bool() && !noforward)
                 actionModeOtherItem.addSubItem(nkbtn_repeat, R.drawable.msg_repeat, LocaleController.getString(R.string.Repeat));
 
@@ -12098,10 +12098,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     private void openForward(boolean fromActionBar) {
-        if (getMessagesController().isChatNoForwardsWithOverride(currentChat) && hasSelectedNoforwardsMessage()) {
+        if (getMessagesController().isChatNoForwards(currentChat) && hasSelectedNoforwardsMessage()) {
             // We should update text if user changed locale without re-opening chat activity
             String str;
-            if (getMessagesController().isChatNoForwardsWithOverride(currentChat)) {
+            if (getMessagesController().isChatNoForwards(currentChat)) {
                 if (ChatObject.isChannel(currentChat) && !currentChat.megagroup) {
                     str = LocaleController.getString(R.string.ForwardsRestrictedInfoChannel);
                 } else {
@@ -18558,7 +18558,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     if (!messageObject.canDeleteMessage(chatMode == MODE_SCHEDULED, currentChat)) {
                         cantDeleteMessagesCount--;
                     }
-                    boolean noforwards = getMessagesController().isChatNoForwardsWithOverride(currentChat);
+                    boolean noforwards = getMessagesController().isChatNoForwards(currentChat);
                     if (chatMode == MODE_SCHEDULED || !messageObject.canForwardMessage() || noforwards) {
                         cantForwardMessagesCount--;
                     } else {
@@ -18599,7 +18599,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     if (!messageObject.canDeleteMessage(chatMode == MODE_SCHEDULED, currentChat)) {
                         cantDeleteMessagesCount++;
                     }
-                    boolean noforwards = getMessagesController().isChatNoForwardsWithOverride(currentChat);
+                    boolean noforwards = getMessagesController().isChatNoForwards(currentChat);
                     if (chatMode == MODE_SCHEDULED || (!messageObject.canForwardMessage() && noforwards)) {
                         cantForwardMessagesCount++;
                     } else {
@@ -18609,9 +18609,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         if (messageObject.getGroupId() == 0) onlyAlbum = false;
                         else selectedAlbums.add(messageObject.getGroupId());
                     }
-                    if (messageObject.isMusic() && !noforwards) {
+                    if (messageObject.isMusic()) {
                         canSaveMusicCount++;
-                    } else if (messageObject.isDocument() && !messageObject.isRoundOnce() && !messageObject.isVoiceOnce() && !noforwards) {
+                    } else if (messageObject.isDocument() && !messageObject.isRoundOnce() && !messageObject.isVoiceOnce()) {
                         canSaveDocumentsCount++;
                     } else {
                         cantSaveMessagesCount++;
@@ -18650,7 +18650,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     starItem = (ActionBarMenuSubItem) actionModeOtherItem.getSubItem(star);
                 }
 
-                boolean noforwards = (getMessagesController().isChatNoForwardsWithOverride(currentChat) && hasSelectedNoforwardsMessage());
+                boolean noforwards = (getMessagesController().isChatNoForwards(currentChat) && hasSelectedNoforwardsMessage());
                 boolean canForward = chatMode != MODE_SCHEDULED && cantForwardMessagesCount == 0 && !noforwards;
 
                 if (forwardNoQuoteItem != null)
@@ -18726,7 +18726,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 int copyVisible = View.GONE, starVisible = View.GONE, newCopyVisible = View.GONE, newStarVisible = View.GONE;
                 if (copyItem != null) {
                     copyVisible = copyItem.getVisibility();
-                    copyItem.setVisibility(!noforwards && selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
+                    copyItem.setVisibility(selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
                     newCopyVisible = copyItem.getVisibility();
                 }
 
@@ -29649,7 +29649,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         allowPin = allowPin && message.getId() > 0 && (message.messageOwner.action == null || message.messageOwner.action instanceof TLRPC.TL_messageActionEmpty) && !message.isExpiredStory() && message.type != MessageObject.TYPE_STORY_MENTION;
         boolean noforwards = getMessagesController().isChatNoForwards(currentChat) || message.messageOwner.noforwards || getDialogId() == UserObject.VERIFY;
-        boolean noforwardsOrPaidMedia = noforwards || message.type == MessageObject.TYPE_PAID_MEDIA && !NekoXConfig.disableFlagSecure;
+        boolean noforwardsOrPaidMedia = message.type == MessageObject.TYPE_PAID_MEDIA || (noforwards && !NekoXConfig.disableFlagSecure);
         boolean allowUnpin = message.getDialogId() != mergeDialogId && allowPin && (pinnedMessageObjects.containsKey(message.getId()) || groupedMessages != null && !groupedMessages.messages.isEmpty() && pinnedMessageObjects.containsKey(groupedMessages.messages.get(0).getId())) && !message.isExpiredStory();
         boolean allowEdit = message.canEditMessage(currentChat) && !chatActivityEnterView.hasAudioToSend() && message.getDialogId() != mergeDialogId && message.type != MessageObject.TYPE_STORY;
         if (allowEdit && groupedMessages != null) {
@@ -30134,9 +30134,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 icons.add(R.drawable.baseline_star_24);
                             }
                         }
-                        boolean noforward = getMessagesController().isChatNoForwardsWithOverride(currentChat);
+                        boolean noforward = getMessagesController().isChatNoForwards(currentChat);
                         if (!selectedObject.isSponsored() && chatMode != MODE_QUICK_REPLIES && chatMode != MODE_SCHEDULED && (!selectedObject.needDrawBluredPreview() || selectedObject.hasExtendedMediaPreview()) &&
-                                !selectedObject.isLiveLocation() && selectedObject.type != MessageObject.TYPE_PHONE_CALL && !noforwardsOrPaidMedia &&
+                                !selectedObject.isLiveLocation() && selectedObject.type != MessageObject.TYPE_PHONE_CALL && !noforwardsOrPaidMedia && !noforwards &&
                                 selectedObject.type != MessageObject.TYPE_GIFT_PREMIUM && selectedObject.type != MessageObject.TYPE_GIFT_PREMIUM_CHANNEL && selectedObject.type != MessageObject.TYPE_SUGGEST_PHOTO && !selectedObject.isWallpaperAction()
                                 && !message.isExpiredStory() && message.type != MessageObject.TYPE_STORY_MENTION && message.type != MessageObject.TYPE_GIFT_STARS) {
                             items.add(LocaleController.getString(R.string.Forward));
