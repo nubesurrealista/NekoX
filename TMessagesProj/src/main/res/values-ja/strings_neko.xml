@@ -261,4 +261,8 @@
     <string name="ImageMessageSizeTweak">画像メッセの最大サイズを大きくする</string>
     <string name="KeepBlockedBotChatHistory">ボットをブロック時はチャットを削除しない</string>
     <string name="DontSendStartCmdOnUnblockBot">ボットをブロック解除時は /start を発送しない</string>
+    <string name="SmallerEmojisInChooser">入力時に小さい絵文字を使用する</string>
+    <string name="ChatNameOverride">ローカルチャット名変更</string>
+    <string name="ChatNameOverrideDesc">チャットプロフィールメニューの"ローカルチャット名"で設定する</string>
+    <string name="ChatNameOverrideMenu">チャット名変更</string>
 </resources>
