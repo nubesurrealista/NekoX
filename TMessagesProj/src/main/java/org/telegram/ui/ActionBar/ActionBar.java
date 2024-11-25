@@ -1045,7 +1045,8 @@ public class ActionBar extends FrameLayout {
         searchVisibleAnimator = new AnimatorSet();
         final ArrayList<View> viewsToHide = new ArrayList<>();
 
-        final boolean ignoreTitles = onSearchChangedIgnoreTitles();
+        // test if UI glitch (elements overlap) be gone by only let ignoreTitles be false when not in tablet mode
+        final boolean ignoreTitles = onSearchChangedIgnoreTitles() && NekoConfig.tabletMode.Int() != 1 && !AndroidUtilities.isTablet();
         if (!ignoreTitles) {
             if (titleTextView[0] != null) {
                 viewsToHide.add(titleTextView[0]);
