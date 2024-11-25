@@ -1,8 +1,10 @@
 #!/bin/bash
 
+set -e
+
 # From upstream repo
 
-PREFIX="$(pwd)/build"
+PREFIX="$(pwd)/dav1d/build"
 mkdir -p "$PREFIX"
 echo "Building dav1d into $PREFIX"
 
@@ -15,8 +17,8 @@ meson setup builddir-arm64 \
   --buildtype=release -Denable_tests=false -Denable_tools=false -Ddefault_library=static \
   --cross-file <(echo "
     [binaries]
-    c = '${ANDROID_NDK}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang'
-    ar = '${ANDROID_NDK}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ar'
+    c = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang'
+    ar = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ar'
     
     [host_machine]
     system = 'android'
@@ -34,8 +36,8 @@ meson setup builddir-armv7 \
   --buildtype=release -Denable_tests=false -Denable_tools=false -Ddefault_library=static \
   --cross-file <(echo "
     [binaries]
-    c = '${ANDROID_NDK}/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi21-clang'
-    ar = '${ANDROID_NDK}/toolchains/llvm/prebuilt/linux-x86_64/bin/arm-linux-androideabi-ar'
+    c = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi21-clang'
+    ar = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/arm-linux-androideabi-ar'
     
     [host_machine]
     system = 'android'
@@ -54,8 +56,8 @@ meson setup builddir-x86 \
   --buildtype=release -Denable_tests=false -Denable_tools=false -Ddefault_library=static \
   --cross-file <(echo "
     [binaries]
-    c = '${ANDROID_NDK}/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android21-clang'
-    ar = '${ANDROID_NDK}/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android-ar'
+    c = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android21-clang'
+    ar = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android-ar'
     
     [host_machine]
     system = 'android'
@@ -73,8 +75,8 @@ meson setup builddir-x86_64 \
   --buildtype=release -Denable_tests=false -Denable_tools=false -Ddefault_library=static \
   --cross-file <(echo "
     [binaries]
-    c = '${ANDROID_NDK}/toolchains/llvm/prebuilt/linux-x86_64/bin/x86_64-linux-android21-clang'
-    ar = '${ANDROID_NDK}/toolchains/llvm/prebuilt/linux-x86_64/bin/x86_64-linux-android-ar'
+    c = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/x86_64-linux-android21-clang'
+    ar = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/x86_64-linux-android-ar'
     
     [host_machine]
     system = 'android'
