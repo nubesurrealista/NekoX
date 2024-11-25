@@ -188,6 +188,8 @@ public class MessagesController extends BaseController implements NotificationCe
     public long giveawayBoostsPerPremium = 4;
     public long boostsPerSentGift = 3;
 
+    public static ConcurrentHashMap<Long, String> overrideNameCache = new ConcurrentHashMap<>();
+
     public static TLRPC.Peer getPeerFromInputPeer(TLRPC.InputPeer peer) {
         if (peer.chat_id != 0) {
             TLRPC.TL_peerChat peerChat = new TLRPC.TL_peerChat();
@@ -6114,14 +6116,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public TLRPC.Chat getChat(Long id) {
-        TLRPC.Chat ret = chats.get(id);
-        if (ret == null) return null;
-        if (NekoConfig.chatNameOverride.Bool()) {
-            String name = NekoXConfig.getChatNameOverride(id);
-            if (name == null) name = NekoXConfig.getChatNameOverride(-id);
-            if (name != null) ret.title = name;
-        }
-        return ret;
+        return chats.get(id);
     }
 
     public TLRPC.EncryptedChat getEncryptedChat(Integer id) {
@@ -6368,6 +6363,20 @@ public class MessagesController extends BaseController implements NotificationCe
             }
         }
         updateEmojiStatusUntilUpdate(-chat.id, chat.emoji_status);
+
+        if (overrideNameCache.containsKey(chat.id)) {
+            String name = overrideNameCache.get(chat.id);
+            if (name != null && !name.isEmpty()) chat.title = name;
+        } else {
+            String name = NekoXConfig.getChatNameOverride(chat.id);
+            if (name != null) {
+                chat.title = name;
+                overrideNameCache.put(chat.id, name);
+            } else {
+                overrideNameCache.put(chat.id, "");
+            }
+        }
+
         if (chat.min) {
             if (oldChat != null) {
                 if (!fromCache) {
