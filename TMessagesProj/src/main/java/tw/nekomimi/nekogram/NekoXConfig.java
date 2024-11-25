@@ -216,7 +216,7 @@ public class NekoXConfig {
         return color;
     }
 
-    
+
     public static void setChannelAlias(long channelID, String name) {
         preferences.edit().putString(NekoConfig.channelAliasPrefix + channelID, name).apply();
     }
@@ -227,5 +227,17 @@ public class NekoXConfig {
 
     public static String getChannelAlias(long channelID) {
         return preferences.getString(NekoConfig.channelAliasPrefix + channelID, null);
+    }
+
+    public static void setChatNameOverride(long chatId, String name) {
+        preferences.edit().putString(NekoConfig.chatNameOverridePrefix + chatId, name).apply();
+    }
+
+    public static void emptyChatNameOverride(long chatId) {
+        preferences.edit().remove(NekoConfig.chatNameOverridePrefix + chatId).apply();
+    }
+
+    public static String getChatNameOverride(long chatId) {
+        return preferences.getString(NekoConfig.chatNameOverridePrefix + chatId, null);
     }
 }

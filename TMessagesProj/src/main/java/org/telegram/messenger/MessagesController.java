@@ -6114,7 +6114,14 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public TLRPC.Chat getChat(Long id) {
-        return chats.get(id);
+        TLRPC.Chat ret = chats.get(id);
+        if (ret == null) return null;
+        if (NekoConfig.chatNameOverride.Bool()) {
+            String name = NekoXConfig.getChatNameOverride(id);
+            if (name == null) name = NekoXConfig.getChatNameOverride(-id);
+            if (name != null) ret.title = name;
+        }
+        return ret;
     }
 
     public TLRPC.EncryptedChat getEncryptedChat(Integer id) {
