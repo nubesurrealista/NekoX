@@ -64,6 +64,7 @@ import org.telegram.ui.Components.FireworksEffect;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.SnowflakesEffect;
+import org.telegram.ui.DialogsActivity;
 
 import java.util.ArrayList;
 
@@ -463,7 +464,7 @@ public class ActionBar extends FrameLayout {
             createTitleTextView(0);
         }
         if (titleTextView[0] != null) {
-            titleTextView[0].setVisibility(value != null && !isSearchFieldVisible ? VISIBLE : INVISIBLE);
+            titleTextView[0].setVisibility(value != null && !isSearchFieldVisible && !onSearchChangedIgnoreTitles() ? VISIBLE : INVISIBLE);
             titleTextView[0].setText(lastTitle = value);
             if (attached && lastRightDrawable instanceof AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable) {
                 ((AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable) lastRightDrawable).setParentView(null);
@@ -942,7 +943,7 @@ public class ActionBar extends FrameLayout {
             }
         });
         actionModeAnimation.start();
-        if (!isSearchFieldVisible) {
+        if (!isSearchFieldVisible && !onSearchChangedIgnoreTitles()) {
             if (titleTextView[0] != null) {
                 titleTextView[0].setVisibility(VISIBLE);
             }
@@ -1098,7 +1099,8 @@ public class ActionBar extends FrameLayout {
                     }
                 }
 
-                if (visible && !ignoreTitles) {
+                boolean shouldHideTitle = onSearchChangedIgnoreTitles();
+                if ((visible && !ignoreTitles) || shouldHideTitle) {
                     if (titleTextView[0] != null) {
                         titleTextView[0].setVisibility(View.GONE);
                     }
