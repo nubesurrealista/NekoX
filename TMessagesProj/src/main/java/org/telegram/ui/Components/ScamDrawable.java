@@ -12,6 +12,9 @@ import android.text.TextPaint;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SharedConfig;
+
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class ScamDrawable extends Drawable {
 
@@ -24,9 +27,17 @@ public class ScamDrawable extends Drawable {
     int colorAlpha = 255;
     int alpha = 255;
 
+    private int fontSize;
+
     public ScamDrawable(int textSize, int type) {
         super();
         currentType = type;
+
+        if (NekoConfig.chatListFontSizeFollowChat.Bool()) {
+            textSize -= (15 - SharedConfig.fontSize);
+        }
+        fontSize = textSize;
+
         textPaint.setTextSize(AndroidUtilities.dp(textSize));
         textPaint.setTypeface(AndroidUtilities.bold());
 
@@ -82,8 +93,10 @@ public class ScamDrawable extends Drawable {
     @Override
     public void draw(Canvas canvas) {
         rect.set(getBounds());
+        int leftPadding = NekoConfig.chatListFontSizeFollowChat.Bool() ? Math.abs((getBounds().width() - textWidth) / 2) : AndroidUtilities.dp(2);
+        int topPadding = NekoConfig.chatListFontSizeFollowChat.Bool() ? (int) Math.ceil(1.095F * fontSize) : 12;
         canvas.drawRoundRect(rect, AndroidUtilities.dp(2), AndroidUtilities.dp(2), paint);
-        canvas.drawText(text, rect.left + AndroidUtilities.dp(5), rect.top + AndroidUtilities.dp(12), textPaint);
+        canvas.drawText(text, rect.left + leftPadding, rect.top + AndroidUtilities.dp(topPadding), textPaint);
     }
 
     @Override
