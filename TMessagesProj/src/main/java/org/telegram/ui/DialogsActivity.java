@@ -3072,7 +3072,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
             @Override
             protected boolean onSearchChangedIgnoreTitles() {
-                return rightSlidingDialogContainer != null && rightSlidingDialogContainer.hasFragment();
+                return slidingTopicListOpened();
             }
 
             @Override
