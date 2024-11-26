@@ -276,4 +276,5 @@
     <string name="MapMobileDataSaverToRoaming">Utilizar la itinerancia preestablecida cuando el ahorro de datos está activado</string>
     <string name="KeepBlockedBotChatHistory">Mantener el historial de bots tras el bloqueo</string>
     <string name="DontSendStartCmdOnUnblockBot">No enviar/iniciar después de desbloquear</string>
+    <string name="OverridePerformanceClass">Anular la clase de rendimiento del dispositivo</string>
 </resources>
