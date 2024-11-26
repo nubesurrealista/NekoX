@@ -3600,6 +3600,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             return;
                         }
                         if (!checkRecordLocked(true)) {
+                            if (AndroidUtilities.isTablet()) {
+                                if (LaunchActivity.instance.getActionBarLayout().getFragmentStack().size() < 2) {
+                                    LaunchActivity.instance.getLayersActionBarLayout().presentFragment(new DialogsActivity(null));
+                                    return;
+                                }
+                            }
                             finishFragment();
                         }
                     }
@@ -33480,6 +33486,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 finishFragment();
             });
             return false;
+        }
+
+        if (AndroidUtilities.isTablet()) {
+            if (LaunchActivity.instance.getActionBarLayout().getFragmentStack().size() < 2) {
+                LaunchActivity.instance.getLayersActionBarLayout().presentFragment(new DialogsActivity(null));
+                return false;
+            }
         }
         return true;
     }
