@@ -8326,10 +8326,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (getParentActivity() == null || view instanceof DialogsHintCell) {
             return false;
         }
-        if (!actionBar.isActionModeShowed() && !AndroidUtilities.isTablet() && !onlySelect && view instanceof DialogCell && !getMessagesController().isForum(((DialogCell) view).getDialogId()) && !rightSlidingDialogContainer.hasFragment()) {
+        if (!actionBar.isActionModeShowed() && !onlySelect && view instanceof DialogCell && !getMessagesController().isForum(((DialogCell) view).getDialogId()) && !rightSlidingDialogContainer.hasFragment()) {
             DialogCell cell = (DialogCell) view;
             if (cell.isPointInsideAvatar(x, y)) {
-                return showChatPreview(cell);
+                if (AndroidUtilities.displaySize.x < AndroidUtilities.displaySize.y || !AndroidUtilities.isTablet())
+                    return showChatPreview(cell);
             }
         }
         if (rightSlidingDialogContainer != null && rightSlidingDialogContainer.hasFragment()) {
