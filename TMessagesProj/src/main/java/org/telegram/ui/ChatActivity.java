@@ -17897,11 +17897,23 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (searchCountText != null && searchGoToBeginningButton != null && searchExpandList != null &&
                     (NekoConfig.forceHideShowAsList.Bool() || (searchGoToBeginningButton.getVisibility() == View.VISIBLE
                     && searchCountText.getX() < searchGoToBeginningButton.getX()))) {
+                // hide text first
+                searchExpandList.setText("", false);
+
                 int textWidth = searchCountText.getWidth();
                 float newX = searchGoToBeginningButton.getX() + searchGoToBeginningButton.getWidth();
                 newX += (searchContainer.getWidth() - newX - textWidth) / 2;
+
+                // set position manually if overflow
+                if (newX + textWidth > searchContainer.getWidth()) {
+                    newX = searchContainer.getWidth() - textWidth - dp(4);
+
+                    // sacrifice go to beginning btn if space isn't enough
+                    if (newX < searchGoToBeginningButton.getX()) {
+                        searchGoToBeginningButton.setVisibility(View.GONE);
+                    }
+                }
                 searchCountText.setX(newX);
-                searchExpandList.setText("", false);
             }
 
             updateBulletinLayout();
