@@ -120,6 +120,15 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         }
     }
 
+    public void setTextVisibility(boolean v) {
+        if (titleTextView != null) {
+            titleTextView.setVisibility(v ? View.VISIBLE : View.GONE);
+        }
+        if (getSubtitleTextView() != null) {
+            getSubtitleTextView().setVisibility(v ? View.VISIBLE : View.GONE);
+        }
+    }
+
     public void setStoriesForceState(Integer storiesForceState) {
         this.storiesForceState = storiesForceState;
     }

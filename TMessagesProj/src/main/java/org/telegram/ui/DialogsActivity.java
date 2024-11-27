@@ -307,6 +307,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private boolean forceHideTabs = false;
     private DownloadProgressIcon downloadIcon;
 
+    public TopicsFragment topicsFragment;
+
     public MessagesStorage.TopicKey getOpenedDialogId() {
         return openedDialogId;
     }
@@ -434,7 +436,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private boolean downloadsItemVisible;
     private ActionBarMenuItem proxyItem;
     private boolean proxyItemVisible;
-    private ActionBarMenuItem scanItem;
+    public ActionBarMenuItem scanItem;
     private ActionBarMenuItem searchItem;
     private ActionBarMenuItem optionsItem;
     private ActionBarMenuItem speedItem;
@@ -3079,6 +3081,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             public void onSearchFieldVisibilityChanged(boolean visible) {
                 if (rightSlidingDialogContainer != null && rightSlidingDialogContainer.hasFragment()) {
                     getBackButton().animate().alpha(visible ? 1f : 0f).start();
+
+                    if (rightSlidingDialogContainer.getFragment() instanceof TopicsFragment) {
+                        ((TopicsFragment) rightSlidingDialogContainer.getFragment()).avatarContainer.setTextVisibility(!visible);
+                    }
                 }
                 super.onSearchFieldVisibilityChanged(visible);
             }
@@ -3186,7 +3192,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (downloadsItem != null && downloadsItemVisible) {
                     downloadsItem.setVisibility(View.GONE);
                 }
-                if (scanItem != null) {
+                if (scanItem != null && !slidingTopicListOpened()) {
                     scanItem.setVisibility(View.VISIBLE);
                 }
                 if (viewPages[0] != null) {
@@ -7364,6 +7370,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         actionBar.openSearchField(query, false);
     }
 
+    public void hideSearch() {
+        showSearch(false, false, false, false);
+    }
+
     private void showSearch(boolean show, boolean startFromDownloads, boolean animated) {
         showSearch(show, startFromDownloads, animated, false);
     }
@@ -8198,7 +8208,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             if (needOpenChatActivity) {
                                 presentFragment(highlightFoundQuote(new ChatActivity(args), msg));
                             } else {
-                                presentFragment(new TopicsFragment(args));
+                                presentFragment(topicsFragment = new TopicsFragment(args));
                             }
                         } else {
                             if (!canOpenInRightSlidingView) {
@@ -8215,7 +8225,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                         rightSlidingDialogContainer.finishPreview();
                                     } else {
                                         viewPages[0].listView.prepareSelectorForAnimation();
-                                        TopicsFragment topicsFragment = new TopicsFragment(args) {
+                                        topicsFragment = new TopicsFragment(args) {
                                             @Override
                                             public boolean isRightFragment() {
                                                 return true;

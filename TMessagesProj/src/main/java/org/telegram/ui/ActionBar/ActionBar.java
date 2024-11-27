@@ -65,6 +65,8 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.SnowflakesEffect;
 import org.telegram.ui.DialogsActivity;
+import org.telegram.ui.LaunchActivity;
+import org.telegram.ui.TopicsFragment;
 
 import java.util.ArrayList;
 
@@ -203,6 +205,25 @@ public class ActionBar extends FrameLayout {
                 closeSearchField();
                 return;
             }
+
+            if (AndroidUtilities.isTablet()) {
+                DialogsActivity dialogsActivity = null;
+                for (BaseFragment fragment : LaunchActivity.instance.getActionBarLayout().getFragmentStack()) {
+                    if (fragment instanceof DialogsActivity) {
+                        dialogsActivity = (DialogsActivity) fragment;
+                        break;
+                    }
+                }
+                if (dialogsActivity != null) {
+                    ActionBarMenuItem searchItem = dialogsActivity.getSearchItem();
+                    if (searchItem.isSearchFieldVisible()) {
+                        dialogsActivity.actionBar.onSearchFieldVisibilityChanged(searchItem.toggleSearch(true));
+                        dialogsActivity.scanItem.setVisibility(View.GONE);
+                        return;
+                    }
+                }
+            }
+
             if (actionBarMenuOnItemClick != null) {
                 actionBarMenuOnItemClick.onItemClick(-1);
             }

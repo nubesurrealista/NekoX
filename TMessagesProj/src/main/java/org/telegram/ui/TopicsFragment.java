@@ -1512,6 +1512,9 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
                     parentDialogsActivity.getSearchItem().toggleSearch(true)
             );
         }
+        if (avatarContainer != null) {
+            avatarContainer.setTextVisibility(false);
+        }
     }
 
     @Override
