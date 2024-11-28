@@ -53,6 +53,7 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
@@ -171,6 +172,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell header5 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Appearance")));
     private final AbstractConfigCell typefaceRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.typeface));
     private final AbstractConfigCell customTitleTextRow = cellGroup.appendCell(new ConfigCellTextInput(null, NekoConfig.customTitleText, "Nekogram X", null));
+    private final AbstractConfigCell nameTitleTextRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.nameAsTitleText));
     private final AbstractConfigCell transparentStatusBarRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.transparentStatusBar));
     private final AbstractConfigCell appBarShadowRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAppBarShadow));
     private final AbstractConfigCell newYearRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.newYear));
@@ -475,6 +477,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 ArticleViewer.BOTTOM_ACTION_BAR = (boolean) newValue;
             } else if (key.equals(NekoConfig.perfClassOverride.getKey())) {
                 NekoConfig.applyPerformanceClassOverride((Integer) newValue);
+            } else if (key.equals(NekoConfig.nameAsTitleText.getKey())) {
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             }
         };
 
