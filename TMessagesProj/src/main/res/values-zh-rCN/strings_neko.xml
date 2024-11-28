@@ -279,6 +279,11 @@
     <string name="ChatNameOverride">使用本地自定对话名称</string>
     <string name="ChatNameOverrideDesc">在对话信息页选单使用"自定对话名称"设定名称</string>
     <string name="ChatNameOverrideMenu">自定对话名称</string>
+    <string name="HideUnreadCounterOnFolderTabs">隐藏资料夹分页未读数量标示</string>
+    <string name="NameAsTitleText">使用账号名字作为标题文字</string>
+    <string name="ArticleViewerBottomActionBar">将网页工具列移至底部</string>
+    <string name="SelectAnIcon">选择图示</string>
+    <string name="OverridePerformanceClass">覆写装置效能分类</string>
     <string name="RestartApp">重新启动应用</string>
     <string name="UseOldAppName">使用旧应用名称 (NekoX)</string>
     <string name="UseOldAppNameDesc">变更此设置时会自动退回桌面, 且图示将被重设.</string>
