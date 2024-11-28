@@ -280,4 +280,5 @@
     <string name="ChatNameOverride">Override chat name</string>
     <string name="ChatNameOverrideDesc">Use "Override name" in chat profile menu</string>
     <string name="ChatNameOverrideMenu">Override name</string>
+    <string name="NameAsTitleText">Use name as title text</string>
 </resources>
