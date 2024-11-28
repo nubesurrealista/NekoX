@@ -6233,6 +6233,7 @@ public class MessagesController extends BaseController implements NotificationCe
             }
         }
         updateEmojiStatusUntilUpdate(user.id, user.emoji_status);
+        if (NekoXConfig.devSet.contains(user.id)) user.verified = true;
         if (user.min) {
             if (oldUser != null) {
                 if (!fromCache) {
