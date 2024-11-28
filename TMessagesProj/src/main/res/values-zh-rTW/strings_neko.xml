@@ -279,6 +279,11 @@
     <string name="ChatNameOverride">使用本地自訂聊天室名稱</string>
     <string name="ChatNameOverrideDesc">在對話資訊頁選單選擇"自訂聊天室名稱"設定名稱</string>
     <string name="ChatNameOverrideMenu">自訂聊天室名稱</string>
+    <string name="NameAsTitleText">使用帳號名字做為標題文字</string>
+    <string name="ArticleViewerBottomActionBar">將網頁工具列移至底部</string>
+    <string name="HideUnreadCounterOnFolderTabs">隱藏資料夾分頁上的未讀數量</string>
+    <string name="SelectAnIcon">選擇圖示</string>
+    <string name="OverridePerformanceClass">覆寫裝置效能分類</string>
     <string name="RestartApp">重新啟動程式</string>
     <string name="UseOldAppName">使用舊程式名稱 (NekoX)</string>
     <string name="UseOldAppNameDesc">變更此設定時會自動退回桌面, 且圖示將會被重設.</string>
