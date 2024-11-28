@@ -260,4 +260,21 @@
     <string name="CleanupLeftoversResults">Membebaskan penyimpanan sebesar %1$.2f KB.</string>
     <string name="CleanupLeftoversResultsMB">Membebaskan %1$.2f MB penyimpanan.</string>
     <string name="IgnoreFilterEmoticonUpdate">Abaikan pembaruan ikon folder dari server</string>
+    <string name="ArticleViewerBottomActionBar">Pindahkan bilah tindakan penampil artikel ke bawah</string>
+    <string name="AlwaysTranslateBeforeSend">Selalu terjemahkan</string>
+    <string name="AlwaysTranslateBeforeSendNote">Hanya teks yang akan disimpan untuk pesan yang diteruskan</string>
+    <string name="SelectAnIcon">Pilih ikon</string>
+    <string name="ImageMessageSizeTweak">Perbesar ukuran pesan maksimum dengan gambar dan aktifkan kesesuaian aspek</string>
+    <string name="CopySticker">Salin Stiker</string>
+    <string name="CopyPhotoSticker">Salin photo/stiker</string>
+    <string name="HideUnreadCounterOnFolderTabs">Sembunyikan penghitung yg belum dibaca pada tab folder</string>
+    <string name="ChooseBestVideoQualityByDefault">Pilih kualitas video terbaik secara default</string>
+    <string name="CrashDialogTitle">NekoX Rusak!</string>
+    <string name="CrashDialogMessage">Bantu pengembang memecahkan masalah ini dengan membagikan info terkait?</string>
+    <string name="TriggerCrash">Pemicu kerusakan</string>
+    <string name="MapMobileDataSaverToRoaming">Gunakan preset roaming saat penghemat data aktif</string>
+    <string name="MapMobileDataSaverToRoamingNote">Hanya berlaku untuk Android 9 atau yg terbaru</string>
+    <string name="OverridePerformanceClass">Pilihan kinerja perangkat</string>
+    <string name="KeepBlockedBotChatHistory">Simpan riwayat bot setelah diblokir</string>
+    <string name="DontSendStartCmdOnUnblockBot">Jangan kirim mulai setelah dibuka blokirnya</string>
 </resources>

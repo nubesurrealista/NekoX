@@ -207,4 +207,11 @@
     <string name="OverrideSettingBoolean">Переопределить булево значение</string>
     <string name="OverrideSettingInteger">Переопределить целочисленное значение</string>
     <string name="OverrideSettingLong">Переопределить \"long\" значение</string>
+    <string name="AutoArchiveAndMuteNoCommonGroupOnly">Заглушить и переместить в архив только пользователей без общих групп</string>
+    <string name="AutoArchiveAndMuteNoCommonGroupOnlyAbout">Требует запрос к серверу, может привести задержке перед действием</string>
+    <string name="DontShareNumberWhenAddContactByDefault">Не показывать свой номер телефона контактам</string>
+    <string name="ConfirmOpenLinkInWebView">Подтвердить перед открытием ссылок из WebView</string>
+    <string name="AlwaysShowBotCommandButton">Всегда показывать кнопку управления ботом</string>
+    <string name="BlacklistedQueryAllAdded">Все запросы в данной ссылке уже находятся в черном списке</string>
+    <string name="ConvertGroupAlert">Это действие нельзя отменить. Супергруппу невозможно вернуть в состояние обычной группы</string>
 </resources>
