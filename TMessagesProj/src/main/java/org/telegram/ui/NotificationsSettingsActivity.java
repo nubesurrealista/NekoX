@@ -1221,7 +1221,9 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                         updateRepeatNotifications = false;
                     } else if (position == unifiedPushDistributorRow) {
                         String value = UnifiedPush.getAckDistributor(ApplicationLoader.applicationContext);
-                        textCell.setTextAndValue(LocaleController.getString(R.string.UnifiedPushDistributor), value, updateUnifiedPushDistributor, false);
+                        textCell.setTextAndValue(LocaleController.getString(R.string.UnifiedPushDistributor),
+                                (value == null || value.isEmpty()) ? "None" : value,
+                                updateUnifiedPushDistributor, false);
                         updateUnifiedPushDistributor = false;
                     }
                     break;

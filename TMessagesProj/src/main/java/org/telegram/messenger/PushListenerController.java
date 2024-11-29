@@ -1545,7 +1545,10 @@ public class PushListenerController {
         if (NekoConfig.enableUnifiedPush.Bool()) {
             FileLog.d("UnifiedPush is enabled");
             instance = UnifiedPushListenerServiceProvider.getInstance();
-        } else {
+        }
+
+        // fallback to original dummy push if there's no provider
+        if (instance == null || !instance.hasServices()) {
             instance = new DummyPushProvider();
         }
         return instance;
