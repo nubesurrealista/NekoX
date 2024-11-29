@@ -277,4 +277,5 @@
     <string name="ChatNameOverride">使用本地自定对话名称</string>
     <string name="ChatNameOverrideDesc">在对话信息页选单使用"自定对话名称"设定名称</string>
     <string name="ChatNameOverrideMenu">自定对话名称</string>
+    <string name="RestartApp">重新启动应用</string>
 </resources>
