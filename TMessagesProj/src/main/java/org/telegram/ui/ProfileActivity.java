@@ -4369,7 +4369,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     });
                 }
 
-                builder.addItem(LocaleController.getString(R.string.BotUnblock), R.drawable.msg_retry,
+                builder.addItem(LocaleController.getString(R.string.RestartApp), R.drawable.msg_retry,
                         (__) -> {
                             ProcessPhoenix.triggerRebirth(ApplicationLoader.applicationContext,
                                     new Intent(ApplicationLoader.applicationContext, LaunchActivity.class));
