@@ -277,4 +277,5 @@
     <string name="ChatNameOverride">使用本地自訂聊天室名稱</string>
     <string name="ChatNameOverrideDesc">在對話資訊頁選單選擇"自訂聊天室名稱"設定名稱</string>
     <string name="ChatNameOverrideMenu">自訂聊天室名稱</string>
+    <string name="RestartApp">重新啟動程式</string>
 </resources>

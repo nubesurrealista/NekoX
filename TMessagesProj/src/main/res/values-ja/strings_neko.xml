@@ -265,4 +265,5 @@
     <string name="ChatNameOverride">ローカルチャット名変更</string>
     <string name="ChatNameOverrideDesc">チャットプロフィールメニューの"ローカルチャット名"で設定する</string>
     <string name="ChatNameOverrideMenu">チャット名変更</string>
+    <string name="RestartApp">アプリを再起動</string>
 </resources>

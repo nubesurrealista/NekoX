@@ -4368,6 +4368,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         return Unit.INSTANCE;
                     });
                 }
+
+                builder.addItem(LocaleController.getString(R.string.BotUnblock), R.drawable.msg_retry,
+                        (__) -> {
+                            ProcessPhoenix.triggerRebirth(ApplicationLoader.applicationContext,
+                                    new Intent(ApplicationLoader.applicationContext, LaunchActivity.class));
+                            return Unit.INSTANCE;
+                        });
                 builder.show();
             } else if (position == premiumRow) {
                 presentFragment(new PremiumPreviewFragment("settings"));
