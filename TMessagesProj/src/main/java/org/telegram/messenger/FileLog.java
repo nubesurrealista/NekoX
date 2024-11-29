@@ -456,7 +456,7 @@ public class FileLog {
         }
     }
 
-    private static String mkTag() {
+    public static String mkTag() {
         final StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         return StrUtil.subAfter(stackTrace[4].getClassName(), ".", true);
     }
