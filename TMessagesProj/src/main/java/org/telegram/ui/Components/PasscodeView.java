@@ -90,6 +90,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.StrUtil;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class PasscodeView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
@@ -1220,7 +1221,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
                     if (useBiometric) {
                         Executor executor = ContextCompat.getMainExecutor(parentActivity);
                         BiometricPrompt.Builder builder = new BiometricPrompt.Builder(parentActivity)
-                                .setTitle(LocaleController.getString("NekoX", R.string.NekoX))
+                                .setTitle(StrUtil.getAppName())
                                 .setNegativeButton(LocaleController.getString("Canel", R.string.Cancel), executor, (dialog, which) -> { });
                         if (Build.VERSION.SDK_INT >= 29) {
                             builder.setConfirmationRequired(false);

@@ -58,6 +58,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.Components.UndoView;
+import org.telegram.ui.LauncherIconController;
 import org.telegram.ui.web.SearchEngine;
 
 import java.util.ArrayList;
@@ -482,7 +483,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             } else if (key.equals(NekoConfig.nameAsTitleText.getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (key.equals(NekoConfig.useOldName.getKey())) {
-                NekoConfig.applyAppNameSwitch((boolean) newValue);
+                LauncherIconController.switchAppName((boolean) newValue);
             }
         };
 

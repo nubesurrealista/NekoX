@@ -14,6 +14,8 @@ import static org.telegram.messenger.LocaleController.formatPluralString;
 import static org.telegram.messenger.LocaleController.formatString;
 import static org.telegram.messenger.LocaleController.getString;
 
+import static tw.nekomimi.nekogram.utils.StrUtil.getAppName;
+
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -7035,7 +7037,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         NekoXConfig.setChatNameOverride(getCurrentChat().id, editText.getText().toString());
                     }
                     new AlertDialog.Builder(getParentActivity())
-                            .setTitle(LocaleController.getString(R.string.NekoX))
+                            .setTitle(getAppName())
                             .setMessage(LocaleController.getString(R.string.RestartAppToTakeEffect))
                             .setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) ->
                                 ProcessPhoenix.triggerRebirth(getContext(), new Intent(getContext(), LaunchActivity.class)))

@@ -43,7 +43,7 @@ object EnvUtil {
             }
 
             if (Build.VERSION.SDK_INT < 30) {
-                add(Environment.getExternalStoragePublicDirectory(LocaleController.getString(R.string.AppNameShort)))
+                add(Environment.getExternalStoragePublicDirectory(StrUtil.getShortAppName()))
             }
 
         }.map { it.path }.toTypedArray()

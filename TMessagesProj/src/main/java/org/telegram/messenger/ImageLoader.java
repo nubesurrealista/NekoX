@@ -91,6 +91,7 @@ import java.util.zip.GZIPInputStream;
 
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.StrUtil;
 
 /**
  * image filter types
@@ -2428,7 +2429,7 @@ public class ImageLoader {
                 FileLog.d("external storage = " + path);
 
                 File publicMediaDir = null;
-                String appName = LocaleController.getString(R.string.AppNameShort);
+                String appName = StrUtil.getShortAppName();
                 if (Build.VERSION.SDK_INT >= 30) {
                     File newPath;
                     try {

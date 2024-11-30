@@ -28,7 +28,7 @@ public class LauncherIconController {
 
     public static LauncherIcon getCurrentIcon() {
         for (LauncherIcon icon : LauncherIcon.values()) {
-            if (isEnabled(icon)) {
+            if (isEnabled(icon, true) || isEnabled(icon, false)) {
                 return icon;
             }
         }
@@ -74,6 +74,15 @@ public class LauncherIconController {
                         PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
             }
         }
+    }
+
+    public static void switchAppName(boolean oldName) {
+        LauncherIcon currentIcon = getCurrentIcon();
+
+        if (currentIcon != null && ((oldName && isEnabled(currentIcon, true)) || (!oldName && isEnabled(currentIcon, false))))
+            return;
+
+        setIcon(currentIcon == LauncherIcon.DEFAULT ? LauncherIcon.COLORED : LauncherIcon.DEFAULT, oldName);
     }
 
     public enum LauncherIcon {

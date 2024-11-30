@@ -63,6 +63,7 @@ import java.util.ArrayList;
 
 import kotlin.Unit;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
+import tw.nekomimi.nekogram.utils.StrUtil;
 
 @TargetApi(23)
 public class ActionIntroActivity extends BaseFragment implements LocationController.LocationFetchCallback {
@@ -674,7 +675,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 processOpenQrReader();
             } else {
                 new AlertDialog.Builder(getParentActivity())
-                        .setTitle(LocaleController.getString("NekoX", R.string.NekoX))
+                        .setTitle(StrUtil.getAppName())
                         .setMessage(AndroidUtilities.replaceTags(LocaleController.getString(R.string.QRCodePermissionNoCameraWithHint)))
                         .setPositiveButton(LocaleController.getString(R.string.PermissionOpenSettings), (dialogInterface, i) -> {
                             try {

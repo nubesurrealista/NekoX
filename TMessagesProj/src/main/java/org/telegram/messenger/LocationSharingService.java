@@ -21,6 +21,8 @@ import org.telegram.ui.LaunchActivity;
 
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.utils.StrUtil;
+
 public class LocationSharingService extends Service implements NotificationCenter.NotificationCenterDelegate {
 
     private NotificationCompat.Builder builder;
@@ -141,7 +143,7 @@ public class LocationSharingService extends Service implements NotificationCente
                 builder.setContentIntent(contentIntent);
                 NotificationsController.checkOtherNotificationsChannel();
                 builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
-                builder.setContentTitle(LocaleController.getString(R.string.NekoX));
+                builder.setContentTitle(StrUtil.getAppName());
                 Intent stopIntent = new Intent(ApplicationLoader.applicationContext, StopLiveLocationReceiver.class);
                 builder.addAction(0, LocaleController.getString(R.string.StopLiveLocation), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, stopIntent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
             }
