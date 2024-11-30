@@ -16,6 +16,7 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.LaunchActivity;
+import org.telegram.ui.LauncherIconController;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -58,6 +59,7 @@ public class NekoConfig {
     // Configs
     public static ConfigItem migrate = addConfig("NekoConfigMigrate", configTypeBool, false);
     public static ConfigItem migrate030 = addConfig("NekoConfigMigrate2", configTypeInt, 0);
+    public static ConfigItem useOldName = addConfig(R.string.UseOldAppName, "UseOldAppName", configTypeBool, GENERAL, false);
     public static ConfigItem largeAvatarInDrawer = addConfig(R.string.AvatarAsBackground, "AvatarAsBackground", configTypeInt, GENERAL, 0); // 0:TG Default 1:NekoX Default 2:Large Avatar
     public static ConfigItem unreadBadgeOnBackButton = addConfig(R.string.unreadBadgeOnBackButton, "unreadBadgeOnBackButton", configTypeBool, CHAT, false);
 //    public static ConfigItem customPublicProxyIP = addConfig("customPublicProxyIP", configTypeString, "");
@@ -393,6 +395,15 @@ public class NekoConfig {
                 SharedConfig.toggleForceDisableTabletMode();
             }
             migrate030.setConfigInt(1);
+        }
+
+        migrate030.setConfigInt(1);
+        if (migrate030.Int() < 2) {
+            // switch to new app name
+            migrate030.setConfigInt(2); // set mig lvl first
+            LauncherIconController.LauncherIcon currentIcon = LauncherIconController.getCurrentIcon();
+            if (currentIcon != null) LauncherIconController.setIcon(currentIcon);
+            LauncherIconController.tryFixLauncherIconIfNeeded();
         }
 
         // TODO remove this after some versions.
@@ -748,6 +759,12 @@ public class NekoConfig {
     public static void applyPerformanceClassOverride(Integer c) {
         if (c == null && (c = NekoConfig.perfClassOverride.Int()) == -1) return;
         SharedConfig.overrideDevicePerformanceClass((c == 0) ? -1 : (c - 1));
+    }
+
+    public static void applyAppNameSwitch(boolean value) {
+        LauncherIconController.LauncherIcon currentIcon = LauncherIconController.getCurrentIcon();
+        if (currentIcon != null) LauncherIconController.setIcon(currentIcon, value);
+        LauncherIconController.tryFixLauncherIconIfNeeded();
     }
 
     public static void init() {

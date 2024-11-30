@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoX" translatable="false">Nekogram X</string>
+    <string name="Momogram" translatable="false">Momogram</string>
     <string name="AppNameShort" translatable="false">NekoX</string>
     <string name="Locked">Locked</string>
     <string name="AccDescrChatAttachEnterMenu">Chat input menu</string>
@@ -213,4 +214,6 @@
     <string name="DisableCustomWallpaperChannel">Disable channel custom wallpaper</string>
     <string name="FasterReconnectHack">Faster reconnect by toggling proxy on/off</string>
     <string name="FasterReconnectHackAbout">This hack only work with good network environment.</string>
+    <string name="UseOldAppName">Use old app name (NekoX)</string>
+    <string name="UseOldAppNameDesc">The app may be closed upon toggling, and icon may be reset to default.</string>
 </resources>

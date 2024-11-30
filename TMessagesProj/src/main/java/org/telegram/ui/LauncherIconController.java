@@ -4,9 +4,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.util.Log;
 
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.R;
+
+import java.util.ArrayList;
+
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class LauncherIconController {
     private static final boolean adaptiveIconSupported = Build.VERSION.SDK_INT > 32;
@@ -21,18 +26,53 @@ public class LauncherIconController {
         setIcon(LauncherIcon.DEFAULT);
     }
 
+    public static LauncherIcon getCurrentIcon() {
+        for (LauncherIcon icon : LauncherIcon.values()) {
+            if (isEnabled(icon)) {
+                return icon;
+            }
+        }
+        tryFixLauncherIconIfNeeded();
+        return null;
+    }
+
+    public static ArrayList<LauncherIcon> getCurrentEnabledIcons() {
+        ArrayList<LauncherIcon> ret = new ArrayList<>();
+        for (LauncherIcon icon : LauncherIcon.values()) {
+            if (isEnabled(icon, true) || isEnabled(icon, false)) {
+                ret.add(icon);
+            }
+        }
+        return ret;
+    }
+
     public static boolean isEnabled(LauncherIcon icon) {
+        return isEnabled(icon, NekoConfig.useOldName.Bool());
+    }
+
+    public static boolean isEnabled(LauncherIcon icon, boolean oldName) {
         Context ctx = ApplicationLoader.applicationContext;
-        int i = ctx.getPackageManager().getComponentEnabledSetting(icon.getComponentName(ctx));
+        int i = ctx.getPackageManager().getComponentEnabledSetting(icon.getComponentName(ctx, oldName));
         return i == PackageManager.COMPONENT_ENABLED_STATE_ENABLED || i == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT && icon == LauncherIcon.DEFAULT;
     }
 
-    public static void setIcon(LauncherIcon icon) {
+    public static void setIcon(LauncherIcon icon) { setIcon(icon, NekoConfig.useOldName.Bool()); }
+
+    public static void setIcon(LauncherIcon icon, boolean oldName) {
         Context ctx = ApplicationLoader.applicationContext;
         PackageManager pm = ctx.getPackageManager();
-        for (LauncherIcon i : LauncherIcon.values()) {
-            pm.setComponentEnabledSetting(i.getComponentName(ctx), i == icon ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+
+        pm.setComponentEnabledSetting(icon.getComponentName(ctx, oldName),
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+
+        var enabledIcons = getCurrentEnabledIcons();
+        for (LauncherIcon i : enabledIcons) {
+            if (i != icon) {
+                pm.setComponentEnabledSetting(i.getComponentName(ctx, true),
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+                pm.setComponentEnabledSetting(i.getComponentName(ctx, false),
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+            }
         }
     }
 
@@ -63,11 +103,20 @@ public class LauncherIconController {
         public final boolean premium;
 
         private ComponentName componentName;
+        private boolean useOldName = true;
 
         public ComponentName getComponentName(Context ctx) {
-            if (componentName == null) {
-                componentName = new ComponentName(ctx.getPackageName(), "org.telegram.messenger." + key);
+            if (componentName == null || useOldName != NekoConfig.useOldName.Bool()) {
+                useOldName = NekoConfig.useOldName.Bool();
+                String cls = String.format("org.telegram.messenger.%s%s", useOldName ? "" : "Momogram", key);
+                componentName = new ComponentName(ctx.getPackageName(), cls);
             }
+            return componentName;
+        }
+
+        public ComponentName getComponentName(Context ctx, boolean oldName) {
+            String cls = String.format("org.telegram.messenger.%s%s", oldName ? "" : "Momogram", key);
+            componentName = new ComponentName(ctx.getPackageName(), cls);
             return componentName;
         }
 
