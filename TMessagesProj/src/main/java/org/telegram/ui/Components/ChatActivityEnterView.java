@@ -2960,7 +2960,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                             MediaController.getInstance().stopRecording(isInScheduleMode() ? 3 : (needConfirm ? 2 : 1), true, 0, voiceOnce);
                             delegate.needStartRecordAudio(0);
                         }
-                        recordingAudioVideo = !needConfirm;
+                        recordingAudioVideo = false;
                         updateRecordInterface(needConfirm ? RECORD_STATE_PREPARING : RECORD_STATE_SENDING, true);
                     }
                     return;
@@ -8690,8 +8690,9 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             AndroidUtilities.cancelRunOnUIThread(moveToSendStateRunnable);
             moveToSendStateRunnable = null;
         }
-        if (recordCircle != null) {recordCircle.voiceEnterTransitionInProgress = false;
-}
+        if (recordCircle != null) {
+            recordCircle.voiceEnterTransitionInProgress = false;
+        }
         if (recordingAudioVideo) {
             if (recordInterfaceState == 1) {
                 lastRecordState = recordState;
@@ -9100,7 +9101,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
                     if (audioVideoSendButton != null) {
                         if (!NekoConfig.useChatAttachMediaMenu.Bool())
-                            audioVideoSendButton.setState(isInVideoMode() ? ChatActivityEnterViewAnimatedIconView.State.VIDEO : ChatActivityEnterViewAnimatedIconView.State.VOICE, !NekoConfig.useChatAttachMediaMenu.Bool() || animated);
+                            audioVideoSendButton.setState(isInVideoMode() ? ChatActivityEnterViewAnimatedIconView.State.VIDEO : ChatActivityEnterViewAnimatedIconView.State.VOICE, false);
                         audioVideoSendButton.setAlpha(1f);
                         audioVideoSendButton.setScaleX(1f);
                         audioVideoSendButton.setScaleY(1f);
@@ -13101,7 +13102,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
             slideToCancelString = getString(R.string.SlideToCancel2);
 
-            cancelString = getString("Cancel", R.string.Cancel).toUpperCase();
+            cancelString = getString(R.string.Cancel).toUpperCase();
 
             cancelCharOffset = slideToCancelString.indexOf(cancelString);
 
