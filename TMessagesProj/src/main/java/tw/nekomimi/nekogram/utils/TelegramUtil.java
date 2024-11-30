@@ -91,7 +91,7 @@ public class TelegramUtil {
 
     public static String getStackTraceAsString(StackTraceElement[] stackTrace) {
         StackTraceElement[] st = (stackTrace == null) ?
-                (StackTraceElement[]) Arrays.stream(Thread.currentThread().getStackTrace()).skip(3).toArray() : stackTrace;
+                Arrays.stream(Thread.currentThread().getStackTrace()).skip(3).toArray(StackTraceElement[]::new) : stackTrace;
         return Arrays.toString(st);
     }
 }
