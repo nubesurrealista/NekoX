@@ -82,6 +82,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import tw.nekomimi.nekogram.ui.EditTextAutoFill;
+import tw.nekomimi.nekogram.utils.StrUtil;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class TwoStepVerificationActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -990,9 +991,9 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                         } else {
                             timeString = LocaleController.formatPluralString("Minutes", time / 60);
                         }
-                        showAlertWithText(LocaleController.getString(R.string.NekoX), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                        showAlertWithText(StrUtil.getAppName(), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
                     } else {
-                        showAlertWithText(LocaleController.getString(R.string.NekoX), error.text);
+                        showAlertWithText(StrUtil.getAppName(), error.text);
                     }
                 }
             });
@@ -1129,9 +1130,9 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                                 } else {
                                     timeString = LocaleController.formatPluralString("Minutes", time / 60);
                                 }
-                                showAlertWithText(LocaleController.getString(R.string.NekoX), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                                showAlertWithText(StrUtil.getAppName(), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
                             } else {
-                                showAlertWithText(LocaleController.getString(R.string.NekoX), error.text);
+                                showAlertWithText(StrUtil.getAppName(), error.text);
                             }
                         });
                     }

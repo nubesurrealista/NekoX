@@ -106,6 +106,7 @@ import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
 import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.StrUtil;
 
 public class DocumentSelectActivity extends BaseFragment {
 
@@ -1309,7 +1310,7 @@ public class DocumentSelectActivity extends BaseFragment {
         if (getParentActivity() == null) {
             return;
         }
-        new AlertDialog.Builder(getParentActivity()).setTitle(LocaleController.getString("NekoX", R.string.NekoX)).setMessage(error).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show();
+        new AlertDialog.Builder(getParentActivity()).setTitle(StrUtil.getAppName()).setMessage(error).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).show();
     }
 
     @SuppressLint("NewApi")

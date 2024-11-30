@@ -99,7 +99,7 @@ object AlertUtil {
 
         val builder = AlertDialog.Builder(ctx)
 
-        builder.setTitle(title ?: LocaleController.getString(R.string.NekoX))
+        builder.setTitle(title ?: StrUtil.getAppName())
         builder.setMessage(text)
 
         builder.setPositiveButton(LocaleController.getString(R.string.OK)) { _, _ ->

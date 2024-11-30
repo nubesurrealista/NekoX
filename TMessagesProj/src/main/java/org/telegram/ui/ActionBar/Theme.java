@@ -158,6 +158,7 @@ import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.StrUtil;
 
 public class Theme {
 
@@ -4594,7 +4595,7 @@ public class Theme {
         themes.add(currentDayTheme = defaultTheme = themeInfo);
         themesDict.put("Blue", themeInfo);
 
-        String appName = LocaleController.getString(R.string.AppNameShort);
+        String appName = StrUtil.getShortAppName();
         themeInfo = new ThemeInfo();
         themeInfo.name = appName;
         themeInfo.assetName = "indigo.attheme";

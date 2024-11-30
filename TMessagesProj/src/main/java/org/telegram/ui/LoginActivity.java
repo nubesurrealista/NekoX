@@ -200,6 +200,7 @@ import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.ui.EditTextAutoFill;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
+import tw.nekomimi.nekogram.utils.StrUtil;
 
 @SuppressLint("HardwareIds")
 public class LoginActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -1387,7 +1388,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 return;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setTitle(getString(R.string.NekoX));
+            builder.setTitle(StrUtil.getAppName());
             builder.setMessage(getString("StopLoading", R.string.StopLoading));
             builder.setPositiveButton(getString("WaitMore", R.string.WaitMore), null);
             builder.setNegativeButton(getString("Stop", R.string.Stop), (dialogInterface, i) -> {
@@ -3162,7 +3163,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                                 bundle.putString("code", reqI.phone_code);
                                                 setPage(LoginActivity.VIEW_PASSWORD, true, bundle, false);
                                             } else {
-                                                needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), error1.text);
+                                                needShowAlert(StrUtil.getAppName(), error1.text);
                                             }
                                         }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
                                     } else {
@@ -3170,17 +3171,17 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                         showDoneButton(false, true);
 
                                         if (errorI.text.contains("PHONE_NUMBER_INVALID")) {
-                                            needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                                            needShowAlert(StrUtil.getAppName(), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
                                         } else if (errorI.text.contains("PHONE_CODE_EMPTY") || errorI.text.contains("PHONE_CODE_INVALID")) {
-                                            needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("InvalidCode", R.string.InvalidCode));
+                                            needShowAlert(StrUtil.getAppName(), LocaleController.getString("InvalidCode", R.string.InvalidCode));
                                         } else if (errorI.text.contains("PHONE_CODE_EXPIRED")) {
                                             onBackPressed(true);
                                             setPage(VIEW_PHONE_INPUT, true, null, true);
-                                            needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                                            needShowAlert(StrUtil.getAppName(), LocaleController.getString("CodeExpired", R.string.CodeExpired));
                                         } else if (errorI.text.startsWith("FLOOD_WAIT")) {
-                                            needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("FloodWait", R.string.FloodWait));
+                                            needShowAlert(StrUtil.getAppName(), LocaleController.getString("FloodWait", R.string.FloodWait));
                                         } else {
-                                            needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + errorI.text);
+                                            needShowAlert(StrUtil.getAppName(), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + errorI.text);
                                         }
                                     }
                                 }
@@ -8587,7 +8588,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             String token = editText.getText().toString();
 
             if (token.length() == 0) {
-                needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("InvalidAccessToken", R.string.InvalidAccessToken));
+                needShowAlert(StrUtil.getAppName(), LocaleController.getString("InvalidAccessToken", R.string.InvalidAccessToken));
                 return;
             }
 
@@ -8620,11 +8621,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     }
                     if (error.text != null) {
                         if (error.text.contains("ACCESS_TOKEN_INVALID")) {
-                            needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("InvalidAccessToken", R.string.InvalidAccessToken));
+                            needShowAlert(StrUtil.getAppName(), LocaleController.getString("InvalidAccessToken", R.string.InvalidAccessToken));
                         } else if (error.text.startsWith("FLOOD_WAIT")) {
-                            needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("FloodWait", R.string.FloodWait));
+                            needShowAlert(StrUtil.getAppName(), LocaleController.getString("FloodWait", R.string.FloodWait));
                         } else if (error.code != -1000) {
-                            needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), error.code + ": " + error.text);
+                            needShowAlert(StrUtil.getAppName(), error.code + ": " + error.text);
                         }
                     }
                 }
@@ -8722,7 +8723,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     bundle.putString("password", Utilities.bytesToHex(data.toByteArray()));
                     setPage(LoginActivity.VIEW_PASSWORD, true, bundle, false);
                 } else {
-                    needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), error1.text);
+                    needShowAlert(StrUtil.getAppName(), error1.text);
                 }
             }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
         } else {

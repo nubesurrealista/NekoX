@@ -35,6 +35,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
+import tw.nekomimi.nekogram.utils.StrUtil;
+
 @RequiresApi(api = Build.VERSION_CODES.R)
 public class FilesMigrationService extends Service {
 
@@ -97,7 +99,7 @@ public class FilesMigrationService extends Service {
             }
         }
 
-        String appName = LocaleController.getString(R.string.AppNameShort);
+        String appName = StrUtil.getShortAppName();
         File newPath = ApplicationLoader.applicationContext.getExternalFilesDir(null);
         File telegramPath = new File(newPath, appName);
         File oldPath = new File(path, appName);
@@ -206,7 +208,7 @@ public class FilesMigrationService extends Service {
                     }
                 }
             }
-            File oldDirectory = new File(path, LocaleController.getString(R.string.AppNameShort));
+            File oldDirectory = new File(path, StrUtil.getShortAppName());
             hasOldFolder = oldDirectory.exists();
         }
         if (hasOldFolder) {

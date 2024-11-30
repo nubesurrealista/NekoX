@@ -94,6 +94,7 @@ public class ConfigItem {
     }
 
     public String String() {
+        if (value == null) return null;
         return value.toString();
     }
 
