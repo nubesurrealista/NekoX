@@ -3,8 +3,8 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
-def verName = APP_VERSION_NAME + "-broken"
-def verCode = 10309
+def verName = APP_VERSION_NAME + "-030"
+def verCode = 10409
 
 if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1").trim().replace('\'','')
@@ -342,7 +342,7 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            outputFileName = outputFileName.replace("TMessagesProj", "NekoX-v" + versionName)
+            outputFileName = outputFileName.replace("TMessagesProj", "Momo-v" + versionName)
         }
     }
 

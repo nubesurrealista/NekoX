@@ -228,6 +228,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell searchBlacklistRow = cellGroup.appendCell(new ConfigCellTextInput(null, NekoConfig.searchBlacklist, null, null, NekoConfig::applySearchBlacklist));
     private final AbstractConfigCell overridePerformanceClassRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.OverridePerformanceClass),
             NekoConfig.perfClassOverride, NekoConfig.perfClassOverrideOptions, null));
+    private final AbstractConfigCell useOldNameRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useOldName, LocaleController.getString(R.string.UseOldAppNameDesc)));
     private final AbstractConfigCell divider7 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final String instantViewAndBots = String.format("%s / %s", LocaleController.getString(R.string.ChannelBots), LocaleController.getString(R.string.OpenInstantView));
@@ -480,6 +481,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 NekoConfig.applyPerformanceClassOverride((Integer) newValue);
             } else if (key.equals(NekoConfig.nameAsTitleText.getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
+            } else if (key.equals(NekoConfig.useOldName.getKey())) {
+                NekoConfig.applyAppNameSwitch((boolean) newValue);
             }
         };
 

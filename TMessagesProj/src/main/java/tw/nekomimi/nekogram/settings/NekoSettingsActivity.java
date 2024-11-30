@@ -175,7 +175,7 @@ public class NekoSettingsActivity extends BaseFragment {
             } else if (position == experimentRow) {
                 presentFragment(new NekoExperimentalSettingsActivity());
             } else if (position == channelRow) {
-                MessagesController.getInstance(currentAccount).openByUserName("nekox_broken", this, 1);
+                MessagesController.getInstance(currentAccount).openByUserName("momogram_update", this, 1);
             } else if (position == translationRow) {
                 Browser.openUrl(getParentActivity(), "https://hosted.weblate.org/engage/nekox_030/");
             } else if (position == fdroidRow) {
@@ -481,7 +481,7 @@ public class NekoSettingsActivity extends BaseFragment {
                 case 3: {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     if (position == channelRow) {
-                        textCell.setTextAndValue(LocaleController.getString(R.string.OfficialChannel), "@nekox_broken", true);
+                        textCell.setTextAndValue(LocaleController.getString(R.string.OfficialChannel), "@momogram_update", true);
                     } else if (position == fdroidRow) {
                         textCell.setText(LocaleController.getString(R.string.AppLinkFDroid), true);
                     } else if (position == googlePlayRow) {
