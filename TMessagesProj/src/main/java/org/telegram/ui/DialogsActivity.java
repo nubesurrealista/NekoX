@@ -8333,7 +8333,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
         if (!actionBar.isActionModeShowed() && !onlySelect && view instanceof DialogCell && !getMessagesController().isForum(((DialogCell) view).getDialogId()) && !rightSlidingDialogContainer.hasFragment()) {
             DialogCell cell = (DialogCell) view;
-            if (cell.isPointInsideAvatar(x, y)) {
+            if (cell.isPointInsideAvatar(x, y) && !cell.isFolderCell()) {
                 if (AndroidUtilities.displaySize.x < AndroidUtilities.displaySize.y || !AndroidUtilities.isTablet())
                     return showChatPreview(cell);
             }
