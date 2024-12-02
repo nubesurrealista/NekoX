@@ -183,7 +183,7 @@ public class NekoSettingsActivity extends BaseFragment {
             } else if (position == googlePlayRow) {
                 Browser.openUrl(getParentActivity(), "https://play.google.com/store/apps/details?id=nekox.messenger");
             } else if (position == sourceCodeRow) {
-                Browser.openUrl(getParentActivity(), "https://github.com/dic1911/NekoX");
+                Browser.openUrl(getParentActivity(), "https://github.com/dic1911/Momogram");
             }
         });
 

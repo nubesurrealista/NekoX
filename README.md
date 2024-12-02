@@ -9,7 +9,7 @@ Built with unique customization and features, get ready and let Momogram take yo
 
 ## Features
 
-Check the [releases page](https://github.com/dic1911/NekoX/releases) for now, this section will be updated later...
+Check the [releases page](https://github.com/dic1911/Momogram/releases) for now, this section will be updated later...
 
 ---
 
@@ -119,4 +119,4 @@ apt install -y yasm
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=dic1911/NekoX&type=Date)](https://star-history.com/#dic1911/NekoX&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=dic1911/Momogram&type=Date)](https://star-history.com/#dic1911/Momogram&Date)
