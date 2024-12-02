@@ -1108,6 +1108,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter implements
 
     @Override
     public void showChatPreview(DialogCell cell) {
+        if (cell.isFolderCell()) return;
         parentFragment.showChatPreview(cell);
     }
 
