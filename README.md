@@ -7,9 +7,62 @@ Momogram is a feature-rich 3rd-party Telegram client, aiming to be the spiritual
 Built with unique customization and features, get ready and let Momogram take your Telegram chatting experience to the next level.
 
 
-## Features
+## New Features
 
-Check the [releases page](https://github.com/dic1911/Momogram/releases) for now, this section will be updated later...
+### General
+- Allow chat preview for tablet mode if in portrait mode
+- Disable auto login with Telegram account when opening certain links
+- Filter languages shown in translate target
+- Hide birthday reminders
+- Hide various premium upselling annoyance
+- In-app anti-spam measure ;)
+- Searchable Momogram settings, just like official ones
+- Only share "last seen" to the ones you want to check their "last seen"
+- Override device performance class
+- Remove tracking queries from URL for better privacy
+- Restart the app automatically whenever critical problem occurs
+- Uncheck "share my number" when adding contact by default
+
+### Chat
+- Auto select best video quality if available
+- Ban button in join request list
+- Block specified chat/channel from search results
+- Copy image/sticker button in menu
+- Detect data saver and use roaming auto download preset when enabled
+- Enable spoiler for all media in specified chats
+- Local only custom chat name
+- New double tap actions
+- Reply as quote by default
+- Remove single emoji from recently used list
+- Schedule send message after slow mode timer ends without having to wait in the same chat
+- Search message by type
+- Translate text messages before send
+- Translate forwarding text message before send (without quote)
+- Use marquee for long chat titles
+
+### Customization
+- Always show downloads button in chat list
+- Custom folder icon, official and custom emoji(local only)
+- Custom title text
+- Disable remote chat wallpaper
+- Hide unread counter on folder tabs
+- Use account name as chat list title
+
+### Mini-app / Webview
+- Block bot without deleting history by default
+- Comfirm before opening external links from webview
+- Custom search engine for in-app browser
+- Copy link button in menu
+- Don't open bot when re-opening tab
+- Don't send "/start" when restarting bot
+- Hide bottom overlay when in chat or sharing
+- Open webpages (ex. games) with mini-app mode
+- Skip confirmation on closing tab
+- Toggle to disable geolocation
+- Toggle to disable safe browsing
+
+
+... and more to come! check the [releases page](https://github.com/dic1911/Momogram/releases) for more new features!
 
 ---
 
