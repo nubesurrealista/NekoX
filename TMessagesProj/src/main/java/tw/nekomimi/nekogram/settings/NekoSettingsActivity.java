@@ -62,6 +62,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import kotlin.text.StringsKt;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.GsonUtil;
@@ -107,7 +108,7 @@ public class NekoSettingsActivity extends BaseFragment {
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString(R.string.NekoSettings));
+        actionBar.setTitle(LocaleController.getString(NekoConfig.useOldName.Bool() ? R.string.NekoSettings : R.string.MomoSettings));
 
         ActionBarMenu menu = actionBar.createMenu();
         ActionBarMenuItem otherMenu = menu.addItem(0, R.drawable.ic_ab_other);
