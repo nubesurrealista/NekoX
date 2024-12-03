@@ -2970,7 +2970,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     testBackend = LoginActivity.this.testBackend;
                 }
 
-                if (getParentActivity() instanceof LaunchActivity) {
+                if (!NekoConfig.allowDupLogin.Bool() && getParentActivity() instanceof LaunchActivity) {
                     for (int a : SharedConfig.activeAccounts) {
                         UserConfig userConfig = UserConfig.getInstance(a);
                         if (!userConfig.isClientActivated()) {
@@ -2981,14 +2981,14 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                             final int num = a;
                             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                             builder.setTitle(getString(R.string.AppName));
-                            builder.setMessage(getString("AccountAlreadyLoggedIn", R.string.AccountAlreadyLoggedIn));
-                            builder.setPositiveButton(getString("AccountSwitch", R.string.AccountSwitch), (dialog, which) -> {
+                            builder.setMessage(getString(R.string.AccountAlreadyLoggedIn));
+                            builder.setPositiveButton(getString(R.string.AccountSwitch), (dialog, which) -> {
                                 if (UserConfig.selectedAccount != num) {
                                     ((LaunchActivity) getParentActivity()).switchToAccount(num, false);
                                 }
                                 finishFragment();
                             });
-                            builder.setNegativeButton(getString("OK", R.string.OK), null);
+                            builder.setNegativeButton(getString(R.string.OK), null);
                             showDialog(builder.create());
                             needHideProgress(false);
                             return;

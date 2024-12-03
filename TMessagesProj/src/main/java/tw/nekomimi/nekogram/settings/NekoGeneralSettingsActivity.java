@@ -230,6 +230,14 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell overridePerformanceClassRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.OverridePerformanceClass),
             NekoConfig.perfClassOverride, NekoConfig.perfClassOverrideOptions, null));
     private final AbstractConfigCell useOldNameRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useOldName, LocaleController.getString(R.string.UseOldAppNameDesc)));
+
+    private final AbstractConfigCell customApiIdRow = cellGroup.appendCell(new ConfigCellTextDetail(NekoConfig.customApiId, (view, position) -> {
+        customDialog_BottomInputString(position, NekoConfig.customApiId, LocaleController.getString(R.string.UseCustomApiNotice), "api_id");
+    }, LocaleController.getString(R.string.None)));
+    private final AbstractConfigCell customApiHashRow = cellGroup.appendCell(new ConfigCellTextDetail(NekoConfig.customApiHash, (view, position) -> {
+        customDialog_BottomInputString(position, NekoConfig.customApiHash, LocaleController.getString(R.string.UseCustomApiNotice), "api_hash");
+    }, LocaleController.getString(R.string.None)));
+
     private final AbstractConfigCell divider7 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final String instantViewAndBots = String.format("%s / %s", LocaleController.getString(R.string.ChannelBots), LocaleController.getString(R.string.OpenInstantView));

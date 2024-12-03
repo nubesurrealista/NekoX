@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
@@ -241,9 +242,29 @@ public class ConnectionsManager extends BaseController {
         }
 
         int version;
-        int appId;
+        int appId = 0;
         String fingerprint;
-        if (getUserConfig().official || !getUserConfig().isClientActivated()) {
+
+        try {
+            String idStr = NekoConfig.customApiId.String();
+            String hashStr = NekoConfig.customApiHash.String();
+            if (StrUtil.isNotBlank(idStr) && StrUtil.isNotBlank(hashStr))
+                appId = Integer.parseInt(idStr);
+        } catch (Exception e) {
+            Log.e("030-api", "failed to parse custom api credential", e);
+            FileLog.e(e);
+        }
+
+        if (appId != 0) {
+            fingerprint = AndroidUtilities.getCertificateSHA256Fingerprint();
+            version = BuildConfig.VERSION_CODE;
+            appId = BuildConfig.APP_ID;
+            String versionName = BuildConfig.VERSION_NAME;
+            if (versionName.contains("-")) {
+                versionName = StrUtil.subBefore(versionName, "-", false);
+            }
+            appVersion = versionName + " (" + BuildConfig.VERSION_CODE + ")";
+        } else if (getUserConfig().official || !getUserConfig().isClientActivated()) {
             fingerprint = "49C1522548EBACD46CE322B6FD47F6092BB745D0F88082145CAF35E14DCC38E1";
             version = BuildConfig.OFFICIAL_VERSION_CODE * 10 + 9;
             appId = BuildVars.OFFICAL_APP_ID;
