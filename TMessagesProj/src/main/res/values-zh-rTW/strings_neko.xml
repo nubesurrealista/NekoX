@@ -278,4 +278,6 @@
     <string name="ChatNameOverrideDesc">在對話資訊頁選單選擇"自訂聊天室名稱"設定名稱</string>
     <string name="ChatNameOverrideMenu">自訂聊天室名稱</string>
     <string name="RestartApp">重新啟動程式</string>
+    <string name="UseOldAppName">使用舊程式名稱 (NekoX)</string>
+    <string name="UseOldAppNameDesc">變更此設定時會自動退回桌面, 且圖示將會被重設.</string>
 </resources>
