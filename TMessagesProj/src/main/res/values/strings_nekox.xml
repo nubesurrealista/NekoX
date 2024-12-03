@@ -219,4 +219,5 @@
     <string name="CustomApiId">Custom API ID</string>
     <string name="CustomApiHash">Custom API hash</string>
     <string name="AllowDupLogin">Allow login to existing account(s)</string>
+    <string name="AllowDupLoginInfo">This can causes various issues, make sure you only keep one of the sessions after the work is done.</string>
 </resources>

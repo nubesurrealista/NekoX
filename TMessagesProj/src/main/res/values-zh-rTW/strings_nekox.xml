@@ -215,4 +215,5 @@
     <string name="CustomApiId">自訂 API ID</string>
     <string name="CustomApiHash">自訂 API hash</string>
     <string name="AllowDupLogin">允許重複登入同一帳號</string>
+    <string name="AllowDupLoginInfo">重複登入帳號將導致各種問題, 請務必在事後登出重複的帳號並重新啟動本程式.</string>
 </resources>
