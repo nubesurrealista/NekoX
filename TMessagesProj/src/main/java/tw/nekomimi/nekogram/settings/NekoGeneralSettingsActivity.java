@@ -904,10 +904,11 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private void customDialog_BottomInputString(int position, ConfigItem bind, String subtitle, String hint) {
         BottomBuilder builder = new BottomBuilder(getParentActivity());
 
-        builder.addTitle(
-                LocaleController.getString(bind.getKey()),
-                subtitle
-        );
+        String title = null;
+        if (bind.getId() != 0) title = LocaleController.getString(bind.getId());
+        else title = LocaleController.getString(bind.getKey());
+
+        builder.addTitle(title, subtitle);
 
         EditText keyField = builder.addEditText(hint);
 
