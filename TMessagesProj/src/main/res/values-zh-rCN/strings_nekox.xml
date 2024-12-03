@@ -216,4 +216,7 @@
     <string name="FasterReconnectHack">自动开关代理以更快速的重新连线</string>
     <string name="UnsupportedProxy">不支持的代理</string>
     <string name="FasterReconnectHackAbout">只在良好的网路环境下工作.</string>
+    <string name="CustomApiId">自定义 API ID</string>
+    <string name="CustomApiHash">自定义 API hash</string>
+    <string name="AllowDupLogin">允许重复登入同一账号</string>
 </resources>

@@ -212,4 +212,7 @@
     <string name="FasterReconnectHackAbout">只在良好的網路環境下有作用.</string>
     <string name="UnsupportedProxy">不支援的代理</string>
     <string name="DisableCustomWallpaperUser">停用使用者自訂背景</string>
+    <string name="CustomApiId">自訂 API ID</string>
+    <string name="CustomApiHash">自訂 API hash</string>
+    <string name="AllowDupLogin">允許重複登入同一帳號</string>
 </resources>

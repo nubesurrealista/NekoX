@@ -107,6 +107,11 @@ public class NekoXConfig {
     private static Boolean hasDeveloper = null;
 
     public static int currentAppId() {
+        String idStr = NekoConfig.customApiId.String();
+        try {
+            return Integer.parseInt(idStr);
+        } catch (Exception ignored) {}
+
         return BuildConfig.APP_ID;
     }
 
@@ -125,7 +130,8 @@ public class NekoXConfig {
     }
 
     public static String currentAppHash() {
-        return BuildConfig.APP_HASH;
+        String hashStr = NekoConfig.customApiHash.String();
+        return StrUtil.isNotBlank(hashStr) ? hashStr : BuildConfig.APP_HASH;
     }
 
     public static boolean isDeveloper() {

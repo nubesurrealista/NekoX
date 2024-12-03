@@ -206,4 +206,7 @@
     <string name="DisableCustomWallpaperUser">ユーザーカスタム壁紙を無効する</string>
     <string name="DisableCustomWallpaperChannel">チャンネルカスタム壁紙を無効する</string>
     <string name="FasterReconnectHack">プロキシをオン/オフでトグルすることによってより速く再接続</string>
+    <string name="CustomApiId">カスタム API ID</string>
+    <string name="CustomApiHash">カスタム API hash</string>
+    <string name="AllowDupLogin">既存アカウントへのログインを許可する</string>
 </resources>

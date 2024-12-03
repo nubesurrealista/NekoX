@@ -216,4 +216,7 @@
     <string name="FasterReconnectHackAbout">This hack only work with good network environment.</string>
     <string name="UseOldAppName">Use old app name (NekoX)</string>
     <string name="UseOldAppNameDesc">The app may be closed upon toggling, and icon may be reset to default.</string>
+    <string name="CustomApiId">Custom API ID</string>
+    <string name="CustomApiHash">Custom API hash</string>
+    <string name="AllowDupLogin">Allow login to existing account(s)</string>
 </resources>
