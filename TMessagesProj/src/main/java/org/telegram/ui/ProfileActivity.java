@@ -12081,7 +12081,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else if (position == chatRow) {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.ChatSettings), R.drawable.msg2_discussion, true);
                     } else if (position == nekoRow) {
-                        textCell.setTextAndIcon(LocaleController.getString(R.string.NekoSettings), R.drawable.notification, true);
+                        textCell.setTextAndIcon(LocaleController.getString(NekoConfig.useOldName.Bool() ? R.string.NekoSettings : R.string.MomoSettings),
+                                R.drawable.notification, true);
                     } else if (position == filtersRow) {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.Filters), R.drawable.msg2_folder, true);
                     } else if (position == stickersRow) {
@@ -12931,12 +12932,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             ArrayList<SearchResult> inclNekoSettings = new ArrayList<>();
             for (SearchResult sr : defaults) if (sr != null) inclNekoSettings.add(sr);
             HashMap<Integer, ArrayList<String>> strMap = NekoConfig.getStringsForSearch();
-            String nekoSettings = LocaleController.getString(R.string.NekoSettings);
+            String modSettings = LocaleController.getString(NekoConfig.useOldName.Bool() ? R.string.NekoSettings : R.string.MomoSettings);
             String[] pageNames = {
                     null,
-                    String.format("%s - %s", nekoSettings, LocaleController.getString(R.string.General)),
-                    String.format("%s - %s", nekoSettings, LocaleController.getString(R.string.Chat)),
-                    String.format("%s - %s", nekoSettings, LocaleController.getString(R.string.Experiment)),
+                    String.format("%s - %s", modSettings, LocaleController.getString(R.string.General)),
+                    String.format("%s - %s", modSettings, LocaleController.getString(R.string.Chat)),
+                    String.format("%s - %s", modSettings, LocaleController.getString(R.string.Experiment)),
             };
             for (Map.Entry<Integer, ArrayList<String>> e : strMap.entrySet()) {
                 for (String str : e.getValue()) {

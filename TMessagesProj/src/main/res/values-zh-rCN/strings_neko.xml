@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="NekoSettings">喵设置</string>
+    <string name="MomoSettings">Momo 设置</string>
     <string name="IPv6">通过 IPv6 连接</string>
     <string name="MessageMenu">消息菜单</string>
     <string name="HidePhone">隐藏您的手机号码</string>
@@ -266,6 +267,7 @@
     <string name="CopyPhotoSticker">复制图像贴纸</string>
     <string name="ChooseBestVideoQualityByDefault">预设选择最高影片品质</string>
     <string name="CrashDialogTitle">NekoX 发生错误 &gt;&lt;</string>
+    <string name="CrashDialogMomoTitle">Momogram 发生错误 &gt;&lt;</string>
     <string name="CrashDialogMessage">是否分享除错信息以利开发者解决问题?</string>
     <string name="TriggerCrash">触发闪退</string>
     <string name="MapMobileDataSaverToRoaming">在启用省流模式时使用漫游设定</string>

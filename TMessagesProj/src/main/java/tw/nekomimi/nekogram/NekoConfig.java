@@ -772,7 +772,7 @@ public class NekoConfig {
                 AndroidUtilities.runOnUIThread(() -> {
                     Context context = LaunchActivity.getLastFragment().getContext();
                     new AlertDialog.Builder(context)
-                            .setTitle(LocaleController.getString(R.string.CrashDialogTitle))
+                            .setTitle(LocaleController.getString(useOldName.Bool() ? R.string.CrashDialogTitle : R.string.CrashDialogMomoTitle))
                             .setMessage(LocaleController.getString(R.string.CrashDialogMessage))
                             .setNeutralButton(LocaleController.getString(R.string.Copy), (__, ___) -> {
                                 AndroidUtilities.addToClipboard(errStr);
