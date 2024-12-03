@@ -51,6 +51,7 @@ import kotlin.Unit;
 
 import tw.nekomimi.nekogram.ui.PopupBuilder;
 import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.StrUtil;
 import tw.nekomimi.nekogram.utils.ZipUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.config.CellGroup;
@@ -249,6 +250,14 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                 intent.setType("application/zip");
                 Activity act = getParentActivity();
                 act.startActivityFromChild(act, intent, 114);
+            } else if (key.equals(NekoConfig.allowDupLogin.getKey())) {
+                if ((boolean) newValue) {
+                    new AlertDialog.Builder(context)
+                            .setTitle(StrUtil.getAppName())
+                            .setMessage(LocaleController.getString(R.string.AllowDupLoginInfo))
+                            .setPositiveButton(LocaleController.getString(R.string.OK), null)
+                            .show();
+                }
             }
         };
 
