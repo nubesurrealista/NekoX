@@ -285,4 +285,7 @@
     <string name="SelectAnIcon">選擇圖示</string>
     <string name="OverridePerformanceClass">覆寫裝置效能分類</string>
     <string name="RestartApp">重新啟動程式</string>
+    <string name="EnableUnifiedPush">啟用 UnifiedPush</string>
+    <string name="SetupUnifiedPush">設定 UnifiedPush</string>
+    <string name="SetupUnifiedPushInfo">已啟用 UnifiedPush, 但您需要安裝至少一個分發器才能使其正常運作。</string>
 </resources>
