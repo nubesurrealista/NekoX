@@ -1568,6 +1568,7 @@ public class PushListenerController {
 
         @Override
         public boolean hasServices() {
+            if (!NekoConfig.enableUnifiedPush.Bool()) return false;
             return !UnifiedPush.getDistributors(ApplicationLoader.applicationContext, new ArrayList()).isEmpty();
         }
 
