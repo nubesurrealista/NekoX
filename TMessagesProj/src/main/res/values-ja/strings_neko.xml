@@ -272,6 +272,4 @@
     <string name="SelectAnIcon">アイコンを選択する</string>
     <string name="HideUnreadCounterOnFolderTabs">フォルダータブの未読カウンターを非表示する</string>
     <string name="RestartApp">アプリを再起動</string>
-    <string name="UseOldAppName">元のアプリ名称を使用する (NekoX)</string>
-    <string name="UseOldAppNameDesc">この設定を変更すると, アプリが終了し, アイコンがデフォルトに戻ります.</string>
 </resources>

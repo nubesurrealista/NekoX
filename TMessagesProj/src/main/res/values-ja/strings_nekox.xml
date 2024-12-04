@@ -210,4 +210,6 @@
     <string name="CustomApiHash">カスタム API hash</string>
     <string name="AllowDupLogin">既存アカウントへのログインを許可する</string>
     <string name="AllowDupLoginInfo">既存アカウントでログインすると問題が起きることがあります, あとで重複してるアカウントをログアウトして, アプリを再起動してください.</string>
+    <string name="UseOldAppName">元のアプリ名称を使用する (NekoX)</string>
+    <string name="UseOldAppNameDesc">この設定を変更すると, アプリが終了し, アイコンがデフォルトに戻ります.</string>
 </resources>

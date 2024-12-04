@@ -285,6 +285,4 @@
     <string name="SelectAnIcon">選擇圖示</string>
     <string name="OverridePerformanceClass">覆寫裝置效能分類</string>
     <string name="RestartApp">重新啟動程式</string>
-    <string name="UseOldAppName">使用舊程式名稱 (NekoX)</string>
-    <string name="UseOldAppNameDesc">變更此設定時會自動退回桌面, 且圖示將會被重設.</string>
 </resources>

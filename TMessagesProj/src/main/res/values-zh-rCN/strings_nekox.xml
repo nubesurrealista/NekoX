@@ -220,4 +220,6 @@
     <string name="CustomApiHash">自定义 API hash</string>
     <string name="AllowDupLogin">允许重复登入同一账号</string>
     <string name="AllowDupLoginInfo">重复登入账号将导致各种问题, 请务必在事后登出重复的账号后重新启动本应用.</string>
+    <string name="UseOldAppName">使用旧应用名称 (NekoX)</string>
+    <string name="UseOldAppNameDesc">变更此设置时会自动退回桌面, 且图示将被重设.</string>
 </resources>
