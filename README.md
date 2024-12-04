@@ -77,6 +77,11 @@ Here are two easy choices for you:
 - [ntfy](https://github.com/binwiederhier/ntfy/releases/latest)
 - [UP-FCM Distributor (relies on Google, but faster)](https://github.com/UnifiedPush/fcm-distributor/releases/latest)
 
+Just choose one of the distributor from above, install and open it at least once to finish setup, then choose it in the notification settings page of Momogram and you're good to go!
+
+In case of UnifiedPush doesn't work well on your device, you can disable it from Momo general settings (or just search for UnifiedPush) and enable original background service.
+
+Read [UnifiedPush document](https://unifiedpush.org/users/distributors/) for more info
 
 #### Do you take feature requests?
 
