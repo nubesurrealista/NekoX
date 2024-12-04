@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -28,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
@@ -492,6 +494,14 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (key.equals(NekoConfig.useOldName.getKey())) {
                 LauncherIconController.switchAppName((boolean) newValue);
+            } else if (key.equals(NekoConfig.enableUnifiedPush.getKey())) {
+                boolean enabled = ((boolean) newValue);
+                // start original service if enabled
+                SharedPreferences accountSettings = MessagesController.getNotificationsSettings(currentAccount);
+                boolean service = accountSettings.getBoolean("pushService", false);
+                boolean bgConn = accountSettings.getBoolean("pushConnection", false);
+                ApplicationLoader.startPushService();
+                ConnectionsManager.getInstance(currentAccount).setPushConnectionEnabled(!enabled && bgConn);
             }
         };
 

@@ -285,4 +285,6 @@
     <string name="NameAsTitleText">Use name as title text</string>
     <string name="EnableUnifiedPush">Enable UnifiedPush</string>
     <string name="RestartApp">Restart App</string>
+    <string name="SetupUnifiedPush">Setup UnifiedPush</string>
+    <string name="SetupUnifiedPushInfo">UnifiedPush is enabled, but you need to have at least one distributor installed in order to make it work.</string>
 </resources>

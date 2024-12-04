@@ -12,12 +12,15 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.PushListenerController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.LauncherIconController;
+import org.unifiedpush.android.connector.UnifiedPush;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -45,6 +48,7 @@ import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
 
 import static tw.nekomimi.nekogram.config.ConfigItem.*;
+import static tw.nekomimi.nekogram.utils.StrUtil.getAppName;
 
 @SuppressLint("ApplySharedPref")
 public class NekoConfig {
@@ -794,6 +798,21 @@ public class NekoConfig {
             applyCustomGetQueryBlacklist();
             applySearchBlacklist();
             applyPerformanceClassOverride(null);
+
+            if (!NekoConfig.enableUnifiedPush.Bool() || UnifiedPush.getSavedDistributor(ApplicationLoader.applicationContext) != null)
+                return;
+
+            AndroidUtilities.runOnUIThread(() -> {
+                Context context = LaunchActivity.getLastFragment().getContext();
+                new AlertDialog.Builder(context)
+                        .setTitle(LocaleController.getString(R.string.SetupUnifiedPush))
+                        .setMessage(LocaleController.getString(R.string.SetupUnifiedPushInfo))
+                        .setNeutralButton(LocaleController.getString(R.string.SettingsHelp), (__, ___) -> {
+                            Browser.openUrl(context, "https://github.com/dic1911/Momogram/tree/test?tab=readme-ov-file#how-do-i-get-notifications-working");
+                        })
+                        .setPositiveButton(LocaleController.getString(R.string.Close), null)
+                        .create().show();
+            });
         } catch (Exception ex) {
             Log.e("030-neko", "failed to load part of neko config", ex);
         }
