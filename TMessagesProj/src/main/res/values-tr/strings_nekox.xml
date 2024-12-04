@@ -216,4 +216,10 @@
     <string name="doubleTapAndReactions">Çift tıkla</string>
     <string name="ShowSelfInsteadOfSavedMessages">Kayıtlı Mesajlar yerine \"siz\" olarak göster</string>
     <string name="doubleTapDisable">Devre dışı bırak</string>
+    <string name="UseOldAppName">Eski uygulama adını kullan (NekoX)</string>
+    <string name="UseOldAppNameDesc">Uygulama seçim değiştirildiğinde kapanabilir ve simge varsayılana geri dönebilir.</string>
+    <string name="CustomApiHash">Kişisel API hash</string>
+    <string name="AllowDupLogin">Mevcut hesaba/hesaplara girişe izin ver</string>
+    <string name="AllowDupLoginInfo">Bu birçok soruna yol açabileceğinden işiniz bittikten sonra bu istemcide aynı numaradan sadece bir oturumun açık kaldığına emin olun.</string>
+    <string name="CustomApiId">Kişisel API ID</string>
 </resources>
