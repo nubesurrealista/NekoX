@@ -272,4 +272,7 @@
     <string name="SelectAnIcon">アイコンを選択する</string>
     <string name="HideUnreadCounterOnFolderTabs">フォルダータブの未読カウンターを非表示する</string>
     <string name="RestartApp">アプリを再起動</string>
+    <string name="EnableUnifiedPush">UnifiedPush を有効にする</string>
+    <string name="SetupUnifiedPush">UnifiedPush を設定する</string>
+    <string name="SetupUnifiedPushInfo">UnifiedPush は有効ですが、動作させるにはディストリビューターをインストールする必要があります.</string>
 </resources>
