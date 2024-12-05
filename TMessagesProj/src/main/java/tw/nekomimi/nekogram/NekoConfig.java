@@ -18,6 +18,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.LauncherIconController;
 import org.unifiedpush.android.connector.UnifiedPush;
@@ -771,10 +772,13 @@ public class NekoConfig {
     public static void init() {
         initStrings();
         try {
+            SharedConfig.loadConfig();
             if (lastCrashError.String() != null && !lastCrashError.String().isBlank()) {
                 final String errStr = lastCrashError.String();
                 AndroidUtilities.runOnUIThread(() -> {
-                    Context context = LaunchActivity.getLastFragment().getContext();
+                    BaseFragment fragment = LaunchActivity.getLastFragment();
+                    if (fragment == null || SharedConfig.activeAccounts.isEmpty()) return;
+                    Context context = fragment.getContext();
                     new AlertDialog.Builder(context)
                             .setTitle(LocaleController.getString(useOldName.Bool() ? R.string.CrashDialogTitle : R.string.CrashDialogMomoTitle))
                             .setMessage(LocaleController.getString(R.string.CrashDialogMessage))
@@ -803,7 +807,9 @@ public class NekoConfig {
                 return;
 
             AndroidUtilities.runOnUIThread(() -> {
-                Context context = LaunchActivity.getLastFragment().getContext();
+                BaseFragment fragment = LaunchActivity.getLastFragment();
+                if (fragment == null || SharedConfig.activeAccounts.isEmpty()) return;
+                Context context = fragment.getContext();
                 new AlertDialog.Builder(context)
                         .setTitle(LocaleController.getString(R.string.SetupUnifiedPush))
                         .setMessage(LocaleController.getString(R.string.SetupUnifiedPushInfo))
