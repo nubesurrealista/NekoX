@@ -148,6 +148,7 @@ android {
         buildConfigField "int", "OFFICIAL_VERSION_CODE", officialCode + ""
         buildConfigField "int", "APP_ID", appId
         buildConfigField "String", "APP_HASH", "\"" + appHash + "\""
+        resValue "string", "package_name", APP_PACKAGE
 
 //        ndk {
 //            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
