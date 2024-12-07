@@ -94,7 +94,7 @@ In case of a rejection, you may ask if a PR is acceptable.
 
 First, join the discussion group and search around to see if anyone reported the same bug (or a test build with bug-fix exists).
 
-Then, make sure you have the latest version installed (check the channel).
+Then, make sure you have the latest version installed (check the channel and the discussion group for latest fixes).
 
 Then, if the issue appears in the official Telegram client too, please submit it to the officials, (be careful not to show Momogram in the description and screenshots, the official developers doesn't like us!).
 
