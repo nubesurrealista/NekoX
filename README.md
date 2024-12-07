@@ -74,7 +74,7 @@ Momogram has basic UnifiedPush support(enabled by default), but you need to inst
 
 Here are two easy choices for you:
 
-- [ntfy](https://github.com/binwiederhier/ntfy/releases/latest)
+- [ntfy](https://github.com/binwiederhier/ntfy-android/releases/latest)
 - [UP-FCM Distributor (relies on Google, but faster)](https://codeberg.org/UnifiedPush/fcm-distributor/releases)
 
 Just choose one of the distributor from above, install and open it at least once to finish setup, then choose it in the notification settings page of Momogram and you're good to go!
