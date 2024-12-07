@@ -83,6 +83,19 @@ object EnvUtil {
     }
 
     @JvmStatic
+    var isWaydroid: Boolean? = null
+
+    @JvmStatic
+    fun checkIsWaydroid(): Boolean {
+        if (isWaydroid != null) return isWaydroid!!
+
+        val waydroidToolsVersion = AndroidUtilities.getSystemProperty("waydroid.tools_version")
+        val fingerprint = AndroidUtilities.getSystemProperty("ro.build.fingerprint")
+        isWaydroid = waydroidToolsVersion != null || fingerprint.contains("waydroid")
+        return isWaydroid!!
+    }
+
+    @JvmStatic
     fun doTest() {
 
         FileLog.d("rootDirectories: ${rootDirectories.size}")
