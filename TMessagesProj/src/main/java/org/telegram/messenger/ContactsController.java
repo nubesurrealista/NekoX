@@ -397,7 +397,7 @@ public class ContactsController extends BaseController {
         Utilities.globalQueue.postRunnable(() -> {
             AccountManager am = AccountManager.get(ApplicationLoader.applicationContext);
             try {
-                Account[] accounts = am.getAccountsByType("org.telegram.messenger");
+                Account[] accounts = am.getAccountsByType(BuildConfig.APPLICATION_ID);
                 for (int a = 0; a < accounts.length; a++) {
                     Account acc = accounts[a];
                     boolean found = false;
@@ -429,7 +429,7 @@ public class ContactsController extends BaseController {
                 readContacts();
                 if (systemAccount == null && !NekoConfig.disableSystemAccount.Bool()) {
                     try {
-                        systemAccount = new Account("" + getUserConfig().getClientUserId(), "org.telegram.messenger");
+                        systemAccount = new Account("" + getUserConfig().getClientUserId(), BuildConfig.APPLICATION_ID);
                         am.addAccountExplicitly(systemAccount, "", null);
                     } catch (Exception ignore) {
 

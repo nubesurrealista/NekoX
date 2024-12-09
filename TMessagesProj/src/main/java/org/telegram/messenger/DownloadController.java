@@ -36,6 +36,7 @@ import java.util.Locale;
 
 import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.EnvUtil;
 
 public class DownloadController extends BaseController implements NotificationCenter.NotificationCenterDelegate {
 
@@ -338,15 +339,18 @@ public class DownloadController extends BaseController implements NotificationCe
                 checkAutodownloadSettings();
             }
         };
+
+        if (getUserConfig().isClientActivated()) {
+            checkAutodownloadSettings();
+        }
+
+        if (Boolean.TRUE.equals(EnvUtil.isWaydroid())) return; // workaround to prevent DeadSystemException for waydroid;
+
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         if (Build.VERSION.SDK_INT >= 33) {
             ApplicationLoader.applicationContext.registerReceiver(networkStateReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
         } else {
             ApplicationLoader.applicationContext.registerReceiver(networkStateReceiver, filter);
-        }
-
-        if (getUserConfig().isClientActivated()) {
-            checkAutodownloadSettings();
         }
     }
 

@@ -1222,7 +1222,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                     } else if (position == unifiedPushDistributorRow) {
                         String value = UnifiedPush.getAckDistributor(ApplicationLoader.applicationContext);
                         textCell.setTextAndValue(LocaleController.getString(R.string.UnifiedPushDistributor),
-                                (value == null || value.isEmpty()) ? "None" : value,
+                                (value == null || value.isEmpty()) ? "None/Unknown" : value,
                                 updateUnifiedPushDistributor, false);
                         updateUnifiedPushDistributor = false;
                     }

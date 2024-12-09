@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import tw.nekomimi.nekogram.utils.EnvUtil;
+
 public class LiteMode {
 
     public static final int FLAG_ANIMATED_STICKERS_KEYBOARD = 1;
@@ -113,6 +115,7 @@ public class LiteMode {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public static int getBatteryLevel() {
         long time = 0;
+        if (Boolean.TRUE.equals(EnvUtil.isWaydroid())) return 69; // workaround to prevent DeadSystemException for waydroid;
         if (lastBatteryLevelCached < 0 || (time = System.currentTimeMillis()) - lastBatteryLevelChecked > 1000 * 12) {
             BatteryManager batteryManager = (BatteryManager) ApplicationLoader.applicationContext.getSystemService(Context.BATTERY_SERVICE);
             if (batteryManager != null) {

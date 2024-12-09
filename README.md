@@ -74,7 +74,7 @@ Momogram has basic UnifiedPush support(enabled by default), but you need to inst
 
 Here are two easy choices for you:
 
-- [ntfy](https://github.com/binwiederhier/ntfy/releases/latest)
+- [ntfy](https://github.com/binwiederhier/ntfy-android/releases/latest)
 - [UP-FCM Distributor (relies on Google, but faster)](https://codeberg.org/UnifiedPush/fcm-distributor/releases)
 
 Just choose one of the distributor from above, install and open it at least once to finish setup, then choose it in the notification settings page of Momogram and you're good to go!
@@ -94,7 +94,7 @@ In case of a rejection, you may ask if a PR is acceptable.
 
 First, join the discussion group and search around to see if anyone reported the same bug (or a test build with bug-fix exists).
 
-Then, make sure you have the latest version installed (check the channel).
+Then, make sure you have the latest version installed (check the channel and the discussion group for latest fixes).
 
 Then, if the issue appears in the official Telegram client too, please submit it to the officials, (be careful not to show Momogram in the description and screenshots, the official developers doesn't like us!).
 
