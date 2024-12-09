@@ -222,7 +222,7 @@
     <string name="OverrideSettingHint">&lt;鍵&gt; &lt;值&gt;</string>
     <string name="SearchByMessageType">以種類搜尋訊息</string>
     <string name="HideOriginalTextAfterTranslate">翻譯後隱藏原始文字</string>
-    <string name="DontAutoPlayNextMessage">不要自動播放下一個音訊訊息</string>
+    <string name="DontAutoPlayNextMessage">不要自動播放下一個語音訊息</string>
     <string name="TranslateBeforeSend">傳送前翻譯</string>
     <string name="UseCustomProviderForAutoTranslate">自動翻譯時使用自訂翻譯服務</string>
     <string name="DontShareNumberWhenAddContactByDefault">新增聯絡人時自動取消勾選分享電話號碼</string>

@@ -220,7 +220,7 @@
     <string name="OverrideSettingFloat">Παράκαμψη τιμής διακύμανσης</string>
     <string name="BlacklistedQueryAllAdded">Όλα τα ερωτήματα στον τρέχοντα σύνδεσμο είναι ήδη στη μαύρη λίστα.</string>
     <string name="TranslateBeforeSend">Μετάφραση πριν την αποστολή</string>
-    <string name="DontAutoPlayNextMessage">Μη αυτόματη αναπαραγωγή επόμενου ηχητικού μηνύματος</string>
+    <string name="DontAutoPlayNextMessage">Μη αυτόματη αναπαραγωγή επόμενου φωνητικού μηνύματος</string>
     <string name="ReplyAsQuoteByDefault">Απάντηση ως παράθεση από προεπιλογή</string>
     <string name="maxRecentEmojiCount">Μέγιστα πρόσφατα emojis</string>
     <string name="justOneEmoji">Επιλεγμένα μόνο</string>

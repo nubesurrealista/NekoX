@@ -258,6 +258,6 @@
     <string name="ProviderLingva">Lingva Translate</string>
     <string name="MarqueeForLongChatTitles">Usar Marquee para títulos de bate-papo longos</string>
     <string name="HideOriginalTextAfterTranslate">Ocultar o texto original após a tradução</string>
-    <string name="DontAutoPlayNextMessage">Não reproduzir automaticamente a próxima mensagem de áudio</string>
+    <string name="DontAutoPlayNextMessage">Não reproduzir automaticamente a próxima mensagem de voz</string>
     <string name="ChatListFontSizeFollowChat">Usar tamanho de fonte da mensagem na lista de chats</string>
 </resources>

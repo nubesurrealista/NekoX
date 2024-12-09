@@ -216,7 +216,7 @@
     <string name="CustomSearchEngineError">Mesin pencari khusus bukan string URI yang valid!</string>
     <string name="OverrideSettingFloat">Mengganti nilai float</string>
     <string name="OverrideSettingHint">&lt;kunci&gt; &lt;nilai&gt;</string>
-    <string name="DontAutoPlayNextMessage">Jangan memutar otomatis pesan audio berikutnya</string>
+    <string name="DontAutoPlayNextMessage">Jangan memutar otomatis pesan suara berikutnya</string>
     <string name="OverrideSettings">Mengganti pengaturan utama global (JANGAN GUNAKAN KECUALI ANDA TAHU APA YANG ANDA LAKUKAN!!)</string>
     <string name="DontShareNumberWhenAddContactByDefault">Hapus tanda centang nomor berbagi saat menambahkan kontak secara default</string>
     <string name="MarqueeForLongChatTitles">Gunakan Marquee untuk judul obrolan yang panjang</string>

@@ -230,7 +230,7 @@
     <string name="BlacklistUrlQueryTitle">移除特定网址参数</string>
     <string name="DontShareNumberWhenAddContactByDefault">新增联络人时自动取消勾选分享号码</string>
     <string name="UseCustomProviderForAutoTranslate">自动翻译时使用自订翻译服务</string>
-    <string name="DontAutoPlayNextMessage">不要自动播放下一个音讯讯息</string>
+    <string name="DontAutoPlayNextMessage">不要自动播放下一个语音讯息</string>
     <string name="MarqueeForLongChatTitles">為较长聊天标题使用卷动效果</string>
     <string name="BlacklistedQuery">已将选取的参数加入黑名单</string>
     <string name="BlacklistedQueryAllAdded">选取连结内的所有参数都已加入黑名单.</string>

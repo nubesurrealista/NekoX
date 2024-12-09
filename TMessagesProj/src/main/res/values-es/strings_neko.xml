@@ -220,7 +220,7 @@
     <string name="MarqueeForLongChatTitles">Utilizar Marquee para los títulos largos del chat</string>
     <string name="DontSendRightAfterTranslated">No enviar justo después de que el mensaje se haya traducido</string>
     <string name="HideOriginalTextAfterTranslate">Esconder texto original después de traducir</string>
-    <string name="DontAutoPlayNextMessage">No reproducir automáticamente el siguiente audio</string>
+    <string name="DontAutoPlayNextMessage">No reproducir automáticamente el siguiente mensaje de voz</string>
     <string name="ChatListFontSizeFollowChat">Usar el tamaño de la fuente del mensaje en la lista de chat</string>
     <string name="UseCustomProviderForAutoTranslate">Usar traductor personalizado para traducción automática</string>
     <string name="DontShareNumberWhenAddContactByDefault">No compartir número al agregar contactos por defecto</string>

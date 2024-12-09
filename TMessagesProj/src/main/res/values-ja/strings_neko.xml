@@ -212,7 +212,7 @@
     <string name="TranslateBeforeSend">送信前に翻訳</string>
     <string name="CopyPhoto">画像をコピー</string>
     <string name="PhotoCopied">画像をコピーしました</string>
-    <string name="DontAutoPlayNextMessage">次の音声メッセージを自動再生しない</string>
+    <string name="DontAutoPlayNextMessage">次のボイスメッセージを自動再生しない</string>
     <string name="ShowBotWebViewSettings">ボットウェブビューの設定を表示</string>
     <string name="CustomTitleText">カスタムタイトル</string>
     <string name="maxRecentEmojiCount">最近の絵文字の最大数</string>

@@ -58,6 +58,7 @@ import android.provider.OpenableColumns;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.view.HapticFeedbackConstants;
@@ -117,6 +118,7 @@ import java.util.concurrent.CountDownLatch;
 import tw.nekomimi.nekogram.SaveToDownloadReceiver;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.utils.TelegramUtil;
 
 public class MediaController implements AudioManager.OnAudioFocusChangeListener, NotificationCenter.NotificationCenterDelegate, SensorEventListener {
 
@@ -2605,11 +2607,6 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     }
 
     private void playNextMessageWithoutOrder(boolean byStop) {
-        if (byStop && NekoConfig.dontAutoPlayNextMessage.Bool()) {
-            pauseMessage(playingMessageObject);
-            return;
-        }
-
         ArrayList<MessageObject> currentPlayList = SharedConfig.shuffleMusic ? shuffledPlaylist : playlist;
 
         if (byStop && (SharedConfig.repeatMode == 2 || SharedConfig.repeatMode == 1 && currentPlayList.size() == 1) && !forceLoopCurrentPlaylist) {
@@ -3536,6 +3533,8 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                             if (!playlist.isEmpty() && (playlist.size() > 1 || !messageObject.isVoice())) {
                                 playNextMessageWithoutOrder(true);
                             } else {
+                                if (NekoConfig.dontAutoPlayNextMessage.Bool())
+                                    MediaController.getInstance().cleanupPlayer(true, true);
                                 cleanupPlayer(true, hasNoNextVoiceOrRoundVideoMessage(), messageObject.isVoice(), false);
                             }
                         } else if (audioPlayer != null && seekToProgressPending != 0 && (playbackState == ExoPlayer.STATE_READY || playbackState == ExoPlayer.STATE_IDLE)) {
