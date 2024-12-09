@@ -277,4 +277,5 @@
     <string name="KeepBlockedBotChatHistory">Mantener el historial de bots tras el bloqueo</string>
     <string name="DontSendStartCmdOnUnblockBot">No enviar/iniciar después de desbloquear</string>
     <string name="OverridePerformanceClass">Anular la clase de rendimiento del dispositivo</string>
+    <string name="MomoSettings">Ajustes de Momo</string>
 </resources>

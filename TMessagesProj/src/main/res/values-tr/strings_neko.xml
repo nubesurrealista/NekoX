@@ -277,4 +277,15 @@
     <string name="OverridePerformanceClass">Cihaz performans sınıfının üzerine yaz</string>
     <string name="KeepBlockedBotChatHistory">Engelledikten sonra bot geçmişini tut</string>
     <string name="DontSendStartCmdOnUnblockBot">Engeli kaldırdıktan sonra /start mesajı göndermeyi etkisizleştir</string>
+    <string name="CrashDialogMomoTitle">Momogram çöktü!</string>
+    <string name="SmallerEmojisInChooser">Seçicide daha küçük emojiler göster</string>
+    <string name="ChatNameOverrideDesc">Sohbet profil menüsünde üzerine yazılmış ismi kullan</string>
+    <string name="NameAsTitleText">İsmi başlık metni olarak kullan</string>
+    <string name="EnableUnifiedPush">UnifiedPush desteğini etkinleştir</string>
+    <string name="RestartApp">Yeniden Başlat</string>
+    <string name="SetupUnifiedPush">UnifiedPush\'u kur</string>
+    <string name="SetupUnifiedPushInfo">UnifiedPush etkinleştirildi, ancak çalışması için en az bir sağlayıcı kurulmalıdır.</string>
+    <string name="ChatNameOverride">Sohbet adının üzerine yaz</string>
+    <string name="MomoSettings">Momo Ayarları</string>
+    <string name="ChatNameOverrideMenu">İsmin üzerine yaz</string>
 </resources>
