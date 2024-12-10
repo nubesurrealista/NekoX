@@ -316,6 +316,9 @@ interface Translator {
                 if (chatActivity.messagePreviewParams == null) {
                     FileLog.d("030-tx: not forwarding, fix state")
                     localIsSelfOutgoing = true
+                } else if (chatActivity.messagePreviewParams.forwardMessages == null || chatActivity.messagePreviewParams.forwardMessages.messages == null) {
+                    FileLog.d("030-tx: forwardMessages is null, fix state")
+                    localIsSelfOutgoing = true
                 } else {
                     chatActivity.messagePreviewParamsForTranslate = chatActivity.messagePreviewParams
                     msgCount = chatActivity.messagePreviewParams.forwardMessages.messages.size
