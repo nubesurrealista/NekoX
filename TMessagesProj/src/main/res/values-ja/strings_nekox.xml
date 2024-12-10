@@ -212,4 +212,11 @@
     <string name="AllowDupLoginInfo">既存アカウントでログインすると問題が起きることがあります, あとで重複してるアカウントをログアウトして, アプリを再起動してください.</string>
     <string name="UseOldAppName">元のアプリ名称を使用する (NekoX)</string>
     <string name="UseOldAppNameDesc">この設定を変更すると, アプリが終了し, アイコンがデフォルトに戻ります.</string>
+    <string name="VersionUpdateVariantNotMatch">バージョンバリアントを自動的に一致させることができませんでした。 \nGitHub から手動でダウンロードしてください。</string>
+    <string name="DeleteDownloadedFileExternal">外部ファイルをスキップしました。</string>
+    <string name="update_download_soucre">ダウンロードソースを選択</string>
+    <string name="hideSponsoredMessage">スポンサーメッセージを非表示にする</string>
+    <string name="AppUpdateNekoX">Nekogram X を更新</string>
+    <string name="UsePersiancalendarInfo">太陽ヒジュラ暦で日付を表示</string>
+    <string name="repeatConfirmText">本当に繰り返しますか？</string>
 </resources>
