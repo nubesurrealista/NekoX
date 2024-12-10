@@ -216,7 +216,6 @@ object AlertUtil {
     })
 
     @JvmStatic
-    @JvmOverloads
     fun showTransFailedDialog(ctx: Context, noRetry: Boolean, message: String, exception: Throwable?, retryRunnable: Runnable) = UIUtil.runOnUIThread(Runnable {
         if (exception != null) {
             Log.e("nx-trans-failed", "exception occurred..", exception)

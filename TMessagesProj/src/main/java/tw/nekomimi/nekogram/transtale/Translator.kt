@@ -1,7 +1,6 @@
 package tw.nekomimi.nekogram.transtale
 
 import android.text.SpannableStringBuilder
-import android.util.Log
 import android.view.View
 import cn.hutool.core.util.ArrayUtil
 import cn.hutool.core.util.StrUtil
@@ -23,7 +22,6 @@ import tw.nekomimi.nekogram.cc.CCConverter
 import tw.nekomimi.nekogram.cc.CCTarget
 import tw.nekomimi.nekogram.transtale.source.*
 import tw.nekomimi.nekogram.ui.PopupBuilder
-import tw.nekomimi.nekogram.utils.TelegramUtil
 import tw.nekomimi.nekogram.utils.UIUtil
 import tw.nekomimi.nekogram.utils.receive
 import tw.nekomimi.nekogram.utils.receiveLazy
@@ -105,11 +103,11 @@ interface Translator {
                 providerYouDao -> if (language == "zh") {
                     language = "zh-CHS"
                 }
-                providerDeepL -> language = language.toUpperCase()
+                providerDeepL -> language = language.uppercase()
                 providerMicrosoft,
                 providerGoogle,
                 providerGoogleCN -> if (language == "zh") {
-                    val countryUpperCase = country.toUpperCase()
+                    val countryUpperCase = country.uppercase()
                     if (countryUpperCase == "CN" || countryUpperCase == "DUANG") {
                         language = if (provider == providerMicrosoft) "zh-Hans" else "zh-CN"
                     } else if (countryUpperCase == "TW" || countryUpperCase == "HK") {
@@ -139,7 +137,7 @@ interface Translator {
             }
 
             if (language == "zh") {
-                val countryUpperCase = country.toUpperCase()
+                val countryUpperCase = country.uppercase()
                 if (countryUpperCase == "CN") {
                     return CCConverter.get(CCTarget.SP).convert(result)
                 } else if (countryUpperCase == "TW") {
@@ -299,7 +297,7 @@ interface Translator {
 
         @JvmStatic
         fun translateMessageBeforeSent(currentAccount: Int, text: CharSequence?, targetLang: String) {
-            translateMessageBeforeSent(currentAccount, text, "en", true, null)
+            translateMessageBeforeSent(currentAccount, text, targetLang, true, null)
         }
 
         @JvmStatic
@@ -327,20 +325,20 @@ interface Translator {
                     chatActivity.messagePreviewParams.forwardMessages.getSelectedMessages(target)
                     target.forEach {
                         var isMsgText = false
-                        var text = it.caption
-                        if (text == null || text.trim().isBlank()) {
+                        var targetText = it.caption
+                        if (targetText == null || targetText.trim().isBlank()) {
                             isMsgText = true
-                            text = it.messageText
+                            targetText = it.messageText
                         }
 
                         // doc & media messages can't be tampered
-                        if (text.isNullOrBlank() || it.isDocument || it.isSticker || it.isVideo || it.isMusic || it.isGif) {
+                        if (targetText.isNullOrBlank() || it.isDocument || it.isSticker || it.isVideo || it.isMusic || it.isGif) {
                             FileLog.d("030-tx: null text or doc")
                             --msgCount
                             return@forEach
                         }
 
-                        doTranslateWithOfficialApi(currentAccount, text, targetLang, { result ->
+                        doTranslateWithOfficialApi(currentAccount, targetText, targetLang, { result ->
                             // Log.d("030-tx", "fwd: $text -> $result")
                             --msgCount
                             if (isMsgText) it.messageText = result
@@ -385,10 +383,8 @@ interface Translator {
                         NotificationCenter.getGlobalInstance().postNotificationName(
                             NotificationCenter.showBulletin,
                             Bulletin.TYPE_ERROR_SUBTITLE,
-                            LocaleController.getString(
-                                "TranslationFailedAlert2",
-                                R.string.TranslationFailedAlert2
-                            ), it.replaceFirst(Regex(" "), "")
+                            LocaleController.getString(R.string.TranslationFailedAlert2),
+                            it.replaceFirst(Regex(" "), "")
                         )
                     }
                 }
@@ -406,13 +402,6 @@ interface Translator {
             textWithEntities.text = text.toString()
             req.flags = req.flags or 2
             req.text.add(textWithEntities)
-            var lang = "en" // 030: tmp
-            if (lang != null) {
-                lang = lang.split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
-            }
-            if ("nb" == lang) {
-                lang = "no"
-            }
             req.to_lang = targetLang
             transReqId = ConnectionsManager.getInstance(currentAccount).sendRequest(
                 req
