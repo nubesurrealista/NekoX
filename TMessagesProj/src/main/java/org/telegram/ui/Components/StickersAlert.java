@@ -115,6 +115,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 public class StickersAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
@@ -597,7 +598,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     public void loadStickerSet(boolean force) {
         if (inputStickerSet != null) {
             final MediaDataController mediaDataController = MediaDataController.getInstance(currentAccount);
-            if (!force) {
+            if (!force && !NekoConfig.alwaysLoadStickerSetFromServer.Bool()) {
                 if (stickerSet == null && inputStickerSet.short_name != null) {
                     stickerSet = mediaDataController.getStickerSetByName(inputStickerSet.short_name);
                 }
@@ -650,7 +651,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                         }
                         optionsButton.setVisibility(View.VISIBLE);
                         stickerSet = (TLRPC.TL_messages_stickerSet) response;
-                        mediaDataController.putStickerSet(stickerSet, false);
+                        mediaDataController.putStickerSet(stickerSet, NekoConfig.alwaysLoadStickerSetFromServer.Bool());
                         if (stickerSet != null && stickerSet.documents.isEmpty()) {
                             dismiss();
                             return;
@@ -1128,8 +1129,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         containerView.addView(optionsButton, LayoutHelper.createFrame(40, 40, Gravity.TOP | Gravity.RIGHT, 0, 5, 5, 0));
         optionsButton.addSubItem(1, R.drawable.baseline_forward_24, LocaleController.getString(R.string.StickersShare));
         optionsButton.addSubItem(2, R.drawable.baseline_link_24, LocaleController.getString(R.string.CopyLink));
-        optionsButton.addSubItem(menu_archive, R.drawable.baseline_archive_24, LocaleController.getString("Archive", R.string.Archive));
-        optionsButton.addSubItem(menu_qrcode, R.drawable.wallet_qr, LocaleController.getString("ShareQRCode", R.string.ShareQRCode));
+        optionsButton.addSubItem(menu_archive, R.drawable.baseline_archive_24, LocaleController.getString(R.string.Archive));
+        optionsButton.addSubItem(menu_qrcode, R.drawable.wallet_qr, LocaleController.getString(R.string.ShareQRCode));
 
         optionsButton.setOnClickListener(v -> {
             checkOptions();
