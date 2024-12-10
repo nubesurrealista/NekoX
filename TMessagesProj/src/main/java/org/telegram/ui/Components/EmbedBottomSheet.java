@@ -393,6 +393,7 @@ public class EmbedBottomSheet extends BottomSheet {
                 if (!AndroidUtilities.isSafeToShow(getContext())) {
                     return true;
                 }
+                if (Build.VERSION.SDK_INT > 25 && detail != null && !detail.didCrash()) return true;
                 new AlertDialog.Builder(getContext(), resourcesProvider)
                         .setTitle(getString(R.string.ChromeCrashTitle))
                         .setMessage(AndroidUtilities.replaceSingleTag(getString(R.string.ChromeCrashMessage), () -> Browser.openUrl(getContext(), "https://play.google.com/store/apps/details?id=com.google.android.webview")))

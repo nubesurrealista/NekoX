@@ -3499,6 +3499,7 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
                     if (!AndroidUtilities.isSafeToShow(getContext())) {
                         return true;
                     }
+                    if (Build.VERSION.SDK_INT > 25 && detail != null && !detail.didCrash()) return true;
                     new AlertDialog.Builder(getContext(), botWebViewContainer == null ? null : botWebViewContainer.resourcesProvider)
                             .setTitle(getString(R.string.ChromeCrashTitle))
                             .setMessage(AndroidUtilities.replaceSingleTag(getString(R.string.ChromeCrashMessage), () -> Browser.openUrl(getContext(), "https://play.google.com/store/apps/details?id=com.google.android.webview")))
@@ -3805,6 +3806,7 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
                                 if (!AndroidUtilities.isSafeToShow(getContext())) {
                                     return true;
                                 }
+                                if (Build.VERSION.SDK_INT > 25 && detail != null && !detail.didCrash()) return true;
                                 new AlertDialog.Builder(getContext(), botWebViewContainer == null ? null : botWebViewContainer.resourcesProvider)
                                         .setTitle(getString(R.string.ChromeCrashTitle))
                                         .setMessage(AndroidUtilities.replaceSingleTag(getString(R.string.ChromeCrashMessage), () -> Browser.openUrl(getContext(), "https://play.google.com/store/apps/details?id=com.google.android.webview")))
