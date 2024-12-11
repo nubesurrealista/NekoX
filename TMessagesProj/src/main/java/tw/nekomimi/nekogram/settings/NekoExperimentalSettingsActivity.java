@@ -95,6 +95,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private final AbstractConfigCell autoTranslateRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.autoTranslate));
     private final AbstractConfigCell autoTranslateProviderRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useCustomProviderForAutoTranslate));
     private final AbstractConfigCell chatListFontSizeFollowChatRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.chatListFontSizeFollowChat));
+    private final AbstractConfigCell autoAttemptInstantViewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.autoAttemptInstantView));
     private final AbstractConfigCell divider0 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header2 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.OverrideSettings)));

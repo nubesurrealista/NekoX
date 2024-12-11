@@ -114,7 +114,6 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import com.google.android.exoplayer2.util.Log;
 
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
@@ -148,7 +147,6 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
@@ -239,6 +237,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
     public final boolean isSheet;
     public final ArticleViewer.Sheet sheet;
+
+    private AlertDialog loadingIndicator;
 
     public ArticleViewer() {
         this.isSheet = false;
@@ -3702,6 +3702,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             return;
         }
         parentActivity = activity;
+        if (activity != null) {
+            loadingIndicator = new AlertDialog(parentActivity, AlertDialog.ALERT_TYPE_LOADING);
+            loadingIndicator.setMessage(LocaleController.getString(R.string.LoadingInstantView));
+        }
 
         SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("articles", Activity.MODE_PRIVATE);
         selectedFont = sharedPreferences.getInt("font_type", 1);
@@ -5187,7 +5191,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             final String anchorFinal = !scrolledToAnchor && anchor != null ? anchor : null;
             TLRPC.TL_messages_getWebPage req = new TLRPC.TL_messages_getWebPage();
             req.url = webpage.url;
-            if (webpage.cached_page instanceof TLRPC.TL_pagePart_layer82 || webpage.cached_page.part) {
+            if (webpage.cached_page != null && (webpage.cached_page instanceof TLRPC.TL_pagePart_layer82 || webpage.cached_page.part)) {
                 req.hash = 0;
             } else {
                 req.hash = webpage.hash;
@@ -12958,6 +12962,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         public int webBackgroundColor = getThemedColor(Theme.key_iv_background);
 
         public WebInstantView.Loader currentInstantLoader;
+        private final boolean autoAttemptInstantView = NekoConfig.autoAttemptInstantView.Bool();
 
         public boolean paused = false;
         public void pause() {
@@ -13114,6 +13119,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         actionBar.lineProgressView.setProgress(0, false);
                     }
                     actionBar.lineProgressView.setProgress(progress, true);
+                    if (loadingIndicator != null) loadingIndicator.setProgress((int) Math.floor((double) progress * 100));
+                    if (progress == 1 && autoAttemptInstantView) loadInstant();
                 }
             });
             webViewContainer.setDelegate(new BotWebViewContainer.Delegate() {
@@ -13627,6 +13634,19 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 currentInstantLoader = null;
             }
             currentInstantLoader = new WebInstantView.Loader(currentAccount);
+            if (autoAttemptInstantView) {
+                currentInstantLoader.openInstantView = () -> {
+                    webViewContainer.setVisibility(View.VISIBLE);
+                    if (loadingIndicator != null) loadingIndicator.dismiss();
+                    if (currentInstantLoader != null && currentInstantLoader.getWebPage() != null) {
+                        addPageToStack(currentInstantLoader.getWebPage(), null, 1);
+                    }
+                };
+                currentInstantLoader.onInstantViewFail = () -> {
+                    webViewContainer.setVisibility(View.VISIBLE);
+                    if (loadingIndicator != null) loadingIndicator.dismiss();
+                };
+            }
             currentInstantLoader.start(getWebView());
             return currentInstantLoader;
         }
@@ -13682,6 +13702,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     public class CachedWeb extends BottomSheetTabs.WebTabData {
+        public TLRPC.WebPage page;
 
         public CachedWeb(String url) {
             lastUrl = url;
@@ -13697,6 +13718,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 pageLayout.setWebBgColor(true, actionBarColor);
                 pageLayout.setWebBgColor(false, backgroundColor);
             } else if (lastUrl != null) {
+                if (NekoConfig.autoAttemptInstantView.Bool()) {
+                    if (loadingIndicator != null) loadingIndicator.show();
+                    pageLayout.webViewContainer.setVisibility(View.INVISIBLE);
+                }
                 pageLayout.webViewContainer.loadUrl(UserConfig.selectedAccount, lastUrl);
             }
         }

@@ -288,4 +288,6 @@
     <string name="SetupUnifiedPush">Setup UnifiedPush</string>
     <string name="SetupUnifiedPushInfo">UnifiedPush is enabled, but you need to have at least one distributor installed in order to make it work.</string>
     <string name="AlwaysLoadStickerSetFromServer">Load sticker set from server when viewing detail</string>
+    <string name="AutoAttemptInstantView">Attempt to open instant view automatically when available</string>
+    <string name="LoadingInstantView">Trying to load instant view…</string>
 </resources>

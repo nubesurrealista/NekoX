@@ -64,6 +64,9 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.TelegramUtil;
+
 public class WebInstantView {
 
     public String url;
@@ -1151,6 +1154,11 @@ public class WebInstantView {
         private int reqId;
         private Runnable cancelLocal;
 
+        // 030
+        public Runnable openInstantView;
+        public Runnable onInstantViewFail;
+        private boolean openedInstantView = false;
+
         public Loader(int currentAccount) {
             this.currentAccount = currentAccount;
         }
@@ -1176,6 +1184,10 @@ public class WebInstantView {
                 }
                 localPage = instant.webpage;
                 notifyUpdate();
+                if (openInstantView != null && !openedInstantView) {
+                    openedInstantView = true;
+                    openInstantView.run();
+                }
             });
         }
 
@@ -1195,6 +1207,11 @@ public class WebInstantView {
                 }
                 localPage = instant.webpage;
                 notifyUpdate();
+
+                if (openInstantView != null && !openedInstantView) {
+                    openedInstantView = true;
+                    openInstantView.run();
+                }
             });
 
             TLRPC.TL_messages_getWebPage req = new TLRPC.TL_messages_getWebPage();
@@ -1218,6 +1235,11 @@ public class WebInstantView {
                 if (!SharedConfig.onlyLocalInstantView && remotePage != null && cancelLocal != null) {
                     cancelLocal.run();
                 }
+                if (remotePage != null && openInstantView != null && !openedInstantView) {
+                    openedInstantView = true;
+                    openInstantView.run();
+                }
+
                 notifyUpdate();
             }));
         }
@@ -1261,6 +1283,10 @@ public class WebInstantView {
         private void notifyUpdate() {
             for (Runnable listener : listeners) {
                 listener.run();
+            }
+
+            if (!isDone() && onInstantViewFail != null) {
+                onInstantViewFail.run();
             }
         }
 
