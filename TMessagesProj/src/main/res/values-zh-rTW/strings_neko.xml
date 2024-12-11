@@ -288,5 +288,7 @@
     <string name="EnableUnifiedPush">啟用 UnifiedPush</string>
     <string name="SetupUnifiedPush">設定 UnifiedPush</string>
     <string name="SetupUnifiedPushInfo">已啟用 UnifiedPush, 但您需要安裝至少一個分發器才能使其正常運作。</string>
+    <string name="AutoAttemptInstantView">在可能時自動使用即時瀏覽</string>
     <string name="LoadingInstantView">嘗試載入即時瀏覽…</string>
+    <string name="OpenExternalOnInstantViewFail">在即時瀏覽不可用時使用外部瀏覽器開啟連結</string>
 </resources>

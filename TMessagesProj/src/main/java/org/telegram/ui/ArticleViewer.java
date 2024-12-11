@@ -13643,8 +13643,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     }
                 };
                 currentInstantLoader.onInstantViewFail = () -> {
-                    webViewContainer.setVisibility(View.VISIBLE);
                     if (loadingIndicator != null) loadingIndicator.dismiss();
+                    if (NekoConfig.useExtBrowserOnIVAttemptFail.Bool()) {
+                        Browser.openInExternalBrowser(parentActivity, lastUrl, true);
+                        ArticleViewer.this.close(false, true);
+                    } else {
+                        webViewContainer.setVisibility(View.VISIBLE);
+                    }
                 };
             }
             currentInstantLoader.start(getWebView());

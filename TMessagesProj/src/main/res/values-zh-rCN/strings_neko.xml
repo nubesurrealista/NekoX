@@ -287,5 +287,7 @@
     <string name="RestartApp">重新启动应用</string>
     <string name="SetupUnifiedPush">设置 UnifiedPush</string>
     <string name="SetupUnifiedPushInfo">已启用 UnifiedPush，但您需要安装至少一个分发器才能使其正常工作。</string>
+    <string name="AutoAttemptInstantView">在可能时自动使用即时浏览</string>
     <string name="LoadingInstantView">尝试载入即时预览…</string>
+    <string name="OpenExternalOnInstantViewFail">Use external browser when instant view isn\'t available</string>
 </resources>

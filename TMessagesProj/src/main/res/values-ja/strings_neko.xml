@@ -288,5 +288,7 @@
     <string name="AccDescrShowKeyboard">キーボードを表示</string>
     <string name="UploadImage">画像をアップロード</string>
     <string name="OverridePerformanceClass">デバイスパフォーマンスクラスを上書き</string>
+    <string name="AutoAttemptInstantView">インスタントビューが利用可能な場合は自動的に開くようにする</string>
     <string name="LoadingInstantView">續を読み込み中…</string>
+    <string name="OpenExternalOnInstantViewFail">インスタントビューが使えないときは外部ブラウザを使う</string>
 </resources>
