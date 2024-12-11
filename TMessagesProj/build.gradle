@@ -89,6 +89,8 @@ android {
     buildToolsVersion "34.0.0"
     ndkVersion rootProject.ext.ndkVersion
 
+    buildFeatures.buildConfig = true
+
     defaultConfig.applicationId = APP_PACKAGE
 
     packagingOptions {
