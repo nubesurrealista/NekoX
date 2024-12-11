@@ -13429,7 +13429,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         public float overrideProgress = -1f;
         public float getProgress() {
-            if (isArticle()) {
+            // 030: top progress is broken for bottom action bar
+            if (isArticle() && !BOTTOM_ACTION_BAR) {
                 if (overrideProgress >= 0) return overrideProgress;
                 int first = layoutManager.findFirstVisibleItemPosition();
                 View view = layoutManager.findViewByPosition(first);
