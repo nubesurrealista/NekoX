@@ -278,4 +278,14 @@
     <string name="DontSendStartCmdOnUnblockBot">No enviar/iniciar después de desbloquear</string>
     <string name="OverridePerformanceClass">Anular la clase de rendimiento del dispositivo</string>
     <string name="MomoSettings">Ajustes de Momo</string>
+    <string name="SmallerEmojisInChooser">Emojis más pequeños en el selector</string>
+    <string name="CrashDialogMomoTitle">¡Momogram falló!</string>
+    <string name="ChatNameOverride">Anular el nombre del chat</string>
+    <string name="ChatNameOverrideDesc">Utilice Anular nombre en el menú del perfil de chat</string>
+    <string name="ChatNameOverrideMenu">Anular nombre</string>
+    <string name="NameAsTitleText">Utilice el nombre como texto del título</string>
+    <string name="RestartApp">Reiniciar la aplicación</string>
+    <string name="SetupUnifiedPush">Configurar UnifiedPush</string>
+    <string name="EnableUnifiedPush">Habilitar UnifiedPush</string>
+    <string name="SetupUnifiedPushInfo">UnifiedPush está habilitado, pero necesita tener al menos un distribuidor instalado para que funcione.</string>
 </resources>
