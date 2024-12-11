@@ -3961,7 +3961,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
             @Override
             protected WebInstantView.Loader getInstantViewLoader() {
-                return pages[0].loadInstant();
+                return pages[0].loadInstant(false);
             }
         };
         actionBar.occupyStatusBar(sheet != null && !BOTTOM_ACTION_BAR);
@@ -13120,7 +13120,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     }
                     actionBar.lineProgressView.setProgress(progress, true);
                     if (loadingIndicator != null) loadingIndicator.setProgress((int) Math.floor((double) progress * 100));
-                    if (progress == 1 && autoAttemptInstantView) loadInstant();
+                    if (progress == 1 && autoAttemptInstantView) loadInstant(true);
                 }
             });
             webViewContainer.setDelegate(new BotWebViewContainer.Delegate() {
@@ -13602,7 +13602,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
         }
 
-        public WebInstantView.Loader loadInstant() {
+        public WebInstantView.Loader loadInstant(boolean first) {
             if (!isWeb()) {
                 if (currentInstantLoader != null) {
                     currentInstantLoader.cancel();
@@ -13635,7 +13635,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 currentInstantLoader = null;
             }
             currentInstantLoader = new WebInstantView.Loader(currentAccount);
-            if (autoAttemptInstantView) {
+            if (first && autoAttemptInstantView) {
                 currentInstantLoader.openInstantView = () -> {
                     webViewContainer.setVisibility(View.VISIBLE);
                     if (loadingIndicator != null) loadingIndicator.dismiss();
