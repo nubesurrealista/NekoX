@@ -2852,6 +2852,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
         boolean rebuildLayout = false;
         boolean invalidate = false;
         boolean oldIsForumCell = isForumCell();
+        boolean ignoreAllReactions = NekoConfig.ignoreAllReactions.Bool();
         drawAvatarSelector = false;
         ttlPeriod = 0;
 
@@ -2900,7 +2901,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                             int[] counts = MessagesController.getInstance(currentAccount).getTopicsController().getForumUnreadCount(localChat.id);
                             unreadCount = counts[0];
                             mentionCount = counts[1];
-                            reactionMentionCount = counts[2];
+                            reactionMentionCount = ignoreAllReactions ? 0 : counts[2];
                             hasUnmutedTopics = counts[3] != 0;
                         } else if (dialog instanceof TLRPC.TL_dialogFolder) {
                             unreadCount = MessagesStorage.getInstance(currentAccount).getArchiveUnreadCount();
@@ -2909,7 +2910,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                         } else {
                             unreadCount = dialog.unread_count;
                             mentionCount = dialog.unread_mentions_count;
-                            reactionMentionCount = dialog.unread_reactions_count;
+                            reactionMentionCount = ignoreAllReactions ? 0 : dialog.unread_reactions_count;
                         }
                         markUnread = dialog.unread_mark;
                         currentEditDate = message != null ? message.messageOwner.edit_date : 0;
@@ -2939,7 +2940,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             if (forumTopic != null) {
                 unreadCount = forumTopic.unread_count;
                 mentionCount = forumTopic.unread_mentions_count;
-                reactionMentionCount = forumTopic.unread_reactions_count;
+                reactionMentionCount = ignoreAllReactions ? 0 : forumTopic.unread_reactions_count;
             }
             if (dialogsType == DialogsActivity.DIALOGS_TYPE_ADD_USERS_TO) {
                 drawPin = false;
@@ -3060,7 +3061,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                             unreadCount = newCount;
                             mentionCount = newMentionCount;
                             markUnread = dialog.unread_mark;
-                            reactionMentionCount = newReactionCout;
+                            reactionMentionCount = ignoreAllReactions ? 0 : newReactionCout;
                             continueUpdate = true;
                         }
                     }
