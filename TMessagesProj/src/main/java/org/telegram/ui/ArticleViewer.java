@@ -13234,7 +13234,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
                 updatePages();
             });
-            swipeContainer.setTopActionBarOffsetY(dp(sheet != null && !sheet.halfSize() ? 0 : 56) + AndroidUtilities.statusBarHeight);
+            swipeContainer.setTopActionBarOffsetY(dp(sheet != null && !sheet.halfSize() ? 0 : 56) + (BOTTOM_ACTION_BAR ? 0 : AndroidUtilities.statusBarHeight));
 //            swipeContainer.setIsKeyboardVisible(obj -> windowView.getKeyboardHeight() >= dp(20));
             addView(swipeContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
