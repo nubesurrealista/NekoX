@@ -13636,7 +13636,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 currentInstantLoader = null;
             }
             currentInstantLoader = new WebInstantView.Loader(currentAccount);
-            if (first && autoAttemptInstantView) {
+            if (first && autoAttemptInstantView && !isTonsite()) {
                 currentInstantLoader.openInstantView = () -> {
                     webViewContainer.setVisibility(View.VISIBLE);
                     if (loadingIndicator != null) loadingIndicator.dismiss();
@@ -13732,7 +13732,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 pageLayout.setWebBgColor(true, actionBarColor);
                 pageLayout.setWebBgColor(false, backgroundColor);
             } else if (lastUrl != null) {
-                if (NekoConfig.autoAttemptInstantView.Bool()) {
+                if (NekoConfig.autoAttemptInstantView.Bool() && !Browser.isTonsite(lastUrl)) {
                     if (loadingIndicator != null) loadingIndicator.show();
                     pageLayout.webViewContainer.setVisibility(View.INVISIBLE);
                 }
