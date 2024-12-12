@@ -304,6 +304,7 @@ public class NekoConfig {
     public static ConfigItem alwaysLoadStickerSetFromServer = addConfig(R.string.AlwaysLoadStickerSetFromServer , "AlwaysLoadStickerSetFromServer", configTypeBool, CHAT, false);
     public static ConfigItem autoAttemptInstantView = addConfig(R.string.AutoAttemptInstantView , "AutoAttemptInstantView", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem useExtBrowserOnIVAttemptFail = addConfig(R.string.OpenExternalOnInstantViewFail , "OpenExternalOnInstantViewFail", configTypeBool, EXPERIMENTAL, false);
+    public static ConfigItem saveIVFailDomains = addConfig(R.string.SaveIVFailDomains , "SaveIVFailDomains", configTypeBool, EXPERIMENTAL, true);
 
     public static ConfigItem customGetQueryBlacklist = addConfig(R.string.BlacklistUrlQueryTitle, "BlacklistUrlQueryTitle", configTypeString, "");
     public static ArrayList<String> customGetQueryBlacklistData = new ArrayList<>();

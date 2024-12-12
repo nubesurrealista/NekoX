@@ -291,4 +291,5 @@
     <string name="AutoAttemptInstantView">Attempt to open instant view automatically when available</string>
     <string name="LoadingInstantView">Trying to load instant view…</string>
     <string name="OpenExternalOnInstantViewFail">Use external browser when instant view isn\'t available</string>
+    <string name="SaveIVFailDomains">Don\'t try to load instant view for previously failed sites</string>
 </resources>

@@ -62,6 +62,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.UrlUtil;
 
 public class Browser {
@@ -408,6 +409,7 @@ public class Browser {
                 allowInAppBrowser &&
                 SharedConfig.inappBrowser &&
                 TextUtils.isEmpty(browserPackage) &&
+                !(NekoConfig.saveIVFailDomains.Bool() && NekoXConfig.isInstantViewFailedDomain(uri.getHost())) &&
                 !RestrictedDomainsList.getInstance().isRestricted(AndroidUtilities.getHostAuthority(uri, true)) &&
                 (uri.getScheme() == null || "https".equals(uri.getScheme()) || "http".equals(uri.getScheme()) || "tonsite".equals(uri.getScheme()))
                 ||

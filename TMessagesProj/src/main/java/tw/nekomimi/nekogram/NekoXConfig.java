@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -251,5 +252,27 @@ public class NekoXConfig {
 
     public static String getChatNameOverride(long chatId) {
         return preferences.getString(NekoConfig.chatNameOverridePrefix + chatId, null);
+    }
+
+    private final static String instantViewFailedDomainKey = "iv_failed_domains";
+    private static HashSet<String> instantViewFailedDomainSet = null;
+    public static void addInstantViewFailedDomain(String host) {
+        if (instantViewFailedDomainSet == null) {
+            Set<String> s = preferences.getStringSet(instantViewFailedDomainKey, null);
+            instantViewFailedDomainSet = (s == null) ? new HashSet<>() : new HashSet<>(s);
+        }
+        instantViewFailedDomainSet.add(host);
+        preferences.edit().putStringSet(instantViewFailedDomainKey, instantViewFailedDomainSet).apply();
+    }
+    public static void resetInstantViewFailedDomains() {
+        instantViewFailedDomainSet.clear();
+        preferences.edit().putStringSet(instantViewFailedDomainKey, Set.of()).apply();
+    }
+    public static boolean isInstantViewFailedDomain(String host) {
+        if (instantViewFailedDomainSet == null) {
+            Set<String> s = preferences.getStringSet(instantViewFailedDomainKey, null);
+            instantViewFailedDomainSet = (s == null) ? new HashSet<>() : new HashSet<>(s);
+        }
+        return instantViewFailedDomainSet.contains(host);
     }
 }

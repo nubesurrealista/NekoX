@@ -224,6 +224,7 @@ import java.util.Locale;
 
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
+import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.parts.ArticleTransKt;
@@ -13645,6 +13646,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 };
                 currentInstantLoader.onInstantViewFail = () -> {
                     if (loadingIndicator != null) loadingIndicator.dismiss();
+                    if (NekoConfig.saveIVFailDomains.Bool()) {
+                        try {
+                            NekoXConfig.addInstantViewFailedDomain(Uri.parse(lastUrl).getHost());
+                        } catch (Exception e) {
+                            FileLog.e("failed to parse/save iv fail domain", e);
+                        }
+                    }
                     if (NekoConfig.useExtBrowserOnIVAttemptFail.Bool()) {
                         Browser.openInExternalBrowser(parentActivity, lastUrl, true);
                         ArticleViewer.this.close(false, true);
