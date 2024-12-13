@@ -292,6 +292,9 @@
     <string name="LoadingInstantView">Trying to load instant view…</string>
     <string name="OpenExternalOnInstantViewFail">Use external browser when instant view isn\'t available</string>
     <string name="SaveIVFailDomains">Don\'t try to load instant view for previously failed sites</string>
+    <string name="ResetIVFailDomains">Reset instant view failure data</string>
+    <string name="ResetIVFailDomainsConfirm">All previously stored instant view failure data will be cleared! Proceed?</string>
     <string name="SpoilerOnAllMedia">Spoiler on all media</string>
     <string name="ProfileMenu">Profile menu</string>
+    <string name="DataCleared">Data cleared</string>
 </resources>

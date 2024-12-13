@@ -291,6 +291,9 @@
     <string name="LoadingInstantView">尝试载入即时预览…</string>
     <string name="OpenExternalOnInstantViewFail">当即时预览载入失败时使用外部浏览器</string>
     <string name="SaveIVFailDomains">不尝试载入曾即时预览失败的域名</string>
+    <string name="ResetIVFailDomains">清除产生即时预览的失败记录</string>
+    <string name="ResetIVFailDomainsConfirm">记录资料将被全部删除! 确定?</string>
     <string name="SpoilerOnAllMedia">为所有媒体套用防剧透</string>
     <string name="ProfileMenu">个人页面菜单</string>
+    <string name="DataCleared">删除完成</string>
 </resources>

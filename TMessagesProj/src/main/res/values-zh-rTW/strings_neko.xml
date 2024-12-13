@@ -292,6 +292,9 @@
     <string name="LoadingInstantView">嘗試載入即時瀏覽…</string>
     <string name="OpenExternalOnInstantViewFail">在即時瀏覽不可用時使用外部瀏覽器開啟連結</string>
     <string name="SaveIVFailDomains">不嘗試載入曾經即時瀏覽失敗的域名</string>
+    <string name="ResetIVFailDomains">清除產生即時瀏覽的失敗記錄</string>
+    <string name="ResetIVFailDomainsConfirm">記錄的資料將被全部刪除! 確定?</string>
     <string name="SpoilerOnAllMedia">為所有媒體套用防劇透</string>
     <string name="ProfileMenu">個人頁面選單</string>
+    <string name="DataCleared">刪除完畢</string>
 </resources>

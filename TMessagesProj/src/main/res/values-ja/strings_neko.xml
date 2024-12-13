@@ -292,6 +292,9 @@
     <string name="LoadingInstantView">續を読み込み中…</string>
     <string name="OpenExternalOnInstantViewFail">インスタントビューが使えないときは外部ブラウザを使う</string>
     <string name="SaveIVFailDomains">インスタントビュー失敗したサイトは試しません</string>
+    <string name="ResetIVFailDomains">インスタントビューの失敗記録をリセットする</string>
+    <string name="ResetIVFailDomainsConfirm">記録されたデータは全て削除されます! 続けますか?</string>
     <string name="SpoilerOnAllMedia">全メディアにネタバレ効果</string>
     <string name="ProfileMenu">プロフィールメニュー</string>
+    <string name="DataCleared">削除しました</string>
 </resources>

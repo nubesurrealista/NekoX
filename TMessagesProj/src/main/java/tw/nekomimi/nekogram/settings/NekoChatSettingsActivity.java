@@ -36,6 +36,7 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
@@ -147,6 +148,14 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final AbstractConfigCell confirmAVRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.confirmAVMessage));
     private final AbstractConfigCell repeatConfirmRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.repeatConfirm));
     private final AbstractConfigCell dividerConfirms = cellGroup.appendCell(new ConfigCellDivider());
+
+    // Instant View
+    private final AbstractConfigCell headerInstantView = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.OpenInstantView)));
+    private final AbstractConfigCell autoAttemptInstantViewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.autoAttemptInstantView));
+    private final AbstractConfigCell useExtBrowserOnIVAttemptFailRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useExtBrowserOnIVAttemptFail));
+    private final AbstractConfigCell saveIVFailDomainsRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.saveIVFailDomains));
+    private final AbstractConfigCell resetIVFailDomainsRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.ResetIVFailDomains), null, null, this::resetIVFailDomains));
+    private final AbstractConfigCell dividerInstantView = cellGroup.appendCell(new ConfigCellDivider());
 
     // Story
     private final AbstractConfigCell headerStory = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.Story)));
@@ -592,6 +601,21 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         builder.setPositiveButton(LocaleController.getString(R.string.OK), null);
         builder.setView(linearLayout);
         showDialog(builder.create());
+    }
+
+    private void resetIVFailDomains() {
+        Context context = getParentActivity();
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(LocaleController.getString(R.string.OpenInstantView));
+        builder.setMessage(LocaleController.getString(R.string.ResetIVFailDomainsConfirm));
+        builder.setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) -> {
+            NekoXConfig.resetInstantViewFailedDomains();
+            BulletinFactory.of(this)
+                    .createSimpleBulletin(R.raw.info, LocaleController.getString(R.string.DataCleared))
+                    .show();
+        });
+        builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
+        builder.show();
     }
 
     @Override

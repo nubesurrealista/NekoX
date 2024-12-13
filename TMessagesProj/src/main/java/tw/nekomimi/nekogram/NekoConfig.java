@@ -302,9 +302,9 @@ public class NekoConfig {
     public static ConfigItem customApiHash = addConfig(R.string.CustomApiHash , "CustomApiHash", configTypeString, GENERAL, "");
     public static ConfigItem allowDupLogin = addConfig(R.string.AllowDupLogin , "AllowDupLogin", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem alwaysLoadStickerSetFromServer = addConfig(R.string.AlwaysLoadStickerSetFromServer , "AlwaysLoadStickerSetFromServer", configTypeBool, CHAT, false);
-    public static ConfigItem autoAttemptInstantView = addConfig(R.string.AutoAttemptInstantView , "AutoAttemptInstantView", configTypeBool, EXPERIMENTAL, false);
-    public static ConfigItem useExtBrowserOnIVAttemptFail = addConfig(R.string.OpenExternalOnInstantViewFail , "OpenExternalOnInstantViewFail", configTypeBool, EXPERIMENTAL, false);
-    public static ConfigItem saveIVFailDomains = addConfig(R.string.SaveIVFailDomains , "SaveIVFailDomains", configTypeBool, EXPERIMENTAL, true);
+    public static ConfigItem autoAttemptInstantView = addConfig(R.string.AutoAttemptInstantView , "AutoAttemptInstantView", configTypeBool, CHAT, false);
+    public static ConfigItem useExtBrowserOnIVAttemptFail = addConfig(R.string.OpenExternalOnInstantViewFail , "OpenExternalOnInstantViewFail", configTypeBool, CHAT, false);
+    public static ConfigItem saveIVFailDomains = addConfig(R.string.SaveIVFailDomains , "SaveIVFailDomains", configTypeBool, CHAT, true);
 
     public static ConfigItem profileShowLinkedChat = addConfig("profileShowLinkedChat", configTypeBool, CHAT, true);
     public static ConfigItem profileShowAddToFolder = addConfig("profileShowAddToFolder", configTypeBool, CHAT, true);
