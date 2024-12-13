@@ -790,7 +790,7 @@ public class NekoConfig {
                                 AndroidUtilities.addToClipboard(errStr);
                                 lastCrashError.setConfigString(null);
                             })
-                            .setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) -> {
+                            .setPositiveButton(LocaleController.getString(R.string.Send), (__, ___) -> {
                                 String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss"));
                                 File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), timestamp + ".nekox-crash.txt");
                                 FileUtil.writeUtf8String(errStr + getNekoConfigValuesAsString(), cacheFile);
