@@ -293,4 +293,5 @@
     <string name="OpenExternalOnInstantViewFail">インスタントビューが使えないときは外部ブラウザを使う</string>
     <string name="SaveIVFailDomains">インスタントビュー失敗したサイトは試しません</string>
     <string name="SpoilerOnAllMedia">全メディアにネタバレ効果</string>
+    <string name="ProfileMenu">プロフィールメニュー</string>
 </resources>

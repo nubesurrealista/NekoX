@@ -89,6 +89,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final AbstractConfigCell showForwardTimeInPopupMenuRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showForwardTimeInPopupMenu));
     private final AbstractConfigCell marqueeForLongChatTitlesRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.marqueeForLongChatTitles));
     private final AbstractConfigCell messageMenuRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.MessageMenu), null, null, this::showMessageMenuAlert));
+    private final AbstractConfigCell profileMenuRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.ProfileMenu), null, null, this::showProfileMenuAlert));
     private final AbstractConfigCell disableCustomWallpaperUserRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableCustomWallpaperUser));
     private final AbstractConfigCell disableCustomWallpaperChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableCustomWallpaperChannel));
     private final AbstractConfigCell appendOriginalTimestampRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.appendOriginalTimestamp));
@@ -498,6 +499,91 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                     }
                     case 11: {
                         textCell.setChecked(NekoConfig.showCopyPhoto.toggleConfigBool());
+                        break;
+                    }
+                }
+            });
+        }
+        builder.setPositiveButton(LocaleController.getString(R.string.OK), null);
+        builder.setView(linearLayout);
+        showDialog(builder.create());
+    }
+
+    private void showProfileMenuAlert() {
+        if (getParentActivity() == null) {
+            return;
+        }
+        Context context = getParentActivity();
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(LocaleController.getString(R.string.ProfileMenu));
+
+        LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+        LinearLayout linearLayoutInviteContainer = new LinearLayout(context);
+        linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.addView(linearLayoutInviteContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
+        int count = 6;
+        for (int a = 0; a < count; a++) {
+            TextCheckCell textCell = new TextCheckCell(context);
+            switch (a) {
+                case 0: {
+                    textCell.setTextAndCheck(String.format("%s/%s",
+                                    LocaleController.getString(R.string.LinkedChannel),
+                                    LocaleController.getString(R.string.LinkedGroupChat)),
+                            NekoConfig.profileShowLinkedChat.Bool(), false);
+                    break;
+                }
+                case 1: {
+                    textCell.setTextAndCheck(LocaleController.getString(R.string.FilterAddTo), NekoConfig.profileShowAddToFolder.Bool(), false);
+                    break;
+                }
+                case 2: {
+                    textCell.setTextAndCheck(LocaleController.getString(R.string.EventLog), NekoConfig.profileShowRecentActions.Bool(), false);
+                    break;
+                }
+                case 3: {
+                    textCell.setTextAndCheck(LocaleController.getString(R.string.ClearCache), NekoConfig.profileShowClearCache.Bool(), false);
+                    break;
+                }
+                case 4: {
+                    textCell.setTextAndCheck(LocaleController.getString(R.string.SearchBlacklistShort), NekoConfig.profileShowBlockSearch.Bool(), false);
+                    break;
+                }
+                case 5: {
+                    textCell.setTextAndCheck(LocaleController.getString(R.string.SpoilerOnAllMedia), NekoConfig.profileShowSpoilerOnAllMedia.Bool(), false);
+                    break;
+                }
+            }
+            textCell.setTag(a);
+            textCell.setBackground(Theme.getSelectorDrawable(false));
+            linearLayoutInviteContainer.addView(textCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+            textCell.setOnClickListener(v2 -> {
+                Integer tag = (Integer) v2.getTag();
+                switch (tag) {
+                    case 0: {
+                        textCell.setChecked(NekoConfig.profileShowLinkedChat.toggleConfigBool());
+                        break;
+                    }
+                    case 1: {
+                        textCell.setChecked(NekoConfig.profileShowAddToFolder.toggleConfigBool());
+                        break;
+                    }
+                    case 2: {
+                        textCell.setChecked(NekoConfig.profileShowRecentActions.toggleConfigBool());
+                        break;
+                    }
+                    case 3: {
+                        textCell.setChecked(NekoConfig.profileShowClearCache.toggleConfigBool());
+                        break;
+                    }
+                    case 4: {
+                        textCell.setChecked(NekoConfig.profileShowBlockSearch.toggleConfigBool());
+                        break;
+                    }
+                    case 5: {
+                        textCell.setChecked(NekoConfig.profileShowSpoilerOnAllMedia.toggleConfigBool());
                         break;
                     }
                 }

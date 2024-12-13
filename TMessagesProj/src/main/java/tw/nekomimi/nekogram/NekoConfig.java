@@ -306,6 +306,13 @@ public class NekoConfig {
     public static ConfigItem useExtBrowserOnIVAttemptFail = addConfig(R.string.OpenExternalOnInstantViewFail , "OpenExternalOnInstantViewFail", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem saveIVFailDomains = addConfig(R.string.SaveIVFailDomains , "SaveIVFailDomains", configTypeBool, EXPERIMENTAL, true);
 
+    public static ConfigItem profileShowLinkedChat = addConfig("profileShowLinkedChat", configTypeBool, CHAT, true);
+    public static ConfigItem profileShowAddToFolder = addConfig("profileShowAddToFolder", configTypeBool, CHAT, true);
+    public static ConfigItem profileShowRecentActions = addConfig("profileShowRecentActions", configTypeBool, CHAT, false);
+    public static ConfigItem profileShowClearCache = addConfig("profileShowClearCache", configTypeBool, CHAT, false);
+    public static ConfigItem profileShowBlockSearch = addConfig("profileShowBlockSearch", configTypeBool, CHAT, false);
+    public static ConfigItem profileShowSpoilerOnAllMedia = addConfig("profileShowSpoilerOnAllMedia", configTypeBool, CHAT, false);
+
     public static ConfigItem customGetQueryBlacklist = addConfig(R.string.BlacklistUrlQueryTitle, "BlacklistUrlQueryTitle", configTypeString, "");
     public static ArrayList<String> customGetQueryBlacklistData = new ArrayList<>();
 

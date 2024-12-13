@@ -10636,12 +10636,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (topicId == 0 && ChatObject.canChangeChatInfo(chat)) {
                 createAutoDeleteItem(context);
             }
-            if (chat != null && (chat.has_link || (chatInfo != null && chatInfo.linked_chat_id != 0))) {
+            if (chat != null && (chat.has_link || (chatInfo != null && chatInfo.linked_chat_id != 0))
+                    && NekoConfig.profileShowLinkedChat.Bool()) {
                 String text;
                 if (!chat.megagroup) {
-                    text = LocaleController.getString("LinkedGroupChat", R.string.LinkedGroupChat);
+                    text = LocaleController.getString(R.string.LinkedGroupChat);
                 } else {
-                    text = LocaleController.getString("LinkedChannelChat", R.string.LinkedChannelChat);
+                    text = LocaleController.getString(R.string.LinkedChannelChat);
                 }
                 otherItem.addSubItem(view_discussion, R.drawable.baseline_layers_24, text);
             }
@@ -10692,14 +10693,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     if (NekoConfig.channelAlias.Bool()){
                         otherItem.addSubItem(aliasChannelName, R.drawable.ic_ab_fave, LocaleController.getString(R.string.setChannelAliasName));
                     }
-                    if (chatInfo != null && chatInfo.linked_chat_id != 0) {
-                        otherItem.addSubItem(view_discussion, R.drawable.msg_discussion, LocaleController.getString(R.string.ViewDiscussion));
-                    }
+                    // 030: duplicated btn
+//                    if (chatInfo != null && chatInfo.linked_chat_id != 0) {
+//                        otherItem.addSubItem(view_discussion, R.drawable.msg_discussion, LocaleController.getString(R.string.ViewDiscussion));
+//                    }
                     if (!currentChat.creator && !currentChat.left && !currentChat.kicked) {
                         otherItem.addSubItem(leave_group, R.drawable.baseline_exit_to_app_24, LocaleController.getString(R.string.LeaveChannelMenu));
                     }
                 }
-                if (ChatObject.hasAdminRights(currentChat)) {
+                if (ChatObject.hasAdminRights(currentChat) && NekoConfig.profileShowRecentActions.Bool()) {
                     otherItem.addSubItem(event_log, R.drawable.baseline_content_paste_24, LocaleController.getString("EventLog", R.string.EventLog));
                 }
             } else {
@@ -10747,15 +10749,25 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (selfUser && !myProfile) {
             otherItem.addSubItem(logout, R.drawable.msg_leave, LocaleController.getString(R.string.LogOut));
         } else {
-            otherItem.addSubItem(add_to_folder, R.drawable.msg_folders, LocaleController.getString(R.string.FilterAddTo));
-            otherItem.addSubItem(clear_cache, R.drawable.msg_delete, LocaleController.getString(R.string.ClearCache));
+            if (NekoConfig.profileShowAddToFolder.Bool())
+                otherItem.addSubItem(add_to_folder, R.drawable.msg_folders, LocaleController.getString(R.string.FilterAddTo));
 
-            int blockFromSearchTxt = (NekoConfig.searchBlacklistData.contains(getDialogId()) ?
-                    R.string.SearchBlacklistRevert : R.string.SearchBlacklistShort);
-            blockFromSearchItem = otherItem.addSubItem(block_from_search, R.drawable.msg_block, LocaleController.getString(blockFromSearchTxt));
+            if (NekoConfig.profileShowClearCache.Bool())
+                otherItem.addSubItem(clear_cache, R.drawable.msg_delete, LocaleController.getString(R.string.ClearCache));
 
-            int spoilerIcon = (NekoConfig.alwaysUseSpoilerForMediaChats.contains(getDialogId()) ? R.drawable.msg_spoiler : R.drawable.msg_spoiler_off);
-            allMediaSpoilerItem = otherItem.addSubItem(all_media_spoiler, spoilerIcon, LocaleController.getString(R.string.SpoilerOnAllMedia));
+            if (NekoConfig.profileShowBlockSearch.Bool()) {
+                int blockFromSearchTxt = (NekoConfig.searchBlacklistData.contains(getDialogId()) ?
+                        R.string.SearchBlacklistRevert : R.string.SearchBlacklistShort);
+                blockFromSearchItem = otherItem.addSubItem(block_from_search, R.drawable.msg_block,
+                        LocaleController.getString(blockFromSearchTxt));
+            }
+
+            if (NekoConfig.profileShowSpoilerOnAllMedia.Bool()) {
+                int spoilerIcon = (NekoConfig.alwaysUseSpoilerForMediaChats.contains(getDialogId()) ?
+                        R.drawable.msg_spoiler : R.drawable.msg_spoiler_off);
+                allMediaSpoilerItem = otherItem.addSubItem(all_media_spoiler, spoilerIcon,
+                        LocaleController.getString(R.string.SpoilerOnAllMedia));
+            }
         }
         if (!isPulledDown) {
             otherItem.hideSubItem(gallery_menu_save);
