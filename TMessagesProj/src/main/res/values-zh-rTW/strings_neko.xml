@@ -292,4 +292,5 @@
     <string name="LoadingInstantView">嘗試載入即時瀏覽…</string>
     <string name="OpenExternalOnInstantViewFail">在即時瀏覽不可用時使用外部瀏覽器開啟連結</string>
     <string name="SaveIVFailDomains">不嘗試載入曾經即時瀏覽失敗的域名</string>
+    <string name="SpoilerOnAllMedia">為所有媒體套用防劇透</string>
 </resources>

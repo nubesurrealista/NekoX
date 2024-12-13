@@ -74,7 +74,6 @@ import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.util.Property;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -170,7 +169,6 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.tl.TL_bots;
 import org.telegram.tgnet.tl.TL_fragment;
-import org.telegram.tgnet.tl.TL_payments;
 import org.telegram.tgnet.tl.TL_stars;
 import org.telegram.tgnet.tl.TL_stories;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -435,6 +433,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private ActionBarMenuSubItem linkItem;
     private ActionBarMenuSubItem setUsernameItem;
     private ActionBarMenuSubItem blockFromSearchItem;
+    private ActionBarMenuSubItem allMediaSpoilerItem;
     private ImageView ttlIconView;
 //    private ActionBarMenuItem qrItem;
     private ActionBarMenuSubItem autoDeleteItem;
@@ -583,6 +582,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private final static int add_to_folder = 1003;
     private final static int aliasChannelName = 1004;
     private final static int overrideName = 1005;
+    private final static int all_media_spoiler = 1006;
 
     private Rect rect = new Rect();
 
@@ -2800,6 +2800,18 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     NekoConfig.saveSearchBlacklist();
                 } else if (id == add_to_folder) {
                     showAddCurrentChatToFolderSheet();
+                } else if (id == all_media_spoiler) {
+                    long did = getDialogId();
+                    if (NekoConfig.alwaysUseSpoilerForMediaChats.contains(did)) {
+                        NekoConfig.alwaysUseSpoilerForMediaChats.remove(did);
+                        allMediaSpoilerItem.setIcon(R.drawable.msg_spoiler_off);
+                    } else {
+                        NekoConfig.alwaysUseSpoilerForMediaChats.add(did);
+                        allMediaSpoilerItem.setIcon(R.drawable.msg_spoiler);
+                    }
+
+                    String str = Arrays.toString(NekoConfig.alwaysUseSpoilerForMediaChats.toArray()).replace(" ", "");
+                    NekoConfig.alwaysUseSpoilerForMedia.setConfigString(str.substring(1, str.length() - 1));
                 }
             }
         });
@@ -10741,6 +10753,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             int blockFromSearchTxt = (NekoConfig.searchBlacklistData.contains(getDialogId()) ?
                     R.string.SearchBlacklistRevert : R.string.SearchBlacklistShort);
             blockFromSearchItem = otherItem.addSubItem(block_from_search, R.drawable.msg_block, LocaleController.getString(blockFromSearchTxt));
+
+            int spoilerIcon = (NekoConfig.alwaysUseSpoilerForMediaChats.contains(getDialogId()) ? R.drawable.msg_spoiler : R.drawable.msg_spoiler_off);
+            allMediaSpoilerItem = otherItem.addSubItem(all_media_spoiler, spoilerIcon, LocaleController.getString(R.string.SpoilerOnAllMedia));
         }
         if (!isPulledDown) {
             otherItem.hideSubItem(gallery_menu_save);
