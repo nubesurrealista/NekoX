@@ -216,4 +216,10 @@
     <string name="DisableCustomWallpaperChannel">Desativar o papel de parede personalizado do canal</string>
     <string name="FasterReconnectHack">Reconexão mais rápida ao alternar proxy ativado/desativado</string>
     <string name="FasterReconnectHackAbout">Este hack só funciona em uma boa rede.</string>
+    <string name="UseOldAppName">Usar nome antigo do aplicativo (NekoX)</string>
+    <string name="UseOldAppNameDesc">O aplicativo pode ser fechado ao alternar, e o ícone pode ser redefinido para o padrão.</string>
+    <string name="CustomApiId">ID de API personalizado</string>
+    <string name="CustomApiHash">Hash de API personalizado</string>
+    <string name="AllowDupLogin">Permitir login em conta(s) existentes</string>
+    <string name="AllowDupLoginInfo">Isso pode causar vários problemas, certifique-se de manter apenas uma das sessões após a conclusão do trabalho.</string>
 </resources>
