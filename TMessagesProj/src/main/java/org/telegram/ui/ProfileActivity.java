@@ -318,6 +318,7 @@ import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
+import tw.nekomimi.nekogram.MomoUpdater;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.config.ConfigItem;
@@ -4342,53 +4343,73 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 });
 
                 if (!BuildVars.isFdroid && !BuildVars.isPlay) {
-                    builder.addItem(LocaleController.getString("CheckUpdate", R.string.CheckUpdate), R.drawable.baseline_search_24, (it) -> {
-                        Browser.openUrl(context, "tg://update");
+                    builder.addItem(LocaleController.getString(R.string.CheckUpdate), R.drawable.baseline_search_24, (it) -> {
+                        // Browser.openUrl(context, "tg://update");
+                        MomoUpdater.checkUpdate((resp, error) -> {
+                            AndroidUtilities.runOnUIThread(() -> {
+                                if (error) {
+                                    new AlertDialog.Builder(getParentActivity())
+                                            .setTitle(LocaleController.getString(R.string.ErrorOccurred))
+                                            .setMessage(LocaleController.getString(R.string.NoUpdate))
+                                            .setPositiveButton(LocaleController.getString(R.string.OK), null)
+                                            .show();
+                                } else if (resp == null) {
+                                    new AlertDialog.Builder(getParentActivity())
+                                            .setTitle(LocaleController.getString(R.string.CheckUpdate))
+                                            .setMessage(LocaleController.getString(R.string.NoUpdate))
+                                            .setPositiveButton(LocaleController.getString(R.string.OK), null)
+                                            .show();
+                                } else {
+                                    SharedConfig.setNewAppVersionAvailable(resp);
+                                    LaunchActivity.instance.showUpdateActivity(currentAccount, resp, false);
+                                }
+                            });
+                        });
                         return Unit.INSTANCE;
                     });
 
-                    String currentChannel = " - ";
-                    switch (NekoXConfig.autoUpdateReleaseChannel) {
-                        case 0:
-                            currentChannel += LocaleController.getString("AutoCheckUpdateOFF", R.string.AutoCheckUpdateOFF);
-                            break;
-                        case 1:
-                            currentChannel += LocaleController.getString("AutoCheckUpdateStable", R.string.AutoCheckUpdateStable);
-                            break;
-                        case 2:
-                            currentChannel += LocaleController.getString("AutoCheckUpdateRc", R.string.AutoCheckUpdateRc);
-                            break;
-                        case 3:
-                            currentChannel += LocaleController.getString("AutoCheckUpdatePreview", R.string.AutoCheckUpdatePreview);
-                            break;
-                    }
-
-                    builder.addItem(LocaleController.getString("AutoCheckUpdateSwitch", R.string.AutoCheckUpdateSwitch) + currentChannel, R.drawable.update_black_24, (it) -> {
-                        BottomBuilder switchBuilder = new BottomBuilder(getParentActivity());
-                        switchBuilder.addTitle(LocaleController.getString("AutoCheckUpdateSwitch", R.string.AutoCheckUpdateSwitch));
-                        switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateOFF", R.string.AutoCheckUpdateOFF), NekoXConfig.autoUpdateReleaseChannel == 0, (radioButtonCell) -> {
-                            NekoXConfig.setAutoUpdateReleaseChannel(0);
-                            switchBuilder.doRadioCheck(radioButtonCell);
-                            return Unit.INSTANCE;
-                        });
-                        switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateStable", R.string.AutoCheckUpdateStable), NekoXConfig.autoUpdateReleaseChannel == 1, (radioButtonCell) -> {
-                            NekoXConfig.setAutoUpdateReleaseChannel(1);
-                            switchBuilder.doRadioCheck(radioButtonCell);
-                            return Unit.INSTANCE;
-                        });
-                        switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateRc", R.string.AutoCheckUpdateRc), NekoXConfig.autoUpdateReleaseChannel == 2, (radioButtonCell) -> {
-                            NekoXConfig.setAutoUpdateReleaseChannel(2);
-                            switchBuilder.doRadioCheck(radioButtonCell);
-                            return Unit.INSTANCE;
-                        });
-                        switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdatePreview", R.string.AutoCheckUpdatePreview), NekoXConfig.autoUpdateReleaseChannel == 3, (radioButtonCell) -> {
-                            NekoXConfig.setAutoUpdateReleaseChannel(3);
-                            switchBuilder.doRadioCheck(radioButtonCell);
-                            return Unit.INSTANCE;
-                        });
-                        showDialog(switchBuilder.create());
-                        return Unit.INSTANCE;
-                    });
+//                    String currentChannel = " - ";
+//                    switch (NekoXConfig.autoUpdateReleaseChannel) {
+//                        case 0:
+//                            currentChannel += LocaleController.getString("AutoCheckUpdateOFF", R.string.AutoCheckUpdateOFF);
+//                            break;
+//                        case 1:
+//                            currentChannel += LocaleController.getString("AutoCheckUpdateStable", R.string.AutoCheckUpdateStable);
+//                            break;
+//                        case 2:
+//                            currentChannel += LocaleController.getString("AutoCheckUpdateRc", R.string.AutoCheckUpdateRc);
+//                            break;
+//                        case 3:
+//                            currentChannel += LocaleController.getString("AutoCheckUpdatePreview", R.string.AutoCheckUpdatePreview);
+//                            break;
+//                    }
+//
+//                    builder.addItem(LocaleController.getString("AutoCheckUpdateSwitch", R.string.AutoCheckUpdateSwitch) + currentChannel, R.drawable.update_black_24, (it) -> {
+//                        BottomBuilder switchBuilder = new BottomBuilder(getParentActivity());
+//                        switchBuilder.addTitle(LocaleController.getString("AutoCheckUpdateSwitch", R.string.AutoCheckUpdateSwitch));
+//                        switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateOFF", R.string.AutoCheckUpdateOFF), NekoXConfig.autoUpdateReleaseChannel == 0, (radioButtonCell) -> {
+//                            NekoXConfig.setAutoUpdateReleaseChannel(0);
+//                            switchBuilder.doRadioCheck(radioButtonCell);
+//                            return Unit.INSTANCE;
+//                        });
+//                        switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateStable", R.string.AutoCheckUpdateStable), NekoXConfig.autoUpdateReleaseChannel == 1, (radioButtonCell) -> {
+//                            NekoXConfig.setAutoUpdateReleaseChannel(1);
+//                            switchBuilder.doRadioCheck(radioButtonCell);
+//                            return Unit.INSTANCE;
+//                        });
+//                        switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateRc", R.string.AutoCheckUpdateRc), NekoXConfig.autoUpdateReleaseChannel == 2, (radioButtonCell) -> {
+//                            NekoXConfig.setAutoUpdateReleaseChannel(2);
+//                            switchBuilder.doRadioCheck(radioButtonCell);
+//                            return Unit.INSTANCE;
+//                        });
+//                        switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdatePreview", R.string.AutoCheckUpdatePreview), NekoXConfig.autoUpdateReleaseChannel == 3, (radioButtonCell) -> {
+//                            NekoXConfig.setAutoUpdateReleaseChannel(3);
+//                            switchBuilder.doRadioCheck(radioButtonCell);
+//                            return Unit.INSTANCE;
+//                        });
+//                        showDialog(switchBuilder.create());
+//                        return Unit.INSTANCE;
+//                    });
                 }
 
                 if (NekoXConfig.isDeveloper()) {

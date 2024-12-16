@@ -63,11 +63,12 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         FrameLayout view = new FrameLayout(context);
         addView(view, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(176) + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)));
 
-        RLottieImageView imageView = new RLottieImageView(context);
-        imageView.setAnimation(R.raw.qr_code_logo, 108, 108);
-        imageView.playAnimation();
-        imageView.getAnimatedDrawable().setAutoRepeat(1);
-        imageView.setScaleType(ImageView.ScaleType.CENTER);
+        ImageView imageView = new ImageView(context);
+        imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_monochrome_wink));
+//        imageView.setAnimation(R.raw.qr_code_logo, 108, 108);
+//        imageView.playAnimation();
+//        imageView.getAnimatedDrawable().setAutoRepeat(1);
+        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         imageView.setPadding(0, 0, 0, AndroidUtilities.dp(14));
         view.addView(imageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0, top, 0, 0));
         imageView.setOnClickListener(v -> {
@@ -94,7 +95,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         titleTextView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
         titleTextView.setTypeface(AndroidUtilities.bold());
-        titleTextView.setText(LocaleController.getString(R.string.UpdateTelegram));
+        titleTextView.setText(LocaleController.getString(R.string.UpdateApp));
         container.addView(titleTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP));
 
         textView = new TextView(context);
@@ -139,16 +140,17 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         acceptButton.setPadding(AndroidUtilities.dp(34), 0, AndroidUtilities.dp(34), 0);
         addView(acceptButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 46, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 0, 0, 45));
         acceptButton.setOnClickListener(view1 -> {
-            if (ApplicationLoader.isStandaloneBuild() || BuildVars.DEBUG_VERSION) {
+            if (true || ApplicationLoader.isStandaloneBuild() || BuildVars.DEBUG_VERSION) {
                 if (!ApplicationLoader.applicationLoaderInstance.checkApkInstallPermissions(getContext())) {
                     return;
                 }
-                if (appUpdate.document instanceof TLRPC.TL_document) {
+                if (appUpdate.document instanceof TLRPC.Document) {
                     if (!ApplicationLoader.applicationLoaderInstance.openApkInstall((Activity) getContext(), appUpdate.document)) {
                         FileLoader.getInstance(accountNum).loadFile(appUpdate.document, "update", FileLoader.PRIORITY_HIGH, 1);
                         showProgress(true);
                     }
                 } else if (appUpdate.url != null) {
+                    setVisibility(View.GONE);
                     Browser.openUrl(getContext(), appUpdate.url);
                 }
             } else if (BuildVars.isHuaweiStoreApp()){

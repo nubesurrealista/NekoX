@@ -225,14 +225,12 @@ import java.util.zip.ZipInputStream;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import kotlin.text.StringsKt;
-import tw.nekomimi.nekogram.InternalUpdater;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.TelegramUtil;
-import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class LaunchActivity extends BasePermissionsActivity implements INavigationLayout.INavigationLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
     public final static String EXTRA_FORCE_NOT_INTERNAL_APPS = "force_not_internal_apps";
@@ -1633,7 +1631,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         }
     }
 
-    private void showUpdateActivity(int account, TLRPC.TL_help_appUpdate update, boolean check) {
+    public void showUpdateActivity(int account, TLRPC.TL_help_appUpdate update, boolean check) {
         if (blockingUpdateView == null) {
             blockingUpdateView = new BlockingUpdateView(LaunchActivity.this) {
                 @Override
@@ -7849,6 +7847,10 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
     @Override
     public void onBackPressed() {
+        if (blockingUpdateView != null && blockingUpdateView.getVisibility() != View.GONE) {
+            blockingUpdateView.setVisibility(View.GONE);
+            return;
+        }
         if (FloatingDebugController.onBackPressed()) {
             return;
         }

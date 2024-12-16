@@ -1,37 +1,34 @@
 package tw.nekomimi.nekogram;
 
+import android.util.Log;
+
 import org.telegram.messenger.AccountInstance;
-import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
-import org.webrtc.EglBase;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 
 import tw.nekomimi.nekogram.utils.FileUtil;
 
 //TODO use UpdateAppAlertDialog / BlockingUpdateView?
 
-public class InternalUpdater {
+public class MomoUpdater {
 
     static final int UPDATE_METADATA_START_FROM = 0;
     static final int MAX_READ_COUNT = 20;
-    static final long CHANNEL_METADATA_ID = 1359638116;
-    static final String CHANNEL_METADATA_NAME = "nekox_update_metadata";
-    static final long CHANNEL_APKS_ID = 1137038259;
-    static final String CHANNEL_APKS_NAME = "NekoXApks";
+    static final long CHANNEL_ID = 2137047153;
+    static final String CHANNEL_NAME = "momogram_update";
 
     static void retrieveUpdateMetadata(retrieveUpdateMetadataCallback callback) {
         final int localVersionCode = SharedConfig.buildVersion();
         AccountInstance accountInstance = AccountInstance.getInstance(UserConfig.selectedAccount);
         TLRPC.TL_messages_getHistory req = new TLRPC.TL_messages_getHistory();
-        req.peer = accountInstance.getMessagesController().getInputPeer(-CHANNEL_METADATA_ID);
+        req.peer = accountInstance.getMessagesController().getInputPeer(-CHANNEL_ID);
         req.offset_id = 0;
         req.limit = MAX_READ_COUNT;
         Runnable sendReq = () -> accountInstance.getConnectionsManager().sendRequest(req, (response, error) -> {
@@ -45,40 +42,22 @@ public class InternalUpdater {
                 List<UpdateMetadata> metas = new ArrayList<>();
                 for (TLRPC.Message message : res.messages) {
                     if (!(message instanceof TLRPC.TL_message)) continue;
-                    if (!message.message.startsWith("v")) continue;
-                    String[] split = message.message.split(",");
-                    if (split.length < 4) continue;
-                    UpdateMetadata metaData = new UpdateMetadata(message.id, split);
+                    if (!message.message.contains("#release")) continue;
+                    UpdateMetadata metaData = new UpdateMetadata(message.id, message.message);
                     metas.add(metaData);
-                }
-                Collections.sort(metas, (o1, o2) -> o2.versionCode - o1.versionCode); // versionCode Desc
-                UpdateMetadata found = null;
-                for (UpdateMetadata metaData : metas) {
-                    if (metaData.versionCode <= localVersionCode) break;
-                    if (NekoXConfig.autoUpdateReleaseChannel < 3 && metaData.versionName.contains("preview"))
-                        continue;
-                    if (NekoXConfig.autoUpdateReleaseChannel < 2 && metaData.versionName.contains("rc"))
-                        continue;
-                    found = metaData;
-                    break;
-                }
-                if (found != null) {
-                    for (TLRPC.Message message : res.messages) {
-                        if (!(message instanceof TLRPC.TL_message)) continue;
-                        if (message.id == found.UpdateLogMessageID) {
-                            found.updateLog = message.message;
-                            found.updateLogEntities = message.entities;
-                            break;
-                        }
+                    if (BuildVars.DEBUG_PRIVATE_VERSION || metaData.versionCode > localVersionCode) {
+                        metaData.updateLog = message.message;
+                        metaData.updateLogEntities = message.entities;
                     }
                 }
-                if (found == null) {
-                    FileLog.d("Cannot find Update Metadata");
+                Collections.sort(metas, (o1, o2) -> o2.versionCode - o1.versionCode); // versionCode Desc
+                if (metas.isEmpty() || (metas.get(0).versionCode < localVersionCode)) {
+                    Log.d("030-upd", "Cannot find Update Metadata");
                     callback.apply(null, false);
                     return;
                 }
-                FileLog.w("Found Update Metadata " + found.versionName + " " + found.versionCode);
-                callback.apply(found, false);
+                Log.d("030-upd", "Found Update Metadata " + metas.get(0).versionName + " " + metas.get(0).versionCode);
+                callback.apply((BuildVars.DEBUG_PRIVATE_VERSION || metas.get(0).versionCode > localVersionCode) ? metas.get(0) : null, false);
             } catch (Exception e) {
                 FileLog.e(e);
                 callback.apply(null, true);
@@ -87,15 +66,15 @@ public class InternalUpdater {
         if (req.peer.access_hash != 0) sendReq.run();
         else {
             TLRPC.TL_contacts_resolveUsername resolve = new TLRPC.TL_contacts_resolveUsername();
-            resolve.username = CHANNEL_METADATA_NAME;
+            resolve.username = CHANNEL_NAME;
             accountInstance.getConnectionsManager().sendRequest(resolve, (response1, error1) -> {
                 if (error1 != null) {
-                    FileLog.e("Error when checking update, unable to resolve metadata channel " + error1.text);
+                    Log.e("030-upd", "Error when checking update, unable to resolve metadata channel " + error1.text);
                     callback.apply(null, true);
                     return;
                 }
                 if (!(response1 instanceof TLRPC.TL_contacts_resolvedPeer)) {
-                    FileLog.e("Error when checking update, unable to resolve metadata channel, unexpected responseType " + response1.getClass().getName());
+                    Log.e("030-upd", "Error when checking update, unable to resolve metadata channel, unexpected responseType " + response1.getClass().getName());
                     callback.apply(null, true);
                     return;
                 }
@@ -104,7 +83,7 @@ public class InternalUpdater {
                 accountInstance.getMessagesController().putChats(resolvedPeer.chats, false);
                 accountInstance.getMessagesStorage().putUsersAndChats(resolvedPeer.users, resolvedPeer.chats, false, true);
                 if ((resolvedPeer.chats == null || resolvedPeer.chats.size() == 0)) {
-                    FileLog.e("Error when checking update, unable to resolve metadata channel, unexpected resolvedChat ");
+                    Log.e("030-upd", "Error when checking update, unable to resolve metadata channel, unexpected resolvedChat ");
                     callback.apply(null, true);
                     return;
                 }
@@ -120,36 +99,38 @@ public class InternalUpdater {
         AccountInstance accountInstance = AccountInstance.getInstance(UserConfig.selectedAccount);
         retrieveUpdateMetadata((metadata, err) -> {
             if (metadata == null) {
+                Log.d("030-upd", "null metadata, err: " + err);
                 callback.apply(null, err);
                 return;
             }
 
             TLRPC.TL_messages_getHistory req = new TLRPC.TL_messages_getHistory();
-            req.peer = accountInstance.getMessagesController().getInputPeer(-CHANNEL_APKS_ID);
-            req.min_id = metadata.apkChannelMessageID;
+            req.peer = accountInstance.getMessagesController().getInputPeer(-CHANNEL_ID);
+            req.min_id = metadata.messageID - 4;
             req.limit = MAX_READ_COUNT;
 
             Runnable sendReq = () -> accountInstance.getConnectionsManager().sendRequest(req, (response, error) -> {
                 if (error != null) {
-                    FileLog.e("Error when getting update document " + error.text);
+                    Log.e("030-upd", "Error when getting update document " + error.text);
                     callback.apply(null, true);
                     return;
                 }
                 try {
                     TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
-                    FileLog.d("Retrieve update messages, size:" + res.messages.size());
-                    final String target = metadata.versionName + "-" + BuildConfig.FLAVOR + "-" + FileUtil.getAbi() + "-" + ("debug".equals(BuildConfig.BUILD_TYPE) ? "release" : BuildConfig.BUILD_TYPE) + ".apk";
+                    Log.e("030-upd", "Retrieve update messages, size:" + res.messages.size());
+                    final boolean isArm = FileUtil.getAbi().startsWith("arm");
                     for (int i = 0; i < res.messages.size(); i++) {
                         if (res.messages.get(i).media == null) continue;
 
                         TLRPC.Document apkDocument = res.messages.get(i).media.document;
                         if (apkDocument.attributes == null) continue;
                         String fileName = apkDocument.attributes.size() == 0 ? "" : apkDocument.attributes.get(0).file_name;
-                        if (!fileName.contains(target))
+                        if ((isArm && fileName.contains("x86")) || (!isArm && !fileName.contains("x86")))
                             continue;
                         TLRPC.TL_help_appUpdate update = new TLRPC.TL_help_appUpdate();
                         update.version = metadata.versionName;
-                        update.document = apkDocument;
+//                        update.document = apkDocument;
+                        update.url = String.format("https://t.me/%s/%d", CHANNEL_NAME, res.messages.get(i).id);
                         update.can_not_skip = false;
                         update.flags |= 2;
                         if (metadata.updateLog != null) {
@@ -159,6 +140,7 @@ public class InternalUpdater {
                         callback.apply(update, false);
                         return;
                     }
+                    Log.d("030-upd", "no file");
                     callback.apply(null, false);
                 } catch (Exception e) {
                     FileLog.e(e);
@@ -168,15 +150,15 @@ public class InternalUpdater {
             if (req.peer.access_hash != 0) sendReq.run();
             else {
                 TLRPC.TL_contacts_resolveUsername resolve = new TLRPC.TL_contacts_resolveUsername();
-                resolve.username = CHANNEL_APKS_NAME;
+                resolve.username = CHANNEL_NAME;
                 accountInstance.getConnectionsManager().sendRequest(resolve, (response1, error1) -> {
                     if (error1 != null) {
-                        FileLog.e("Error when checking update, unable to resolve metadata channel " + error1);
+                        Log.e("030-upd", "Error when checking update, unable to resolve metadata channel " + error1);
                         callback.apply(null, true);
                         return;
                     }
                     if (!(response1 instanceof TLRPC.TL_contacts_resolvedPeer)) {
-                        FileLog.e("Error when checking update, unable to resolve metadata channel, unexpected responseType " + response1.getClass().getName());
+                        Log.e("030-upd", "Error when checking update, unable to resolve metadata channel, unexpected responseType " + response1.getClass().getName());
                         callback.apply(null, true);
                         return;
                     }
@@ -185,7 +167,7 @@ public class InternalUpdater {
                     accountInstance.getMessagesController().putChats(resolvedPeer.chats, false);
                     accountInstance.getMessagesStorage().putUsersAndChats(resolvedPeer.users, resolvedPeer.chats, false, true);
                     if ((resolvedPeer.chats == null || resolvedPeer.chats.size() == 0)) {
-                        FileLog.e("Error when checking update, unable to resolve metadata channel, unexpected resolvedChat ");
+                        Log.e("030-upd", "Error when checking update, unable to resolve metadata channel, unexpected resolvedChat ");
                         callback.apply(null, true);
                         return;
                     }
@@ -212,17 +194,16 @@ public class InternalUpdater {
         int messageID;
         String versionName;
         int versionCode;
-        int apkChannelMessageID;
-        int UpdateLogMessageID;
         String updateLog = null;
         ArrayList<TLRPC.MessageEntity> updateLogEntities = null;
 
-        UpdateMetadata(int messageID, String[] split) {
+        UpdateMetadata(int messageID, String text) {
             this.messageID = messageID;
-            versionName = split[0];
-            versionCode = Integer.parseInt(split[1]);
-            apkChannelMessageID = Integer.parseInt(split[2]);
-            UpdateLogMessageID = Integer.parseInt(split[3]);
+            String[] lines = text.split("\n");
+            String[] split = lines[0].split(" ");
+            versionName = split[1];
+            versionCode = Integer.parseInt(split[2].split("r")[1]) * 10 + 9;
+            updateLog = text.replace(lines[0] + "\n\n", "");
         }
     }
 
