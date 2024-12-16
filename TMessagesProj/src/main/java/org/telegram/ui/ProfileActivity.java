@@ -4403,6 +4403,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         devBuilder.show();
                         return Unit.INSTANCE;
                     });
+                    builder.addItem(String.format("Set DEBUG_PRIVATE to %s", !BuildVars.DEBUG_PRIVATE_VERSION),
+                            R.drawable.baseline_bug_report_24, (__) -> {
+                        BuildVars.DEBUG_PRIVATE_VERSION = !BuildVars.DEBUG_PRIVATE_VERSION;
+                        Toast.makeText(context,
+                                String.format("BuildVars.DEBUG_PRIVATE_VERSION is now %s", BuildVars.DEBUG_PRIVATE_VERSION),
+                                Toast.LENGTH_SHORT).show();
+                        return Unit.INSTANCE;
+                    });
                 }
 
                 builder.addItem(LocaleController.getString(R.string.RestartApp), R.drawable.msg_retry,
