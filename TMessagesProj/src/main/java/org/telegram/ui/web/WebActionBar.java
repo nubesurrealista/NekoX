@@ -714,7 +714,7 @@ public class WebActionBar extends FrameLayout {
 
     public void drawBackground(Canvas canvas, float h, float alpha, float shadowalpha, boolean withShadow) {
         final float shadowh = Math.max(dp(0.66f), 1);
-        float t = ArticleViewer.BOTTOM_ACTION_BAR ? getHeight() - h : 0;
+        float t = 0; // ArticleViewer.BOTTOM_ACTION_BAR ? getHeight() - h : 0;
         float b = ArticleViewer.BOTTOM_ACTION_BAR ? getHeight()     : h;
         float shadowt = ArticleViewer.BOTTOM_ACTION_BAR ? t : b - shadowh;
 
