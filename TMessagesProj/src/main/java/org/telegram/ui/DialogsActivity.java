@@ -5241,20 +5241,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     MomoUpdater.checkUpdate((resp, err) -> {
                         AndroidUtilities.runOnUIThread(() -> {
                             if (err || resp == null) {
-                                new AlertDialog.Builder(getParentActivity())
-                                        .setTitle(LocaleController.getString(err ? R.string.ErrorOccurred : R.string.CheckUpdate))
-                                        .setMessage(LocaleController.getString(R.string.NoUpdate))
-                                        .setPositiveButton(LocaleController.getString(R.string.OK), null)
-                                        .show();
                                 return;
                             }
                             new AlertDialog.Builder(getParentActivity())
                                     .setTitle(LocaleController.getString(R.string.CheckUpdate))
                                     .setMessage(LocaleController.formatString(R.string.AutoCheckUpdateInfo, resp.version))
                                     .setPositiveButton(LocaleController.getString(R.string.Update), (__, ___) -> {
-                                        if (resp.url != null) Browser.openUrl(context, resp.url);
-                                        else
+                                        if (resp.url != null) {
+                                            Browser.openUrl(context, resp.url);
+                                        } else {
                                             Toast.makeText(context, LocaleController.getString(R.string.ErrorOccurred), Toast.LENGTH_SHORT).show();
+                                        }
                                     })
                                     .setNegativeButton(LocaleController.getString(R.string.UpdateLater), (__, ___) -> {
                                         NekoConfig.nextPromptUpdateTime.setConfigLong(t + (3 * 86400 * 1000));
