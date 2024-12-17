@@ -96,6 +96,7 @@ public class MomoUpdater {
     }
 
     public static void checkUpdate(checkUpdateCallback callback) {
+        NekoConfig.nextPromptUpdateTime.setConfigLong(0L);
         AccountInstance accountInstance = AccountInstance.getInstance(UserConfig.selectedAccount);
         retrieveUpdateMetadata((metadata, err) -> {
             if (metadata == null) {

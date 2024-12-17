@@ -99,6 +99,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell avatarBackgroundBlurRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.avatarBackgroundBlur));
     private final AbstractConfigCell avatarBackgroundDarkenRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.avatarBackgroundDarken));
     private final AbstractConfigCell hidePhoneRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hidePhone));
+    private final AbstractConfigCell checkUpdateRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.checkUpdate));
     private final AbstractConfigCell divider0 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell headerTranslation = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.Translate)));

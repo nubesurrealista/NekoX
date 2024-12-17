@@ -12,7 +12,6 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.PushListenerController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
@@ -28,7 +27,6 @@ import java.io.File;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -37,10 +35,8 @@ import android.util.Log;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 import cn.hutool.core.util.StrUtil;
@@ -49,7 +45,6 @@ import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
 
 import static tw.nekomimi.nekogram.config.ConfigItem.*;
-import static tw.nekomimi.nekogram.utils.StrUtil.getAppName;
 
 @SuppressLint("ApplySharedPref")
 public class NekoConfig {
@@ -77,7 +72,8 @@ public class NekoConfig {
 
 //    public static ConfigItem enablePublicProxy = addConfig(R.string.enablePublicProxy, "enablePublicProxy", configTypeBool, false);
 //    public static ConfigItem autoUpdateSubInfo = addConfig(R.string.autoUpdateSubInfo, "autoUpdateSubInfo", configTypeBool, true);
-    public static ConfigItem lastUpdateCheckTime = addConfig("lastUpdateCheckTime", configTypeLong, 0L);
+    public static ConfigItem nextPromptUpdateTime = addConfig("nextPromptUpdateTime", configTypeLong, 0L);
+    public static ConfigItem checkUpdate = addConfig(R.string.AutoCheckUpdate, "AutoCheckUpdate", configTypeBool, GENERAL, true);
 
     // From NekoConfig
     public static ConfigItem useIPv6 = addConfig(R.string.IPv6, "IPv6", configTypeBool, GENERAL, false);

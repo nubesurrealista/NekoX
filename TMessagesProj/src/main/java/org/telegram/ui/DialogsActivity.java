@@ -35,15 +35,12 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Matrix;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Shader;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -57,12 +54,10 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.transition.ChangeBounds;
 import android.transition.TransitionManager;
-import android.util.Log;
 import android.util.LongSparseArray;
 import android.util.Property;
 import android.util.SparseArray;
 import android.util.StateSet;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
@@ -137,7 +132,6 @@ import org.telegram.tgnet.tl.TL_chatlists;
 import org.telegram.tgnet.tl.TL_stars;
 import org.telegram.tgnet.tl.TL_stories;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
@@ -186,7 +180,6 @@ import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.ArchiveHelp;
 import org.telegram.ui.Components.AvatarDrawable;
-import org.telegram.ui.Components.BackButtonMenu;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.BlurredRecyclerView;
 import org.telegram.ui.Components.PermissionRequest;
@@ -217,7 +210,6 @@ import org.telegram.ui.Components.FragmentContextView;
 import org.telegram.ui.Components.ItemOptions;
 import org.telegram.ui.Components.JoinGroupAlert;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Components.MediaActionDrawable;
 import org.telegram.ui.Components.MediaActivity;
 import org.telegram.ui.Components.NumberTextView;
 import org.telegram.ui.Components.PacmanAnimation;
@@ -228,7 +220,6 @@ import org.telegram.ui.Components.ProxyDrawable;
 import org.telegram.ui.Components.PullForegroundDrawable;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
-import org.telegram.ui.Components.RadialProgress2;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble;
 import org.telegram.ui.Components.RecyclerAnimationScrollHelper;
@@ -249,7 +240,6 @@ import org.telegram.ui.Stories.UserListPoller;
 import org.telegram.ui.Stories.recorder.HintView2;
 import org.telegram.ui.Stories.recorder.StoryRecorder;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -258,16 +248,12 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Random;
 
-import kotlin.Unit;
-import tw.nekomimi.nekogram.ui.BottomBuilder;
-import tw.nekomimi.nekogram.InternalUpdater;
+import tw.nekomimi.nekogram.MomoUpdater;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.PrivacyUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
-import tw.nekomimi.nekogram.utils.UIUtil;
 import tw.nekomimi.nekogram.utils.UpdateUtil;
-import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class DialogsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, FloatingDebugProvider {
 
@@ -5249,6 +5235,35 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         if (searchString == null && initialDialogsType == DIALOGS_TYPE_DEFAULT) {
             // NekoX: Remove UPDATE NOW Bottom View in DialogsActivity
+            if (NekoConfig.checkUpdate.Bool()) {
+                long t = System.currentTimeMillis();
+                if (t >= NekoConfig.nextPromptUpdateTime.Long()) {
+                    MomoUpdater.checkUpdate((resp, err) -> {
+                        AndroidUtilities.runOnUIThread(() -> {
+                            if (err || resp == null) {
+                                new AlertDialog.Builder(getParentActivity())
+                                        .setTitle(LocaleController.getString(err ? R.string.ErrorOccurred : R.string.CheckUpdate))
+                                        .setMessage(LocaleController.getString(R.string.NoUpdate))
+                                        .setPositiveButton(LocaleController.getString(R.string.OK), null)
+                                        .show();
+                                return;
+                            }
+                            new AlertDialog.Builder(getParentActivity())
+                                    .setTitle(LocaleController.getString(R.string.CheckUpdate))
+                                    .setMessage(LocaleController.formatString(R.string.AutoCheckUpdateInfo, resp.version))
+                                    .setPositiveButton(LocaleController.getString(R.string.Update), (__, ___) -> {
+                                        if (resp.url != null) Browser.openUrl(context, resp.url);
+                                        else
+                                            Toast.makeText(context, LocaleController.getString(R.string.ErrorOccurred), Toast.LENGTH_SHORT).show();
+                                    })
+                                    .setNegativeButton(LocaleController.getString(R.string.UpdateLater), (__, ___) -> {
+                                        NekoConfig.nextPromptUpdateTime.setConfigLong(t + (3 * 86400 * 1000));
+                                    })
+                                    .show();
+                        });
+                    });
+                }
+            }
         }
 
         undoViewIndex = contentView.getChildCount();
