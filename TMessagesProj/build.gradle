@@ -3,12 +3,10 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
-def verName = APP_VERSION_NAME + "-030"
+def verName = APP_VERSION_NAME
 def verCode = 10609
 
-if (System.getenv("DEBUG_BUILD") == "true") {
-    verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1").trim().replace('\'','')
-}
+verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1").trim().replace('\'','')
 
 def archs = List.of("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
 
@@ -345,7 +343,7 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            outputFileName = outputFileName.replace("TMessagesProj", "Momo-v" + versionName)
+            outputFileName = outputFileName.replace("-mini-releaseNoGcm", "").replace("TMessagesProj", "Momo-v" + versionName)
         }
     }
 

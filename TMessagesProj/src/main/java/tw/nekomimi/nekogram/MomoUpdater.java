@@ -3,6 +3,7 @@ package tw.nekomimi.nekogram;
 import android.util.Log;
 
 import org.telegram.messenger.AccountInstance;
+import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.SharedConfig;
@@ -120,13 +121,14 @@ public class MomoUpdater {
                     TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
                     Log.e("030-upd", "Retrieve update messages, size:" + res.messages.size());
                     final boolean isArm = FileUtil.getAbi().startsWith("arm");
+                    final String versionStr = String.format("%s-%s", metadata.versionName, metadata.versionHash);
                     for (int i = 0; i < res.messages.size(); i++) {
                         if (res.messages.get(i).media == null) continue;
 
                         TLRPC.Document apkDocument = res.messages.get(i).media.document;
                         if (apkDocument.attributes == null) continue;
                         String fileName = apkDocument.attributes.size() == 0 ? "" : apkDocument.attributes.get(0).file_name;
-                        if ((isArm && fileName.contains("x86")) || (!isArm && !fileName.contains("x86")))
+                        if (!fileName.contains(versionStr) || (isArm && fileName.contains("x86")) || (!isArm && !fileName.contains("x86")))
                             continue;
                         TLRPC.TL_help_appUpdate update = new TLRPC.TL_help_appUpdate();
                         update.version = metadata.versionName;
@@ -194,6 +196,7 @@ public class MomoUpdater {
     static class UpdateMetadata {
         int messageID;
         String versionName;
+        String versionHash;
         int versionCode;
         String updateLog = null;
         ArrayList<TLRPC.MessageEntity> updateLogEntities = null;
@@ -201,10 +204,15 @@ public class MomoUpdater {
         UpdateMetadata(int messageID, String text) {
             this.messageID = messageID;
             String[] lines = text.split("\n");
-            String[] split = lines[0].split(" ");
-            versionName = split[1];
-            versionCode = Integer.parseInt(split[2].split("r")[1]) * 10 + 9;
-            updateLog = text.replace(lines[0] + "\n\n", "");
+            try {
+                String[] split = lines[0].split(" ");
+                versionName = split[1];
+                versionHash = split[2];
+                versionCode = Integer.parseInt(split[3].split("r")[1]) * 10 + 9;
+                updateLog = text.replace(lines[0] + "\n\n", "");
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
         }
     }
 

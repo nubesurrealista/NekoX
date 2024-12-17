@@ -52,6 +52,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.util.Base64;
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.view.ActionMode;
@@ -583,13 +584,11 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 if (freeAccounts > 0 && availableAccount != null) {
                     presentFragment(new LoginActivity(availableAccount));
                     drawerLayoutContainer.closeDrawer(false);
-                } else {
-                    if (actionBarLayout.getFragmentStack().size() > 0) {
-                        BaseFragment fragment = actionBarLayout.getFragmentStack().get(0);
-                        LimitReachedBottomSheet limitReachedBottomSheet = new LimitReachedBottomSheet(fragment, this, TYPE_ACCOUNTS, currentAccount, null);
-                        fragment.showDialog(limitReachedBottomSheet);
-                        limitReachedBottomSheet.onShowPremiumScreenRunnable = () -> drawerLayoutContainer.closeDrawer(false);
-                    }
+                } else if (!actionBarLayout.getFragmentStack().isEmpty()) {
+                    BaseFragment fragment = actionBarLayout.getFragmentStack().get(0);
+                    LimitReachedBottomSheet limitReachedBottomSheet = new LimitReachedBottomSheet(fragment, this, TYPE_ACCOUNTS, currentAccount, null);
+                    fragment.showDialog(limitReachedBottomSheet);
+                    limitReachedBottomSheet.onShowPremiumScreenRunnable = () -> drawerLayoutContainer.closeDrawer(false);
                 }
             } else if (view instanceof DrawerActionCheckCell) {
                 int id = drawerLayoutAdapter.getId(position);
@@ -1057,6 +1056,8 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         if (AndroidUtilities.isTablet()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
+
+            Log.w("030-tablet", "isTablet -> creating launchLayout");
             launchLayout = new RelativeLayout(this) {
                 private Path path = new Path();
                 private boolean inLayout;
@@ -1071,6 +1072,11 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
                 @Override
                 protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                    if (!AndroidUtilities.isTablet()) {
+                        Log.w("030-tablet", "not tablet mode but in tablet mode launchLayout.onMeasure");
+                        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+                        return;
+                    }
                     inLayout = true;
                     int width = MeasureSpec.getSize(widthMeasureSpec);
                     int height = MeasureSpec.getSize(heightMeasureSpec);
@@ -1128,8 +1134,10 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 }
             };
             if (i != -1) {
+                Log.d("030-tablet", String.format("add launchLayout to previous drawerLayoutContainer index %d", i));
                 drawerLayoutContainer.addView(launchLayout, i, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
             } else {
+                Log.d("030-tablet", "append launchLayout to drawerLayoutContainer");
                 drawerLayoutContainer.addView(launchLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
             }
 
@@ -1204,6 +1212,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             layersView.setVisibility(layerFragmentsStack.isEmpty() ? View.GONE : View.VISIBLE);
             launchLayout.addView(layersView);
         } else {
+            Log.d("030-tablet", "not tablet, creating actionBarLayout");
             ViewGroup parent = (ViewGroup) actionBarLayout.getView().getParent();
             if (parent != null) {
                 parent.removeView(actionBarLayout.getView());
