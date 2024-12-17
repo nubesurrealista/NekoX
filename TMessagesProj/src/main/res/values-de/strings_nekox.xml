@@ -43,7 +43,7 @@
     <string name="TransToLang">Zielsprache der Übersetzung</string>
     <string name="TransInputToLang">Quellsprache der Übersetzung</string>
     <string name="More">Mehr</string>
-    <string name="NekoXUpdatesChannel">NekoX-Update-Kanal</string>
+    <string name="NekoXUpdatesChannel">Update-Kanal</string>
     <string name="ShowIdAndDc">ID/DC im Profil anzeigen</string>
     <string name="PrivacyNotice">Datenschutzwarnung</string>
     <string name="PrivacyNoticePhoneVisible">Es wurde festgestellt, dass deine Rufnummer für jeden sichtbar ist, was dazu führen kann, dass staatlich kontrollierte Hacker deine wahre Identität ermitteln können. Bitte deaktiviere dies!</string>
@@ -105,7 +105,7 @@
     <string name="ScanQRCode">QR-Code scannen</string>
     <string name="NoQrFound">Kein QR-Code gefunden</string>
     <string name="DeveloperSettings">Entwickleroptionen</string>
-    <string name="NekoXFaq">NekoX FAQ</string>
+    <string name="NekoXFaq">FAQ</string>
     <string name="TransSite">Plattform übersetzen</string>
     <string name="OpenKayChain">OpenPGP-Client</string>
     <string name="OpenPGPApp">OpenPGP-Anbieter</string>

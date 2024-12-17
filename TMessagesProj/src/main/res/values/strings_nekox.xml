@@ -47,7 +47,7 @@
     <string name="TransToLang">Translation target language</string>
     <string name="TransInputToLang">Translation input target language</string>
     <string name="More">More</string>
-    <string name="NekoXUpdatesChannel">NekoX Updates Channel</string>
+    <string name="NekoXUpdatesChannel">Updates Channel</string>
     <string name="ShowIdAndDc">Show ID / DC in profile</string>
     <string name="PrivacyNotice">Privacy warning</string>
     <string name="PrivacyNoticePhoneVisible">Your mobile phone number is visible to anyone, which lets government-controlled hackers find your true identity. Please turn it off!</string>
@@ -109,7 +109,7 @@
     <string name="ScanQRCode">Scan QR Code</string>
     <string name="NoQrFound">No QR Code found</string>
     <string name="DeveloperSettings">Developer Settings</string>
-    <string name="NekoXFaq">NekoX FAQ</string>
+    <string name="NekoXFaq">FAQ</string>
     <string name="TransSite">Translate Platform</string>
     <string name="OpenKayChain">OpenPGP Client</string>
     <string name="OpenPGPApp">OpenPGP Provider</string>

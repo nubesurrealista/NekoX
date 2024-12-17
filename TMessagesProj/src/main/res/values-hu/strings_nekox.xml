@@ -46,7 +46,7 @@
     <string name="TransToLang">A fordítás célnyelve</string>
     <string name="TransInputToLang">A fordítás bemeneti célnyelve</string>
     <string name="More">Több</string>
-    <string name="NekoXUpdatesChannel">A NekoX frissíti a csatornát</string>
+    <string name="NekoXUpdatesChannel">Frissíti a csatornát</string>
     <string name="ShowIdAndDc">ID / DC megjelenítése a profilban</string>
     <string name="PrivacyNotice">Adatvédelmi figyelmeztetés</string>
     <string name="PrivacyNoticePhoneVisible">Azt észlelték, hogy mobiltelefonszámát bárki láthatja, emiatt a kormány által ellenőrzött hackerek megtalálhatják az Ön valódi személyazonosságát. Kérjük, kapcsolja ki!</string>
@@ -108,7 +108,7 @@
     <string name="ScanQRCode">QR kód beolvasása</string>
     <string name="NoQrFound">Nem található QR-kód</string>
     <string name="DeveloperSettings">Fejlesztői beállítások</string>
-    <string name="NekoXFaq">NekoX GYIK</string>
+    <string name="NekoXFaq">GYIK</string>
     <string name="TransSite">Fordítási platform</string>
     <string name="OpenKayChain">OpenPGP kliens</string>
     <string name="OpenPGPApp">OpenPGP Szolgáltató</string>

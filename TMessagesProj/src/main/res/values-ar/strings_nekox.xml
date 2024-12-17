@@ -108,7 +108,7 @@
     <string name="ScanQRCode">مسح كود QR</string>
     <string name="NoQrFound">لم يتم العثور على رمز QR</string>
     <string name="DeveloperSettings">إعدادات المطور</string>
-    <string name="NekoXFaq">أسئلة NekoX الشائعة</string>
+    <string name="NekoXFaq">أسئلة الشائعة</string>
     <string name="TransSite">ترجمة النظام الأساسي</string>
     <string name="OpenKayChain">عميل OpenPGP</string>
     <string name="OpenPGPApp">موفر OpenPGP</string>

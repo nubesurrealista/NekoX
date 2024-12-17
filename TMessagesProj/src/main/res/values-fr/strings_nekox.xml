@@ -38,7 +38,7 @@
     <string name="TransToLang">Langue cible de la traduction</string>
     <string name="TransInputToLang">Langue source de la traduction</string>
     <string name="More">Plus</string>
-    <string name="NekoXUpdatesChannel">Canal de mise à jour NekoX</string>
+    <string name="NekoXUpdatesChannel">Canal de mise à jour</string>
     <string name="ShowIdAndDc">Afficher ID / DC dans le profil</string>
     <string name="PrivacyNotice">Avertissement de confidentialité</string>
     <string name="PrivacyNoticePhoneVisible">Nous détectons que votre numéro de téléphone est visible par tout le monde, ce qui peut amener les pirates informatiques contrôlés par le gouvernement à trouver votre véritable identité, veuillez désactiver la détection !</string>
@@ -96,7 +96,7 @@
     <string name="ScanQRCode">Scanner le QR Code</string>
     <string name="NoQrFound">Aucun QR Code trouvé</string>
     <string name="DeveloperSettings">Paramètres de développeur</string>
-    <string name="NekoXFaq">FAQ NekoX</string>
+    <string name="NekoXFaq">FAQ</string>
     <string name="TransSite">Platforme de Traduction</string>
     <string name="OpenKayChain">Client OpenPGP</string>
     <string name="OpenPGPApp">Fournisseur OpenPGP</string>

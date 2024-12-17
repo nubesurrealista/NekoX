@@ -105,7 +105,7 @@
     <string name="PrivacyNoticePhoneVisible">O seu número de telemóvel está visível para qualquer pessoa, o que pode fazer com que hackers controlados pelo governo encontrem sua verdadeira identidade. Por favor, desative isso!</string>
     <string name="PrivacyNotice">Aviso de privacidade</string>
     <string name="ShowIdAndDc">Mostrar ID / DC no perfil</string>
-    <string name="NekoXUpdatesChannel">Canal de Atualizações NekoX</string>
+    <string name="NekoXUpdatesChannel">Canal de Atualizações</string>
     <string name="More">Mais</string>
     <string name="TransInputToLang">Idioma de destino para tradução durante a digitação</string>
     <string name="TransToLang">Idioma de destino para tradução</string>

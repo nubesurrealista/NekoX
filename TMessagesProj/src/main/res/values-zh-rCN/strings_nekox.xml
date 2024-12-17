@@ -46,7 +46,7 @@
     <string name="TransToLang">目标翻译语言</string>
     <string name="TransInputToLang">输入翻译目标语言</string>
     <string name="More">更多</string>
-    <string name="NekoXUpdatesChannel">NekoX 更新频道</string>
+    <string name="NekoXUpdatesChannel">更新频道</string>
     <string name="ShowIdAndDc">在个人资料中显示 ID/ DC</string>
     <string name="PrivacyNotice">隐私警告</string>
     <string name="PrivacyNoticePhoneVisible">您的手机号码正对任何人都可见, 这可能会导致政府控制的黑客找到您的真实身份。请关闭它！</string>
@@ -108,7 +108,7 @@
     <string name="ScanQRCode">扫描二维码</string>
     <string name="NoQrFound">未找到二维码</string>
     <string name="DeveloperSettings">开发者设置</string>
-    <string name="NekoXFaq">NekoX 常见问题</string>
+    <string name="NekoXFaq">常见问题</string>
     <string name="TransSite">翻译平台</string>
     <string name="OpenKayChain">OpenPGP 客户端</string>
     <string name="OpenPGPApp">OpenPGP 客户端</string>

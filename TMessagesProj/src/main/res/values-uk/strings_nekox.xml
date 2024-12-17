@@ -46,7 +46,7 @@
     <string name="TransToLang">Переклад на мову</string>
     <string name="TransInputToLang">Переклад із мови</string>
     <string name="More">Більше</string>
-    <string name="NekoXUpdatesChannel">Канал оновлень NekoX</string>
+    <string name="NekoXUpdatesChannel">Канал оновлень</string>
     <string name="ShowIdAndDc">Показати ID / DC в профілі</string>
     <string name="PrivacyNotice">Загроза приватності</string>
     <string name="PrivacyNoticePhoneVisible">Ваш номер телефону загальнодоступний, що спрощує виявлення вашої справжньої особи. Радимо сховати номер!</string>
@@ -108,7 +108,7 @@
     <string name="ScanQRCode">Сканувати QR-код</string>
     <string name="NoQrFound">QR-код не знайдено</string>
     <string name="DeveloperSettings">Параметри розробки</string>
-    <string name="NekoXFaq">Питання NekoX</string>
+    <string name="NekoXFaq">Питання</string>
     <string name="TransSite">Платформа перекладу</string>
     <string name="OpenKayChain">Клієнт OpenPGP</string>
     <string name="OpenPGPApp">Провайдер OpenPGP</string>

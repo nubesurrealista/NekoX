@@ -46,7 +46,7 @@
     <string name="TransToLang">زبان ترجمه مقصد</string>
     <string name="TransInputToLang">زبان ترجمه پیام ورودی</string>
     <string name="More">بیشتر</string>
-    <string name="NekoXUpdatesChannel">کانال بروزرسانی NekoX</string>
+    <string name="NekoXUpdatesChannel">کانال بروزرسانی</string>
     <string name="ShowIdAndDc">نمایش ID / DC در پروفایل کاربر</string>
     <string name="PrivacyNotice">هشدار حریم‌خصوصی</string>
     <string name="PrivacyNoticePhoneVisible">بنظر میاد شماره تلفن شما برای همه قابل مشاهده است، و این ممکن باعث شود که هکرهای دولتی هویت واقعی شما را پیدا کنند. لطفا آن را خاموش کنید!</string>
@@ -108,7 +108,7 @@
     <string name="ScanQRCode">اسکن کد QR</string>
     <string name="NoQrFound">هیچ کد QR یافت نشد</string>
     <string name="DeveloperSettings">تنظیمات توسعه‌دهنده</string>
-    <string name="NekoXFaq">پرسش‌های متداول NekoX</string>
+    <string name="NekoXFaq">پرسش‌های متداول</string>
     <string name="TransSite">پلتفرم ترجمه</string>
     <string name="OpenKayChain">OpenPGP Client</string>
     <string name="OpenPGPApp">OpenPGP Provider</string>

@@ -46,7 +46,7 @@
     <string name="TransToLang">Թարգմանության թիրախային լեզուն</string>
     <string name="TransInputToLang">Թարգմանության մուտքագրման թիրախային լեզուն</string>
     <string name="More">Ավելին</string>
-    <string name="NekoXUpdatesChannel">NekoX- ի թարմացումների ալիք</string>
+    <string name="NekoXUpdatesChannel">թարմացումների ալիք</string>
     <string name="ShowIdAndDc">IDույց տալ ID / DC պրոֆիլում</string>
     <string name="PrivacyNotice">Գաղտնիության զգուշացում</string>
     <string name="PrivacyNoticePhoneVisible">Հայտնաբերվում է, որ ձեր բջջային հեռախոսի համարը տեսանելի է յուրաքանչյուրի համար, ինչը կարող է պատճառ լինել, որ կառավարությունը վերահսկի հակերները գտնեն ձեր իրական ինքնությունը: Խնդրում ենք անջատել այն:</string>
@@ -108,7 +108,7 @@
     <string name="ScanQRCode">Սկան QR կոդ</string>
     <string name="NoQrFound">QR կոդ չի գտնվել</string>
     <string name="DeveloperSettings">Մշակողի կարգավորումներ</string>
-    <string name="NekoXFaq">NekoX ՀՏՀ</string>
+    <string name="NekoXFaq">ՀՏՀ</string>
     <string name="TransSite">Թարգմանել պլատֆորմը</string>
     <string name="OpenKayChain">OpenPGP հաճախորդ</string>
     <string name="OpenPGPApp">OpenPGP մատակարար</string>

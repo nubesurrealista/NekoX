@@ -37,7 +37,7 @@
     <string name="GoogleCloudTransKey">Cheia de traducere ale Google Cloud</string>
     <string name="TransToLang">Limba țintă de traducere</string>
     <string name="More">Mai Mult</string>
-    <string name="NekoXUpdatesChannel">Canalul de actualizări NekoX</string>
+    <string name="NekoXUpdatesChannel">Canalul de actualizări</string>
     <string name="ShowIdAndDc">Afișează ID-ul / DC în profil</string>
     <string name="PrivacyNotice">Avertisment de confidențialitate</string>
     <string name="PrivacyNoticePhoneVisible">S-a detectat că numărul dvs. de telefon mobil este vizibil pentru oricine, ceea ce poate determina hackerii controlați de guvern să vă găsească adevărata identitate, vă rugăm să o dezactivați!</string>
@@ -82,7 +82,7 @@
     <string name="ScanQRCode">Scanați codul QR</string>
     <string name="NoQrFound">Codul QR nu a fost găsit</string>
     <string name="DeveloperSettings">Setări dezvoltator</string>
-    <string name="NekoXFaq">Întrebări frecvente despre NekoX</string>
+    <string name="NekoXFaq">Întrebări frecvente despre</string>
     <string name="TransSite">Platformă de traducere</string>
     <string name="OpenKayChain">Client OpenPGP</string>
     <string name="OpenPGPApp">Furnizor OpenPGP</string>

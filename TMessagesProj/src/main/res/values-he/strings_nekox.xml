@@ -46,7 +46,7 @@
     <string name="TransToLang">שפת יעד לתרגום</string>
     <string name="TransInputToLang">שפת יעד קלט לתרגום</string>
     <string name="More">יותר</string>
-    <string name="NekoXUpdatesChannel">ערוץ עדכוני NekoX</string>
+    <string name="NekoXUpdatesChannel">ערוץ עדכוני</string>
     <string name="ShowIdAndDc">הצג ID / DC בפרופיל</string>
     <string name="PrivacyNotice">אזהרת פרטיות</string>
     <string name="PrivacyNoticePhoneVisible">מגלה שמספר הטלפון הנייד שלך גלוי לכל אחד, מה שעלול לגרום להאקרים שבשליטת הממשלה למצוא את זהותך האמיתית, אנא כבה אותו!</string>
@@ -108,7 +108,7 @@
     <string name="ScanQRCode">סרוק קוד QR</string>
     <string name="NoQrFound">לא נמצא קוד QR</string>
     <string name="DeveloperSettings">הגדרות מפתחים</string>
-    <string name="NekoXFaq">שאלות נפוצות על NekoX</string>
+    <string name="NekoXFaq">שאלות נפוצות על</string>
     <string name="TransSite">תרגם פלטפורמה</string>
     <string name="OpenKayChain">לקוח OpenPGP</string>
     <string name="OpenPGPApp">ספק OpenPGP</string>

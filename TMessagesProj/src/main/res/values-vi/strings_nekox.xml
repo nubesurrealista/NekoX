@@ -46,7 +46,7 @@
     <string name="TransToLang">Dịch ngôn ngữ được chọn</string>
     <string name="TransInputToLang">Dịch ngôn ngữ đầu vào được chọn</string>
     <string name="More">Thêm</string>
-    <string name="NekoXUpdatesChannel">Kênh cập nhật NekoX</string>
+    <string name="NekoXUpdatesChannel">Kênh cập nhật</string>
     <string name="ShowIdAndDc">Hiển thị ID / DC trong hồ sơ</string>
     <string name="PrivacyNotice">Cảnh báo quyền riêng tư</string>
     <string name="PrivacyNoticePhoneVisible">Số điện thoại của bạn được hiển thị cho bất kỳ ai, điều này có thể khiến các tin tặc do chính phủ kiểm soát tìm ra danh tính thật của bạn. Vui lòng tắt nó đi!</string>
@@ -108,7 +108,7 @@
     <string name="ScanQRCode">Quét mã QR</string>
     <string name="NoQrFound">Không tìm thấy mã QR</string>
     <string name="DeveloperSettings">Cài đặt nhà phát triển</string>
-    <string name="NekoXFaq">FAQ NekoX</string>
+    <string name="NekoXFaq">FAQ</string>
     <string name="TransSite">Nền tảng Dịch</string>
     <string name="OpenKayChain">Ứng dụng khách OpenPGP</string>
     <string name="OpenPGPApp">Nhà cung cấp OpenPGP</string>

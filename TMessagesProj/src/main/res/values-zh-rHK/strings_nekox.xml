@@ -37,7 +37,7 @@
     <string name="TransToLang">翻譯目標語言</string>
     <string name="TransInputToLang">翻譯輸入目標語言</string>
     <string name="More">更多</string>
-    <string name="NekoXUpdatesChannel">NekoX 更新頻道</string>
+    <string name="NekoXUpdatesChannel">更新頻道</string>
     <string name="ShowIdAndDc">在個人資料中顯示ID / DC</string>
     <string name="PrivacyNotice">隱私警告</string>
     <string name="PrivacyNoticePhoneVisible">檢測到您的手機號碼對任何人都可見, 這可能會導致政府控制的黑客找到您的真實身份，請關閉它！</string>
@@ -99,7 +99,7 @@
     <string name="ScanQRCode">扫描二维码</string>
     <string name="NoQrFound">未找到二維碼</string>
     <string name="DeveloperSettings">開發人員設定</string>
-    <string name="NekoXFaq">NekoX 常見問題</string>
+    <string name="NekoXFaq">常見問題</string>
     <string name="TransSite">翻譯平台</string>
     <string name="OpenKayChain">OpenPGP 客戶端</string>
     <string name="OpenPGPApp">OpenPGP 客戶端</string>

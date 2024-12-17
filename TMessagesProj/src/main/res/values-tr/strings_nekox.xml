@@ -46,7 +46,7 @@
     <string name="TransToLang">Çeviri Hedef Dili</string>
     <string name="TransInputToLang">Çeviri Girişi Hedef Dili</string>
     <string name="More">Daha</string>
-    <string name="NekoXUpdatesChannel">NekoX Güncellemeleri Kanalı</string>
+    <string name="NekoXUpdatesChannel">Güncellemeleri Kanalı</string>
     <string name="ShowIdAndDc">Profilde ID / DC Değerlerini Göster</string>
     <string name="PrivacyNotice">Gizlilik uyarısı</string>
     <string name="PrivacyNoticePhoneVisible">Cep telefonu numaranızın herkes tarafından görülebildiği tespit edildi. Bu ayar, devlet adına çalışan hackerların gerçek kimliğinizi bulmasına neden olabilir, lütfen kapatın!</string>
@@ -108,7 +108,7 @@
     <string name="ScanQRCode">QR Kodu Tara</string>
     <string name="NoQrFound">QR Kod bulunamadı</string>
     <string name="DeveloperSettings">Geliştirici Ayarları</string>
-    <string name="NekoXFaq">NekoX SSS</string>
+    <string name="NekoXFaq">SSS</string>
     <string name="TransSite">Çeviri Platformu</string>
     <string name="OpenKayChain">OpenPGP İstemcisi</string>
     <string name="OpenPGPApp">OpenPGP Sağlayıcısı</string>

@@ -46,7 +46,7 @@
     <string name="TransToLang">Язык перевода</string>
     <string name="TransInputToLang">Переводить с</string>
     <string name="More">Ещё</string>
-    <string name="NekoXUpdatesChannel">Канал обновлений NekoX</string>
+    <string name="NekoXUpdatesChannel">Канал обновлений</string>
     <string name="ShowIdAndDc">Отображать ID и DC в профиле</string>
     <string name="PrivacyNotice">Предупреждение</string>
     <string name="PrivacyNoticePhoneVisible">Номер вашего мобильного телефона виден всем, что позволяет хакерам узнать вашу истинную личность. Пожалуйста, отключите его!</string>
@@ -108,7 +108,7 @@
     <string name="ScanQRCode">Сканировать QR-код</string>
     <string name="NoQrFound">QR-код не обнаружен</string>
     <string name="DeveloperSettings">Настройки разработчика</string>
-    <string name="NekoXFaq">ЧаВО NekoX (EN/CH)</string>
+    <string name="NekoXFaq">ЧаВО</string>
     <string name="TransSite">Платформа переводов</string>
     <string name="OpenKayChain">OpenPGP</string>
     <string name="OpenPGPApp">Провайдер OpenPGP</string>

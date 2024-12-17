@@ -46,7 +46,7 @@
     <string name="TransToLang">翻訳対象言語</string>
     <string name="TransInputToLang">翻訳入力対象言語</string>
     <string name="More">もっと見る</string>
-    <string name="NekoXUpdatesChannel">NekoX アップデートチャンネル</string>
+    <string name="NekoXUpdatesChannel">アップデートチャンネル</string>
     <string name="ShowIdAndDc">プロファイルにID / DCを表示</string>
     <string name="PrivacyNotice">プライバシー警告</string>
     <string name="PrivacyNoticePhoneVisible">あなたの携帯電話番号が誰にでも見えることが検出されました。これにより、政府の管理下にあるハッカーがあなたの本当の身元を突き止める可能性があります。オフにしてください。</string>
@@ -108,7 +108,7 @@
     <string name="ScanQRCode">QRコードをスキャン</string>
     <string name="NoQrFound">QRコードが見つかりません</string>
     <string name="DeveloperSettings">開発者設定</string>
-    <string name="NekoXFaq">NekoX FAQ</string>
+    <string name="NekoXFaq">FAQ</string>
     <string name="TransSite">翻訳プラットフォーム</string>
     <string name="OpenKayChain">OpenPGP クライアント</string>
     <string name="OpenPGPApp">OpenPGPプロバイダー</string>

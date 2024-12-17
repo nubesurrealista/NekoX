@@ -46,7 +46,7 @@
     <string name="TransToLang">번역할 언어</string>
     <string name="TransInputToLang">번역 입력할 언어</string>
     <string name="More">더 보기</string>
-    <string name="NekoXUpdatesChannel">NekoX 업데이트 채널</string>
+    <string name="NekoXUpdatesChannel">업데이트 채널</string>
     <string name="ShowIdAndDc">프로필에 ID / DC 표시</string>
     <string name="PrivacyNotice">개인 정보 경고</string>
     <string name="PrivacyNoticePhoneVisible">사용자의 휴대 전화 번호가 공개 설정 되어 있습니다. 정부에서 관리하는 해커가 신원을 확인 할 수 있습니다. 비공개로 전환해 주세요!</string>
@@ -108,7 +108,7 @@
     <string name="ScanQRCode">QR 코드 스캔</string>
     <string name="NoQrFound">QR 코드를 찾을 수 없습니다</string>
     <string name="DeveloperSettings">개발자 설정</string>
-    <string name="NekoXFaq">NekoX 자주하는 질문</string>
+    <string name="NekoXFaq">자주하는 질문</string>
     <string name="TransSite">플랫폼 번역</string>
     <string name="OpenKayChain">OpenPGP 클라이언트</string>
     <string name="OpenPGPApp">OpenPGP 제공자</string>

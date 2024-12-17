@@ -46,7 +46,7 @@
     <string name="TransToLang">Tərcümə hədəf dili</string>
     <string name="TransInputToLang">Tərcümə giriş hədəf dili</string>
     <string name="More">Daha çox</string>
-    <string name="NekoXUpdatesChannel">NekoX Kanalını Yeniləyir</string>
+    <string name="NekoXUpdatesChannel">Kanalını Yeniləyir</string>
     <string name="ShowIdAndDc">Profildə ID / DC göstərin</string>
     <string name="PrivacyNotice">Məxfilik xəbərdarlığı</string>
     <string name="PrivacyNoticePhoneVisible">Mobil telefon nömrənizin hər kəsə göründüyü aşkar edildi, bu da hökumət tərəfindən idarə olunan hakerlərin əsl kimliyinizi tapmasına səbəb ola bilər, xahiş edirəm onu söndürün!</string>
@@ -108,7 +108,7 @@
     <string name="ScanQRCode">QR kodunu skan edin</string>
     <string name="NoQrFound">QR kodu tapılmadı</string>
     <string name="DeveloperSettings">Developer Ayarları</string>
-    <string name="NekoXFaq">NekoX ilə bağlı suallar</string>
+    <string name="NekoXFaq">ilə bağlı suallar</string>
     <string name="TransSite">Tərcümə Platforması</string>
     <string name="OpenKayChain">OpenPGP Müştəri</string>
     <string name="OpenPGPApp">OpenPGP Təminatçısı</string>

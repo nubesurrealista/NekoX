@@ -44,7 +44,7 @@
     <string name="TransToLang">Tujuan bahasa ingin di terjemahkan</string>
     <string name="TransInputToLang">Asal bahasa yg ingin di terjemahkan</string>
     <string name="More">Lainnya</string>
-    <string name="NekoXUpdatesChannel">Kanal Pembaruan NekoX</string>
+    <string name="NekoXUpdatesChannel">Kanal Pembaruan</string>
     <string name="ShowIdAndDc">Tampilkan ID / DC di profil</string>
     <string name="PrivacyNotice">Hal privasi</string>
     <string name="PrivacyNoticePhoneVisible">Terdeteksi bahwa nomor ponsel anda bisa dilihat oleh siapa pun, yang bisa di retas oleh Hacker suruhan pemerintah sehingga dengan mudah menemukan identitas asli anda, harap matikan saja!</string>
@@ -106,7 +106,7 @@
     <string name="ScanQRCode">Pindai Kode QR</string>
     <string name="NoQrFound">Kode QR tidak ditemukan</string>
     <string name="DeveloperSettings">Pengaturan Pengembang</string>
-    <string name="NekoXFaq">FAQ NekoX</string>
+    <string name="NekoXFaq">FAQ</string>
     <string name="TransSite">Platform Penterjemah</string>
     <string name="OpenKayChain">Klien OpenPGP</string>
     <string name="OpenPGPApp">Penyedia OpenPGP</string>
