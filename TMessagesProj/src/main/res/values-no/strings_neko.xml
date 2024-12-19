@@ -9,7 +9,7 @@
     <string name="UseMediaStreamInVoip">Bruk mediastrøm i VoIP</string>
     <string name="BotLogin">Bott-innlogging</string>
     <string name="Repeat">Gjenta</string>
-    <string name="NekogramRunning">NekogramX kjører</string>
+    <string name="NekogramRunning">Momogram kjører</string>
     <string name="Valentine">Valentinsdagen</string>
     <string name="Snowflakes">Snøflak</string>
     <string name="FirstLast">Første sist</string>
@@ -41,7 +41,7 @@
     <string name="ConfirmAVMessage">Bekreft forsendelse av video/lydmelding</string>
     <string name="AskBeforeCalling">Spør før anrop</string>
     <string name="ConfirmCall">Bekreft anrop</string>
-    <string name="CallTo">Ring **%1$s**\?</string>
+    <string name="CallTo">Ring **%1$s**?</string>
     <string name="Categories">Kategorier</string>
     <string name="OfficialChannel">Offisiell kanal</string>
     <string name="About">Om</string>
@@ -117,7 +117,7 @@
     <string name="AutoPauseVideo">Sett video på pause automatisk</string>
     <string name="AutoPauseVideoAbout">Ved låseskjerm/bytte til bakgrunn.</string>
     <string name="IncreaseVoiceMessageQuality">Øk talemeldingskvalitet</string>
-    <string name="IgnoreBlockedAbout">Du vil ikke lenger kunne lese meldinger fra blokkerte brukere i grupper.</string>
+    <string name="IgnoreBlockedAbout">DET ER IKKE EGENTLIG GJUL! Meldinger er fortsatt tilgjengelige for visning, men meldinger vil bli konvertert til Spoiler.</string>
     <string name="DisableAppBarShadow">Skru av tittellinje-skygge</string>
     <string name="DisableProximityEvents">Skru av nærhets-hendelser</string>
     <string name="customSavePathHint">La stå tomt for å lagre direkte</string>

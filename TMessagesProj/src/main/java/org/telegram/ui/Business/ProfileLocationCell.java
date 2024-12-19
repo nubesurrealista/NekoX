@@ -88,12 +88,8 @@ public class ProfileLocationCell extends LinearLayout {
         if (value != null) {
             textView1.setText(value.address);
             if (value.geo_point != null) {
-//<<<<<<< HEAD
-//                imageReceiver.setImage(AndroidUtilities.formapMapUrl(false, value.geo_point.lat, value.geo_point._long, dp(44), dp(44), false, 15), "44_44", thumbDrawable, null, 0);
-//=======
                 final int scale = Math.min(2, (int) Math.ceil(AndroidUtilities.density));
                 imageReceiver.setImage(ImageLocation.getForWebFile(WebFile.createWithGeoPoint(value.geo_point, dp(44), dp(44), 15, scale)), "44_44", thumbDrawable, 0, null, null, 0);
-//>>>>>>> 3a822b15f (update to 10.10.0 (4571))
             } else {
                 imageReceiver.setImageBitmap((Drawable) null);
             }

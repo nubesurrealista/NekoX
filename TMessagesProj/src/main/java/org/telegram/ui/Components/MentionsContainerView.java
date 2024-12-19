@@ -103,9 +103,11 @@ public class MentionsContainerView extends BlurredFrameLayout implements Notific
 
             @Override
             protected Size getSizeForItem(int i) {
+                size.full = false;
                 if (i == 0) {
                     size.width = getWidth();
                     size.height = paddedAdapter.getPadding();
+                    size.full = true;
                     return size;
                 } else {
                     i--;
@@ -162,9 +164,9 @@ public class MentionsContainerView extends BlurredFrameLayout implements Notific
             @Override
             protected int getFlowItemCount() {
                 if (adapter.getBotContextSwitch() != null || adapter.getBotWebViewSwitch() != null) {
-                    return getItemCount() - 2;
+                    return getItemCount() - 1;
                 }
-                return super.getFlowItemCount() - 1;
+                return super.getFlowItemCount();
             }
         };
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -181,6 +183,7 @@ public class MentionsContainerView extends BlurredFrameLayout implements Notific
                 } else if (object instanceof TLRPC.Document) {
                     return 20;
                 } else {
+                    position++;
                     if (adapter.getBotContextSwitch() != null || adapter.getBotWebViewSwitch() != null) {
                         position--;
                     }
@@ -238,7 +241,7 @@ public class MentionsContainerView extends BlurredFrameLayout implements Notific
                 MentionsContainerView.this.onContextClick(result);
             }
 
-        }, resourcesProvider);
+        }, resourcesProvider, isStories());
         paddedAdapter = new PaddedListAdapter(adapter);
         listView.setAdapter(paddedAdapter);
 
@@ -608,6 +611,17 @@ public class MentionsContainerView extends BlurredFrameLayout implements Notific
             Object object = getAdapter().getItem(position);
             int start = getAdapter().getResultStartPosition();
             int len = getAdapter().getResultLength();
+            if (getAdapter().isLocalHashtagHint(position)) {
+                TLRPC.Chat currentChat = getAdapter().chat;
+                if (currentChat == null && getAdapter().parentFragment != null) {
+                    currentChat = getAdapter().parentFragment.getCurrentChat();
+                }
+                delegate.replaceText(start, len, getAdapter().getHashtagHint() + (currentChat != null ? "@" + ChatObject.getPublicUsername(currentChat) : "") + " ", false);
+                return;
+            } else if (getAdapter().isGlobalHashtagHint(position)) {
+                delegate.replaceText(start, len, getAdapter().getHashtagHint() + " ", false);
+                return;
+            }
             if (object instanceof TLRPC.TL_document) {
                 MessageObject.SendAnimationData sendAnimationData = null;
                 if (view instanceof StickerCell) {
@@ -723,7 +737,6 @@ public class MentionsContainerView extends BlurredFrameLayout implements Notific
                         if (position == 0) {
                             return;
                         }
-                        position--;
                         if (adapter.isStickers()) {
                             return;
                         } else if (adapter.getBotContextSwitch() != null || adapter.getBotWebViewSwitch() != null) {
@@ -894,6 +907,10 @@ public class MentionsContainerView extends BlurredFrameLayout implements Notific
                 }
             });
         }
+    }
+
+    protected boolean isStories() {
+        return false;
     }
 
 }

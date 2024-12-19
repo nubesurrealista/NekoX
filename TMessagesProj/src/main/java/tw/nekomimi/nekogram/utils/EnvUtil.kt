@@ -7,6 +7,8 @@ import android.os.storage.StorageManager
 import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.FileLog
+import org.telegram.messenger.LocaleController
+import org.telegram.messenger.R
 import tw.nekomimi.nekogram.NekoConfig
 import java.io.File
 import java.util.*
@@ -41,7 +43,7 @@ object EnvUtil {
             }
 
             if (Build.VERSION.SDK_INT < 30) {
-                add(Environment.getExternalStoragePublicDirectory("NekoX"))
+                add(Environment.getExternalStoragePublicDirectory(StrUtil.getShortAppName()))
             }
 
         }.map { it.path }.toTypedArray()
@@ -49,16 +51,17 @@ object EnvUtil {
     // This is the only media path of NekoX, don't use other!
     @JvmStatic
     fun getTelegramPath(): File {
+        var defaultIndex = if (availableDirectories.size > 3) 2 else 0
 
         if (NekoConfig.cachePath.String() == "") {
             // https://github.com/NekoX-Dev/NekoX/issues/284
-            NekoConfig.cachePath.setConfigString(availableDirectories[2]);
+            NekoConfig.cachePath.setConfigString(availableDirectories[defaultIndex]);
         }
         var telegramPath = File(NekoConfig.cachePath.String())
         if (telegramPath.isDirectory || telegramPath.mkdirs()) {
             return telegramPath
         } else {
-            NekoConfig.cachePath.setConfigString(availableDirectories[2])
+            NekoConfig.cachePath.setConfigString(availableDirectories[defaultIndex])
         }
 
         // fallback
@@ -77,6 +80,19 @@ object EnvUtil {
 
         return telegramPath;
 
+    }
+
+    @JvmStatic
+    var isWaydroid: Boolean? = null
+
+    @JvmStatic
+    fun checkIsWaydroid(): Boolean {
+        if (isWaydroid != null) return isWaydroid!!
+
+        val waydroidToolsVersion = AndroidUtilities.getSystemProperty("waydroid.tools_version")
+        val fingerprint = AndroidUtilities.getSystemProperty("ro.build.fingerprint")
+        isWaydroid = waydroidToolsVersion != null || fingerprint.contains("waydroid")
+        return isWaydroid!!
     }
 
     @JvmStatic

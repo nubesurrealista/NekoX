@@ -1,13 +1,13 @@
 package tw.nekomimi.nekogram.utils;
 
 
-import android.util.Log;
-
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 
+import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
 
@@ -58,7 +58,7 @@ public class TelegramUtil {
                     Thread.sleep(1000);
                     suc = true;
                 } catch (InterruptedException e) {
-                    Log.w("030-conn", "interrupted");
+                    FileLog.w("sleep in proxy toggle hack was interrupted");
                     if (!isConnecting())
                         return;
                 }
@@ -87,5 +87,11 @@ public class TelegramUtil {
         else if (!isConnecting()) return;
         toggleProxyOnOffThread = new Thread(toggleProxyOnOffRunnable);
         toggleProxyOnOffThread.start();
+    }
+
+    public static String getStackTraceAsString(StackTraceElement[] stackTrace) {
+        StackTraceElement[] st = (stackTrace == null) ?
+                Arrays.stream(Thread.currentThread().getStackTrace()).skip(3).toArray(StackTraceElement[]::new) : stackTrace;
+        return Arrays.toString(st);
     }
 }

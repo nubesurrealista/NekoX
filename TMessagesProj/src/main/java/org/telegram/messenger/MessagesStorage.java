@@ -35,15 +35,18 @@ import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLiteException;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.support.LongSparseIntArray;
+import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.tl.TL_bots;
 import org.telegram.tgnet.tl.TL_stories;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.DialogsSearchAdapter;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble;
+import org.telegram.ui.Components.VideoPlayer;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.EditWidgetActivity;
 
@@ -91,6 +94,8 @@ public class MessagesStorage extends BaseController {
     private int lastSavedDate = 0;
     private int lastSavedQts = 0;
 
+    private int classGuid;
+
     private ArrayList<MessagesController.DialogFilter> dialogFilters = new ArrayList<>();
     private SparseArray<MessagesController.DialogFilter> dialogFiltersMap = new SparseArray<>();
     private LongSparseArray<Boolean> unknownDialogsIds = new LongSparseArray<>();
@@ -105,7 +110,7 @@ public class MessagesStorage extends BaseController {
     private static SparseArray<MessagesStorage> Instance = new SparseArray();
     private static final Object lockObject = new Object();
 
-    public final static int LAST_DB_VERSION = 155;
+    public final static int LAST_DB_VERSION = 159;
     private boolean databaseMigrationInProgress;
     public boolean showClearDatabaseAlert;
     private LongSparseIntArray dialogIsForum = new LongSparseIntArray();
@@ -215,6 +220,7 @@ public class MessagesStorage extends BaseController {
         storageQueue = new DispatchQueue("storageQueue_" + instance);
         storageQueue.setPriority(8);
         storageQueue.postRunnable(() -> openDatabase(1));
+        classGuid = ConnectionsManager.generateClassGuid();
     }
 
     public SQLiteDatabase getDatabase() {
@@ -725,6 +731,9 @@ public class MessagesStorage extends BaseController {
 
         database.executeFast("CREATE TABLE business_links(data BLOB, order_value INTEGER);").stepThis().dispose();
         database.executeFast("CREATE TABLE fact_checks(hash INTEGER PRIMARY KEY, data BLOB, expires INTEGER);").stepThis().dispose();
+        database.executeFast("CREATE TABLE popular_bots(uid INTEGER PRIMARY KEY, time INTEGER, offset TEXT);").stepThis().dispose();
+
+        database.executeFast("CREATE TABLE star_gifts2(id INTEGER PRIMARY KEY, data BLOB, hash INTEGER, time INTEGER, pos INTEGER);").stepThis().dispose();
 
         database.executeFast("PRAGMA user_version = " + MessagesStorage.LAST_DB_VERSION).stepThis().dispose();
 
@@ -1410,6 +1419,8 @@ public class MessagesStorage extends BaseController {
                 database.executeFast("DELETE FROM business_replies").stepThis().dispose();
                 database.executeFast("DELETE FROM quick_replies_messages").stepThis().dispose();
                 database.executeFast("DELETE FROM effects").stepThis().dispose();
+                database.executeFast("DELETE FROM app_config").stepThis().dispose();
+                database.executeFast("DELETE FROM star_gifts2").stepThis().dispose();
 
 
                 cursor = database.queryFinalized("SELECT did FROM dialogs WHERE 1");
@@ -2189,6 +2200,9 @@ public class MessagesStorage extends BaseController {
                     for (int a = 0; a < dialogs.size(); a++) {
                         long did = dialogs.keyAt(a);
                         ReadDialog dialog = dialogs.valueAt(a);
+                        if (getMessagesController().isForum(did)) {
+                            getMessagesController().markAllTopicsAsRead(did);
+                        }
                         getMessagesController().markDialogAsRead(did, dialog.lastMid, dialog.lastMid, dialog.date, false, 0, dialog.unreadCount, true, 0);
                     }
                 });
@@ -3003,10 +3017,16 @@ public class MessagesStorage extends BaseController {
             state.bindInteger(3, filter.unreadCount);
             state.bindInteger(4, filter.flags);
             state.bindString(5, filter.id == 0 ? "ALL_CHATS" : filter.name);
-            if (filter.emoticon != null) {
-                state.bindString(6, filter.emoticon);
+            String emoticon = dialogFilters.get(dialogFilters.indexOf(filter)).emoticon;
+            if (NekoConfig.ignoreFilterEmoticonUpdate.Bool()) {
+                if (emoticon != null) state.bindString(6, emoticon);
+                else state.bindNull(6);
             } else {
-                state.bindNull(6);
+                if (filter.emoticon != null) {
+                    state.bindString(6, filter.emoticon);
+                } else {
+                    state.bindNull(6);
+                }
             }
             state.bindInteger(7, filter.color);
             state.step();
@@ -3148,7 +3168,7 @@ public class MessagesStorage extends BaseController {
                             changed = true;
                             filter.name = newFilter.title;
                         }
-                        if (!TextUtils.equals(filter.emoticon, newFilter.emoticon)) {
+                        if (!NekoConfig.ignoreFilterEmoticonUpdate.Bool() && !TextUtils.equals(filter.emoticon, newFilter.emoticon)) {
                             changed = true;
                             filter.emoticon = newFilter.emoticon;
                         }
@@ -7477,7 +7497,7 @@ public class MessagesStorage extends BaseController {
                 cursor.dispose();
                 cursor = null;
                 for (int a = 0; a < info.bot_info.size(); a++) {
-                    TLRPC.BotInfo botInfo = info.bot_info.get(a);
+                    TL_bots.BotInfo botInfo = info.bot_info.get(a);
                     usersToLoad.add(botInfo.user_id);
                 }
             }
@@ -8306,7 +8326,7 @@ public class MessagesStorage extends BaseController {
         });
     }
 
-    public Runnable getMessagesInternal(long dialogId, long mergeDialogId, int count, int max_id, int offset_date, int minDate, int classGuid, int load_type, int mode, long threadMessageId, int loadIndex, boolean processMessages, boolean isTopic, MessageLoaderLogger loaderLogger) {
+    public Runnable getMessagesInternal(long dialogId, long mergeDialogId, int count, int max_id, int offset_date, int minDate, int classGuid, int load_type, int mode, long threadMessageId, int loadIndex, boolean processMessages, boolean isTopic, Timer loaderLogger) {
         TLRPC.TL_messages_messages res = new TLRPC.TL_messages_messages();
         long currentUserId = getUserConfig().clientUserId;
         int count_unread = 0;
@@ -9291,19 +9311,16 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    public void getMessages(long dialogId, long mergeDialogId, boolean loadInfo, int count, int max_id, int offset_date, int minDate, int classGuid, int load_type, int mode, long replyMessageId, int loadIndex, boolean processMessages, boolean isTopic, MessageLoaderLogger loaderLogger) {
+    public void getMessages(long dialogId, long mergeDialogId, boolean loadInfo, int count, int max_id, int offset_date, int minDate, int classGuid, int load_type, int mode, long replyMessageId, int loadIndex, boolean processMessages, boolean isTopic, Timer loaderLogger) {
+        Timer.Task t1 = Timer.start(loaderLogger, "MessagesStorage.getMessages: storageQueue.postRunnable");
         storageQueue.postRunnable(() -> {
-            if (loaderLogger != null) {
-                loaderLogger.logStorageQueuePost();
-            }
+            Timer.done(t1);
+            Timer.Task t2 = Timer.start(loaderLogger, "MessagesStorage.getMessages");
             Runnable processMessagesRunnable = getMessagesInternal(dialogId, mergeDialogId, count, max_id, offset_date, minDate, classGuid, load_type, mode, replyMessageId, loadIndex, processMessages, isTopic, loaderLogger);
-            if (loaderLogger != null) {
-                loaderLogger.logStorageProccessing();
-            }
+            Timer.done(t2);
+            Timer.Task t3 = Timer.start(loaderLogger, "MessagesStorage.getMessages: stageQueue.postRunnable");
             Utilities.stageQueue.postRunnable(() -> {
-                if (loaderLogger != null) {
-                    loaderLogger.logStageQueuePost();
-                }
+                Timer.done(t3);
                 processMessagesRunnable.run();
             });
         });
@@ -11945,12 +11962,20 @@ public class MessagesStorage extends BaseController {
                     }
                     data.reuse();
 
-                    if (downloadMask != 0 && (message.peer_id.channel_id == 0 || message.post) && message.date >= getConnectionsManager().getCurrentTime() - 60 * 60 && getDownloadController().canDownloadMedia(message) == 1) {
-                        if (message.media instanceof TLRPC.TL_messageMediaPhoto || message.media instanceof TLRPC.TL_messageMediaDocument || message.media instanceof TLRPC.TL_messageMediaWebPage) {
+                    if (downloadMask != 0 && (message.peer_id.channel_id == 0 || message.post) && message.date >= getConnectionsManager().getCurrentTime() - 15 * 60 && getDownloadController().canDownloadMedia(message) == 1) {
+                        final long dialogId = MessageObject.getDialogId(message);
+                        if (getDialogFolderIdInternal(dialogId) != 1 && (message.media instanceof TLRPC.TL_messageMediaPhoto || message.media instanceof TLRPC.TL_messageMediaDocument || message.media instanceof TLRPC.TL_messageMediaWebPage)) {
                             int type = 0;
                             long id = 0;
                             TLRPC.MessageMedia object = null;
                             TLRPC.Document document = MessageObject.getDocument(message);
+                            ArrayList<VideoPlayer.Quality> qualities = VideoPlayer.getQualities(currentAccount, message.media);
+                            if (qualities != null) {
+                                VideoPlayer.VideoUri v = VideoPlayer.getQualityForThumb(qualities);
+                                if (v != null) {
+                                    document = v.document;
+                                }
+                            }
                             TLRPC.Photo photo = MessageObject.getPhoto(message);
                             if (MessageObject.isVoiceMessage(message)) {
                                 id = document.id;
@@ -14842,6 +14867,13 @@ public class MessagesStorage extends BaseController {
                                         sameMedia = oldMessage.media.photo.id == message.media.photo.id;
                                     } else if (oldMessage.media instanceof TLRPC.TL_messageMediaDocument && message.media instanceof TLRPC.TL_messageMediaDocument && oldMessage.media.document != null && message.media.document != null) {
                                         sameMedia = oldMessage.media.document.id == message.media.document.id;
+                                    } else if (MessageObject.getPhoto(oldMessage) != null && MessageObject.getPhoto(message) != null) {
+                                        sameMedia = MessageObject.getPhoto(oldMessage).id == MessageObject.getPhoto(message).id;
+                                    } else if (MessageObject.getDocument(oldMessage) != null && MessageObject.getDocument(message) != null) {
+                                        sameMedia = MessageObject.getDocument(oldMessage).id == MessageObject.getDocument(message).id;
+                                    }
+                                    if (oldMessage.out && !message.out) {
+                                        message.out = oldMessage.out;
                                     }
                                     if (!sameMedia) {
                                         addFilesToDelete(oldMessage, filesToDelete, idsToDelete, namesToDelete, false);
@@ -15383,6 +15415,14 @@ public class MessagesStorage extends BaseController {
                     if (!chatsToLoad.contains(-peerId)) {
                         chatsToLoad.add(-peerId);
                     }
+                }
+            }
+        }
+        if (message.reactions != null && message.reactions.top_reactors != null) {
+            for (int i = 0; i < message.reactions.top_reactors.size(); ++i) {
+                final TLRPC.MessageReactor reactor = message.reactions.top_reactors.get(i);
+                if (reactor != null && reactor.peer_id != null) {
+                    addLoadPeerInfo(reactor.peer_id, usersToLoad, chatsToLoad);
                 }
             }
         }
@@ -16119,14 +16159,54 @@ public class MessagesStorage extends BaseController {
 
         if (autoArchiveAndMute) {
             for (long did : toArchiveAndMute) {
-                ArrayList<Long> list = new ArrayList<>();
-                list.add(did);
-                AndroidUtilities.runOnUIThread(() -> {
-                    getMessagesController().addDialogToFolder(list, 1, -1, null, 0);
-                    getNotificationsController().setDialogNotificationsSettings(did, 0, NotificationsController.SETTING_MUTE_FOREVER);
+                getStorageQueue().postRunnable(() -> {
+                    TLRPC.User currentUser = getUserSync(did);
+                    if (currentUser.bot) return; // bots can't send first msg
+                    final ArrayList<Long> list = new ArrayList<>(1);
+                    list.add(did);
+                    if (NekoConfig.autoArchiveAndMuteNoCommonGroupOnly.Bool()) {
+                        getMessagesController().loadFullUser(currentUser, classGuid, true, userFull -> {
+                            if (userFull != null && userFull.common_chats_count > 0) return;
+                            AndroidUtilities.runOnUIThread(() -> {
+                                getMessagesController().addDialogToFolder(list, 1, -1, null, 0);
+                                getNotificationsController().setDialogNotificationsSettings(did, 0, NotificationsController.SETTING_MUTE_FOREVER);
+                            });
+                        });
+                    } else {
+                        AndroidUtilities.runOnUIThread(() -> {
+                            getMessagesController().addDialogToFolder(list, 1, -1, null, 0);
+                            getNotificationsController().setDialogNotificationsSettings(did, 0, NotificationsController.SETTING_MUTE_FOREVER);
+                        });
+                    }
                 });
             }
         }
+    }
+
+    private int getDialogFolderIdInternal(long dialogId) {
+        SQLiteCursor cursor = null;
+        try {
+            int folderId;
+            if (unknownDialogsIds.get(dialogId) != null) {
+                folderId = -1;
+            } else {
+                cursor = database.queryFinalized("SELECT folder_id FROM dialogs WHERE did = ?", dialogId);
+                if (cursor.next()) {
+                    folderId = cursor.intValue(0);
+                } else {
+                    folderId = -1;
+                }
+                cursor.dispose();
+            }
+            return folderId;
+        } catch (Exception e) {
+            checkSQLException(e);
+        } finally {
+            if (cursor != null) {
+                cursor.dispose();
+            }
+        }
+        return 0;
     }
 
     public void getDialogFolderId(long dialogId, IntCallback callback) {
@@ -16658,9 +16738,9 @@ public class MessagesStorage extends BaseController {
             if (TextUtils.isEmpty(search1)) {
                 return;
             }
-            String savedMessages = LocaleController.getString("SavedMessages", R.string.SavedMessages).toLowerCase();
+            String savedMessages = LocaleController.getString(R.string.SavedMessages).toLowerCase();
             String savedMessages2 = "saved messages";
-            String replies = LocaleController.getString("RepliesTitle", R.string.RepliesTitle).toLowerCase();
+            String replies = LocaleController.getString(R.string.RepliesTitle).toLowerCase();
             String replies2 = "replies";
             String search2 = LocaleController.getInstance().getTranslitString(search1);
             if (search1.equals(search2) || search2.length() == 0) {
@@ -16740,7 +16820,7 @@ public class MessagesStorage extends BaseController {
                 if (user != null) {
                     DialogsSearchAdapter.DialogSearchResult dialogSearchResult = new DialogsSearchAdapter.DialogSearchResult();
                     dialogSearchResult.date = Integer.MAX_VALUE;
-                    dialogSearchResult.name = LocaleController.getString("RepliesTitle", R.string.RepliesTitle);
+                    dialogSearchResult.name = LocaleController.getString(R.string.RepliesTitle);
                     dialogSearchResult.object = user;
                     dialogsResult.put(user.id, dialogSearchResult);
                     resultCount++;

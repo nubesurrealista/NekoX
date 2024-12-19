@@ -3,10 +3,8 @@
 package tw.nekomimi.nekogram.utils
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -16,31 +14,20 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Build
 import android.os.Environment
-import android.util.Base64
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.view.setPadding
-import com.github.shadowsocks.plugin.PluginOptions
 import com.google.zxing.*
 import com.google.zxing.common.GlobalHistogramBinarizer
 import com.google.zxing.qrcode.QRCodeReader
 import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
-import com.v2ray.ang.V2RayConfig.SS_PROTOCOL
-import com.v2ray.ang.V2RayConfig.WSS_PROTOCOL
-import com.v2ray.ang.V2RayConfig.WS_PROTOCOL
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import org.json.JSONArray
-import org.json.JSONException
 import org.telegram.messenger.*
 import org.telegram.messenger.browser.Browser
-import org.yaml.snakeyaml.Yaml
-import tw.nekomimi.nekogram.proxy.ShadowsocksLoader
-import tw.nekomimi.nekogram.proxynext.ProxyConfig
-import tw.nekomimi.nekogram.proxynext.ShadowsocksBean
 import tw.nekomimi.nekogram.ui.BottomBuilder
 import tw.nekomimi.nekogram.utils.AlertUtil.showToast
 import java.io.File
@@ -48,169 +35,25 @@ import java.util.*
 
 
 object ProxyUtil {
-    @SuppressLint("NewApi")
-    @JvmStatic
-    @JvmOverloads
-    fun parseProxies(text: String, tryDecode: Boolean = true): MutableList<String> {
-
-        if (tryDecode && !text.contains("proxies:")) {
-            try {
-                return parseProxies(String(Base64.decode(text, Base64.NO_PADDING)), false)
-            } catch (ignored: Exception) {
-            }
-        }
-
-        val proxies = mutableListOf<String>()
-
-        try {
-            // sip008
-            val ssArray = JSONArray(text)
-            for (index in 0 until ssArray.length()) {
-                proxies.add(ShadowsocksLoader.Bean.parseJson(ssArray.getJSONObject(index)).toString())
-            }
-            return proxies
-        } catch (ignored: JSONException) {
-        }
-
-        if (text.contains("proxies:")) {
-            // clash
-
-            val yamlProxies = Yaml().loadAs(text, Map::class.java)["proxies"] as List<Map<String, Any?>>
-            for (proxy in yamlProxies) {
-                runCatching {
-                    when (proxy["type"] as String) {
-                        "ss" -> {
-                            var pluginStr = ""
-                            if (proxy.contains("plugin")) {
-                                val opts = PluginOptions()
-                                opts.id = proxy["plugin"] as String
-                                opts.putAll(proxy["plugin-opts"] as Map<String, String?>)
-                                pluginStr = opts.toString(false)
-                            }
-                            proxies.add(
-                                    ShadowsocksLoader.Bean(
-                                            proxy["server"] as String,
-                                            proxy["port"] as Int,
-                                            proxy["password"] as String,
-                                            proxy["cipher"] as String,
-                                            pluginStr,
-                                            proxy["name"] as String
-                                    ).toString())
-                        }
-                        else -> {
-                            // ignored
-                        }
-                    }
-                }
-            }
-            return proxies
-        }
-
-        text.split('\n').map { it.split(" ") }.forEach {
-
-            it.forEach { line ->
-
-                if (line.startsWith("tg://proxy") ||
-                        line.startsWith("tg://socks") ||
-                        line.startsWith("https://t.me/proxy") ||
-                        line.startsWith("https://t.me/socks") ||
-                        line.startsWith(SS_PROTOCOL) ||
-                        line.startsWith(WS_PROTOCOL) ||
-                        line.startsWith(WSS_PROTOCOL)) {
-                    runCatching { proxies.add(SharedConfig.parseProxyInfo(line).link) }
-                }
-            }
-        }
-        if (proxies.isEmpty()) error("no proxy link found")
-        return proxies
-    }
 
     @JvmStatic
-    fun importFromClipboard(ctx: Activity) {
-        val text = (ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip?.getItemAt(0)?.text?.toString()
-        val proxies = mutableListOf<SharedConfig.ProxyInfo>()
-        var error = false
-
-        text?.trim()?.split('\n')?.map { it.split(" ") }?.forEach { lists ->
-            lists.forEach { line ->
-                if (line.startsWith("tg://proxy") ||
-                        line.startsWith("tg://socks") ||
-                        line.startsWith("https://t.me/proxy") ||
-                        line.startsWith("https://t.me/socks") ||
-                        line.startsWith(SS_PROTOCOL) ||
-                        line.startsWith(WS_PROTOCOL) ||
-                        line.startsWith(WSS_PROTOCOL)) {
-                    runCatching { proxies.add(SharedConfig.parseProxyInfo(line)) }.onFailure {
-                        error = true
-                        showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink) + ": ${it.message ?: it.javaClass.simpleName}")
-                    }
-                }
-            }
-        }
-
+    fun importProxy(ctx: Activity, link: String): Boolean {
         runCatching {
-            if (proxies.isEmpty() && !error) {
-                String(Base64.decode(text, Base64.NO_PADDING)).trim().split('\n').map { it.split(" ") }.forEach { str ->
-                    str.forEach { line ->
-                        if (line.startsWith("tg://proxy") ||
-                                line.startsWith("tg://socks") ||
-                                line.startsWith("https://t.me/proxy") ||
-                                line.startsWith("https://t.me/socks") ||
-                                line.startsWith(SS_PROTOCOL) ||
-                                line.startsWith(WS_PROTOCOL) ||
-                                line.startsWith(WSS_PROTOCOL)) {
-                            runCatching { proxies.add(SharedConfig.parseProxyInfo(line)) }.onFailure {
-                                error = true
-                                showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink) + ": ${it.message ?: it.javaClass.simpleName}")
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (proxies.isEmpty()) {
-            if (!error) showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink))
-            return
-        } else if (!error) {
-            AlertUtil.showSimpleAlert(ctx, LocaleController.getString("ImportedProxies", R.string.ImportedProxies) + "\n\n" + proxies.joinToString("\n") { it.title })
-        }
-
-        proxies.forEach {
-            SharedConfig.addProxy(it)
-        }
-
-        UIUtil.runOnUIThread {
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged)
-        }
-    }
-
-    @JvmStatic
-    fun importProxy(ctx: Context, link: String): Boolean {
-        runCatching {
-            if (link.startsWith(ProxyConfig.SS_PROTOCOL)) {
-                when (val singConfig = ProxyConfig.parseSingBoxConfig(link)) {
-                    is ShadowsocksBean -> AndroidUtilities.showShadowsocksAlert(ctx, singConfig)
-                }
-            } else if (link.startsWith(ProxyConfig.WS_PROTOCOL) || link.startsWith(ProxyConfig.WSS_PROTOCOL)) {
-                AndroidUtilities.showWsAlert(ctx, SharedConfig.WsProxy(link))
-            } else {
-                val url = link.replace("tg://", "https://t.me/").toHttpUrlOrNull()!!
-                AndroidUtilities.showProxyAlert(ctx,
-                        url.queryParameter("server") ?: return false,
-                        url.queryParameter("port") ?: return false,
-                        url.queryParameter("user"),
-                        url.queryParameter("pass"),
-                        url.queryParameter("secret"),
-                        url.fragment)
-            }
+            val url = link.replace("tg://", "https://t.me/").toHttpUrlOrNull()!!
+            AndroidUtilities.showProxyAlert(ctx,
+                    url.queryParameter("server") ?: return false,
+                    url.queryParameter("port") ?: return false,
+                    url.queryParameter("user"),
+                    url.queryParameter("pass"),
+                    url.queryParameter("secret"),
+                    url.fragment)
             return true
         }.onFailure {
             FileLog.e(it)
             if (BuildVars.LOGS_ENABLED) {
                 AlertUtil.showSimpleAlert(ctx, it)
             } else {
-                showToast("${LocaleController.getString("BrokenLink", R.string.BrokenLink)}: ${it.message}")
+                showToast("${LocaleController.getString(R.string.BrokenLink)}: ${it.message}")
             }
 
         }
@@ -228,7 +71,7 @@ object ProxyUtil {
 
             AndroidUtilities.addToClipboard(url)
 
-            Toast.makeText(ctx, LocaleController.getString("LinkCopied", R.string.LinkCopied), Toast.LENGTH_LONG).show()
+            Toast.makeText(ctx, LocaleController.getString(R.string.LinkCopied), Toast.LENGTH_LONG).show()
 
         } else if (type == 0) {
 
@@ -238,7 +81,7 @@ object ProxyUtil {
 
             shareIntent.putExtra(Intent.EXTRA_TEXT, url)
 
-            val chooserIntent = Intent.createChooser(shareIntent, LocaleController.getString("ShareLink", R.string.ShareLink))
+            val chooserIntent = Intent.createChooser(shareIntent, LocaleController.getString(R.string.ShareLink))
 
             chooserIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 
@@ -297,8 +140,8 @@ object ProxyUtil {
 
                         builder.addItems(arrayOf(
 
-                                LocaleController.getString("SaveToGallery", R.string.SaveToGallery),
-                                LocaleController.getString("Cancel", R.string.Cancel)
+                                LocaleController.getString(R.string.SaveToGallery),
+                                LocaleController.getString(R.string.Cancel)
 
                         ), intArrayOf(
 
@@ -332,7 +175,7 @@ object ProxyUtil {
                                     }
 
                                     AndroidUtilities.addMediaToGallery(saveTo.path)
-                                    showToast(LocaleController.getString("PhotoSavedHint", R.string.PhotoSavedHint))
+                                    showToast(LocaleController.getString(R.string.PhotoSavedHint))
 
                                 }.onFailure {
                                     FileLog.e(it)
@@ -411,7 +254,7 @@ object ProxyUtil {
 
         } catch (e: Throwable) {
 
-            showToast(LocaleController.getString("NoQrFound", R.string.NoQrFound))
+            showToast(LocaleController.getString(R.string.NoQrFound))
 
         }
 
@@ -435,9 +278,9 @@ object ProxyUtil {
         builder.addTitle(text)
 
         builder.addItems(arrayOf(
-                LocaleController.getString("Open", R.string.Open),
-                LocaleController.getString("Copy", R.string.Copy),
-                LocaleController.getString("ShareQRCode", R.string.ShareQRCode)
+                LocaleController.getString(R.string.Open),
+                LocaleController.getString(R.string.Copy),
+                LocaleController.getString(R.string.ShareQRCode)
         ), intArrayOf(
                 R.drawable.baseline_open_in_browser_24,
                 R.drawable.baseline_content_copy_24,
@@ -447,7 +290,7 @@ object ProxyUtil {
                 0 -> Browser.openUrl(ctx, text)
                 1 -> {
                     AndroidUtilities.addToClipboard(text)
-                    showToast(LocaleController.getString("LinkCopied", R.string.LinkCopied))
+                    showToast(LocaleController.getString(R.string.LinkCopied))
                 }
 
                 else -> showQrDialog(ctx, text)

@@ -55,6 +55,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.Adapters.FiltersView;
+import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
@@ -63,6 +64,9 @@ import org.telegram.ui.Components.FireworksEffect;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.SnowflakesEffect;
+import org.telegram.ui.DialogsActivity;
+import org.telegram.ui.LaunchActivity;
+import org.telegram.ui.TopicsFragment;
 
 import java.util.ArrayList;
 
@@ -192,6 +196,8 @@ public class ActionBar extends FrameLayout {
         backButtonImageView.setScaleType(ImageView.ScaleType.CENTER);
         backButtonImageView.setBackgroundDrawable(Theme.createSelectorDrawable(itemsBackgroundColor));
         backButtonImageView.setPadding(dp(1), 0, 0, 0);
+        if (NekoConfig.unreadBadgeOnBackButton.Bool() && parentFragment instanceof ChatActivity)
+            ((ChatActivity) parentFragment).didReceivedNotification(NotificationCenter.dialogsUnreadCounterChanged, 0);
         addView(backButtonImageView, LayoutHelper.createFrame(54, 54, Gravity.LEFT | Gravity.TOP));
 
         backButtonImageView.setOnClickListener(v -> {
@@ -199,11 +205,30 @@ public class ActionBar extends FrameLayout {
                 closeSearchField();
                 return;
             }
+
+            if (AndroidUtilities.isTablet()) {
+                DialogsActivity dialogsActivity = null;
+                for (BaseFragment fragment : LaunchActivity.instance.getActionBarLayout().getFragmentStack()) {
+                    if (fragment instanceof DialogsActivity) {
+                        dialogsActivity = (DialogsActivity) fragment;
+                        break;
+                    }
+                }
+                if (dialogsActivity != null) {
+                    ActionBarMenuItem searchItem = dialogsActivity.getSearchItem();
+                    if (searchItem.isSearchFieldVisible()) {
+                        dialogsActivity.actionBar.onSearchFieldVisibilityChanged(searchItem.toggleSearch(true));
+                        dialogsActivity.scanItem.setVisibility(View.GONE);
+                        return;
+                    }
+                }
+            }
+
             if (actionBarMenuOnItemClick != null) {
                 actionBarMenuOnItemClick.onItemClick(-1);
             }
         });
-        backButtonImageView.setContentDescription(LocaleController.getString("AccDescrGoBack", R.string.AccDescrGoBack));
+        backButtonImageView.setContentDescription(LocaleController.getString(R.string.AccDescrGoBack));
     }
 
     public Drawable getBackButtonDrawable() {
@@ -460,7 +485,7 @@ public class ActionBar extends FrameLayout {
             createTitleTextView(0);
         }
         if (titleTextView[0] != null) {
-            titleTextView[0].setVisibility(value != null && !isSearchFieldVisible ? VISIBLE : INVISIBLE);
+            titleTextView[0].setVisibility(value != null && !isSearchFieldVisible && !onSearchChangedIgnoreTitles() ? VISIBLE : INVISIBLE);
             titleTextView[0].setText(lastTitle = value);
             if (attached && lastRightDrawable instanceof AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable) {
                 ((AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable) lastRightDrawable).setParentView(null);
@@ -659,20 +684,6 @@ public class ActionBar extends FrameLayout {
 //        }
 
         return actionMode;
-    }
-
-    public void onDrawCrossfadeBackground(Canvas canvas) {
-        if (blurredBackground && actionBarColor != Color.TRANSPARENT) {
-            rectTmp.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
-            blurScrimPaint.setColor(actionBarColor);
-            contentView.drawBlurRect(canvas, getY(), rectTmp, blurScrimPaint, true);
-        } else {
-            Drawable drawable = getBackground();
-            if (drawable != null) {
-                drawable.setBounds(0, 0, getWidth(), getHeight());
-                drawable.draw(canvas);
-            }
-        }
     }
 
     public void onDrawCrossfadeContent(Canvas canvas, boolean front, boolean hideBackDrawable, float progress) {
@@ -953,7 +964,7 @@ public class ActionBar extends FrameLayout {
             }
         });
         actionModeAnimation.start();
-        if (!isSearchFieldVisible) {
+        if (!isSearchFieldVisible && !onSearchChangedIgnoreTitles()) {
             if (titleTextView[0] != null) {
                 titleTextView[0].setVisibility(VISIBLE);
             }
@@ -1056,7 +1067,8 @@ public class ActionBar extends FrameLayout {
         searchVisibleAnimator = new AnimatorSet();
         final ArrayList<View> viewsToHide = new ArrayList<>();
 
-        final boolean ignoreTitles = onSearchChangedIgnoreTitles();
+        // test if UI glitch (elements overlap) be gone by only let ignoreTitles be false when not in tablet mode
+        final boolean ignoreTitles = onSearchChangedIgnoreTitles() && NekoConfig.tabletMode.Int() != 1 && !AndroidUtilities.isTablet();
         if (!ignoreTitles) {
             if (titleTextView[0] != null) {
                 viewsToHide.add(titleTextView[0]);
@@ -1108,7 +1120,8 @@ public class ActionBar extends FrameLayout {
                     }
                 }
 
-                if (visible && !ignoreTitles) {
+                boolean shouldHideTitle = onSearchChangedIgnoreTitles();
+                if ((visible && !ignoreTitles) || shouldHideTitle) {
                     if (titleTextView[0] != null) {
                         titleTextView[0].setVisibility(View.GONE);
                     }

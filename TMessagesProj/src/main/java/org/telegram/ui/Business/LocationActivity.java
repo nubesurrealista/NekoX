@@ -112,7 +112,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         Drawable checkmark = context.getResources().getDrawable(R.drawable.ic_ab_done).mutate();
         checkmark.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarDefaultIcon), PorterDuff.Mode.MULTIPLY));
         doneButtonDrawable = new CrossfadeDrawable(checkmark, new CircularProgressDrawable(Theme.getColor(Theme.key_actionBarDefaultIcon)));
-        doneButton = actionBar.createMenu().addItemWithWidth(done_button, doneButtonDrawable, AndroidUtilities.dp(56), LocaleController.getString("Done", R.string.Done));
+        doneButton = actionBar.createMenu().addItemWithWidth(done_button, doneButtonDrawable, AndroidUtilities.dp(56), LocaleController.getString(R.string.Done));
         checkDone(false);
 
         FrameLayout contentView = new FrameLayout(context);
@@ -330,13 +330,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             mapMarker.setTranslationY(-dp(12));
             final int w = (int) ((mapPreview.getMeasuredWidth() <= 0 ? AndroidUtilities.displaySize.x : mapPreview.getMeasuredWidth()) / AndroidUtilities.density);
             final int h = 240;
-//<<<<<<< HEAD
-//            String url = AndroidUtilities.formapMapUrl(false, geo.lat, geo._long, w, h, false, 15);
-//            mapPreview.setImage(url, w + "_" + h, mapLoadingDrawable);
-//=======
             final int scale = Math.min(2, (int) Math.ceil(AndroidUtilities.density));
             mapPreview.setImage(ImageLocation.getForWebFile(WebFile.createWithGeoPoint(geo.lat, geo._long, 0, scale * w, scale * h, 15, scale)), w + "_" + h, mapLoadingDrawable, 0, null);
-//>>>>>>> 3a822b15f (update to 10.10.0 (4571))
         } else {
             mapPreview.setImageBitmap(null);
         }
@@ -453,8 +448,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
             builder.setTitle(LocaleController.getString(R.string.UnsavedChanges));
             builder.setMessage(LocaleController.getString(R.string.BusinessLocationUnsavedChanges));
-            builder.setPositiveButton(LocaleController.getString("ApplyTheme", R.string.ApplyTheme), (dialogInterface, i) -> processDone());
-            builder.setNegativeButton(LocaleController.getString("PassportDiscard", R.string.PassportDiscard), (dialog, which) -> finishFragment());
+            builder.setPositiveButton(LocaleController.getString(R.string.ApplyTheme), (dialogInterface, i) -> processDone());
+            builder.setNegativeButton(LocaleController.getString(R.string.PassportDiscard), (dialog, which) -> finishFragment());
             showDialog(builder.create());
             return false;
         }

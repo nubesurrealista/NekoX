@@ -65,6 +65,7 @@ import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.Bulletin;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -184,8 +185,8 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
     public StickerEmptyView getEmptyView() {
         if (emptyView == null) {
             emptyView = new StickerEmptyView(fragment.getParentActivity(), null, StickerEmptyView.STICKER_TYPE_DONE, fragment.getResourceProvider());
-            emptyView.title.setText(isChannel ? LocaleController.getString("NoSubscribeRequests", R.string.NoSubscribeRequests) : LocaleController.getString("NoMemberRequests", R.string.NoMemberRequests));
-            emptyView.subtitle.setText(isChannel ? LocaleController.getString("NoSubscribeRequestsDescription", R.string.NoSubscribeRequestsDescription) : LocaleController.getString("NoMemberRequestsDescription", R.string.NoMemberRequestsDescription));
+            emptyView.title.setText(isChannel ? LocaleController.getString(R.string.NoSubscribeRequests) : LocaleController.getString(R.string.NoMemberRequests));
+            emptyView.subtitle.setText(isChannel ? LocaleController.getString(R.string.NoSubscribeRequestsDescription) : LocaleController.getString(R.string.NoMemberRequestsDescription));
             emptyView.setAnimateLayoutChange(true);
             emptyView.setVisibility(GONE);
         }
@@ -198,8 +199,8 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             if (isShowLastItemDivider) {
                 searchEmptyView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite, fragment.getResourceProvider()));
             }
-            searchEmptyView.title.setText(LocaleController.getString("NoResult", R.string.NoResult));
-            searchEmptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", R.string.SearchEmptyViewFilteredSubtitle2));
+            searchEmptyView.title.setText(LocaleController.getString(R.string.NoResult));
+            searchEmptyView.subtitle.setText(LocaleController.getString(R.string.SearchEmptyViewFilteredSubtitle2));
             searchEmptyView.setAnimateLayoutChange(true);
             searchEmptyView.setVisibility(GONE);
         }
@@ -414,6 +415,11 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         hideChatJoinRequest(importer, false);
     }
 
+    @Override
+    public void onBanClicked(TLRPC.TL_chatInviteImporter importer) {
+        hideChatJoinRequest(importer, false, true);
+    }
+
     public void setAdapterItemsEnabled(boolean adapterItemsEnabled) {
         if (recyclerView != null) {
             int position = adapter.extraFirstHolders();
@@ -462,8 +468,47 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
     }
 
     private void hideChatJoinRequest(TLRPC.TL_chatInviteImporter importer, boolean isApproved) {
+        hideChatJoinRequest(importer, isApproved, false);
+    }
+
+    private void hideChatJoinRequest(TLRPC.TL_chatInviteImporter importer, boolean isApproved, final boolean ban) {
         TLRPC.User user = users.get(importer.user_id);
         if (user == null) {
+            return;
+        }
+
+        MessagesController messagesController = MessagesController.getInstance(currentAccount);
+        if (ban) {
+            TLRPC.TL_channels_editBanned req = new TLRPC.TL_channels_editBanned();
+            req.channel = messagesController.getInputChannel(chatId);
+            req.participant = MessagesController.getInputPeer(user);
+            req.banned_rights = new TLRPC.TL_chatBannedRights();
+            req.banned_rights.view_messages = true;
+            req.banned_rights.send_media = true;
+            req.banned_rights.send_messages = true;
+            req.banned_rights.send_stickers = true;
+            req.banned_rights.send_gifs = true;
+            req.banned_rights.send_games = true;
+            req.banned_rights.send_inline = true;
+            req.banned_rights.embed_links = true;
+            req.banned_rights.pin_messages = true;
+            req.banned_rights.send_polls = true;
+            req.banned_rights.invite_users = true;
+            req.banned_rights.change_info = true;
+            ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
+                BulletinFactory bulletinFactory = allImporters.isEmpty() ? BulletinFactory.of(fragment)
+                        : BulletinFactory.of(layoutContainer, fragment.getResourceProvider());
+                if (error == null) {
+                    hideChatJoinRequest(importer, false, false);
+                    AndroidUtilities.runOnUIThread(() -> bulletinFactory.createSimpleBulletin(R.raw.done,
+                            LocaleController.formatString(R.string.EventLogChannelRestricted, user.first_name)).show());
+                } else {
+                    AndroidUtilities.runOnUIThread(() -> {
+                        String err = String.format("%d - %s", error.code, error.text);
+                        bulletinFactory.createSimpleBulletin(R.raw.error, err).show(true);
+                    });
+                }
+            });
             return;
         }
         TLRPC.TL_messages_hideChatJoinRequest req = new TLRPC.TL_messages_hideChatJoinRequest();
@@ -473,7 +518,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
             if (error == null) {
                 TLRPC.TL_updates updates = (TLRPC.TL_updates) response;
-                MessagesController.getInstance(currentAccount).processUpdates(updates, false);
+                messagesController.processUpdates(updates, false);
             }
             AndroidUtilities.runOnUIThread(() -> {
                 if (fragment == null || fragment.getParentActivity() == null) {
@@ -782,7 +827,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             ActionBarMenuSubItem addCell = new ActionBarMenuSubItem(context, true, false);
             addCell.setColors(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem, resourcesProvider), Theme.getColor(Theme.key_actionBarDefaultSubmenuItemIcon, resourcesProvider));
             addCell.setSelectorColor(Theme.getColor(Theme.key_dialogButtonSelector, resourcesProvider));
-            addCell.setTextAndIcon(isChannel ? LocaleController.getString("AddToChannel", R.string.AddToChannel) : LocaleController.getString("AddToGroup", R.string.AddToGroup), R.drawable.msg_requests);
+            addCell.setTextAndIcon(isChannel ? LocaleController.getString(R.string.AddToChannel) : LocaleController.getString(R.string.AddToGroup), R.drawable.msg_requests);
             addCell.setOnClickListener((v) -> {
                 if (importer != null) {
                     onAddClicked(importer);
@@ -794,7 +839,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             ActionBarMenuSubItem sendMsgCell = new ActionBarMenuSubItem(context, false, false);
             sendMsgCell.setColors(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem, resourcesProvider), Theme.getColor(Theme.key_actionBarDefaultSubmenuItemIcon, resourcesProvider));
             sendMsgCell.setSelectorColor(Theme.getColor(Theme.key_dialogButtonSelector, resourcesProvider));
-            sendMsgCell.setTextAndIcon(LocaleController.getString("SendMessage", R.string.SendMessage), R.drawable.msg_msgbubble3);
+            sendMsgCell.setTextAndIcon(LocaleController.getString(R.string.SendMessage), R.drawable.msg_msgbubble3);
             sendMsgCell.setOnClickListener((v) -> {
                 if (importer != null) {
                     isNeedRestoreList = true;
@@ -811,7 +856,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             ActionBarMenuSubItem dismissCell = new ActionBarMenuSubItem(context, false, true);
             dismissCell.setColors(Theme.getColor(Theme.key_text_RedBold, resourcesProvider), Theme.getColor(Theme.key_text_RedRegular, resourcesProvider));
             dismissCell.setSelectorColor(Theme.getColor(Theme.key_dialogButtonSelector, resourcesProvider));
-            dismissCell.setTextAndIcon(LocaleController.getString("DismissRequest", R.string.DismissRequest), R.drawable.msg_remove);
+            dismissCell.setTextAndIcon(LocaleController.getString(R.string.DismissRequest), R.drawable.msg_remove);
             dismissCell.setOnClickListener((v) -> {
                 if (importer != null) {
                     onDismissClicked(importer);

@@ -31,6 +31,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import java.io.File;
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
@@ -65,7 +66,7 @@ public class NekoXSettingActivity extends BaseFragment {
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString("NekoSettings", R.string.NekoSettings));
+        actionBar.setTitle(LocaleController.getString(NekoConfig.useOldName.Bool() ? R.string.NekoSettings : R.string.MomoSettings));
 
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
@@ -267,7 +268,7 @@ public class NekoXSettingActivity extends BaseFragment {
                 case 4: {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == developerSettingsRow) {
-                        headerCell.setText(LocaleController.getString("DeveloperSettings", R.string.DeveloperSettings));
+                        headerCell.setText(LocaleController.getString(R.string.DeveloperSettings));
                     }
                     break;
                 }

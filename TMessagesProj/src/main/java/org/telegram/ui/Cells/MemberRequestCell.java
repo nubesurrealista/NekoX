@@ -57,7 +57,7 @@ public class MemberRequestCell extends FrameLayout {
         addButton.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         addButton.setMaxLines(1);
         addButton.setPadding(btnPadding, 0, btnPadding, 0);
-        addButton.setText(isChannel ? LocaleController.getString("AddToChannel", R.string.AddToChannel) : LocaleController.getString("AddToGroup", R.string.AddToGroup));
+        addButton.setText(isChannel ? LocaleController.getString(R.string.AddToChannel) : LocaleController.getString(R.string.AddToGroup));
         addButton.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
         addButton.setTextSize(14);
         addButton.setTypeface(AndroidUtilities.bold());
@@ -74,7 +74,7 @@ public class MemberRequestCell extends FrameLayout {
         dismissButton.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         dismissButton.setMaxLines(1);
         dismissButton.setPadding(btnPadding, 0, btnPadding, 0);
-        dismissButton.setText(LocaleController.getString("Dismiss", R.string.Dismiss));
+        dismissButton.setText(LocaleController.getString(R.string.Dismiss));
         dismissButton.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText));
         dismissButton.setTextSize(14);
         dismissButton.setTypeface(AndroidUtilities.bold());
@@ -88,6 +88,27 @@ public class MemberRequestCell extends FrameLayout {
         dismissLayoutParams.leftMargin = LocaleController.isRTL ? 0 : (int)(addButtonWidth + AndroidUtilities.dp(73 + 6));
         dismissLayoutParams.rightMargin = LocaleController.isRTL ? (int)(addButtonWidth + AndroidUtilities.dp(73 + 6)) : 0;
         addView(dismissButton, dismissLayoutParams);
+
+        float dismissButtonWidth = dismissButton.getPaint().measureText(dismissButton.getText().toString()) + btnPadding * 2;
+        TextView banButton = new TextView(getContext());
+        banButton.setBackground(Theme.AdaptiveRipple.filledRectByKey(Theme.key_text_RedBold, 4));
+        banButton.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
+        banButton.setMaxLines(1);
+        banButton.setPadding(btnPadding, 0, btnPadding, 0);
+        banButton.setText(LocaleController.getString(R.string.Ban));
+        banButton.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
+        banButton.setTextSize(14);
+        banButton.setTypeface(AndroidUtilities.bold());
+        banButton.setOnClickListener(v -> {
+            if (clickListener != null && importer != null) {
+                clickListener.onBanClicked(importer);
+            }
+        });
+        FrameLayout.LayoutParams banLayoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, AndroidUtilities.dp(32), LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
+        banLayoutParams.topMargin = AndroidUtilities.dp(62);
+        banLayoutParams.leftMargin = LocaleController.isRTL ? 0 : (int)(addButtonWidth + dismissButtonWidth + AndroidUtilities.dp(73 + 6));
+        banLayoutParams.rightMargin = LocaleController.isRTL ? (int)(addButtonWidth + dismissButtonWidth + AndroidUtilities.dp(73 + 6)) : 0;
+        addView(banButton, banLayoutParams);
     }
 
     public void setData(LongSparseArray<TLRPC.User> users, TLRPC.TL_chatInviteImporter importer, boolean isNeedDivider) {
@@ -101,7 +122,7 @@ public class MemberRequestCell extends FrameLayout {
         nameTextView.setText(UserObject.getUserName(user));
         String dateText = LocaleController.formatDateAudio(importer.date, false);
         if (importer.via_chatlist) {
-            statusTextView.setText(LocaleController.getString("JoinedViaFolder", R.string.JoinedViaFolder));
+            statusTextView.setText(LocaleController.getString(R.string.JoinedViaFolder));
         } else if (importer.approved_by == 0) {
             statusTextView.setText(LocaleController.formatString("RequestedToJoinAt", R.string.RequestedToJoinAt, dateText));
         } else {
@@ -145,5 +166,7 @@ public class MemberRequestCell extends FrameLayout {
         void onAddClicked(TLRPC.TL_chatInviteImporter importer);
 
         void onDismissClicked(TLRPC.TL_chatInviteImporter importer);
+
+        void onBanClicked(TLRPC.TL_chatInviteImporter importer);
     }
 }

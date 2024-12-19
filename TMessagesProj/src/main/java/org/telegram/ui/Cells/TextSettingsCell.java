@@ -14,9 +14,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -26,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
@@ -50,6 +53,7 @@ public class TextSettingsCell extends FrameLayout {
     private boolean canDisable;
     private boolean drawLoading;
     private int padding;
+    private boolean valueTextTrimmed;
 
     private boolean incrementLoadingProgress;
     private float loadingProgress;
@@ -111,12 +115,18 @@ public class TextSettingsCell extends FrameLayout {
         return valueImageView;
     }
 
+    private boolean betterLayout = BuildVars.DEBUG_PRIVATE_VERSION;
+    public void setBetterLayout(boolean betterLayout) {
+        // I might break something with this, gonna need to further test
+        this.betterLayout = betterLayout;
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), AndroidUtilities.dp(50) + (needDivider ? 1 : 0));
 
         int availableWidth = getMeasuredWidth() - getPaddingLeft() - getPaddingRight() - AndroidUtilities.dp(34);
-        int width = availableWidth / 2;
+        int width = betterLayout ? availableWidth : availableWidth / 2;
         if (valueImageView.getVisibility() == VISIBLE) {
             valueImageView.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.EXACTLY));
         }
@@ -127,14 +137,20 @@ public class TextSettingsCell extends FrameLayout {
             } else {
                 imageView.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.AT_MOST));
             }
+            if (betterLayout) width -= imageView.getMeasuredWidth() + AndroidUtilities.dp(8);
         }
 
         if (valueBackupImageView != null) {
             valueBackupImageView.measure(MeasureSpec.makeMeasureSpec(valueBackupImageView.getLayoutParams().height, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(valueBackupImageView.getLayoutParams().width, MeasureSpec.EXACTLY));
+            if (betterLayout) width -= valueBackupImageView.getMeasuredWidth() + AndroidUtilities.dp(8);
         }
         if (valueTextView.getVisibility() == VISIBLE) {
             valueTextView.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.EXACTLY));
-            width = availableWidth - valueTextView.getMeasuredWidth() - AndroidUtilities.dp(8);
+            if (betterLayout) {
+                width -= valueTextView.getMeasuredWidth() + AndroidUtilities.dp(8);
+            } else {
+                width = availableWidth - valueTextView.getMeasuredWidth() - AndroidUtilities.dp(8);
+            }
 
             if (valueImageView.getVisibility() == VISIBLE) {
                 MarginLayoutParams params = (MarginLayoutParams) valueImageView.getLayoutParams();
@@ -194,6 +210,20 @@ public class TextSettingsCell extends FrameLayout {
         textView.setText(text);
         valueImageView.setVisibility(INVISIBLE);
         if (value != null) {
+            Point size = AndroidUtilities.getRealScreenSize();
+
+            if (paint == null) {
+                paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                paint.setColor(Theme.getColor(Theme.key_dialogSearchBackground, resourcesProvider));
+            }
+            float w = paint.measureText(value.toString());
+            float max = ((float) Math.min(size.x, size.y) / 4);
+            if (w > max) {
+                float cw = Math.max(1, (w / value.length()));
+                int c = (int) Math.floor(max / cw);
+                value = value.subSequence(0, c - 3) + "...";
+            }
+
             valueTextView.setText(value, animated);
             valueTextView.setVisibility(VISIBLE);
         } else {

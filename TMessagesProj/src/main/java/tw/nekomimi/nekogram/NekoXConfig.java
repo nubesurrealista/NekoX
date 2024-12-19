@@ -1,19 +1,17 @@
 package tw.nekomimi.nekogram;
 
-import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
-import android.os.Build;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildConfig;
-import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
@@ -22,9 +20,8 @@ import org.telegram.ui.ActionBar.Theme;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.HashSet;
 import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,7 +33,7 @@ public class NekoXConfig {
 
     //  public static String FAQ_URL = "https://telegra.ph/NekoX-FAQ-03-31";
     //  public static String FAQ_URL = "https://github.com/NekoX-Dev/NekoX#faq";
-    public static String FAQ_URL = "https://github.com/dic1911/NekoX#faq";
+    public static String FAQ_URL = "https://github.com/dic1911/Momogram#faq";
     public static long releaseChannel = 2137047153;
     public static long[] officialChats = {
             1305127566, // NekoX Updates
@@ -51,7 +48,10 @@ public class NekoXConfig {
             896711046, // nekohasekai
             380570774, // Haruhi
             150725478, // HenTaku
+            487758521, // Banks
     };
+
+    public static HashSet<Long> devSet = new HashSet<>();
 
     public static final int TITLE_TYPE_TEXT = 0;
     public static final int TITLE_TYPE_ICON = 1;
@@ -81,6 +81,10 @@ public class NekoXConfig {
 //    public static int customAppId = preferences.getInt("custom_app_id", 0);
 //    public static String customAppHash = preferences.getString("custom_app_hash", "");
 
+    static {
+        for (long id : developers) devSet.add(id);
+    }
+
     public static void toggleDeveloperMode() {
         preferences.edit().putBoolean("developer_mode", developerMode = !developerMode).apply();
         if (!developerMode) {
@@ -103,6 +107,11 @@ public class NekoXConfig {
     private static Boolean hasDeveloper = null;
 
     public static int currentAppId() {
+        String idStr = NekoConfig.customApiId.String();
+        try {
+            return Integer.parseInt(idStr);
+        } catch (Exception ignored) {}
+
         return BuildConfig.APP_ID;
     }
 
@@ -121,7 +130,8 @@ public class NekoXConfig {
     }
 
     public static String currentAppHash() {
-        return BuildConfig.APP_HASH;
+        String hashStr = NekoConfig.customApiHash.String();
+        return StrUtil.isNotBlank(hashStr) ? hashStr : BuildConfig.APP_HASH;
     }
 
     public static boolean isDeveloper() {
@@ -149,12 +159,12 @@ public class NekoXConfig {
                 NekoConfig.openPGPApp.setConfigString("");
             }
         }
-        return LocaleController.getString("None", R.string.None);
+        return LocaleController.getString(R.string.None);
     }
 
     public static String formatLang(String name) {
         if (name == null || name.isEmpty()) {
-            return LocaleController.getString("Default", R.string.Default);
+            return LocaleController.getString(R.string.Default);
         } else {
             if (name.contains("-")) {
                 return new Locale(StrUtil.subBefore(name, "-", false), StrUtil.subAfter(name, "-", false)).getDisplayName(LocaleController.getInstance().currentLocale);
@@ -216,7 +226,7 @@ public class NekoXConfig {
         return color;
     }
 
-    
+
     public static void setChannelAlias(long channelID, String name) {
         preferences.edit().putString(NekoConfig.channelAliasPrefix + channelID, name).apply();
     }
@@ -227,5 +237,19 @@ public class NekoXConfig {
 
     public static String getChannelAlias(long channelID) {
         return preferences.getString(NekoConfig.channelAliasPrefix + channelID, null);
+    }
+
+    public static void setChatNameOverride(long chatId, String name) {
+        preferences.edit().putString(NekoConfig.chatNameOverridePrefix + chatId, name).apply();
+        MessagesController.overrideNameCache.put(chatId, name);
+    }
+
+    public static void emptyChatNameOverride(long chatId) {
+        preferences.edit().remove(NekoConfig.chatNameOverridePrefix + chatId).apply();
+        MessagesController.overrideNameCache.put(chatId, "");
+    }
+
+    public static String getChatNameOverride(long chatId) {
+        return preferences.getString(NekoConfig.chatNameOverridePrefix + chatId, null);
     }
 }

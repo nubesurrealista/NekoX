@@ -43,4 +43,21 @@ object IoUtil {
 
     }
 
+    @JvmStatic
+    fun deleteRecursively(path: File): Long {
+        var claimedSpace = 0L
+        val children = path.listFiles() ?: return 0
+        for (child in children) {
+            if (child.isDirectory) {
+                claimedSpace += deleteRecursively(child)
+                child.delete()
+            } else {
+                val size = child.length() / 1024
+                if (child.delete())
+                    claimedSpace += size
+            }
+        }
+        return claimedSpace
+    }
+
 }

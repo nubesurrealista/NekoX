@@ -27,6 +27,7 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -39,6 +40,8 @@ import androidx.multidex.MultiDex;
 
 import androidx.multidex.MultiDex;
 
+import com.jakewharton.processphoenix.ProcessPhoenix;
+
 import org.json.JSONObject;
 import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.tgnet.ConnectionsManager;
@@ -47,16 +50,21 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Adapters.DrawerLayoutAdapter;
 import org.telegram.ui.Components.ForegroundDetector;
 import org.telegram.ui.Components.Premium.boosts.BoostRepository;
+import org.telegram.ui.IUpdateButton;
 import org.telegram.ui.IUpdateLayout;
+import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.LauncherIconController;
 
 import java.io.File;
 import java.util.LinkedList;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.parts.SignturesKt;
 import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.TelegramUtil;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class ApplicationLoader extends Application {
     private static PendingIntent pendingIntent;
@@ -97,7 +105,13 @@ public class ApplicationLoader extends Application {
         } catch (Throwable ignore) {
         }
         Thread.currentThread().setUncaughtExceptionHandler((thread, error) -> {
-            Log.e("nekox", "from " + thread.toString(), error);
+            Log.e("nekox", "from " + thread, error);
+            String errStr = String.format("%s\n%s: %s | %s\n%s",
+                    AndroidUtilities.getSystemProperty("ro.build.fingerprint"),
+                    error.getClass().getName(), error.getMessage(), error.getCause(),
+                    TelegramUtil.getStackTraceAsString(error.getStackTrace()));
+            NekoConfig.lastCrashError.setConfigString(errStr);
+            ProcessPhoenix.triggerRebirth(applicationContext, new Intent(applicationContext, LaunchActivity.class));
         });
     }
 
@@ -285,10 +299,27 @@ public class ApplicationLoader extends Application {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("app start time = " + (startTime = SystemClock.elapsedRealtime()));
             try {
-                FileLog.d("buildVersion = " + ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0).versionCode);
+                final PackageInfo info = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
+                final String abi;
+                switch (info.versionCode % 10) {
+                    case 1:
+                    case 2:
+                        abi = "store bundled " + Build.CPU_ABI + " " + Build.CPU_ABI2;
+                        break;
+                    default:
+                    case 9:
+                        if (ApplicationLoader.isStandaloneBuild()) {
+                            abi = "direct " + Build.CPU_ABI + " " + Build.CPU_ABI2;
+                        } else {
+                            abi = "universal " + Build.CPU_ABI + " " + Build.CPU_ABI2;
+                        }
+                        break;
+                }
+                FileLog.d("buildVersion = " + String.format(Locale.US, "v%s (%d[%d]) %s", info.versionName, info.versionCode / 10, info.versionCode % 10, abi));
             } catch (Exception e) {
                 FileLog.e(e);
             }
+            FileLog.d("device = manufacturer=" + Build.MANUFACTURER + ", device=" + Build.DEVICE + ", model=" + Build.MODEL + ", product=" + Build.PRODUCT);
         }
         if (applicationContext == null) {
             applicationContext = getApplicationContext();
@@ -332,6 +363,7 @@ public class ApplicationLoader extends Application {
 
     private static void startPushServiceInternal() {
         if (PushListenerController.getProvider().hasServices()) {
+            if (NekoConfig.enableUnifiedPush.Bool()) stopPushService();
             return;
         }
         SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
@@ -369,16 +401,18 @@ public class ApplicationLoader extends Application {
                 }
             });
 
-        } else AndroidUtilities.runOnUIThread(() -> {
-            applicationContext.stopService(new Intent(applicationContext, NotificationsService.class));
+        } else AndroidUtilities.runOnUIThread(ApplicationLoader::stopPushService);
+    }
 
-            PendingIntent pintent = PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), PendingIntent.FLAG_MUTABLE);
-            AlarmManager alarm = (AlarmManager)applicationContext.getSystemService(Context.ALARM_SERVICE);
-            alarm.cancel(pintent);
-            if (pendingIntent != null) {
-                alarm.cancel(pendingIntent);
-            }
-        });
+    private static void stopPushService() {
+        applicationContext.stopService(new Intent(applicationContext, NotificationsService.class));
+
+        PendingIntent pintent = PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), PendingIntent.FLAG_MUTABLE);
+        AlarmManager alarm = (AlarmManager)applicationContext.getSystemService(Context.ALARM_SERVICE);
+        alarm.cancel(pintent);
+        if (pendingIntent != null) {
+            alarm.cancel(pendingIntent);
+        }
     }
 
     private static void initPushServices() {
@@ -455,6 +489,21 @@ public class ApplicationLoader extends Application {
         return false;
     }
 
+    public static boolean isDataSaverEnabled() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) return false;
+        try {
+            ConnectivityManager cm = (ConnectivityManager) applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+            boolean ret = (cm != null && cm.getRestrictBackgroundStatus() == ConnectivityManager.RESTRICT_BACKGROUND_STATUS_ENABLED);
+            if (ret) {
+                FileLog.d("data saver is enabled");
+                return true;
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return false;
+    }
+
     public static boolean isConnectedOrConnectingToWiFi() {
         try {
             ensureCurrentNetworkGet(false);
@@ -512,7 +561,8 @@ public class ApplicationLoader extends Application {
                     return lastKnownNetworkType;
                 }
                 if (connectivityManager.isActiveNetworkMetered()) {
-                    lastKnownNetworkType = StatsController.TYPE_MOBILE;
+                    lastKnownNetworkType = (NekoConfig.mapMobileDataSaverToRoaming.Bool() && isDataSaverEnabled()) ?
+                            StatsController.TYPE_ROAMING : StatsController.TYPE_MOBILE;
                 } else {
                     lastKnownNetworkType = StatsController.TYPE_WIFI;
                 }
@@ -525,7 +575,8 @@ public class ApplicationLoader extends Application {
         } catch (Exception e) {
             FileLog.e(e);
         }
-        return StatsController.TYPE_MOBILE;
+        return (NekoConfig.mapMobileDataSaverToRoaming.Bool() && isDataSaverEnabled()) ?
+                StatsController.TYPE_ROAMING : StatsController.TYPE_MOBILE;
     }
 
     public static int getCurrentNetworkType() {
@@ -600,18 +651,6 @@ public class ApplicationLoader extends Application {
         return result;
     }
 
-//    public static void startAppCenter(Activity context) {
-//        applicationLoaderInstance.startAppCenterInternal(context);
-//    }
-//
-//    public static void checkForUpdates() {
-//        applicationLoaderInstance.checkForUpdatesInternal();
-//    }
-//
-//    public static void appCenterLog(Throwable e) {
-//        applicationLoaderInstance.appCenterLogInternal(e);
-//    }
-
     protected void appCenterLogInternal(Throwable e) {
 
     }
@@ -644,6 +683,10 @@ public class ApplicationLoader extends Application {
     }
 
     public IUpdateLayout takeUpdateLayout(Activity activity, ViewGroup sideMenu, ViewGroup sideMenuContainer) {
+        return null;
+    }
+
+    public IUpdateButton takeUpdateButton(Context context) {
         return null;
     }
 
@@ -686,5 +729,4 @@ public class ApplicationLoader extends Application {
     public BaseFragment openSettings(int n) {
         return null;
     }
-
 }

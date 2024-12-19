@@ -62,6 +62,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class GroupMedia {
 
     @NonNull
@@ -445,7 +447,7 @@ public class GroupMedia {
                 canvas.save();
                 canvas.clipPath(clipPath);
                 drawBlurred(canvas, hiddenAlpha);
-                canvas.drawColor(Theme.multAlpha(0x30000000, hiddenAlpha));
+                canvas.drawColor(Theme.multAlpha(0x50000000, hiddenAlpha));
                 buttonText.draw(canvas, x + width / 2f - buttonWidth / 2f + dp(14), y + height / 2f, 0xFFFFFFFF, hiddenAlpha);
                 canvas.restore();
 
@@ -908,7 +910,7 @@ public class GroupMedia {
         }
 
         public int maxSizeWidth = 800;
-        public float maxSizeHeight = 814;
+        public float maxSizeHeight = NekoConfig.imageMessageSizeTweak.Bool() ? 1935 : 814;
 
         public final GroupedMessages.TransitionParams transitionParams = new GroupedMessages.TransitionParams();
 
@@ -989,6 +991,10 @@ public class GroupMedia {
                 } else {
                     position.photoWidth = 100;
                     position.photoHeight = 100;
+                }
+                if (position.photoWidth <= 0 || position.photoHeight <= 0) {
+                    position.photoWidth = 50;
+                    position.photoHeight = 50;
                 }
                 position.aspectRatio = position.photoWidth / (float) position.photoHeight;
 

@@ -1,0 +1,25 @@
+From 4ac1911b8e9a8dfef0b27aa83eca2c7fb91a20bd Mon Sep 17 00:00:00 2001
+From: dic1911 <9561880+dic1911@users.noreply.github.com>
+Date: Mon, 25 Nov 2024 10:25:14 +0800
+Subject: [PATCH] [PATCH] replace SUINT with unsigned
+
+---
+ libavcodec/golomb.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libavcodec/golomb.h b/libavcodec/golomb.h
+index defee7139b..4d8db0f78c 100644
+--- a/libavcodec/golomb.h
++++ b/libavcodec/golomb.h
+@@ -513,7 +513,7 @@ static inline int get_ur_golomb_jpegls(GetBitContext *gb, int k, int limit,
+                 buf = 0;
+             }
+ 
+-            buf += ((SUINT)i << k);
++            buf += ((unsigned)i << k);
+         } else if (i == limit - 1) {
+             buf = SHOW_UBITS(re, gb, esc_len);
+             LAST_SKIP_BITS(re, gb, esc_len);
+-- 
+2.47.0.windows.2
+

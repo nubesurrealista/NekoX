@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.telegram.tgnet.TLRPC;
@@ -30,6 +31,11 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
+import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.transtale.Translator;
+import tw.nekomimi.nekogram.transtale.TranslatorKt;
+import tw.nekomimi.nekogram.utils.TelegramUtil;
+
 public class TranslateController extends BaseController {
 
     public static final String UNKNOWN_LANGUAGE = "und";
@@ -43,6 +49,7 @@ public class TranslateController extends BaseController {
     private static final int GROUPING_TRANSLATIONS_TIMEOUT = 80;
 
     private final Set<Long> translatingDialogs = new HashSet<>();
+    private final Set<Long> wasTranslatingDialogs = new HashSet<>();
     private final Set<Long> translatableDialogs = new HashSet<>();
     private final HashMap<Long, TranslatableDecision> translatableDialogMessages = new HashMap<>();
     private final HashMap<Long, String> translateDialogLanguage = new HashMap<>();
@@ -66,7 +73,7 @@ public class TranslateController extends BaseController {
     }
 
     public boolean isFeatureAvailable() {
-        return isChatTranslateEnabled() && UserConfig.getInstance(currentAccount).isPremium();
+        return NekoConfig.autoTranslate.Bool() || isChatTranslateEnabled() || UserConfig.getInstance(currentAccount).isPremium();
     }
 
     private Boolean chatTranslateEnabled;
@@ -115,9 +122,9 @@ public class TranslateController extends BaseController {
         return (
             isFeatureAvailable() &&
             !DialogObject.isEncryptedDialog(dialogId) &&
-            getUserConfig().getClientUserId() != dialogId &&
+            getUserConfig().getClientUserId() != dialogId // &&
             /* DialogObject.isChatDialog(dialogId) &&*/
-            translatableDialogs.contains(dialogId)
+            /*translatableDialogs.contains(dialogId)*/
         );
     }
 
@@ -125,12 +132,13 @@ public class TranslateController extends BaseController {
         if (hideTranslateDialogs.contains(dialogId)) {
             return true;
         }
+        boolean isPremium = UserConfig.getInstance(currentAccount).isPremium();
         TLRPC.ChatFull chatFull = getMessagesController().getChatFull(-dialogId);
-        if (chatFull != null) {
+        if (chatFull != null && isPremium) {
             return chatFull.translations_disabled;
         }
         TLRPC.UserFull userFull = getMessagesController().getUserFull(dialogId);
-        if (userFull != null) {
+        if (userFull != null && isPremium) {
             return userFull.translations_disabled;
         }
         return false;
@@ -138,6 +146,10 @@ public class TranslateController extends BaseController {
 
     public boolean isTranslatingDialog(long dialogId) {
         return isFeatureAvailable() && translatingDialogs.contains(dialogId);
+    }
+
+    public boolean wasTranslatingDialog(long dialogId) {
+        return isFeatureAvailable() && wasTranslatingDialogs.contains(dialogId);
     }
 
     public void toggleTranslatingDialog(long dialogId) {
@@ -228,12 +240,13 @@ public class TranslateController extends BaseController {
         final boolean wasHidden = hideTranslateDialogs.contains(dialogId);
 
         boolean hidden = false;
+        boolean isPremium = UserConfig.getInstance(currentAccount).isPremium();
         TLRPC.ChatFull chatFull = getMessagesController().getChatFull(-dialogId);
-        if (chatFull != null) {
+        if (chatFull != null && isPremium) {
             hidden = chatFull.translations_disabled;
         } else {
             TLRPC.UserFull userFull = getMessagesController().getUserFull(dialogId);
-            if (userFull != null) {
+            if (userFull != null && isPremium) {
                 hidden = userFull.translations_disabled;
             }
         }
@@ -258,18 +271,21 @@ public class TranslateController extends BaseController {
     }
 
     public void setHideTranslateDialog(long dialogId, boolean hide, boolean doNotNotify) {
-        TLRPC.TL_messages_togglePeerTranslations req = new TLRPC.TL_messages_togglePeerTranslations();
-        req.peer = getMessagesController().getInputPeer(dialogId);
-        req.disabled = hide;
-        getConnectionsManager().sendRequest(req, null);
+        boolean isPremium = UserConfig.getInstance(currentAccount).isPremium();
+        if (isPremium) {
+            TLRPC.TL_messages_togglePeerTranslations req = new TLRPC.TL_messages_togglePeerTranslations();
+            req.peer = getMessagesController().getInputPeer(dialogId);
+            req.disabled = hide;
+            getConnectionsManager().sendRequest(req, null);
+        }
 
         TLRPC.ChatFull chatFull = getMessagesController().getChatFull(-dialogId);
-        if (chatFull != null) {
+        if (chatFull != null && isPremium) {
             chatFull.translations_disabled = hide;
             getMessagesStorage().updateChatInfo(chatFull, true);
         }
         TLRPC.UserFull userFull = getMessagesController().getUserFull(dialogId);
-        if (userFull != null) {
+        if (userFull != null && isPremium) {
             userFull.translations_disabled = hide;
             getMessagesStorage().updateUserInfo(userFull, true);
         }
@@ -278,8 +294,10 @@ public class TranslateController extends BaseController {
             if (hide) {
                 hideTranslateDialogs.add(dialogId);
                 translatingDialogs.remove(dialogId);
+                wasTranslatingDialogs.remove(dialogId);
             } else {
                 hideTranslateDialogs.remove(dialogId);
+                wasTranslatingDialogs.add(dialogId);
             }
         }
         saveTranslatingDialogsCache();
@@ -517,6 +535,52 @@ public class TranslateController extends BaseController {
             final MessageObject finalMessageObject = messageObject;
             if (finalMessageObject.messageOwner.translatedText == null || !language.equals(finalMessageObject.messageOwner.translatedToLanguage)) {
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.messageTranslating, finalMessageObject);
+                if (NekoConfig.useCustomProviderForAutoTranslate.Bool()
+                        && NekoConfig.translationProvider.Int() != Translator.providerTelegram
+                        && NekoConfig.translationProvider.Int() != Translator.providerLingva) {
+                    Translator.translate(TranslatorKt.getCode2Locale(language), finalMessageObject.messageOwner.message, new Translator.Companion.TranslateCallBack() {
+                        @Override
+                        public void onSuccess(@NonNull String translation) {
+                            // Log.e("030-tx", String.format("result: %s", translation));
+                            TLRPC.TL_textWithEntities textObj = new TLRPC.TL_textWithEntities();
+                            textObj.text = translation;
+                            finalMessageObject.messageOwner.translatedToLanguage = language;
+                            finalMessageObject.messageOwner.translatedText = textObj;
+                            if (keepReply) {
+                                keepReplyMessage(finalMessageObject);
+                            }
+                            getMessagesStorage().updateMessageCustomParams(dialogId, finalMessageObject.messageOwner);
+                            ArrayList<MessageObject> dialogMessages = messagesController.dialogMessage.get(dialogId);
+                            if (dialogMessages != null) {
+                                for (int i = 0; i < dialogMessages.size(); ++i) {
+                                    MessageObject dialogMessage = dialogMessages.get(i);
+                                    if (dialogMessage != null && dialogMessage.getId() == finalMessageObject.getId()) {
+                                        dialogMessage.messageOwner.translatedToLanguage = language;
+                                        dialogMessage.messageOwner.translatedText = textObj;
+                                        if (dialogMessage.updateTranslation()) {
+                                            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.updateInterfaces, 0);
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailed(boolean unsupported, @NonNull String message) {
+                            Log.e("030-tx", String.format("unsupported: %s, msg: %s", unsupported, message));
+                            try {
+                                NotificationCenter.getGlobalInstance().postNotificationName(
+                                        NotificationCenter.showBulletin, Bulletin.TYPE_ERROR_SUBTITLE,
+                                        LocaleController.getString("TranslationFailedAlert2", R.string.TranslationFailedAlert2), message);
+                            } catch (Exception ex) {
+                                Log.e("030-tx", "failed to show error", ex);
+                            }
+                        }
+                    });
+
+                    return;
+                }
                 pushToTranslate(finalMessageObject, language, (id, text, lang) -> {
                     if (finalMessageObject.getId() != id) {
                         FileLog.e("wtf, asked to translate " + finalMessageObject.getId() + " but got " + id + "!");
@@ -630,6 +694,18 @@ public class TranslateController extends BaseController {
     private ArrayList<Integer> pendingLanguageChecks = new ArrayList<>();
     private void checkLanguage(MessageObject messageObject) {
         // NekoX: remove Language Detector
+        if (!isTranslatable(messageObject) || messageObject.messageOwner == null || TextUtils.isEmpty(messageObject.messageOwner.message)) {
+            return;
+        }
+
+        final long dialogId = messageObject.getDialogId();
+        if (isDialogTranslatable(dialogId)) {
+            return;
+        }
+
+        messageObject.messageOwner.originalLanguage = "auto"; // "und" ??
+        getMessagesStorage().updateMessageCustomParams(dialogId, messageObject.messageOwner);
+        checkDialogTranslatable(messageObject);
     }
 
     private void checkDialogTranslatable(MessageObject messageObject) {
@@ -793,7 +869,7 @@ public class TranslateController extends BaseController {
                         }
                     } else if (err != null && "TO_LANG_INVALID".equals(err.text)) {
                         toggleTranslatingDialog(dialogId, false);
-                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_ERROR, LocaleController.getString("TranslationFailedAlert2", R.string.TranslationFailedAlert2));
+                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_ERROR, LocaleController.getString(R.string.TranslationFailedAlert2));
                     } else {
                         if (err != null && "QUOTA_EXCEEDED".equals(err.text)) {
                             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_ERROR, LocaleController.getString(R.string.TranslationFailedAlert1));
@@ -911,6 +987,15 @@ public class TranslateController extends BaseController {
         }
 
         String translatingDialogsCache = messagesController.getMainSettings().getString("translating_dialog_languages2", null);
+
+        String[] wasTranslatingDialogsCache = messagesController.getMainSettings().getString("was_translating_dialog_languages", "").split(";");
+        if (wasTranslatingDialogsCache.length > 1) {
+            for (String s : wasTranslatingDialogsCache) {
+                if (s.isBlank()) continue;
+                wasTranslatingDialogs.add(Long.parseLong(s));
+            }
+        }
+
         if (translatingDialogsCache == null) {
             return;
         }
@@ -930,10 +1015,11 @@ public class TranslateController extends BaseController {
             String from = langs[0], to = langs[1];
             if ("null".equals(from)) from = null;
             if ("null".equals(to)) to = null;
-            if (from != null) {
+            if (true || from != null) { // from is always null cuz lack of lang detector
                 detectedDialogLanguage.put(did, from);
                 if (!restricted.contains(from)) {
                     translatingDialogs.add(did);
+                    wasTranslatingDialogs.add(did);
                     translatableDialogs.add(did);
                 }
                 if (to != null) {
@@ -957,7 +1043,9 @@ public class TranslateController extends BaseController {
 
     private void saveTranslatingDialogsCache() {
         StringBuilder langset = new StringBuilder();
+        StringBuilder langset2 = new StringBuilder();
         Iterator<Long> i = translatingDialogs.iterator();
+        Iterator<Long> i2 = wasTranslatingDialogs.iterator();
         boolean first = true;
         while (i.hasNext()) {
             try {
@@ -979,6 +1067,18 @@ public class TranslateController extends BaseController {
                 langset.append(did).append("=").append(lang).append(">").append(tolang);
             } catch (Exception e) {}
         }
+        first = true;
+        while (i2.hasNext()) {
+            try {
+                long did = i2.next();
+                if (!first) {
+                    langset2.append(";");
+                } else {
+                    first = false;
+                }
+                langset2.append(did);
+            } catch (Exception ignored) {}
+        }
 
         Set<String> hidden = new HashSet<>();
         i = hideTranslateDialogs.iterator();
@@ -989,7 +1089,10 @@ public class TranslateController extends BaseController {
                 FileLog.e(e);
             }
         }
-        MessagesController.getMainSettings(currentAccount).edit().putString("translating_dialog_languages2", langset.toString()).putStringSet("hidden_translation_at", hidden).apply();
+        MessagesController.getMainSettings(currentAccount).edit()
+                .putString("translating_dialog_languages2", langset.toString())
+                .putString("was_translating_dialog_languages", langset2.toString())
+                .putStringSet("hidden_translation_at", hidden).apply();
     }
 
     private void resetTranslatingDialogsCache() {

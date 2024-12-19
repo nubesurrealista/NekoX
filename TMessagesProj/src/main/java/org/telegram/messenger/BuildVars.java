@@ -45,6 +45,7 @@ public class BuildVars {
     public static boolean isFdroid = BuildConfig.BUILD_TYPE.toLowerCase().contains("fdroid");
     public static boolean isMini = !BuildConfig.FLAVOR.startsWith("full");
     public static boolean isGServicesCompiled = BuildConfig.BUILD_TYPE.equals("debug") || BuildConfig.BUILD_TYPE.equals("release");
+    public static final boolean hasTintSupport = Build.VERSION.SDK_INT > 21;
 
     static {
 
@@ -60,6 +61,11 @@ public class BuildVars {
         if (!DEBUG_PRIVATE_VERSION && ApplicationLoader.applicationContext != null) {
             SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
             LOGS_ENABLED = DEBUG_VERSION = sharedPreferences.getBoolean("logsEnabled", DEBUG_VERSION);
+            if (LOGS_ENABLED) {
+                Thread.setDefaultUncaughtExceptionHandler((thread, exception) -> {
+                    FileLog.fatal(exception, true);
+                });
+            }
         }
     }
 

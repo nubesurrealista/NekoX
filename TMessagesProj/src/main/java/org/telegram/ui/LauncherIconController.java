@@ -3,11 +3,19 @@ package org.telegram.ui;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
+import android.util.Log;
 
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.R;
 
+import java.util.ArrayList;
+
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class LauncherIconController {
+    private static final boolean adaptiveIconSupported = Build.VERSION.SDK_INT > 32;
+
     public static void tryFixLauncherIconIfNeeded() {
         for (LauncherIcon icon : LauncherIcon.values()) {
             if (isEnabled(icon)) {
@@ -18,25 +26,69 @@ public class LauncherIconController {
         setIcon(LauncherIcon.DEFAULT);
     }
 
+    public static LauncherIcon getCurrentIcon() {
+        for (LauncherIcon icon : LauncherIcon.values()) {
+            if (isEnabled(icon, true) || isEnabled(icon, false)) {
+                return icon;
+            }
+        }
+        tryFixLauncherIconIfNeeded();
+        return null;
+    }
+
+    public static ArrayList<LauncherIcon> getCurrentEnabledIcons() {
+        ArrayList<LauncherIcon> ret = new ArrayList<>();
+        for (LauncherIcon icon : LauncherIcon.values()) {
+            if (isEnabled(icon, true) || isEnabled(icon, false)) {
+                ret.add(icon);
+            }
+        }
+        return ret;
+    }
+
     public static boolean isEnabled(LauncherIcon icon) {
+        return isEnabled(icon, NekoConfig.useOldName.Bool());
+    }
+
+    public static boolean isEnabled(LauncherIcon icon, boolean oldName) {
         Context ctx = ApplicationLoader.applicationContext;
-        int i = ctx.getPackageManager().getComponentEnabledSetting(icon.getComponentName(ctx));
+        int i = ctx.getPackageManager().getComponentEnabledSetting(icon.getComponentName(ctx, oldName));
         return i == PackageManager.COMPONENT_ENABLED_STATE_ENABLED || i == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT && icon == LauncherIcon.DEFAULT;
     }
 
-    public static void setIcon(LauncherIcon icon) {
+    public static void setIcon(LauncherIcon icon) { setIcon(icon, NekoConfig.useOldName.Bool()); }
+
+    public static void setIcon(LauncherIcon icon, boolean oldName) {
         Context ctx = ApplicationLoader.applicationContext;
         PackageManager pm = ctx.getPackageManager();
-        for (LauncherIcon i : LauncherIcon.values()) {
-            pm.setComponentEnabledSetting(i.getComponentName(ctx), i == icon ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+
+        pm.setComponentEnabledSetting(icon.getComponentName(ctx, oldName),
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+
+        var enabledIcons = getCurrentEnabledIcons();
+        for (LauncherIcon i : enabledIcons) {
+            if (i != icon) {
+                pm.setComponentEnabledSetting(i.getComponentName(ctx, true),
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+                pm.setComponentEnabledSetting(i.getComponentName(ctx, false),
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+            }
         }
+    }
+
+    public static void switchAppName(boolean oldName) {
+        LauncherIcon currentIcon = getCurrentIcon();
+
+        if (currentIcon != null && ((oldName && isEnabled(currentIcon, true)) || (!oldName && isEnabled(currentIcon, false))))
+            return;
+
+        setIcon(currentIcon == LauncherIcon.DEFAULT ? LauncherIcon.COLORED : LauncherIcon.DEFAULT, oldName);
     }
 
     public enum LauncherIcon {
         DEFAULT("DefaultIcon", R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.string.AppIconDefault),
         COLORED("ColoredIcon", R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.string.AppIconColored),
-        OLD_CLASSIC("ClassicIcon", R.drawable.ic_launcher_classic_foreground, R.mipmap.ic_launcher_classic, R.string.AppIconColoredClassic),
+        OLD_CLASSIC("ClassicIcon", R.drawable.ic_launcher_classic_foreground, adaptiveIconSupported ? R.mipmap.ic_launcher_classic : R.drawable.ic_launcher_classic_foreground, R.string.AppIconColoredClassic),
         THEMED_CLASSIC("ThemedClassicIcon", R.color.ic_launcher_background, R.drawable.icon_preview_neko_classic, R.string.AppIconThemedClassic),
         THEMED_XEYE("ThemedXEyeIcon", R.color.ic_launcher_background, R.drawable.icon_preview_neko_xeye_foreground, R.string.AppIconThemedXEye),
         NEKO_AQUA("NekoAquaIcon", R.drawable.icon_4_background_sa, R.drawable.icon_preview_neko_xeye_foreground, R.string.AppIconAqua),
@@ -60,11 +112,20 @@ public class LauncherIconController {
         public final boolean premium;
 
         private ComponentName componentName;
+        private boolean useOldName = true;
 
         public ComponentName getComponentName(Context ctx) {
-            if (componentName == null) {
-                componentName = new ComponentName(ctx.getPackageName(), "org.telegram.messenger." + key);
+            if (componentName == null || useOldName != NekoConfig.useOldName.Bool()) {
+                useOldName = NekoConfig.useOldName.Bool();
+                String cls = String.format("org.telegram.messenger.%s%s", useOldName ? "" : "Momogram", key);
+                componentName = new ComponentName(ctx.getPackageName(), cls);
             }
+            return componentName;
+        }
+
+        public ComponentName getComponentName(Context ctx, boolean oldName) {
+            String cls = String.format("org.telegram.messenger.%s%s", oldName ? "" : "Momogram", key);
+            componentName = new ComponentName(ctx.getPackageName(), cls);
             return componentName;
         }
 

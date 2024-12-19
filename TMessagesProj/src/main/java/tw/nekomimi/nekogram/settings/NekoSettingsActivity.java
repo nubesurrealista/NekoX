@@ -62,10 +62,12 @@ import java.util.Map;
 import java.util.function.Function;
 
 import kotlin.text.StringsKt;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.GsonUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
+import tw.nekomimi.nekogram.utils.StrUtil;
 
 @SuppressLint("RtlHardcoded")
 public class NekoSettingsActivity extends BaseFragment {
@@ -83,7 +85,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
     private int aboutRow;
     private int channelRow;
-    private int fdroidRow;
+    private int fdroidRow = -1;
     private int googlePlayRow;
     private int sourceCodeRow;
     private int translationRow;
@@ -106,12 +108,12 @@ public class NekoSettingsActivity extends BaseFragment {
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString("NekoSettings", R.string.NekoSettings));
+        actionBar.setTitle(LocaleController.getString(NekoConfig.useOldName.Bool() ? R.string.NekoSettings : R.string.MomoSettings));
 
         ActionBarMenu menu = actionBar.createMenu();
         ActionBarMenuItem otherMenu = menu.addItem(0, R.drawable.ic_ab_other);
-        otherMenu.addSubItem(backup_settings, LocaleController.getString("BackupSettings", R.string.BackupSettings));
-        otherMenu.addSubItem(import_settings, LocaleController.getString("ImportSettings", R.string.ImportSettings));
+        otherMenu.addSubItem(backup_settings, LocaleController.getString(R.string.BackupSettings));
+        otherMenu.addSubItem(import_settings, LocaleController.getString(R.string.ImportSettings));
 
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
@@ -175,15 +177,15 @@ public class NekoSettingsActivity extends BaseFragment {
             } else if (position == experimentRow) {
                 presentFragment(new NekoExperimentalSettingsActivity());
             } else if (position == channelRow) {
-                MessagesController.getInstance(currentAccount).openByUserName("nekox_broken", this, 1);
+                MessagesController.getInstance(currentAccount).openByUserName("momogram_update", this, 1);
             } else if (position == translationRow) {
-                Browser.openUrl(getParentActivity(), "https://hosted.weblate.org/engage/nekox/");
+                Browser.openUrl(getParentActivity(), "https://hosted.weblate.org/engage/nekox_030/");
             } else if (position == fdroidRow) {
                 Browser.openUrl(getParentActivity(), "https://f-droid.org/packages/nekox.messenger");
             } else if (position == googlePlayRow) {
                 Browser.openUrl(getParentActivity(), "https://play.google.com/store/apps/details?id=nekox.messenger");
             } else if (position == sourceCodeRow) {
-                Browser.openUrl(getParentActivity(), "https://github.com/dic1911/NekoX");
+                Browser.openUrl(getParentActivity(), "https://github.com/dic1911/Momogram");
             }
         });
 
@@ -302,9 +304,9 @@ public class NekoSettingsActivity extends BaseFragment {
     public static void importSettings(Context context, File settingsFile) {
 
         AlertUtil.showConfirm(context,
-                LocaleController.getString("ImportSettingsAlert", R.string.ImportSettingsAlert),
+                LocaleController.getString(R.string.ImportSettingsAlert),
                 R.drawable.baseline_security_24,
-                LocaleController.getString("Import", R.string.Import),
+                LocaleController.getString(R.string.Import),
                 true,
                 () -> importSettingsConfirmed(context, settingsFile));
 
@@ -317,9 +319,9 @@ public class NekoSettingsActivity extends BaseFragment {
             importSettings(configJson);
 
             AlertDialog restart = new AlertDialog(context, 0);
-            restart.setTitle(LocaleController.getString("NekoX", R.string.NekoX));
-            restart.setMessage(LocaleController.getString("RestartAppToTakeEffect", R.string.RestartAppToTakeEffect));
-            restart.setPositiveButton(LocaleController.getString("OK", R.string.OK), (__, ___) -> {
+            restart.setTitle(StrUtil.getAppName());
+            restart.setMessage(LocaleController.getString(R.string.RestartAppToTakeEffect));
+            restart.setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) -> {
                 ProcessPhoenix.triggerRebirth(context, new Intent(context, LaunchActivity.class));
             });
             restart.show();
@@ -385,7 +387,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
         aboutRow = rowCount++;
         channelRow = rowCount++;
-        fdroidRow = rowCount++;
+//        fdroidRow = rowCount++;
         /*if (ExternalGcm.checkPlayServices()) {
             googlePlayRow = rowCount++;
         } else {*/
@@ -468,37 +470,37 @@ public class NekoSettingsActivity extends BaseFragment {
                 case 2: {
                     TextCell textCell = (TextCell) holder.itemView;
                     if (position == chatRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Chat", R.string.Chat), R.drawable.baseline_chat_bubble_24, true);
+                        textCell.setTextAndIcon(LocaleController.getString(R.string.Chat), R.drawable.baseline_chat_bubble_24, true);
                     } else if (position == generalRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("General", R.string.General), R.drawable.baseline_palette_24, true);
+                        textCell.setTextAndIcon(LocaleController.getString(R.string.General), R.drawable.baseline_palette_24, true);
                     } else if (position == experimentRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Experiment", R.string.Experiment), R.drawable.baseline_star_24, true);
+                        textCell.setTextAndIcon(LocaleController.getString(R.string.Experiment), R.drawable.baseline_star_24, true);
                     } else if (position == accountRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Account", R.string.Account), R.drawable.baseline_person_24, true);
+                        textCell.setTextAndIcon(LocaleController.getString(R.string.Account), R.drawable.baseline_person_24, true);
                     }
                     break;
                 }
                 case 3: {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     if (position == channelRow) {
-                        textCell.setTextAndValue(LocaleController.getString("OfficialChannel", R.string.OfficialChannel), "@nekox_broken", true);
+                        textCell.setTextAndValue(LocaleController.getString(R.string.OfficialChannel), "@momogram_update", true);
                     } else if (position == fdroidRow) {
-                        textCell.setText(LocaleController.getString("AppLinkFDroid", R.string.AppLinkFDroid), true);
+                        textCell.setText(LocaleController.getString(R.string.AppLinkFDroid), true);
                     } else if (position == googlePlayRow) {
-                        textCell.setText(LocaleController.getString("GooglePlay", R.string.GooglePlay), true);
+                        textCell.setText(LocaleController.getString(R.string.GooglePlay), true);
                     } else if (position == sourceCodeRow) {
-                        textCell.setText(LocaleController.getString("SourceCode", R.string.SourceCode), true);
+                        textCell.setText(LocaleController.getString(R.string.SourceCode), true);
                     } else if (position == translationRow) {
-                        textCell.setText(LocaleController.getString("TransSite", R.string.TransSite), true);
+                        textCell.setText(LocaleController.getString(R.string.TransSite), true);
                     }
                     break;
                 }
                 case 4: {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == categoriesRow) {
-                        headerCell.setText(LocaleController.getString("Categories", R.string.Categories));
+                        headerCell.setText(LocaleController.getString(R.string.Categories));
                     } else if (position == aboutRow) {
-                        headerCell.setText(LocaleController.getString("About", R.string.About));
+                        headerCell.setText(LocaleController.getString(R.string.About));
                     }
                     break;
                 }

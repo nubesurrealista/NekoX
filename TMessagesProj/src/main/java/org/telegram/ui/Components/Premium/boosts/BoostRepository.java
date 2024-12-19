@@ -1,6 +1,7 @@
 package org.telegram.ui.Components.Premium.boosts;
 
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Pair;
 
 import org.json.JSONObject;
@@ -97,12 +98,7 @@ public class BoostRepository {
         return peers;
     }
 
-    public static void payGiftCode(List<TLObject> users, TLRPC.TL_premiumGiftCodeOption option, TLRPC.Chat chat, BaseFragment baseFragment, Utilities.Callback<Void> onSuccess, Utilities.Callback<TLRPC.TL_error> onError) {
-        if (!isGoogleBillingAvailable()) {
-            payGiftCodeByInvoice(users, option, chat, baseFragment, onSuccess, onError);
-        } else {
-            payGiftCodeByGoogle(users, option, chat, baseFragment, onSuccess, onError);
-        }
+    public static void payGiftCode(List<TLObject> users, TLRPC.TL_premiumGiftCodeOption option, TLRPC.Chat chat, TLRPC.TL_textWithEntities message, BaseFragment baseFragment, Utilities.Callback<Void> onSuccess, Utilities.Callback<TLRPC.TL_error> onError) {
     }
 
     public static boolean isGoogleBillingAvailable() {
@@ -120,41 +116,80 @@ public class BoostRepository {
         // 030: remove premium shit
     }
 
-    public static void launchPreparedGiveaway(TL_stories.TL_prepaidGiveaway prepaidGiveaway, List<TLObject> chats, List<TLObject> selectedCountries,
-                                              TLRPC.Chat chat, int date, boolean onlyNewSubscribers, boolean winnersVisible, boolean withAdditionPrize, String prizeDesc,
+    public static void launchPreparedGiveaway(TL_stories.PrepaidGiveaway prepaidGiveaway, List<TLObject> chats, List<TLObject> selectedCountries,
+                                              TLRPC.Chat chat, int date, boolean onlyNewSubscribers, boolean winnersVisible, boolean withAdditionPrize, int users, String prizeDesc,
                                               Utilities.Callback<Void> onSuccess, Utilities.Callback<TLRPC.TL_error> onError) {
         MessagesController controller = MessagesController.getInstance(UserConfig.selectedAccount);
         ConnectionsManager connection = ConnectionsManager.getInstance(UserConfig.selectedAccount);
 
-        TLRPC.TL_inputStorePaymentPremiumGiveaway purpose = new TLRPC.TL_inputStorePaymentPremiumGiveaway();
-        purpose.only_new_subscribers = onlyNewSubscribers;
-        purpose.winners_are_visible = winnersVisible;
-        purpose.prize_description = prizeDesc;
-        purpose.until_date = date;
-        purpose.flags |= 2;
-        purpose.flags |= 4;
-        if (withAdditionPrize) {
-            purpose.flags |= 16;
-        }
-        purpose.random_id = System.currentTimeMillis();
-        purpose.additional_peers = new ArrayList<>();
-        purpose.boost_peer = controller.getInputPeer(-chat.id);
-        purpose.currency = "";
-
-        for (TLObject object : selectedCountries) {
-            TLRPC.TL_help_country country = (TLRPC.TL_help_country) object;
-            purpose.countries_iso2.add(country.iso2);
-        }
-
-        for (TLObject o : chats) {
-            if (o instanceof TLRPC.Chat) {
-                purpose.additional_peers.add(controller.getInputPeer(-((TLRPC.Chat) o).id));
+        TLRPC.InputStorePaymentPurpose finalPurpose;
+        if (prepaidGiveaway instanceof TL_stories.TL_prepaidGiveaway) {
+            TLRPC.TL_inputStorePaymentPremiumGiveaway purpose = new TLRPC.TL_inputStorePaymentPremiumGiveaway();
+            purpose.only_new_subscribers = onlyNewSubscribers;
+            purpose.winners_are_visible = winnersVisible;
+            purpose.prize_description = prizeDesc;
+            purpose.until_date = date;
+            purpose.flags |= 2;
+            purpose.flags |= 4;
+            if (withAdditionPrize) {
+                purpose.flags |= 16;
             }
+            purpose.random_id = System.currentTimeMillis();
+            purpose.additional_peers = new ArrayList<>();
+            purpose.boost_peer = controller.getInputPeer(-chat.id);
+            purpose.currency = "";
+
+            for (TLObject object : selectedCountries) {
+                TLRPC.TL_help_country country = (TLRPC.TL_help_country) object;
+                purpose.countries_iso2.add(country.iso2);
+            }
+
+            for (TLObject o : chats) {
+                if (o instanceof TLRPC.Chat) {
+                    purpose.additional_peers.add(controller.getInputPeer(-((TLRPC.Chat) o).id));
+                }
+            }
+
+            finalPurpose = purpose;
+        } else if (prepaidGiveaway instanceof TL_stories.TL_prepaidStarsGiveaway) {
+            TLRPC.TL_inputStorePaymentStarsGiveaway purpose = new TLRPC.TL_inputStorePaymentStarsGiveaway();
+            purpose.only_new_subscribers = onlyNewSubscribers;
+            purpose.winners_are_visible = winnersVisible;
+            purpose.prize_description = prizeDesc;
+            purpose.until_date = date;
+            purpose.flags |= 2;
+            purpose.flags |= 4;
+            if (withAdditionPrize) {
+                purpose.flags |= 16;
+            }
+            purpose.random_id = System.currentTimeMillis();
+            purpose.additional_peers = new ArrayList<>();
+            purpose.boost_peer = controller.getInputPeer(-chat.id);
+            purpose.currency = "";
+
+            purpose.stars = ((TL_stories.TL_prepaidStarsGiveaway) prepaidGiveaway).stars;
+            purpose.users = prepaidGiveaway.quantity;
+
+            for (TLObject object : selectedCountries) {
+                TLRPC.TL_help_country country = (TLRPC.TL_help_country) object;
+                purpose.countries_iso2.add(country.iso2);
+            }
+
+            for (TLObject o : chats) {
+                if (o instanceof TLRPC.Chat) {
+                    purpose.additional_peers.add(controller.getInputPeer(-((TLRPC.Chat) o).id));
+                }
+            }
+
+            finalPurpose = purpose;
+        } else {
+            return;
         }
+
         TLRPC.TL_payments_launchPrepaidGiveaway req = new TLRPC.TL_payments_launchPrepaidGiveaway();
         req.giveaway_id = prepaidGiveaway.id;
         req.peer = controller.getInputPeer(-chat.id);
-        req.purpose = purpose;
+        req.purpose = finalPurpose;
         connection.sendRequest(req, (response, error) -> {
             if (error != null) {
                 AndroidUtilities.runOnUIThread(() -> onError.run(error));
@@ -263,8 +298,9 @@ public class BoostRepository {
         });
     }
 
-    public static void loadGiftOptions(TLRPC.Chat chat, Utilities.Callback<List<TLRPC.TL_premiumGiftCodeOption>> onDone) {
+    public static int loadGiftOptions(int currentAccount, TLRPC.Chat chat, Utilities.Callback<List<TLRPC.TL_premiumGiftCodeOption>> onDone) {
         // 030: remove premium shit
+        return -1;
     }
 
     public static int searchContacts(int reqId, String query, Utilities.Callback<List<TLRPC.User>> onDone) {

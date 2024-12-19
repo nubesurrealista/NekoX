@@ -333,6 +333,10 @@ public class FileLog {
                 try {
                     getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/" + tag + ": " + message + "\n");
                     getInstance().streamWriter.write(exception.toString());
+                    StackTraceElement[] stack = exception.getStackTrace();
+                    for (int a = 0; a < stack.length; a++) {
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: \tat " + stack[a] + "\n");
+                    }
                     getInstance().streamWriter.flush();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -392,9 +396,10 @@ public class FileLog {
         e.printStackTrace();
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
-
                 try {
                     getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/" + tag + ": " + e + "\n");
+                    if (e.getCause() != null)
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/" + tag + ": Caused by " + e.getCause() + "\n");
                     StackTraceElement[] stack = e.getStackTrace();
                     for (int a = 0; a < stack.length; a++) {
                         getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/" + tag + ": " + stack[a] + "\n");
@@ -417,7 +422,7 @@ public class FileLog {
         if (!BuildVars.LOGS_ENABLED) {
             return;
         }
-//        if (BuildVars.DEBUG_VERSION && needSent(e) && logToAppCenter) {
+//        if (logToAppCenter && BuildVars.DEBUG_VERSION && needSent(e)) {
 //            AndroidUtilities.appCenterLog(e);
 //        }
         ensureInitied();
@@ -428,6 +433,8 @@ public class FileLog {
             getInstance().logQueue.postRunnable(() -> {
                 try {
                     getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " Fatal/" + tag + ": " + e + "\n");
+                    if (e.getCause() != null)
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " Fatal/" + tag + ": Caused by " + e.getCause() + "\n");
                     StackTraceElement[] stack = e.getStackTrace();
                     for (int a = 0; a < stack.length; a++) {
                         getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " Fatal/" + tag + ": " + stack[a] + "\n");
@@ -449,7 +456,7 @@ public class FileLog {
         }
     }
 
-    private static String mkTag() {
+    public static String mkTag() {
         final StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         return StrUtil.subAfter(stackTrace[4].getClassName(), ".", true);
     }

@@ -223,6 +223,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
 
     private int currentAccount;
     private View parentView;
+    private Runnable parentRunnable;
 
     private int param;
     private Object currentParentObject;
@@ -2052,12 +2053,10 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         manualAlphaAnimator = value;
     }
 
-    @Keep
     public float getCurrentAlpha() {
         return currentAlpha;
     }
 
-    @Keep
     public void setCurrentAlpha(float value) {
         currentAlpha = value;
     }
@@ -2607,6 +2606,10 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         }
     }
 
+    public int getAutoRepeat() {
+        return autoRepeat;
+    }
+
     public void setAutoRepeatCount(int count) {
         autoRepeatCount = count;
         if (getLottieAnimation() != null) {
@@ -2664,8 +2667,8 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     public void setEmojiPaused(boolean paused) {
         if (emojiPaused == paused) return;
         emojiPaused = paused;
-        RLottieDrawable rLottieDrawable = getLottieAnimation();
         allowStartLottieAnimation = !paused;
+        RLottieDrawable rLottieDrawable = getLottieAnimation();
         if (rLottieDrawable != null) {
             if (paused) {
                 rLottieDrawable.stop();

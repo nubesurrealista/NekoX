@@ -21,6 +21,8 @@ import org.telegram.ui.LaunchActivity;
 
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.utils.StrUtil;
+
 public class LocationSharingService extends Service implements NotificationCenter.NotificationCenterDelegate {
 
     private NotificationCompat.Builder builder;
@@ -102,7 +104,7 @@ public class LocationSharingService extends Service implements NotificationCente
             if (DialogObject.isUserDialog(dialogId)) {
                 TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(dialogId);
                 param = UserObject.getFirstName(user);
-                str = LocaleController.getString("AttachLiveLocationIsSharing", R.string.AttachLiveLocationIsSharing);
+                str = LocaleController.getString(R.string.AttachLiveLocationIsSharing);
             } else {
                 TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-dialogId);
                 if (chat != null) {
@@ -110,13 +112,13 @@ public class LocationSharingService extends Service implements NotificationCente
                 } else {
                     param = "";
                 }
-                str = LocaleController.getString("AttachLiveLocationIsSharingChat", R.string.AttachLiveLocationIsSharingChat);
+                str = LocaleController.getString(R.string.AttachLiveLocationIsSharingChat);
             }
         } else {
             param = LocaleController.formatPluralString("Chats", infos.size());
-            str = LocaleController.getString("AttachLiveLocationIsSharingChats", R.string.AttachLiveLocationIsSharingChats);
+            str = LocaleController.getString(R.string.AttachLiveLocationIsSharingChats);
         }
-        String text = String.format(str, LocaleController.getString("AttachLiveLocation", R.string.AttachLiveLocation), param);
+        String text = String.format(str, LocaleController.getString(R.string.AttachLiveLocation), param);
         builder.setTicker(text);
         builder.setContentText(text);
         if (post) {
@@ -141,9 +143,9 @@ public class LocationSharingService extends Service implements NotificationCente
                 builder.setContentIntent(contentIntent);
                 NotificationsController.checkOtherNotificationsChannel();
                 builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
-                builder.setContentTitle(LocaleController.getString("NekoX", R.string.NekoX));
+                builder.setContentTitle(StrUtil.getAppName());
                 Intent stopIntent = new Intent(ApplicationLoader.applicationContext, StopLiveLocationReceiver.class);
-                builder.addAction(0, LocaleController.getString("StopLiveLocation", R.string.StopLiveLocation), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, stopIntent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
+                builder.addAction(0, LocaleController.getString(R.string.StopLiveLocation), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, stopIntent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
             }
 
             updateNotification(false);

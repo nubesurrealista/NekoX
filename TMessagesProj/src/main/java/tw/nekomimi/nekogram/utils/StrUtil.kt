@@ -5,8 +5,11 @@ import android.view.View
 import android.widget.TextView
 import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.FileLog
+import org.telegram.messenger.LocaleController
+import org.telegram.messenger.R
 import org.telegram.ui.ActionBar.BaseFragment
 import org.telegram.ui.Components.URLSpanNoUnderline
+import tw.nekomimi.nekogram.NekoConfig
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -66,6 +69,27 @@ object StrUtil {
             rlen = text.length
         }
         return text.substring(llen, rlen)
+    }
+
+    @JvmStatic
+    fun get030Tag(obj: Any): String {
+        return "030-${obj.javaClass.simpleName}"
+    }
+
+    @JvmStatic
+    fun getAppName(): String {
+        if (NekoConfig.useOldName.Bool())
+            return LocaleController.getString(R.string.NekoX)
+
+        return LocaleController.getString(R.string.Momogram)
+    }
+
+    @JvmStatic
+    fun getShortAppName(): String {
+        if (NekoConfig.useOldName.Bool())
+            return LocaleController.getString(R.string.AppNameShort)
+
+        return LocaleController.getString(R.string.Momogram)
     }
 
 }
