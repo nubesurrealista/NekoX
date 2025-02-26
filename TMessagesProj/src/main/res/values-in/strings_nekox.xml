@@ -215,4 +215,14 @@
     <string name="HideChannelBottomNotiToggle">Sembunyikan tombol notifikasi di bagian bawah saluran</string>
     <string name="MonetNickname">Monet untuk nama panggilan</string>
     <string name="UseCamera2API">Gunakan API Kamera 2</string>
+    <string name="HideCameraInAttachMenu">Sembunyikan Kamera di Menu Lampiran</string>
+    <string name="ForceExternalBrowserForBotsDesc">Beberapa bot yang membutuhkan API khusus dari telegram mungkin tidak berfungsi</string>
+    <string name="ForceExternalBrowserForBots">Gunakan browser eksternal untuk bot/mini-apps</string>
+    <string name="OpenLinkInApp">Buka di Aplikasi</string>
+    <string name="DebugSendLogsExt">Bagikan Log ke Aplikasi Eksternal</string>
+    <string name="FeatureRemoved">Fitur ini telah dihapus.</string>
+    <string name="FeatureRemovedWhy">Mengapa?</string>
+    <string name="ShowQuickReconnect">Tampilkan tombol Reconnect cepat saat terhubung kembali</string>
+    <string name="ShowQuickReconnectDesc">Sama seperti peretasan kembali sebelumnya, tetapi dipicu secara manual.</string>
+    <string name="FeatureRemovedWhyDetail">Dengan perubahan hulu dimulai dari 11.7.0, beberapa API tidak lagi berfungsi, mengakibatkan klien tidak stabil, ini mungkin atau mungkin tidak diselesaikan di masa depan, jangan spam untuk meminta ETA.</string>
 </resources>
