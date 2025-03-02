@@ -225,4 +225,9 @@
     <string name="ShowQuickReconnect">Tampilkan tombol Reconnect cepat saat terhubung kembali</string>
     <string name="ShowQuickReconnectDesc">Sama seperti peretasan kembali sebelumnya, tetapi dipicu secara manual.</string>
     <string name="FeatureRemovedWhyDetail">Dengan perubahan hulu dimulai dari 11.7.0, beberapa API tidak lagi berfungsi, mengakibatkan klien tidak stabil, ini mungkin atau mungkin tidak diselesaikan di masa depan, jangan spam untuk meminta ETA.</string>
+    <string name="ShowPhoneNumTemp">Jungkit telepon num.</string>
+    <string name="PauseInactiveTabAnimation">Jeda animasi tab yang tidak aktif</string>
+    <string name="MuteBlockedFromGroup">Pemberitahuan obrolan grup bisu jika dari pengguna yang diblokir</string>
+    <string name="MuteBotsFromGroup">Pemberitahuan obrolan grup bisu jika dari bot</string>
+    <string name="MuteBotsFromGroupDesc">Pesan yang diketahui untuk admin tidak akan di bisukan</string>
 </resources>
