@@ -61,7 +61,7 @@
     <string name="ProviderGoogleTranslate">Google Terjemahan</string>
     <string name="ProviderGoogleTranslateCN">Google China Terjemahan</string>
     <string name="TranslateApiUnsupported">Layanan penterjemah yg di pilih tidak mendukung bahasa Anda.</string>
-    <string name="ProviderLingocloud">Lingocloud</string>
+    <string name="ProviderLingocloud">Layanan Lingocloud</string>
     <string name="UndoTranslate">Batal terjemahkan</string>
     <string name="DisablePhotoViewerSideAction">Matikan fitur membalikkan foto dengan mengetuk</string>
     <string name="BotToken">Token</string>
@@ -90,7 +90,7 @@
     <string name="OfficialChannel">Kanal resmi</string>
     <string name="About">Tentang</string>
     <string name="IgnoreBlockedAbout">BUKANLAH BENAR-BENAR DISEMBUNYIKAN! Pesan masih dapat dilihat, tetapi pesan akan diubah menjadi Spoiler.</string>
-    <string name="GooglePlay">Google Play</string>
+    <string name="GooglePlay">Layanan Google</string>
     <string name="SourceCode">Kode sumber pada github.com</string>
     <string name="ResetStickerSize">Atur ulang ukuran stiker</string>
     <string name="RestartAppToTakeEffect">Hidupkan ulang aplikasi ini agar terlihat perbedaannya.</string>
@@ -106,7 +106,7 @@
     <string name="BlurAvatarBackground">Buramkan gambar profil</string>
     <string name="DarkenAvatarBackground">Gelapkan gambar profil</string>
     <string name="ProviderDeepLTranslate">Terjemahan DeepL</string>
-    <string name="ProviderMicrosoftTranslator">Microsoft Translator</string>
+    <string name="ProviderMicrosoftTranslator">Microsoft Penerjemah</string>
     <string name="ProviderYouDao">Terjemahan YouDao</string>
     <string name="pressTitleToOpenAllChats">Tekan judul untuk membuka tab \"Semua Obrolan\"</string>
     <string name="maxRecentStickerCount">Maksimal Stiker terbaru</string>
@@ -303,7 +303,7 @@
     <string name="CloudflareCredentials">Kredensial Cloudflare</string>
     <string name="CloudflareCredentialsNotSet">Kredensial Cloudflare tidak dikonfigurasi.</string>
     <string name="CloudflareCredentialsDialog">Konfigurasikan ID Akun Cloudflare dan Token API.\n**Bagaimana cara memperolehnya?**</string>
-    <string name="TranscribeProviderWorkersAI">Whisper (Workers AI)</string>
+    <string name="TranscribeProviderWorkersAI">Whisper (AI Workers)</string>
     <string name="CloudflareAPIToken">Toko API</string>
     <string name="EnhancedVideoBitrate">Bitrate video bersama yang ditingkatkan</string>
     <string name="EnhancedVideoBitrateInfo">Kualitas lebih baik dengan ukuran file yang jauh lebih besar</string>
@@ -314,4 +314,7 @@
     <string name="TranscribeProvider">Penyedia transkripsi</string>
     <string name="TranscribeProviderAuto">Pilih otomatis</string>
     <string name="CloudflareAccountID">ID Akun</string>
+    <string name="AllowTestingUpdate">Periksa pembuatan pengujian saat mencari pembaruan</string>
+    <string name="enhancedFileLoaderWarning">Ini mungkin memiliki efek negatif pada kecepatan unduhan aktual, terutama ketika tidak pada akun premium, lanjutkan?</string>
+    <string name="AllowBotInDirectShare">Izinkan bot sebagai target langsung</string>
 </resources>
