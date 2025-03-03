@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsCallback;
@@ -66,6 +67,7 @@ import java.util.regex.Pattern;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.utils.TelegramUtil;
 import tw.nekomimi.nekogram.utils.UrlUtil;
 
 public class Browser {
@@ -534,7 +536,11 @@ public class Browser {
                     Intent.parseUri(uri.toString(), Intent.URI_INTENT_SCHEME) :
                     new Intent(Intent.ACTION_VIEW, uri);
             if (!TextUtils.isEmpty(browser)) {
-                intent.setPackage(browser);
+                Log.d("030-ext", String.format("%s was specified\n%s", browser, TelegramUtil.getStackTraceAsString(null)));
+                if (!NekoConfig.forceAllowChooseBrowser.Bool())
+                    intent.setPackage(browser);
+                else
+                    Log.d("030-ext", "ignored");
             }
             intent.putExtra(android.provider.Browser.EXTRA_CREATE_NEW_TAB, true);
             intent.putExtra(android.provider.Browser.EXTRA_APPLICATION_ID, context.getPackageName());
