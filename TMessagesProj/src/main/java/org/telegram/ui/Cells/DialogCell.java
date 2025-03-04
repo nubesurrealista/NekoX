@@ -42,7 +42,6 @@ import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ReplacementSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.accessibility.AccessibilityEvent;
@@ -4104,7 +4103,6 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 (drawScam == 1 ? Theme.dialogs_scamDrawable : Theme.dialogs_fakeDrawable).draw(canvas);
             }
 
-            Log.d("030-ic", String.format("iconW = %d", FolderIconHelper.getIconWidth()));
             if (parentFragment != null && NekoConfig.showAddedToFoldersAtTitle.Bool()) {
                 Paint textPaint = Theme.dialogs_messagePaint[paintIndex];
                 HashSet<String> icons = new HashSet<>();
