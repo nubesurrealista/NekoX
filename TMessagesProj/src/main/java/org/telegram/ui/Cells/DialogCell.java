@@ -4120,6 +4120,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 if (chatListFontSizeFollowChat && SharedConfig.fontSize != 15) {
                     float diff = dp(15 - SharedConfig.fontSize);
                     y -= (int) (SharedConfig.fontSize < 15 ? diff * (threeLines ? 1 : 0.95) : diff * (threeLines ? 0.18 : 0.2));
+                    if (SharedConfig.fontSize < 15) iconW *= ((float) SharedConfig.fontSize / 15);
                 }
                 canvas.save();
                 for (var i : icons) {
