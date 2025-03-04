@@ -7170,6 +7170,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
         Log.d("030-fban", String.format("%s %d", target != null, targetId));
         getMessagesController().banUserFromAllModeratingChat(target, (response, error) -> {
+            Log.d("030-fban", String.format("r: %s %s, e: %s %s",
+                    response != null, (response == null ? "" : response.getClass().getName()),
+                    error != null, (error == null ? "" : error.getClass().getName())));
             if (error == null) {
                 int amount = ((TLRPC.TL_error) response).code;
                 if (amount == 0) {

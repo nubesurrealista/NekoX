@@ -235,4 +235,5 @@
     <string name="BanForAllModeratingChats">Ban this user from all your moderating chats?</string>
     <string name="BannedForChats">Banned %1$s for %2$d chat(s)</string>
     <string name="FBan">FBan</string>
+    <string name="ShowAddedToFoldersAtTitle">Show added to folder (icons) next to chat title</string>
 </resources>

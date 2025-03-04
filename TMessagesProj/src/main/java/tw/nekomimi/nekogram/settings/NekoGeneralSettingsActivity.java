@@ -201,6 +201,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             LocaleController.getString(R.string.Disable)
     }, null));
 
+    private final AbstractConfigCell showAddedToFoldersAtTitleRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showAddedToFoldersAtTitle));
     private final AbstractConfigCell forceBlurInChatRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.forceBlurInChat));
     private final AbstractConfigCell header_chatblur = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.ChatBlurAlphaValue)));
     private final AbstractConfigCell chatBlurAlphaValueRow = cellGroup.appendCell(new ConfigCellCustom(ConfigCellCustom.CUSTOM_ITEM_CharBlurAlpha, NekoConfig.forceBlurInChat.Bool()));

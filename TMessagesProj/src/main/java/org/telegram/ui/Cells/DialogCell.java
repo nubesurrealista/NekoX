@@ -15,6 +15,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -41,6 +42,7 @@ import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ReplacementSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.accessibility.AccessibilityEvent;
@@ -51,9 +53,12 @@ import android.view.animation.OvershootInterpolator;
 import androidx.collection.LongSparseArray;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.graphics.drawable.BitmapDrawableKt;
 
+import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ChatThemeController;
 import org.telegram.messenger.CodeHighlighting;
@@ -126,10 +131,13 @@ import org.telegram.ui.Stories.StoryViewer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
 
+import tw.nekomimi.nekogram.folder.FolderIconHelper;
 import tw.nekomimi.nekogram.ui.MessageHelper;
 import tw.nekomimi.nekogram.NekoConfig;
 
@@ -186,6 +194,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
     public boolean isSavedDialog;
     public boolean isSavedDialogCell;
     public DialogCellTags tags;
+    private static final HashMap<String, Bitmap> folderIconCache = new HashMap<>(10);
 
     public final StoriesUtilities.AvatarStoryParams storyParams = new StoriesUtilities.AvatarStoryParams(false) {
         @Override
@@ -3977,6 +3986,8 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             }
             boolean drawMuted = drawUnmute || dialogMuted;
             boolean threeLines = (useForceThreeLines || SharedConfig.useThreeLinesLayout) && !chatListFontSizeFollowChat;
+            float drawableScale = (chatListFontSizeFollowChat || SharedConfig.fontSize <= 15) ? 1f : ((float) SharedConfig.fontSize / 15);
+            float folderX = -1f;
             if (dialogsType != 2 && (drawMuted || dialogMutedProgress > 0) && !drawVerified && drawScam == 0 && !drawPremium) {
                 if (drawMuted && dialogMutedProgress != 1f) {
                     dialogMutedProgress += 16 / 150f;
@@ -4002,14 +4013,16 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 if (chatListFontSizeFollowChat) {
                     if (SharedConfig.fontSize != 15) {
                         float diff = dp(15 - SharedConfig.fontSize);
-                        muteY -= (int) (SharedConfig.fontSize < 15 ? diff * 1.475 : diff * 0.3);
+                        muteY -= (int) (SharedConfig.fontSize < 15 ? diff * 1.475 : diff * (threeLines ? 0.18 : 0.3));
                     }
-                    setDrawableBounds(Theme.dialogs_muteDrawable, (int) muteX, (int) muteY, SharedConfig.fontSize <= 15 ? 1 : ((float) SharedConfig.fontSize / 15));
-                    setDrawableBounds(Theme.dialogs_unmuteDrawable, (int) muteX, (int) muteY, SharedConfig.fontSize <= 15 ? 1 : ((float) SharedConfig.fontSize / 15));
+                    drawableScale = SharedConfig.fontSize <= 15 ? 1 : ((float) SharedConfig.fontSize / 15);
+                    setDrawableBounds(Theme.dialogs_muteDrawable, (int) muteX, (int) muteY, drawableScale);
+                    setDrawableBounds(Theme.dialogs_unmuteDrawable, (int) muteX, (int) muteY, drawableScale);
                 } else {
                     setDrawableBounds(Theme.dialogs_muteDrawable, muteX, muteY);
                     setDrawableBounds(Theme.dialogs_unmuteDrawable, muteX, muteY);
                 }
+                folderX = muteX + (Theme.dialogs_muteDrawable.getIntrinsicWidth() * drawableScale) + dp(2);
 
                 if (dialogMutedProgress != 1f) {
                     canvas.save();
@@ -4043,12 +4056,13 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                         float diff = dp(15 - SharedConfig.fontSize);
                         y -= (int) (SharedConfig.fontSize < 15 ? diff * 1.5 : diff * 0.3);
                     }
-                    setDrawableBounds(Theme.dialogs_verifiedDrawable, (int) nameMuteLeft - dp(1), (int) y, SharedConfig.fontSize <= 15 ? 1 : ((float) SharedConfig.fontSize / 15));
-                    setDrawableBounds(Theme.dialogs_verifiedCheckDrawable, (int) nameMuteLeft - dp(1), (int) y, SharedConfig.fontSize <= 15 ? 1 : ((float) SharedConfig.fontSize / 15));
+                    setDrawableBounds(Theme.dialogs_verifiedDrawable, (int) nameMuteLeft - dp(1), (int) y, drawableScale);
+                    setDrawableBounds(Theme.dialogs_verifiedCheckDrawable, (int) nameMuteLeft - dp(1), (int) y, drawableScale);
                 } else {
                     setDrawableBounds(Theme.dialogs_verifiedDrawable, nameMuteLeft - dp(1), y);
                     setDrawableBounds(Theme.dialogs_verifiedCheckDrawable, nameMuteLeft - dp(1), y);
                 }
+                folderX = nameMuteLeft + (Math.max(Theme.dialogs_verifiedCheckDrawable.getIntrinsicWidth(), Theme.dialogs_verifiedDrawable.getIntrinsicWidth()) * drawableScale) + dp(4);
 
                 Theme.dialogs_verifiedDrawable.draw(canvas);
                 Theme.dialogs_verifiedCheckDrawable.draw(canvas);
@@ -4064,6 +4078,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                             nameMuteLeft + dp(20),
                             y - dp(4) + dp(22)
                     );
+                    folderX = nameMuteLeft + dp(20 + 4);
                     emojiStatus.setColor(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider));
                     emojiStatus.draw(canvas);
                 } else {
@@ -4087,6 +4102,48 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                     setDrawableBounds((drawScam == 1 ? Theme.dialogs_scamDrawable : Theme.dialogs_fakeDrawable), (int) nameMuteLeft, (int) y);
                 }
                 (drawScam == 1 ? Theme.dialogs_scamDrawable : Theme.dialogs_fakeDrawable).draw(canvas);
+            }
+
+            Log.d("030-ic", String.format("iconW = %d", FolderIconHelper.getIconWidth()));
+            if (parentFragment != null && NekoConfig.showAddedToFoldersAtTitle.Bool()) {
+                Paint textPaint = Theme.dialogs_messagePaint[paintIndex];
+                HashSet<String> icons = new HashSet<>();
+                for (var f : parentFragment.getMessagesController().dialogFilters) {
+                    if (f.emoticon != null && !f.isDefault() &&
+                            f.includesDialog(AccountInstance.getInstance(currentAccount), currentDialogId)) {
+                        icons.add(f.emoticon);
+                    }
+                }
+                if (folderX == -1f) folderX = nameMuteLeft + dp(2);
+                int iconW = FolderIconHelper.getIconWidth();
+                int y = dp(threeLines ? 6 : 9);
+                if (chatListFontSizeFollowChat && SharedConfig.fontSize != 15) {
+                    float diff = dp(15 - SharedConfig.fontSize);
+                    y -= (int) (SharedConfig.fontSize < 15 ? diff * (threeLines ? 1 : 0.95) : diff * (threeLines ? 0.18 : 0.2));
+                }
+                canvas.save();
+                for (var i : icons) {
+                    Bitmap icBitmap = folderIconCache.get(i);
+                    if (icBitmap == null) {
+                        if (FolderIconHelper.isIconAvailable(i)) {
+                            android.graphics.Rect bounds = new android.graphics.Rect(0, 0, iconW, iconW);
+                            Drawable icon = getResources().getDrawable(FolderIconHelper.getTabIcon(i)).mutate();
+                            if (BuildVars.hasTintSupport) icon.setTint(textPaint.getColor());
+                            icon.setBounds(bounds);
+
+                            icBitmap = Bitmap.createBitmap(iconW, iconW, Bitmap.Config.ARGB_8888);
+                            Canvas ic = new Canvas(icBitmap);
+                            icon.draw(ic);
+
+                            folderIconCache.put(i, icBitmap);
+                        }
+                    }
+                    if (icBitmap != null) {
+                        canvas.drawBitmap(icBitmap, folderX, y, textPaint);
+                        folderX += (iconW + dp(1));
+                    }
+                }
+                canvas.restore();
             }
 
             if (drawReorder || reorderIconProgress != 0) {
