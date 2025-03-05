@@ -20433,6 +20433,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
         private int startMovingQuality;
 
+        private int repeatedTap = 0; // for toggle enhanced bitrate
+
         public QualityChooseView(Context context) {
             super(context);
 
@@ -20469,7 +20471,16 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
             } else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 if (selectedCompression != startMovingQuality) {
+                    repeatedTap = 0;
                     requestVideoPreview(1);
+                } else if (++repeatedTap > 2) {
+                    if (repeatedTap == 3) {
+                        Toast t = Toast.makeText(activityContext, LocaleController.getString(R.string.VideoBitrateToggled), Toast.LENGTH_LONG);
+                        t.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                        t.show();
+                    }
+                    NekoConfig.enhancedVideoBitrate.toggleConfigBool();
+                    didChangedCompressionLevel(false);
                 }
                 moving = false;
             }
