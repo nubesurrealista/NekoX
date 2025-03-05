@@ -1259,7 +1259,7 @@ public class FileLoader extends BaseController {
             return new File("");
         }
         if (message instanceof TLRPC.TL_messageService) {
-            if (message.action.photo != null) {
+            if (message.action != null && message.action.photo != null) {
                 ArrayList<TLRPC.PhotoSize> sizes = message.action.photo.sizes;
                 if (sizes.size() > 0) {
                     TLRPC.PhotoSize sizeFull = getClosestPhotoSizeWithSize(sizes, AndroidUtilities.getPhotoSize());
