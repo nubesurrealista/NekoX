@@ -327,7 +327,9 @@ public class NekoConfig {
 
     public static ConfigItem allowBotInDirectShare = addConfig(R.string.AllowBotInDirectShare , "AllowBotInDirectShare", configTypeBool, GENERAL, false);
     public static ConfigItem showQuickReconnect = addConfig(R.string.ShowQuickReconnect , "AllowBotInDirectShare", configTypeBool, EXPERIMENTAL, false);
-    public static ConfigItem showAddedToFoldersAtTitle = addConfig(R.string.ShowAddedToFoldersAtTitle , "ShowAddedToFoldersAtTitle", configTypeBool, GENERAL, false);
+    public static ConfigItem showAddedToFoldersAtTitle = addConfig(R.string.ShowAddedToFoldersAtTitle , "ShowAddedToFoldersAtTitle", configTypeBool, false);
+    public static ConfigItem showAddedToFoldersAtTitleType = addConfig(R.string.ShowAddedToFoldersAtTitle , "ShowAddedToFoldersAtTitleType", configTypeInt, GENERAL, 0); // 1: left, 2: right
+    public static String[] titleFolderIconOptions = null;
 
     public static ConfigItem profileShowLinkedChat = addConfig("profileShowLinkedChat", configTypeBool, CHAT, true);
     public static ConfigItem profileShowAddToFolder = addConfig("profileShowAddToFolder", configTypeBool, CHAT, true);
@@ -456,6 +458,11 @@ public class NekoConfig {
         if (migrate030.Int() < 3) {
             migrate030.setConfigInt(3);
             alwaysDestroyPhotoViewer.setConfigBool(true);
+        }
+
+        if (migrate030.Int() < 4) {
+            migrate030.setConfigInt(4);
+            showAddedToFoldersAtTitleType.setConfigInt(showAddedToFoldersAtTitle.Bool() ? 1 : 0);
         }
 
         // TODO remove this after some versions.
@@ -698,6 +705,11 @@ public class NekoConfig {
                 getString(R.string.TranscribeProviderAuto),
                 getString(R.string.TelegramPremium),
                 getString(R.string.TranscribeProviderWorkersAI),
+        };
+        titleFolderIconOptions = new String[] {
+                getString(R.string.Disable),
+                getString(R.string.PositionLeft),
+                getString(R.string.PositionRight)
         };
     }
 

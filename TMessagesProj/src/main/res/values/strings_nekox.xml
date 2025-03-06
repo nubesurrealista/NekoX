@@ -237,4 +237,6 @@
     <string name="FBan">FBan</string>
     <string name="ShowAddedToFoldersAtTitle">Show added to folder (icons) next to chat title</string>
     <string name="VideoBitrateToggled">Switched bitrate by multi-tap, tap again to switch back</string>
+    <string name="PositionLeft">Left</string>
+    <string name="PositionRight">Right</string>
 </resources>

@@ -42,6 +42,7 @@ import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ReplacementSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.accessibility.AccessibilityEvent;
@@ -52,7 +53,6 @@ import android.view.animation.OvershootInterpolator;
 import androidx.collection.LongSparseArray;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
-import androidx.core.graphics.drawable.BitmapDrawableKt;
 
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
@@ -64,7 +64,6 @@ import org.telegram.messenger.CodeHighlighting;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.ChatThemeController;
-import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
@@ -194,6 +193,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
     public boolean isSavedDialogCell;
     public DialogCellTags tags;
     private static final HashMap<String, Bitmap> folderIconCache = new HashMap<>(10);
+    private static int minFolderIconsLeft = Integer.MAX_VALUE;
 
     public final StoriesUtilities.AvatarStoryParams storyParams = new StoriesUtilities.AvatarStoryParams(false) {
         @Override
@@ -3419,8 +3419,6 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             return;
         }
 
-        boolean chatListFontSizeFollowChat = NekoConfig.chatListFontSizeFollowChat.Bool();
-
         if (clipProgress != 0.0f && Build.VERSION.SDK_INT != 24) {
             canvas.save();
             canvas.clipRect(0, topClip * clipProgress, getMeasuredWidth(), getMeasuredHeight() - (int) (bottomClip * clipProgress));
@@ -3743,6 +3741,37 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 canvas.restore();
             }
 
+            boolean chatListFontSizeFollowChat = NekoConfig.chatListFontSizeFollowChat.Bool();
+            boolean threeLines = (useForceThreeLines || SharedConfig.useThreeLinesLayout) && !chatListFontSizeFollowChat;
+            // draw folder icons on left of time/read indicator
+            if (timeLayout != null && parentFragment != null && NekoConfig.showAddedToFoldersAtTitleType.Int() == 2) {
+                HashSet<String> icons = new HashSet<>();
+                for (var f : parentFragment.getMessagesController().dialogFilters) {
+                    if (f.emoticon != null && !f.isDefault() &&
+                            f.includesDialog(AccountInstance.getInstance(currentAccount), currentDialogId)) {
+                        icons.add(f.emoticon);
+                    }
+                }
+                int iconW = FolderIconHelper.getIconWidth();
+                int y = dp(threeLines ? 6 : 9); // timeTop
+                if (chatListFontSizeFollowChat && SharedConfig.fontSize != 15) {
+                        float diff = dp(15 - SharedConfig.fontSize);
+                        y -= (int) (SharedConfig.fontSize < 15 ? diff * (threeLines ? 0.95 : 0.9) : diff * (threeLines ? 0.18 : 0.2));
+                    if (SharedConfig.fontSize < 15) iconW *= ((float) SharedConfig.fontSize / 15);
+                }
+                int folderX = 0; // nameMuteLeft + dp(2);
+                if (LocaleController.isRTL) {
+                    folderX = timeLeft + timeLayout.getEllipsizedWidth();
+                } else {
+                    int left = minFolderIconsLeft != Integer.MAX_VALUE ? minFolderIconsLeft : checkDrawLeft;
+                    if (left == 0 || checkDrawLeft1 < left && checkDrawLeft1 != 0) left = checkDrawLeft1;
+                    if (left == 0) left = timeLeft - Theme.dialogs_checkReadDrawable.getIntrinsicWidth() - dp(2);
+                    minFolderIconsLeft = Math.min(minFolderIconsLeft, left);
+                    folderX = left - ((icons.size() + dp(0.5F)) * iconW);
+                }
+                drawFolderIcons(canvas, folderX, y, icons, iconW);
+            }
+
             if (drawLock2()) {
                 Theme.dialogs_lock2Drawable.setBounds(
                         lock2Left,
@@ -3984,7 +4013,6 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 }
             }
             boolean drawMuted = drawUnmute || dialogMuted;
-            boolean threeLines = (useForceThreeLines || SharedConfig.useThreeLinesLayout) && !chatListFontSizeFollowChat;
             float drawableScale = (chatListFontSizeFollowChat || SharedConfig.fontSize <= 15) ? 1f : ((float) SharedConfig.fontSize / 15);
             float folderX = -1f;
             if (dialogsType != 2 && (drawMuted || dialogMutedProgress > 0) && !drawVerified && drawScam == 0 && !drawPremium) {
@@ -4103,8 +4131,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 (drawScam == 1 ? Theme.dialogs_scamDrawable : Theme.dialogs_fakeDrawable).draw(canvas);
             }
 
-            if (parentFragment != null && NekoConfig.showAddedToFoldersAtTitle.Bool()) {
-                Paint textPaint = Theme.dialogs_messagePaint[paintIndex];
+            if (parentFragment != null && NekoConfig.showAddedToFoldersAtTitleType.Int() == 1) {
                 HashSet<String> icons = new HashSet<>();
                 for (var f : parentFragment.getMessagesController().dialogFilters) {
                     if (f.emoticon != null && !f.isDefault() &&
@@ -4120,29 +4147,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                     y -= (int) (SharedConfig.fontSize < 15 ? diff * (threeLines ? 1 : 0.95) : diff * (threeLines ? 0.18 : 0.2));
                     if (SharedConfig.fontSize < 15) iconW *= ((float) SharedConfig.fontSize / 15);
                 }
-                canvas.save();
-                for (var i : icons) {
-                    Bitmap icBitmap = folderIconCache.get(i);
-                    if (icBitmap == null) {
-                        if (FolderIconHelper.isIconAvailable(i)) {
-                            android.graphics.Rect bounds = new android.graphics.Rect(0, 0, iconW, iconW);
-                            Drawable icon = getResources().getDrawable(FolderIconHelper.getTabIcon(i)).mutate();
-                            if (BuildVars.hasTintSupport) icon.setTint(textPaint.getColor());
-                            icon.setBounds(bounds);
-
-                            icBitmap = Bitmap.createBitmap(iconW, iconW, Bitmap.Config.ARGB_8888);
-                            Canvas ic = new Canvas(icBitmap);
-                            icon.draw(ic);
-
-                            folderIconCache.put(i, icBitmap);
-                        }
-                    }
-                    if (icBitmap != null) {
-                        canvas.drawBitmap(icBitmap, folderX, y, textPaint);
-                        folderX += (iconW + dp(1));
-                    }
-                }
-                canvas.restore();
+                drawFolderIcons(canvas, ((int) Math.ceil(folderX)), y, icons, iconW);
             }
 
             if (drawReorder || reorderIconProgress != 0) {
@@ -4471,6 +4476,33 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
         if (needInvalidate) {
             invalidate();
         }
+    }
+
+    private void drawFolderIcons(Canvas canvas, int x, int y, HashSet<String> icons, int iconSize) {
+        Paint textPaint = Theme.dialogs_messagePaint[paintIndex];
+        canvas.save();
+        for (var i : icons) {
+            Bitmap icBitmap = folderIconCache.get(i);
+            if (icBitmap == null) {
+                if (FolderIconHelper.isIconAvailable(i)) {
+                    android.graphics.Rect bounds = new android.graphics.Rect(0, 0, iconSize, iconSize);
+                    Drawable icon = getResources().getDrawable(FolderIconHelper.getTabIcon(i)).mutate();
+                    if (BuildVars.hasTintSupport) icon.setTint(textPaint.getColor());
+                    icon.setBounds(bounds);
+
+                    icBitmap = Bitmap.createBitmap(iconSize, iconSize, Bitmap.Config.ARGB_8888);
+                    Canvas ic = new Canvas(icBitmap);
+                    icon.draw(ic);
+
+                    folderIconCache.put(i, icBitmap);
+                }
+            }
+            if (icBitmap != null) {
+                canvas.drawBitmap(icBitmap, x, y, textPaint);
+                x += (iconSize + dp(1));
+            }
+        }
+        canvas.restore();
     }
 
     private PremiumGradient.PremiumGradientTools premiumGradient;
