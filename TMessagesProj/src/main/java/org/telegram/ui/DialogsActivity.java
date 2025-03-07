@@ -255,6 +255,7 @@ import java.util.Random;
 import tw.nekomimi.nekogram.MomoUpdater;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.ui.CustomChatListBottomSheet;
 import tw.nekomimi.nekogram.utils.PrivacyUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.TelegramUtil;
@@ -431,6 +432,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private ActionBarMenuItem proxyItem;
     private boolean proxyItemVisible;
     private boolean proxyItemVisibleForWorkaround;
+    public ActionBarMenuItem recentItem;
     public ActionBarMenuItem scanItem;
     private ActionBarMenuItem searchItem;
     private ActionBarMenuItem optionsItem;
@@ -638,6 +640,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
 
     private final static int nekox_scanqr = 1003;
+    private final static int nekox_recent = 1004;
 
     private final static int ARCHIVE_ITEM_STATE_PINNED = 0;
     private final static int ARCHIVE_ITEM_STATE_SHOWED = 1;
@@ -3155,6 +3158,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (!NekoConfig.alwaysShowDownloads.Bool())
                 downloadsItem.setVisibility(View.GONE);
 
+            recentItem = menu.addItem(nekox_recent, (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) ?
+                    getParentActivity().getDrawable(R.drawable.menu_clear_recent) : Theme.dialogs_clockDrawable);
+            recentItem.setContentDescription(LocaleController.getString(R.string.Recent));
+            recentItem.setVisibility(NekoConfig.recentChatFolderSize.Int() > 0 &&
+                    !getMessagesController().recentChats.isEmpty() ? View.VISIBLE : View.GONE);
+
             updatePasscodeButton();
             updateProxyButton(false, false);
         }
@@ -3201,6 +3210,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
                 if (downloadsItem != null && downloadsItemVisible) {
                     downloadsItem.setVisibility(View.GONE);
+                }
+                if (recentItem != null) {
+                    recentItem.setVisibility(View.GONE);
                 }
                 if (scanItem != null && !slidingTopicListOpened()) {
                     scanItem.setVisibility(View.VISIBLE);
@@ -3257,6 +3269,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
                 if (downloadsItem != null && downloadsItemVisible) {
                     downloadsItem.setVisibility(View.VISIBLE);
+                }
+                if (recentItem != null) {
+                    recentItem.setVisibility(!getMessagesController().recentChats.isEmpty());
                 }
                 if (scanItem != null) {
                     scanItem.setVisibility(View.GONE);
@@ -3843,6 +3858,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             return false;
                         }
                     });
+                } else if (id == nekox_recent) {
+                    CustomChatListBottomSheet sheet = new CustomChatListBottomSheet(DialogsActivity.this);
+                    sheet.setDelegate((dialogId, isUser) -> {
+                        Bundle args = new Bundle();
+                        args.putLong(isUser ? "user_id" : "chat_id", dialogId);
+                        presentFragment(new ChatActivity(args));
+                    });
+                    sheet.show();
                 } else if (id >= 10 && id < 10 + UserConfig.MAX_ACCOUNT_COUNT) {
                     if (getParentActivity() == null) {
                         return;
@@ -7269,6 +7292,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     @Override
     public boolean presentFragment(BaseFragment fragment) {
+        if (fragment instanceof ChatActivity) {
+            getMessagesController().openedChat(fragment.getArguments().getLong("chat_id", 0));
+            if (recentItem != null) {
+                recentItem.setVisibility(NekoConfig.recentChatFolderSize.Int() > 0 &&
+                        searchItem.getVisibility() == View.VISIBLE &&
+                        !getMessagesController().recentChats.isEmpty() ? View.VISIBLE : View.GONE);
+            }
+        }
         boolean b = super.presentFragment(fragment);
         if (b) {
             if (viewPages != null) {
@@ -10394,6 +10425,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (downloadsItem != null && downloadsItemVisible) {
                 downloadsItem.setVisibility(View.VISIBLE);
             }
+            if (recentItem != null) {
+                recentItem.setVisibility(!getMessagesController().recentChats.isEmpty());
+            }
         }
         ArrayList<Animator> arrayList = new ArrayList<>();
         arrayList.add(ObjectAnimator.ofFloat(doneItem, View.ALPHA, show ? 1.0f : 0.0f));
@@ -10421,6 +10455,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     }
                     if (downloadsItem != null && downloadsItemVisible) {
                         downloadsItem.setVisibility(View.INVISIBLE);
+                    }
+                    if (recentItem != null) {
+                        recentItem.setVisibility(View.GONE);
                     }
                 } else {
                     if (doneItem != null) {

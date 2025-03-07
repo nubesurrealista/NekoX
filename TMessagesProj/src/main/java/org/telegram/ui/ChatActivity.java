@@ -3024,6 +3024,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             getMessagesController().getSavedMessagesController().checkSavedDialogCount(getTopicId());
         }
 
+        getMessagesController().openedChat(dialog_id);
         return true;
     }
 

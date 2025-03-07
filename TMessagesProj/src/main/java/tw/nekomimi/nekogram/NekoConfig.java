@@ -330,6 +330,7 @@ public class NekoConfig {
     public static ConfigItem showAddedToFoldersAtTitle = addConfig(R.string.ShowAddedToFoldersAtTitle , "ShowAddedToFoldersAtTitle", configTypeBool, false);
     public static ConfigItem showAddedToFoldersAtTitleType = addConfig(R.string.ShowAddedToFoldersAtTitle , "ShowAddedToFoldersAtTitleType", configTypeInt, GENERAL, 0); // 1: left, 2: right
     public static String[] titleFolderIconOptions = null;
+    public static ConfigItem recentChatFolderSize = addConfig(R.string.RecentChatFolderSize , "RecentChatFolderSize", configTypeInt, GENERAL, 0); // 0: disabled
 
     public static ConfigItem profileShowLinkedChat = addConfig("profileShowLinkedChat", configTypeBool, CHAT, true);
     public static ConfigItem profileShowAddToFolder = addConfig("profileShowAddToFolder", configTypeBool, CHAT, true);

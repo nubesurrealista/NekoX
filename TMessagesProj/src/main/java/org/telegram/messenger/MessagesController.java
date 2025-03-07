@@ -128,6 +128,7 @@ import tw.nekomimi.nekogram.ui.InternalFilters;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.TelegramUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class MessagesController extends BaseController implements NotificationCenter.NotificationCenterDelegate {
@@ -22752,6 +22753,23 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
             });
         }
+    }
+
+    public ArrayList<Long> recentChats = new ArrayList<>();
+    public void openedChat(long dialog_id) {
+        if (dialog_id == 0) {
+            Log.d("030-recent", "ignore cuz did is 0");
+            return;
+        }
+        int maxSize = NekoConfig.recentChatFolderSize.Int();
+        recentChats.remove(dialog_id);
+        if (recentChats.contains(-dialog_id))
+            recentChats.remove(-dialog_id);
+        recentChats.add(0, dialog_id);
+        while (recentChats.size() > maxSize)
+            recentChats.remove(recentChats.size() - 1);
+        Log.d("030-recent", String.format("opened %d, current recent count=%d",
+                dialog_id, recentChats.size()));
     }
 
 }

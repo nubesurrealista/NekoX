@@ -239,4 +239,5 @@
     <string name="VideoBitrateToggled">Switched bitrate by multi-tap, tap again to switch back</string>
     <string name="PositionLeft">Left</string>
     <string name="PositionRight">Right</string>
+    <string name="RecentChatFolderSize">Recently opened chats size</string>
 </resources>

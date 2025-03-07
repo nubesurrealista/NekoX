@@ -65,8 +65,10 @@ import org.telegram.ui.LauncherIconController;
 import org.telegram.ui.web.SearchEngine;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -181,6 +183,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell sortMenuRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.SortMenu), null, null, () -> {
         showSortMenuAlert();
     }));
+    private final AbstractConfigCell recentChatFolderSizeRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractConfigCell divider4 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header5 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Appearance")));
@@ -420,6 +423,18 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     SharedConfig.toggleUseCamera2(currentAccount);
                     if (view instanceof TextCheckCell)
                         ((TextCheckCell) view).setChecked(SharedConfig.isUsingCamera2(currentAccount));
+                } else if (position == cellGroup.rows.indexOf(recentChatFolderSizeRow)) {
+                    final int[] counts = {0, 10, 20, 30, 50, Integer.MAX_VALUE};
+                    List<String> types = Arrays.stream(counts)
+                            .mapToObj(String::valueOf)
+                            .collect(Collectors.toList());
+                    PopupBuilder builder = new PopupBuilder(view);
+                    builder.setItems(types, (i, str) -> {
+                        NekoConfig.recentChatFolderSize.setConfigInt(Integer.parseInt(str.toString()));
+                        listAdapter.notifyItemChanged(position);
+                        return Unit.INSTANCE;
+                    });
+                    builder.show();
                 }
             }
         });
@@ -842,6 +857,9 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                             textCell.setTextAndValue(LocaleController.getString(R.string.TransToLang), NekoXConfig.formatLang(NekoConfig.translateToLang.String()), true);
                         } else if (position == cellGroup.rows.indexOf(translateInputToLangRow)) {
                             textCell.setTextAndValue(LocaleController.getString(R.string.TransInputToLang), NekoXConfig.formatLang(NekoConfig.translateInputLang.String()), true);
+                        } else if (position == cellGroup.rows.indexOf(recentChatFolderSizeRow)) {
+                            textCell.setTextAndValue(LocaleController.getString(R.string.RecentChatFolderSize),
+                                    NekoXConfig.formatLang(NekoConfig.recentChatFolderSize.String()), true);
                         }
                     } else if (holder.itemView instanceof TextCheckCell) {
                         TextCheckCell checkCell = (TextCheckCell) holder.itemView;
