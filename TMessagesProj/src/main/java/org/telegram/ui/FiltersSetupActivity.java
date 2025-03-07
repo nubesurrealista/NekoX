@@ -473,7 +473,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             }
 
             String name = filter.name;
-            if (filter.isDefault()) {
+            if (filter.isDefault() && NekoConfig.customAllChatsName.String().isBlank()) {
                 name = LocaleController.getString(R.string.FilterAllChats);
             }
             if (!animated) {
