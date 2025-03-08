@@ -4858,6 +4858,14 @@ public class AndroidUtilities {
         return Color.argb((int) ((aS + (aF - aS) * offset) * alpha), (int) (rS + (rF - rS) * offset), (int) (gS + (gF - gS) * offset), (int) (bS + (bF - bS) * offset));
     }
 
+    public static int adjustBrightness(int color, float factor, float alphaFactor) {
+        int alpha = (int) Math.floor(Color.alpha(color) * alphaFactor);
+        int red = Math.min(255, (int) (Color.red(color) * factor));
+        int green = Math.min(255, (int) (Color.green(color) * factor));
+        int blue = Math.min(255, (int) (Color.blue(color) * factor));
+        return Color.argb(alpha, red, green, blue);
+    }
+
     public static int indexOfIgnoreCase(final String origin, final String searchStr) {
         if (searchStr.isEmpty() || origin.isEmpty()) {
             return origin.indexOf(searchStr);

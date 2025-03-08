@@ -3769,7 +3769,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                     minFolderIconsLeft = Math.min(minFolderIconsLeft, left);
                     folderX = left - ((icons.size() + dp(0.5F)) * iconW);
                 }
-                drawFolderIcons(canvas, folderX, y, icons, iconW);
+                drawFolderIcons(canvas, folderX + dp(1), y, icons, iconW);
             }
 
             if (drawLock2()) {
@@ -4147,7 +4147,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                     y -= (int) (SharedConfig.fontSize < 15 ? diff * (threeLines ? 1 : 0.95) : diff * (threeLines ? 0.18 : 0.2));
                     if (SharedConfig.fontSize < 15) iconW *= ((float) SharedConfig.fontSize / 15);
                 }
-                drawFolderIcons(canvas, ((int) Math.ceil(folderX)), y, icons, iconW);
+                drawFolderIcons(canvas, ((int) Math.ceil(folderX)) + dp(1), y, icons, iconW);
             }
 
             if (drawReorder || reorderIconProgress != 0) {
@@ -4479,8 +4479,12 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
     }
 
     private void drawFolderIcons(Canvas canvas, int x, int y, HashSet<String> icons, int iconSize) {
-        Paint textPaint = Theme.dialogs_messagePaint[paintIndex];
+        TextPaint textPaint = Theme.dialogs_messagePaint[paintIndex];
+        TextPaint bgPaint = new TextPaint(textPaint);
+        boolean darken = AndroidUtilities.computePerceivedBrightness(textPaint.getColor()) > 0.5F;
+        bgPaint.setColor(AndroidUtilities.adjustBrightness(bgPaint.getColor(), darken ? 0.75F : 1.25F, 0.3F));
         canvas.save();
+        int startX = x;
         for (var i : icons) {
             Bitmap icBitmap = folderIconCache.get(i);
             if (icBitmap == null) {
@@ -4502,6 +4506,12 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 x += (iconSize + dp(1));
             }
         }
+        int padding = dp(8);
+        int bgWidth = x - startX + padding; // additional padding for bg
+        x = startX - (padding / 2);
+        int r = (int) Math.floor(iconSize * 0.75F);
+        rect.set(x, y, x + bgWidth, y + iconSize + dp(1));
+        canvas.drawRoundRect(rect, r, r, bgPaint);
         canvas.restore();
     }
 
