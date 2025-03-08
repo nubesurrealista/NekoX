@@ -4147,7 +4147,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                     y -= (int) (SharedConfig.fontSize < 15 ? diff * (threeLines ? 1 : 0.95) : diff * (threeLines ? 0.18 : 0.2));
                     if (SharedConfig.fontSize < 15) iconW *= ((float) SharedConfig.fontSize / 15);
                 }
-                drawFolderIcons(canvas, ((int) Math.ceil(folderX)) + dp(1), y, icons, iconW);
+                drawFolderIcons(canvas, ((int) Math.ceil(folderX)) + dp(3), y, icons, iconW);
             }
 
             if (drawReorder || reorderIconProgress != 0) {
@@ -4479,6 +4479,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
     }
 
     private void drawFolderIcons(Canvas canvas, int x, int y, HashSet<String> icons, int iconSize) {
+        if (icons.isEmpty()) return;
         TextPaint textPaint = Theme.dialogs_messagePaint[paintIndex];
         TextPaint bgPaint = new TextPaint(textPaint);
         boolean darken = AndroidUtilities.computePerceivedBrightness(textPaint.getColor()) > 0.5F;
@@ -4510,7 +4511,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
         int bgWidth = x - startX + padding; // additional padding for bg
         x = startX - (padding / 2);
         int r = (int) Math.floor(iconSize * 0.75F);
-        rect.set(x, y, x + bgWidth, y + iconSize + dp(1));
+        rect.set(x, y, x + bgWidth, y + iconSize);
         canvas.drawRoundRect(rect, r, r, bgPaint);
         canvas.restore();
     }
