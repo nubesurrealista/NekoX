@@ -20,6 +20,7 @@ import org.telegram.ui.ActionBar.Theme;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -50,10 +51,10 @@ public class NekoXConfig {
             896711046, // nekohasekai
             380570774, // Haruhi
             150725478, // HenTaku
-            487758521, // Banks
     };
 
     public static HashSet<Long> devSet = new HashSet<>();
+    public static HashMap<Long, String> customStatusStr = new HashMap<>();
 
     public static final int TITLE_TYPE_TEXT = 0;
     public static final int TITLE_TYPE_ICON = 1;
@@ -86,6 +87,8 @@ public class NekoXConfig {
 
     static {
         for (long id : developers) devSet.add(id);
+        customStatusStr.put(150725478L, "Momogram dev 030");
+        customStatusStr.put(487758521L, "Banks ;)");
     }
 
     public static void toggleDeveloperMode() {
@@ -292,5 +295,15 @@ public class NekoXConfig {
             instantViewFailedDomainSet = (s == null) ? new HashSet<>() : new HashSet<>(s);
         }
         return instantViewFailedDomainSet.contains(host);
+    }
+
+    public static String getCustomStatusText(Long id) {
+        if (id == null) return null;
+        String status = customStatusStr.get(id);
+        if (status == null) {
+            return devSet.contains(id) ? "NekoX dev" : null;
+        }
+
+        return status;
     }
 }

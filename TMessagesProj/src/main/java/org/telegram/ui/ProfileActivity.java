@@ -10027,6 +10027,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 topView.setBackgroundEmojiId(UserObject.getProfileEmojiId(user), user != null && user.emoji_status instanceof TLRPC.TL_emojiStatusCollectible, true);
             }
             setCollectibleGiftStatus(user.emoji_status instanceof TLRPC.TL_emojiStatusCollectible ? (TLRPC.TL_emojiStatusCollectible) user.emoji_status : null);
+            String customStatus = NekoXConfig.getCustomStatusText(user.id);
+            if (customStatus != null) {
+                TLRPC.TL_emojiStatusCollectible status = new TLRPC.TL_emojiStatusCollectible();
+                status.collectible_id = -69L;
+                status.title = customStatus;
+                setCollectibleGiftStatus(status, true);
+            }
 
             final ImageLocation imageLocation = ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_BIG);
             final ImageLocation thumbLocation = ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_SMALL);
@@ -15019,14 +15026,22 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private TLRPC.TL_emojiStatusCollectible collectibleStatus;
 
     public void setCollectibleGiftStatus(TLRPC.TL_emojiStatusCollectible status) {
+        setCollectibleGiftStatus(status, false);
+    }
+
+    public void setCollectibleGiftStatus(TLRPC.TL_emojiStatusCollectible status, boolean custom) {
         if (avatarContainer2 == null) return;
         if (collectibleStatus == status) return;
         if (collectibleStatus != null && status != null && collectibleStatus.collectible_id == status.collectible_id) return;
+        if (collectibleStatus != null && collectibleStatus.collectible_id == -69L) return;
         collectibleStatus = status;
         if (collectibleHint != null) {
             collectibleHint.hide();
         }
-        if (status != null && !TextUtils.isEmpty(status.slug)) {
+        if (status != null && (!TextUtils.isEmpty(status.slug) || custom)) {
+            Log.d("030-status", String.format("flags=%d collectible_id=%d document_id=%d title=%s slug=%s pattern_document_id=%d center_color=%d edge_color=%d pattern_color=%d text_color=%d until=%d",
+                    status.flags, status.collectible_id, status.document_id, status.title, status.slug,
+                    status.pattern_document_id, status.center_color, status.edge_color, status.pattern_color, status.text_color, status.until));
             collectibleHintVisible = null;
             collectibleHint = new HintView2(getContext(), HintView2.DIRECTION_BOTTOM);
             collectibleHintBackgroundColor = Theme.blendOver(status.center_color | 0xFF000000, Theme.multAlpha(status.pattern_color | 0xFF000000, .5f));
@@ -15044,6 +15059,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             collectibleHint.show();
             final String slug = status.slug;
             collectibleHint.setOnClickListener(v -> {
+                if (custom) {
+                    if (NekoXConfig.devSet.contains(userId))
+                        Browser.openUrl(getContext(), "https://t.me/momogram_update");
+                    else
+                        BulletinFactory.of(ProfileActivity.this)
+                                .createSimpleBulletin(R.raw.info, LocaleController.getString(R.string.CustomStatusInfo))
+                                .show(true);
+                    return;
+                }
                 Browser.openUrl(getContext(), "https://" + getMessagesController().linkPrefix + "/nft/" + slug);
             });
             if (extraHeight < dp(82)) {

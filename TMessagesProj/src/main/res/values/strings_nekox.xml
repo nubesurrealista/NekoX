@@ -240,4 +240,5 @@
     <string name="PositionLeft">Left</string>
     <string name="PositionRight">Right</string>
     <string name="RecentChatFolderSize">Recently opened chats size</string>
+    <string name="CustomStatusInfo">This is a custom status. Join the Momogram chat to request one!</string>
 </resources>
