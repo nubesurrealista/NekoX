@@ -42,8 +42,8 @@ public class AvatarsDrawable {
     public final static int STYLE_MESSAGE_SEEN = 11;
     private boolean showSavedMessages;
 
-    DrawingState[] currentStates = new DrawingState[3];
-    DrawingState[] animatingStates = new DrawingState[3];
+    public DrawingState[] currentStates = new DrawingState[3];
+    public DrawingState[] animatingStates = new DrawingState[3];
     boolean wasDraw;
 
     float transitionProgress = 1f;
@@ -242,14 +242,14 @@ public class AvatarsDrawable {
         overrideAlpha = alpha;
     }
 
-    private static class DrawingState {
+    public static class DrawingState {
 
         public static final int ANIMATION_TYPE_NONE = -1;
         public static final int ANIMATION_TYPE_IN = 0;
         public static final int ANIMATION_TYPE_OUT = 1;
         public static final int ANIMATION_TYPE_MOVE = 2;
 
-        private AvatarDrawable avatarDrawable;
+        public AvatarDrawable avatarDrawable;
         private GroupCallUserCell.AvatarWavesDrawable wavesDrawable;
         private long lastUpdateTime;
         private long lastSpeakTime;
@@ -388,6 +388,8 @@ public class AvatarsDrawable {
         invalidate();
     }
 
+    public float maxX;
+
     public void onDraw(Canvas canvas) {
         wasDraw = true;
         boolean bigAvatars = currentStyle == 4 || currentStyle == STYLE_GROUP_CALL_TOOLTIP;
@@ -429,6 +431,7 @@ public class AvatarsDrawable {
             }
             canvas.saveLayerAlpha(-padding, -padding, width + padding, height + padding, 255, Canvas.ALL_SAVE_FLAG);
         }
+        maxX = 0;
         if (drawStoriesCircle) {
             for (int a = 2; a >= 0; a--) {
                 for (int k = 0; k < 2; k++) {
@@ -502,7 +505,6 @@ public class AvatarsDrawable {
                     continue;
                 }
                 DrawingState[] states = k == 0 ? animatingStates : currentStates;
-
 
                 if (k == 1 && transitionProgress != 1f && states[a].animationType != DrawingState.ANIMATION_TYPE_OUT) {
                     continue;
@@ -640,6 +642,7 @@ public class AvatarsDrawable {
                 } else {
                     imageReceiver.draw(canvas);
                 }
+                maxX = Math.max(maxX, imageReceiver.getCenterX() + imageReceiver.getImageWidth() / 2.0f * avatarScale);
                 if (needRestore) {
                     canvas.restore();
                 }
@@ -648,6 +651,10 @@ public class AvatarsDrawable {
         if (useAlphaLayer) {
             canvas.restore();
         }
+    }
+
+    public float getMaxX() {
+        return maxX;
     }
 
     public int getSize() {

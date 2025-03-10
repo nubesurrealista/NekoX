@@ -14,6 +14,7 @@ import androidx.core.util.Pair;
 
 
 import org.json.JSONObject;
+import org.checkerframework.checker.units.qual.A;
 import org.telegram.messenger.utils.BillingUtilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -28,6 +29,8 @@ import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BillingController {
@@ -36,6 +39,12 @@ public class BillingController {
     private String lastPremiumTransaction = "";
     private String lastPremiumToken = "";
     public static boolean billingClientEmpty;
+
+
+    private final Set<String> requestingTokens = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    private final Map<String, Integer> currencyExpMap = new HashMap<>();
+    private boolean isDisconnected;
+    private Runnable onCanceled;
 
     public static BillingController getInstance() {
         if (instance == null) {
@@ -74,6 +83,9 @@ public class BillingController {
         }
         if ("TON".equalsIgnoreCase(currency)) {
             return "TON " + (amount / 1_000_000_000.0);
+        }
+        if ("XTR".equalsIgnoreCase(currency)) {
+            return "XTR " + LocaleController.formatNumber(amount, ',');
         }
         Currency cur = Currency.getInstance(currency);
         if (cur != null) {
