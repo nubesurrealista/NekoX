@@ -2474,6 +2474,7 @@ public class ImageLoader {
                         File imagePath = new File(telegramPath, "Telegram Images");
                         imagePath.mkdir();
                         if (imagePath.isDirectory() && canMoveFiles(cachePath, imagePath, FileLoader.MEDIA_DIR_IMAGE)) {
+                            AndroidUtilities.createEmptyFile(new File(imagePath, ".nomedia"));
                             mediaDirs.put(FileLoader.MEDIA_DIR_IMAGE, imagePath);
                             if (BuildVars.LOGS_ENABLED) {
                                 FileLog.d("image path = " + imagePath);
@@ -2487,6 +2488,7 @@ public class ImageLoader {
                         File videoPath = new File(telegramPath, "Telegram Video");
                         videoPath.mkdir();
                         if (videoPath.isDirectory() && canMoveFiles(cachePath, videoPath, FileLoader.MEDIA_DIR_VIDEO)) {
+                            AndroidUtilities.createEmptyFile(new File(videoPath, ".nomedia"));
                             mediaDirs.put(FileLoader.MEDIA_DIR_VIDEO, videoPath);
                             if (BuildVars.LOGS_ENABLED) {
                                 FileLog.d("video path = " + videoPath);
@@ -2557,6 +2559,7 @@ public class ImageLoader {
                         File imagePath = new File(publicMediaDir, "Telegram Images");
                         imagePath.mkdir();
                         if (imagePath.isDirectory() && canMoveFiles(cachePath, imagePath, FileLoader.MEDIA_DIR_IMAGE)) {
+                            AndroidUtilities.createEmptyFile(new File(imagePath, ".nomedia"));
                             mediaDirs.put(FileLoader.MEDIA_DIR_IMAGE_PUBLIC, imagePath);
                             if (BuildVars.LOGS_ENABLED) {
                                 FileLog.d("image path = " + imagePath);
@@ -2570,6 +2573,7 @@ public class ImageLoader {
                         File videoPath = new File(publicMediaDir, "Telegram Video");
                         videoPath.mkdir();
                         if (videoPath.isDirectory() && canMoveFiles(cachePath, videoPath, FileLoader.MEDIA_DIR_VIDEO)) {
+                            AndroidUtilities.createEmptyFile(new File(videoPath, ".nomedia"));
                             mediaDirs.put(FileLoader.MEDIA_DIR_VIDEO_PUBLIC, videoPath);
                             if (BuildVars.LOGS_ENABLED) {
                                 FileLog.d("video path = " + videoPath);
