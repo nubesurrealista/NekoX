@@ -12949,7 +12949,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             }
 
             if (!dontSend && args.length > 1 && args[1] != null) {
-                if (args[1].equals(translateUUID)) sendMessageInternal(true, 0, false);
+                if (args[1].equals(translateUUID)) sendMessageInternal(true, 0, 0, false);
                 else Log.d("030-txx", String.format("UUID mismatch, expect: %s, got: %s", translateUUID, args[1]));
             }
         } else if (id == NotificationCenter.forwardingMessageTranslated) {
@@ -13026,7 +13026,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 messageSendPreview.dismiss(true);
                 messageSendPreview = null;
             }
-            sendMessageInternal(true, 0, false);
+            sendMessageInternal(true, 0, 0, false);
             parentFragment.messagePreviewParamsForTranslate = null;
             isTranslatedBeforeSend = false;
         }, 30);

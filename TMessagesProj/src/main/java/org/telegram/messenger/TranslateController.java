@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.icu.text.Collator;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Pair;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;

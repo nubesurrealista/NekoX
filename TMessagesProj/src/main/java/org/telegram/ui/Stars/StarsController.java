@@ -1215,7 +1215,6 @@ public class StarsController {
             if (NekoConfig.removePremiumAnnoyance.Bool()) {
                 currentPendingReactions = new PendingPaidReactions(key, messageObject, chatActivity, ConnectionsManager.getInstance(currentAccount).getCurrentTime(), affect);;
                 currentPendingReactions.add(amount, affect);
-                currentPendingReactions.anonymous = true;
                 return currentPendingReactions;
             }
             final long dialogId = chatActivity.getDialogId();

@@ -2387,7 +2387,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                         paidDialogIds.add(did);
                     }
                 }
-                onSend(selectedDialogs, 1, selectedDialogTopics.get(selectedDialogs.valueAt(0)));
+                onSend(selectedDialogs, 1, selectedDialogTopics.get(selectedDialogs.valueAt(0)), withSound);
             }
         }
 

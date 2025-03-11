@@ -2708,7 +2708,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             if (delegate != null) {
                                 if (drawPhotoImage && photoImage.isInsideImage(x, y)) {
                                     PhotoViewer.getInstance().createMessagesList = true;
-                                    delegate.didPressImage(this, lastTouchX, lastTouchY);
+                                    delegate.didPressImage(this, lastTouchX, lastTouchY, true);
                                 } else {
                                     delegate.didPressWebPage(this, webPage, webPage.url, MessageObject.getMedia(currentMessageObject.messageOwner).safe);
                                 }
@@ -7868,30 +7868,19 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     messageObject.checkedVotes.clear();
                 }
 
-                String question;
-
-                if (messageObject.messageOwner.translated) {
-                    question = media.poll.translatedQuestion;
-                    if (question == null) {
-                        messageObject.messageOwner.translated = false;
-                        question = media.poll.question.text;
-                    }
-                } else {
-                    question = media.poll.question.text;
-                }
-
-                CharSequence questionText = question;
-                questionText = Emoji.replaceEmoji(questionText, Theme.chat_audioTitlePaint.getFontMetricsInt(),  false);
-                if (media.poll.question.entities != null) {
-                    questionText = MessageObject.replaceAnimatedEmoji(questionText, media.poll.question.entities, Theme.chat_audioTitlePaint.getFontMetricsInt(), true);
-                    MessageObject.addEntitiesToText(questionText, media.poll.question.entities, currentMessageObject.isOutOwner(), false, false, false);
-                }
-
                 TLRPC.TL_textWithEntities question = media.poll.question;
+                String qStr = null;
+                boolean isCustomTranslated = false;
                 if (messageObject.translated && messageObject.messageOwner != null && messageObject.messageOwner.translatedPoll != null && messageObject.messageOwner.translatedPoll.question != null) {
                     question = messageObject.messageOwner.translatedPoll.question;
+                } else if (messageObject.messageOwner.translated) {
+                    isCustomTranslated = true;
+                    if (media.poll.translatedQuestion != null)
+                        qStr = media.poll.translatedQuestion;
+                    else
+                        isCustomTranslated = messageObject.messageOwner.translated = false;
                 }
-                CharSequence questionText = new SpannableStringBuilder(question.text);
+                CharSequence questionText = new SpannableStringBuilder(isCustomTranslated ? qStr : question.text);
                 questionText = Emoji.replaceEmoji(questionText, Theme.chat_audioTitlePaint.getFontMetricsInt(), false);
                 if (question.entities != null) {
                     questionText = MessageObject.replaceAnimatedEmoji(questionText, question.entities, Theme.chat_audioTitlePaint.getFontMetricsInt(), true);

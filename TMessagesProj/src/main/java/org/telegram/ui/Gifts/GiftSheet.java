@@ -669,8 +669,8 @@ public class GiftSheet extends BottomSheetWithRecyclerListView implements Notifi
                 }
             } else if (!products.isEmpty()) {
                 long startMs = System.currentTimeMillis();
-                BillingController.getInstance().queryProductDetails(products, (billingResult, list) -> {
-                    long pricePerMonthMaxStore = 0;
+//                BillingController.getInstance().queryProductDetails(products, (billingResult, list) -> {
+//                    long pricePerMonthMaxStore = 0;
 
 //                    for (ProductDetails details : list) {
 //                        for (GiftPremiumBottomSheet.GiftTier giftTier : premiumTiers) {
@@ -685,15 +685,15 @@ public class GiftSheet extends BottomSheetWithRecyclerListView implements Notifi
 //                        }
 //                    }
 
-                    for (GiftPremiumBottomSheet.GiftTier giftTier : premiumTiers) {
-                        giftTier.setPricePerMonthRegular(pricePerMonthMaxStore);
-                    }
-                    AndroidUtilities.runOnUIThread(() -> {
-                        if (adapter != null) {
-                            adapter.update(false);
-                        }
-                    });
-                });
+//                    for (GiftPremiumBottomSheet.GiftTier giftTier : premiumTiers) {
+//                        giftTier.setPricePerMonthRegular(pricePerMonthMaxStore);
+//                    }
+//                    AndroidUtilities.runOnUIThread(() -> {
+//                        if (adapter != null) {
+//                            adapter.update(false);
+//                        }
+//                    });
+//                });
             }
         }
         if (premiumTiers.isEmpty()) {

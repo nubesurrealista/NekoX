@@ -7230,7 +7230,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     if (chatMode == MODE_SCHEDULED) {
                         AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), dialog_id, (notify, scheduleDate) -> SendMessagesHelper.getInstance(currentAccount).sendSticker(document, query, dialog_id, replyingMessageObject, getThreadMessage(), null, replyingQuote, null, notify, scheduleDate, false, parent, quickReplyShortcut, getQuickReplyId(), 0, 0), themeDelegate);
                     } else {
-                        getSendMessagesHelper().sendSticker(document, query, dialog_id, replyingMessageObject, getThreadMessage(), null, replyingQuote, sendAnimationData, true, 0, false, parent, quickReplyShortcut, getQuickReplyId(), price, 0, 0);
+                        getSendMessagesHelper().sendSticker(document, query, dialog_id, replyingMessageObject, getThreadMessage(), null, replyingQuote, sendAnimationData, true, 0, false, parent, quickReplyShortcut, getQuickReplyId(), price, 0);
                     }
                     hideFieldPanel(false);
                     chatActivityEnterView.addStickerToRecent(document);
@@ -12437,10 +12437,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     public void processInlineBotWebView(TLRPC.TL_inlineBotWebView object) { processInlineBotWebView(object, -1L); }
     public void processInlineBotWebView(TLRPC.TL_inlineBotWebView object, long viaBotId) {
         final Runnable open = () -> {
-            TLRPC.User bot = mentionContainer.getAdapter().getFoundContextBot();
+            final TLRPC.User bot = mentionContainer.getAdapter().getFoundContextBot();
             long botId = bot == null ? viaBotId : bot.id;
             boolean isOverridden = viaBotId != -1L;
-            final TLRPC.User bot = mentionContainer.getAdapter().getFoundContextBot();
             final WebViewRequestProps props = WebViewRequestProps.of(currentAccount, currentUser != null ? currentUser.id : currentChat.id, botId, object.text, object.url, BotWebViewSheet.TYPE_SIMPLE_WEB_VIEW_BUTTON, 0, false, null, false, null, null, BotWebViewSheet.FLAG_FROM_INLINE_SWITCH, false, false);
             if (LaunchActivity.instance != null && LaunchActivity.instance.getBottomSheetTabs() != null && LaunchActivity.instance.getBottomSheetTabs().tryReopenTab(props) != null) {
                 return;
@@ -14354,7 +14353,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if ((scheduleDate != 0) == (chatMode == MODE_SCHEDULED)) {
             waitingForSendingMessageLoad = true;
         }
-        AlertsCreator.showSendMediaAlert(getSendMessagesHelper().sendMessage(arrayList, did == 0 ? dialog_id : did, fromMyName, false, notify, scheduleDate), this);
+        AlertsCreator.showSendMediaAlert(getSendMessagesHelper().sendMessage(arrayList, did == 0 ? dialog_id : did, fromMyName, false, notify, scheduleDate, 0), this);
     }
 
     public boolean shouldShowImport() {
@@ -14587,7 +14586,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             ArrayList<MessageObject> messagesToForward = new ArrayList<>();
             messagePreviewParams.forwardMessages.getSelectedMessages(messagesToForward);
             // 030: fix neko no quote fwd button
-            forwardMessages(messagesToForward, messagePreviewParams.hideForwardSendersName || noForwardQuote, messagePreviewParams.hideCaption, notify, scheduleDate != 0 && scheduleDate != 0x7ffffffe ? scheduleDate + 1 : scheduleDate);
+            forwardMessages(messagesToForward, messagePreviewParams.hideForwardSendersName || noForwardQuote, messagePreviewParams.hideCaption, notify, scheduleDate != 0 && scheduleDate != 0x7ffffffe ? scheduleDate + 1 : scheduleDate, 0);
             messagePreviewParams.forwardMessages = null;
         }
     }
@@ -42974,7 +42973,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             return;
         }
 
-        forwardMessages(messages, false, false, true, 0);
+        forwardMessages(messages, false, false, true, 0, 0);
     }
     private class RecyclerListViewInternal extends RecyclerListView implements StoriesListPlaceProvider.ClippedView {
         public RecyclerListViewInternal(Context context, ThemeDelegate themeDelegate) {

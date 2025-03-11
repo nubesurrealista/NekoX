@@ -1805,7 +1805,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     }
 
     public void sendSticker(TLRPC.Document document, String query, long peer, MessageObject replyToMsg, MessageObject replyToTopMsg, TL_stories.StoryItem storyItem, ChatActivity.ReplyQuote quote, MessageObject.SendAnimationData sendAnimationData, boolean notify, int scheduleDate, boolean updateStickersOrder, Object parentObject, String quick_reply_shortcut, int quick_reply_shortcut_id, long stars) {
-        sendSticker(document, query, peer, replyToMsg, replyToTopMsg, storyItem, quote, sendAnimationData, notify, scheduleDate, updateStickersOrder, parentObject, quick_reply_shortcut, quick_reply_shortcut_id, 0, 0L);
+        sendSticker(document, query, peer, replyToMsg, replyToTopMsg, storyItem, quote, sendAnimationData, notify, scheduleDate, updateStickersOrder, parentObject, quick_reply_shortcut, quick_reply_shortcut_id, 0, 0);
     }
 
     public void sendSticker(TLRPC.Document document, String query, long peer, MessageObject replyToMsg, MessageObject replyToTopMsg, TL_stories.StoryItem storyItem, ChatActivity.ReplyQuote quote, MessageObject.SendAnimationData sendAnimationData, boolean notify, int scheduleDate, boolean updateStickersOrder, Object parentObject, String quick_reply_shortcut, int quick_reply_shortcut_id, long stars, int clientScheduleDate) {
