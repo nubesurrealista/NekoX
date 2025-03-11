@@ -5879,7 +5879,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             FileLog.e(e);
             castAvailable = false;
         }
-        castItemButton.setVisibility(View.INVISIBLE);
+        if (castItemButton != null) castItemButton.setVisibility(View.INVISIBLE);
         if (castAvailable) {
             castItem = videoItem.addSubItem(gallery_menu_chromecast, R.drawable.menu_video_chromecast, getString(R.string.VideoPlayerChromecast));
             castItem.setEnabledByColor(false, 0xFFFFFFFF, 0xFF73B4EC);
