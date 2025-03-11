@@ -1,13 +1,13 @@
-//package org.telegram.ui;
-//
-//import android.content.Context;
-//import android.database.ContentObserver;
-//import android.media.AudioManager;
-//import android.os.Handler;
-//import android.provider.Settings;
-//
-//import androidx.annotation.NonNull;
-//
+package org.telegram.ui;
+
+import android.content.Context;
+import android.database.ContentObserver;
+import android.media.AudioManager;
+import android.os.Handler;
+import android.provider.Settings;
+
+import androidx.annotation.NonNull;
+
 //import com.google.android.gms.cast.Cast;
 //import com.google.android.gms.cast.MediaError;
 //import com.google.android.gms.cast.MediaSeekOptions;
@@ -17,35 +17,35 @@
 //import com.google.android.gms.cast.framework.Session;
 //import com.google.android.gms.cast.framework.SessionManagerListener;
 //import com.google.android.gms.cast.framework.media.RemoteMediaClient;
-//
-//import org.telegram.messenger.AndroidUtilities;
-//import org.telegram.messenger.ApplicationLoader;
-//import org.telegram.messenger.FileLog;
-//import org.telegram.messenger.MediaController;
-//import org.telegram.messenger.Utilities;
-//import org.telegram.ui.ActionBar.BaseFragment;
-//
-//import java.util.Set;
-//import java.util.concurrent.atomic.AtomicInteger;
-//
-//public class CastSync {
-//
-//    public static final int TYPE_PHOTOVIEWER = 0;
-//    public static final int TYPE_MUSIC = 1;
-//
-//    public static int type;
-//    public static AtomicInteger pending;
-//
-//    public static Context getContext() {
-//        Context context = LaunchActivity.instance;
-//        if (context == null) context = ApplicationLoader.applicationContext;
-//        return context;
-//    }
-//
-//    private static boolean listened;
-//    public static void check(int type) {
-//        CastSync.type = type;
-//        if (listened) return;
+
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.MediaController;
+import org.telegram.messenger.Utilities;
+import org.telegram.ui.ActionBar.BaseFragment;
+
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class CastSync {
+
+    public static final int TYPE_PHOTOVIEWER = 0;
+    public static final int TYPE_MUSIC = 1;
+
+    public static int type;
+    public static AtomicInteger pending;
+
+    public static Context getContext() {
+        Context context = LaunchActivity.instance;
+        if (context == null) context = ApplicationLoader.applicationContext;
+        return context;
+    }
+
+    private static boolean listened = true; // skip check cuz we're not actually using chromecast
+    public static void check(int type) {
+        CastSync.type = type;
+        if (listened) return;
 //        try {
 //            final Context context = getContext();
 //            if (context == null) return;
@@ -131,9 +131,9 @@
 //        } catch (Exception e) {
 //            FileLog.e(e);
 //        }
-//    }
-//
-//    public static void stop() {
+    }
+
+    public static void stop() {
 //        final Context context = getContext();
 //        if (context == null) return;
 //        try {
@@ -143,9 +143,9 @@
 //        } catch (Exception e) {
 //            FileLog.e(e);
 //        }
-//    }
-//
-//    public static boolean isActive() {
+    }
+
+    public static boolean isActive() {
 //        final Context context = getContext();
 //        if (context == null) return false;
 //        try {
@@ -156,10 +156,10 @@
 //        } catch (Exception e) {
 //            FileLog.e(e);
 //        }
-//        return false;
-//    }
-//
-//    public static RemoteMediaClient getClient() {
+        return false;
+    }
+
+    public static /* RemoteMediaClient */ Object getClient() {
 //        final Context context = getContext();
 //        if (context == null) return null;
 //        try {
@@ -172,16 +172,17 @@
 //        } catch (Exception e) {
 //            FileLog.e(e);
 //        }
-//        return null;
-//    }
-//
-//    public static long getPosition() {
+        return null;
+    }
+
+    public static long getPosition() {
+        return -1;
 //        final RemoteMediaClient client = getClient();
 //        if (client == null) return -1;
 //        return client.getApproximateStreamPosition();
-//    }
-//
-//    public static void seekTo(long position) {
+    }
+
+    public static void seekTo(long position) {
 //        final RemoteMediaClient client = getClient();
 //        if (client == null) return;
 //        if (pending == null) {
@@ -193,17 +194,17 @@
 //                .setPosition(position)
 //                .build()
 //        ).addStatusListener(s -> pending.decrementAndGet());
-//    }
-//
-//    public static void syncPosition(long position) {
+    }
+
+    public static void syncPosition(long position) {
 //        if (position < 0) return;
 //        final long currentPosition = getPosition();
 //        if (currentPosition == -1 || Math.abs(currentPosition - position) > 1_500) {
 //            seekTo(position);
 //        }
-//    }
-//
-//    public static void setVolume(float volume) {
+    }
+
+    public static void setVolume(float volume) {
 //        final RemoteMediaClient client = getClient();
 //        if (client == null) return;
 //        if (pending == null) {
@@ -211,17 +212,19 @@
 //        }
 //        pending.incrementAndGet();
 //        client.setStreamVolume(volume).addStatusListener(s -> pending.decrementAndGet());
-//    }
-//
-//    public static float getVolume() {
+    }
+
+    public static float getVolume() {
+        return 1f;
 //        final RemoteMediaClient client = getClient();
 //        if (client == null) return 0.5f;
 //        final MediaStatus status = client.getMediaStatus();
 //        if (status == null) return 0.5f;
 //        return (float) status.getStreamVolume();
-//    }
-//
-//    public static boolean isPlaying() {
+    }
+
+    public static boolean isPlaying() {
+        return true;
 //        final RemoteMediaClient client = getClient();
 //        if (client == null) return false;
 //        if (type == TYPE_PHOTOVIEWER) {
@@ -229,9 +232,9 @@
 //        } else {
 //            return client.isPlaying();
 //        }
-//    }
-//
-//    public static void setPlaying(boolean play) {
+    }
+
+    public static void setPlaying(boolean play) {
 //        final RemoteMediaClient client = getClient();
 //        if (client == null) return;
 //        if (play != client.isPlaying()) {
@@ -245,8 +248,8 @@
 //                client.pause().addStatusListener(s -> pending.decrementAndGet());
 //            }
 //        }
-//    }
-//    public static void setSpeed(float speed) {
+    }
+    public static void setSpeed(float speed) {
 //        final RemoteMediaClient client = getClient();
 //        if (client == null) return;
 //        if (pending == null) {
@@ -254,78 +257,79 @@
 //        }
 //        pending.incrementAndGet();
 //        client.setPlaybackRate(speed).addStatusListener(s -> pending.decrementAndGet());
-//    }
-//
-//    public static boolean isUpdatePending() {
-//        return pending != null && pending.get() > 0;
-//    }
-//
-//    public static float getSpeed() {
+    }
+
+    public static boolean isUpdatePending() {
+        return pending != null && pending.get() > 0;
+    }
+
+    public static float getSpeed() {
+        return 1.0f;
 //        final RemoteMediaClient client = getClient();
 //        if (client == null) return 1.0f;
 //        final MediaStatus status = client.getMediaStatus();
 //        if (status == null) return 1.0f;
 //        return (float) status.getPlaybackRate();
-//    }
-//
-//    private static int savedVolume;
-//    private static ContentObserver syncingVolume;
-//    public static void doSyncVolume(boolean sync) {
-//        if ((syncingVolume != null) != sync) {
-//            if (sync) {
-//                final Context context = getContext();
-//                if (context == null) return;
-//                AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-//                if (audioManager == null) return;
-//
-//                savedVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-//
-//                context.getContentResolver().registerContentObserver(Settings.System.CONTENT_URI, true, syncingVolume = new ContentObserver(new Handler()) {
-//                    @Override
-//                    public void onChange(boolean selfChange) {
-//                        setVolume(getDeviceVolume());
-//                    }
-//                });
-//                setVolume(getDeviceVolume());
-//
-//                final int stream = AudioManager.STREAM_MUSIC;
-//                audioManager.adjustStreamVolume(stream, AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
-//            } else if (syncingVolume != null) {
-//                final Context context = getContext();
-//                if (context == null) return;
-//                context.getContentResolver().unregisterContentObserver(syncingVolume);
-//                syncingVolume = null;
-//                AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-//                if (audioManager == null) return;
-//                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, savedVolume, 0);
-//
-//                syncInterface();
-//            }
-//        }
-//    }
-//
-//    public static void syncInterface() {
-//        if (type == TYPE_PHOTOVIEWER) {
-//            PhotoViewer.getInstance().syncCastedPlayer();
-//        } else if (type == TYPE_MUSIC) {
-//            MediaController.getInstance().syncCastedPlayer();
-//        }
-//    }
-//
-//    public static float getDeviceVolume() {
-//        final Context context = getContext();
-//        if (context == null) return 0.0f;
-//        final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-//        if (audioManager == null) return 0.0f;
-//
-//        int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-//        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-//        int minVolume = 0;
-//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-//            minVolume = audioManager.getStreamMinVolume(AudioManager.STREAM_MUSIC);
-//        }
-//
-//        return Utilities.clamp01((float) (currentVolume - minVolume) / (maxVolume - minVolume));
-//    }
-//
-//}
+    }
+
+    private static int savedVolume;
+    private static ContentObserver syncingVolume;
+    public static void doSyncVolume(boolean sync) {
+        if ((syncingVolume != null) != sync) {
+            if (sync) {
+                final Context context = getContext();
+                if (context == null) return;
+                AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+                if (audioManager == null) return;
+
+                savedVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+
+                context.getContentResolver().registerContentObserver(Settings.System.CONTENT_URI, true, syncingVolume = new ContentObserver(new Handler()) {
+                    @Override
+                    public void onChange(boolean selfChange) {
+                        setVolume(getDeviceVolume());
+                    }
+                });
+                setVolume(getDeviceVolume());
+
+                final int stream = AudioManager.STREAM_MUSIC;
+                audioManager.adjustStreamVolume(stream, AudioManager.ADJUST_SAME, AudioManager.FLAG_SHOW_UI);
+            } else if (syncingVolume != null) {
+                final Context context = getContext();
+                if (context == null) return;
+                context.getContentResolver().unregisterContentObserver(syncingVolume);
+                syncingVolume = null;
+                AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+                if (audioManager == null) return;
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, savedVolume, 0);
+
+                syncInterface();
+            }
+        }
+    }
+
+    public static void syncInterface() {
+        if (type == TYPE_PHOTOVIEWER) {
+            PhotoViewer.getInstance().syncCastedPlayer();
+        } else if (type == TYPE_MUSIC) {
+            MediaController.getInstance().syncCastedPlayer();
+        }
+    }
+
+    public static float getDeviceVolume() {
+        final Context context = getContext();
+        if (context == null) return 0.0f;
+        final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        if (audioManager == null) return 0.0f;
+
+        int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        int minVolume = 0;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+            minVolume = audioManager.getStreamMinVolume(AudioManager.STREAM_MUSIC);
+        }
+
+        return Utilities.clamp01((float) (currentVolume - minVolume) / (maxVolume - minVolume));
+    }
+
+}

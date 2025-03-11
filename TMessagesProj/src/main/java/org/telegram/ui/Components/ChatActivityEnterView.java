@@ -2789,7 +2789,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                                 sendButton.setEffect(effectId = 0);
                             } else {
                                 if (NekoConfig.confirmAVMessage.Bool()) {
-                                    MediaController.getInstance().stopRecording(2, true, 0, voiceOnce);
+                                    MediaController.getInstance().stopRecording(2, true, 0, voiceOnce, 0);
                                 } else if (recordingAudioVideo && isInScheduleMode()) {
                                     AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), (notify, scheduleDate) -> MediaController.getInstance().stopRecording(1, notify, scheduleDate, false, 0), () -> MediaController.getInstance().stopRecording(0, false, 0, false, 0), resourcesProvider);
                                 }
@@ -3015,12 +3015,12 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     if (!hasRecordVideo || calledRecordRunnable) {
                         startedDraggingX = -1;
                         if (hasRecordVideo && isInVideoMode) {
-                            delegate.needStartRecordVideo(needConfirm ? 3 : 1, true, 0, voiceOnce ? 0x7FFFFFFF : 0, messageSendPreview != null ? messageSendPreview.getSelectedEffect() : 0);
+                            delegate.needStartRecordVideo(needConfirm ? 3 : 1, true, 0, voiceOnce ? 0x7FFFFFFF : 0, messageSendPreview != null ? messageSendPreview.getSelectedEffect() : 0, 0);
                         } else {
                             if (recordingAudioVideo && isInScheduleMode()) {
-                                AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), (notify, scheduleDate) -> MediaController.getInstance().stopRecording(1, notify, scheduleDate, voiceOnce), () -> MediaController.getInstance().stopRecording(0, false, 0, voiceOnce), null);
+                                AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), (notify, scheduleDate) -> MediaController.getInstance().stopRecording(1, notify, scheduleDate, voiceOnce, 0), () -> MediaController.getInstance().stopRecording(0, false, 0, voiceOnce, 0), null);
                             }
-                            MediaController.getInstance().stopRecording(isInScheduleMode() ? 3 : (needConfirm ? 2 : 1), true, 0, voiceOnce);
+                            MediaController.getInstance().stopRecording(isInScheduleMode() ? 3 : (needConfirm ? 2 : 1), true, 0, voiceOnce, 0);
                             delegate.needStartRecordAudio(0);
                         }
                         recordingAudioVideo = false;

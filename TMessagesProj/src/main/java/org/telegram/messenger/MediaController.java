@@ -72,13 +72,13 @@ import android.widget.FrameLayout;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import com.google.android.gms.cast.MediaMetadata;
-import com.google.android.gms.common.images.WebImage;
+//import com.google.android.gms.cast.MediaMetadata;
+//import com.google.android.gms.common.images.WebImage;
 
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.chromecast.ChromecastController;
-import org.telegram.messenger.chromecast.ChromecastFileServer;
-import org.telegram.messenger.chromecast.ChromecastMedia;
+//import org.telegram.messenger.chromecast.ChromecastFileServer;
+//import org.telegram.messenger.chromecast.ChromecastMedia;
 import org.telegram.messenger.chromecast.ChromecastMediaVariations;
 import org.telegram.messenger.video.MediaCodecVideoConvertor;
 import org.telegram.messenger.voip.VoIPService;
@@ -3954,94 +3954,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     }
 
     private ChromecastMediaVariations getCurrentChromecastMedia() {
-        if (playingMessageObject == null) {
-            return null;
-        }
-
-        final String title = playingMessageObject.getMusicTitle();
-        final String subtitle = playingMessageObject.getMusicAuthor();
-        final TLRPC.Document document = playingMessageObject.getDocument();
-
-        if (playingMessageObject.isRoundVideo() || playingMessageObject.isVideo() || playingMessageObject.isMusic()) {
-            File file = null;
-            if (playingMessageObject.attachPathExists && playingMessageObject.messageOwner != null) {
-                file = new File(playingMessageObject.messageOwner.attachPath);
-            }
-            if (file == null || !file.exists()) {
-                file = FileLoader.getInstance(playingMessageObject.currentAccount).getPathToMessage(playingMessageObject.messageOwner);;
-            }
-            if (file != null && file.exists()) {
-                final String mime = playingMessageObject.getMimeType();
-                final Uri uri = Uri.parse("file://" + file.getAbsolutePath());
-
-                final MediaMetadata metadata = new MediaMetadata();
-                if (audioInfo != null) {
-                    if (!TextUtils.isEmpty(audioInfo.getTitle())) {
-                        metadata.putString(MediaMetadata.KEY_TITLE, audioInfo.getTitle());
-                    }
-                    if (!TextUtils.isEmpty(audioInfo.getArtist())) {
-                        metadata.putString(MediaMetadata.KEY_ARTIST, audioInfo.getArtist());
-                    }
-                    if (!TextUtils.isEmpty(audioInfo.getAlbum())) {
-                        metadata.putString(MediaMetadata.KEY_ALBUM_TITLE, audioInfo.getAlbum());
-                    }
-                    if (!TextUtils.isEmpty(audioInfo.getAlbumArtist())) {
-                        metadata.putString(MediaMetadata.KEY_ALBUM_ARTIST, audioInfo.getAlbumArtist());
-                    }
-                    if (!TextUtils.isEmpty(audioInfo.getComposer())) {
-                        metadata.putString(MediaMetadata.KEY_COMPOSER, audioInfo.getComposer());
-                    }
-                    if (audioInfo.getDisc() != 0) {
-                        metadata.putInt(MediaMetadata.KEY_DISC_NUMBER, (int) audioInfo.getDisc());
-                    }
-                    if (audioInfo.getTrack() != 0) {
-                        metadata.putInt(MediaMetadata.KEY_TRACK_NUMBER, (int) audioInfo.getTrack());
-                    }
-                    if (audioInfo.getCover() != null) {
-                        File coverFile = audioInfo.getCoverFile();
-                        if (coverFile == null || !coverFile.exists()) {
-                            coverFile = StoryEntry.makeCacheFile(UserConfig.selectedAccount, "jpg");
-                            FileOutputStream stream = null;
-                            try {
-                                audioInfo.getCover().compress(Bitmap.CompressFormat.JPEG, 80, stream = new FileOutputStream(coverFile));
-                            } catch (Exception e) {
-                                FileLog.e(e);
-                                coverFile = null;
-                            } finally {
-                                if (stream != null) {
-                                    try {
-                                        stream.close();
-                                    } catch (Exception e2) {
-                                        FileLog.e(e2);
-                                    }
-                                }
-                            }
-                            audioInfo.setCoverFile(coverFile);
-                        }
-                        if (coverFile != null && coverFile.exists()) {
-                            final String path = ChromecastController.getInstance().setCover(coverFile);
-                            metadata.addImage(new WebImage(Uri.parse(ChromecastFileServer.getUrlToSource(ChromecastFileServer.getHost(), path))));
-                        }
-                    }
-                }
-                final ChromecastMedia media = ChromecastMedia.Builder.fromUri(uri, "/player_" + playingMessageObject.getId(), mime)
-                    .setTitle(title)
-                    .setSubtitle(subtitle)
-                    .setMetadata(metadata)
-                    .build();
-
-                return ChromecastMediaVariations.of(media);
-            }
-        }
-
-        if (videoPlayer != null) {
-            return videoPlayer.getCurrentChromecastMedia((document != null ? document.id : playingMessageObject.getId()) + "", title, subtitle);
-        }
-
-        if (audioPlayer != null) {
-            return audioPlayer.getCurrentChromecastMedia((document != null ? document.id : playingMessageObject.getId()) + "", title, subtitle);
-        }
-
+        // no chromecast lib
         return null;
     }
 

@@ -9,7 +9,7 @@ import org.telegram.messenger.Utilities;
 import java.io.File;
 
 class ChromecastControllerState {
-    private ChromecastFileServer server;
+//    private ChromecastFileServer server;
     private ChromecastMediaVariations media;
     private ChromecastController.RemoteMediaClientHandler client;
 
@@ -22,11 +22,11 @@ class ChromecastControllerState {
             removeFromFileServer(media);
         }
 
-        if (m != null && m.getVariationsCount() > 0 && !m.getVariation(0).mimeType.startsWith("audio/")) {
-            if (server != null) {
-                server.setCoverFile(null, null);
-            }
-        }
+//        if (m != null && m.getVariationsCount() > 0 && !m.getVariation(0).mimeType.startsWith("audio/")) {
+//            if (server != null) {
+//                server.setCoverFile(null, null);
+//            }
+//        }
 
         if (client != null && m != null) {
             client.load(m);
@@ -36,14 +36,14 @@ class ChromecastControllerState {
     }
 
     public String setCoverFile(File file) {
-        if (file != null && server != null && server.getCoverFile() != null && TextUtils.equals(server.getCoverFile().getAbsolutePath(), file.getAbsolutePath())) {
-            return server.getCoverPath();
-        }
+//        if (file != null && server != null && server.getCoverFile() != null && TextUtils.equals(server.getCoverFile().getAbsolutePath(), file.getAbsolutePath())) {
+//            return server.getCoverPath();
+//        }
         final String path = "/file" + Utilities.fastRandom.nextLong();
-        if (server == null) {
-            server = new ChromecastFileServer();
-        }
-        server.setCoverFile(path, file);
+//        if (server == null) {
+//            server = new ChromecastFileServer();
+//        }
+//        server.setCoverFile(path, file);
         return path;
     }
 
@@ -82,22 +82,22 @@ class ChromecastControllerState {
     }
 
     private void addToFileServer(ChromecastMediaVariations media) {
-        if (server == null) {
-            server = new ChromecastFileServer();
-        }
-
-        for (int a = 0; a < media.getVariationsCount(); a++) {
-            server.addFileToCast(media.getVariation(a));
-        }
+//        if (server == null) {
+//            server = new ChromecastFileServer();
+//        }
+//
+//        for (int a = 0; a < media.getVariationsCount(); a++) {
+//            server.addFileToCast(media.getVariation(a));
+//        }
     }
 
     private void removeFromFileServer(ChromecastMediaVariations media) {
-        if (server == null) {
-            return;
-        }
-
-        for (int a = 0; a < media.getVariationsCount(); a++) {
-            server.removeFileFromCast(media.getVariation(a));
-        }
+//        if (server == null) {
+//            return;
+//        }
+//
+//        for (int a = 0; a < media.getVariationsCount(); a++) {
+//            server.removeFileFromCast(media.getVariation(a));
+//        }
     }
 }
