@@ -7582,38 +7582,36 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             if (checkPremiumAnimatedEmoji(currentAccount, dialog_id, parentFragment, null, message)) {
                 return;
             }
-            if (StrUtil.isNotBlank(message)) {
-                if (delegate != null) {
-                    delegate.beforeMessageSend(message, notify, scheduleDate);
-                }
-                if (processSendingText(message, notify, scheduleDate, payStars)) {
-                    if (delegate != null && delegate.hasForwardingMessages() || (scheduleDate != 0 && !isInScheduleMode()) || isInScheduleMode()) {
+            if (delegate != null) {
+                delegate.beforeMessageSend(message, notify, scheduleDate);
+            }
+            if (processSendingText(message, notify, scheduleDate, payStars)) {
+                if (delegate != null && delegate.hasForwardingMessages() || (scheduleDate != 0 && !isInScheduleMode()) || isInScheduleMode()) {
+                    if (messageEditText != null) {
+                        messageEditText.setText("");
+                    }
+                    if (delegate != null) {
+                        delegate.onMessageSend(message, notify, scheduleDate, payStars);
+                    }
+                } else {
+                    messageTransitionIsRunning = false;
+                    AndroidUtilities.runOnUIThread(moveToSendStateRunnable = () -> {
+                        moveToSendStateRunnable = null;
+                        hideTopView(true);
                         if (messageEditText != null) {
                             messageEditText.setText("");
                         }
                         if (delegate != null) {
                             delegate.onMessageSend(message, notify, scheduleDate, payStars);
+                            messageEditText.setText("");
                         }
-                    } else {
-                        messageTransitionIsRunning = false;
-                        AndroidUtilities.runOnUIThread(moveToSendStateRunnable = () -> {
-                            moveToSendStateRunnable = null;
-                            hideTopView(true);
-                            if (messageEditText != null) {
-                                messageEditText.setText("");
-                            }
-                            if (delegate != null) {
-                                delegate.onMessageSend(message, notify, scheduleDate, payStars);
-                                messageEditText.setText("");
-                            }
-                        }, 200);
-                    }
-                    lastTypingTimeSend = 0;
-                } else if (forceShowSendButton) {
-                    if (delegate != null) {
-                        delegate.beforeMessageSend(null, notify, scheduleDate);
-                        delegate.onMessageSend(null, notify, scheduleDate, payStars);
-                    }
+                    }, 200);
+                }
+                lastTypingTimeSend = 0;
+            } else if (forceShowSendButton) {
+                if (delegate != null) {
+                    delegate.beforeMessageSend(null, notify, scheduleDate);
+                    delegate.onMessageSend(null, notify, scheduleDate, payStars);
                 }
             }
             updateSendButtonPaid();
