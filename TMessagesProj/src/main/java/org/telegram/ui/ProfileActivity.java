@@ -3614,6 +3614,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     if (searchMode) {
                         searchItem.getSearchField().setText("");
                     }
+                    updateCollectibleHint();
                     return searchExpandTransition(searchMode);
                 }
 
@@ -15163,9 +15164,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             collectibleHint.hide();
         }
         if (status != null && (!TextUtils.isEmpty(status.slug) || custom)) {
-            Log.d("030-status", String.format("flags=%d collectible_id=%d document_id=%d title=%s slug=%s pattern_document_id=%d center_color=%d edge_color=%d pattern_color=%d text_color=%d until=%d",
-                    status.flags, status.collectible_id, status.document_id, status.title, status.slug,
-                    status.pattern_document_id, status.center_color, status.edge_color, status.pattern_color, status.text_color, status.until));
             collectibleHintVisible = null;
             collectibleHint = new HintView2(getContext(), HintView2.DIRECTION_BOTTOM);
             collectibleHintBackgroundColor = Theme.blendOver(status.center_color | 0xFF000000, Theme.multAlpha(status.pattern_color | 0xFF000000, .5f));
@@ -15208,7 +15206,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         final float expanded = AndroidUtilities.lerp(expandAnimatorValues, currentExpanAnimatorFracture);
         collectibleHint.setTranslationY(-collectibleHint.getPaddingBottom() + nameTextView[1].getY() - dp(24) + lerp(dp(6), -dp(12), expanded));
         collectibleHint.setBgColor(ColorUtils.blendARGB(collectibleHintBackgroundColor, 0x50000000, expanded));
-        final boolean visible = extraHeight >= dp(82);
+        final boolean visible = !searchMode && extraHeight >= dp(82);
         if (collectibleHintVisible == null || collectibleHintVisible != visible) {
             collectibleHint.animate().alpha((collectibleHintVisible = visible) ? 1.0f : 0.0f).setInterpolator(CubicBezierInterpolator.EASE_OUT).setDuration(200).start();
         }
