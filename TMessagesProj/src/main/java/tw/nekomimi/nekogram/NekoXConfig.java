@@ -319,11 +319,13 @@ public class NekoXConfig {
         return status != null && status.has_particle;
     }
 
+    private static boolean checkedStatusUpdate = false;
     public static synchronized void checkCustomStatusUpdate() {
         long t = System.currentTimeMillis();
-        if (t < NekoConfig.nextCheckCustomStatusTime.Long()) return;
+        if (checkedStatusUpdate && t < NekoConfig.nextCheckCustomStatusTime.Long()) return;
         try {
             CustomStatusHelper.updateCustomStatus();
+            checkedStatusUpdate = true;
         } catch (Exception e) {
             Log.e("030-status", "updateCustomStatus err", e);
         }
