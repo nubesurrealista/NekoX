@@ -26768,7 +26768,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         } else {
                             bottomOverlayChatText.setText(LocaleController.getString(ChatObject.isChannelAndNotMegaGroup(currentChat) ? R.string.ChannelJoin : R.string.GroupJoin));
                             bottomOverlayChatText.setEnabled(true);
-                            showGiftButton = chatInfo != null && chatInfo.stargifts_available;
+                            showGiftButton = !NekoConfig.removePremiumAnnoyance.Bool() && chatInfo != null && chatInfo.stargifts_available;
                         }
                         showBottomOverlayProgress(false, false);
                     }
@@ -27056,7 +27056,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     private void showGiftButton(boolean show, boolean animated) {
-        if (getContext() == null) return;
+        if (getContext() == null || NekoConfig.removePremiumAnnoyance.Bool()) return;
         final boolean wasShown = bottomGiftButton != null && bottomGiftButton.getAlpha() > 0.5f;
         if (bottomGiftButton == null) {
             bottomGiftButton = new ImageView(getContext());
