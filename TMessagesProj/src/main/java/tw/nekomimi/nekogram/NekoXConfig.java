@@ -5,6 +5,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
+import android.util.Log;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -32,6 +33,7 @@ import java.util.regex.Pattern;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.database.NitritesKt;
+import tw.nekomimi.nekogram.helpers.CustomStatusHelper;
 
 public class NekoXConfig {
 
@@ -55,7 +57,7 @@ public class NekoXConfig {
     };
 
     public static HashSet<Long> devSet = new HashSet<>();
-    public static HashMap<Long, CustomEmojiStatusText> customStatus = new HashMap<>();
+    public static final HashMap<Long, CustomEmojiStatusText> customStatus = new HashMap<>();
 
     public static final int TITLE_TYPE_TEXT = 0;
     public static final int TITLE_TYPE_ICON = 1;
@@ -298,7 +300,7 @@ public class NekoXConfig {
         return instantViewFailedDomainSet.contains(host);
     }
 
-    public static CustomEmojiStatusText getCustomStatusText(Long id) {
+    public static synchronized CustomEmojiStatusText getCustomStatusText(Long id) {
         if (id == null) return null;
         CustomEmojiStatusText status = customStatus.get(id);
         if (status == null) {
@@ -311,9 +313,27 @@ public class NekoXConfig {
         return status;
     }
 
+    public static synchronized boolean hasCustomStatusParticle(Long id) {
+        if (id == null) return false;
+        CustomEmojiStatusText status = customStatus.get(id);
+        return status != null && status.has_particle;
+    }
+
+    public static synchronized void checkCustomStatusUpdate() {
+        long t = System.currentTimeMillis();
+        if (t < NekoConfig.nextCheckCustomStatusTime.Long()) return;
+        try {
+            CustomStatusHelper.updateCustomStatus();
+        } catch (Exception e) {
+            Log.e("030-status", "updateCustomStatus err", e);
+        }
+        NekoConfig.nextCheckCustomStatusTime.setConfigLong(t + (30 * 60 * 1000));
+    }
+
     public static class CustomEmojiStatusText extends TLRPC.TL_emojiStatusCollectible {
 
-        boolean hasParticle;
+        public long id;
+        public boolean has_particle;
 
         public CustomEmojiStatusText(String t) {
             title = t;
@@ -329,7 +349,7 @@ public class NekoXConfig {
             pattern_color = pattern;
             text_color = color;
             title = txt;
-            hasParticle = particle;
+            has_particle = particle;
         }
     }
 }

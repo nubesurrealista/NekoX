@@ -50228,7 +50228,7 @@ public class TLRPC {
         public int edge_color;
         public int pattern_color;
         public int text_color;
-        public int until;
+        // public int until; // dup
 
         public void readParams(InputSerializedData stream, boolean exception) {
             flags = stream.readInt32(exception);

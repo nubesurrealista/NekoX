@@ -5285,6 +5285,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
 
         if (searchString == null && initialDialogsType == DIALOGS_TYPE_DEFAULT) {
+            NekoXConfig.checkCustomStatusUpdate();
             // NekoX: Remove UPDATE NOW Bottom View in DialogsActivity
             if (!updatePopped && NekoConfig.checkUpdate.Bool() && folderId == 0) {
                 long t = System.currentTimeMillis();

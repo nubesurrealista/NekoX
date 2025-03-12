@@ -348,6 +348,8 @@ public class NekoConfig {
     public static ConfigItem perfClassOverride = addConfig(R.string.OverridePerformanceClass, "perfClassOverride", configTypeInt, GENERAL, 0);
     public static String[] perfClassOverrideOptions = null;
 
+    public static ConfigItem nextCheckCustomStatusTime = addConfig("nextCheckCustomStatusTime", configTypeLong, 0L);
+
     static {
         loadConfig(false);
         checkMigrate(false);
