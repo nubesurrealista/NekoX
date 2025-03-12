@@ -16,6 +16,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 
 import java.io.BufferedReader;
@@ -54,7 +55,7 @@ public class NekoXConfig {
     };
 
     public static HashSet<Long> devSet = new HashSet<>();
-    public static HashMap<Long, String> customStatusStr = new HashMap<>();
+    public static HashMap<Long, CustomEmojiStatusText> customStatus = new HashMap<>();
 
     public static final int TITLE_TYPE_TEXT = 0;
     public static final int TITLE_TYPE_ICON = 1;
@@ -87,8 +88,8 @@ public class NekoXConfig {
 
     static {
         for (long id : developers) devSet.add(id);
-        customStatusStr.put(150725478L, "Momogram dev 030");
-        customStatusStr.put(487758521L, "Banks ;)");
+        customStatus.put(150725478L, new CustomEmojiStatusText(3833041, 2077096, 2026694, 16769475, "Momogram dev 030", true));
+        customStatus.put(487758521L, new CustomEmojiStatusText("Banks ;)"));
     }
 
     public static void toggleDeveloperMode() {
@@ -297,13 +298,38 @@ public class NekoXConfig {
         return instantViewFailedDomainSet.contains(host);
     }
 
-    public static String getCustomStatusText(Long id) {
+    public static CustomEmojiStatusText getCustomStatusText(Long id) {
         if (id == null) return null;
-        String status = customStatusStr.get(id);
+        CustomEmojiStatusText status = customStatus.get(id);
         if (status == null) {
-            return devSet.contains(id) ? "NekoX dev" : null;
+            if (devSet.contains(id)) {
+                return new CustomEmojiStatusText("NekoX dev");
+            }
+            return null;
         }
 
         return status;
+    }
+
+    public static class CustomEmojiStatusText extends TLRPC.TL_emojiStatusCollectible {
+
+        boolean hasParticle;
+
+        public CustomEmojiStatusText(String t) {
+            title = t;
+        }
+
+        public CustomEmojiStatusText(int center, int edge, int pattern, int color, String txt) {
+            this(center, edge, pattern, color, txt, false);
+        }
+
+        public CustomEmojiStatusText(int center, int edge, int pattern, int color, String txt, boolean particle) {
+            center_color = center;
+            edge_color = edge;
+            pattern_color = pattern;
+            text_color = color;
+            title = txt;
+            hasParticle = particle;
+        }
     }
 }

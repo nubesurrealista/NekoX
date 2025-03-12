@@ -6276,7 +6276,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         } else {
                             emojiStatusDrawable[a].set((Drawable) null, true);
                         }
-                        emojiStatusDrawable[a].setParticles(gift != null, true);
+                        emojiStatusDrawable[a].setParticles(gift != null ||
+                                NekoXConfig.customStatus.containsKey(myProfile ? getUserConfig().getClientUserId() : userId), true);
                     }
                 }
                 if (documentId != null) {
@@ -10015,10 +10016,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             final TLRPC.TL_emojiStatus status = (TLRPC.TL_emojiStatus) emojiStatus;
             if ((status.flags & 1) == 0 || status.until > (int) (System.currentTimeMillis() / 1000)) {
                 emojiStatusDrawable[a].set(status.document_id, animated);
-                emojiStatusDrawable[a].setParticles(false, animated);
+                emojiStatusDrawable[a].setParticles(NekoXConfig.customStatus.containsKey(myProfile ? getUserConfig().getClientUserId() : userId), animated);
             } else {
                 emojiStatusDrawable[a].set(getPremiumCrossfadeDrawable(a), animated);
-                emojiStatusDrawable[a].setParticles(false, animated);
+                emojiStatusDrawable[a].setParticles(NekoXConfig.customStatus.containsKey(myProfile ? getUserConfig().getClientUserId() : userId), animated);
             }
         } else if (emojiStatus instanceof TLRPC.TL_emojiStatusCollectible) {
             final TLRPC.TL_emojiStatusCollectible status = (TLRPC.TL_emojiStatusCollectible) emojiStatus;
@@ -10030,11 +10031,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 emojiStatusDrawable[a].setParticles(true, animated);
             } else {
                 emojiStatusDrawable[a].set(getPremiumCrossfadeDrawable(a), animated);
-                emojiStatusDrawable[a].setParticles(false, animated);
+                emojiStatusDrawable[a].setParticles(NekoXConfig.customStatus.containsKey(myProfile ? getUserConfig().getClientUserId() : userId), animated);
             }
         } else {
             emojiStatusDrawable[a].set(getPremiumCrossfadeDrawable(a), animated);
-            emojiStatusDrawable[a].setParticles(false, animated);
+            emojiStatusDrawable[a].setParticles(NekoXConfig.customStatus.containsKey(myProfile ? getUserConfig().getClientUserId() : userId), animated);
         }
         updateEmojiStatusDrawableColor();
         return emojiStatusDrawable[a];
@@ -10125,13 +10126,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (topView != null) {
                 topView.setBackgroundEmojiId(UserObject.getProfileEmojiId(user), user != null && user.emoji_status instanceof TLRPC.TL_emojiStatusCollectible, true);
             }
-            setCollectibleGiftStatus(user.emoji_status instanceof TLRPC.TL_emojiStatusCollectible ? (TLRPC.TL_emojiStatusCollectible) user.emoji_status : null);
-            String customStatus = NekoXConfig.getCustomStatusText(user.id);
+
+            // prioritize custom status over NFT bullshit
+            NekoXConfig.CustomEmojiStatusText customStatus = NekoXConfig.getCustomStatusText(user.id);
             if (customStatus != null) {
-                TLRPC.TL_emojiStatusCollectible status = new TLRPC.TL_emojiStatusCollectible();
-                status.collectible_id = -69L;
-                status.title = customStatus;
-                setCollectibleGiftStatus(status, true);
+                setCollectibleGiftStatus((TLRPC.TL_emojiStatusCollectible) customStatus, true);
+            } else {
+                setCollectibleGiftStatus(user.emoji_status instanceof TLRPC.TL_emojiStatusCollectible ? (TLRPC.TL_emojiStatusCollectible) user.emoji_status : null);
             }
 
             final ImageLocation imageLocation = ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_BIG);
