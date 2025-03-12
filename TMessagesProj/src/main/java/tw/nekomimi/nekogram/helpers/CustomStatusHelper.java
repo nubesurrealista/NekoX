@@ -24,6 +24,7 @@ import tw.nekomimi.nekogram.NekoXConfig.CustomEmojiStatusText;
 
 public class CustomStatusHelper {
     private static OkHttpClient okHttpClient;
+    public static final int DEFAULT_BACKGROUND_COLOR = 9803157;
     private static final ExclusionStrategy exclusionStrategy = new ExclusionStrategy() {
         @Override
         public boolean shouldSkipField(FieldAttributes f) {
@@ -66,6 +67,7 @@ public class CustomStatusHelper {
                 CustomEmojiStatusText[] customStatuses = gson.fromJson(body, NekoXConfig.CustomEmojiStatusText[].class);
                 synchronized (NekoXConfig.customStatus) {
                     for (CustomEmojiStatusText s : customStatuses) {
+                        if (s.center_color == 0) s.center_color = DEFAULT_BACKGROUND_COLOR;
                         NekoXConfig.customStatus.put(s.id, s);
                     }
                 }

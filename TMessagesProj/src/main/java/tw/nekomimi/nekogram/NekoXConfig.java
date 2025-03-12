@@ -339,6 +339,7 @@ public class NekoXConfig {
 
         public CustomEmojiStatusText(String t) {
             title = t;
+            center_color = CustomStatusHelper.DEFAULT_BACKGROUND_COLOR;
         }
 
         public CustomEmojiStatusText(int center, int edge, int pattern, int color, String txt) {
