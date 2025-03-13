@@ -10594,7 +10594,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     if (videoPlayer != player) {
                         return;
                     }
-                    if (currentMessageObject.isGif() && NekoConfig.takeGIFasVideo.Bool()) {
+                    if (currentMessageObject != null && currentMessageObject.isGif() && NekoConfig.takeGIFasVideo.Bool()) {
                         closePhoto(false, false);
                         tempDisableGifAsVideo = true;
                         openPhoto(currentMessageObject, parentChatActivity, currentDialogId, mergeDialogId, topicId, placeProvider);
