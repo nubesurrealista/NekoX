@@ -463,6 +463,7 @@ public class CaptionContainerView extends FrameLayout {
             keyboardAnimator = ValueAnimator.ofFloat(keyboardT, show ? 1 : 0);
             keyboardAnimator.addUpdateListener(anm -> {
                 keyboardT = (float) anm.getAnimatedValue();
+                createEditText(CaptionContainerView.this.getContext());
                 editText.getEditText().setTranslationX(lerp(dp(-40 + 18) + getEditTextLeft(), dp(2), keyboardT));
                 editText.setTranslationX(lerp(0, dp(-8), keyboardT));
                 editText.setTranslationY(lerp(0, dp(isAtTop() ? -10 : 10), keyboardT));
