@@ -93,6 +93,8 @@ import androidx.recyclerview.widget.LinearSmoothScrollerCustom;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.jakewharton.processphoenix.ProcessPhoenix;
+
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimationNotificationsLocker;
@@ -255,6 +257,7 @@ import java.util.Random;
 import tw.nekomimi.nekogram.MomoUpdater;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.helpers.EvilLeakerKiller;
 import tw.nekomimi.nekogram.ui.CustomChatListBottomSheet;
 import tw.nekomimi.nekogram.utils.PrivacyUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
@@ -7081,6 +7084,20 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
         }
         PhotoViewer.muteVideoForChatId = -1L;
+        if (NekoConfig.checkMemLeak.Bool()) {
+            EvilLeakerKiller ek = EvilLeakerKiller.getInstance(getParentActivity().getApplicationContext());
+            if (ek != null && ek.checkRamUsage() > 1048576 /* TODO: use 2GB instead */) {
+                new AlertDialog.Builder(getContext())
+                        .setTitle(LocaleController.getString(R.string.MemLeak))
+                        .setMessage(LocaleController.getString(R.string.MemLeakInfo))
+                        .setPositiveButton("OK", (__, ___) -> {
+                            Context ctx = LaunchActivity.instance.getApplicationContext();
+                            ProcessPhoenix.triggerRebirth(ctx, new Intent(ctx, LaunchActivity.class));
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            }
+        }
         // momo end
 
         chatOpened = false;

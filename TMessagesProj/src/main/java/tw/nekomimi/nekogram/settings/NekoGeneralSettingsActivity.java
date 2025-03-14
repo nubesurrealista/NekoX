@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -68,11 +69,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
+import tw.nekomimi.nekogram.helpers.EvilLeakerKiller;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.ui.PopupBuilder;
@@ -249,6 +252,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell searchBlacklistRow = cellGroup.appendCell(new ConfigCellTextInput(null, NekoConfig.searchBlacklist, null, null, NekoConfig::applySearchBlacklist));
     private final AbstractConfigCell overridePerformanceClassRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.OverridePerformanceClass),
             NekoConfig.perfClassOverride, NekoConfig.perfClassOverrideOptions, null));
+    private final AbstractConfigCell checkMemLeakRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.checkMemLeak));
     private final AbstractConfigCell useOldNameRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useOldName, LocaleController.getString(R.string.UseOldAppNameDesc)));
 
     private final AbstractConfigCell customApiIdRow = cellGroup.appendCell(new ConfigCellTextDetail(NekoConfig.customApiId, (view, position) -> {
@@ -437,6 +441,16 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     builder.show();
                 }
             }
+        });
+        listView.setOnItemLongClickListener((view, position, x, y) -> {
+            if (position == cellGroup.rows.indexOf(checkMemLeakRow)) {
+                if (EvilLeakerKiller.getInstance(null) != null)
+                    Toast.makeText(getParentActivity(),
+                            String.format(Locale.US, "Current: %d KB", EvilLeakerKiller.getInstance(null).PSS), Toast.LENGTH_SHORT)
+                            .show();
+                return true;
+            }
+            return false;
         });
 
         // Cells: Set OnSettingChanged Callbacks

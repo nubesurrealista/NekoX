@@ -241,4 +241,7 @@
     <string name="PositionRight">Right</string>
     <string name="RecentChatFolderSize">Recently opened chats size</string>
     <string name="CustomStatusInfo">This is a custom status. Join the Momogram chat to request one!</string>
+    <string name="MemLeak">MemLeak</string>
+    <string name="MemLeakInfo">OMG! It\'s leaking! Restart the app?\n\nNote. You can disable this reminder in general settings.</string>
+    <string name="CheckMemLeak">Prompt to restart app when it uses more memory than it should</string>
 </resources>
