@@ -60,15 +60,15 @@ public class Painting {
     private HashMap<Integer, Texture> brushTextures = new HashMap<>();
     private Texture bitmapTexture;
     private Texture originalBitmapTexture;
-    private ByteBuffer vertexBuffer;
-    private ByteBuffer textureBuffer;
+    private static ByteBuffer vertexBuffer;
+    private static ByteBuffer textureBuffer;
     private int reusableFramebuffer;
     private int paintTexture;
     private int helperTexture;
     private Map<String, Shader> shaders;
     private int suppressChangesCounter;
     private int[] buffers = new int[1];
-    private ByteBuffer dataBuffer;
+    private static ByteBuffer dataBuffer;
 
     private boolean paused;
     private Slice backupSlice;
@@ -94,13 +94,21 @@ public class Painting {
         imageBitmap = originalBitmap;
         imageBitmapRotation = originalRotation;
 
-        dataBuffer = ByteBuffer.allocateDirect((int) size.width * (int) size.height * 4);
+        int capacity = (int) size.width * (int) size.height * 4;
+        boolean reuse = (dataBuffer != null && (dataBuffer.capacity() >= capacity));
+        if (reuse) {
+            dataBuffer.clear();
+        } else {
+            dataBuffer = ByteBuffer.allocateDirect(capacity);
+        }
 
         projection = GLMatrix.LoadOrtho(0, size.width, 0, size.height, -1.0f, 1.0f);
 
         if (vertexBuffer == null) {
             vertexBuffer = ByteBuffer.allocateDirect(8 * 4);
             vertexBuffer.order(ByteOrder.nativeOrder());
+        } else {
+            vertexBuffer.clear();
         }
         vertexBuffer.putFloat(0.0f);
         vertexBuffer.putFloat(0.0f);
@@ -123,8 +131,8 @@ public class Painting {
             textureBuffer.putFloat(1.0f);
             textureBuffer.putFloat(1.0f);
             textureBuffer.putFloat(1.0f);
-            textureBuffer.rewind();
         }
+        textureBuffer.rewind();
     }
 
     public boolean masking = false;

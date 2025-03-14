@@ -25,6 +25,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 
 public class Icon3D {
     private int mProgramObject;
@@ -103,8 +104,14 @@ public class Icon3D {
             "models/coin_stars.binobj"
     };
 
+    private static HashMap<Integer,  FloatBuffer[]> verticesCache = new HashMap<>();
+    private static HashMap<Integer,  FloatBuffer[]> texturesCache = new HashMap<>();
+    private static HashMap<Integer,  FloatBuffer[]> normalsCache = new HashMap<>();
+    private static HashMap<Integer,  Integer[]> trianglesCountCache = new HashMap<>();
+
     public Icon3D(Context context, int type) {
         this.type = type;
+        boolean unk = false, useCache = false;
         String[] modelPaths;
         if (type == TYPE_COIN) {
             modelPaths = coinModel;
@@ -114,29 +121,40 @@ public class Icon3D {
             modelPaths = starModel;
         } else {
             modelPaths = new String[0];
+            unk = true;
         }
 
         N = modelPaths.length;
-        mVertices = new FloatBuffer[N];
-        mTextures = new FloatBuffer[N];
-        mNormals = new FloatBuffer[N];
+
+        //noinspection AssignmentUsedAsCondition
+        mVertices = (useCache = (!unk && verticesCache.containsKey(type))) ? verticesCache.get(type) : new FloatBuffer[N];
+        mTextures = useCache ? texturesCache.get(type) : new FloatBuffer[N];
+        mNormals = useCache ? normalsCache.get(type) : new FloatBuffer[N];
         trianglesCount = new int[N];
-        for (int i = 0; i < N; ++i) {
-            ObjLoader obj = new ObjLoader(context, modelPaths[i]);
 
-            mVertices[i] = ByteBuffer.allocateDirect(obj.positions.length * 4)
-                    .order(ByteOrder.nativeOrder()).asFloatBuffer();
-            mVertices[i].put(obj.positions).position(0);
+        if (useCache) {
+            Integer[] l = trianglesCountCache.get(type);
+            for (int i = 0; i < N; ++i) {
+                trianglesCount[i] = l[i];
+            }
+        } else {
+            for (int i = 0; i < N; ++i) {
+                ObjLoader obj = new ObjLoader(context, modelPaths[i]);
 
-            mTextures[i] = ByteBuffer.allocateDirect(obj.textureCoordinates.length * 4)
-                    .order(ByteOrder.nativeOrder()).asFloatBuffer();
-            mTextures[i].put(obj.textureCoordinates).position(0);
+                mVertices[i] = ByteBuffer.allocateDirect(obj.positions.length * 4)
+                        .order(ByteOrder.nativeOrder()).asFloatBuffer();
+                mVertices[i].put(obj.positions).position(0);
 
-            mNormals[i] = ByteBuffer.allocateDirect(obj.normals.length * 4)
-                    .order(ByteOrder.nativeOrder()).asFloatBuffer();
-            mNormals[i].put(obj.normals).position(0);
+                mTextures[i] = ByteBuffer.allocateDirect(obj.textureCoordinates.length * 4)
+                        .order(ByteOrder.nativeOrder()).asFloatBuffer();
+                mTextures[i].put(obj.textureCoordinates).position(0);
 
-            trianglesCount[i] = obj.positions.length;
+                mNormals[i] = ByteBuffer.allocateDirect(obj.normals.length * 4)
+                        .order(ByteOrder.nativeOrder()).asFloatBuffer();
+                mNormals[i].put(obj.normals).position(0);
+
+                trianglesCount[i] = obj.positions.length;
+            }
         }
 
         generateTexture();
