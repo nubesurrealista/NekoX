@@ -1255,6 +1255,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     private ValueAnimator searchExpandAnimator;
     private float searchExpandProgress;
+    private boolean hideJoin = false;
+    private static int[] notInChatStrings = new int[] {
+            R.string.ChannelJoin, R.string.GroupJoin,
+            R.string.ChannelJoinRequest, R.string.GroupJoinRequest,
+            R.string.ChannelJoinRequestSent, R.string.GroupJoinRequestSent
+    };
 
     public static ChatActivity of(long dialogId) {
         Bundle bundle = new Bundle();
@@ -8650,6 +8656,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
             }
         });
+        bottomOverlayChatText.setOnLongClickListener(v -> {
+            for (int id : notInChatStrings) {
+                String cmp = LocaleController.getString(id);
+                if (bottomOverlayChatText.getText().toString().equals(cmp)) {
+                    hideJoin = true;
+                    bottomOverlayProgress.setTag(1);
+                    showBottomOverlayProgress(!hideJoin, false);
+                    updateBottomOverlay(false);
+                    break;
+                }
+            }
+            return true;
+        });
 
         bottomOverlayProgress = new RadialProgressView(context, themeDelegate);
         bottomOverlayProgress.setSize(AndroidUtilities.dp(22));
@@ -12271,7 +12290,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (show && bottomOverlayProgress.getTag() != null || !show && bottomOverlayProgress.getTag() == null) {
             return;
         }
-        if (show && isBottomOverlaysInvisible() && isMuteUnmuteButton()) show = false;
+        if (show && isBottomOverlaysInvisible() && shouldHideBottomOverlay()) show = false;
         if (bottomOverlayAnimation != null) {
             bottomOverlayAnimation.cancel();
             bottomOverlayAnimation = null;
@@ -17772,7 +17791,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     bottom = bottomOverlayChat.getBottom();
                 }
                 top -= (int) ((pullingDownAnimateToActivity == null ? 0 : pullingDownAnimateToActivity.pullingBottomOffset) * pullingDownAnimateProgress);
-                if ((!isMuteUnmuteButton() && bottomOverlayChat.getVisibility() == View.VISIBLE) || chatActivityEnterView.getVisibility() == View.VISIBLE)
+                if ((!shouldHideBottomOverlay() && bottomOverlayChat.getVisibility() == View.VISIBLE) || chatActivityEnterView.getVisibility() == View.VISIBLE)
                     pullingDownDrawable.drawBottomPanel(canvas, top, bottom, getMeasuredWidth());
             }
             if (pullingDownAnimateToActivity != null) {
@@ -26687,7 +26706,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         bottomOverlayChatWaitsReply = false;
         bottomOverlayLinks = false;
         boolean forceVisible = false;
-        boolean forceNoBottom = false;
+        boolean forceNoBottom = hideJoin;
         boolean showGiftButton = false;
         if (chatMode == MODE_DEFAULT && getDialogId() != getUserConfig().getClientUserId() && userInfo != null && userInfo.contact_require_premium && !getUserConfig().isPremium()) {
             bottomOverlayLinks = true;
@@ -27048,7 +27067,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             chatActivityEnterView.setBotInfo(botInfo);
         }
 
-        if (isMuteUnmuteButton())
+        if (shouldHideBottomOverlay())
             bottomOverlayChat.setVisibility(View.INVISIBLE);
 
         showGiftButton(showGiftButton && bottomOverlayChat.getVisibility() == View.VISIBLE, animated);
@@ -43766,14 +43785,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 && (searchContainer == null || searchContainer.getVisibility() == View.INVISIBLE)
                 && !isInPreviewMode()
                 && !isInBubbleMode()
-                && NekoConfig.hideChannelBottomMuteUnmute.Bool();
+                && (NekoConfig.hideChannelBottomMuteUnmute.Bool() || hideJoin);
     }
 
-    private boolean isMuteUnmuteButton() {
+    private boolean shouldHideBottomOverlay() {
         CharSequence text = bottomOverlayChatText.getText();
         return (LocaleController.getString(R.string.ChannelMute).equals(text)
                 || LocaleController.getString(R.string.ChannelUnmute).equals(text))
-                && NekoConfig.hideChannelBottomMuteUnmute.Bool();
+                && NekoConfig.hideChannelBottomMuteUnmute.Bool() || hideJoin;
     }
 
     private void updatePaddings() {
