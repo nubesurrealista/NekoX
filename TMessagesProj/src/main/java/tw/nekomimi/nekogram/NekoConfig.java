@@ -223,6 +223,7 @@ public class NekoConfig {
     public static ConfigItem showBottomActionsWhenSelecting = addConfig(R.string.showBottomActionsWhenSelecting, "showBottomActionsWhenSelecting", configTypeBool, CHAT, false);
 
     public static ConfigItem labelChannelUser = addConfig(R.string.labelChannelUser, "labelChannelUser", configTypeBool, CHAT, false);
+    public static ConfigItem alwaysLabelAnonAdmin = addConfig(R.string.AlwaysLabelAnonAdmin, "AlwaysLabelAnonAdmin", configTypeBool, CHAT, false);
     public static ConfigItem channelAlias = addConfig(R.string.channelAlias, "channelAlias", configTypeBool, EXPERIMENTAL, false);
 
     public static ConfigItem disableAutoDownloadingWin32Executable = addConfig(R.string.Win32ExecutableFiles, "Win32ExecutableFiles", configTypeBool, GENERAL, true);

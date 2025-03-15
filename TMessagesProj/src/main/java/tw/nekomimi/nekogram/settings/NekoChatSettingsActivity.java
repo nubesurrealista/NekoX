@@ -91,6 +91,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final AbstractConfigCell showSeconds = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showSeconds));
     private final AbstractConfigCell showBottomActionsWhenSelectingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showBottomActionsWhenSelecting));
     private final AbstractConfigCell labelChannelUserRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.labelChannelUser, LocaleController.getString(R.string.labelChannelUserDetails)));
+    private final AbstractConfigCell alwaysLabelAnonAdminRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.alwaysLabelAnonAdmin));
     private final AbstractConfigCell hideSendAsChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideSendAsChannel));
     private final AbstractConfigCell hideChannelBottomMuteUnmuteRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideChannelBottomMuteUnmute));
     private final AbstractConfigCell showSpoilersDirectlyRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showSpoilersDirectly));

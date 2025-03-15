@@ -244,4 +244,5 @@
     <string name="MemLeak">MemLeak</string>
     <string name="MemLeakInfo">OMG! It\'s leaking! Restart the app?\n\nNote. You can disable this reminder in general settings.</string>
     <string name="CheckMemLeak">Prompt to restart app when it uses more memory than it should</string>
+    <string name="AlwaysLabelAnonAdmin">Always label anonymous admin in chat</string>
 </resources>

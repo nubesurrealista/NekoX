@@ -67,7 +67,6 @@ import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.URLSpan;
-import android.util.Log;
 import android.util.Pair;
 import android.util.Property;
 import android.util.SparseArray;
@@ -16350,6 +16349,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             currentTimeString = timeString;
         }
 
+        // 030: add anon admin title in timestamp display
+        if (isAnonAdminMessage() && messageObject.isAnyKindOfSticker() /* TODO: && wasn't already shown */) {
+            currentTimeString = String.format("(%s) %s", messageObject.messageOwner.post_author, currentTimeString);
+        }
+
         if (messageObject.messageOwner.forwards > 0 && NekoConfig.showChannelMsgFwdCount.Bool()) {
             currentTimeString = "\uD83D\uDD4A" + LocaleController.formatShortNumber(messageObject.messageOwner.forwards, null) + " " + currentTimeString;
         }
@@ -17414,6 +17418,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         if (currentMessageObject.forceAvatar || currentMessageObject.getDialogId() == UserObject.VERIFY && currentMessageObject.messageOwner != null && currentMessageObject.messageOwner.fwd_from != null) {
             return true;
         }
+        if (isAnonAdminMessage() && !currentMessageObject.isAnyKindOfSticker()) return true;
         if (currentMessageObject.isSponsored()) {
             return false;
         }
@@ -17425,6 +17430,15 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             !pinnedTop && drawName && isChat && (!currentMessageObject.isOutOwner() || currentMessageObject.isSupergroup() && currentMessageObject.isFromGroup() || currentMessageObject.isRepostPreview) ||
             currentMessageObject.isImportedForward() && currentMessageObject.messageOwner.fwd_from.from_id == null
         );
+    }
+
+    private Boolean isAnonAdmin = null;
+    protected boolean isAnonAdminMessage() {
+        if (isAnonAdmin != null) return isAnonAdmin;
+        return (isAnonAdmin = NekoConfig.alwaysLabelAnonAdmin.Bool() &&
+                currentMessageObject.messageOwner != null &&
+                currentMessageObject.messageOwner.from_id.channel_id == currentMessageObject.getChatId() &&
+                currentMessageObject.messageOwner.post_author != null);
     }
 
     private String getAuthorName() {
@@ -17445,6 +17459,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         } else if (currentMessageObject != null && currentMessageObject.isSponsored()) {
             return currentMessageObject.sponsoredTitle;
         }
+        if (isAnonAdminMessage()) return currentMessageObject.messageOwner.post_author;
         return "DELETED";
     }
 
