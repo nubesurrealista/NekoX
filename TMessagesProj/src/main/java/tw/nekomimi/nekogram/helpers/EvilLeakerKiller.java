@@ -11,6 +11,8 @@ public class EvilLeakerKiller {
     private int[] pid = new int[] { android.os.Process.myPid() };
     public int PSS = -1;
 
+    public static int threshold = (int) (1.2 * 1048576); // 1.2GB
+
 
     public static EvilLeakerKiller getInstance(Context context) {
         if (instance == null && context != null) {

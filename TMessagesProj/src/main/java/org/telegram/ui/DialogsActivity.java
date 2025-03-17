@@ -303,6 +303,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private boolean reselectTab = false;
     private DownloadProgressIcon downloadIcon;
 
+    private AlertDialog memleakDialog = null;
+
     public TopicsFragment topicsFragment;
 
     public MessagesStorage.TopicKey getOpenedDialogId() {
@@ -7084,20 +7086,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
         }
         PhotoViewer.muteVideoForChatId = -1L;
-        if (NekoConfig.checkMemLeak.Bool()) {
-            EvilLeakerKiller ek = EvilLeakerKiller.getInstance(getParentActivity().getApplicationContext());
-            if (ek != null && ek.checkRamUsage() > 1048576 /* TODO: use 2GB instead */) {
-                new AlertDialog.Builder(getContext())
-                        .setTitle(LocaleController.getString(R.string.MemLeak))
-                        .setMessage(LocaleController.getString(R.string.MemLeakInfo))
-                        .setPositiveButton("OK", (__, ___) -> {
-                            Context ctx = LaunchActivity.instance.getApplicationContext();
-                            ProcessPhoenix.triggerRebirth(ctx, new Intent(ctx, LaunchActivity.class));
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .show();
-            }
-        }
         // momo end
 
         chatOpened = false;
@@ -7465,6 +7453,27 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             storyHint.show();
         }
         AndroidUtilities.runOnUIThread(this::createSearchViewPager, 200);
+
+        if (NekoConfig.checkMemLeak.Bool()) {
+            EvilLeakerKiller ek = EvilLeakerKiller.getInstance(getParentActivity().getApplicationContext());
+            // 1.2GB by default, increase by 200MB when ignored
+            int usage = 0;
+            if (ek != null && (usage = ek.checkRamUsage()) > EvilLeakerKiller.threshold) {
+                EvilLeakerKiller.threshold += (200 * 1024);
+                if (memleakDialog == null) {
+                    memleakDialog = new AlertDialog.Builder(getContext())
+                            .setTitle(LocaleController.formatString(R.string.MemLeak, usage / 1024))
+                            .setMessage(LocaleController.getString(R.string.MemLeakInfo))
+                            .setPositiveButton("OK", (__, ___) -> {
+                                Context ctx = LaunchActivity.instance.getApplicationContext();
+                                ProcessPhoenix.triggerRebirth(ctx, new Intent(ctx, LaunchActivity.class));
+                            })
+                            .setNegativeButton("Cancel", null)
+                            .create();
+                }
+                memleakDialog.show();
+            }
+        }
     }
 
     private void showArchiveHelp() {
