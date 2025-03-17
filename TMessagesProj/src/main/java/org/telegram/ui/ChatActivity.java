@@ -33912,7 +33912,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             getSendMessagesHelper().sendMessage(params);
                         }
                     }
-                    getSendMessagesHelper().sendMessage(fmessages, did, false, false, notify, scheduleDate, price == null ? 0 : price);
+                    // getSendMessagesHelper().sendMessage(fmessages, did, false, false, notify, scheduleDate, price == null ? 0 : price);
+                    forwardMessages(fmessages, noForwardQuote, notify, scheduleDate, did);
                     if (params != null && NekoConfig.sendCommentAfterForward.Bool()) {
                         getSendMessagesHelper().sendMessage(params);
                     }
