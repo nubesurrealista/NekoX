@@ -1337,7 +1337,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         final String finalUrl1 = url1;
         final int finalTimestamp = timestamp;
         builder.addTitle(finalUrl1);
-        builder.addItems(new String[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)},
+        builder.addItems(new String[]{LocaleController.getString(R.string.Open), LocaleController.getString(R.string.Copy)},
                 new int[]{R.drawable.msg_openin, R.drawable.msg_copy}, (which,__,___ ) -> {
             if (which == 0) {
                 onLinkClick(link, widget);
@@ -5185,7 +5185,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         }
                         ProxyUtil.tryReadQR(parentActivity, bitmap);
                     } catch (Exception ignored) {
-                        AlertUtil.showToast(LocaleController.getString("NoQrFound", R.string.NoQrFound));
+                        AlertUtil.showToast(LocaleController.getString(R.string.NoQrFound));
                     }
                 } else if (id == gallery_menu_chromecast) {
                     castItemButton.performClick();

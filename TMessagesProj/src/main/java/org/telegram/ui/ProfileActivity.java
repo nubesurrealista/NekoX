@@ -4273,7 +4273,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 builder.addTitle("@" + user.username);
 
                 if (userId == getUserConfig().clientUserId && isQrNeedVisible()) {
-                    builder.addItem(LocaleController.getString("QrCode", R.string.QrCode), R.drawable.wallet_qr, __ -> {
+                    builder.addItem(LocaleController.getString(R.string.QrCode), R.drawable.wallet_qr, __ -> {
                         Bundle args = new Bundle();
                         args.putLong("chat_id", chatId);
                         args.putLong("user_id", userId);
@@ -4282,17 +4282,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     });
                 }
 
-                builder.addItem(LocaleController.getString("Edit", R.string.Edit), R.drawable.baseline_edit_24, __ -> {
+                builder.addItem(LocaleController.getString(R.string.Edit), R.drawable.baseline_edit_24, __ -> {
                     presentFragment(new ChangeUsernameActivity());
                     return Unit.INSTANCE;
                 });
 
-                builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
+                builder.addItem(LocaleController.getString(R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
                     AlertUtil.copyAndAlert("@" + user.username);
                     return Unit.INSTANCE;
                 });
 
-                builder.addItem(LocaleController.getString("CopyLink", R.string.CopyLink), R.drawable.baseline_link_24, __ -> {
+                builder.addItem(LocaleController.getString(R.string.CopyLink), R.drawable.baseline_link_24, __ -> {
                     AlertUtil.copyAndAlert("https://t.me/" + user.username);
                     return Unit.INSTANCE;
                 });
@@ -4310,30 +4310,30 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 number = PhoneFormat.getInstance().format("+" + user.phone);
                 BottomBuilder builder = new BottomBuilder(getParentActivity());
                 builder.addTitle(number);
-                builder.addItem(LocaleController.getString("Edit", R.string.Edit), R.drawable.baseline_edit_24, __ -> {
+                builder.addItem(LocaleController.getString(R.string.Edit), R.drawable.baseline_edit_24, __ -> {
                     presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER));
                     return Unit.INSTANCE;
                 });
-                builder.addItem(LocaleController.getString("Call", R.string.Call), R.drawable.baseline_call_24, __ -> {
+                builder.addItem(LocaleController.getString(R.string.Call), R.drawable.baseline_call_24, __ -> {
                     AlertUtil.call(user.phone);
                     return Unit.INSTANCE;
                 });
-                builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
+                builder.addItem(LocaleController.getString(R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
                     AlertUtil.copyAndAlert(number);
                     return Unit.INSTANCE;
                 });
-                builder.addItem(LocaleController.getString("ShareContact", R.string.ShareContact), R.drawable.baseline_forward_24, __ -> {
+                builder.addItem(LocaleController.getString(R.string.ShareContact), R.drawable.baseline_forward_24, __ -> {
                     Bundle args = new Bundle();
                     args.putBoolean("onlySelect", true);
                     args.putInt("dialogsType", 3);
-                    args.putString("selectAlertString", LocaleController.getString("SendContactToText", R.string.SendContactToText));
-                    args.putString("selectAlertStringGroup", LocaleController.getString("SendContactToGroupText", R.string.SendContactToGroupText));
+                    args.putString("selectAlertString", LocaleController.getString(R.string.SendContactToText));
+                    args.putString("selectAlertStringGroup", LocaleController.getString(R.string.SendContactToGroupText));
                     DialogsActivity fragment = new DialogsActivity(args);
                     fragment.setDelegate(ProfileActivity.this);
                     presentFragment(fragment);
                     return Unit.INSTANCE;
                 });
-                builder.addItem(LocaleController.getString("Hide", R.string.Hide), R.drawable.baseline_remove_circle_24, __ -> {
+                builder.addItem(LocaleController.getString(R.string.Hide), R.drawable.baseline_remove_circle_24, __ -> {
                     hideNumber = true;
                     updateListAnimated(false);
                     return Unit.INSTANCE;
@@ -4344,26 +4344,26 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 String number = PhoneFormat.getInstance().format("+" + user.phone);
                 BottomBuilder builder = new BottomBuilder(getParentActivity());
                 builder.addTitle(number);
-                builder.addItem(LocaleController.getString("Call", R.string.Call), R.drawable.baseline_call_24, __ -> {
+                builder.addItem(LocaleController.getString(R.string.Call), R.drawable.baseline_call_24, __ -> {
                     AlertUtil.call(user.phone);
                     return Unit.INSTANCE;
                 });
-                builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
+                builder.addItem(LocaleController.getString(R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
                     AlertUtil.copyAndAlert(number);
                     return Unit.INSTANCE;
                 });
-                builder.addItem(LocaleController.getString("ShareContact", R.string.ShareContact), R.drawable.baseline_forward_24, __ -> {
+                builder.addItem(LocaleController.getString(R.string.ShareContact), R.drawable.baseline_forward_24, __ -> {
                     Bundle args = new Bundle();
                     args.putBoolean("onlySelect", true);
                     args.putInt("dialogsType", 3);
-                    args.putString("selectAlertString", LocaleController.getString("SendContactToText", R.string.SendContactToText));
-                    args.putString("selectAlertStringGroup", LocaleController.getString("SendContactToGroupText", R.string.SendContactToGroupText));
+                    args.putString("selectAlertString", LocaleController.getString(R.string.SendContactToText));
+                    args.putString("selectAlertStringGroup", LocaleController.getString(R.string.SendContactToGroupText));
                     DialogsActivity fragment = new DialogsActivity(args);
                     fragment.setDelegate(ProfileActivity.this);
                     presentFragment(fragment);
                     return Unit.INSTANCE;
                 });
-                builder.addItem(LocaleController.getString("Hide", R.string.Hide), R.drawable.baseline_remove_circle_24, __ -> {
+                builder.addItem(LocaleController.getString(R.string.Hide), R.drawable.baseline_remove_circle_24, __ -> {
                     hideNumber = true;
                     updateListAnimated(false);
                     return Unit.INSTANCE;
@@ -4378,12 +4378,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 String message = cell.getTextView().getText().toString();
                 builder.addTitle(message);
                 String finalMessage = message;
-                builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, (it) -> {
+                builder.addItem(LocaleController.getString(R.string.Copy), R.drawable.baseline_content_copy_24, (it) -> {
                     AndroidUtilities.addToClipboard(finalMessage);
-                    AlertUtil.showToast(LocaleController.getString("TextCopied", R.string.TextCopied));
+                    AlertUtil.showToast(LocaleController.getString(R.string.TextCopied));
                     return Unit.INSTANCE;
                 });
-                builder.addItem(BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs), R.drawable.baseline_bug_report_24, (it) -> {
+                builder.addItem(BuildVars.LOGS_ENABLED ? LocaleController.getString(R.string.DebugMenuDisableLogs) : LocaleController.getString(R.string.DebugMenuEnableLogs), R.drawable.baseline_bug_report_24, (it) -> {
                     BuildVars.LOGS_ENABLED = BuildVars.DEBUG_VERSION = !BuildVars.LOGS_ENABLED;
                     SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
                     sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.LOGS_ENABLED).apply();
@@ -4419,10 +4419,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
 
                 if (NekoXConfig.isDeveloper()) {
-                    builder.addItem(LocaleController.getString("DeveloperSettings", R.string.DeveloperSettings), R.drawable.baseline_developer_mode_24, (it) -> {
+                    builder.addItem(LocaleController.getString(R.string.DeveloperSettings), R.drawable.baseline_developer_mode_24, (it) -> {
                         BottomBuilder devBuilder = new BottomBuilder(ProfileActivity.this.getParentActivity());
-                        devBuilder.addTitle(LocaleController.getString("DevModeTitle", R.string.DevModeTitle), LocaleController.getString("DevModeNotice", R.string.DevModeNotice));
-                        devBuilder.addItem(LocaleController.getString("Continue", R.string.Continue), R.drawable.baseline_warning_24, true, (__) -> {
+                        devBuilder.addTitle(LocaleController.getString(R.string.DevModeTitle), LocaleController.getString(R.string.DevModeNotice));
+                        devBuilder.addItem(LocaleController.getString(R.string.Continue), R.drawable.baseline_warning_24, true, (__) -> {
                             ProfileActivity.this.presentFragment(new NekoXSettingActivity());
                             return Unit.INSTANCE;
                         });
@@ -5418,11 +5418,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 nameTextView[a].setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
                 nameTextView[a].setOnLongClickListener(v -> {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, (dialogInterface, i) -> {
+                    builder.setItems(new CharSequence[]{LocaleController.getString(R.string.Copy)}, (dialogInterface, i) -> {
                         if (i == 0) {
                             try {
                                 AndroidUtilities.addToClipboard(((SimpleTextView) v).getText());
-                                Toast.makeText(getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getParentActivity(), LocaleController.getString(R.string.TextCopied), Toast.LENGTH_SHORT).show();
                             } catch (Exception e) {
                                 FileLog.e(e);
                             }
@@ -6650,7 +6650,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             BottomBuilder builder = new BottomBuilder(getParentActivity());
             builder.addTitle("@" + username);
 
-            builder.addItem(LocaleController.getString("QrCode", R.string.QrCode), R.drawable.wallet_qr, __ -> {
+            builder.addItem(LocaleController.getString(R.string.QrCode), R.drawable.wallet_qr, __ -> {
                 Bundle args = new Bundle();
                 args.putLong("chat_id", chatId);
                 args.putLong("user_id", userId);
@@ -6659,7 +6659,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             });
 
             if (chatInfo != null && chatInfo.can_set_username) {
-                builder.addItem(LocaleController.getString("Edit", R.string.Edit), R.drawable.baseline_edit_24, __ -> {
+                builder.addItem(LocaleController.getString(R.string.Edit), R.drawable.baseline_edit_24, __ -> {
                     ChatEditTypeActivity fragment = new ChatEditTypeActivity(chatId, chatInfo.can_set_location);
                     fragment.setInfo(chatInfo);
                     presentFragment(fragment);
@@ -6748,12 +6748,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
             }
 
-            builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
+            builder.addItem(LocaleController.getString(R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
                 AlertUtil.copyAndAlert("@" + username);
                 return Unit.INSTANCE;
             });
 
-            builder.addItem(LocaleController.getString("CopyLink", R.string.CopyLink), R.drawable.baseline_link_24, __ -> {
+            builder.addItem(LocaleController.getString(R.string.CopyLink), R.drawable.baseline_link_24, __ -> {
                 AlertUtil.copyAndAlert("https://t.me/" + username);
                 return Unit.INSTANCE;
             });
@@ -6935,7 +6935,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return false;
             }
             BottomBuilder builder = new BottomBuilder(getParentActivity());
-            builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
+            builder.addItem(LocaleController.getString(R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
                 try {
                     String about;
                     if (position == locationRow) {
@@ -6953,7 +6953,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 return Unit.INSTANCE;
             });
-            builder.addItem(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate, __ -> {
+            builder.addItem(LocaleController.getString(R.string.Translate), R.drawable.ic_translate, __ -> {
                 try {
                     String about;
                     if (position == locationRow) {
@@ -10693,30 +10693,30 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             idTextView.setOnClickListener(v -> {
                 BottomBuilder builder = new BottomBuilder(getParentActivity());
                 builder.addTitle(finalId + "");
-                builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
+                builder.addItem(LocaleController.getString(R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
                     AlertUtil.copyAndAlert(finalId + "");
                     return Unit.INSTANCE;
                 });
                 if (finalId == userId) {
-                    builder.addItem(LocaleController.getString("CopyLink", R.string.CopyLink), R.drawable.baseline_link_24, __ -> {
+                    builder.addItem(LocaleController.getString(R.string.CopyLink), R.drawable.baseline_link_24, __ -> {
                         AlertUtil.copyLinkAndAlert("tg://user?id=" + finalId);
                         return Unit.INSTANCE;
                     });
-                    builder.addItem(LocaleController.getString("CopyLink", R.string.CopyLink) + " (Android)", R.drawable.baseline_link_24, __ -> {
+                    builder.addItem(LocaleController.getString(R.string.CopyLink) + " (Android)", R.drawable.baseline_link_24, __ -> {
                         AlertUtil.copyLinkAndAlert("tg://openmessage?user_id=" + finalId);
                         return Unit.INSTANCE;
                     });
-                    builder.addItem(LocaleController.getString("CopyLink", R.string.CopyLink) + " (IOS)", R.drawable.baseline_link_24, __ -> {
+                    builder.addItem(LocaleController.getString(R.string.CopyLink) + " (IOS)", R.drawable.baseline_link_24, __ -> {
                         AlertUtil.copyLinkAndAlert("https://t.me/@id" + finalId);
                         return Unit.INSTANCE;
                     });
                 } else {
-                    builder.addItem(LocaleController.getString("CopyLink", R.string.CopyLink) + " (Android)", R.drawable.baseline_link_24, __ -> {
+                    builder.addItem(LocaleController.getString(R.string.CopyLink) + " (Android)", R.drawable.baseline_link_24, __ -> {
                         AlertUtil.copyLinkAndAlert("tg://openmessage?chat_id=" + finalId);
                         return Unit.INSTANCE;
                     });
                 }
-                builder.addItem(LocaleController.getString("Hide", R.string.Hide), R.drawable.baseline_remove_circle_24, __ -> {
+                builder.addItem(LocaleController.getString(R.string.Hide), R.drawable.baseline_remove_circle_24, __ -> {
                     idTextView.setVisibility(View.GONE);
                     return Unit.INSTANCE;
                 });
@@ -10908,7 +10908,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         otherItem.addSubItem(add_shortcut, R.drawable.msg_home, LocaleController.getString(R.string.AddShortcut));
                         if (isBot) {
 //                            if (!user.bot_nochats) {
-//                                otherItem.addSubItem(invite_to_group, R.drawable.baseline_group_add_24, LocaleController.getString("BotInvite", R.string.BotInvite));
+//                                otherItem.addSubItem(invite_to_group, R.drawable.baseline_group_add_24, LocaleController.getString(R.string.BotInvite));
 //                            }
                             otherItem.addSubItem(share, R.drawable.baseline_forward_24, LocaleController.getString(R.string.BotShare));
                         } else {
@@ -10956,7 +10956,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     otherItem.setSubItemShown(start_secret_chat, DialogObject.isEmpty(getMessagesController().isUserContactBlocked(userId)));
                 }
                 if (StrUtil.isNotBlank(user.username)) {
-                    otherItem.addSubItem(qr_code, R.drawable.wallet_qr, LocaleController.getString("ShareQRCode", R.string.ShareQRCode));
+                    otherItem.addSubItem(qr_code, R.drawable.wallet_qr, LocaleController.getString(R.string.ShareQRCode));
                 }
                 if (!isBot && getContactsController().contactsDict.get(userId) != null) {
                     otherItem.addSubItem(add_shortcut, R.drawable.baseline_home_24, LocaleController.getString(R.string.AddShortcut));
@@ -11065,7 +11065,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 otherItem.addSubItem(leave_group, R.drawable.baseline_exit_to_app_24, LocaleController.getString(R.string.DeleteAndExit));
             }
             if (StrUtil.isNotBlank(chat.username) || ChatObject.canUserDoAdminAction(chat, ChatObject.ACTION_INVITE)) {
-                otherItem.addSubItem(qr_code, R.drawable.wallet_qr, LocaleController.getString("ShareQRCode", R.string.ShareQRCode));
+                otherItem.addSubItem(qr_code, R.drawable.wallet_qr, LocaleController.getString(R.string.ShareQRCode));
             }
             if (topicId == 0) {
                 otherItem.addSubItem(add_shortcut, R.drawable.msg_home, LocaleController.getString(R.string.AddShortcut));

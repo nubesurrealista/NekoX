@@ -6603,7 +6603,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             if (set.set != null) {
                                 String title = set.set.title;
                                 if (PinnedStickerHelper.getInstance(currentAccount).isPinned(set.set.id)) {
-                                    title += " " + LocaleController.getString("SetPinnedSuffix", R.string.SetPinnedSuffix);
+                                    title += " " + LocaleController.getString(R.string.SetPinnedSuffix);
                                 }
                                 cell.setText(title, 0);
                                 if (set.set.creator && !StickersAlert.DISABLE_STICKER_EDITOR) {

@@ -107,7 +107,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             user = accountInstance.getMessagesController().getUser(id);
             if (user != null) {
                 if (UserObject.isUserSelf(user) && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
-                    name = LocaleController.getString("SavedMessages", R.string.SavedMessages);
+                    name = LocaleController.getString(R.string.SavedMessages);
                 } else if (UserObject.isReplyUser(user)) {
                     name = LocaleController.getString(R.string.RepliesTitle);
                 } else if (UserObject.isDeleted(user)) {

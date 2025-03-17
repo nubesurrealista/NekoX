@@ -1348,7 +1348,7 @@ public class AlertsCreator {
             builder.setNeutralButton(LocaleController.getString(R.string.Copy), (dialogInterface, i) -> {
                 try {
                     AndroidUtilities.addToClipboard(url);
-                    Toast.makeText(fragment.getParentActivity(), LocaleController.getString("LinkCopied", R.string.LinkCopied), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(fragment.getParentActivity(), LocaleController.getString(R.string.LinkCopied), Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
@@ -1374,7 +1374,7 @@ public class AlertsCreator {
         String urlFinal = uri != null ? uri.toString() : url;
         Runnable open = () -> Browser.openUrl(activity, Uri.parse(url), true, false, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, resourcesProvider);
-        builder.setTitle(LocaleController.getString("OpenUrlTitle", R.string.OpenUrlTitle));
+        builder.setTitle(LocaleController.getString(R.string.OpenUrlTitle));
         AlertDialog[] dialog = new AlertDialog[1];
         SpannableString link = new SpannableString(urlFinal);
         link.setSpan(new URLSpan(urlFinal) {
@@ -1386,19 +1386,19 @@ public class AlertsCreator {
                 }
             }
         }, 0, link.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(LocaleController.getString("OpenUrlAlert2", R.string.OpenUrlAlert2));
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(LocaleController.getString(R.string.OpenUrlAlert2));
         int index = stringBuilder.toString().indexOf("%1$s");
         if (index >= 0) {
             stringBuilder.replace(index, index + 4, link);
         }
         builder.setMessage(stringBuilder);
         builder.setMessageTextViewClickable(false);
-        builder.setPositiveButton(LocaleController.getString("Open", R.string.Open), (dialogInterface, i) -> open.run());
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-        builder.setNeutralButton(LocaleController.getString("Copy", R.string.Copy), (dialogInterface, i) -> {
+        builder.setPositiveButton(LocaleController.getString(R.string.Open), (dialogInterface, i) -> open.run());
+        builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
+        builder.setNeutralButton(LocaleController.getString(R.string.Copy), (dialogInterface, i) -> {
             try {
                 AndroidUtilities.addToClipboard(url);
-                Toast.makeText(activity, LocaleController.getString("LinkCopied", R.string.LinkCopied), Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, LocaleController.getString(R.string.LinkCopied), Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -2444,29 +2444,29 @@ public class AlertsCreator {
                 });
             }
             textView.setText(LocaleController.formatString("DeleteFewChatsTitle", R.string.DeleteFewChatsTitle, LocaleController.formatPluralString("ChatsSelected", count)));
-            messageTextView.setText(LocaleController.getString("AreYouSureDeleteFewChats", R.string.AreYouSureDeleteFewChats));
+            messageTextView.setText(LocaleController.getString(R.string.AreYouSureDeleteFewChats));
         } else {
             if (canClearCacheCount != 0) {
                 textView.setText(LocaleController.formatString("ClearCacheFewChatsTitle", R.string.ClearCacheFewChatsTitle, LocaleController.formatPluralString("ChatsSelectedClearCache", count)));
-                messageTextView.setText(LocaleController.getString("AreYouSureClearHistoryCacheFewChats", R.string.AreYouSureClearHistoryCacheFewChats));
+                messageTextView.setText(LocaleController.getString(R.string.AreYouSureClearHistoryCacheFewChats));
             } else {
                 textView.setText(LocaleController.formatString("ClearFewChatsTitle", R.string.ClearFewChatsTitle, LocaleController.formatPluralString("ChatsSelectedClear", count)));
-                messageTextView.setText(LocaleController.getString("AreYouSureClearHistoryFewChats", R.string.AreYouSureClearHistoryFewChats));
+                messageTextView.setText(LocaleController.getString(R.string.AreYouSureClearHistoryFewChats));
             }
         }
 
         frameLayout.addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 24, 11, 24, 0));
         frameLayout.addView(messageTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 24, 57, 24, 1));
 
-        String actionText = canDeleteHistory ? LocaleController.getString("Delete", R.string.Delete)
-                : canClearCacheCount != 0 ? LocaleController.getString("ClearHistoryCache", R.string.ClearHistoryCache)
-                : LocaleController.getString("ClearHistory", R.string.ClearHistory);
+        String actionText = canDeleteHistory ? LocaleController.getString(R.string.Delete)
+                : canClearCacheCount != 0 ? LocaleController.getString(R.string.ClearHistoryCache)
+                : LocaleController.getString(R.string.ClearHistory);
         builder.setPositiveButton(actionText, (dialogInterface, i) -> {
             if (onProcessRunnable != null) {
                 onProcessRunnable.run(deleteForAll[0]);
             }
         });
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
         AlertDialog alertDialog = builder.create();
         fragment.showDialog(alertDialog);
         TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);

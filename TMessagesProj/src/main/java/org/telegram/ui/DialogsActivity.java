@@ -3172,7 +3172,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
 
         scanItem = menu.addItem(nekox_scanqr, R.drawable.wallet_qr);
-        scanItem.setContentDescription(LocaleController.getString("ScanQRCode", R.string.ScanQRCode));
+        scanItem.setContentDescription(LocaleController.getString(R.string.ScanQRCode));
         scanItem.setVisibility(View.GONE);
 
         searchItem = menu.addItem(0, R.drawable.ic_ab_search).setIsSearchField(true, false).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
@@ -4796,10 +4796,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         floatingButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon), PorterDuff.Mode.SRC_IN));
         if (initialDialogsType == DIALOGS_TYPE_WIDGET) {
             floatingButton.setImageResource(R.drawable.floating_check);
-            floatingButtonContainer.setContentDescription(LocaleController.getString("Done", R.string.Done));
+            floatingButtonContainer.setContentDescription(LocaleController.getString(R.string.Done));
         } else {
             floatingButton.setAnimation(R.raw.write_contacts_fab_icon, 52, 52);
-            floatingButtonContainer.setContentDescription(LocaleController.getString("NewMessageTitle", R.string.NewMessageTitle));
+            floatingButtonContainer.setContentDescription(LocaleController.getString(R.string.NewMessageTitle));
         }
         if (Build.VERSION.SDK_INT >= 21) {
             StateListAnimator animator = new StateListAnimator();

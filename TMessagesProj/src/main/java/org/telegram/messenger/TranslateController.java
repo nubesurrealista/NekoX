@@ -582,7 +582,7 @@ public class TranslateController extends BaseController {
                             try {
                                 NotificationCenter.getGlobalInstance().postNotificationName(
                                         NotificationCenter.showBulletin, Bulletin.TYPE_ERROR_SUBTITLE,
-                                        LocaleController.getString("TranslationFailedAlert2", R.string.TranslationFailedAlert2), message);
+                                        LocaleController.getString(R.string.TranslationFailedAlert2), message);
                             } catch (Exception ex) {
                                 Log.e("030-tx", "failed to show error", ex);
                             }

@@ -180,7 +180,7 @@ object AlertUtil {
         builder.setMessage(AndroidUtilities.replaceTags(text))
         builder.setPositiveButton(button, listener)
 
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null)
+        builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null)
         val alertDialog = builder.show()
 
         if (red) {

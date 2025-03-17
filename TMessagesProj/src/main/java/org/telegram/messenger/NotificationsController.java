@@ -5108,7 +5108,7 @@ public class NotificationsController extends BaseController {
                 if (dialogId == selfUserId) {
                     senderName[0] = name;
                 } else if (DialogObject.isChatDialog(dialogId) && lastMessageObject.messageOwner.from_scheduled) {
-                    senderName[0] = LocaleController.getString("NotificationMessageScheduledName", R.string.NotificationMessageScheduledName);
+                    senderName[0] = LocaleController.getString(R.string.NotificationMessageScheduledName);
                 }
                 if (message == null) {
                     if (BuildVars.LOGS_ENABLED) {
@@ -5120,7 +5120,7 @@ public class NotificationsController extends BaseController {
                     text.append("\n\n");
                 }
                 if (dialogId != selfUserId && lastMessageObject.messageOwner.from_scheduled && DialogObject.isUserDialog(dialogId)) {
-                    message = String.format("%1$s: %2$s", LocaleController.getString("NotificationMessageScheduledName", R.string.NotificationMessageScheduledName), message);
+                    message = String.format("%1$s: %2$s", LocaleController.getString(R.string.NotificationMessageScheduledName), message);
                     text.append(message);
                 }
                 long date = Long.MAX_VALUE;

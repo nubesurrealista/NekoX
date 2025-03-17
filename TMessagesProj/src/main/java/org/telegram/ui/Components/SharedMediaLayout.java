@@ -6963,7 +6963,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                                     url1 = url1.substring(4);
                                 }
                                 AndroidUtilities.addToClipboard(url1);
-                                AlertUtil.showToast(LocaleController.getString("LinkCopied", R.string.LinkCopied));
+                                AlertUtil.showToast(LocaleController.getString(R.string.LinkCopied));
                             } else if (which == 3) {
                                 new BlacklistUrlQueryBottomSheet(profileActivity, urlFinal).show();
                             }

@@ -532,7 +532,7 @@ public class ContentPreviewViewer {
                         icons.add(R.drawable.baseline_delete_24);
                         actions.add(5);
                     }
-                    items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
+                    items.add(LocaleController.getString(R.string.SaveToGallery));
                     icons.add(R.drawable.baseline_image_24);
                     actions.add(nkbtn_stickerdl);
                 }

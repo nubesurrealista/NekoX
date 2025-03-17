@@ -4589,7 +4589,7 @@ public class AndroidUtilities {
         pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
 
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(View.GONE);
-        pickerBottomLayout.middleButtonTextView.setText(LocaleController.getString("Save", R.string.Save).toUpperCase());
+        pickerBottomLayout.middleButtonTextView.setText(LocaleController.getString(R.string.Save).toUpperCase());
         pickerBottomLayout.middleButton.setVisibility(View.VISIBLE);
         pickerBottomLayout.middleButton.setOnClickListener((it) -> {
             int p = Utilities.parseInt(port);
@@ -4605,7 +4605,7 @@ public class AndroidUtilities {
             dismissRunnable.run();
         });
 
-        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", R.string.ConnectingConnectProxy).toUpperCase());
+        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString(R.string.ConnectingConnectProxy).toUpperCase());
         pickerBottomLayout.doneButton.setOnClickListener(v -> {
             int p = Utilities.parseInt(port);
             SharedConfig.ProxyInfo info;

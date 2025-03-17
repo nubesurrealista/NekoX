@@ -4273,7 +4273,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                         BulletinFactory.of(mainFragmentsStack.get(mainFragmentsStack.size() - 1)).createErrorBulletin(LocaleController.getString(R.string.PaymentInvoiceLinkInvalid)).show();
                     }
                 } else if (!LaunchActivity.this.isFinishing()) {
-                    Toast.makeText(LaunchActivity.this, LocaleController.getString("nekoXPaymentRemovedToast", R.string.nekoXPaymentRemovedToast), Toast.LENGTH_LONG).show();
+                    Toast.makeText(LaunchActivity.this, LocaleController.getString(R.string.nekoXPaymentRemovedToast), Toast.LENGTH_LONG).show();
                 }
 
                 try {
@@ -6974,7 +6974,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             } else if (reason == 3) {
                 builder.setTitle(LocaleController.getString(R.string.Proxy));
                 if (args.length > 1) {
-//                    builder.setMessage(LocaleController.getString("WsNoDC4", R.string.WsNoDC4));
+//                    builder.setMessage(LocaleController.getString(R.string.WsNoDC4));
                 } else {
                     builder.setMessage(LocaleController.getString(R.string.UseProxyTelegramError));
                 }

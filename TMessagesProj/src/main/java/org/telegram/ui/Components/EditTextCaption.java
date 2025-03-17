@@ -277,7 +277,7 @@ public class EditTextCaption extends EditTextBoldCursor {
 
     public void makeSelectedMention() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(LocaleController.getString("CreateMention", R.string.CreateMention));
+        builder.setTitle(LocaleController.getString(R.string.CreateMention));
 
         final EditTextBoldCursor editText = new EditTextBoldCursor(getContext()) {
             @Override
@@ -311,7 +311,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         }
 
 
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+        builder.setPositiveButton(LocaleController.getString(R.string.OK), (dialogInterface, i) -> {
             Editable editable = getText();
             CharacterStyle spans[] = editable.getSpans(start, end, CharacterStyle.class);
             if (spans != null && spans.length > 0) {
@@ -337,7 +337,7 @@ public class EditTextCaption extends EditTextBoldCursor {
                 delegate.onSpansChanged();
             }
         });
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
         builder.show().setOnShowListener(dialog -> {
             editText.requestFocus();
             AndroidUtilities.showKeyboard(editText);

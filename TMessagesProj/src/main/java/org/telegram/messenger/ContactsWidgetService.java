@@ -112,7 +112,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
                 if (DialogObject.isUserDialog(id)) {
                     user = accountInstance.getMessagesController().getUser(id);
                     if (UserObject.isUserSelf(user) && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
-                        name = LocaleController.getString("SavedMessages", R.string.SavedMessages);
+                        name = LocaleController.getString(R.string.SavedMessages);
                     } else if (UserObject.isReplyUser(user)) {
                         name = LocaleController.getString(R.string.RepliesTitle);
                     } else if (UserObject.isDeleted(user)) {

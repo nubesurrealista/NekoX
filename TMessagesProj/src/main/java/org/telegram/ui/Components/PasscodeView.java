@@ -1222,7 +1222,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
                         Executor executor = ContextCompat.getMainExecutor(parentActivity);
                         BiometricPrompt.Builder builder = new BiometricPrompt.Builder(parentActivity)
                                 .setTitle(StrUtil.getAppName())
-                                .setNegativeButton(LocaleController.getString("Canel", R.string.Cancel), executor, (dialog, which) -> { });
+                                .setNegativeButton(LocaleController.getString(R.string.Cancel), executor, (dialog, which) -> { });
                         if (Build.VERSION.SDK_INT >= 29) {
                             builder.setConfirmationRequired(false);
                         }

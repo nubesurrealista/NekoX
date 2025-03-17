@@ -3076,7 +3076,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                                     url1 = url1.substring(4);
                                                 }
                                                 AndroidUtilities.addToClipboard(url1);
-                                                AlertUtil.showToast(LocaleController.getString("LinkCopied", R.string.LinkCopied));
+                                                AlertUtil.showToast(LocaleController.getString(R.string.LinkCopied));
                                             }
                                             return Unit.INSTANCE;
                                         });

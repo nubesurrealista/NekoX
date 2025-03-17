@@ -159,13 +159,13 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                     finishFragment();
                 } else if (id == unblock_all) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString("UnblockAll", R.string.UnblockAll));
+                    builder.setTitle(LocaleController.getString(R.string.UnblockAll));
                     if (getMessagesController().totalBlockedCount != 0) {
-                        builder.setMessage(LocaleController.getString("UnblockAllWarn", R.string.UnblockAllWarn));
-                        builder.setPositiveButton(LocaleController.getString("UnblockAll", R.string.UnblockAll), (dialog, which) -> {
+                        builder.setMessage(LocaleController.getString(R.string.UnblockAllWarn));
+                        builder.setPositiveButton(LocaleController.getString(R.string.UnblockAll), (dialog, which) -> {
                             new Thread(() -> getMessagesController().unblockAllUsers()).start();
                         });
-                        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                        builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
                     } else {
                         builder.setMessage(LocaleController.getString("BlockedListEmpty",R.string.BlockedListEmpty));
                         builder.setPositiveButton(LocaleController.getString("OK",R.string.OK),null);
@@ -180,8 +180,8 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             ActionBarMenu menu = actionBar.createMenu();
 
             ActionBarMenuItem otherItem = menu.addItem(0, R.drawable.ic_ab_other);
-            otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
-            otherItem.addSubItem(unblock_all, LocaleController.getString("UnblockAll", R.string.UnblockAll));
+            otherItem.setContentDescription(LocaleController.getString(R.string.AccDescrMoreOptions));
+            otherItem.addSubItem(unblock_all, LocaleController.getString(R.string.UnblockAll));
 
         }
 

@@ -4515,7 +4515,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
         if (!isInInput) {
 
-            cell.setTextAndIcon(LocaleController.getString("ChatAttachEnterMenuRecordAudio", R.string.ChatAttachEnterMenuRecordAudio), R.drawable.baseline_mic_24);
+            cell.setTextAndIcon(LocaleController.getString(R.string.ChatAttachEnterMenuRecordAudio), R.drawable.baseline_mic_24);
             cell.setOnClickListener(v -> {
                 if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
                     menuPopupWindow.dismiss();
@@ -4547,7 +4547,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
                 cell = new ActionBarMenuSubItem(getContext(), false, dlps == 0);
 
-                cell.setTextAndIcon(LocaleController.getString("ChatAttachEnterMenuRecordVideo", R.string.ChatAttachEnterMenuRecordVideo), R.drawable.baseline_camera_alt_24);
+                cell.setTextAndIcon(LocaleController.getString(R.string.ChatAttachEnterMenuRecordVideo), R.drawable.baseline_camera_alt_24);
                 cell.setOnClickListener(v -> {
                     if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
                         menuPopupWindow.dismiss();
@@ -4583,7 +4583,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
             if (StrUtil.isNotBlank(NekoConfig.openPGPApp.String())) {
 
-                cell.setTextAndIcon(LocaleController.getString("Sign", R.string.Sign), R.drawable.baseline_vpn_key_24);
+                cell.setTextAndIcon(LocaleController.getString(R.string.Sign), R.drawable.baseline_vpn_key_24);
                 cell.setOnClickListener(v -> {
                     if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
                         menuPopupWindow.dismiss();
@@ -4616,7 +4616,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 chatId = -1;
             }
 
-            cell.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
+            cell.setTextAndIcon(LocaleController.getString(R.string.Translate), R.drawable.ic_translate);
             cell.setOnClickListener(v -> {
                 if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
                     menuPopupWindow.dismiss();
@@ -4639,7 +4639,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
             cell = new ActionBarMenuSubItem(getContext(), false, dlps == 0);
 
-            cell.setTextAndIcon(LocaleController.getString("Translate", R.string.OpenCC), R.drawable.ic_translate);
+            cell.setTextAndIcon(LocaleController.getString(R.string.OpenCC), R.drawable.ic_translate);
             ActionBarMenuSubItem finalCell1 = cell;
             cell.setOnClickListener(v -> {
                 String ccTarget = TranslateDb.getChatCCTarget(chatId, NekoConfig.ccInputLang.String());
@@ -4675,7 +4675,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             cell = new ActionBarMenuSubItem(getContext(), false, dlps == 0);
 
 
-            cell.setTextAndIcon(LocaleController.getString("ReplaceText", R.string.ReplaceText), R.drawable.baseline_edit_24);
+            cell.setTextAndIcon(LocaleController.getString(R.string.ReplaceText), R.drawable.baseline_edit_24);
             cell.setOnClickListener(v -> {
                 if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
                     menuPopupWindow.dismiss();
@@ -4691,8 +4691,8 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             cell = new ActionBarMenuSubItem(getContext(), false, false);
 
             cell.setTextAndIcon(dlps != 1 ?
-                    LocaleController.getString("ChatAttachEnterMenuEnableLinkPreview", R.string.ChatAttachEnterMenuEnableLinkPreview) :
-                    LocaleController.getString("ChatAttachEnterMenuDisableLinkPreview", R.string.ChatAttachEnterMenuDisableLinkPreview), R.drawable.baseline_link_24);
+                    LocaleController.getString(R.string.ChatAttachEnterMenuEnableLinkPreview) :
+                    LocaleController.getString(R.string.ChatAttachEnterMenuDisableLinkPreview), R.drawable.baseline_link_24);
 
             ActionBarMenuSubItem finalCell = cell;
             cell.setOnClickListener(v -> {
@@ -4704,8 +4704,8 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 messageWebPageSearch = delegate.getDisableLinkPreviewStatus() == 1;
 
                 finalCell.setTextAndIcon(delegate.getDisableLinkPreviewStatus() != 1 ?
-                        LocaleController.getString("ChatAttachEnterMenuEnableLinkPreview", R.string.ChatAttachEnterMenuEnableLinkPreview) :
-                        LocaleController.getString("ChatAttachEnterMenuDisableLinkPreview", R.string.ChatAttachEnterMenuDisableLinkPreview), R.drawable.baseline_link_24);
+                        LocaleController.getString(R.string.ChatAttachEnterMenuEnableLinkPreview) :
+                        LocaleController.getString(R.string.ChatAttachEnterMenuDisableLinkPreview), R.drawable.baseline_link_24);
 
             });
 
@@ -4875,7 +4875,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
                     translateSpinner.show();
                     if (messageEditText == null) {
-                        BulletinFactory.of(parentFragment).createErrorBulletin(LocaleController.getString("TranslationFailedAlert2", R.string.TranslationFailedAlert2)).show();
+                        BulletinFactory.of(parentFragment).createErrorBulletin(LocaleController.getString(R.string.TranslationFailedAlert2)).show();
                         return;
                     }
                     Locale toDefault = TranslatorKt.getCode2Locale("en");
@@ -5133,7 +5133,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         options.add(R.drawable.ic_translate, null, getString(NekoConfig.dontSendRightAfterTranslated.Bool() ? R.string.Translate : R.string.TranslateBeforeSend),
                 Theme.key_actionBarDefaultSubmenuItemIcon, Theme.key_actionBarDefaultSubmenuItem, () -> {
             if (messageEditText == null) {
-                BulletinFactory.of(parentFragment).createErrorBulletin(LocaleController.getString("TranslationFailedAlert2", R.string.TranslationFailedAlert2)).show();
+                BulletinFactory.of(parentFragment).createErrorBulletin(LocaleController.getString(R.string.TranslationFailedAlert2)).show();
                 return;
             }
             Locale toDefault = TranslatorKt.getCode2Locale("en");
@@ -6186,15 +6186,15 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
         BottomBuilder builder = new BottomBuilder(getContext());
 
-        builder.addTitle(LocaleController.getString("ReplaceText", R.string.ReplaceText), true);
+        builder.addTitle(LocaleController.getString(R.string.ReplaceText), true);
 
         TextCheckCell regex = builder.addCheckItem(LocaleController.getString(R.string.ReplaceRegex), false, false, null);
-        EditText origin = builder.addEditText(LocaleController.getString("TextOrigin", R.string.TextOrigin));
-        EditText replace = builder.addEditText(LocaleController.getString("TextReplace", R.string.TextReplace));
+        EditText origin = builder.addEditText(LocaleController.getString(R.string.TextOrigin));
+        EditText replace = builder.addEditText(LocaleController.getString(R.string.TextReplace));
 
 
         String finalText = text.toString();
-        builder.addButton(LocaleController.getString("TextReplace", R.string.TextReplace), true, it -> {
+        builder.addButton(LocaleController.getString(R.string.TextReplace), true, it -> {
 
             String originText = origin.getText().toString();
             String replaceText = replace.getText().toString();
@@ -7161,7 +7161,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             targetRes = R.drawable.ic_ab_other;
 
             attachButton.setOnClickListener(this::onMenuClick);
-            attachButton.setContentDescription(LocaleController.getString("AccDescrAttachButton", R.string.AccDescrChatAttachEnterMenu));
+            attachButton.setContentDescription(LocaleController.getString(R.string.AccDescrChatAttachEnterMenu));
             if (delegate != null)
                 delegate.onAttachButtonHidden();
 
@@ -7177,7 +7177,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 }
                 delegate.didPressAttachButton();
             });
-            attachButton.setContentDescription(LocaleController.getString("AccDescrAttachButton", R.string.AccDescrAttachButton));
+            attachButton.setContentDescription(LocaleController.getString(R.string.AccDescrAttachButton));
         }
         if (duration == 0) {
             attachButton.setImageResource(targetRes);
@@ -9929,7 +9929,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             }
 
             AlertDialog.Builder dialog = new AlertDialog.Builder(this.getContext());
-            dialog.setMessage(LocaleController.getString("ConfirmToSendCommand", R.string.ConfirmToSendCommand));
+            dialog.setMessage(LocaleController.getString(R.string.ConfirmToSendCommand));
             dialog.setPositiveButton(LocaleController.getString(android.R.string.ok), (dialog1, which) -> {
                 SendMessagesHelper.getInstance(currentAccount).sendMessage(sendMessageParams);
             });
@@ -11006,7 +11006,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 if (!canShowBotsMenu && !NekoConfig.alwaysHideBotCommandButton.Bool()) {
                     createBotButton();
                     botButtonDrawable.setIcon(R.drawable.input_bot1, true);
-                    botButton.setContentDescription(LocaleController.getString("AccDescrBotCommands", R.string.AccDescrBotCommands));
+                    botButton.setContentDescription(LocaleController.getString(R.string.AccDescrBotCommands));
                     botButton.setVisibility(VISIBLE);
                 } else if (botButton != null && !NekoConfig.alwaysShowBotCommandButton.Bool()) {
                     botButton.setVisibility(GONE);
@@ -11066,7 +11066,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     botButton.setContentDescription(LocaleController.getString(R.string.AccDescrShowKeyboard));
                 } else {
                     botButtonDrawable.setIcon(R.drawable.deproko_baseline_bots_24, true);
-                    botButton.setContentDescription(LocaleController.getString("AccDescrBotKeyboard", R.string.AccDescrBotKeyboard));
+                    botButton.setContentDescription(LocaleController.getString(R.string.AccDescrBotKeyboard));
                 }
                 if (botButton.getVisibility() != VISIBLE) {
                     return true;
@@ -11074,7 +11074,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             } else {
                 if (!canShowBotsMenu) {
                     botButtonDrawable.setIcon(R.drawable.deproko_baseline_bots_command_26, true);
-                    botButton.setContentDescription(LocaleController.getString("AccDescrBotCommands", R.string.AccDescrBotCommands));
+                    botButton.setContentDescription(LocaleController.getString(R.string.AccDescrBotCommands));
                     return true;
                 }
             }

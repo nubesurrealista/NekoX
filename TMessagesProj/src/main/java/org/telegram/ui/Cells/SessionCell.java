@@ -220,7 +220,7 @@ public class SessionCell extends FrameLayout {
                 if (stringBuilder.length() != 0) {
                     stringBuilder.append(", ");
                 }
-                stringBuilder.append(LocaleController.getString("UnofficialApp", R.string.UnofficialApp));
+                stringBuilder.append(LocaleController.getString(R.string.UnofficialApp));
                 stringBuilder.append(" (ID: ");
                 stringBuilder.append(session.api_id);
                 stringBuilder.append(")");

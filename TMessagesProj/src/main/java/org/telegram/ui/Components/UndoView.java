@@ -533,7 +533,7 @@ public class UndoView extends FrameLayout {
         infoTextView.setMovementMethod(null);
 
         if (currentAction == ACTION_NEED_RESTART) {
-            infoTextView.setText(LocaleController.getString("RestartAppToTakeEffect", R.string.RestartAppToTakeEffect));
+            infoTextView.setText(LocaleController.getString(R.string.RestartAppToTakeEffect));
 
             layoutParams.leftMargin = AndroidUtilities.dp(58);
             layoutParams.topMargin = AndroidUtilities.dp(13);
@@ -550,7 +550,7 @@ public class UndoView extends FrameLayout {
             leftImageView.playAnimation();
             undoImageView.setVisibility(GONE);
 
-            undoTextView.setText(LocaleController.getString("ApplyTheme", R.string.ApplyTheme));
+            undoTextView.setText(LocaleController.getString(R.string.ApplyTheme));
             currentCancelRunnable = () -> ProcessPhoenix.triggerRebirth(getContext(), new Intent(getContext(), LaunchActivity.class));
 
         } else if (isTooltipAction()) {
@@ -648,7 +648,7 @@ public class UndoView extends FrameLayout {
                 icon = R.raw.voip_invite;
                 timeLeft = 3000;
             } else if (action == ACTION_PAYMENT_SUCCESS) {
-                Toast.makeText(getContext(), LocaleController.getString("nekoXPaymentRemovedToast", R.string.nekoXPaymentRemovedToast), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), LocaleController.getString(R.string.nekoXPaymentRemovedToast), Toast.LENGTH_LONG).show();
                /* infoText = (CharSequence) infoObject;
                 subInfoText = null;
                 icon = R.raw.payment_success;

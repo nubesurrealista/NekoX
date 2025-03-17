@@ -3163,7 +3163,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                             if (error1 == null) {
                                                 TL_account.Password password = (TL_account.Password) response1;
                                                 if (!TwoStepVerificationActivity.canHandleCurrentPassword(password, true)) {
-                                                    AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
+                                                    AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString(R.string.UpdateAppAlert), true);
                                                     return;
                                                 }
                                                 Bundle bundle = new Bundle();
@@ -3183,17 +3183,17 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                         showDoneButton(false, true);
 
                                         if (errorI.text.contains("PHONE_NUMBER_INVALID")) {
-                                            needShowAlert(getAppName(), LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+                                            needShowAlert(getAppName(), LocaleController.getString(R.string.InvalidPhoneNumber));
                                         } else if (errorI.text.contains("PHONE_CODE_EMPTY") || errorI.text.contains("PHONE_CODE_INVALID")) {
-                                            needShowAlert(getAppName(), LocaleController.getString("InvalidCode", R.string.InvalidCode));
+                                            needShowAlert(getAppName(), LocaleController.getString(R.string.InvalidCode));
                                         } else if (errorI.text.contains("PHONE_CODE_EXPIRED")) {
                                             onBackPressed(true);
                                             setPage(VIEW_PHONE_INPUT, true, null, true);
-                                            needShowAlert(getAppName(), LocaleController.getString("CodeExpired", R.string.CodeExpired));
+                                            needShowAlert(getAppName(), LocaleController.getString(R.string.CodeExpired));
                                         } else if (errorI.text.startsWith("FLOOD_WAIT")) {
-                                            needShowAlert(getAppName(), LocaleController.getString("FloodWait", R.string.FloodWait));
+                                            needShowAlert(getAppName(), LocaleController.getString(R.string.FloodWait));
                                         } else {
-                                            needShowAlert(getAppName(), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + errorI.text);
+                                            needShowAlert(getAppName(), LocaleController.getString(R.string.ErrorOccurred) + "\n" + errorI.text);
                                         }
                                     }
                                 }
@@ -8736,7 +8736,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 if (error1 == null) {
                     TL_account.Password password = (TL_account.Password) response1;
                     if (!TwoStepVerificationActivity.canHandleCurrentPassword(password, true)) {
-                        AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString("UpdateAppAlert", R.string.UpdateAppAlert), true);
+                        AlertsCreator.showUpdateAppAlert(getParentActivity(), LocaleController.getString(R.string.UpdateAppAlert), true);
                         return;
                     }
                     Bundle bundle = new Bundle();

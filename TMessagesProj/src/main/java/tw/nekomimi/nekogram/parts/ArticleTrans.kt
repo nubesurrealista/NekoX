@@ -59,7 +59,7 @@ fun ArticleViewer.doTransLATE() {
     status.setOnCancelListener {
 
         pages[0].adapter.trans = false
-        // transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate)
+        // transMenu.setTextAndIcon(LocaleController.getString(R.string.Translate), R.drawable.ic_translate)
         cancel.set(true)
         transPool.close()
 
@@ -133,7 +133,7 @@ fun ArticleViewer.doTransLATE() {
                                 status.dismiss()
                                 updatePaintSize()
                                 pages[0].adapter.trans = false
-                                // transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate)
+                                // transMenu.setTextAndIcon(LocaleController.getString(R.string.Translate), R.drawable.ic_translate)
 
                                 AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, it.message
                                         ?: it.javaClass.simpleName, null, Runnable {

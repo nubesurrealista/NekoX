@@ -803,9 +803,9 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
                 }
 
                 Dialog dialog = new AlertDialog.Builder(getParentActivity())
-                        .setTitle(LocaleController.getString("UnifiedPushDistributor", R.string.UnifiedPushDistributor))
+                        .setTitle(LocaleController.getString(R.string.UnifiedPushDistributor))
                         .setView(linearLayout)
-                        .setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null)
+                        .setNegativeButton(LocaleController.getString(R.string.Cancel), null)
                         .create();
                 dialogRef.set(dialog);
                 showDialog(dialog);

@@ -403,8 +403,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
         ActionBarMenuItem otherItem = menu.addItem(menu_other, R.drawable.ic_ab_other);
 
-        otherItem.addSubItem(menu_export, R.drawable.baseline_file_download_24, LocaleController.getString("ExportStickers", R.string.ExportStickers));
-        otherItem.addSubItem(menu_import, R.drawable.baseline_playlist_add_24, LocaleController.getString("ImportStickersX", R.string.ImportStickersX));
+        otherItem.addSubItem(menu_export, R.drawable.baseline_file_download_24, LocaleController.getString(R.string.ExportStickers));
+        otherItem.addSubItem(menu_import, R.drawable.baseline_playlist_add_24, LocaleController.getString(R.string.ImportStickersX));
 
         ActionBarMenu actionMode = actionBar.createActionMode();
         selectedCountTextView = new NumberTextView(actionMode.getContext());
@@ -652,7 +652,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
     private void showError(String msg, boolean exitOnFail) {
 
-        AlertUtil.showSimpleAlert(getParentActivity(), LocaleController.getString("InvalidStickersFile", R.string.InvalidStickersFile) + msg, (__) -> {
+        AlertUtil.showSimpleAlert(getParentActivity(), LocaleController.getString(R.string.InvalidStickersFile) + msg, (__) -> {
 
             if (exitOnFail) finishFragment();
 
@@ -666,7 +666,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
         BottomBuilder builder = new BottomBuilder(getParentActivity());
 
-        builder.addTitle(LocaleController.getString("ExportStickers", R.string.ExportStickers), true);
+        builder.addTitle(LocaleController.getString(R.string.ExportStickers), true);
 
         AtomicBoolean exportSets = new AtomicBoolean(true);
         AtomicBoolean exportArchived = new AtomicBoolean(true);
@@ -674,8 +674,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         final AtomicReference<TextView> exportButton = new AtomicReference<>();
 
         builder.addCheckItems(new String[]{
-                LocaleController.getString("StickerSets", R.string.StickerSets),
-                LocaleController.getString("ArchivedStickers", R.string.ArchivedStickers)
+                LocaleController.getString(R.string.StickerSets),
+                LocaleController.getString(R.string.ArchivedStickers)
         }, (__) -> true, false, (index, text, cell, isChecked) -> {
 
             if (index == 0) {
@@ -692,7 +692,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
         builder.addCancelButton();
 
-        exportButton.set(builder.addButton(LocaleController.getString("Export", R.string.ExportStickers), (it) -> {
+        exportButton.set(builder.addButton(LocaleController.getString(R.string.ExportStickers), (it) -> {
 
             exportStickersFinal(exportSets.get(), exportArchived.get());
 
