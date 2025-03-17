@@ -23236,7 +23236,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     @Override
-    public boolean onHoverEvent(MotionEvent event) {
+    public boolean dispatchHoverEvent(MotionEvent event) {
         int x = (int) getEventX(event);
         int y = (int) getEventY(event);
         if (event.getAction() == MotionEvent.ACTION_HOVER_ENTER || event.getAction() == MotionEvent.ACTION_HOVER_MOVE) {
