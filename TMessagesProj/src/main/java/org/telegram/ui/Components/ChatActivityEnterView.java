@@ -11588,7 +11588,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                                         null, replyingQuote, sendAnimationData, notify, scheduleDate,
                                         parent instanceof TLRPC.TL_messages_stickerSet, parent,
                                         parentFragment != null ? parentFragment.quickReplyShortcut : null,
-                                        parentFragment != null ? parentFragment.getQuickReplyId() : 0, slowModeTimer);
+                                        parentFragment != null ? parentFragment.getQuickReplyId() : 0, 0, slowModeTimer);
                             parentFragment.showSlowModeAutoSendHint(view == null ? slowModeButton : view, true, true);
                         }
                     }
@@ -11654,7 +11654,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                                                 .sendSticker(document, query, dialog_id, replyingMessageObject, getThreadMessage(),
                                                         storyItem, replyingQuote, null, notify, scheduleDate, false, parent,
                                                         parentFragment != null ? parentFragment.quickReplyShortcut : null,
-                                                        parentFragment != null ? parentFragment.getQuickReplyId() : 0, slowModeTimer);
+                                                        parentFragment != null ? parentFragment.getQuickReplyId() : 0, 0, slowModeTimer);
                                     });
                                 }
                                 parentFragment.showSlowModeAutoSendHint(view == null ? slowModeButton : view, true, true);
@@ -11960,6 +11960,16 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     if (slowModeTimer > 0 && !isInScheduleMode()) {
                         if (delegate != null) {
                             delegate.onUpdateSlowModeButton(slowModeButton, true, slowModeButton.getText());
+                            if (NekoConfig.autoSendMessageIfBlockedBySlowMode.Bool() && sendNextMessageRunnable == null) {
+                                parentFragment.shouldShowAutoSendHint = true;
+                                SendMessagesHelper.getInstance(currentAccount)
+                                        .sendSticker(sticker, query, dialog_id, replyingMessageObject, getThreadMessage(),
+                                                null, replyingQuote, sendAnimationData, notify, scheduleDate,
+                                                parent instanceof TLRPC.TL_messages_stickerSet, parent,
+                                                parentFragment != null ? parentFragment.quickReplyShortcut : null,
+                                                parentFragment != null ? parentFragment.getQuickReplyId() : 0, 0, slowModeTimer);
+                                parentFragment.showSlowModeAutoSendHint(slowModeButton, true, true);
+                            }
                         }
                         return;
                     }
