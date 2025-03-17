@@ -39551,33 +39551,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else if (message.isSending()) {
                 return;
             }
-            if (fullPreview && message != null && message.messageOwner != null && message.messageOwner.media != null && message.messageOwner.media.webpage != null && !TextUtils.isEmpty(message.messageOwner.media.webpage.url)) {
-                final String url = message.messageOwner.media.webpage.url;
-                final String host = AndroidUtilities.getHostAuthority(url);
-                if (!openLinkInternally(url, cell, null, message.getId(), PROGRESS_INSTANT)) {
-                    if (progressDialogCurrent != null) {
-                        progressDialogCurrent.cancel(true);
-                    }
-                    progressDialogCurrent = cell == null || cell.getMessageObject() == null ? null : new Browser.Progress() {
-                        @Override
-                        public void init() {
-                            progressDialogAtMessageId = cell.getMessageObject().getId();
-                            progressDialogAtMessageType = PROGRESS_INSTANT;
-                            progressDialogLinkSpan = null;
-                            cell.invalidate();
-                        }
-
-                        @Override
-                        public void end(boolean replaced) {
-                            if (!replaced) {
-                                AndroidUtilities.runOnUIThread(ChatActivity.this::resetProgressDialogLoading, 250);
-                            }
-                        }
-                    };
-                    Browser.openUrl(getParentActivity(), Uri.parse(url), true, false, false, progressDialogCurrent, null, false, true, false);
-                }
-                return;
-            }
             if (message.isDice()) {
                 createUndoView();
                 if (undoView == null) {
