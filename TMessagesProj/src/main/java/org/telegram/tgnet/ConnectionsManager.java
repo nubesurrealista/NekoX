@@ -32,7 +32,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BaseController;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
-//import org.telegram.messenger.CaptchaController;
+import org.telegram.messenger.CaptchaController;
 import org.telegram.messenger.EmuDetector;
 import org.telegram.messenger.FileLoadOperation;
 import org.telegram.messenger.FileLoader;
@@ -1649,6 +1649,6 @@ public class ConnectionsManager extends BaseController {
 
     @Keep
     public static void onCaptchaCheck(final int currentAccount, final int requestToken, final String action, final String key_id) {
-//        CaptchaController.request(currentAccount, requestToken, action, key_id);
+        CaptchaController.request(currentAccount, requestToken, action, key_id);
     }
 }
