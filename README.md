@@ -2,9 +2,6 @@
 
 ---
 
-[<img src="https://www.openapk.net/images/openapk-badge.png" alt="Get it from OpenAPK"
-height="100"><br/>](https://www.openapk.net/momogram/nekox.messenger.broken/)
-
 Momogram is a feature-rich 3rd-party Telegram client, aiming to be the spiritual successor of the OG NekoX.
 
 Built with unique customization and features, get ready and let Momogram take your Telegram chatting experience to the next level.
