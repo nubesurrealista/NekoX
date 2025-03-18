@@ -446,7 +446,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             if (position == cellGroup.rows.indexOf(checkMemLeakRow)) {
                 if (EvilLeakerKiller.getInstance(null) != null)
                     Toast.makeText(getParentActivity(),
-                            String.format(Locale.US, "Current: %d KB", EvilLeakerKiller.getInstance(null).PSS), Toast.LENGTH_SHORT)
+                            String.format(Locale.US, "Current: %.2f MB", (float) EvilLeakerKiller.getInstance(null).PSS / 1024), Toast.LENGTH_SHORT)
                             .show();
                 return true;
             }

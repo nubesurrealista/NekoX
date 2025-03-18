@@ -7462,7 +7462,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 EvilLeakerKiller.threshold += (200 * 1024);
                 if (memleakDialog == null) {
                     memleakDialog = new AlertDialog.Builder(getContext())
-                            .setTitle(LocaleController.formatString(R.string.MemLeak, usage / 1024))
+                            .setTitle(String.format(LocaleController.formatString(R.string.MemLeak, usage / 1024)))
                             .setMessage(LocaleController.getString(R.string.MemLeakInfo))
                             .setPositiveButton("OK", (__, ___) -> {
                                 Context ctx = LaunchActivity.instance.getApplicationContext();
