@@ -4305,21 +4305,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 headerItem.lazilyAddSubItem(search, R.drawable.msg_search, LocaleController.getString(R.string.Search));
             }
             // NekoX - start
-            boolean allowShowPinned;
+//            boolean allowShowPinned;
             if (currentChat != null) {
-                allowShowPinned = ChatObject.canUserDoAction(currentChat, ChatObject.ACTION_PIN) || ChatObject.isChannel(currentChat);
-
+//                allowShowPinned = ChatObject.canUserDoAction(currentChat, ChatObject.ACTION_PIN) || ChatObject.isChannel(currentChat);
+//
                 if (ChatObject.hasAdminRights(currentChat) && (ChatObject.isChannel(currentChat) || currentChat.gigagroup)) {
                     headerItem.lazilyAddSubItem(nkheaderbtn_recent_actions, R.drawable.msg_log, LocaleController.getString(R.string.EventLog));
                 }
-            } else if (currentUser != null && currentUser.self) {
-                allowShowPinned = true;
-            } else if (userInfo != null) {
-                allowShowPinned = userInfo.can_pin_message;
-            } else {
-                allowShowPinned = false;
+//            } else if (currentUser != null && currentUser.self) {
+//                allowShowPinned = true;
+//            } else if (userInfo != null) {
+//                allowShowPinned = userInfo.can_pin_message;
+//            } else {
+//                allowShowPinned = false;
             }
-            if (allowShowPinned) {
+            if (MessagesController.getNotificationsSettings(currentAccount).getInt("pin_" + dialog_id, 0) != 0) {
                 headerItem.lazilyAddSubItem(nkheaderbtn_show_pinned, R.drawable.deproko_baseline_pin_24, LocaleController.getString(R.string.PinnedMessage));
             }
             checkOpenAppMenuButton();
@@ -16721,6 +16721,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     public class ChatActivityFragmentView extends SizeNotifierFrameLayout {
+        private int maxSearchTextWidth = -1;
+        private int searchResultCount = -1;
+        private float lastShiftedX = -1;
+        private boolean dontHide = false;
 
         public ChatActivity getChatActivity() {
             return ChatActivity.this;
@@ -18092,26 +18096,46 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 scrollToPositionOnRecreate = -1;
             }
 
-            if (searchContainer != null && searchCountText != null && searchGoToBeginningButton != null && searchExpandList != null &&
-                    (NekoConfig.forceHideShowAsList.Bool() || (searchGoToBeginningButton.getVisibility() == View.VISIBLE
-                    && searchCountText.getX() < (dp(4) + searchGoToBeginningButton.getX())))) {
-                // hide text first
-                searchExpandList.setText("", false);
+            if (searchContainer != null && searchCountText != null &&
+                    searchGoToBeginningButton != null && searchExpandList != null) {
 
                 int textWidth = searchCountText.getWidth();
-                float newX = searchGoToBeginningButton.getX() + searchGoToBeginningButton.getWidth() + dp(4);
-                newX += (searchContainer.getWidth() - newX - textWidth) / 2;
-
-                // set position manually if overflow
-                if (newX + textWidth > searchContainer.getWidth()) {
-                    newX = searchContainer.getWidth() - textWidth - dp(4);
-
-                    // sacrifice go to beginning btn if space isn't enough
-                    if (newX < searchGoToBeginningButton.getX()) {
-                        searchGoToBeginningButton.setVisibility(View.GONE);
-                    }
+                if (textWidth > maxSearchTextWidth) {
+                    maxSearchTextWidth = textWidth;
+                    dontHide = false;
                 }
-                searchCountText.setX(newX);
+
+                if (!dontHide && (NekoConfig.forceHideShowAsList.Bool() ||
+                    (searchGoToBeginningButton.getVisibility() == View.VISIBLE &&
+                        searchCountText.getX() < (dp(4) + searchGoToBeginningButton.getX())))) {
+                    // hide text first
+                    searchExpandList.setText("", false);
+
+                    float newX = lastShiftedX;
+                    if (newX == -1 || searchResultCount != searchLastCount) {
+                        newX = searchGoToBeginningButton.getX() + searchGoToBeginningButton.getWidth() + dp(4);
+                        newX += (searchContainer.getWidth() - newX - textWidth) / 2;
+                    }
+
+                    // set position manually if overflow
+                    if (searchResultCount != searchLastCount && newX + textWidth > searchContainer.getWidth()) {
+                        newX = searchContainer.getWidth() - textWidth - dp(4);
+
+                        // sacrifice go to beginning btn if space isn't enough
+                        if (newX < searchGoToBeginningButton.getX()) {
+                            searchGoToBeginningButton.setVisibility(View.GONE);
+                        }
+                    }
+                    if (searchLastCount > 0) {
+                        searchResultCount = searchLastCount;
+                        lastShiftedX = newX;
+                    }
+                    float actualX = lastShiftedX == -1 || lastShiftedX > newX ? newX : lastShiftedX;
+                    actualX = Math.min(actualX, (float) (searchContainer.getWidth() - searchCountText.getMeasuredWidth()) / 2);
+                    searchCountText.setX(actualX);
+                } else {
+                    dontHide = true;
+                }
             }
 
             updateBulletinLayout();
