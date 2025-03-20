@@ -17436,7 +17436,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         if (isAnonAdmin != null) return isAnonAdmin;
         return (isAnonAdmin = NekoConfig.alwaysLabelAnonAdmin.Bool() &&
                 currentMessageObject.messageOwner != null &&
-                currentMessageObject.messageOwner.from_id.channel_id == currentMessageObject.getChatId() &&
+                (currentMessageObject.messageOwner.from_id != null &&
+                        currentMessageObject.messageOwner.from_id.channel_id == currentMessageObject.getChatId()) &&
                 currentMessageObject.messageOwner.post_author != null);
     }
 
