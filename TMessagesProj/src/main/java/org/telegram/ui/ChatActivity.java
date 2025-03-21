@@ -377,6 +377,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     private final static int nkheaderbtn_recent_actions = 3001;
     private final static int nkheaderbtn_bot_app = 3002;
+    private final static int nkheaderbtn_pinned_msgs = 3003;
 
     public int shareAlertDebugMode = DEBUG_SHARE_ALERT_MODE_NORMAL;
     public boolean shareAlertDebugTopicsSlowMotion;
@@ -4334,6 +4335,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 headerItem.lazilyAddSubItem(report, R.drawable.msg_report, LocaleController.getString(R.string.ReportChat));
             }
             // NekoX - start
+            headerItem.addSubItem(nkheaderbtn_pinned_msgs, R.drawable.menu_pinnedlist, LocaleController.getString(R.string.PinnedMessages));
+
             if (currentChat != null && (currentChat.has_link || (chatInfo != null && chatInfo.linked_chat_id != 0))) {
                 String text;
                 if (!currentChat.megagroup) {
@@ -23029,6 +23032,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
             }
             updatePinnedTopicStarterMessage();
+            if (headerItem != null) {
+                if (pinnedMessageIds.isEmpty())
+                    headerItem.hideSubItem(nkheaderbtn_pinned_msgs);
+                else if (pinnedMessageView == null || pinnedMessageView.getVisibility() != View.VISIBLE)
+                    headerItem.showSubItem(nkheaderbtn_pinned_msgs);
+            }
         } else if (id == NotificationCenter.didReceivedWebpages) {
             ArrayList<TLRPC.Message> arrayList = (ArrayList<TLRPC.Message>) args[0];
             boolean updated = false;
@@ -23411,6 +23420,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             i--;
                         }
                     }
+                    if (headerItem != null && pinnedMessageIds.isEmpty())
+                        headerItem.hideSubItem(nkheaderbtn_pinned_msgs);
                 }
 
                 loadedPinnedMessagesCount = pinnedMessageIds.size();
@@ -25571,6 +25582,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
             }
         }
+        if (headerItem != null && pinnedMessageIds.isEmpty())
+            headerItem.hideSubItem(nkheaderbtn_pinned_msgs);
         if (updatedReplies) {
             updateReplyMessageHeader(true);
         }
@@ -27361,6 +27374,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         if (pinnedMessageViewAnimator != null && pinnedMessageViewAnimator.equals(animation)) {
                             if (pinnedMessageView != null) {
                                 pinnedMessageView.setVisibility(View.GONE);
+                                if (headerItem != null) headerItem.hideSubItem(nkheaderbtn_pinned_msgs);
                             }
                             pinnedMessageViewAnimator = null;
                         }
@@ -27378,6 +27392,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 pinnedMessageEnterOffset = -AndroidUtilities.dp(50);
                 pinnedMessageView.setVisibility(View.GONE);
                 chatListView.invalidate();
+                if (headerItem != null) headerItem.hideSubItem(nkheaderbtn_pinned_msgs);
             }
             return true;
         }
@@ -27520,10 +27535,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
         if ((threadMessageObject == null || isTopic) && (chatInfo == null && userInfo == null || pinned_msg_id == 0 || !pinnedMessageIds.isEmpty() && pinnedMessageIds.get(0) == preferences.getInt("pin_" + dialog_id, 0)) || isReport() || actionBar != null && (actionBar.isActionModeShowed() || actionBar.isSearchFieldVisible())) {
             changed = hidePinnedMessageView(animated);
-            if (headerItem != null) headerItem.hideSubItem(nkheaderbtn_show_pinned);
         } else if (pinned_msg_id == preferences.getInt("pin_" + dialog_id, 0)) {
             changed = hidePinnedMessageView(animated);
-            if (headerItem != null) headerItem.showSubItem(nkheaderbtn_show_pinned);
         } else {
             if (pinnedMessageView == null) {
                 createPinnedMessageView();
@@ -27580,6 +27593,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         invalidateMessagesVisiblePart();
                         pinnedMessageView.setVisibility(View.VISIBLE);
                     }
+                    if (headerItem != null) headerItem.hideSubItem(nkheaderbtn_pinned_msgs);
                 }
                 for (int a = 0; a < pinnedNextAnimation.length; a++) {
                     if (pinnedNextAnimation[a] != null) {
@@ -42621,6 +42635,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else {
                 chatActivityEnterView.openWebViewMenu(true);
             }
+        } else if (id == nkheaderbtn_pinned_msgs) {
+            openPinnedMessagesList(false);
         }
     }
 
