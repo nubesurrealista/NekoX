@@ -4917,7 +4917,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                     }
                                 });
                             } else {
-                                BaseFragment fragment = mainFragmentsStack.get(mainFragmentsStack.size() - 1);
+                                BaseFragment fragment = mainFragmentsStack.isEmpty() ? null : mainFragmentsStack.get(Math.max(0, mainFragmentsStack.size() - 1)); // WTF? java.lang.ArrayIndexOutOfBoundsException: length=10; index=-1
                                 fragment.showDialog(new JoinGroupAlert(LaunchActivity.this, invite, group, fragment, (fragment instanceof ChatActivity ? ((ChatActivity) fragment).themeDelegate : null)));
                             }
                         } else {
