@@ -445,9 +445,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         listView.setOnItemLongClickListener((view, position, x, y) -> {
             if (position == cellGroup.rows.indexOf(checkMemLeakRow)) {
                 if (EvilLeakerKiller.getInstance(null) != null)
-                    Toast.makeText(getParentActivity(),
-                            String.format(Locale.US, "Current: %.2f MB", (float) EvilLeakerKiller.getInstance(null).PSS / 1024), Toast.LENGTH_SHORT)
-                            .show();
+                    AlertsCreator.createMemLeakDialog(getParentActivity(), EvilLeakerKiller.getInstance(null).checkRamUsage()).show();
                 return true;
             }
             return false;

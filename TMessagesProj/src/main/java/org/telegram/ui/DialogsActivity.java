@@ -303,8 +303,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private boolean reselectTab = false;
     private DownloadProgressIcon downloadIcon;
 
-    private AlertDialog memleakDialog = null;
-
     public TopicsFragment topicsFragment;
 
     public MessagesStorage.TopicKey getOpenedDialogId() {
@@ -7460,18 +7458,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int usage = 0;
             if (ek != null && (usage = ek.checkRamUsage()) > EvilLeakerKiller.threshold) {
                 EvilLeakerKiller.threshold += (200 * 1024);
-                if (memleakDialog == null) {
-                    memleakDialog = new AlertDialog.Builder(getContext())
-                            .setTitle(String.format(LocaleController.formatString(R.string.MemLeak, usage / 1024)))
-                            .setMessage(LocaleController.getString(R.string.MemLeakInfo))
-                            .setPositiveButton("OK", (__, ___) -> {
-                                Context ctx = LaunchActivity.instance.getApplicationContext();
-                                ProcessPhoenix.triggerRebirth(ctx, new Intent(ctx, LaunchActivity.class));
-                            })
-                            .setNegativeButton("Cancel", null)
-                            .create();
-                }
-                memleakDialog.show();
+                AlertsCreator.createMemLeakDialog(getContext(), usage).show();
             }
         }
     }

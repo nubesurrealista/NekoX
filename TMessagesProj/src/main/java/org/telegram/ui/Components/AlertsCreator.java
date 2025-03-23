@@ -69,6 +69,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.util.Consumer;
 
 import com.c3r5b8.telegram_monet.MonetThemeCreator;
+import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
@@ -6857,6 +6858,17 @@ public class AlertsCreator {
             }
             processCreate(editText, alertDialog, fragment);
         });
+    }
+
+    public static AlertDialog.Builder createMemLeakDialog(Context context, int usage) {
+        return new AlertDialog.Builder(context)
+                .setTitle(LocaleController.getString(R.string.MemLeak))
+                .setMessage(LocaleController.formatString(R.string.MemLeakInfo, (float)usage / 1024))
+                .setPositiveButton("OK", (__, ___) -> {
+                    Context ctx = LaunchActivity.instance.getApplicationContext();
+                    ProcessPhoenix.triggerRebirth(ctx, new Intent(ctx, LaunchActivity.class));
+                })
+                .setNegativeButton("Cancel", null);
     }
 
     private static void processCreate(EditTextBoldCursor editText, AlertDialog alertDialog, BaseFragment fragment) {
