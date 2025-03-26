@@ -143,6 +143,6 @@ public class BillingController {
             case 8: return "ITEM_NOT_OWNED";
             default: return "NETWORK_ERROR"; // TODO: use proper value
         }
-        // return null;
+        return "BILLING_UNKNOWN_ERROR";
     }
 }

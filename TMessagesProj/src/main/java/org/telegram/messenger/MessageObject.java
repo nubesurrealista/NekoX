@@ -5073,14 +5073,20 @@ public class MessageObject {
                     } else {
                         messageText = replaceWithLink(getString(R.string.UserAcceptedToGroupAction), "un1", fromObject);
                     }
-                } else if (messageOwner.action instanceof TLRPC.TL_messageActionPaidMessage) {
-                    final TLRPC.TL_messageActionPaidMessage action = (TLRPC.TL_messageActionPaidMessage) messageOwner.action;
+                } else if (messageOwner.action instanceof TLRPC.TL_messageActionPaidMessagesPrice) {
+                    final TLRPC.TL_messageActionPaidMessagesPrice action = (TLRPC.TL_messageActionPaidMessagesPrice) messageOwner.action;
                     if (isOutOwner()) {
-                        messageText = formatPluralStringComma("PaidMessageActionOut", (int) action.stars);
-                    } else if (getDialogId() > 0) {
-                        messageText = replaceWithLink(formatPluralStringComma("PaidMessageActionIn", (int) action.stars), "un1", fromObject);
+                        messageText = formatPluralStringComma("PaidMessagesPriceUpdatedOut", (int) action.stars);
                     } else {
-                        messageText = replaceWithLink(formatPluralStringComma("PaidMessageAction", (int) action.stars), "un1", fromObject);
+                        messageText = replaceWithLink(formatPluralStringComma("PaidMessagesPriceUpdated", (int) action.stars), "un1", fromObject);
+                    }
+                } else if (messageOwner.action instanceof TLRPC.TL_messageActionPaidMessagesRefunded) {
+                    final TLRPC.TL_messageActionPaidMessagesRefunded action = (TLRPC.TL_messageActionPaidMessagesRefunded) messageOwner.action;
+                    if (isOutOwner()) {
+                        final TLRPC.User user = getUser(users, sUsers, DialogObject.getPeerDialogId(messageOwner.peer_id));
+                        messageText = replaceWithLink(formatPluralStringComma("PaidMessagesRefundedOut", (int) action.stars), "un1", user);
+                    } else {
+                        messageText = replaceWithLink(formatPluralStringComma("PaidMessagesRefunded", (int) action.stars), "un1", fromObject);
                     }
                 }
             }
@@ -8334,6 +8340,13 @@ public class MessageObject {
             return messageOwner.peer_id.channel_id;
         }
         return 0;
+    }
+
+    public TLRPC.Peer getFromPeer() {
+        if (messageOwner != null) {
+            return messageOwner.from_id;
+        }
+        return null;
     }
 
     public TLObject getFromPeerObject() {

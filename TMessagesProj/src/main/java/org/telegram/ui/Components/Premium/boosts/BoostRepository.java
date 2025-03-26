@@ -217,7 +217,10 @@ public class BoostRepository {
         // 030: remove premium shit
     }
 
-    public static void payGiveAwayByGoogle(List<TLObject> chats, List<TLObject> selectedCountries, TLRPC.TL_premiumGiftCodeOption option, TLRPC.Chat chat, int date, boolean onlyNewSubscribers, BaseFragment baseFragment, Utilities.Callback<Void> onSuccess, Utilities.Callback<TLRPC.TL_error> onError) {
+    public static void payGiveAwayByGoogle(List<TLObject> chats, List<TLObject> selectedCountries, TLRPC.TL_premiumGiftCodeOption option,
+                                           TLRPC.Chat chat, int date, boolean onlyNewSubscribers, BaseFragment baseFragment,
+                                           boolean winnersVisible, boolean withAdditionPrize, String prizeDesc,
+                                           Utilities.Callback<Void> onSuccess, Utilities.Callback<TLRPC.TL_error> onError) {
         // 030: remove premium shit
     }
 
