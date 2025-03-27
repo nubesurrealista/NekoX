@@ -3112,7 +3112,7 @@ public class ContactsController extends BaseController {
 
     private int checkPrivacyRuleTypeAndPrepareInput(int category) {
         if (category == PRIVACY_RULES_TYPE_MESSAGES) {
-            TLRPC.TL_globalPrivacySettings settings = ContactsController.getInstance(currentAccount).getGlobalPrivacySettings();
+            TLRPC.GlobalPrivacySettings settings = ContactsController.getInstance(currentAccount).getGlobalPrivacySettings();
             int ret = settings != null && settings.new_noncontact_peers_require_premium ? TYPE_CONTACTS : TYPE_EVERYBODY;
             return ret;
         }
