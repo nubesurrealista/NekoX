@@ -116,15 +116,17 @@ public class ContactsController extends BaseController {
     private class MyContentObserver extends ContentObserver {
 
         private Runnable checkRunnable = () -> {
+            boolean acc = false;
             for (int a : SharedConfig.activeAccounts) {
                 if (UserConfig.getInstance(a).isClientActivated()) {
+                    if (SharedConfig.loginingAccount == a) acc = true;
                     ConnectionsManager.getInstance(a).resumeNetworkMaybe();
                     ContactsController.getInstance(a).checkContacts();
                 }
-                if (SharedConfig.loginingAccount != -1) {
-                    ConnectionsManager.getInstance(SharedConfig.loginingAccount).resumeNetworkMaybe();
-                    ContactsController.getInstance(SharedConfig.loginingAccount).checkContacts();
-                }
+            }
+            if (!acc) {
+                ConnectionsManager.getInstance(SharedConfig.loginingAccount).resumeNetworkMaybe();
+                ContactsController.getInstance(SharedConfig.loginingAccount).checkContacts();
             }
         };
 
