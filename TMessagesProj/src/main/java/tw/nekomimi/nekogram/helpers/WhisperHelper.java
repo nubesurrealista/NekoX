@@ -1,10 +1,15 @@
 package tw.nekomimi.nekogram.helpers;
 
+import static com.whispertflite.utils.OpusOggDecoder.decodeOpusOggToFloatArray;
+
+import android.content.Intent;
 import android.media.MediaCodec;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.media.MediaMuxer;
+import android.speech.RecognizerIntent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.inputmethod.EditorInfo;
@@ -14,17 +19,22 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.exoplayer2.extractor.ExtractorOutput;
+import com.google.android.exoplayer2.extractor.ogg.OggExtractor;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.whispertflite.WhisperRecognitionService;
+import com.whispertflite.asr.Whisper;
+import com.whispertflite.utils.OpusOggDecoder;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BotWebViewVibrationEffect;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -35,14 +45,17 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.LaunchActivity;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
+import io.github.jaredmdobson.concentus.OpusDecoder;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -57,6 +70,12 @@ public class WhisperHelper {
     public static boolean useWorkersAi(int account) {
         int value = NekoConfig.transcribeProvider.Int();
         return value == NekoConfig.TRANSCRIBE_WORKERSAI ||
+                (!UserConfig.getInstance(account).isPremium() && value == NekoConfig.TRANSCRIBE_AUTO);
+    }
+
+    public static boolean useLocalModel(int account) {
+        int value = NekoConfig.transcribeProvider.Int();
+        return value == NekoConfig.TRANSCRIBE_LOCAL ||
                 (!UserConfig.getInstance(account).isPremium() && value == NekoConfig.TRANSCRIBE_AUTO);
     }
 
@@ -267,6 +286,44 @@ public class WhisperHelper {
                 }
             } catch (Exception e) {
                 callback.accept(null, e);
+            }
+        });
+    }
+
+    private static boolean localInferenceRunning = false;
+    public static void localInference(File file, boolean video, BiConsumer<String, Exception> callback) {
+        if (localInferenceRunning) {
+            callback.accept(null, new RuntimeException("ERR_TRANSCRIBE_IN_PROGRESS"));
+            return;
+        }
+        executorService.submit(() -> {
+            localInferenceRunning = true;
+            // TODO: limit length to 30s?
+            File audioFile;
+            if (video) {
+                audioFile = new File(file + ".m4a");
+                try {
+                    extractAudio(file.getAbsolutePath(), audioFile.getAbsolutePath());
+                } catch (IOException e) {
+                    FileLog.e(e);
+                }
+            } else {
+                audioFile = file;
+            }
+
+            try {
+                Log.d("030-Whisper", audioFile.getAbsolutePath());
+                float[] arr = OpusOggDecoder.decodeOpusOggToFloatArray(audioFile);
+                var svc = new WhisperRecognitionService();
+                svc.startTranscription(arr, (result, error) -> {
+                    callback.accept(result, new RuntimeException(error));
+                    svc.onDestroy();
+                    localInferenceRunning = false;
+                });
+            } catch (Exception e) {
+                Log.e("030-Whisper", "decode/inference err", e);
+                callback.accept(null, e);
+                localInferenceRunning = false;
             }
         });
     }

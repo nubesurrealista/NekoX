@@ -348,6 +348,14 @@ dependencies {
     implementation 'org.dizitart:nitrite-mvstore-adapter:4.3.0'
     implementation 'org.apache.commons:commons-lang3:3.17.0'
 
+    // for whisper
+    implementation 'org.tensorflow:tensorflow-lite:2.15.0'
+    implementation 'org.tensorflow:tensorflow-lite-support:0.4.4'
+    // ogg to samples
+//    implementation 'com.soywiz.korlibs.korge:korio:4.0.0'
+    implementation 'io.github.jaredmdobson:concentus:1.0.2'
+    implementation "org.gagravarr:vorbis-java-core:0.8"
+
     implementation "cn.hutool:hutool-core:5.8.32"
     implementation "cn.hutool:hutool-crypto:5.8.32"
     implementation 'cn.hutool:hutool-http:5.8.32'

@@ -62,6 +62,7 @@ public class NekoConfig {
     public static final int TRANSCRIBE_AUTO = 0;
     public static final int TRANSCRIBE_PREMIUM = 1;
     public static final int TRANSCRIBE_WORKERSAI = 2;
+    public static final int TRANSCRIBE_LOCAL = 3;
 
     private static boolean configLoaded = false;
     private static final ArrayList<ConfigItem> configs = new ArrayList<>();
@@ -714,6 +715,7 @@ public class NekoConfig {
                 getString(R.string.TranscribeProviderAuto),
                 getString(R.string.TelegramPremium),
                 getString(R.string.TranscribeProviderWorkersAI),
+                getString(R.string.WhisperLocal)
         };
         titleFolderIconOptions = new String[] {
                 getString(R.string.Disable),

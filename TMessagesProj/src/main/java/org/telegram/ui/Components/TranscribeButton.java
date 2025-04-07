@@ -28,8 +28,11 @@ import androidx.core.graphics.ColorUtils;
 import androidx.core.math.MathUtils;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
+import com.whispertflite.utils.WhisperModelDownloader;
+
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DialogObject;
@@ -45,13 +48,18 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
+import org.telegram.ui.ChatActivity;
+import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PremiumPreviewFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 
 import tw.nekomimi.nekogram.helpers.WhisperHelper;
 
@@ -670,7 +678,7 @@ public class TranscribeButton {
         long dialogId = DialogObject.getPeerDialogId(peer);
         int messageId = messageObject.messageOwner.id;
         if (open) {
-            if (messageObject.messageOwner.voiceTranscription != null && messageObject.messageOwner.voiceTranscriptionFinal) {
+            if (!WhisperHelper.useLocalModel(account) && messageObject.messageOwner.voiceTranscription != null && messageObject.messageOwner.voiceTranscriptionFinal) {
                 TranscribeButton.openVideoTranscription(messageObject);
                 messageObject.messageOwner.voiceTranscriptionOpen = true;
                 MessagesStorage.getInstance(account).updateMessageVoiceTranscriptionOpen(dialogId, messageId, messageObject.messageOwner);
@@ -681,20 +689,9 @@ public class TranscribeButton {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("sending Transcription request, msg_id=" + messageId + " dialog_id=" + dialogId);
                 }
-                if (WhisperHelper.useWorkersAi(account)) {
-                    var path = FileLoader.getInstance(UserConfig.selectedAccount).getPathToMessage(messageObject.messageOwner);
-                    if (path == null) {
-                        NotificationCenter.getInstance(account).postNotificationName(NotificationCenter.voiceTranscriptionUpdate, messageObject);
-                        NotificationCenter.getInstance(account).postNotificationName(NotificationCenter.updateTranscriptionLock);
-                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_ERROR, LocaleController.getString(R.string.PleaseDownload));
-                        return;
-                    }
+                if (WhisperHelper.useWorkersAi(account) || WhisperHelper.useLocalModel(account)) {
                     long id = Utilities.random.nextLong();
-                    if (transcribeOperationsByDialogPosition == null) {
-                        transcribeOperationsByDialogPosition = new HashMap<>();
-                    }
-                    transcribeOperationsByDialogPosition.put(reqInfoHash(messageObject), messageObject);
-                    WhisperHelper.requestWorkersAi(path, messageObject.isRoundVideo(), (text, exception) -> {
+                    BiConsumer<String, Exception> callback = (text, exception) -> {
                         if (text != null) {
                             if (transcribeOperationsById == null) {
                                 transcribeOperationsById = new HashMap<>();
@@ -719,7 +716,51 @@ public class TranscribeButton {
                                 WhisperHelper.showErrorDialog(exception);
                             });
                         }
-                    });
+                    };
+
+                    var path = FileLoader.getInstance(UserConfig.selectedAccount).getPathToMessage(messageObject.messageOwner);
+                    if (path == null) {
+                        NotificationCenter.getInstance(account).postNotificationName(NotificationCenter.voiceTranscriptionUpdate, messageObject);
+                        NotificationCenter.getInstance(account).postNotificationName(NotificationCenter.updateTranscriptionLock);
+                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_ERROR, LocaleController.getString(R.string.PleaseDownload));
+                        return;
+                    }
+                    if (transcribeOperationsByDialogPosition == null) {
+                        transcribeOperationsByDialogPosition = new HashMap<>();
+                    }
+                    transcribeOperationsByDialogPosition.put(reqInfoHash(messageObject), messageObject);
+
+                    if (WhisperHelper.useWorkersAi(account)) {
+                        WhisperHelper.requestWorkersAi(path, messageObject.isRoundVideo(), callback);
+                    } else {
+                        BaseFragment frag = LaunchActivity.getLastFragment();
+                        final AlertDialog progressDlg = frag == null ? null : new AlertDialog(frag.getContext(), AlertDialog.ALERT_TYPE_SPINNER);
+                        if (progressDlg != null) {
+                            progressDlg.setTitle(LocaleController.formatString(R.string.WebDownloadingFile, "Whisper model"));
+                            progressDlg.setCanCancel(false);
+                            progressDlg.setProgress(0);
+                            progressDlg.show();
+                        }
+                        WhisperModelDownloader.downloadModels((done, progress) -> {
+                            Log.d("030-?", String.format("done=%s progress=%f", done, progress));
+                            if (!done && progressDlg != null) {
+                                if (progress > 0) {
+                                    progressDlg.setProgress((int) Math.ceil(progress * 100));
+                                } else {
+                                    progressDlg.dismiss();
+                                    new AlertDialog.Builder(frag.getContext())
+                                            .setTitle("Whisper")
+                                            .setMessage("ERR_DOWNLOAD_FAILED")
+                                            .setPositiveButton(LocaleController.getString(R.string.OK), null)
+                                            .show();
+                                }
+                            }
+                            if (done) {
+                                if (progressDlg != null) progressDlg.dismiss();
+                                WhisperHelper.localInference(path, messageObject.isRoundVideo(), callback);
+                            }
+                        });
+                    }
                     return;
                 }
                 TLRPC.TL_messages_transcribeAudio req = new TLRPC.TL_messages_transcribeAudio();
