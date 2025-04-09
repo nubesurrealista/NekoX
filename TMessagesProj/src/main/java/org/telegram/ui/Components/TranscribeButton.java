@@ -127,7 +127,10 @@ public class TranscribeButton {
 
         this.isOpen = false;
         this.shouldBeOpen = false;
-        premium = parent.getMessageObject() != null && (UserConfig.getInstance(parent.getMessageObject().currentAccount).isPremium() || WhisperHelper.useWorkersAi(parent.getMessageObject().currentAccount));
+        premium = parent.getMessageObject() != null &&
+                (UserConfig.getInstance(parent.getMessageObject().currentAccount).isPremium() ||
+                        WhisperHelper.useWorkersAi(parent.getMessageObject().currentAccount) ||
+                        WhisperHelper.useLocalModel(parent.getMessageObject().currentAccount));
 
         loadingFloat = new AnimatedFloat(parent, 250, CubicBezierInterpolator.EASE_OUT_QUINT);
         animatedDrawLock = new AnimatedFloat(parent, 250, CubicBezierInterpolator.EASE_OUT_QUINT);
@@ -933,7 +936,7 @@ public class TranscribeButton {
         if (messageObject == null || messageObject.messageOwner == null) {
             return false;
         }
-        if (WhisperHelper.useWorkersAi(messageObject.currentAccount)) {
+        if (WhisperHelper.useWorkersAi(messageObject.currentAccount) || WhisperHelper.useLocalModel(messageObject.currentAccount)) {
             return false;
         }
         if (isFreeTranscribeInChat(messageObject)) {
