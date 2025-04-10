@@ -1,13 +1,9 @@
 package tw.nekomimi.nekogram.helpers;
 
-import static com.whispertflite.utils.OpusOggDecoder.decodeOpusOggToFloatArray;
-
-import android.content.Intent;
 import android.media.MediaCodec;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.media.MediaMuxer;
-import android.speech.RecognizerIntent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
@@ -19,17 +15,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.exoplayer2.extractor.ExtractorOutput;
-import com.google.android.exoplayer2.extractor.ogg.OggExtractor;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.whispertflite.WhisperRecognitionService;
-import com.whispertflite.asr.Whisper;
 import com.whispertflite.utils.OpusOggDecoder;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BotWebViewVibrationEffect;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -45,17 +37,17 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.LaunchActivity;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 
-import io.github.jaredmdobson.concentus.OpusDecoder;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -291,6 +283,7 @@ public class WhisperHelper {
     }
 
     private static boolean localInferenceRunning = false;
+    private static final int SAMPLE_RATE = 16000, LENGTH_LIMIT = 30, SAMPLE_LIMIT = SAMPLE_RATE * LENGTH_LIMIT;
     public static void localInference(File file, boolean video, BiConsumer<String, Exception> callback) {
         if (localInferenceRunning) {
             callback.accept(null, new RuntimeException("ERR_TRANSCRIBE_IN_PROGRESS"));
@@ -298,7 +291,6 @@ public class WhisperHelper {
         }
         executorService.submit(() -> {
             localInferenceRunning = true;
-            // TODO: limit length to 30s?
             File audioFile;
             if (video) {
                 audioFile = new File(file + ".m4a");
@@ -312,19 +304,42 @@ public class WhisperHelper {
             }
 
             try {
-                Log.d("030-Whisper", audioFile.getAbsolutePath());
+                var svc = WhisperRecognitionService.instance;
                 float[] arr = OpusOggDecoder.decodeOpusOggToFloatArray(audioFile);
-                var svc = new WhisperRecognitionService();
-                svc.startTranscription(arr, (result, error) -> {
-                    callback.accept(result, new RuntimeException(error));
-                    svc.onDestroy();
-                    localInferenceRunning = false;
-                });
+                float length = (float) arr.length / SAMPLE_RATE;
+                int batchCount = (int) Math.ceil(length / LENGTH_LIMIT);
+                AtomicBoolean err = new AtomicBoolean(false);
+                String[] results = new String[batchCount];
+                Log.d("030-Whisper", String.format("%s: len=%f batchCount=%d", audioFile.getAbsolutePath(), length, batchCount));
+
+                for (int i = 0; i < batchCount; ++i) {
+                    CountDownLatch latch = new CountDownLatch(1);
+                    int batchNo = i;
+                    int start = i * SAMPLE_LIMIT, end = Math.min(arr.length - 1, start + SAMPLE_LIMIT);
+                    float[] batch = Arrays.copyOfRange(arr, start, end);
+                    Log.d("030-Whisper", String.format("process %d to %d", start, end));
+                    svc.startTranscription(batch, (result, error) -> {
+                        if (error != null) {
+                            callback.accept(null, new RuntimeException(error));
+                            err.set(true);
+                        }
+                        else results[batchNo] = result;
+                        latch.countDown();
+                    });
+                    latch.await();
+                    if (err.get()) break;
+                }
+
+                StringBuilder ret = new StringBuilder();
+                for (int i = 0; i < batchCount; ++i) {
+                    ret.append(results[i]).append(" ");
+                }
+                if (!err.get()) callback.accept(ret.toString(), null);
             } catch (Exception e) {
                 Log.e("030-Whisper", "decode/inference err", e);
                 callback.accept(null, e);
-                localInferenceRunning = false;
             }
+            localInferenceRunning = false;
         });
     }
 

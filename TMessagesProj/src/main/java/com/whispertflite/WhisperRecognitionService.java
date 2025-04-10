@@ -18,6 +18,7 @@ import java.io.File;
 
 public class WhisperRecognitionService {
     private static final String TAG = "WhisperRecognitionSvc";
+    public static final WhisperRecognitionService instance = new WhisperRecognitionService();
 
     // whisper-small.tflite works well for multi-lingual
     public static final String MULTI_LINGUAL_EU_MODEL_FAST = "whisper-base.EUROPEAN_UNION.tflite";
@@ -48,10 +49,12 @@ public class WhisperRecognitionService {
         String vocabFileName = isMultilingualModel ? MULTILINGUAL_VOCAB_FILE : ENGLISH_ONLY_VOCAB_FILE;
         File vocabFile = new File(sdcardDataFolder, vocabFileName);
 
-        mWhisper = new Whisper();
-        mWhisper.loadModel(modelFile, vocabFile, isMultilingualModel);
-        Log.d(TAG, "Initialized: " + modelFile.getName());
-        mWhisper.setLanguage(-1); // auto
+        if (mWhisper == null) {
+            mWhisper = new Whisper();
+            mWhisper.loadModel(modelFile, vocabFile, isMultilingualModel);
+            Log.d(TAG, "Initialized: " + modelFile.getName());
+            mWhisper.setLanguage(-1); // auto
+        }
         mWhisper.setListener(new Whisper.WhisperListener() {
             @Override
             public void onUpdateReceived(String message) {
@@ -104,8 +107,8 @@ public class WhisperRecognitionService {
                 toast.show();
             });
             mWhisper.setAction(Whisper.ACTION_TRANSCRIBE);
-            mWhisper.start();
             mWhisper.processSamples(samples);
+            mWhisper.start();
             Log.d(TAG,"Start Transcription");
         }
     }

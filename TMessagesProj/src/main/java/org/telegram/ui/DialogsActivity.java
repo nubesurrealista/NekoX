@@ -94,6 +94,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.jakewharton.processphoenix.ProcessPhoenix;
+import com.whispertflite.WhisperRecognitionService;
 
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
@@ -7485,6 +7486,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 AlertsCreator.createMemLeakDialog(getContext(), usage).show();
             }
         }
+        WhisperRecognitionService.instance.onDestroy();
     }
 
     private void showArchiveHelp() {
