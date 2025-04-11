@@ -272,7 +272,7 @@ public class ReactionsLayoutInBubble {
         for (int i = 0; i < oldButtons.size(); i++) {
             oldButtons.get(i).detach();
         }
-        isEmpty = reactionButtons.isEmpty();
+        isEmpty = reactionButtons.isEmpty() || (messageObject != null && messageObject.shouldBeHidden());
     }
 
     private final ArrayList<Integer> reactionLineWidths = new ArrayList<>();

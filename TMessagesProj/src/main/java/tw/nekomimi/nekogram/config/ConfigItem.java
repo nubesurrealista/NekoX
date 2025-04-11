@@ -163,6 +163,12 @@ public class ConfigItem {
         saveConfig();
     }
 
+    private Runnable onConfigChanged = null;
+    public ConfigItem setOnConfigChanged(Runnable r) {
+        onConfigChanged = r;
+        return this;
+    }
+
     // save one item
     public void saveConfig() {
         synchronized (NekoConfig.sync) {
@@ -200,6 +206,8 @@ public class ConfigItem {
                 }
 
                 editor.apply();
+
+                if (onConfigChanged != null) onConfigChanged.run();
             } catch (Exception e) {
                 FileLog.e(e);
             }

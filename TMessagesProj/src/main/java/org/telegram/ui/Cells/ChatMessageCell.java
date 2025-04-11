@@ -1645,7 +1645,18 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
     // NekoX
     private boolean needHideMessage() {
-        return currentMessageObject.messageOwner.hide;
+        if (needHide || currentMessageObject.shouldBeHidden()) return (needHide = true);
+        boolean hasHideRegex = NekoConfig.hideMessageRegexString != null && !NekoConfig.hideMessageRegexString.isBlank();
+        if (hasHideRegex) {
+            if (currentMessagesGroup != null && currentMessagesGroup.messages != null) {
+                int len = currentMessagesGroup.messages.size();
+                for (int i = 0; i < len; ++i) {
+                    if (currentMessagesGroup.messages.get(i).shouldBeHidden())
+                        return (needHide = true);
+                }
+            }
+        }
+        return false;
 //                || MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(currentMessageObject.getFromChatId()) >= 0
 //                && NekoConfig.ignoreBlocked.Bool()
 //                && !(getParent() != null && getParent().getClass().getName().contains("ChannelAdminLogActivity"));
@@ -8226,7 +8237,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 int widthForCaption = backgroundWidth - dp(20);
                 int additionHeight = 0;
 
-                currentCaption = messageObject.caption;
+                currentCaption = messageObject.shouldBeHidden() ? null : messageObject.caption;
                 if (currentCaption != null) {
                     try {
                         captionFullWidth = widthForCaption;
@@ -8387,7 +8398,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     int maxWidth = backgroundWidth - dp(86 + (currentPosition == null ? 0 : 52));
                     if (currentPosition == null) {
                         captionFullWidth = backgroundWidth - getExtraTextX() * 2;
-                        currentCaption = messageObject.caption;
+                        currentCaption = messageObject.shouldBeHidden() ? null : messageObject.caption;
                         if (!TextUtils.isEmpty(currentCaption)) {
                             try {
                                 captionLayout = new MessageObject.TextLayoutBlocks(getPrimaryMessageObject(), currentCaption, Theme.chat_msgTextPaint, captionFullWidth);
@@ -9202,6 +9213,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         }
                     }
 
+                    if (needHideMessage()) currentCaption = null;
                     if (currentCaption != null) {
                         try {
                             captionFullWidth = widthForCaption;
@@ -9643,7 +9655,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     width -= dp(24);
                 }
                 int widthForCaption = width - dp(31 + (currentMessageObject.type != MessageObject.TYPE_ROUND_VIDEO ? 14 : 0)) - getExtraTextX() * 2;
-                if (!messageObject.isRestrictedMessage && captionLayout == null && (messageObject.caption != null || messageObject.isVoiceTranscriptionOpen())) {
+                if (!needHide && !messageObject.isRestrictedMessage && captionLayout == null && (messageObject.caption != null || messageObject.isVoiceTranscriptionOpen())) {
                     currentCaption = messageObject.isVoiceTranscriptionOpen() ? messageObject.getVoiceTranscription() : messageObject.caption;
                     if (currentCaption != null && !TextUtils.isEmpty(messageObject.messageOwner.voiceTranscription) && currentMessageObject.isVoiceTranscriptionOpen() && !currentMessageObject.messageOwner.voiceTranscriptionFinal) {
                         currentCaption += " ";
@@ -10171,21 +10183,21 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         needHide = needHideMessage();
         if (needHide) {
             totalHeight = 0;
-            drawTime = false;
             needNewVisiblePart = false;
             needReplyImage = false;
+            drawBackground = false;
             drawCommentButton = false;
-            drawForwardedName = false;
-            drawInstantView = false;
             drawCommentNumber = false;
+            drawForwardedName = false;
             drawImageButton = false;
+            drawInstantView = false;
             drawJoinChannelView = false;
             drawJoinGroupView = false;
             drawMediaCheckBox = false;
             drawName = false;
             drawNameLayout = false;
             drawPhotoImage = false;
-            drawBackground = false;
+            drawTime = false;
             isAvatarVisible = false;
         }
         if (transcribeButton != null) {
@@ -17297,7 +17309,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
                 try {
                     replyTextWidth = dp(4) + (needReplyImage ? dp(33) : 0);
-                    if (stringFinalText != null) {
+                    if (stringFinalText != null && !needHideMessage()) {
                         SpannableStringBuilder sb = new SpannableStringBuilder(stringFinalText);
                         boolean changed = false;
                         for (TextStyleSpan span : sb.getSpans(0, sb.length(), TextStyleSpan.class)) {

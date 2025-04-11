@@ -36836,6 +36836,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 } else {
                     messages = ChatActivity.this.messages;
                 }
+                messages.removeIf(MessageObject::shouldBeHidden);
 
                 MessageObject message = messages.get(position - messagesStartRow);
                 View view = holder.itemView;

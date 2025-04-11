@@ -105,7 +105,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 
@@ -604,7 +603,7 @@ public class MessageObject {
     }
 
     public boolean shouldDrawReactions() {
-        if (isRepostPreview) {
+        if (isRepostPreview || shouldBeHidden()) {
             return false;
         }
         return true;
@@ -4023,7 +4022,7 @@ public class MessageObject {
     }
 
     public boolean hasInlineBotButtons() {
-        return !isRestrictedMessage && !isRepostPreview && messageOwner != null && messageOwner.reply_markup instanceof TLRPC.TL_replyInlineMarkup && !messageOwner.reply_markup.rows.isEmpty();
+        return !shouldBeHidden() && !isRestrictedMessage && !isRepostPreview && messageOwner != null && messageOwner.reply_markup instanceof TLRPC.TL_replyInlineMarkup && !messageOwner.reply_markup.rows.isEmpty();
     }
 
     public void measureInlineBotButtons() {
@@ -11532,4 +11531,12 @@ public class MessageObject {
         return messageOwner != null && messageOwner.paid_message_stars > 0;
     }
 
+    private Boolean hiddenByRegex = null;
+    public boolean shouldBeHidden() {
+        if (messageOwner.hide) return true;
+        boolean hasHideRegex = NekoConfig.hideMessageRegexString != null && !NekoConfig.hideMessageRegexString.isBlank();
+        if (!hasHideRegex) return false;
+        if (hiddenByRegex != null) return hiddenByRegex;
+        return hiddenByRegex = (messageOwner.message != null && NekoConfig.hideMessageRegexPattern.matcher(messageOwner.message).find());
+    }
 }

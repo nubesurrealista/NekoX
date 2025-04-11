@@ -41,8 +41,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import cn.hutool.core.util.StrUtil;
+import kotlin.text.Regex;
 import tw.nekomimi.nekogram.config.ConfigItem;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
@@ -333,6 +335,10 @@ public class NekoConfig {
     public static ConfigItem showAddedToFoldersAtTitleType = addConfig(R.string.ShowAddedToFoldersAtTitle , "ShowAddedToFoldersAtTitleType", configTypeInt, GENERAL, 0); // 1: left, 2: right
     public static String[] titleFolderIconOptions = null;
     public static ConfigItem recentChatFolderSize = addConfig(R.string.RecentChatFolderSize , "RecentChatFolderSize", configTypeInt, GENERAL, 0); // 0: disabled
+
+    public static ConfigItem hideMessageRegex = addConfig(R.string.HideMessageRegex, "HideMessageRegex", configTypeString, CHAT, "").setOnConfigChanged(NekoConfig::applyHideMsgRegex);
+    public static String hideMessageRegexString = null;
+    public static Pattern hideMessageRegexPattern = null;
 
     public static ConfigItem profileShowLinkedChat = addConfig("profileShowLinkedChat", configTypeBool, CHAT, true);
     public static ConfigItem profileShowAddToFolder = addConfig("profileShowAddToFolder", configTypeBool, CHAT, true);
@@ -722,6 +728,7 @@ public class NekoConfig {
                 getString(R.string.PositionLeft),
                 getString(R.string.PositionRight)
         };
+        applyHideMsgRegex();
     }
 
     public static void setTranscribeProvider(int provider) {
@@ -853,6 +860,12 @@ public class NekoConfig {
     public static void applyPerformanceClassOverride(Integer c) {
         if (c == null && (c = NekoConfig.perfClassOverride.Int()) == -1) return;
         SharedConfig.overrideDevicePerformanceClass((c == 0) ? -1 : (c - 1));
+    }
+
+    public static void applyHideMsgRegex() {
+        hideMessageRegexString = hideMessageRegex.String();
+        hideMessageRegexPattern = Pattern.compile(hideMessageRegexString);
+        Log.d("030-hide", "new regex: " + hideMessageRegexString);
     }
 
 
