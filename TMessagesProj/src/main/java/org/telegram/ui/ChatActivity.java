@@ -36321,6 +36321,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else {
                 messages = ChatActivity.this.messages;
             }
+            messages.removeIf(MessageObject::shouldBeHidden);
             if (chatMode == MODE_SAVED && isInsideContainer) {
                 hintRow = rowCount++;
             } else {
