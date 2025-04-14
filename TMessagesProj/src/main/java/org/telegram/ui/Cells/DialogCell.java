@@ -42,7 +42,6 @@ import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ReplacementSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.accessibility.AccessibilityEvent;
@@ -63,7 +62,6 @@ import org.telegram.messenger.ChatThemeController;
 import org.telegram.messenger.CodeHighlighting;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
-import org.telegram.messenger.ChatThemeController;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
@@ -2933,12 +2931,16 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                         clearingDialog = MessagesController.getInstance(currentAccount).isClearingDialog(dialog.id);
                         groupMessages = MessagesController.getInstance(currentAccount).dialogMessage.get(dialog.id);
                         message = groupMessages != null && groupMessages.size() > 0 ? groupMessages.get(0) : null;
-                        if (message != null && NekoConfig.ignoreBlocked.Bool() && MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(message.getSenderId()) >= 0) {
-                            if (MessagesController.getInstance(currentAccount).dialogMessageFromUnblocked.get(dialog.id) != null)
-                                message = MessagesController.getInstance(currentAccount).dialogMessageFromUnblocked.get(dialog.id);
+                        boolean shouldIgnore = message != null &&
+                                (message.shouldBeHidden() ||
+                                        (NekoConfig.ignoreBlocked.Bool() &&
+                                        MessagesController.getInstance(currentAccount).blockedPeers.indexOfKey(message.getSenderId()) >= 0));
+                        if (message != null && shouldIgnore) {
+                            if (MessagesController.getInstance(currentAccount).dialogMessageFiltered.get(dialog.id) != null)
+                                message = MessagesController.getInstance(currentAccount).dialogMessageFiltered.get(dialog.id);
                             else {
                                 message = MessageHelper.getInstance(currentAccount).getLastMessageFromUnblock(dialog.id);
-                                MessagesController.getInstance(currentAccount).dialogMessageFromUnblocked.put(dialog.id, message);
+                                MessagesController.getInstance(currentAccount).dialogMessageFiltered.put(dialog.id, message);
                             }
                             // Username show may be abnormal if User who send `message` is not loaded in (never enter chat since boot, esp after cold starting)
                         }

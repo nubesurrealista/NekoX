@@ -27,7 +27,6 @@ import androidx.core.content.FileProvider;
 
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteException;
-import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BaseController;
@@ -62,7 +61,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
@@ -277,7 +275,7 @@ public class MessageHelper extends BaseController {
                     continue;
                 TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
                 data.reuse();
-                if (getMessagesController().blockePeers.indexOfKey(message.from_id.user_id) < 0) {
+                if (getMessagesController().blockedPeers.indexOfKey(message.from_id.user_id) < 0) {
                     // valid message
                     ret = new MessageObject(currentAccount, message, true, true);
                     message.send_state = cursor.intValue(1);

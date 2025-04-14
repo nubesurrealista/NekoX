@@ -59623,7 +59623,7 @@ public class TLRPC {
                     boolean spoilerOverride = false;
                     if (NekoConfig.ignoreBlocked.Bool()) {
                         for (int n : MessagesController.instanceNums) {
-                            spoilerOverride = MessagesController.getInstance(n).blockePeers.indexOfKey(result.from_id.user_id) >= 0;
+                            spoilerOverride = MessagesController.getInstance(n).blockedPeers.indexOfKey(result.from_id.user_id) >= 0;
                             if (spoilerOverride) break;
                         }
                     }

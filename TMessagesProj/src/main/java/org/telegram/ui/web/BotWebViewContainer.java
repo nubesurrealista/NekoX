@@ -36,13 +36,11 @@ import android.os.Environment;
 import android.os.Message;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Pair;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.webkit.ConsoleMessage;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
@@ -74,7 +72,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BotWebViewVibrationEffect;
@@ -128,7 +125,6 @@ import org.telegram.ui.Stories.recorder.StoryEntry;
 import org.telegram.ui.Stories.recorder.StoryRecorder;
 import org.telegram.ui.WrappedResourceProvider;
 import org.telegram.ui.bots.BotBiometry;
-import org.telegram.ui.bots.BotBiometrySettings;
 import org.telegram.ui.bots.BotDownloads;
 import org.telegram.ui.bots.BotLocation;
 import org.telegram.ui.bots.BotSensors;
@@ -1942,7 +1938,7 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
                 } else {
                     message.append(AndroidUtilities.replaceTags(getString(R.string.AreYouSureShareMyContactInfoBot)));
                 }
-                final boolean blocked = MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(botUser.id) >= 0;
+                final boolean blocked = MessagesController.getInstance(currentAccount).blockedPeers.indexOfKey(botUser.id) >= 0;
                 if (blocked) {
                     message.append("\n\n");
                     message.append(getString(R.string.AreYouSureShareMyContactInfoBotUnblock));

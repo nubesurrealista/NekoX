@@ -548,7 +548,7 @@ public class MessageObject {
 
     public boolean hasMediaSpoilers() {
         boolean hasMedia = messageOwner.media != null;
-        boolean maskForBlockedUser = (NekoConfig.ignoreBlocked.Bool() && MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(getSenderId()) >= 0);
+        boolean maskForBlockedUser = (NekoConfig.ignoreBlocked.Bool() && MessagesController.getInstance(currentAccount).blockedPeers.indexOfKey(getSenderId()) >= 0);
         boolean maskForSpecifiedChat = NekoConfig.alwaysUseSpoilerForMediaChats.contains(messageOwner.dialog_id);
         return maskForBlockedUser || (hasMedia && maskForSpecifiedChat)
                 || !isRepostPreview && (hasMedia && (messageOwner.media.spoiler && !NekoConfig.showSpoilersDirectly.Bool()) || needDrawBluredPreview())

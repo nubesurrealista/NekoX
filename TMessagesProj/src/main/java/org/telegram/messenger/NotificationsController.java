@@ -51,8 +51,6 @@ import android.text.TextUtils;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
-import android.text.TextUtils;
-import android.util.SparseArray;
 
 
 import androidx.collection.LongSparseArray;
@@ -1053,7 +1051,7 @@ public class NotificationsController extends BaseController {
                     continue;
                 }
 
-                if (NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockePeers.indexOfKey(messageObject.getSenderId()) >= 0) {
+                if (NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockedPeers.indexOfKey(messageObject.getSenderId()) >= 0) {
                     continue;
                 }
 
@@ -3950,7 +3948,7 @@ public class NotificationsController extends BaseController {
             var m = list.get(i);
             long id = m.getSenderId();
 
-            if (blocked && messagesController.blockePeers.indexOfKey(id) >= 0) {
+            if (blocked && messagesController.blockedPeers.indexOfKey(id) >= 0) {
                 list.remove(i);
                 --i;
                 continue;
@@ -5106,7 +5104,7 @@ public class NotificationsController extends BaseController {
                 } else {
                     text.append(LocaleController.formatPluralString("StoryNotification4", storyPushMessages.size() - 2, cutLastName(names.get(0)), cutLastName(names.get(1))));
                 }
-                if (NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockePeers.indexOfKey(lastMessageObject.getSenderId()) >= 0) {
+                if (NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockedPeers.indexOfKey(lastMessageObject.getSenderId()) >= 0) {
                     continue;
                 }
                 String message = getShortStringForMessage(lastMessageObject, senderName, preview);

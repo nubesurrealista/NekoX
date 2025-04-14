@@ -16,7 +16,6 @@ import static org.telegram.messenger.LocaleController.getString;
 import static tw.nekomimi.nekogram.utils.StrUtil.getAppName;
 
 import android.Manifest;
-import android.accounts.Account;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -84,7 +83,6 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.URLSpan;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.Pair;
 import android.util.Property;
 import android.util.SparseArray;
@@ -139,7 +137,6 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.zxing.common.detector.MathUtils;
 
-import org.checkerframework.checker.units.qual.A;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.sufficientlysecure.keychain.pgp.PgpHelper;
@@ -2993,7 +2990,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             if (currentUser != null && !UserObject.isReplyUser(currentUser)) {
-                userBlocked = getMessagesController().blockePeers.indexOfKey(currentUser.id) >= 0;
+                userBlocked = getMessagesController().blockedPeers.indexOfKey(currentUser.id) >= 0;
             }
 
             if (currentEncryptedChat != null && AndroidUtilities.getMyLayerVersion(currentEncryptedChat.layer) != SecretChatHelper.CURRENT_SECRET_CHAT_LAYER) {
@@ -22346,7 +22343,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         } else if (id == NotificationCenter.blockedUsersDidLoad) {
             if (currentUser != null && !UserObject.isReplyUser(currentUser)) {
                 boolean oldValue = userBlocked;
-                userBlocked = getMessagesController().blockePeers.indexOfKey(currentUser.id) >= 0;
+                userBlocked = getMessagesController().blockedPeers.indexOfKey(currentUser.id) >= 0;
                 if (oldValue != userBlocked) {
                     updateBottomOverlay();
                 }
@@ -42565,7 +42562,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             Integer end = ids.get(ids.size() - 1);
             for (int i = 0; i < messages.size(); i++) {
                 int msgId = messages.get(i).getId();
-                if (NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockePeers.indexOfKey(messages.get(i).getSenderId()) >= 0)
+                if (NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockedPeers.indexOfKey(messages.get(i).getSenderId()) >= 0)
                     continue;
                 if (msgId > begin && msgId < end && selectedMessagesIds[0].indexOfKey(msgId) < 0) {
                     MessageObject message = messages.get(i);

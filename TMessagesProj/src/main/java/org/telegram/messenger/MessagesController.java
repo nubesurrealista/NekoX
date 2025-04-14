@@ -130,7 +130,6 @@ import tw.nekomimi.nekogram.ui.InternalFilters;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class MessagesController extends BaseController implements NotificationCenter.NotificationCenterDelegate {
@@ -168,7 +167,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public LongSparseArray<TLRPC.Dialog> dialogs_dict = new LongSparseArray<>();
     public LongSparseArray<ArrayList<MessageObject>> dialogMessage = new LongSparseArray<>();
     // NekoX: ignoreBlocked, Messages cache for Dialog Cell
-    public LongSparseArray<MessageObject> dialogMessageFromUnblocked = new LongSparseArray<>();
+    public LongSparseArray<MessageObject> dialogMessageFiltered = new LongSparseArray<>();
     public LongSparseArray<MessageObject> dialogMessagesByRandomIds = new LongSparseArray<>();
     public LongSparseIntArray deletedHistory = new LongSparseIntArray();
     public SparseArray<MessageObject> dialogMessagesByIds = new SparseArray<>();
@@ -261,7 +260,7 @@ public class MessagesController extends BaseController implements NotificationCe
     private LongSparseArray<TLRPC.Dialog> clearingHistoryDialogs = new LongSparseArray<>();
 
     public boolean loadingBlockedPeers = false;
-    public LongSparseIntArray blockePeers = new LongSparseIntArray();
+    public LongSparseIntArray blockedPeers = new LongSparseIntArray();
     public int totalBlockedCount = -1;
     public boolean blockedEndReached;
 
@@ -6281,7 +6280,7 @@ public class MessagesController extends BaseController implements NotificationCe
         createdDialogMainThreadIds.clear();
         visibleDialogMainThreadIds.clear();
         visibleScheduledDialogMainThreadIds.clear();
-        blockePeers.clear();
+        blockedPeers.clear();
         for (int a = 0; a < sendingTypings.length; a++) {
             if (sendingTypings[a] == null) {
                 continue;
@@ -7223,15 +7222,15 @@ public class MessagesController extends BaseController implements NotificationCe
                         TL_bots.BotInfo botInfo = res.full_chat.bot_info.get(a);
                         getMediaDataController().putBotInfo(-chatId, botInfo);
                     }
-                    int index = blockePeers.indexOfKey(-chatId);
+                    int index = blockedPeers.indexOfKey(-chatId);
                     if (res.full_chat.blocked) {
                         if (index < 0) {
-                            blockePeers.put(-chatId, 1);
+                            blockedPeers.put(-chatId, 1);
                             getNotificationCenter().postNotificationName(NotificationCenter.blockedUsersDidLoad);
                         }
                     } else {
                         if (index >= 0) {
-                            blockePeers.removeAt(index);
+                            blockedPeers.removeAt(index);
                             getNotificationCenter().postNotificationName(NotificationCenter.blockedUsersDidLoad);
                         }
                     }
@@ -7317,15 +7316,15 @@ public class MessagesController extends BaseController implements NotificationCe
                         userFull.bot_info.user_id = user.id;
                         getMediaDataController().putBotInfo(user.id, userFull.bot_info);
                     }
-                    int index = blockePeers.indexOfKey(user.id);
+                    int index = blockedPeers.indexOfKey(user.id);
                     if (userFull.blocked) {
                         if (index < 0) {
-                            blockePeers.put(user.id, 1);
+                            blockedPeers.put(user.id, 1);
                             getNotificationCenter().postNotificationName(NotificationCenter.blockedUsersDidLoad);
                         }
                     } else {
                         if (index >= 0) {
-                            blockePeers.removeAt(index);
+                            blockedPeers.removeAt(index);
                             getNotificationCenter().postNotificationName(NotificationCenter.blockedUsersDidLoad);
                         }
                     }
@@ -8210,10 +8209,10 @@ public class MessagesController extends BaseController implements NotificationCe
                 return;
             }
         }
-        if (blockePeers.indexOfKey(id) >= 0) {
+        if (blockedPeers.indexOfKey(id) >= 0) {
             return;
         }
-        blockePeers.put(id, 1);
+        blockedPeers.put(id, 1);
         if (user != null) {
             if (user.bot) {
                 getMediaDataController().removeInline(id);
@@ -8404,7 +8403,7 @@ public class MessagesController extends BaseController implements NotificationCe
             }
         }
         totalBlockedCount--;
-        blockePeers.delete(id);
+        blockedPeers.delete(id);
         if (user != null) {
             req.id = getInputPeer(user);
         } else {
@@ -8424,7 +8423,7 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         loadingBlockedPeers = true;
         TLRPC.TL_contacts_getBlocked req = new TLRPC.TL_contacts_getBlocked();
-        req.offset = reset ? 0 : blockePeers.size();
+        req.offset = reset ? 0 : blockedPeers.size();
         req.limit = 100;
         getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
             if (response != null) {
@@ -8433,13 +8432,13 @@ public class MessagesController extends BaseController implements NotificationCe
                 putChats(res.chats, false);
                 getMessagesStorage().putUsersAndChats(res.users, res.chats, true, true);
                 if (reset) {
-                    blockePeers.clear();
+                    blockedPeers.clear();
                 }
                 totalBlockedCount = Math.max(res.count, res.blocked.size());
                 blockedEndReached = res.blocked.size() < req.limit;
                 for (int a = 0, N = res.blocked.size(); a < N; a++) {
                     TLRPC.TL_peerBlocked blocked = res.blocked.get(a);
-                    blockePeers.put(MessageObject.getPeerId(blocked.peer_id), 1);
+                    blockedPeers.put(MessageObject.getPeerId(blocked.peer_id), 1);
                 }
                 loadingBlockedPeers = false;
                 getNotificationCenter().postNotificationName(NotificationCenter.blockedUsersDidLoad);
@@ -8455,9 +8454,9 @@ public class MessagesController extends BaseController implements NotificationCe
 
         if (totalBlockedCount == 0) return;
 
-        if (blockePeers.size() == 0) getBlockedPeers(true);
+        if (blockedPeers.size() == 0) getBlockedPeers(true);
 
-        LongSparseIntArray blockedCopy = blockePeers.clone();
+        LongSparseIntArray blockedCopy = blockedPeers.clone();
 
         if (blockedCopy.size() == 0) return;
 
@@ -8469,7 +8468,7 @@ public class MessagesController extends BaseController implements NotificationCe
             getConnectionsManager().sendRequest(req, (response, error) -> {
 
                 totalBlockedCount--;
-                blockePeers.delete(peer_id);
+                blockedPeers.delete(peer_id);
 
                 UIUtil.runOnUIThread(() -> getNotificationCenter().postNotificationName(NotificationCenter.blockedUsersDidLoad));
 
@@ -9748,15 +9747,15 @@ public class MessagesController extends BaseController implements NotificationCe
                     getTranslateController().updateDialogFull(user.id);
                     StarsController.getInstance(currentAccount).invalidateProfileGifts(info);
 
-                    int index = blockePeers.indexOfKey(user.id);
+                    int index = blockedPeers.indexOfKey(user.id);
                     if (info.blocked) {
                         if (index < 0) {
-                            blockePeers.put(user.id, 1);
+                            blockedPeers.put(user.id, 1);
                             getNotificationCenter().postNotificationName(NotificationCenter.blockedUsersDidLoad);
                         }
                     } else {
                         if (index >= 0) {
-                            blockePeers.removeAt(index);
+                            blockedPeers.removeAt(index);
                             getNotificationCenter().postNotificationName(NotificationCenter.blockedUsersDidLoad);
                         }
                     }
@@ -10460,7 +10459,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 newTypes.put(key, newPrintingStringsTypes);
 
                 if (NekoConfig.ignoreBlocked.Bool()) {
-                    arr = arr.stream().filter(it -> getMessagesController().blockePeers.indexOfKey(it.userId) == -1).collect(Collectors.toCollection(ArrayList::new));
+                    arr = arr.stream().filter(it -> getMessagesController().blockedPeers.indexOfKey(it.userId) == -1).collect(Collectors.toCollection(ArrayList::new));
                 }
                 if (arr.isEmpty()) continue;
 
@@ -12551,7 +12550,7 @@ public class MessagesController extends BaseController implements NotificationCe
             ArrayList<MessageObject> newMessages = new ArrayList<>();
             for (int a = 0; a < dialogsRes.messages.size(); a++) {
                 TLRPC.Message message = dialogsRes.messages.get(a);
-                if ((NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockePeers.indexOfKey(message.peer_id.user_id) >= 0) || message.date == 0) {
+                if ((NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockedPeers.indexOfKey(message.peer_id.user_id) >= 0) || message.date == 0) {
                     continue;
                 }
                 if (lastMessage == null || message.date < lastMessage.date) {
@@ -16811,7 +16810,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     message.media = new TLRPC.TL_messageMediaEmpty();
 
                     if (!message.out && NekoConfig.ignoreBlocked.Bool()) {
-                        if (blockePeers.indexOfKey(message.from_id.user_id) >= 0) {
+                        if (blockedPeers.indexOfKey(message.from_id.user_id) >= 0) {
                             if (message.message != null && !message.message.isBlank()) {
                                 TLRPC.TL_messageEntitySpoiler s = new TLRPC.TL_messageEntitySpoiler();
                                 s.length = message.message.length();
@@ -17926,11 +17925,11 @@ public class MessagesController extends BaseController implements NotificationCe
                 getMessagesStorage().getStorageQueue().postRunnable(() -> AndroidUtilities.runOnUIThread(() -> {
                     long id = MessageObject.getPeerId(finalUpdate.peer_id);
                     if (finalUpdate.blocked) {
-                        if (blockePeers.indexOfKey(id) < 0) {
-                            blockePeers.put(id, 1);
+                        if (blockedPeers.indexOfKey(id) < 0) {
+                            blockedPeers.put(id, 1);
                         }
                     } else {
-                        blockePeers.delete(id);
+                        blockedPeers.delete(id);
                     }
                     getNotificationCenter().postNotificationName(NotificationCenter.blockedUsersDidLoad);
                     getStoriesController().updateBlockUser(id, finalUpdate.blocked_my_stories_from, false);
@@ -20413,10 +20412,14 @@ public class MessagesController extends BaseController implements NotificationCe
                         arrayList.add(msg);
                     }
                 }
-                if (NekoConfig.ignoreBlocked.Bool() && blockePeers.indexOfKey(lastMessage.getSenderId()) >= 0) {
-                    ArrayList<MessageObject> preMsg = dialogMessage.get(dialogId);
-                    if (preMsg != null && !preMsg.isEmpty() && blockePeers.indexOfKey(preMsg.get(0).getSenderId()) < 0)
-                        dialogMessageFromUnblocked.put(dialogId, preMsg.get(0));
+
+                // (is blocked && should filter) || (matches regex)
+                boolean hide = lastMessage.shouldBeHidden();
+                if (hide || (NekoConfig.ignoreBlocked.Bool() && blockedPeers.indexOfKey(lastMessage.getSenderId()) >= 0)) {
+                    ArrayList<MessageObject> previousMsgs = dialogMessage.get(dialogId);
+                    boolean notBlocked = (!previousMsgs.isEmpty() && blockedPeers.indexOfKey(previousMsgs.get(0).getSenderId()) < 0);
+                    if (previousMsgs != null && notBlocked && !previousMsgs.get(0).shouldBeHidden())
+                        dialogMessageFiltered.put(dialogId, previousMsgs.get(0));
                 }
                 dialogMessage.put(dialogId, arrayList);
                 getTranslateController().checkDialogMessage(dialogId);

@@ -5724,7 +5724,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
         spoilerOverride =
                 NekoConfig.ignoreBlocked.Bool() &&
-                MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(messageObject.getSenderId()) >= 0;
+                MessagesController.getInstance(currentAccount).blockedPeers.indexOfKey(messageObject.getSenderId()) >= 0;
         if (messageChanged || dataChanged || groupChanged || pollChanged || widthChanged && messageObject.isPoll() || isPhotoDataChanged(messageObject) || pinnedBottom != bottomNear || pinnedTop != topNear || transChanged) {
             updatedContent = true;
             if (stickerSetIcons != null) {

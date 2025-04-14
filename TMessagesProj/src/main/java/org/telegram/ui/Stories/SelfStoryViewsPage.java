@@ -150,7 +150,7 @@ public class SelfStoryViewsPage extends FrameLayout implements NotificationCente
             return false;
         }
 
-        if (MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(view.user_id) >= 0) {
+        if (MessagesController.getInstance(currentAccount).blockedPeers.indexOfKey(view.user_id) >= 0) {
             return false;
         }
 
@@ -289,7 +289,7 @@ public class SelfStoryViewsPage extends FrameLayout implements NotificationCente
                     return false;
                 }
 
-                final boolean isBlocked = messagesController.blockePeers.indexOfKey(user.id) >= 0;
+                final boolean isBlocked = messagesController.blockedPeers.indexOfKey(user.id) >= 0;
                 final boolean isContact = user != null && (user.contact || ContactsController.getInstance(currentAccount).contactsDict.get(user.id) != null);
                 final boolean storiesShown = isStoryShownToUser(viewUser);
                 final boolean storiesBlocked = messagesController.getStoriesController().isBlocked(viewUser);
