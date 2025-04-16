@@ -10935,6 +10935,53 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 dismiss(true);
                 chatActivityEnterView.getSendButton().callOnClick();
             }
+
+            @Override
+            protected boolean canReplyToPrivateChat() {
+                if (currentChat == null) {
+                    return false;
+                }
+
+                TLRPC.Message messageOwner = messagePreviewParams.replyMessage.messages.get(0).messageOwner;
+                long userId = messageOwner.from_id.user_id;
+                long chatId = messageOwner.peer_id.user_id;
+                return chatId == 0 && userId > 0 && userId != UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+            }
+
+            @Override
+            protected void replyToPrivateChat() {
+                dismiss(false);
+
+                Bundle args = new Bundle();
+                args.putLong("user_id", messagePreviewParams.replyMessage.messages.get(0).messageOwner.from_id.user_id);
+
+                ChatActivity chatActivity = new ChatActivity(args);
+                presentFragment(chatActivity);
+
+                if (replyingMessageObject != null) {
+                    if (chatActivityEnterView != null && chatActivity.chatActivityEnterView != null) {
+                        chatActivity.chatActivityEnterView.setFieldText(
+                                chatActivityEnterView.getFieldText()
+                        );
+                    }
+                    if (replyingQuoteGroup != null) {
+                        chatActivity.replyingQuoteGroup = replyingQuoteGroup;
+                    } else if (replyingMessageObject != null) {
+                        chatActivity.replyingQuoteGroup = getGroup(replyingMessageObject.getGroupId());
+                    }
+                    if (replyingTopMessage != null) {
+                        chatActivity.replyingTopMessage = replyingTopMessage;
+                    } else if (threadMessageObject != null) {
+                        chatActivity.replyingTopMessage = threadMessageObject;
+                    }
+                    chatActivity.showFieldPanelForReplyQuote(replyingMessageObject, replyingQuote);
+                }
+
+                replyingMessageObject = null;
+                replyingQuote = null;
+                messagePreviewParams.updateReply(null, null, dialog_id, null);
+                fallbackFieldPanel();
+            }
         };
         messagePreviewParams.attach(forwardingPreviewView);
         TLRPC.Peer defPeer = chatInfo != null ? chatInfo.default_send_as : null;

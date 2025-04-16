@@ -248,4 +248,5 @@
     <string name="WhisperLocal">Whisper (Local)</string>
     <string name="WhisperLocalProcessing">Whisper (Local) is processing the message...</string>
     <string name="HideMessageRegex">Hide messages with regex</string>
+    <string name="ReplyInPrivate">Reply in private</string>
 </resources>
