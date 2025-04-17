@@ -1256,6 +1256,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     private ValueAnimator searchExpandAnimator;
     private float searchExpandProgress;
+    private boolean shownTranslate = false;
     private boolean hideJoin = false;
     private static int[] notInChatStrings = new int[] {
             R.string.ChannelJoin, R.string.GroupJoin,
@@ -3899,6 +3900,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 } else if (id == search) {
                     openSearchWithText(isSupportedTags() ? "" : null);
                 } else if (id == translate) {
+                    shownTranslate = true;
                     getMessagesController().getTranslateController().setHideTranslateDialog(getDialogId(), false, !isReplyChatComment());
                     if (!getMessagesController().getTranslateController().toggleTranslatingDialog(getDialogId(), true) || isReplyChatComment()) {
                         updateTopPanel(true);
@@ -28362,12 +28364,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             show = true;
         }
         boolean showRestartTopic = !isInPreviewMode() && forumTopic != null && forumTopic.closed && !forumTopic.hidden && ChatObject.canManageTopic(currentAccount, currentChat, forumTopic);
-        boolean showTranslate = (
-            true ||
-            getUserConfig().isPremium() ?
-                getMessagesController().getTranslateController().isDialogTranslatable(getDialogId()) && !getMessagesController().getTranslateController().isTranslateDialogHidden(getDialogId()) :
-                !getMessagesController().premiumFeaturesBlocked() && preferences.getInt("dialog_show_translate_count" + did, 5) <= 0
-        );
+        boolean showTranslate = (getMessagesController().getTranslateController().isDialogTranslatable(getDialogId()) &&
+                                (shownTranslate || getMessagesController().getTranslateController().isTranslatingDialog(getDialogId())) &&
+                                !getMessagesController().getTranslateController().isTranslateDialogHidden(getDialogId()));
         boolean showBizBot = currentEncryptedChat == null && getUserConfig().isPremium() && preferences.getLong("dialog_botid" + did, 0) != 0;
         boolean showBotAd = currentUser != null && currentUser.bot && messages.size() >= 2 && botSponsoredMessage != null;
         if (showRestartTopic) {
@@ -28997,7 +28996,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
             }
         }
-        if (show2) {
+        if (false && show2) {
             createTopPanel2();
             if (topChatPanelView2 == null) {
                 return;
@@ -29041,7 +29040,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     invalidateMessagesVisiblePart();
                 }
             }
-        } else if (topChatPanelView2 != null) {
+        } else if (false && topChatPanelView2 != null) {
             if (topChatPanelView2.getTag() == null) {
                 topChatPanelView.setTag(1);
 
@@ -43825,7 +43824,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             views.add(searchDownButton);
             views.add(searchContainer);
             views.add(topChatPanelView);
-            views.add(topChatPanelView2);
+//            views.add(topChatPanelView2);
             views.add(chatListView);
             views.add(messagesSearchListContainer);
             views.add(mentionContainer);
