@@ -16698,6 +16698,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             } else {
                 currentNameString = "";
             }
+            if (currentNameString == null) currentNameString = ""; // avoid NPE
             int additionalWidth = dp(currentMessageObject.isSponsored() ? -24 : 0);
             CharSequence nameStringFinal = AndroidUtilities.removeDiacritics(currentNameString.replace('\n', ' ').replace('\u200F', ' '));
             try {
