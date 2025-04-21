@@ -216,4 +216,19 @@
     <string name="CustomMaxCacheSizeHint">Tamaño en MB (ej. 512)</string>
     <string name="CustomMaxCacheSizeBulletin">El tamaño máximo de la caché está establecido en %1$s MB</string>
     <string name="UseCamera2API">Usar la API de Cámara 2</string>
+    <string name="ForceExternalBrowserForBots">Usar navegador externo para bots y mini apps</string>
+    <string name="OpenLinkInApp">Abrir en app</string>
+    <string name="FeatureRemovedWhyDetail">Desde la versión 11.7.0, algunas API ya no funcionan y el cliente puede fallar; esto podría arreglarse o no más adelante, no preguntes por fecha.</string>
+    <string name="HideCameraInAttachMenu">Ocultar cámara en menú de adjuntos</string>
+    <string name="ForceExternalBrowserForBotsDesc">Algunos bots que requieren APIs personalizadas de Telegram pueden presentar fallos</string>
+    <string name="DebugSendLogsExt">Compartir registros a una app externa</string>
+    <string name="FeatureRemoved">Esta función ha sido removida.</string>
+    <string name="PauseInactiveTabAnimation">Pausar animación de pestañas inactivas</string>
+    <string name="FeatureRemovedWhy">¿Por qué?</string>
+    <string name="ShowQuickReconnect">Mostrar botón de reconexión rápida al reconectar</string>
+    <string name="ShowQuickReconnectDesc">Igual que el truco de reconexión anterior, pero activado manualmente.</string>
+    <string name="ShowPhoneNumTemp">Alternar número de teléfono.</string>
+    <string name="MuteBlockedFromGroup">Silenciar notificaciones grupales de bloqueados</string>
+    <string name="MuteBotsFromGroup">Silenciar notificaciones grupales de bots</string>
+    <string name="MuteBotsFromGroupDesc">No se silenciarán mensajes conocidos para admins</string>
 </resources>
