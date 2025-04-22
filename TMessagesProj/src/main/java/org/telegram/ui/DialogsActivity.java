@@ -10378,14 +10378,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (proxyDrawable == null || doneItem != null && doneItem.getVisibility() == View.VISIBLE) {
             return;
         }
-        boolean showDownloads = downloadsItemVisible = NekoConfig.alwaysShowDownloads.Bool() && !slidingTopicListOpened();
-        for (int i = 0; i < getDownloadController().downloadingFiles.size() && !showDownloads; i++) {
+        boolean hasDownloads = false;
+        for (int i = 0; i < getDownloadController().downloadingFiles.size(); i++) {
             if (getFileLoader().isLoadingFile(getDownloadController().downloadingFiles.get(i).getFileName())) {
-                showDownloads = true;
+                hasDownloads = true;
                 break;
             }
         }
-        if (!searching && !slidingTopicListOpened() && (getDownloadController().hasUnviewedDownloads() || showDownloads || (downloadsItem.getVisibility() == View.VISIBLE && downloadsItem.getAlpha() == 1 && !force))) {
+        boolean showDownloads = (hasDownloads || NekoConfig.alwaysShowDownloads.Bool());
+        if (!searching && !slidingTopicListOpened() &&
+                ((showDownloads || getDownloadController().hasUnviewedDownloads()) ||
+                        (downloadsItem.getVisibility() == View.VISIBLE && downloadsItem.getAlpha() == 1 && !force))) {
             downloadsItemVisible = true;
             downloadsItem.setVisibility(View.VISIBLE);
         } else {
@@ -10393,7 +10396,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             downloadsItemVisible = false;
         }
 
-        if (downloadsItemVisible && downloadIcon != null && DownloadController.getInstance(currentAccount).downloadingFiles.isEmpty()) {
+        if (downloadsItemVisible && downloadIcon != null && !hasDownloads) {
             downloadIcon.forceCompleted();
         }
 
