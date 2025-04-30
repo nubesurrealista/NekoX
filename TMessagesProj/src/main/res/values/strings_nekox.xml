@@ -249,4 +249,6 @@
     <string name="WhisperLocalProcessing">Whisper (Local) is processing the message...</string>
     <string name="HideMessageRegex">Hide messages with regex</string>
     <string name="ReplyInPrivate">Reply in private</string>
+    <string name="AutoRestartOnLeak">Auto restart when memory leaks too much</string>
+    <string name="AutoRestartOnLeakInfo">Note. Only applies when there\'s no ongoing download/upload operations</string>
 </resources>

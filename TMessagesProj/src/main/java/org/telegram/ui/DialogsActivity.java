@@ -7482,8 +7482,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             // 1.2GB by default, increase by 200MB when ignored
             int usage = 0;
             if (ek != null && (usage = ek.checkRamUsage()) > EvilLeakerKiller.threshold) {
-                EvilLeakerKiller.threshold += (200 * 1024);
-                AlertsCreator.createMemLeakDialog(getContext(), usage).show();
+                if (NekoConfig.autoRestartOnLeak.Bool()) {
+                    if (!FileLoader.hasUploadOperation(currentAccount)) {
+                        Context ctx = LaunchActivity.instance.getApplicationContext();
+                        ProcessPhoenix.triggerRebirth(ctx, new Intent(ctx, LaunchActivity.class));
+                    } else {
+                        FileLog.w("restart postponed due to ongoing operation");
+                    }
+                } else {
+                    EvilLeakerKiller.threshold += (200 * 1024);
+                    AlertsCreator.createMemLeakDialog(getContext(), usage).show();
+                }
             }
         }
         WhisperRecognitionService.instance.onDestroy();

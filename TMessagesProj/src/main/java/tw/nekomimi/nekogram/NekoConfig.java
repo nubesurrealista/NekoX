@@ -358,6 +358,7 @@ public class NekoConfig {
 
     public static ConfigItem nextCheckCustomStatusTime = addConfig("nextCheckCustomStatusTime", configTypeLong, 0L);
     public static ConfigItem checkMemLeak = addConfig(R.string.CheckMemLeak , "CheckMemLeak", configTypeBool, GENERAL, true);
+    public static ConfigItem autoRestartOnLeak = addConfig(R.string.AutoRestartOnLeak , "AutoRestartOnLeak", configTypeBool, EXPERIMENTAL, false);
 
     static {
         loadConfig(false);

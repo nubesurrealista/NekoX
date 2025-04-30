@@ -258,6 +258,14 @@ public class FileLoader extends BaseController {
         return localInstance;
     }
 
+    public static boolean hasUploadOperation(int num) {
+        FileLoader instance = getInstance(num);
+        return !instance.uploadOperationQueue.isEmpty() ||
+                !instance.uploadSmallOperationQueue.isEmpty() ||
+                !instance.uploadOperationPaths.isEmpty() ||
+                !instance.uploadOperationPathsEnc.isEmpty();
+    }
+
     public FileLoader(int instance) {
         super(instance);
         filePathDatabase = new FilePathDatabase(instance);
