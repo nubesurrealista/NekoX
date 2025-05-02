@@ -8677,7 +8677,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     hideJoin = true;
                     bottomOverlayProgress.setTag(1);
                     showBottomOverlayProgress(!hideJoin, false);
-                    updateBottomOverlay(false);
+                    updateBottomOverlay(false, true);
                     break;
                 }
             }
@@ -26811,7 +26811,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         updateBottomOverlay(false);
     }
     private void updateBottomOverlay(boolean animated) {
-        if (bottomOverlayChatText == null || chatMode == MODE_SCHEDULED || getContext() == null) {
+        updateBottomOverlay(animated, false);
+    }
+    private void updateBottomOverlay(boolean animated, boolean force) {
+        if (!force && (bottomOverlayChatText == null || chatMode == MODE_SCHEDULED || getContext() == null)) {
             return;
         }
         bottomOverlayChatWaitsReply = false;
@@ -27205,6 +27208,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         showGiftButton(showGiftButton && bottomOverlayChat.getVisibility() == View.VISIBLE, animated);
         checkRaiseSensors();
+        if (force) chatActivityEnterView.setVisibility(View.VISIBLE);
     }
 
     private void showGiftButton(boolean show, boolean animated) {
