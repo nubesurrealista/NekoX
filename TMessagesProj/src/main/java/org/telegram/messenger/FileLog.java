@@ -10,6 +10,8 @@ package org.telegram.messenger;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.google.gson.ExclusionStrategy;
@@ -20,6 +22,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 import org.telegram.messenger.time.FastDateFormat;
 import org.telegram.messenger.video.MediaCodecVideoConvertor;
@@ -37,6 +42,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 
 import cn.hutool.core.util.StrUtil;
 
@@ -86,7 +92,7 @@ public class FileLog {
     private static HashSet<String> excludeRequests;
 
     public static void dumpResponseAndRequest(int account, TLObject request, TLObject response, TLRPC.TL_error error, long requestMsgId, long startRequestTimeInMillis, int requestToken) {
-        if (/*!BuildVars.DEBUG_PRIVATE_VERSION || !BuildVars.LOGS_ENABLED || */request == null) {
+        if (!BuildVars.DEBUG_PRIVATE_VERSION || !BuildVars.LOGS_ENABLED || request == null) {
             return;
         }
         String requestSimpleName = request.getClass().getSimpleName();
@@ -130,7 +136,7 @@ public class FileLog {
     }
 
     public static void dumpUnparsedMessage(TLObject message, long messageId, int account) {
-        if (/*!BuildVars.DEBUG_PRIVATE_VERSION || !BuildVars.LOGS_ENABLED || */message == null) {
+        if (!BuildVars.DEBUG_PRIVATE_VERSION || !BuildVars.LOGS_ENABLED || message == null) {
             return;
         }
         try {
@@ -158,6 +164,24 @@ public class FileLog {
             });
         } catch (Throwable e) {
         }
+    }
+
+    private void dumpANR() {
+        StringBuilder sb = new StringBuilder();
+        Map<Thread, StackTraceElement[]> allThreads = Thread.getAllStackTraces();
+
+        for (Map.Entry<Thread, StackTraceElement[]> entry : allThreads.entrySet()) {
+            Thread thread = entry.getKey();
+            StackTraceElement[] stackTrace = entry.getValue();
+
+            sb.append("Thread: ").append(thread.getName()).append("\n");
+            for (StackTraceElement element : stackTrace) {
+                sb.append("\tat ").append(element).append("\n");
+            }
+            sb.append("\n\n");
+        }
+
+        FileLog.e("ANR thread dump\n" + sb.toString());
     }
 
     private static boolean gsonDisabled;
@@ -206,9 +230,40 @@ public class FileLog {
             };
             gson = new GsonBuilder()
                 .addSerializationExclusionStrategy(exclusionStrategy)
+                .registerTypeAdapter(byte[].class, new ByteArrayHexAdapter())
                 .registerTypeAdapterFactory(RuntimeClassNameTypeAdapterFactory.of(TLObject.class, "type_", exclusionStrategy))
                 .registerTypeHierarchyAdapter(TLObject.class, new TLObjectDeserializer())
                 .create();
+        }
+    }
+
+    public static class ByteArrayHexAdapter extends TypeAdapter<byte[]> {
+
+        @Override
+        public void write(JsonWriter out, byte[] value) throws IOException {
+            if (value == null) {
+                out.nullValue();
+                return;
+            }
+
+            StringBuilder hex = new StringBuilder(2 + value.length * 2);
+            hex.append("0x");
+            for (byte b : value) {
+                hex.append(String.format("%02x", b & 0xFF));
+            }
+            out.value(hex.toString());
+        }
+
+        @Override
+        public byte[] read(JsonReader in) throws IOException {
+            String hex = in.nextString();
+            int len = hex.length();
+            byte[] result = new byte[len / 2];
+            for (int i = 0; i < len; i += 2) {
+                result[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
+                    + Character.digit(hex.charAt(i+1), 16));
+            }
+            return result;
         }
     }
 
@@ -279,6 +334,9 @@ public class FileLog {
             tlStreamWriter.flush();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        if (BuildVars.DEBUG_VERSION) {
+            new ANRDetector(this::dumpANR);
         }
         initied = true;
     }
@@ -545,5 +603,32 @@ public class FileLog {
             super(e);
         }
 
+    }
+
+    public class ANRDetector {
+        private final long TIMEOUT_MS = 5000; // ANR threshold (5 seconds)
+        private final Handler mainHandler = new Handler(Looper.getMainLooper());
+        private boolean isUIThreadResponsive = true;
+
+        public ANRDetector(Runnable anrDetected) {
+            new Thread(() -> {
+                while (true) {
+                    isUIThreadResponsive = false;
+
+                    // Post a task to the main thread
+                    mainHandler.post(() -> isUIThreadResponsive = true);
+
+                    try {
+                        Thread.sleep(TIMEOUT_MS);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (!isUIThreadResponsive) {
+                        anrDetected.run();
+                    }
+                }
+            }).start();
+        }
     }
 }

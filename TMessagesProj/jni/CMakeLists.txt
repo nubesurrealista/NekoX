@@ -15,7 +15,9 @@ ${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libswresample.a,
 ${CMAKE_HOME_DIRECTORY}/dav1d/build/${ANDROID_ABI}/lib/libdav1d.a,
 ${CMAKE_HOME_DIRECTORY}/libvpx/build/${ANDROID_ABI}/lib/libvpx.a,
 ${CMAKE_HOME_DIRECTORY}/boringssl/build/${ANDROID_ABI}/ssl/libssl.a,
-${CMAKE_HOME_DIRECTORY}/boringssl/build/${ANDROID_ABI}/crypto/libcrypto.a")
+${CMAKE_HOME_DIRECTORY}/boringssl/build/${ANDROID_ABI}/crypto/libcrypto.a,
+${CMAKE_HOME_DIRECTORY}/tde2e/${ANDROID_ABI}/libtde2e.a,
+${CMAKE_HOME_DIRECTORY}/tde2e/${ANDROID_ABI}/libtdutils.a")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -g")
@@ -61,6 +63,12 @@ set_target_properties(libvpx PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY
 
 add_library(libdav1d STATIC IMPORTED)
 set_target_properties(libdav1d PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/dav1d/build/${ANDROID_ABI}/lib/libdav1d.a)
+
+add_library(tde2e STATIC IMPORTED)
+set_target_properties(tde2e PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/tde2e/${ANDROID_ABI}/libtde2e.a)
+
+add_library(tdutils STATIC IMPORTED)
+set_target_properties(tdutils PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/tde2e/${ANDROID_ABI}/libtdutils.a)
 
 #tgnet
 #add_library(mozjpeg STATIC
@@ -385,6 +393,7 @@ add_library(${NATIVE_LIB} SHARED
         fast-edge.cpp
         genann.c
         secureid_ocr.cpp
+        tde2e/bridge.cpp
 )
 
 target_compile_options(${NATIVE_LIB} PUBLIC
@@ -637,7 +646,9 @@ target_include_directories(${NATIVE_LIB} PUBLIC
         intro
         rlottie/inc
         tgcalls/
-        webrtc/)
+        webrtc/
+        tde2e/include
+)
 
 target_link_libraries(${NATIVE_LIB}
         -Wl,--whole-archive rnnoise openh264 voipandroid -Wl,--no-whole-archive
@@ -656,6 +667,8 @@ target_link_libraries(${NATIVE_LIB}
         swresample
         libvpx
         libdav1d
+        tde2e
+        tdutils
         avutil
         ssl
         crypto
