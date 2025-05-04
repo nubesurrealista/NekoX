@@ -5,12 +5,14 @@ set -e
 # From upstream repo
 
 PREFIX="$(pwd)/dav1d/build"
+rm -rf "$PREFIX"
 mkdir -p "$PREFIX"
 echo "Building dav1d into $PREFIX"
 
 pushd dav1d
 
 meson setup builddir-arm64 \
+  --wipe \
   --prefix "$PREFIX/arm64-v8a" \
   --libdir="lib" \
   --includedir="include" \
@@ -30,6 +32,7 @@ ninja -C builddir-arm64
 ninja -C builddir-arm64 install
 
 meson setup builddir-armv7 \
+  --wipe \
   --prefix "$PREFIX/armeabi-v7a" \
   --libdir="lib" \
   --includedir="include" \
@@ -50,6 +53,7 @@ ninja -C builddir-armv7
 ninja -C builddir-armv7 install
 
 meson setup builddir-x86 \
+  --wipe \
   --prefix "$PREFIX/x86" \
   --libdir="lib" \
   --includedir="include" \
@@ -69,6 +73,7 @@ ninja -C builddir-x86
 ninja -C builddir-x86 install
 
 meson setup builddir-x86_64 \
+  --wipe \
   --prefix "$PREFIX/x86_64" \
   --libdir="lib" \
   --includedir="include" \
