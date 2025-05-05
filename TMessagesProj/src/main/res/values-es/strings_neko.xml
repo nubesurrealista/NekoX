@@ -314,4 +314,7 @@
     <string name="MarkdownCode">Código</string>
     <string name="TranscribeProviderDesc">Con la opción de selección automática, %s se utilizará cuando Telegram Premium no esté disponible.</string>
     <string name="CloudflareCredentialsObtainDesc">1. Abre el panel de control de Cloudfare e inicia sesión con tu cuenta\n\n2. Expande la opción de IA en el menú lateral y haz clic en Workers AI\n\n3. Haz clic en Usar API REST\n\n4. Anota tu ID de cuenta y luego crea un token de API en esa página.</string>
+    <string name="AllowTestingUpdate">Buscar builds de prueba al actualizar</string>
+    <string name="enhancedFileLoaderWarning">Esto puede afectar la velocidad de descarga, especialmente sin cuenta premium. ¿Proceder?</string>
+    <string name="AllowBotInDirectShare">Compartir con bots directamente</string>
 </resources>
