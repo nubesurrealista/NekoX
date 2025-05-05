@@ -251,4 +251,7 @@
     <string name="ReplyInPrivate">Reply in private</string>
     <string name="AutoRestartOnLeak">Auto restart when memory leaks too much</string>
     <string name="AutoRestartOnLeakInfo">Note. Only applies when there\'s no ongoing download/upload operations</string>
+    <string name="DeleteUnusedWhisperModel">Delete unused Whisper model</string>
+    <string name="WhisperModelInUse">Local Whisper model is in use, ignoring.</string>
+    <string name="WhisperModelRemoved">Local Whisper model was removed.</string>
 </resources>

@@ -14,12 +14,16 @@ import android.widget.LinearLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.whispertflite.utils.WhisperModelDownloader;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
@@ -80,6 +84,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final AbstractConfigCell transcribeProviderRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.TranscribeProvider),
             NekoConfig.transcribeProvider, NekoConfig.transcribeOptions, null));
     private final AbstractConfigCell cfCredentialsRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final AbstractConfigCell deleteUnusedModelRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractConfigCell unreadBadgeOnBackButton = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.unreadBadgeOnBackButton));
     private final AbstractConfigCell sendCommentAfterForwardRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.sendCommentAfterForward));
     private final AbstractConfigCell smallerEmojiInChooserRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.smallerEmojiInChooser));
@@ -308,6 +313,24 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                     builder.show();
                 } else if (position == cellGroup.rows.indexOf(cfCredentialsRow)) {
                     WhisperHelper.showCfCredentialsDialog(this);
+                } else if (position == cellGroup.rows.indexOf(deleteUnusedModelRow)) {
+                    boolean modelInUse = false;
+                    for (int acc : SharedConfig.activeAccounts) {
+                        if (WhisperHelper.useLocalModel(acc)) {
+                            modelInUse = true;
+                            break;
+                        }
+                    }
+                    if (modelInUse) {
+                        BulletinFactory.of(NekoChatSettingsActivity.this)
+                                .createSimpleBulletin(R.raw.error, LocaleController.getString(R.string.WhisperModelInUse))
+                                .show(true);
+                        return;
+                    }
+                    WhisperModelDownloader.deleteModels();
+                    BulletinFactory.of(NekoChatSettingsActivity.this)
+                            .createSimpleBulletin(R.raw.info, LocaleController.getString(R.string.WhisperModelRemoved))
+                            .show(true);
                 }
             }
         });
@@ -765,6 +788,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                             textCell.setTextAndValue(LocaleController.getString(R.string.maxRecentEmojiCount), String.valueOf(NekoConfig.maxRecentEmojiCount.Int()), true);
                         } else if (position == cellGroup.rows.indexOf(cfCredentialsRow)) {
                             textCell.setTextAndValue(LocaleController.getString(R.string.CloudflareCredentials), "", true);
+                        } else if (position == cellGroup.rows.indexOf(deleteUnusedModelRow)) {
+                            textCell.setTextAndValue(LocaleController.getString(R.string.DeleteUnusedWhisperModel), "", true);
                         }
                     }
                 } else {

@@ -38,18 +38,29 @@ public class WhisperModelDownloader {
     static boolean modelMultiLingualBaseFinished = false;
     static boolean modelMultiLingualSmallFinished = false;
 
-    public static boolean modelExists(final Activity activity) {
-        File modelMultiLingualBaseFile = new File(activity.getExternalFilesDir(null) + "/" + modelMultiLingualBase);
-        File modelMultiLingualSmallFile = new File(activity.getExternalFilesDir(null) + "/" + modelMultiLingualSmall);
+    static final File extDir = ApplicationLoader.applicationContext.getExternalFilesDir(null);
+
+    public static boolean modelExists() {
+        File modelMultiLingualBaseFile = new File(extDir + "/" + modelMultiLingualBase);
+        File modelMultiLingualSmallFile = new File(extDir + "/" + modelMultiLingualSmall);
         if (!modelMultiLingualBaseFile.exists() || !modelMultiLingualSmallFile.exists()) {
             return true;   //update available
         } else {
             return false;  //no update
         }
     }
+
+    public static void deleteModels() {
+        File modelMultiLingualBaseFile = new File(extDir + "/" + modelMultiLingualBase);
+        File modelMultiLingualSmallFile = new File(extDir + "/" + modelMultiLingualSmall);
+        if (modelMultiLingualBaseFile.exists()) {
+            modelMultiLingualBaseFile.delete();
+        }
+        if (modelMultiLingualSmallFile.exists()) {
+            modelMultiLingualSmallFile.delete();
+        }
+    }
     public static boolean checkModels() {
-        Context context = ApplicationLoader.applicationContext;
-        File extDir = context.getExternalFilesDir(null);
         copyAssetsToSdcard();
         File modelMultiLingualBaseFile = new File(extDir + "/" + modelMultiLingualBase);
         File modelMultiLingualSmallFile = new File(extDir + "/" + modelMultiLingualSmall);
