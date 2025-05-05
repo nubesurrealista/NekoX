@@ -219,4 +219,26 @@
     <string name="MuteBlockedFromGroup">忽略來自封鎖帳號的群組訊息通知</string>
     <string name="MuteBotsFromGroup">忽略來自封鎖機器人的群組訊息通知</string>
     <string name="MuteBotsFromGroupDesc">仍會收到已知的群組管理相關訊息</string>
+    <string name="ShowAddedToFoldersAtTitle">在聊天列表的對話名稱旁顯示資料夾圖示</string>
+    <string name="VideoBitrateToggled">已切換影片碼率, 重複點擊以再次切換</string>
+    <string name="PositionLeft">左</string>
+    <string name="PositionRight">右</string>
+    <string name="RecentChatFolderSize">最近開啟的聊天記錄數量限制</string>
+    <string name="MemLeak">記憶體洩漏</string>
+    <string name="MemLeakInfo">OMG! It\'s leaking! (目前記憶體用量: %1$.2f MB) 重新啟動本應用?\n\n註: 您可在一般設定內停用這個提示視窗.</string>
+    <string name="CheckMemLeak">在應用程式使用過多記憶體時詢問是否重新啟動本應用</string>
+    <string name="AlwaysLabelAnonAdmin">總是在聊天內顯示匿名管理員的名稱</string>
+    <string name="WhisperLocal">Whisper (本地)</string>
+    <string name="WhisperLocalProcessing">Whisper (本地) 正在處理訊息...</string>
+    <string name="DebugSendLogsExt">分享記錄檔至外部應用程式</string>
+    <string name="ShowQuickReconnect">重新連線時顯示快速重連按鈕</string>
+    <string name="BanForAllModeratingChats">確認要從所有您管理的聊天封鎖這個使用者?</string>
+    <string name="GenerateMonetTheme">產生 Monet 主題</string>
+    <string name="MonetLightMode">淺色模式</string>
+    <string name="MonetGradient">啟用漸層</string>
+    <string name="MonetAvatarGradient">為大頭貼啟用漸層</string>
+    <string name="MonetNickname">為暱稱啟用 Monet</string>
+    <string name="MonetAlterOut">替代的外送訊息樣式</string>
+    <string name="AlwaysDestroyPhotoViewer">總是銷毀圖片檢視器物件</string>
+    <string name="BannedForChats">已在 %2$d 個群組中將 %1$s 封鎖</string>
 </resources>
