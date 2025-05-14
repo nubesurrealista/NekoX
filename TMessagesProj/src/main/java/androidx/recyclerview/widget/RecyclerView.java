@@ -8904,7 +8904,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         public void removeAndRecycleViewAt(int index, @NonNull Recycler recycler) {
             final View view = getChildAt(index);
             ViewHolder holder = getChildViewHolderInt(view);
-            if (holder.shouldIgnore()) {
+            if (holder == null || holder.shouldIgnore()) {
                 return;
             }
             removeViewAt(index);
