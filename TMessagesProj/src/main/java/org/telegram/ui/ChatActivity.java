@@ -14098,7 +14098,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         return dialog != chatAttachAlert && dialog != chatThemeBottomSheet && !(dialog instanceof BotWebViewSheet) && super.dismissDialogOnPause(dialog);
     }
 
-    private boolean disableLinkPreview = NekoConfig.disableLinkPreviewByDefault.Bool();
+    public boolean disableLinkPreview = NekoConfig.disableLinkPreviewByDefault.Bool();
     int waitingForWebpageId;
     private void cancelSearchLinks() {
         if (linkSearchRequestId != 0) {
@@ -14316,6 +14316,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private HashMap<String, TLRPC.WebPage> lastLinkPreviewResults;
 
     private void requestLinkPreviewCached(TL_account.getWebPagePreview req, Utilities.Callback2<Boolean, TLRPC.WebPage> done) {
+        if (disableLinkPreview) return;
         if (lastLinkPreviewResults == null) {
             lastLinkPreviewResults = new HashMap<>();
         }
@@ -14339,6 +14340,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     private void requestLinkPreview(TL_account.getWebPagePreview req, Utilities.Callback2<Boolean, TLRPC.WebPage> done) {
         cancelSearchLinks();
+        if (disableLinkPreview) return;
         linkSearchRequestId = getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
             linkSearchRequestId = 0;
             TLRPC.TL_messageMediaWebPage media = null;

@@ -7161,7 +7161,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
     public void setWebPage(TLRPC.WebPage webPage, boolean searchWebPages) {
         messageWebPage = webPage;
-        messageWebPageSearch = searchWebPages;
+        messageWebPageSearch = searchWebPages && !parentFragment.disableLinkPreview;
     }
 
     public boolean isMessageWebPageSearchEnabled() {
