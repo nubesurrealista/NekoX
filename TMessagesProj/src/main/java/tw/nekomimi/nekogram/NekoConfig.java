@@ -1001,6 +1001,9 @@ public class NekoConfig {
         StringBuilder sb = new StringBuilder("\n\nNekoConfig:\n");
         for (Field f : NekoConfig.class.getDeclaredFields()) {
             if (f.getType() == ConfigItem.class && Modifier.isStatic(f.getModifiers())) {
+                if (f.getName().contains("Api"))
+                    continue;
+
                 try {
                     ConfigItem item = (ConfigItem) f.get(null);
                     if (item == null) {
