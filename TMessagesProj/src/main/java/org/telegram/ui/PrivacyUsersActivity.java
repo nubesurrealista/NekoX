@@ -79,6 +79,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     public static final int TYPE_FILTER = 2;
 
     private int unblock_all = 1;
+    private int unblock_da = 2;
 
     public interface PrivacyActivityDelegate {
         void didUpdateUserList(ArrayList<Long> ids, boolean added);
@@ -155,18 +156,18 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             public void onItemClick(int id) {
                 if (id == -1) {
                     finishFragment();
-                } else if (id == unblock_all) {
+                } else if (id == unblock_all || id == unblock_da) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                    builder.setTitle(LocaleController.getString(R.string.UnblockAll));
+                    builder.setTitle(LocaleController.getString((id == unblock_da) ? R.string.UnblockDeleted : R.string.UnblockAll));
                     if (getMessagesController().totalBlockedCount != 0) {
-                        builder.setMessage(LocaleController.getString(R.string.UnblockAllWarn));
-                        builder.setPositiveButton(LocaleController.getString(R.string.UnblockAll), (dialog, which) -> {
-                            new Thread(() -> getMessagesController().unblockAllUsers()).start();
+                        builder.setMessage(LocaleController.getString((id == unblock_da) ? R.string.UnblockDeletedWarn : R.string.UnblockAllWarn));
+                        builder.setPositiveButton(LocaleController.getString((id == unblock_da) ? R.string.UnblockDeleted : R.string.UnblockAll), (dialog, which) -> {
+                            new Thread(() -> getMessagesController().unblockAllUsers(id == unblock_da)).start();
                         });
                         builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
                     } else {
-                        builder.setMessage(LocaleController.getString("BlockedListEmpty",R.string.BlockedListEmpty));
-                        builder.setPositiveButton(LocaleController.getString("OK",R.string.OK),null);
+                        builder.setMessage(LocaleController.getString(R.string.BlockedListEmpty));
+                        builder.setPositiveButton(LocaleController.getString(R.string.OK),null);
                     }
                     showDialog(builder.create());
                 }
@@ -180,6 +181,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             ActionBarMenuItem otherItem = menu.addItem(0, R.drawable.ic_ab_other);
             otherItem.setContentDescription(LocaleController.getString(R.string.AccDescrMoreOptions));
             otherItem.addSubItem(unblock_all, LocaleController.getString(R.string.UnblockAll));
+            otherItem.addSubItem(unblock_da, LocaleController.getString(R.string.UnblockDeleted));
 
         }
 

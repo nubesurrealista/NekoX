@@ -8477,20 +8477,28 @@ public class MessagesController extends BaseController implements NotificationCe
         }));
     }
 
-    public void unblockAllUsers() {
+    int lastFetchedBlockedCount = 0;
+    public void unblockAllUsers(boolean deletedOnly) {
 
         if (totalBlockedCount == 0) return;
 
         if (blockedPeers.size() == 0) getBlockedPeers(true);
 
         LongSparseIntArray blockedCopy = blockedPeers.clone();
+        int blockedCount = blockedCopy.size();
 
-        if (blockedCopy.size() == 0) return;
+        if (blockedCount == 0 || blockedCount == lastFetchedBlockedCount) return;
+        lastFetchedBlockedCount = blockedCount;
 
         for (int index = 0; index < blockedCopy.size(); index++) {
+            long peer_id = blockedCopy.keyAt(index);
+            TLRPC.User u = getUser(peer_id);
+            if (deletedOnly && (u == null || !u.deleted)) {
+                Log.d("030-unblock", String.format("skipped, exists=%s deleted=%s", u != null, (u == null ? "N/A" : u.deleted)));
+                continue;
+            }
 
             TLRPC.TL_contacts_unblock req = new TLRPC.TL_contacts_unblock();
-            long peer_id = blockedCopy.keyAt(index);
             req.id = getInputPeer(peer_id);
             getConnectionsManager().sendRequest(req, (response, error) -> {
 
@@ -8505,7 +8513,7 @@ public class MessagesController extends BaseController implements NotificationCe
 
         }
 
-        unblockAllUsers();
+        unblockAllUsers(deletedOnly);
 
     }
 

@@ -86,7 +86,9 @@
     <string name="HideProxyByDefault">Hide proxy settings by default</string>
     <string name="SkipOpenLinkConfirm">Skip open link confirmation</string>
     <string name="UnblockAll">Unblock All</string>
+    <string name="UnblockDeleted">Unblock Deleted</string>
     <string name="UnblockAllWarn">Are you sure you want to unblock **all users and bots**?</string>
+    <string name="UnblockDeletedWarn">Are you sure you want to unblock **all deleted users/bots**?</string>
     <string name="BlockedListEmpty">You haven\'t blocked anyone :)</string>
     <string name="ImportProxyList">Import proxy servers</string>
     <string name="ExportStickers">Export Stickers</string>
