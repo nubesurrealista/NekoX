@@ -16778,16 +16778,26 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 StaticLayout staticLayout = new StaticLayout(adminString, Theme.chat_adminPaint, dp(300), Layout.Alignment.ALIGN_NORMAL, 0f, 0f, false);
                 adminWidth = (int) staticLayout.getLineWidth(0);
                 nameWidth -= adminWidth;
-            } else if (NekoConfig.labelChannelUser.Bool() && isMegagroup && currentChat != null && currentMessageObject.isSenderChannel()) {
+            } else if (isMegagroup && currentChat != null && currentMessageObject.isSenderChannel()) {
                 final String channelStr = LocaleController.getString(R.string.channelLabel);
+                boolean labelChannelUser = NekoConfig.labelChannelUser.Bool();
                 if (NekoConfig.channelAlias.Bool()) {
                     String aliasName = NekoXConfig.getChannelAlias(currentMessageObject.messageOwner.from_id.channel_id);
+                    SpannableStringBuilder maybeAdminString = new SpannableStringBuilder();
                     if (aliasName != null) {
-                        adminString = new SpannableStringBuilder(aliasName + " | " + channelStr);
-                    } else {
-                        adminString = new SpannableStringBuilder(channelStr);
+                        maybeAdminString.append(aliasName);
                     }
-                } else {
+
+                    if (labelChannelUser) {
+                        if (maybeAdminString.length() > 0)
+                            maybeAdminString.append(" | ");
+
+                        maybeAdminString.append(channelStr);
+                    }
+
+                    if (maybeAdminString.length() > 0)
+                        adminString = maybeAdminString;
+                } else if (labelChannelUser) {
                     adminString = new SpannableStringBuilder(channelStr);
                 }
                 adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString.toString()));
