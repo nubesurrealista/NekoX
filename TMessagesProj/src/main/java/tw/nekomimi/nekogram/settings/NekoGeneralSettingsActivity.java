@@ -253,6 +253,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell overridePerformanceClassRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.OverridePerformanceClass),
             NekoConfig.perfClassOverride, NekoConfig.perfClassOverrideOptions, null));
     private final AbstractConfigCell checkMemLeakRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.checkMemLeak));
+    private final AbstractConfigCell memLeakThresholdRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractConfigCell useOldNameRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useOldName, LocaleController.getString(R.string.UseOldAppNameDesc)));
 
     private final AbstractConfigCell customApiIdRow = cellGroup.appendCell(new ConfigCellTextDetail(NekoConfig.customApiId, (view, position) -> {
@@ -435,6 +436,18 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     PopupBuilder builder = new PopupBuilder(view);
                     builder.setItems(types, (i, str) -> {
                         NekoConfig.recentChatFolderSize.setConfigInt(Integer.parseInt(str.toString()));
+                        listAdapter.notifyItemChanged(position);
+                        return Unit.INSTANCE;
+                    });
+                    builder.show();
+                } else if (position == cellGroup.rows.indexOf(memLeakThresholdRow)) {
+                    final Float[] values = {1.2F, 1.5F, 1.8F, 2F};
+                    List<String> options = Arrays.stream(values)
+                            .map(String::valueOf)
+                            .collect(Collectors.toList());
+                    PopupBuilder builder = new PopupBuilder(view);
+                    builder.setItems(options, (i, __) -> {
+                        NekoConfig.memLeakThreshold.setConfigInt(EvilLeakerKiller.setThreshold(values[i]));
                         listAdapter.notifyItemChanged(position);
                         return Unit.INSTANCE;
                     });
@@ -872,6 +885,9 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                         } else if (position == cellGroup.rows.indexOf(recentChatFolderSizeRow)) {
                             textCell.setTextAndValue(LocaleController.getString(R.string.RecentChatFolderSize),
                                     NekoXConfig.formatLang(NekoConfig.recentChatFolderSize.String()), true);
+                        } else if (position == cellGroup.rows.indexOf(memLeakThresholdRow)) {
+                            textCell.setTextAndValue(LocaleController.getString(R.string.MemLeakThreshold),
+                                    String.format(Locale.US, "%.1fGB", ((float) NekoConfig.memLeakThreshold.Int() / 1024576)), true);
                         }
                     } else if (holder.itemView instanceof TextCheckCell) {
                         TextCheckCell checkCell = (TextCheckCell) holder.itemView;

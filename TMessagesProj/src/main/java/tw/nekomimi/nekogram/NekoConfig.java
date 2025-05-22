@@ -46,6 +46,7 @@ import java.util.regex.Pattern;
 import cn.hutool.core.util.StrUtil;
 import kotlin.text.Regex;
 import tw.nekomimi.nekogram.config.ConfigItem;
+import tw.nekomimi.nekogram.helpers.EvilLeakerKiller;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
 
@@ -359,6 +360,7 @@ public class NekoConfig {
     public static ConfigItem nextCheckCustomStatusTime = addConfig("nextCheckCustomStatusTime", configTypeLong, 0L);
     public static ConfigItem checkMemLeak = addConfig(R.string.CheckMemLeak , "CheckMemLeak", configTypeBool, GENERAL, true);
     public static ConfigItem autoRestartOnLeak = addConfig(R.string.AutoRestartOnLeak , "AutoRestartOnLeak", configTypeBool, EXPERIMENTAL, false);
+    public static ConfigItem memLeakThreshold = addConfig(R.string.MemLeakThreshold , "MemLeakThreshold", configTypeInt, EXPERIMENTAL, EvilLeakerKiller.setThreshold(1.2F));
 
     static {
         loadConfig(false);
@@ -947,6 +949,7 @@ public class NekoConfig {
             applySearchBlacklist();
             applyPerformanceClassOverride(null);
             loadCustomAllChatsText();
+            EvilLeakerKiller.threshold = memLeakThreshold.Int();
 
             if (!NekoConfig.enableUnifiedPush.Bool() || UnifiedPush.getSavedDistributor(ApplicationLoader.applicationContext) != null)
                 return;

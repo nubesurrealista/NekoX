@@ -42,4 +42,8 @@ public class EvilLeakerKiller {
         return PSS;
     }
 
+    public static int setThreshold(float GB) {
+        return threshold = (int) (GB * 1024576);
+    }
+
 }

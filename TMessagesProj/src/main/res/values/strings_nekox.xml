@@ -255,4 +255,5 @@
     <string name="DeleteUnusedWhisperModel">Delete unused Whisper model</string>
     <string name="WhisperModelInUse">Local Whisper model is in use, ignoring.</string>
     <string name="WhisperModelRemoved">Local Whisper model was removed.</string>
+    <string name="MemLeakThreshold">RAM usage threshold</string>
 </resources>
