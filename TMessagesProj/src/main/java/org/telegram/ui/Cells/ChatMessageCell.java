@@ -16800,8 +16800,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 } else if (labelChannelUser) {
                     adminString = new SpannableStringBuilder(channelStr);
                 }
-                adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString.toString()));
-                nameWidth -= adminWidth;
+                if (adminString != null) {
+                    adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString.toString()));
+                    nameWidth -= adminWidth;
+                }
             } else {
                 adminString = null;
                 adminWidth = 0;
