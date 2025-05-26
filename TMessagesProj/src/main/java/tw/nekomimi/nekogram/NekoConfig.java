@@ -1020,4 +1020,27 @@ public class NekoConfig {
         return sb.toString();
     }
 
+    public static int resetModConfig() {
+        int err = 0;
+        for (Field f : NekoConfig.class.getDeclaredFields()) {
+            if (f.getType() == ConfigItem.class && Modifier.isStatic(f.getModifiers())) {
+                if (f.getName().contains("Api"))
+                    continue;
+
+                try {
+                    ConfigItem item = (ConfigItem) f.get(null);
+                    if (item == null) {
+                        ++err;
+                    } else {
+                        item.reset();
+                    }
+                } catch (IllegalAccessException e) {
+                    Log.e("030-neko", String.format("(failed to get %s, %s: %s | %s)\n",
+                            f.getName(), e.getClass().getName(), e.getMessage(), e.getCause()), e);
+                }
+            }
+        }
+        return err;
+    }
+
 }

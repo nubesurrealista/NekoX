@@ -169,6 +169,11 @@ public class ConfigItem {
         return this;
     }
 
+    public void reset() {
+        value = defaultValue;
+        saveConfig();
+    }
+
     // save one item
     public void saveConfig() {
         synchronized (NekoConfig.sync) {

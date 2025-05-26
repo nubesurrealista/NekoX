@@ -258,4 +258,6 @@
     <string name="WhisperModelInUse">Local Whisper model is in use, ignoring.</string>
     <string name="WhisperModelRemoved">Local Whisper model was removed.</string>
     <string name="MemLeakThreshold">RAM usage threshold</string>
+    <string name="ResetSettings">Reset settings</string>
+    <string name="ResetSettingsDesc">Reset settings (except for API keys and custom alias)?\nYou won\'t be able to undo this action unless you have backup the settings first!</string>
 </resources>

@@ -103,6 +103,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
     private static final int backup_settings = 1;
     private static final int import_settings = 2;
+    private static final int reset_settings = 3;
 
     @SuppressLint("NewApi")
     @Override
@@ -114,6 +115,7 @@ public class NekoSettingsActivity extends BaseFragment {
         ActionBarMenuItem otherMenu = menu.addItem(0, R.drawable.ic_ab_other);
         otherMenu.addSubItem(backup_settings, LocaleController.getString(R.string.BackupSettings));
         otherMenu.addSubItem(import_settings, LocaleController.getString(R.string.ImportSettings));
+        otherMenu.addSubItem(reset_settings, LocaleController.getString(R.string.ResetSettings));
 
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
@@ -152,6 +154,16 @@ public class NekoSettingsActivity extends BaseFragment {
                         }
                     });
                     presentFragment(fragment);
+                } else if (id == reset_settings) {
+                    new AlertDialog.Builder(context)
+                            .setTitle(LocaleController.getString(R.string.ResetSettings))
+                            .setMessage(LocaleController.getString(R.string.ResetSettingsDesc))
+                            .setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) -> {
+                                NekoConfig.resetModConfig();
+                                promptRestartApp(context);
+                            })
+                            .setNegativeButton(LocaleController.getString(R.string.Cancel), null)
+                            .show();
                 }
             }
         });
@@ -317,18 +329,21 @@ public class NekoSettingsActivity extends BaseFragment {
         try {
             JsonObject configJson = GsonUtil.toJsonObject(FileUtil.readUtf8String(settingsFile));
             importSettings(configJson);
-
-            AlertDialog restart = new AlertDialog(context, 0);
-            restart.setTitle(StrUtil.getAppName());
-            restart.setMessage(LocaleController.getString(R.string.RestartAppToTakeEffect));
-            restart.setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) -> {
-                ProcessPhoenix.triggerRebirth(context, new Intent(context, LaunchActivity.class));
-            });
-            restart.show();
+            promptRestartApp(context);
         } catch (Exception e) {
             AlertUtil.showSimpleAlert(context, e);
         }
 
+    }
+
+    private static void promptRestartApp(Context context) {
+        AlertDialog restart = new AlertDialog(context, 0);
+        restart.setTitle(StrUtil.getAppName());
+        restart.setMessage(LocaleController.getString(R.string.RestartAppToTakeEffect));
+        restart.setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) -> {
+            ProcessPhoenix.triggerRebirth(context, new Intent(context, LaunchActivity.class));
+        });
+        restart.show();
     }
 
     @SuppressLint("ApplySharedPref")
