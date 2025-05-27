@@ -38,6 +38,8 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.TypedValue;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
@@ -140,6 +142,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private TextView joinButton;
     private int joinButtonWidth;
     private CellFlickerDrawable joinButtonFlicker;
+    private GestureDetector gestureDetector;
+    private boolean skipSetBackground = false;
 
     private boolean isMuted;
 
@@ -271,8 +275,42 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             ((ViewGroup) fragment.getFragmentView()).setClipToPadding(false);
         }
 
+        gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+            private static final int SWIPE_THRESHOLD = 50;
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                if (!isMusic) return false;
+
+                AndroidUtilities.runOnUIThread(() -> notifyButtonBounce.setPressed(false), 100);
+                float diffX = e2.getX() - e1.getX();
+                float diffY = e2.getY() - e1.getY();
+                if (Math.abs(diffX) > Math.abs(diffY)
+                        && Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_THRESHOLD
+                ) {
+                    skipSetBackground = true;
+                    if (diffX > 0) {
+                        MediaController.getInstance().playNextMessage();
+                    } else {
+                        MediaController.getInstance().playPreviousMessage();
+                    }
+                    selector.setBackground(null);
+                    AndroidUtilities.runOnUIThread(() -> skipSetBackground = false, 1000);
+                    return true;
+                }
+                return false;
+            }
+        });
+        gestureDetector.setIsLongpressEnabled(false);
         setTag(1);
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent e) {
+        selector.setBackground(Theme.getSelectorDrawable(false));
+        getParent().requestDisallowInterceptTouchEvent(true);
+        return gestureDetector.onTouchEvent(e) || super.onTouchEvent(e);
+    };
 
     public void setSupportsCalls(boolean value) {
         supportsCalls = value;
@@ -1147,7 +1185,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
             titleTextView.setLayoutParams(LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 36, Gravity.LEFT | Gravity.TOP, 35, 0, 36, 0));
         } else if (style == STYLE_AUDIO_PLAYER || style == STYLE_LIVE_LOCATION) {
-            selector.setBackground(Theme.getSelectorDrawable(false));
+            if (!skipSetBackground) {
+                selector.setBackground(Theme.getSelectorDrawable(false));
+            }
             frameLayout.setBackgroundColor(getThemedColor(Theme.key_inappPlayerBackground));
             frameLayout.setTag(Theme.key_inappPlayerBackground);
 
