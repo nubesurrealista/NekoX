@@ -109,8 +109,8 @@
     <string name="customGroupVoipAudioBitrate">Csoportos VoIP hang bitráta</string>
     <string name="disableChoosingSticker">\"Gépel\" státusz megjelenítése \"Matricaválasztás\" helyett</string>
     <string name="SaveToDownloadCount_few">%1$d fájl mentése a letöltésekbe</string>
-    <string name="customSavePath">Egyéni tárhely útvonal</string>
-    <string name="showBottomActionsWhenSelecting">Alsó lehetőségek mutatása kijelöléskor</string>
+    <string name="customSavePath">Egyedi tárhely útvonal</string>
+    <string name="showBottomActionsWhenSelecting">Alsó műveletek megjelenítése kijelöléskor</string>
     <string name="disablePremiumStickerAnimation">Prémium matrica animáció letiltása</string>
     <string name="ProviderDeepLTranslate">DeepL Fordító</string>
     <string name="pressTitleToOpenAllChats">Koppintson a címre az \"Összes Csevegés\" lap megnyitásához</string>
