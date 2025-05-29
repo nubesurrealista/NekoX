@@ -19316,6 +19316,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         updateSelectedMessageReactions();
         updateNekoXActionModeTitle();
+        if (shouldHideBottomOverlay() && (!NekoConfig.showBottomActionsWhenSelecting.Bool() || getSelectedMessages1().isEmpty()))
+            bottomMessagesActionContainer.setVisibility(View.INVISIBLE);
     }
 
     private void updateSelectedMessageReactions() {
@@ -43982,18 +43984,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private boolean isBottomOverlaysInvisible() {
         return bottomOverlayChat.getVisibility() == View.INVISIBLE
                 && chatActivityEnterView.getVisibility() == View.INVISIBLE
-                && (bottomMessagesActionContainer == null || bottomMessagesActionContainer.getVisibility() == View.INVISIBLE)
+                && (bottomMessagesActionContainer == null || bottomMessagesActionContainer.getVisibility() == View.INVISIBLE || shouldHideBottomOverlay())
                 && (searchContainer == null || searchContainer.getVisibility() == View.INVISIBLE)
                 && !isInPreviewMode()
-                && !isInBubbleMode()
-                && (NekoConfig.hideChannelBottomMuteUnmute.Bool() || hideJoin);
+                && !isInBubbleMode();
     }
 
     private boolean shouldHideBottomOverlay() {
         CharSequence text = bottomOverlayChatText.getText();
-        return (LocaleController.getString(R.string.ChannelMute).equals(text)
-                || LocaleController.getString(R.string.ChannelUnmute).equals(text))
-                && NekoConfig.hideChannelBottomMuteUnmute.Bool() || hideJoin;
+        return ((text != null) && NekoConfig.hideChannelBottomMuteUnmute.Bool() &&
+                (LocaleController.getString(R.string.ChannelMute).contentEquals(text)
+                || LocaleController.getString(R.string.ChannelUnmute).contentEquals(text)))
+                || hideJoin;
     }
 
     private void updatePaddings() {
