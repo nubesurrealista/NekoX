@@ -5,6 +5,7 @@
 #include "c_utils.h"
 #include "libavutil/opt.h"
 #include "libswscale/swscale.h"
+#include <libavcodec/avcodec.h>
 
 typedef struct {
     AVCodecContext *codec_ctx;

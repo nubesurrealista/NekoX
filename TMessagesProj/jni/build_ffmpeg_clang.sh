@@ -81,7 +81,6 @@ function build_one {
 	--enable-encoder=libvpx_vp9 \
 	--enable-runtime-cpudetect \
 	--enable-pthreads \
-	--enable-avresample \
 	--enable-swscale \
 	--enable-protocol=file \
 	--enable-decoder=opus \
@@ -150,6 +149,9 @@ function checkPreRequisites {
 setCurrentPlatform
 checkPreRequisites
 
+# fix build
+patch -f -d ffmpeg -p1 < patches/ffmpeg/0001-no-getauxval.patch || true
+
 # TODO: fix env variable for NDK
 # NDK=/opt/android-sdk/ndk-bundle
 
@@ -176,7 +178,7 @@ function build {
 				PREFIX=./build/$CPU
 				LIB_DIR=lib64
 				LIBVPXPREFIX=../libvpx/build/x86_64
-				ADDITIONAL_CONFIGURE_FLAG="--disable-asm"
+				ADDITIONAL_CONFIGURE_FLAG="--disable-x86asm --disable-asm"
 				build_one
 			;;
 			arm64)
@@ -193,7 +195,7 @@ function build {
 				PREFIX=./build/$CPU
 				LIB_DIR=lib
 				LIBVPXPREFIX=../libvpx/build/arm64-v8a
-				ADDITIONAL_CONFIGURE_FLAG="--enable-neon --enable-optimizations"
+				ADDITIONAL_CONFIGURE_FLAG="--disable-x86asm --enable-neon --enable-optimizations"
 				build_one
 			;;
 			arm)
@@ -210,7 +212,7 @@ function build {
 				PREFIX=./build/armeabi-v7a
 				LIB_DIR=lib
 				LIBVPXPREFIX=../libvpx/build/armeabi-v7a
-				ADDITIONAL_CONFIGURE_FLAG="--enable-neon"
+				ADDITIONAL_CONFIGURE_FLAG="--disable-x86asm --enable-neon"
 				build_one
 			;;
 			x86)

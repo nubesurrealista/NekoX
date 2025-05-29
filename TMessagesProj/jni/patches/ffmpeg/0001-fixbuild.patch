@@ -1,0 +1,102 @@
+From d597c29b1fa6f6e655978096f7d9d9439c8dc264 Mon Sep 17 00:00:00 2001
+From: dic1911 <9561880+dic1911@users.noreply.github.com>
+Date: Tue, 27 May 2025 17:57:42 +0800
+Subject: [PATCH] fixbuild
+
+---
+ libavcodec/get_bits.h | 16 ++++++++--------
+ libavcodec/golomb.h   |  2 +-
+ libavformat/isom.h    |  2 +-
+ 3 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/libavcodec/get_bits.h b/libavcodec/get_bits.h
+index fe2f6378b4..477bd11746 100644
+--- a/libavcodec/get_bits.h
++++ b/libavcodec/get_bits.h
+@@ -291,8 +291,8 @@ static inline void skip_bits_long(GetBitContext *s, int n)
+  */
+ static inline int get_xbits(GetBitContext *s, int n)
+ {
+-    register int sign;
+-    register int32_t cache;
++    int sign;
++    int32_t cache;
+     OPEN_READER(re, s);
+     av_assert2(n>0 && n<=25);
+     UPDATE_CACHE(re, s);
+@@ -305,8 +305,8 @@ static inline int get_xbits(GetBitContext *s, int n)
+ 
+ static inline int get_xbits_le(GetBitContext *s, int n)
+ {
+-    register int sign;
+-    register int32_t cache;
++    int sign;
++    int32_t cache;
+     OPEN_READER(re, s);
+     av_assert2(n>0 && n<=25);
+     UPDATE_CACHE_LE(re, s);
+@@ -319,7 +319,7 @@ static inline int get_xbits_le(GetBitContext *s, int n)
+ 
+ static inline int get_sbits(GetBitContext *s, int n)
+ {
+-    register int tmp;
++    int tmp;
+     OPEN_READER(re, s);
+     av_assert2(n>0 && n<=25);
+     UPDATE_CACHE(re, s);
+@@ -334,7 +334,7 @@ static inline int get_sbits(GetBitContext *s, int n)
+  */
+ static inline unsigned int get_bits(GetBitContext *s, int n)
+ {
+-    register unsigned int tmp;
++    unsigned int tmp;
+     OPEN_READER(re, s);
+     av_assert2(n>0 && n<=25);
+     UPDATE_CACHE(re, s);
+@@ -355,7 +355,7 @@ static av_always_inline int get_bitsz(GetBitContext *s, int n)
+ 
+ static inline unsigned int get_bits_le(GetBitContext *s, int n)
+ {
+-    register int tmp;
++    int tmp;
+     OPEN_READER(re, s);
+     av_assert2(n>0 && n<=25);
+     UPDATE_CACHE_LE(re, s);
+@@ -370,7 +370,7 @@ static inline unsigned int get_bits_le(GetBitContext *s, int n)
+  */
+ static inline unsigned int show_bits(GetBitContext *s, int n)
+ {
+-    register unsigned int tmp;
++    unsigned int tmp;
+     OPEN_READER_NOSIZE(re, s);
+     av_assert2(n>0 && n<=25);
+     UPDATE_CACHE(re, s);
+diff --git a/libavcodec/golomb.h b/libavcodec/golomb.h
+index 742334978d..cc23abb2cb 100644
+--- a/libavcodec/golomb.h
++++ b/libavcodec/golomb.h
+@@ -511,7 +511,7 @@ static inline int get_ur_golomb_jpegls(GetBitContext *gb, int k, int limit,
+                 buf = 0;
+             }
+ 
+-            buf += ((SUINT)i << k);
++            buf += ((unsigned)i << k);
+         } else if (i == limit - 1) {
+             buf = SHOW_UBITS(re, gb, esc_len);
+             LAST_SKIP_BITS(re, gb, esc_len);
+diff --git a/libavformat/isom.h b/libavformat/isom.h
+index ffabc01a2d..2490f83eec 100644
+--- a/libavformat/isom.h
++++ b/libavformat/isom.h
+@@ -295,7 +295,7 @@ typedef struct HEIFGrid {
+ } HEIFGrid;
+ 
+ typedef struct MOVContext {
+-    const AVClass *class; ///< class for private options
++    const AVClass *clazz; ///< class for private options
+     AVFormatContext *fc;
+     int time_scale;
+     int64_t duration;     ///< duration of the longest track
+-- 
+2.47.0.windows.2
+

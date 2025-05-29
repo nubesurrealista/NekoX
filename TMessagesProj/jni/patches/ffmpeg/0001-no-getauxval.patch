@@ -1,0 +1,29 @@
+From 4f42058d49a9506f5167f200f5d5154d22ae6527 Mon Sep 17 00:00:00 2001
+From: dic1911 <9561880+dic1911@users.noreply.github.com>
+Date: Wed, 28 May 2025 10:23:39 +0800
+Subject: [PATCH] no getauxval
+
+---
+ libavutil/cpu.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/libavutil/cpu.c b/libavutil/cpu.c
+index 44cbb9e9ff..0795226406 100644
+--- a/libavutil/cpu.c
++++ b/libavutil/cpu.c
+@@ -292,9 +292,9 @@ size_t av_cpu_max_align(void)
+ 
+ unsigned long ff_getauxval(unsigned long type)
+ {
+-#if HAVE_GETAUXVAL
+-    return getauxval(type);
+-#elif HAVE_ELF_AUX_INFO
++// #if HAVE_GETAUXVAL
++//     return getauxval(type);
++#if HAVE_ELF_AUX_INFO
+     unsigned long aux = 0;
+     int ret = elf_aux_info(type, &aux, sizeof(aux));
+     if (ret != 0) {
+-- 
+2.47.0.windows.2
+
