@@ -4026,7 +4026,7 @@ public class NotificationsController extends BaseController {
                     isAdminPing = foundMention;
                 }
                 if (!isAdminPing && (isBot || messagesController.getUser(id).bot)) {
-                    delayedPushMessages.remove(i);
+                    delayedPushMessages.remove(m);
                     --i;
                     if (!isBot) BOTS.add(id);
                 }
