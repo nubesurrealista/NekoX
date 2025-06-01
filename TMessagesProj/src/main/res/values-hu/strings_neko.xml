@@ -109,8 +109,8 @@
     <string name="customGroupVoipAudioBitrate">Csoportos VoIP hang bitráta</string>
     <string name="disableChoosingSticker">\"Gépel\" státusz megjelenítése \"Matricaválasztás\" helyett</string>
     <string name="SaveToDownloadCount_few">%1$d fájl mentése a letöltésekbe</string>
-    <string name="customSavePath">Egyéni tárhely útvonal</string>
-    <string name="showBottomActionsWhenSelecting">Alsó lehetőségek mutatása kijelöléskor</string>
+    <string name="customSavePath">Egyedi tárhely útvonal</string>
+    <string name="showBottomActionsWhenSelecting">Alsó műveletek megjelenítése kijelöléskor</string>
     <string name="disablePremiumStickerAnimation">Prémium matrica animáció letiltása</string>
     <string name="ProviderDeepLTranslate">DeepL Fordító</string>
     <string name="pressTitleToOpenAllChats">Koppintson a címre az \"Összes Csevegés\" lap megnyitásához</string>
@@ -133,7 +133,7 @@
     <string name="NekoGeneralNotification">Értesítés</string>
     <string name="reactions">Reakciók a menüben</string>
     <string name="doubleTapSendReactions">Reakció küldése dupla koppintással (Alapértelmezett)</string>
-    <string name="forceBlurInChat">Beszelgetés-elmosás kényszerített engedélyezése</string>
+    <string name="forceBlurInChat">Csevegés elmosódás kényszerítése</string>
     <string name="DontSendGreetingSticker">Ne küldjön üdvözlő matricát</string>
     <string name="disableSwipeToNextChannel">Húzással való csatornaléptetés letiltása</string>
     <string name="doubleTapShowReactions">Reakciók csak dupla koppintásra</string>
@@ -143,7 +143,7 @@
     <string name="mapDriftingFixForGoogleMaps">Google Térkép csúszás kijavítása Kínában</string>
     <string name="DeleteAllFromSelfDone">Minden üzenete törlésre került</string>
     <string name="TakeGIFasVideo">Kezelje a GIF-et videóként</string>
-    <string name="ChatBlurAlphaValue">Csevegés Elmosás Alphája</string>
+    <string name="ChatBlurAlphaValue">Csevegés Elmosódás Alphája</string>
     <string name="ProviderTelegramAPI">Telegram API</string>
     <string name="DisableStories">Sztorik kikapcsolása</string>
     <string name="useTelegramTranslateInChat">A Telegram Fordító UI használata a csevegésben</string>
@@ -152,5 +152,5 @@
     <string name="DeleteAllFromSelfBefore">Előtte...</string>
     <string name="MomoSettings">Momo Beállítások</string>
     <string name="DeleteAllFromSelfAlertBefore">Figyelem! Ez **törölni fogja a(z) %s előtti összes üzenetét** a csevegésben **minden** résztvevő számára.</string>
-    <string name="customSavePathHint">Üresen hagy, hogy közvetlenül lementse</string>
+    <string name="customSavePathHint">Hagyja üresen a közvetlen mentéshez</string>
 </resources>
