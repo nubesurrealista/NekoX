@@ -7694,6 +7694,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             }
             return alertShown;
         } else {
+            parentFragment.ignoreKeepPosition = true;
             send.run();
             return false;
         }

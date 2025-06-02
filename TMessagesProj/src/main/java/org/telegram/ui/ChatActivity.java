@@ -379,6 +379,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int nkheaderbtn_bot_app = 3002;
     private final static int nkheaderbtn_pinned_msgs = 3003;
 
+    public boolean ignoreKeepPosition = false;
+
     public int shareAlertDebugMode = DEBUG_SHARE_ALERT_MODE_NORMAL;
     public boolean shareAlertDebugTopicsSlowMotion;
 
@@ -25306,7 +25308,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     diff = 0;
                 }
                 if (!isAd) {
-                    if (lastVisible == 0 && diff <= AndroidUtilities.dp(5) || hasFromMe) {
+                    boolean shouldKeepPosition = !ignoreKeepPosition && NekoConfig.keepSamePositionOnNewMsg.Bool();
+                    if (lastVisible == 0 && diff <= AndroidUtilities.dp(5) || (hasFromMe && !shouldKeepPosition)) {
                         newUnreadMessageCount = 0;
                         if (!firstLoading && chatMode != MODE_SCHEDULED) {
                             if (paused) {
@@ -25326,6 +25329,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         canShowPagedownButton = true;
                         updatePagedownButtonVisibility(true);
                     }
+                    ignoreKeepPosition = false;
                 } else {
                     MessageObject scrollToMessage = null;
                     if (child instanceof ChatMessageCell) {
