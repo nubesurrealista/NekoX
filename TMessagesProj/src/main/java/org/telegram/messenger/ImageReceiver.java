@@ -2681,6 +2681,12 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         }
     }
 
+    private int rotation = 0;
+    public void setRotation(Integer r) {
+        if (r == null) return;
+        rotation = r;
+    }
+
     public void setUseSharedAnimationQueue(boolean value) {
         useSharedAnimationQueue = value;
     }
@@ -2696,6 +2702,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         AnimatedFileDrawable animation = getAnimation();
         if (animation != null) {
             animation.setUseSharedQueue(useSharedAnimationQueue);
+            animation.setRotation(rotation);
             animation.start();
         } else {
             RLottieDrawable rLottieDrawable = getLottieAnimation();
@@ -2951,6 +2958,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 fileDrawable.addParent(this);
             }
             if (allowStartAnimation && currentOpenedLayerFlags == 0) {
+                fileDrawable.setRotation(rotation);
                 fileDrawable.checkRepeat();
             }
             fileDrawable.setAllowDecodeSingleFrame(allowDecodeSingleFrame);
@@ -3137,6 +3145,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 }
                 AnimatedFileDrawable animatedFileDrawable = getAnimation();
                 if (allowStartAnimation && animatedFileDrawable != null) {
+                    animatedFileDrawable.setRotation(rotation);
                     animatedFileDrawable.checkRepeat();
                     invalidate();
                 }

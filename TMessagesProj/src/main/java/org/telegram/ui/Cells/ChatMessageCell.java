@@ -51,6 +51,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.text.LineBreaker;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -67,6 +68,7 @@ import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.util.Pair;
 import android.util.Property;
 import android.util.SparseArray;
@@ -98,7 +100,6 @@ import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatMessageSharedResources;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
@@ -218,6 +219,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 import tw.nekomimi.nekogram.NekoConfig;
@@ -239,6 +241,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
     public ExpiredStoryView expiredStoryView;
     private boolean skipFrameUpdate;
+    public boolean rotated = false;
 
     public ChannelRecommendationsCell channelRecommendationsCell;
 
@@ -450,6 +453,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
     public void setVisibleOnScreen(boolean visibleOnScreen, float clipTop, float clipBottom) {
         if (this.visibleOnScreen != visibleOnScreen) {
+            rotated = false;
             this.visibleOnScreen = visibleOnScreen;
             checkImageReceiversAttachState();
             if (visibleOnScreen) {
@@ -7450,6 +7454,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                                     (currentMessageObject.mediaExists || currentMessageObject.attachPathExists) ||
                                     messageObject.canStreamVideo() && DownloadController.getInstance(currentAccount).canDownloadMedia(currentMessageObject)
                                 )) {
+                                    photoImage.setRotation(getVideoRotation());
                                     photoImage.setAllowDecodeSingleFrame(true);
                                     photoImage.setAllowStartAnimation(true);
                                     photoImage.startAnimation();
@@ -9504,6 +9509,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             
                         }
                     } else if (autoPlayingMedia) {
+                        photoImage.setRotation(getVideoRotation());
                         photoImage.setAllowStartAnimation(true);
                         photoImage.startAnimation();
                         TLRPC.Document document = messageObject.getDocument();
@@ -10342,6 +10348,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     private boolean needHide;
+    private static final MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+    private Integer videoRotation = null;
 
     public void checkVideoPlayback(boolean allowStart, Bitmap thumb) {
         if (currentMessageObject.isVideo()) {
@@ -10349,6 +10357,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 photoImage.setAllowStartAnimation(false);
                 photoImage.stopAnimation();
             } else {
+                photoImage.setRotation(getVideoRotation());
                 photoImage.setAllowStartAnimation(true);
                 photoImage.startAnimation();
             }
@@ -10369,6 +10378,25 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
 
         }
+    }
+
+    public Integer getVideoRotation() {
+        if (videoRotation != null) return videoRotation;
+
+        ConcurrentHashMap<Integer, Integer> cache = MediaController.cachedRotations
+                .computeIfAbsent(currentMessageObject.getFromChatId(),
+                                __ -> new ConcurrentHashMap<>());
+        Integer cached = cache.get(currentMessageObject.getId());
+        if (cached != null) return cached;
+        try {
+            retriever.setDataSource(FileLoader.getInstance(currentAccount).getPathToMessage(currentMessageObject.messageOwner).getPath());
+            videoRotation = Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION));
+            cache.put(currentMessageObject.getId(), videoRotation);
+            Log.d("030-r", String.format("value=%d", videoRotation));
+        } catch (Exception e) {
+            Log.e("030-r", "", e);
+        }
+        return videoRotation;
     }
 
     private boolean hadLongPress = false;
@@ -16072,6 +16100,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     }
                     if (!PhotoViewer.isPlayingMessage(currentMessageObject)) {
                         photoImage.setAllowStartAnimation(true);
+                        photoImage.setRotation(getVideoRotation());
                         photoImage.startAnimation();
                     } else {
                         photoImage.setAllowStartAnimation(false);

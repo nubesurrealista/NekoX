@@ -831,6 +831,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     private static final int AUDIO_NO_FOCUS_CAN_DUCK = 1;
     private static final int AUDIO_FOCUSED = 2;
     private static final ConcurrentHashMap<String, Integer> cachedEncoderBitrates = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<Long, ConcurrentHashMap<Integer, Integer>> cachedRotations = new ConcurrentHashMap<>();
 
     private ArrayList<VideoConvertMessage> foregroundConvertingMessages = new ArrayList<>();
     private VideoConvertMessage currentForegroundConvertingVideo;

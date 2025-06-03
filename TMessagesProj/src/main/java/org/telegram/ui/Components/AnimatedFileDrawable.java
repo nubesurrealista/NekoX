@@ -22,6 +22,7 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaMetadataRetriever;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
@@ -42,6 +43,7 @@ import org.telegram.tgnet.TLRPC;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -55,6 +57,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     // clipPath not use antialias
     private final boolean USE_BITMAP_SHADER = Build.VERSION.SDK_INT < 29;
     private boolean PRERENDER_FRAME = true;
+    private static final MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
 
     public static native long createDecoder(String src, int[] params, int account, long streamFileSize, Object readCallback, boolean preview);
 
@@ -371,7 +374,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
 
     private int decoderTryCount = 0;
     private final int MAX_TRIES = 15;
-    private Runnable loadFrameRunnable = new Runnable() {
+    private final Runnable loadFrameRunnable = new Runnable() {
         @Override
         public void run() {
             if (!isRecycled) {
@@ -539,6 +542,13 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
         if (seekTo != 0) {
             seekTo(seekTo, false);
         }
+
+        try {
+            metadataRetriever.setDataSource(file.getAbsolutePath());
+            metaData[2] = Integer.parseInt(metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION));
+        } catch (Exception e) {
+            FileLog.e("error reading rotation from metadata", e);
+        }
     }
 
     public void setIsWebmSticker(boolean b) {
@@ -657,6 +667,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
         synchronized (sync) {
             pendingSeekTo = ms;
             pendingSeekToUI = ms;
+            scheduledForSeek = false;
             if (nativePtr != 0) {
                 prepareToSeek(nativePtr);
             }
@@ -667,19 +678,6 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             }
             if (force && decodeSingleFrame) {
                 singleFrameDecoded = false;
-//                if ((!PRERENDER_FRAME || nextRenderingBitmap2 != null) && nextRenderingBitmap != null) {
-//                    renderingBitmap = nextRenderingBitmap;
-//                    renderingBitmapTime = nextRenderingBitmapTime;
-//                    for (int i = 0; i < backgroundShader.length; i++) {
-//                        renderingShader[i] = nextRenderingShader[i];
-//                        nextRenderingShader[i] = nextRenderingShader2[i];
-//                        nextRenderingShader2[i] = null;
-//                    }
-//                    nextRenderingBitmap = nextRenderingBitmap2;
-//                    nextRenderingBitmapTime = nextRenderingBitmapTime2;
-//                    nextRenderingBitmap2 = null;
-//                    nextRenderingBitmapTime2 = 0;
-//                }
                 if (loadFrameTask == null) {
                     scheduleNextGetFrame(false, true);
                 } else {
@@ -763,6 +761,11 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
         useSharedQueue = value;
     }
 
+    public void setRotation(int r) {
+        if (metaData[2] != 0 && r == 0) return;
+        metaData[2] = r;
+    }
+
     @Override
     protected void finalize() throws Throwable {
         try {
@@ -780,7 +783,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
 
     @Override
     public void start() {
-        if (isRunning || parents.size() == 0 && !ignoreNoParent) {
+        if (isRunning || parents.isEmpty() && !ignoreNoParent) {
             return;
         }
         isRunning = true;
@@ -816,8 +819,9 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     private void scheduleNextGetFrame() {
         scheduleNextGetFrame(true, false);
     }
+    private boolean scheduledForSeek;
     private void scheduleNextGetFrame(boolean wait, boolean cancel) {
-        if (loadFrameTask != null && !cancel || ((!PRERENDER_FRAME || nextRenderingBitmap2 != null) && nextRenderingBitmap != null) || !canLoadFrames() || destroyWhenDone || !isRunning && (!decodeSingleFrame || decodeSingleFrame && singleFrameDecoded) || parents.size() == 0 && !ignoreNoParent || generatingCache) {
+        if (loadFrameTask != null && !cancel || ((!PRERENDER_FRAME || nextRenderingBitmap2 != null && !(!scheduledForSeek && pendingSeekToUI >= 0)) && nextRenderingBitmap != null) || !canLoadFrames() || destroyWhenDone || !isRunning && (!decodeSingleFrame || decodeSingleFrame && singleFrameDecoded) || parents.size() == 0 && !ignoreNoParent || generatingCache) {
             return;
         }
         long ms = 0;
@@ -842,6 +846,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             }
             decodeQueue.postRunnable(loadFrameTask = loadFrameRunnable, ms);
         }
+        scheduledForSeek = true;
     }
 
     public boolean isLoadingStream() {
@@ -997,7 +1002,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
                     canvas.restore();
                 }
             } else {
-               drawBitmap(rect, paint, canvas, scaleX, scaleY);
+                drawBitmap(rect, paint, canvas, scaleX, scaleY);
             }
         }
     }
@@ -1138,7 +1143,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     public void setStartEndTime(long startTime, long endTime) {
         this.startTime = startTime / 1000f;
         this.endTime = endTime / 1000f;
-        if (getCurrentProgressMs() < startTime) {
+        if (startTime >= 0 && getCurrentProgressMs() < startTime) {
             seekTo(startTime, true);
         }
     }
