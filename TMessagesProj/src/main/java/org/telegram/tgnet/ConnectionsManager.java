@@ -634,13 +634,13 @@ public class ConnectionsManager extends BaseController {
     public int getConnectionState() {
         if (connectionState == ConnectionStateConnected && isUpdating) {
             if (oldState != ConnectionStateConnected || oldUpdating != isUpdating)
-                Log.d("030-con?", "getConnectionState - connected & updating");
+                FileLog.d("getConnectionState - connected & updating");
             oldState = connectionState;
             oldUpdating = isUpdating;
             return ConnectionStateUpdating;
         }
         if (oldState != connectionState)
-            Log.d("030-con?", String.format("getConnectionState - state: %d, updating: %s", connectionState, isUpdating));
+            FileLog.d(String.format("getConnectionState - state: %d, updating: %s", connectionState, isUpdating));
         oldState = connectionState;
         return connectionState;
     }
@@ -854,7 +854,7 @@ public class ConnectionsManager extends BaseController {
     public static void onConnectionStateChanged(final int state, final int currentAccount) {
         try {
             if (state != getInstance(currentAccount).oldState2)
-                Log.d("030-con", String.format("onConnectionStateChanged - state: %d, updating: %s", state, getInstance(currentAccount).isUpdating));
+                FileLog.d(String.format("onConnectionStateChanged - state: %d, updating: %s", state, getInstance(currentAccount).isUpdating));
             getInstance(currentAccount).oldState2 = state;
             AndroidUtilities.runOnUIThread(() -> {
                 getInstance(currentAccount).connectionState = state;
@@ -1144,7 +1144,7 @@ public class ConnectionsManager extends BaseController {
             if (isUpdating == value) {
                 return;
             }
-            Log.d("030-con", String.format("setIsUpdating - state: %d, updating: %s", connectionState, value));
+            FileLog.d(String.format("setIsUpdating - state: %d, updating: %s", connectionState, value));
             isUpdating = value;
             if (connectionState == ConnectionStateConnected) {
                 AccountInstance.getInstance(currentAccount).getNotificationCenter().postNotificationName(NotificationCenter.didUpdateConnectionState);
