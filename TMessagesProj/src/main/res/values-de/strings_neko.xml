@@ -217,4 +217,5 @@
     <string name="BlacklistUrlQueryAdd">Anfrage für die Blockierliste</string>
     <string name="BlacklistedQueryRemoved">Die abgewählte(n) Anfrage(n) wurden von der Blockierliste entfernt.</string>
     <string name="TranslateBeforeSend">Übersetzen vor dem Senden</string>
+    <string name="SearchByMessageType">Suche nach Nachrichtentyp</string>
 </resources>
