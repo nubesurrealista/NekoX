@@ -67,6 +67,7 @@ import org.telegram.ui.Components.Text;
 import org.telegram.ui.FilterCreateActivity;
 import org.telegram.ui.NotificationsSettingsActivity;
 import org.telegram.ui.Stories.StoriesUtilities;
+import org.telegram.ui.bots.BotWebViewSheet;
 
 import java.util.Locale;
 
@@ -132,6 +133,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
     private final AnimatedFloat starsBlockedT = new AnimatedFloat(this, 0, 350, CubicBezierInterpolator.EASE_OUT_QUINT);
     private long starsPriceBlocked;
     private boolean openBot;
+    private long openBotPressedAt;
 
     private int statusLeft;
     private StaticLayout statusLayout;
@@ -1144,8 +1146,10 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
             final boolean hit = openButtonRect.contains(event.getX(), event.getY());
             if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
                 openButtonBounce.setPressed(hit);
+                if (hit) openBotPressedAt = System.currentTimeMillis();
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (openButtonBounce.isPressed()) {
+                    BotWebViewSheet.tempOpenExternally = ((System.currentTimeMillis() - openBotPressedAt) > 50);
                     onOpenButtonClick.run(user);
                 }
                 openButtonBounce.setPressed(false);

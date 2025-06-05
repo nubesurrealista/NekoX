@@ -126,6 +126,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
     private String initialUrl = null;
 
     public static HashSet<BotWebViewSheet> activeSheets = new HashSet<>();
+    public static boolean tempOpenExternally = false;
 
     public void showJustAddedBulletin() {
         TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(botId);
@@ -1827,7 +1828,8 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
         initialUrl = url;
         if (url != null && !fromTab) {
             MediaDataController.getInstance(currentAccount).increaseWebappRating(requestProps.botId);
-            if (!inApp && NekoConfig.forceExternalBrowserForBots.Bool()) {
+            if (tempOpenExternally || (!inApp && NekoConfig.forceExternalBrowserForBots.Bool())) {
+                tempOpenExternally = false;
                 Browser.openUrl(parentActivity, url);
                 dismiss(false, null);
                 return;

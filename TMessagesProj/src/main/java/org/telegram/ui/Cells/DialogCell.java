@@ -129,6 +129,7 @@ import org.telegram.ui.Stars.StarsIntroActivity;
 import org.telegram.ui.Stories.StoriesListPlaceProvider;
 import org.telegram.ui.Stories.StoriesUtilities;
 import org.telegram.ui.Stories.StoryViewer;
+import org.telegram.ui.bots.BotWebViewSheet;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -200,6 +201,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
     public DialogCellTags tags;
     private static final HashMap<String, Bitmap> folderIconCache = new HashMap<>(10);
     private static int minFolderIconsLeft = Integer.MAX_VALUE;
+    private long pressedAt = 0L;
 
     public final StoriesUtilities.AvatarStoryParams storyParams = new StoriesUtilities.AvatarStoryParams(false) {
         @Override
@@ -5729,8 +5731,10 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 final boolean hit = openButtonRect.contains(event.getX(), event.getY());
                 if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
                     openButtonBounce.setPressed(hit);
+                    if (hit) pressedAt = System.currentTimeMillis();
                 } else if (openButtonBounce.isPressed() && event.getAction() == MotionEvent.ACTION_UP) {
                     if (onOpenButtonClick != null) {
+                        BotWebViewSheet.tempOpenExternally = ((System.currentTimeMillis() - pressedAt) > 50);
                         onOpenButtonClick.run(user);
                     }
                     openButtonBounce.setPressed(false);
