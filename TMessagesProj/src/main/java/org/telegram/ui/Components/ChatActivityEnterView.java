@@ -11637,6 +11637,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     if (delegate != null) {
                         delegate.onUpdateSlowModeButton(view != null ? view : slowModeButton, true, slowModeButton.getText());
                         if (NekoConfig.autoSendMessageIfBlockedBySlowMode.Bool() && sendNextMessageRunnable == null) {
+                            parentFragment.ignoreKeepPosition = true;
                             parentFragment.shouldShowAutoSendHint = true;
                             SendMessagesHelper.getInstance(currentAccount)
                                 .sendSticker(sticker, query, dialog_id, replyingMessageObject, getThreadMessage(),
@@ -11705,6 +11706,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                                 if (document != null) {
                                     AndroidUtilities.runOnUIThread(() -> {
                                         TL_stories.StoryItem storyItem = delegate != null ? delegate.getReplyToStory() : null;
+                                        parentFragment.ignoreKeepPosition = true;
                                         SendMessagesHelper.getInstance(currentAccount)
                                                 .sendSticker(document, query, dialog_id, replyingMessageObject, getThreadMessage(),
                                                         storyItem, replyingQuote, null, notify, scheduleDate, false, parent,
@@ -11727,6 +11729,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                             }
                             TL_stories.StoryItem storyItem = delegate != null ? delegate.getReplyToStory() : null;
                             if (gif instanceof TLRPC.Document) {
+                                parentFragment.ignoreKeepPosition = true;
                                 TLRPC.Document document = (TLRPC.Document) gif;
                                 SendMessagesHelper.getInstance(currentAccount).sendSticker(document, query, dialog_id, replyingMessageObject, getThreadMessage(), storyItem, replyingQuote, null, notify, scheduleDate, false, parent, parentFragment != null ? parentFragment.quickReplyShortcut : null, parentFragment != null ? parentFragment.getQuickReplyId() : 0, stars, getSendMonoForumPeerId(), 0);
                                 MediaDataController.getInstance(currentAccount).addRecentGif(document, (int) (System.currentTimeMillis() / 1000), true);
@@ -11753,6 +11756,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                                 if (storyItem == null) {
                                     SendMessagesHelper.prepareSendingBotContextResult(parentFragment, accountInstance, result, params, dialog_id, replyingMessageObject, getThreadMessage(), null, replyingQuote, notify, scheduleDate, parentFragment != null ? parentFragment.quickReplyShortcut : null, parentFragment != null ? parentFragment.getQuickReplyId() : 0, stars);
                                 } else {
+                                    parentFragment.ignoreKeepPosition = true;
                                     SendMessagesHelper.getInstance(currentAccount).sendSticker(result.document, query, dialog_id, replyingMessageObject, getThreadMessage(), storyItem, replyingQuote, null, notify, scheduleDate, false, parent, parentFragment != null ? parentFragment.quickReplyShortcut : null, parentFragment != null ? parentFragment.getQuickReplyId() : 0, stars, getSendMonoForumPeerId(), 0);
                                 }
                                 if (searchingType != 0) {
@@ -12017,6 +12021,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                             delegate.onUpdateSlowModeButton(slowModeButton, true, slowModeButton.getText());
                             if (NekoConfig.autoSendMessageIfBlockedBySlowMode.Bool() && sendNextMessageRunnable == null) {
                                 parentFragment.shouldShowAutoSendHint = true;
+                                parentFragment.ignoreKeepPosition = true;
                                 SendMessagesHelper.getInstance(currentAccount)
                                         .sendSticker(sticker, query, dialog_id, replyingMessageObject, getThreadMessage(),
                                                 null, replyingQuote, sendAnimationData, notify, scheduleDate,
@@ -12033,6 +12038,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         emojiView.closeSearch(true);
                         emojiView.hideSearchKeyboard();
                     }
+                    parentFragment.ignoreKeepPosition = true;
                     setStickersExpanded(false, true, false);
                     final TL_stories.StoryItem storyItem = delegate != null ? delegate.getReplyToStory() : null;
                     SendMessagesHelper.getInstance(currentAccount).sendSticker(sticker, query, dialog_id, replyingMessageObject, getThreadMessage(), storyItem, replyingQuote, sendAnimationData, notify, scheduleDate, parent instanceof TLRPC.TL_messages_stickerSet, parent, parentFragment != null ? parentFragment.quickReplyShortcut : null, parentFragment != null ? parentFragment.getQuickReplyId() : 0, stars, getSendMonoForumPeerId(), 0);
