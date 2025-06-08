@@ -77,6 +77,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import javax.net.ssl.SSLException;
 
@@ -1258,10 +1259,16 @@ public class ConnectionsManager extends BaseController {
             InputStream httpConnectionStream = null;
             boolean done = false;
             try {
-                URL downloadUrl = new URL("https://www.google.com/resolve?name=" + currentHostName + "&type=A");
+                if (!NekoConfig.useAdGuardDNS.Bool()) {
+                    List<InetAddress> answers = DnsFactory.lookup(currentHostName);
+                    return new ResolvedDomain(new ArrayList<>(answers.stream().map(InetAddress::getHostAddress).collect(Collectors.toSet())), System.currentTimeMillis());
+                }
+
+                // www.google.com
+                URL downloadUrl = new URL("https://dns.adguard-dns.com/resolve?name=" + currentHostName + "&type=A");
                 URLConnection httpConnection = downloadUrl.openConnection();
                 httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0 like Mac OS X) AppleWebKit/602.1.38 (KHTML, like Gecko) Version/10.0 Mobile/14A5297c Safari/602.1");
-                httpConnection.addRequestProperty("Host", "dns.google.com");
+                // httpConnection.addRequestProperty("Host", "dns.google.com");
                 httpConnection.setConnectTimeout(1000);
                 httpConnection.setReadTimeout(2000);
                 httpConnection.connect();

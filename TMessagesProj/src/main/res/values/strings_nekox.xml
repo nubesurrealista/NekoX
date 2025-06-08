@@ -261,4 +261,5 @@
     <string name="ResetSettings">Reset settings</string>
     <string name="ResetSettingsDesc">Reset settings (except for API keys and custom alias)?\nYou won\'t be able to undo this action unless you have backup the settings first!</string>
     <string name="KeepSamePositionOnNewMsg">Keep scroll position on new message sent from other session</string>
+    <string name="UseAdGuardDNS">Use AdGuard DNS</string>
 </resources>

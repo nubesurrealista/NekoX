@@ -179,6 +179,7 @@ public class NekoConfig {
     public static ConfigItem disableNumberRounding = addConfig(R.string.DisableNumberRounding, "DisableNumberRounding", configTypeBool, GENERAL, false);
 
     public static ConfigItem useSystemDNS = addConfig(R.string.useSystemDNS, "useSystemDNS", configTypeBool, GENERAL, false);
+    public static ConfigItem useAdGuardDNS = addConfig(R.string.UseAdGuardDNS , "UseAdGuardDNS", configTypeBool, GENERAL, false);
     public static ConfigItem customDoH = addConfig(R.string.customDoH, "customDoH", configTypeString, GENERAL, "");
     public static ConfigItem hideProxyByDefault = addConfig(R.string.HideProxyByDefault, "HideProxyByDefault", configTypeBool, GENERAL, false);
     public static ConfigItem useProxyItem = addConfig(R.string.UseProxyItem, "UseProxyItem", configTypeBool, GENERAL, true);
