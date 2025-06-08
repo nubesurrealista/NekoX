@@ -11444,12 +11444,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     args.putBoolean("quote", !forward);
                     final boolean reply = !forward && messagePreviewParams.replyMessage != null && !messagePreviewParams.replyMessage.messages.isEmpty() && messagePreviewParams.quote == null;
                     args.putBoolean("reply_to", reply);
-                    if (reply) {
-                        final long author = DialogObject.getPeerDialogId(messagePreviewParams.replyMessage.messages.get(0).getFromPeer());
-                        if (author != 0 && author != getDialogId() && author != getUserConfig().getClientUserId() && author > 0) {
-                            args.putLong("reply_to_author", author);
-                        }
-                    }
+                    // if (reply) {
+                    //     final long author = DialogObject.getPeerDialogId(messagePreviewParams.replyMessage.messages.get(0).getFromPeer());
+                    //     if (author != 0 && author != getDialogId() && author != getUserConfig().getClientUserId() && author > 0) {
+                    //         args.putLong("reply_to_author", author);
+                    //     }
+                    // }
                     args.putInt("hasPoll", hasPoll);
                     args.putBoolean("hasInvoice", hasInvoice);
                     args.putInt("messagesCount", msgCount);
