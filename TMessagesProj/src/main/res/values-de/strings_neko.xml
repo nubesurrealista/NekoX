@@ -218,4 +218,10 @@
     <string name="BlacklistedQueryRemoved">Die abgewählte(n) Anfrage(n) wurden von der Blockierliste entfernt.</string>
     <string name="TranslateBeforeSend">Übersetzen vor dem Senden</string>
     <string name="SearchByMessageType">Suche nach Nachrichtentyp</string>
+    <string name="MarqueeForLongChatTitles">Marquee für lange Chat-Titel verwenden</string>
+    <string name="UseCustomProviderForAutoTranslate">Benutzerdefinierten Übersetzungsanbieter für die automatische Übersetzung verwenden</string>
+    <string name="ChatListFontSizeFollowChat">Schriftgröße der Nachrichten in der Chatliste verwenden</string>
+    <string name="DontSendRightAfterTranslated">Nicht sofort nach der Übersetzung der Nachricht senden</string>
+    <string name="HideOriginalTextAfterTranslate">Ursprungstext nach der Übersetzung ausblenden</string>
+    <string name="DontAutoPlayNextMessage">Nächste Sprachnachricht nicht automatisch abspielen</string>
 </resources>
