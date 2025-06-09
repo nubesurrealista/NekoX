@@ -4682,7 +4682,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         contentView.addView(filtersView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP));
         filtersView.setVisibility(View.GONE);
 
-        if (initialDialogsType != DIALOGS_TYPE_WIDGET) {
+        if (initialDialogsType != DIALOGS_TYPE_WIDGET && storiesEnabled) {
             floatingButton2Container = new FrameLayout(context);
             floatingButton2Container.setVisibility(onlySelect && initialDialogsType != 10 || folderId != 0 || !storiesEnabled ? View.GONE : View.VISIBLE);
             contentView.addView(floatingButton2Container, LayoutHelper.createFrame((Build.VERSION.SDK_INT >= 21 ? 36 : 40), (Build.VERSION.SDK_INT >= 21 ? 36 : 40), (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, LocaleController.isRTL ? 24 : 0, 0, LocaleController.isRTL ? 0 : 24, 14 + 60 + 8));

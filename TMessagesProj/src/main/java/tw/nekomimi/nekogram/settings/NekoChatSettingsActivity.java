@@ -342,7 +342,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                 getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
             } else if (key.equals(NekoConfig.disableProximityEvents.getKey())) {
                 MediaController.getInstance().recreateProximityWakeLock();
-            } else if (key.equals(NekoConfig.showSeconds.getKey())) {
+            } else if (key.equals(NekoConfig.showSeconds.getKey()) || key.equals(NekoConfig.disableStories.getKey())) {
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             }
         };
