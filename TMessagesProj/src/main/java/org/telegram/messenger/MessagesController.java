@@ -23199,7 +23199,6 @@ public class MessagesController extends BaseController implements NotificationCe
     public ArrayList<Long> recentChats = new ArrayList<>();
     public void openedChat(long dialog_id) {
         if (dialog_id == 0) {
-            Log.d("030-recent", "ignore cuz did is 0");
             return;
         }
         int maxSize = NekoConfig.recentChatFolderSize.Int();
