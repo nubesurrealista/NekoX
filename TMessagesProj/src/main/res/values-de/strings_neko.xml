@@ -254,4 +254,10 @@
     <string name="AutoSendAfterSlowModeIgnoredHint">Eine Nachricht befindet sich in der Warteschlange. Ignoriert.</string>
     <string name="ReplyAsQuoteByDefault">Standardmäßig als Zitat antworten</string>
     <string name="CrashDialogMomoTitle">Momogram ist abgestürzt!</string>
+    <string name="LingvaInstanceNotConfigured">Die Lingva Instanz ist nicht konfiguriert, es sind keine Übersetzungen verfügbar.</string>
+    <string name="ProviderLingva">Lingva Translate</string>
+    <string name="SearchBlacklistRevert">Von der Blockierliste entfernen</string>
+    <string name="CustomLingvaInstance">Eigene Lingva Instanz</string>
+    <string name="DisableAutoWebLogin">Automatische Anmeldung mit Telegram-Konto deaktivieren</string>
+    <string name="LingvaInstanceNote">Suche online nach öffentlichen Instanzen oder hoste selbst eine. Beachte, dass der Lingva-Übersetzer nicht mit der automatischen Übersetzung funktioniert.</string>
 </resources>
