@@ -1,17 +1,23 @@
 package tw.nekomimi.nekogram.utils;
 
 
+import android.content.Intent;
+
+import com.jakewharton.processphoenix.ProcessPhoenix;
+
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.ui.LaunchActivity;
 
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
 
 public class TelegramUtil {
 
@@ -114,5 +120,11 @@ public class TelegramUtil {
         StackTraceElement[] st = (stackTrace == null) ?
                 Arrays.stream(Thread.currentThread().getStackTrace()).skip(3).toArray(StackTraceElement[]::new) : stackTrace;
         return Arrays.toString(st);
+    }
+
+    public static void restartApp(boolean crash) {
+        if (!crash) NekoXConfig.saveMusicPlaybackState(null);
+        ProcessPhoenix.triggerRebirth(LaunchActivity.instance,
+                new Intent(LaunchActivity.instance, LaunchActivity.class));
     }
 }

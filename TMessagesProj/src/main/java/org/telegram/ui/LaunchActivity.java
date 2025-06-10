@@ -1041,6 +1041,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
         RestrictedLanguagesSelectActivity.checkRestrictedLanguages(false);
         EvilLeakerKiller.getInstance(getApplicationContext());
+        NekoXConfig.restoreMusicPlaybackState(currentAccount);
     }
 
     private void showAttachMenuBot(TLRPC.TL_attachMenuBot attachMenuBot, String startApp, boolean sidemenu) {

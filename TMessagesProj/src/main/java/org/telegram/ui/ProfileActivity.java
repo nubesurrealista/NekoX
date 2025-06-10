@@ -344,6 +344,7 @@ import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.LangsKt;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
+import tw.nekomimi.nekogram.utils.TelegramUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class ProfileActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, SharedMediaLayout.SharedMediaPreloaderDelegate, ImageUpdater.ImageUpdaterDelegate, SharedMediaLayout.Delegate {
@@ -4516,8 +4517,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
                 builder.addItem(LocaleController.getString(R.string.RestartApp), R.drawable.msg_retry,
                         (__) -> {
-                            ProcessPhoenix.triggerRebirth(ApplicationLoader.applicationContext,
-                                    new Intent(ApplicationLoader.applicationContext, LaunchActivity.class));
+                            TelegramUtil.restartApp(false);
                             return Unit.INSTANCE;
                         });
                 builder.show();
@@ -7251,8 +7251,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     new AlertDialog.Builder(getParentActivity())
                             .setTitle(getAppName())
                             .setMessage(LocaleController.getString(R.string.RestartAppToTakeEffect))
-                            .setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) ->
-                                ProcessPhoenix.triggerRebirth(getContext(), new Intent(getContext(), LaunchActivity.class)))
+                            .setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) -> TelegramUtil.restartApp(false))
                             .setNegativeButton(LocaleController.getString(R.string.Cancel), null)
                             .create().show();
                 });

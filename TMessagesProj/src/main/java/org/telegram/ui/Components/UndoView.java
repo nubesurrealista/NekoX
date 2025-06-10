@@ -66,6 +66,7 @@ import org.telegram.ui.Components.Forum.ForumUtilities;
 import org.telegram.ui.Components.Premium.boosts.BoostRepository;
 import org.telegram.ui.LaunchActivity;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.TelegramUtil;
 
 import java.util.ArrayList;
 
@@ -553,7 +554,7 @@ public class UndoView extends FrameLayout {
             undoImageView.setVisibility(GONE);
 
             undoTextView.setText(LocaleController.getString(R.string.ApplyTheme));
-            currentCancelRunnable = () -> ProcessPhoenix.triggerRebirth(getContext(), new Intent(getContext(), LaunchActivity.class));
+            currentCancelRunnable = () -> TelegramUtil.restartApp(false);
 
         } else if (isTooltipAction()) {
             CharSequence infoText = "";

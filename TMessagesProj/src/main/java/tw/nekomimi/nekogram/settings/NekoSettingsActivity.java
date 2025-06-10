@@ -68,6 +68,7 @@ import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.GsonUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
 import tw.nekomimi.nekogram.utils.StrUtil;
+import tw.nekomimi.nekogram.utils.TelegramUtil;
 
 @SuppressLint("RtlHardcoded")
 public class NekoSettingsActivity extends BaseFragment {
@@ -341,7 +342,7 @@ public class NekoSettingsActivity extends BaseFragment {
         restart.setTitle(StrUtil.getAppName());
         restart.setMessage(LocaleController.getString(R.string.RestartAppToTakeEffect));
         restart.setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) -> {
-            ProcessPhoenix.triggerRebirth(context, new Intent(context, LaunchActivity.class));
+            TelegramUtil.restartApp(false);
         });
         restart.show();
     }

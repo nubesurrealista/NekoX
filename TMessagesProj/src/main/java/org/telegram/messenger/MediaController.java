@@ -52,6 +52,7 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -121,6 +122,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
@@ -1814,7 +1816,8 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             }
         } else if (id == NotificationCenter.musicDidLoad) {
             long did = (Long) args[0];
-            if (playingMessageObject != null && playingMessageObject.isMusic() && playingMessageObject.getDialogId() == did && !playingMessageObject.scheduled) {
+            long mid = (Long) args[3];
+            if ((playingMessageObject != null && playingMessageObject.isMusic() && playingMessageObject.getDialogId() == did && !playingMessageObject.scheduled) || (mid != -1L)) {
                 ArrayList<MessageObject> arrayListBegin = (ArrayList<MessageObject>) args[1];
                 ArrayList<MessageObject> arrayListEnd = (ArrayList<MessageObject>) args[2];
                 playlist.addAll(0, arrayListBegin);
@@ -1834,6 +1837,30 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     }
                 }
                 playlistClassGuid = ConnectionsManager.generateClassGuid();
+
+                // 030: restore from previous session
+                if (mid != -1L) {
+                    int len = playlist.size();
+                    MessageObject msg = null;
+                    for (int i = 0; i < len; ++i) {
+                        msg = playlist.get(i);
+                        if (msg.getId() == mid) {
+                            currentPlaylistNum = i;
+                            break;
+                        }
+                    }
+                    Bundle progress = NekoXConfig.getLastMusicPlaybackProgress();
+                    boolean pause = false;
+                    if (progress != null) {
+                        msg.forceSeekTo = progress.getFloat("progress");
+                        msg.audioProgress = msg.forceSeekTo;
+                        msg.audioProgressMs = progress.getInt("ms");
+                        msg.audioProgressSec = progress.getInt("sec");
+                        pause = progress.getBoolean("paused");
+                    }
+                    playMessage(msg, pause);
+                    NekoXConfig.doneRestoreMusicPlaybackState();
+                }
             }
         } else if (id == NotificationCenter.mediaDidLoad) {
             int guid = (Integer) args[3];
@@ -2368,6 +2395,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
 
         if (audioPlayer != null) {
+            NekoXConfig.doneRestoreMusicPlaybackState();
             if (audioVolumeAnimator != null) {
                 audioVolumeAnimator.removeAllUpdateListeners();
                 audioVolumeAnimator.cancel();
@@ -3902,7 +3930,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     messageObject.forceSeekTo = -1;
                 }
                 audioPlayer.setStreamType(useFrontSpeaker ? AudioManager.STREAM_VOICE_CALL : AudioManager.STREAM_MUSIC);
-                audioPlayer.play();
+                if (!silent) audioPlayer.play(); // TODO: fix FragmentContextView state being playing when restore in paused state
                 if (!messageObject.isVoice()) {
                     if (audioVolumeAnimator != null) {
                         audioVolumeAnimator.removeAllListeners();
@@ -3984,6 +4012,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 NotificationCenter.getInstance(messageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingProgressDidChanged, playingMessageObject.getId(), 0);
                 FileLog.e(e2);
             }
+            NekoXConfig.saveMusicPlaybackState(null);
         }
         if (canStartMusicPlayerService()) {
             Intent intent = new Intent(ApplicationLoader.applicationContext, MusicPlayerService.class);

@@ -1,10 +1,12 @@
 package tw.nekomimi.nekogram;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.util.Log;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -12,6 +14,9 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaController;
+import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
@@ -354,5 +359,73 @@ public class NekoXConfig {
             title = txt;
             has_particle = particle;
         }
+    }
+
+    private final static String LAST_PLAYING_MSG_DIALOG_ID = "last_playing_message_dialog_id";
+    private final static String LAST_PLAYING_MSG_ID = "last_playing_message_id";
+    private final static String LAST_PLAYING_MSG_PAUSED = "last_playing_message_paused";
+    private final static String LAST_PLAYING_MSG_PROGRESS = "last_playing_message_progress";
+    private final static String LAST_PLAYING_MSG_PROGRESS_MS = "last_playing_message_progress_ms";
+    private final static String LAST_PLAYING_MSG_PROGRESS_SEC = "last_playing_message_progress_sec";
+    @SuppressLint("ApplySharedPref")
+    public static void saveMusicPlaybackState(Runnable callback) {
+        MessageObject msg = MediaController.getInstance().getPlayingMessageObject();
+        if (msg == null) {
+            callback.run();
+            return;
+        }
+
+        Log.d("030-music", String.format("save playback %d %d", msg.getDialogId(), msg.getId()));
+        {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putLong(LAST_PLAYING_MSG_DIALOG_ID, msg.getDialogId());
+            editor.putLong(LAST_PLAYING_MSG_ID, msg.getId());
+            editor.putFloat(LAST_PLAYING_MSG_PROGRESS, msg.audioProgress);
+            editor.putInt(LAST_PLAYING_MSG_PROGRESS_MS, msg.audioProgressMs);
+            editor.putInt(LAST_PLAYING_MSG_PROGRESS_SEC, msg.audioProgressSec);
+            editor.putBoolean(LAST_PLAYING_MSG_PAUSED, MediaController.getInstance().isMessagePaused());
+
+            boolean success = editor.commit();
+            if (!success) {
+                Log.e("030-music", "commit failed");
+            }
+        }
+        if (callback != null) AndroidUtilities.runOnUIThread(callback);
+    }
+
+    public static void restoreMusicPlaybackState(int currentAccount) {
+        long dialogId = preferences.getLong(LAST_PLAYING_MSG_DIALOG_ID, -1L);
+        if (dialogId == -1L) {
+            Log.d("030-music", "no saved state to restore");
+            return;
+        }
+        MediaDataController mediaDataController =  MediaDataController.getInstance(currentAccount);
+        long lastPlayingMessageId = preferences.getLong(LAST_PLAYING_MSG_ID, -1L);
+        Log.d("030-music", String.format("restore playback %d %d", dialogId, lastPlayingMessageId));
+        mediaDataController.loadMusic(dialogId, lastPlayingMessageId + 1, lastPlayingMessageId - 1);
+    }
+
+    public static long getLastMusicMessageId() {
+        return preferences.getLong(LAST_PLAYING_MSG_ID, -1L);
+    }
+
+    public static Bundle getLastMusicPlaybackProgress() {
+        long dialogId = preferences.getLong(LAST_PLAYING_MSG_DIALOG_ID, -1L);
+        if (dialogId == -1L) {
+            Log.d("030-music", "no saved progress");
+            return null;
+        }
+
+        Bundle ret = new Bundle();
+        ret.putBoolean("paused", preferences.getBoolean(LAST_PLAYING_MSG_PAUSED, false));
+        ret.putFloat("progress", preferences.getFloat(LAST_PLAYING_MSG_PROGRESS, 0));
+        ret.putInt("ms", preferences.getInt(LAST_PLAYING_MSG_PROGRESS_MS, 0));
+        ret.putInt("sec", preferences.getInt(LAST_PLAYING_MSG_PROGRESS_SEC, 0));
+        return ret;
+    }
+
+    public static void doneRestoreMusicPlaybackState() {
+        Log.d("030-music", "remove last playback state flag");
+        preferences.edit().remove(LAST_PLAYING_MSG_DIALOG_ID).apply();
     }
 }

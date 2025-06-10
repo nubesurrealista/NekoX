@@ -113,7 +113,7 @@ public class ApplicationLoader extends Application {
                     error.getClass().getName(), error.getMessage(), error.getCause(),
                     TelegramUtil.getStackTraceAsString(error.getStackTrace()));
             NekoConfig.lastCrashError.setConfigString(errStr);
-            ProcessPhoenix.triggerRebirth(applicationContext, new Intent(applicationContext, LaunchActivity.class));
+            TelegramUtil.restartApp(true);
         });
     }
 

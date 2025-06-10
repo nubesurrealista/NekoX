@@ -159,6 +159,7 @@ import kotlin.Unit;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.TelegramUtil;
 import tw.nekomimi.nekogram.utils.UrlUtil;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 
@@ -6904,8 +6905,7 @@ public class AlertsCreator {
                 .setTitle(LocaleController.getString(R.string.MemLeak))
                 .setMessage(LocaleController.formatString(R.string.MemLeakInfo, (float)usage / 1024))
                 .setPositiveButton("OK", (__, ___) -> {
-                    Context ctx = LaunchActivity.instance.getApplicationContext();
-                    ProcessPhoenix.triggerRebirth(ctx, new Intent(ctx, LaunchActivity.class));
+                    TelegramUtil.restartApp(false);
                 })
                 .setNegativeButton("Cancel", null);
     }

@@ -7501,8 +7501,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     if (onlySelect || isQuote || isReplyTo || FileLoader.hasUploadOperation(currentAccount)) {
                         FileLog.w("restart postponed by fwd/share or upload op");
                     } else {
-                        Context ctx = LaunchActivity.instance.getApplicationContext();
-                        ProcessPhoenix.triggerRebirth(ctx, new Intent(ctx, LaunchActivity.class));
+                        TelegramUtil.restartApp(true);
                     }
                 } else {
                     EvilLeakerKiller.threshold += (200 * 1024);
