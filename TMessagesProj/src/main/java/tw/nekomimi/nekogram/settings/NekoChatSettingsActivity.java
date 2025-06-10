@@ -286,7 +286,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                 }
             } else if (a instanceof ConfigCellCustom) { // Custom onclick
                 if (position == cellGroup.rows.indexOf(maxRecentStickerCountRow)) {
-                    final int[] counts = {20, 30, 40, 50, 80, 100, 120, 150, 180, 200};
+                    final int[] counts = {0, 20, 30, 40, 50, 80, 100, 120, 150, 180, 200};
                     List<String> types = Arrays.stream(counts)
                             .filter(i -> i <= getMessagesController().maxRecentStickersCount)
                             .mapToObj(String::valueOf)
