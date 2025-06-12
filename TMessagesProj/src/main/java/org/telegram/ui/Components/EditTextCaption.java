@@ -44,6 +44,7 @@ import android.widget.TextView;
 
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.CodeHighlighting;
@@ -61,7 +62,6 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 
-import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
@@ -228,7 +228,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         String origin = getText().toString();
         String text = getText().subSequence(start, end).toString();
 
-        if (StrUtil.isBlank(origin)) return;
+        if (StringUtils.isBlank(origin)) return;
 
         TranslateDb db = TranslateDb.currentInputTarget();
 

@@ -1,11 +1,11 @@
 package tw.nekomimi.nekogram.utils
 
 import android.os.Build
-import cn.hutool.core.io.resource.ResourceUtil
 import okhttp3.internal.closeQuietly
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.FileLog
 import java.io.File
+import java.io.InputStream
 import java.util.zip.ZipFile
 
 object FileUtil {
@@ -268,7 +268,7 @@ object FileUtil {
 
         runCatching {
 
-            ResourceUtil.getStream(path).use {
+            IoUtil.getResourceObj(path).stream.use {
 
                 FileLog.d("found nonAsset in resources: $path")
 

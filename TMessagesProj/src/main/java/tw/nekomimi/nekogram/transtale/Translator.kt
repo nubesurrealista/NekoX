@@ -2,8 +2,6 @@ package tw.nekomimi.nekogram.transtale
 
 import android.text.SpannableStringBuilder
 import android.view.View
-import cn.hutool.core.util.ArrayUtil
-import cn.hutool.core.util.StrUtil
 import org.apache.commons.lang3.LocaleUtils
 import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.FileLog
@@ -17,6 +15,9 @@ import org.telegram.tgnet.TLRPC
 import org.telegram.ui.ChatActivity
 import org.telegram.ui.Components.Bulletin
 import org.telegram.ui.Components.TranslateAlert2
+import moe.hx030.momogram.util.ArrayUtil
+import okhttp3.OkHttpClient
+import org.apache.commons.lang3.StringUtils
 import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.cc.CCConverter
 import tw.nekomimi.nekogram.cc.CCTarget
@@ -46,7 +47,7 @@ val String.code2Locale: Locale by receiveLazy<String, Locale> {
 
 val Locale.locale2code by receiveLazy<Locale, String> {
 
-    if (StrUtil.isBlank(country)) {
+    if (StringUtils.isBlank(country)) {
         language
     } else {
         "$language-$country"
@@ -73,6 +74,8 @@ interface Translator {
     suspend fun doTranslate(from: String, to: String, query: String): String
 
     companion object {
+
+        val httpClient = OkHttpClient()
 
         @Throws(Exception::class)
         suspend fun translate(query: String) = translate(
@@ -155,9 +158,8 @@ interface Translator {
 
             val builder = PopupBuilder(anchor)
 
-            var locales = (if (full) LocaleUtils.availableLocaleList()
-                    .filter { it.variant.isBlank() } else LocaleController.getInstance()
-                    .languages
+            var locales = (if (full) LocaleUtils.availableLocaleList().filter { it.variant.isBlank() }
+                    else LocaleController.getInstance().languages
                     .map { it.pluralLangCode }
                     .toSet()
                     .filter { !it.lowercase().contains("duang") }
@@ -174,8 +176,8 @@ interface Translator {
 
                 if (locales[i] == defLang) {
 
-                    locales = ArrayUtil.remove(locales, i)
-                    locales = ArrayUtil.insert(locales, 0, defLang)
+                    locales = ArrayUtil.remove(locales, i) as Array<Locale>
+                    locales = ArrayUtil.insert(locales, 0, defLang) as Array<Locale>
 
                     break
 

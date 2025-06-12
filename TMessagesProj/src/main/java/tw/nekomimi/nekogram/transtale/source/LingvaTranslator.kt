@@ -1,15 +1,13 @@
 package tw.nekomimi.nekogram.transtale.source
 
-import android.util.Log
-import cn.hutool.core.util.XmlUtil
-import cn.hutool.http.HttpUtil
+import okhttp3.Request
 import org.json.JSONObject
 import org.telegram.messenger.FileLog
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
-import org.w3c.dom.Node
 import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.transtale.Translator
+import tw.nekomimi.nekogram.transtale.Translator.Companion.httpClient
 import java.net.URLEncoder
 
 object LingvaTranslator : Translator {
@@ -22,13 +20,13 @@ object LingvaTranslator : Translator {
         if (instance.isNullOrBlank()) error(LocaleController.getString(R.string.LingvaInstanceNotConfigured))
 
         if (!randomPathMap.containsKey(instance)) {
-            val get = HttpUtil.createGet(instance)
-            val res = get.execute()
-            if (!res.isOk) {
-                error("ERROR ${res.status}: ${res.body()}")
+            val get = Request.Builder().url(instance).build()
+            val res = httpClient.newCall(get).execute()
+            if (!res.isSuccessful) {
+                error("ERROR ${res.code}: ${res.body.string()}")
             }
             try {
-                val path = res.body().split("/_buildManifest.js")[0].split("/").last()
+                val path = res.body.string().split("/_buildManifest.js")[0].split("/").last()
                 randomPathMap[instance] = path
             } catch (ex: Exception) {
                 FileLog.e("lingva err: failed to get path for translation api", ex)
@@ -38,17 +36,17 @@ object LingvaTranslator : Translator {
 
         val path = randomPathMap[instance]
 
-        var req = HttpUtil.createGet("$instance/_next/data/$path/$from/$to/${processedQuery}.json")
+        var req = Request.Builder().url("$instance/_next/data/$path/$from/$to/${processedQuery}.json").build()
 
-        val res = req.execute()
+        val res = httpClient.newCall(req).execute()
 
-        if (res.status != 200) {
+        if (res.code != 200) {
             FileLog.e("lingva err: $instance/_next/data/$path/$from/$to/${processedQuery}.json")
-            FileLog.e("lingva err: HTTP ${res.status} : ${res.body()}")
-            error("HTTP ${res.status} : ${res.body()}")
+            FileLog.e("lingva err: HTTP ${res.code} : ${res.body.string()}")
+            error("HTTP ${res.code} : ${res.body.string()}")
         }
 
-        val respObj = JSONObject(res.body())
+        val respObj = JSONObject(res.body.string())
 
         if (respObj.optString("error", "").isNotBlank()) {
             FileLog.e("lingva err: " + respObj.toString(2))

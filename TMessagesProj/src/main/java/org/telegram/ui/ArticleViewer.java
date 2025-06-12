@@ -115,6 +115,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimationNotificationsLocker;
@@ -222,7 +223,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
@@ -2567,7 +2567,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             return spannableStringBuilder;
         } else if (richText instanceof TLRPC.TL_textPlain) {
             String plainText = ((TLRPC.TL_textPlain) richText).text;
-            if (!noTranslate && StrUtil.isNotBlank(plainText) && pages[0].adapter.trans && TranslateDb.currentTarget().contains(plainText)) {
+            if (!noTranslate && StringUtils.isNotBlank(plainText) && pages[0].adapter.trans && TranslateDb.currentTarget().contains(plainText)) {
                 plainText = TranslateDb.currentTarget().query(plainText);
                 if (plainText == null) {
                     plainText = ((TLRPC.TL_textPlain) richText).text + " (Not translated)";

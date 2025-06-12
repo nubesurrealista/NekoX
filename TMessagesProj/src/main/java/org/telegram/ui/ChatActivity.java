@@ -138,6 +138,7 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.zxing.common.detector.MathUtils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.sufficientlysecure.keychain.pgp.PgpHelper;
@@ -291,6 +292,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.IDN;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -310,7 +312,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.ui.MessageDetailsActivity;
@@ -1907,10 +1908,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 selectedObjectGroup = getValidGroupedMessage(selectedObject);
                 switch (actionType) {
                     case 3: {
-                        boolean hasText = StrUtil.isNotBlank(selectedObject.messageOwner.message);
+                        boolean hasText = StringUtils.isNotBlank(selectedObject.messageOwner.message);
                         if (selectedObjectGroup != null) {
                             for (MessageObject object : selectedObjectGroup.messages) {
-                                if (StrUtil.isNotBlank(object.messageOwner.message)) {
+                                if (StringUtils.isNotBlank(object.messageOwner.message)) {
                                     hasText = true;
                                     break;
                                 }
@@ -13660,8 +13661,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                 case OpenPgpApi.RESULT_CODE_SUCCESS: {
 
-                    String str = StrUtil.utf8Str(os.toByteArray());
-                    if (StrUtil.isBlank(str)) return;
+                    String str = new String(os.toByteArray(), StandardCharsets.UTF_8);
+                    if (StringUtils.isBlank(str)) return;
                     // 030: is this correct?
                     SendMessagesHelper.SendMessageParams params = new SendMessagesHelper.SendMessageParams();
                     params.message = str;
@@ -29780,7 +29781,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
 
         if (shareKeyItem != null) {
-            if ((currentChat != null && ChatObject.canSendMessages(currentChat) || user != null && !user.self) && StrUtil.isNotBlank(NekoConfig.openPGPApp.String())) {
+            if ((currentChat != null && ChatObject.canSendMessages(currentChat) || user != null && !user.self) && StringUtils.isNotBlank(NekoConfig.openPGPApp.String())) {
                 shareKeyItem.setVisibility(View.VISIBLE);
             } else {
                 shareKeyItem.setVisibility(View.GONE);
@@ -31882,7 +31883,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             boolean docsWithMessages = false;
                             if (selectedObjectGroup != null && selectedObjectGroup.isDocuments) {
                                 for (MessageObject object : selectedObjectGroup.messages) {
-                                    if (StrUtil.isNotBlank(object.messageOwner.message)) {
+                                    if (StringUtils.isNotBlank(object.messageOwner.message)) {
                                         docsWithMessages = true;
                                     }
                                 }
@@ -31907,7 +31908,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     icons.add(R.drawable.baseline_share_24);
                                 }
                             }
-                            if (messageObject != null && StrUtil.isNotBlank(messageObject.messageOwner.message) && StrUtil.isNotBlank(NekoConfig.openPGPApp.String())) {
+                            if (messageObject != null && StringUtils.isNotBlank(messageObject.messageOwner.message) && StringUtils.isNotBlank(NekoConfig.openPGPApp.String())) {
                                 if (PgpHelper.PGP_CLEARTEXT_SIGNATURE.matcher(selectedObject.messageOwner.message).matches()) {
                                     items.add(LocaleController.getString(R.string.PGPVerify));
                                     options.add(nkbtn_PGPVerify);
@@ -32108,7 +32109,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         boolean docsWithMessages = false;
                         if (selectedObjectGroup != null && selectedObjectGroup.isDocuments) {
                             for (MessageObject object : selectedObjectGroup.messages) {
-                                if (StrUtil.isNotBlank(object.messageOwner.message)) {
+                                if (StringUtils.isNotBlank(object.messageOwner.message)) {
                                     docsWithMessages = true;
                                 }
                             }
@@ -32126,7 +32127,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 icons.add(R.drawable.ic_translate);
                             }
                         }
-                        if (messageObject != null && StrUtil.isNotBlank(messageObject.messageOwner.message) && StrUtil.isNotBlank(NekoConfig.openPGPApp.String())) {
+                        if (messageObject != null && StringUtils.isNotBlank(messageObject.messageOwner.message) && StringUtils.isNotBlank(NekoConfig.openPGPApp.String())) {
                             //TODO wtf
                             if (PgpHelper.PGP_CLEARTEXT_SIGNATURE.matcher(selectedObject.messageOwner.message).matches()) {
                                 items.add(LocaleController.getString(R.string.PGPVerify));
@@ -34408,7 +34409,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 R.drawable.baseline_security_24, LocaleController.getString(R.string.Import),
                                 false, () -> {
 //                                    String status = ProxyListActivity.processProxyListFile(getParentActivity(), finalLocFile1);
-//                                    if (!StrUtil.isBlank(status)) {
+//                                    if (!StringUtils.isBlank(status)) {
 //                                        presentFragment(new ProxyListActivity(status));
 //                                    }
                                     Toast.makeText(ChatActivity.this.getContext(), "This function is removed temporarily.", Toast.LENGTH_LONG).show();
@@ -41184,7 +41185,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             R.drawable.baseline_security_24, LocaleController.getString(R.string.Import),
                             false, () -> {
 //                              String status = ProxyListActivity.processProxyListFile(getParentActivity(), finalLocFile);
-//                              if (!StrUtil.isBlank(status)) {
+//                              if (!StringUtils.isBlank(status)) {
 //                                  presentFragment(new ProxyListActivity(status));
 //                              }
                                 Toast.makeText(ChatActivity.this.getContext(), "This function is removed.", Toast.LENGTH_LONG).show();
@@ -44217,7 +44218,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             case nkbtn_translate: {
                 if (NekoConfig.useTelegramTranslateInChat.Bool() && !selectedObject.isPoll() && !selectedObject.messageOwner.translated) {
                     String toLang = NekoConfig.translateToLang.String();
-                    if (StrUtil.isBlank(toLang)) toLang = LocaleController.getInstance().getCurrentLocale().getLanguage();
+                    if (StringUtils.isBlank(toLang)) toLang = LocaleController.getInstance().getCurrentLocale().getLanguage();
                     int[] messageIdToTranslate = new int[] { selectedObject.getId() };
                     final CharSequence finalMessageText = getMessageCaption(selectedObject, selectedObjectGroup, messageIdToTranslate);
                     Utilities.CallbackReturn<URLSpan, Boolean> onLinkPress = (link) -> {
@@ -44310,7 +44311,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             case nkbtn_PGPImport: {
 
                 Intent open = new Intent(NekoConfig.openPGPApp.String() + ".action.IMPORT_KEY");
-                open.putExtra(NekoConfig.openPGPApp.String() + ".EXTRA_KEY_BYTES", StrUtil.utf8Bytes(selectedObject.messageOwner.message));
+                open.putExtra(NekoConfig.openPGPApp.String() + ".EXTRA_KEY_BYTES", selectedObject.messageOwner.message.getBytes(StandardCharsets.UTF_8));
 
                 try {
 

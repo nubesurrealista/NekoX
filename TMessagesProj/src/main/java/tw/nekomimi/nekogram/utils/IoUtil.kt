@@ -1,8 +1,14 @@
 package tw.nekomimi.nekogram.utils
 
+import moe.hx030.momogram.util.res.ClassPathResource
+import moe.hx030.momogram.util.res.FileResource
+import moe.hx030.momogram.util.res.Resource
+import org.apache.commons.lang3.StringUtils
 import java.io.File
+import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.util.regex.Pattern
 
 object IoUtil {
 
@@ -60,4 +66,35 @@ object IoUtil {
         return claimedSpace
     }
 
+    @JvmStatic
+    fun getResourceObj(path: String): Resource {
+        if (StringUtils.isNotBlank(path)) {
+            if (path.startsWith("file:") || isAbsolutePath(path)) {
+                return FileResource(path)
+            }
+        }
+        return ClassPathResource(path)
+    }
+
+    val PATTERN_PATH_ABSOLUTE: Pattern = Pattern.compile("^[a-zA-Z]:([/\\\\].*)?", Pattern.DOTALL)
+
+    @JvmStatic
+    fun isAbsolutePath(path: String): Boolean {
+        if (StringUtils.isEmpty(path)) {
+            return false
+        }
+
+        return '/' == path[0] || PATTERN_PATH_ABSOLUTE.matcher(path).lookingAt()
+    }
+
+    @JvmStatic
+    fun exec(vararg args: String?): Process {
+        val process: Process
+        try {
+            process = ProcessBuilder(*args).redirectErrorStream(true).start()
+        } catch (e: IOException) {
+            throw RuntimeException(e)
+        }
+        return process
+    }
 }

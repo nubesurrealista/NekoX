@@ -20,6 +20,7 @@ import android.util.SparseArray;
 
 import androidx.collection.LongSparseArray;
 
+import org.apache.commons.lang3.StringUtils;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.tgnet.NativeByteBuffer;
@@ -35,7 +36,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
-import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 
@@ -616,7 +616,7 @@ public class DownloadController extends BaseController implements NotificationCe
     public boolean canDownloadMedia(MessageObject messageObject) {
         if (messageObject.getDocument() != null) {
             String documentName = messageObject.getDocument().file_name;
-            if (StrUtil.isNotBlank(documentName)) {
+            if (StringUtils.isNotBlank(documentName)) {
                 if ((NekoConfig.disableAutoDownloadingWin32Executable.Bool() &&
                         documentName.toLowerCase().matches(".*\\.(cmd|bat|com|exe|lnk|msi|ps1|reg|vb|vbe|vbs|vbscript)")
                 ) || (NekoConfig.disableAutoDownloadingArchive.Bool() &&

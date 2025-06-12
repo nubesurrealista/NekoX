@@ -1,20 +1,14 @@
 package tw.nekomimi.nekogram.database
 
 import android.content.SharedPreferences
-import cn.hutool.core.lang.Singleton.put
-import org.dizitart.no2.*
 import org.dizitart.no2.collection.Document
 import org.dizitart.no2.collection.FindOptions
 import org.dizitart.no2.collection.NitriteCollection
 import org.dizitart.no2.collection.UpdateOptions
-import org.dizitart.no2.filters.EqualsFilter
 import org.dizitart.no2.filters.Filter
 import org.dizitart.no2.filters.FluentFilter
-import org.dizitart.no2.index.IndexOptions
-import org.dizitart.no2.index.IndexType
 import org.telegram.messenger.FileLog
 import tw.nekomimi.nekogram.utils.UIUtil
-import tw.nekomimi.nekogram.utils.applyIf
 
 class DbPref(val connection: NitriteCollection) : SharedPreferences {
 

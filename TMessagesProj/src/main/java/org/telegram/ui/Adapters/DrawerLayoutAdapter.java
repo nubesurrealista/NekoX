@@ -17,6 +17,7 @@ import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.apache.commons.lang3.StringUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
@@ -45,10 +46,10 @@ import org.telegram.ui.Components.SideMenultItemAnimator;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import cn.hutool.core.util.StrUtil;
 import kotlin.jvm.functions.Function0;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.utils.StrUtil;
 
 public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter implements NotificationCenter.NotificationCenterDelegate {
 
@@ -386,7 +387,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         }
         if (NekoXConfig.disableStatusUpdate && !UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().bot) {
             boolean online = MessagesController.getInstance(UserConfig.selectedAccount).isOnline();
-            String message = online ? StrUtil.upperFirst(LocaleController.getString(R.string.Online)) : LocaleController.getString(R.string.VoipOfflineTitle);
+            String message = online ? StrUtil.firstCharUpper(LocaleController.getString(R.string.Online)) : LocaleController.getString(R.string.VoipOfflineTitle);
             if (NekoXConfig.keepOnlineStatus) {
                 message += " (" + LocaleController.getString(R.string.Locked) + ")";
             }

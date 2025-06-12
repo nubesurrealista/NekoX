@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
@@ -18,11 +19,9 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.LaunchActivity;
 
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 
 /*
@@ -116,7 +115,7 @@ public class SearchEngine {
                 searchEngines.add(new SearchEngine(name, search_url, autocomplete_url, privacy_policy_url));
             }
             String customSearchEngineUrl = NekoConfig.customSearchEngine.String();
-            if (!StrUtil.isEmpty(customSearchEngineUrl)) {
+            if (!StringUtils.isEmpty(customSearchEngineUrl)) {
                 try {
                     Uri u = Uri.parse(customSearchEngineUrl);
                     String host = u.getHost();

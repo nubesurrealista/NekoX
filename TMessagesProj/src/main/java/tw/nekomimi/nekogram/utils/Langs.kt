@@ -1,8 +1,6 @@
 package tw.nekomimi.nekogram.utils
 
-import cn.hutool.core.collection.CollUtil
-import cn.hutool.core.util.ArrayUtil
-import cn.hutool.core.util.StrUtil
+import moe.hx030.momogram.util.ArrayUtil
 import org.telegram.ui.ActionBar.AlertDialog
 import java.math.BigInteger
 import java.util.*
@@ -29,12 +27,6 @@ fun <T> T.applyIfNot(boolean: Boolean, block: (T.() -> Unit)?): T {
     return this
 }
 
-fun String.input(vararg params: Any): String {
-
-    return StrUtil.format(this, *params)
-
-}
-
 val Number.asByteArray get() = BigInteger.valueOf(toLong()).toByteArray()!!
 
 val ByteArray.asLong get() = BigInteger(this).toLong()
@@ -49,14 +41,6 @@ fun <T> Array<T>.shift(): Array<T> {
 fun <T> Array<T>.shift(size: Int): Array<T> {
 
     return ArrayUtil.sub(this, size, this.size)
-
-}
-
-fun <T> Collection<T>.shift() = shift(1)
-
-fun <T> Collection<T>.shift(size: Int): Collection<T> {
-
-    return LinkedList(CollUtil.sub(this, size, this.size))
 
 }
 

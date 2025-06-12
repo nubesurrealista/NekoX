@@ -47,6 +47,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.apache.commons.lang3.StringUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BotWebViewVibrationEffect;
@@ -109,7 +110,6 @@ import org.telegram.ui.Components.spoilers.SpoilersTextView;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.folder.FolderIconHelper;
@@ -162,7 +162,7 @@ public class FilterCreateActivity extends BaseFragment {
             return Unit.INSTANCE;
         });
         EditText input = builder.addEditText(LocaleController.getString(R.string.Emoji));
-        if (StrUtil.isNotBlank(filter.emoticon)) {
+        if (StringUtils.isNotBlank(filter.emoticon)) {
             oldEmoticon = filter.emoticon;
             input.setText(filter.emoticon);
         }
@@ -170,7 +170,7 @@ public class FilterCreateActivity extends BaseFragment {
         builder.addOkButton((it) -> {
             String emoticon = input.getText().toString();
             if (emoticon.length() > 2) emoticon = emoticon.substring(0, 2);
-            if (StrUtil.isBlank(emoticon)) return Unit.INSTANCE;
+            if (StringUtils.isBlank(emoticon)) return Unit.INSTANCE;
             filter.emoticon = emoticon;
             newFilterEmoticon = emoticon;
             checkDoneButton(true);

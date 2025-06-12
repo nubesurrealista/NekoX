@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import org.apache.commons.lang3.StringUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -43,7 +44,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import cn.hutool.core.util.StrUtil;
 import kotlin.text.Regex;
 import tw.nekomimi.nekogram.config.ConfigItem;
 import tw.nekomimi.nekogram.helpers.EvilLeakerKiller;
@@ -751,7 +751,7 @@ public class NekoConfig {
     public static void updateUseSpoilerMediaChatList() {
         alwaysUseSpoilerForMediaChats.clear();
         String str = alwaysUseSpoilerForMedia.String();
-        if ((str = StrUtil.trim(str)).isEmpty()) return;
+        if ((str = StringUtils.trim(str)).isEmpty()) return;
 
         String[] chatIds = str.split(",");
         for (String chatId : chatIds) {
@@ -767,12 +767,12 @@ public class NekoConfig {
         AndroidUtilities.runOnUIThread(() -> {
             preferredTranslateTargetLangList.clear();
             String str = preferredTranslateTargetLang.String();
-            if ((str = StrUtil.trim(str)).isEmpty()) return;
+            if ((str = StringUtils.trim(str)).isEmpty()) return;
 
             String[] languages = str.split(",");
             if (languages.length == 0 || languages[0].trim().isEmpty()) return;
             for (String lang : languages) {
-                lang = StrUtil.trim(lang).toLowerCase();
+                lang = StringUtils.trim(lang).toLowerCase();
                 preferredTranslateTargetLangList.add(lang);
             }
         }, 1000);
@@ -790,7 +790,7 @@ public class NekoConfig {
         };
         for (int i = 0; i < checklist.length; ++i) {
             String s = checklist[i].String().trim();
-            if (!StrUtil.isEmpty(s)) {
+            if (!StringUtils.isEmpty(s)) {
                 target = s;
                 type = i;
                 break;

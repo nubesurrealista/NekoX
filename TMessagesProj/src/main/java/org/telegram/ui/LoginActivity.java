@@ -123,6 +123,7 @@ import com.google.zxing.common.detector.MathUtils;
 //import com.google.android.play.core.integrity.IntegrityTokenResponse;
 //import com.googlecode.mp4parser.boxes.apple.AppleNameBox;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.PhoneFormat.PhoneFormat;
@@ -223,8 +224,6 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import cn.hutool.core.util.NumberUtil;
-import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.DataCenter;
 import tw.nekomimi.nekogram.NekoConfig;
@@ -233,6 +232,7 @@ import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.ui.EditTextAutoFill;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
+import tw.nekomimi.nekogram.utils.StrUtil;
 
 @SuppressLint("HardwareIds")
 public class LoginActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -8806,7 +8806,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             } catch (Exception ignore) {
             }
             if (response instanceof TLRPC.TL_auth_loginToken) {
-                exportLoginTokenDialog = ProxyUtil.showQrDialog(getParentActivity(), "tg://login?token=" + cn.hutool.core.codec.Base64.encodeUrlSafe(((TLRPC.TL_auth_loginToken) response).token));
+                exportLoginTokenDialog = ProxyUtil.showQrDialog(getParentActivity(), "tg://login?token=" + Base64.encodeToString(((TLRPC.TL_auth_loginToken) response).token, Base64.NO_PADDING));
                 int delay = (int) (((TLRPC.TL_auth_loginToken) response).expires - System.currentTimeMillis() / 1000);
                 if (delay < 0 || delay > 20) delay = 20;
                 if (BuildVars.DEBUG_VERSION) {
@@ -9958,8 +9958,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     }
 
     public void doCustomApi() {
-        boolean hasCustomApiCreds = StrUtil.isNotBlank(NekoConfig.customApiId.String())
-                && StrUtil.isNotBlank(NekoConfig.customApiHash.String());
+        boolean hasCustomApiCreds = StringUtils.isNotBlank(NekoConfig.customApiId.String())
+                && StringUtils.isNotBlank(NekoConfig.customApiHash.String());
         BottomBuilder builder = new BottomBuilder(getParentActivity());
 
         EditText[] inputs = new EditText[2];
@@ -9976,7 +9976,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String value = s.toString();
-                if (!NumberUtil.isInteger(value)) {
+                if (!StrUtil.isInteger(value)) {
                     inputs[0].setText("0");
                 } else {
                     customApiCredential[0] = value;
@@ -10044,7 +10044,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         builder.addCancelButton();
         builder.addButton(LocaleController.getString(R.string.Set), (it) -> {
             int target = NekoXConfig.loginApiType.get();
-            if (StrUtil.isBlank(customApiCredential[0]) || StrUtil.isBlank(customApiCredential[1])) {
+            if (StringUtils.isBlank(customApiCredential[0]) || StringUtils.isBlank(customApiCredential[1])) {
                 target = 0;
             }
             if (target == 1) {
@@ -10052,7 +10052,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     inputs[0].requestFocus();
                     AndroidUtilities.showKeyboard(inputs[0]);
                     return Unit.INSTANCE;
-                } else if (StrUtil.isBlank(customApiCredential[1])) {
+                } else if (StringUtils.isBlank(customApiCredential[1])) {
                     inputs[1].requestFocus();
                     AndroidUtilities.showKeyboard(inputs[1]);
                     return Unit.INSTANCE;

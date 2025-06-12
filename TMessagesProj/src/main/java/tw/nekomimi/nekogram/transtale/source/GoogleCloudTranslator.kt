@@ -1,14 +1,15 @@
 package tw.nekomimi.nekogram.transtale.source
 
 import android.os.Build
-import cn.hutool.core.util.StrUtil
-import cn.hutool.http.HttpUtil
+import okhttp3.FormBody
+import okhttp3.Request
+import org.apache.commons.lang3.StringUtils
 import org.json.JSONObject
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.transtale.Translator
-import java.net.URLEncoder
+import tw.nekomimi.nekogram.transtale.Translator.Companion.httpClient
 
 object GoogleCloudTranslator : Translator {
 
@@ -20,31 +21,32 @@ object GoogleCloudTranslator : Translator {
 
         }
 
-        if (StrUtil.isBlank(NekoConfig.googleCloudTranslateKey.String())) error("Missing Cloud Translate Key")
+        if (StringUtils.isBlank(NekoConfig.googleCloudTranslateKey.String())) error("Missing Cloud Translate Key")
 
-        var req = HttpUtil.createPost("https://translation.googleapis.com/language/translate/v2")
 
-        req = if (Build.VERSION.SDK_INT > 25) {
-            req.form("q", query)
-                .form("target", to)
-                .form("format", "text")
-                .form("key", NekoConfig.googleCloudTranslateKey.String())
-                .apply {
-                    if (from != "auto") form("source", from)
-                }
-        } else {
-            req.body("q=${URLEncoder.encode(query)}&target=$to&format=text&key=${NekoConfig.googleCloudTranslateKey.String()}" + (if (from != "auto") "&source=$from" else ""))
+        val sdk25up = Build.VERSION.SDK_INT > 25
+        var req = Request.Builder()
+            .url("https://translation.googleapis.com/language/translate/v2")
+            .apply {
+                post(FormBody.Builder()
+                    .add("q", query)
+                    .add("target", to)
+                    .add("format", "text")
+                    .add("key", NekoConfig.googleCloudTranslateKey.String())
+                    .apply {
+                        if (from != "auto") add("source", from)
+                }.build())
+            }
+
+        val response = httpClient.newCall(req.build()).execute()
+
+        if (response.code != 200) {
+
+            error("HTTP ${response.code} : ${response.body.string()}")
+
         }
 
-        val response = req.execute()
-
-        if (response.status != 200) {
-
-            error("HTTP ${response.status} : ${response.body()}")
-
-        }
-
-        var respObj = JSONObject(response.body())
+        var respObj = JSONObject(response.body.string())
 
         if (respObj.isNull("data")) error(respObj.toString(4))
 

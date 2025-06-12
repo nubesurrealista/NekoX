@@ -117,6 +117,7 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.recyclerview.widget.ChatListItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
@@ -200,6 +201,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -208,10 +210,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.lang.UUID;
-import cn.hutool.core.util.ReUtil;
-import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.NekoXConfig;
@@ -224,6 +222,7 @@ import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.PGPUtil;
+import tw.nekomimi.nekogram.utils.StrUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class ChatActivityEnterView extends BlurredFrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate, StickersAlert.StickersAlertDelegate, SuggestEmojiView.AnchorViewDelegate {
@@ -3271,7 +3270,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 Locale toDefault = TranslatorKt.getCode2Locale("en");
                 Translator.translateMessageBeforeSent(currentAccount, messageEditText.lastText,
                         TranslatorKt.getLocale2code(TranslateDb.getChatLanguage(dialog_id, toDefault)),
-                        !parentFragment.isForwarding(), parentFragment, translateUUID = UUID.fastUUID().toString(true)); // ignores fwd msgs by setting the flag to true
+                        !parentFragment.isForwarding(), parentFragment, translateUUID = StrUtil.getSimpleUUID()); // ignores fwd msgs by setting the flag to true
                 return;
             }
 
@@ -4496,7 +4495,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
         } else {
 
-            if (StrUtil.isNotBlank(NekoConfig.openPGPApp.String())) {
+            if (StringUtils.isNotBlank(NekoConfig.openPGPApp.String())) {
 
                 cell.setTextAndIcon(LocaleController.getString(R.string.Sign), R.drawable.baseline_vpn_key_24);
                 cell.setOnClickListener(v -> {
@@ -4797,7 +4796,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     Translator.translateMessageBeforeSent(currentAccount, messageEditText.lastText,
                             TranslatorKt.getLocale2code(TranslateDb.getChatLanguage(dialog_id, toDefault)),
                             !parentFragment.isForwarding(), parentFragment,
-                            translateUUID = UUID.fastUUID().toString(true));
+                            translateUUID = StrUtil.getSimpleUUID());
                 });
                 transBeforeSendButton.setOnLongClickListener(v -> {
                     Translator.showTargetLangSelect(v, true, (locale) -> {
@@ -4806,7 +4805,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         }
                         Translator.translateMessageBeforeSent(currentAccount, messageEditText.lastText,
                                 TranslatorKt.getLocale2code(locale), !parentFragment.isForwarding(),
-                                parentFragment, translateUUID = UUID.fastUUID().toString(true));
+                                parentFragment, translateUUID = StrUtil.getSimpleUUID());
                         TranslateDb.saveChatLanguage(dialog_id, locale);
                         return Unit.INSTANCE;
                     });
@@ -4814,7 +4813,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 });
                 sendPopupLayout.addView(transBeforeSendButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
 
-                if (StrUtil.isNotBlank(NekoConfig.openPGPApp.String())) {
+                if (StringUtils.isNotBlank(NekoConfig.openPGPApp.String())) {
                     Log.d("030-pgp", "using " + NekoConfig.openPGPApp.String());
                     ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getContext(), false, true, resourcesProvider);
                     cell.setTextAndIcon(LocaleController.getString(R.string.Sign), R.drawable.baseline_vpn_key_24);
@@ -5078,7 +5077,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             Translator.translateMessageBeforeSent(currentAccount, messageEditText.lastText,
                     TranslatorKt.getLocale2code(TranslateDb.getChatLanguage(dialog_id, toDefault)),
                     !parentFragment.isForwarding(), parentFragment,
-                    translateUUID = UUID.fastUUID().toString(true));
+                    translateUUID = StrUtil.getSimpleUUID());
         }, () -> {
             Translator.showTargetLangSelect(messageSendPreview.getOptionsView().getLongClickedView(), true, (locale) -> {
                 if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
@@ -5087,13 +5086,13 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 Translator.translateMessageBeforeSent(currentAccount, messageEditText.lastText,
                         TranslatorKt.getLocale2code(locale),
                         !parentFragment.isForwarding(), parentFragment,
-                        translateUUID = UUID.fastUUID().toString(true));
+                        translateUUID = StrUtil.getSimpleUUID());
                 TranslateDb.saveChatLanguage(dialog_id, locale);
                 return Unit.INSTANCE;
             });
         });
 
-        if (StrUtil.isNotBlank(NekoConfig.openPGPApp.String())) {
+        if (StringUtils.isNotBlank(NekoConfig.openPGPApp.String())) {
             Log.d("030-pgp", "using " + NekoConfig.openPGPApp.String());
             options.add(R.drawable.baseline_vpn_key_24, null, getString(R.string.Sign),
                     Theme.key_actionBarDefaultSubmenuItemIcon, Theme.key_actionBarDefaultSubmenuItem, () -> {
@@ -6038,7 +6037,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
         intent.setAction(action);
 
-        ByteArrayInputStream is = IoUtil.toUtf8Stream(messageEditText.getText().toString());
+        ByteArrayInputStream is = new ByteArrayInputStream(messageEditText.getText().toString().getBytes(StandardCharsets.UTF_8));
         ByteArrayOutputStream os = new ByteArrayOutputStream();
 
         PGPUtil.post(() -> PGPUtil.api.executeApiAsync(intent, is, os, result -> {
@@ -6047,8 +6046,8 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
                 case OpenPgpApi.RESULT_CODE_SUCCESS: {
 
-                    String str = StrUtil.utf8Str(os.toByteArray());
-                    if (StrUtil.isNotBlank(str)) messageEditText.setText(str);
+                    String str = new String(os.toByteArray(), StandardCharsets.UTF_8);
+                    if (StringUtils.isNotBlank(str)) messageEditText.setText(str);
                     break;
 
                 }
@@ -6193,14 +6192,14 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 String replaced;
                 if (useRegex) {
                     try {
-                        replaced = ReUtil.replaceAll(finalText, originText, replaceText);
+                        replaced = StrUtil.replaceAllRegex(finalText, originText, replaceText);
                     } catch (Exception e) {
                         UIUtil.runOnUIThread(progress::dismiss);
                         AlertUtil.showToast(e);
                         return;
                     }
                 } else {
-                    replaced = StrUtil.replace(finalText, originText, replaceText);
+                    replaced = finalText.replace(originText, replaceText);
                 }
                 UIUtil.runOnUIThread(() -> {
                     if (start == end) messageEditText.setText(replaced);

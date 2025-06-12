@@ -1,18 +1,20 @@
 package tw.nekomimi.nekogram.transtale.source
 
-import cn.hutool.core.util.StrUtil
+import okhttp3.Request
+import org.apache.commons.lang3.StringUtils
 import org.json.JSONObject
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.transtale.TransUtils
 import tw.nekomimi.nekogram.transtale.Translator
+import tw.nekomimi.nekogram.transtale.Translator.Companion.httpClient
 
 object GoogleAppTranslator : Translator {
 
     override suspend fun doTranslate(from: String, to: String, query: String): String {
 
-        if (NekoConfig.translationProvider.Int() != 2 && StrUtil.isNotBlank(
+        if (NekoConfig.translationProvider.Int() != 2 && StringUtils.isNotBlank(
                 NekoConfig.googleCloudTranslateKey.String())) return GoogleCloudTranslator.doTranslate(from, to, query)
 
         if (to !in targetLanguages) {
@@ -27,20 +29,21 @@ object GoogleAppTranslator : Translator {
                 "&tl=" + to +
                 "&ie=UTF-8&oe=UTF-8&client=at&dt=t&otf=2"
 
-        val response = cn.hutool.http.HttpUtil
-                .createGet(url)
-                .header("User-Agent", "GoogleTranslate/6.14.0.04.343003216 (Linux; U; Android 10; Redmi K20 Pro)")
-                .execute()
+        val req = Request.Builder()
+            .url(url)
+            .header("User-Agent", "GoogleTranslate/6.14.0.04.343003216 (Linux; U; Android 10; Redmi K20 Pro)")
 
-        if (response.status != 200) {
+        val response = httpClient.newCall(req.build()).execute()
 
-            error("HTTP ${response.status} : ${response.body()}")
+        if (response.code != 200) {
+
+            error("HTTP ${response.code} : ${response.body.string()}")
 
         }
 
         val result = StringBuilder()
 
-        val array = JSONObject(response.body()).getJSONArray("sentences")
+        val array = JSONObject(response.body.string()).getJSONArray("sentences")
         for (index in 0 until array.length()) {
             result.append(array.getJSONObject(index).getString("trans"))
         }

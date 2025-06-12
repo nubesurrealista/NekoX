@@ -47,9 +47,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 
-import cn.hutool.core.util.ReflectUtil;
 import kotlin.Unit;
 
+import moe.hx030.momogram.util.ReflectUtil;
 import tw.nekomimi.nekogram.ui.PopupBuilder;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.StrUtil;

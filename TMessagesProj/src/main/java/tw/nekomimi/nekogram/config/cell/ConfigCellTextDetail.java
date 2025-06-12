@@ -2,11 +2,11 @@ package tw.nekomimi.nekogram.config.cell;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.apache.commons.lang3.StringUtils;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Components.RecyclerListView;
 
-import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.config.CellGroup;
 import tw.nekomimi.nekogram.config.ConfigItem;
 
@@ -34,6 +34,6 @@ public class ConfigCellTextDetail extends AbstractConfigCell {
 
     public void onBindViewHolder(RecyclerView.ViewHolder holder) {
         TextDetailSettingsCell cell = (TextDetailSettingsCell) holder.itemView;
-        cell.setTextAndValue(title, StrUtil.isNotBlank(bindConfig.String()) ? bindConfig.String() : hint, cellGroup.needSetDivider(this));
+        cell.setTextAndValue(title, StringUtils.isNotBlank(bindConfig.String()) ? bindConfig.String() : hint, cellGroup.needSetDivider(this));
     }
 }

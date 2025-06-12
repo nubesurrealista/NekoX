@@ -44,7 +44,8 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 
-import cn.hutool.core.util.StrUtil;
+import tw.nekomimi.nekogram.utils.StrUtil;
+
 
 public class FileLog {
     private OutputStreamWriter streamWriter = null;
@@ -523,7 +524,7 @@ public class FileLog {
 
     public static String mkTag() {
         final StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        return StrUtil.subAfter(stackTrace[4].getClassName(), ".", true);
+        return StrUtil.getSubString(stackTrace[4].getClassName(), ".", null, true);
     }
 
     private static String mkMessage(Throwable e) {

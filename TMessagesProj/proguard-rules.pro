@@ -77,7 +77,6 @@
 -keep class tw.nekomimi.nekogram.InternalUpdater$NekoXReleaseNote { *; }
 -keep class tw.nekomimi.nekogram.InternalUpdater$NekoXAPK { *; }
 
-#-keep class cn.hutool.core.bean.PropDesc { *; }
 #-keep class java.beans.Transient { *; }
 #-keep class java.lang.management.** { *; }
 #-keep class sun.net.spi.nameservice.** { *; }

@@ -125,7 +125,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import cn.hutool.core.thread.ThreadUtil;
+import moe.hx030.momogram.util.ThreadUtil;
 import tw.nekomimi.nekogram.ui.InternalFilters;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;

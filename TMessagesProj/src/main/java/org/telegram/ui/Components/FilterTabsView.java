@@ -49,6 +49,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.apache.commons.lang3.StringUtils;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
@@ -67,7 +68,6 @@ import org.telegram.ui.Stories.recorder.HintView2;
 
 import java.util.ArrayList;
 
-import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.folder.FolderIconHelper;
@@ -1385,7 +1385,7 @@ public class FilterTabsView extends FrameLayout {
             currentPosition = position;
         }
 
-        if (emoticon == null || StrUtil.isBlank(emoticon)) {
+        if (emoticon == null || StringUtils.isBlank(emoticon)) {
             emoticon = (stableId == 0) ? "\uD83D\uDCAC" : "\uD83D\uDCC1";
         }
 

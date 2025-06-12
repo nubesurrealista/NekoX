@@ -21,12 +21,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.telegram.messenger.AndroidUtilities;
@@ -57,7 +57,6 @@ import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.AlertsCreator;
-import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
@@ -72,9 +71,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import cn.hutool.core.util.ReflectUtil;
-import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
+import moe.hx030.momogram.util.ReflectUtil;
 import tw.nekomimi.nekogram.helpers.EvilLeakerKiller;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.NekoXConfig;
@@ -1005,7 +1003,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
         EditText keyField = builder.addEditText(hint);
 
-        if (StrUtil.isNotBlank(bind.String())) {
+        if (StringUtils.isNotBlank(bind.String())) {
             keyField.setText(bind.String());
         }
 
@@ -1015,7 +1013,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
             String key = keyField.getText().toString();
 
-            if (StrUtil.isBlank(key)) key = null;
+            if (StringUtils.isBlank(key)) key = null;
 
             bind.setConfigString(key);
 

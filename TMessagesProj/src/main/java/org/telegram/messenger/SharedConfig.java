@@ -59,7 +59,6 @@ import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 
-import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
@@ -462,12 +461,12 @@ public class SharedConfig {
             if (subId != 0L) {
                 builder.append("Unknown");
             } else {
-                if (StrUtil.isBlank(secret))
+                if (StringUtils.isBlank(secret))
                     builder.append("Socks5");
                 else builder.append("MTProto");
             }
             builder.append(" ] ");
-            if (StrUtil.isBlank(this.getRemarks())) {
+            if (StringUtils.isBlank(this.getRemarks())) {
                 builder.append(address).append(":").append(port);
             } else {
                 builder.append(this.getRemarks());
@@ -800,7 +799,7 @@ public class SharedConfig {
             messageSeenHintCount = preferences.getInt("messageSeenCount", 3);
             emojiInteractionsHintCount = preferences.getInt("emojiInteractionsHintCount", 3);
             dayNightThemeSwitchHintCount = preferences.getInt("dayNightThemeSwitchHintCount", 3);
-            activeAccounts = Arrays.stream(preferences.getString("active_accounts", "").split(",")).filter(StrUtil::isNotBlank).map(Integer::parseInt).collect(Collectors.toCollection(CopyOnWriteArraySet::new));
+            activeAccounts = Arrays.stream(preferences.getString("active_accounts", "").split(",")).filter(StringUtils::isNotBlank).map(Integer::parseInt).collect(Collectors.toCollection(CopyOnWriteArraySet::new));
 
             if (!preferences.contains("activeAccountsLoaded")) {
                 int maxAccounts;
@@ -821,7 +820,7 @@ public class SharedConfig {
                     } else {
                         perf = ApplicationLoader.applicationContext.getSharedPreferences("userconfig" + i, Context.MODE_PRIVATE);
                     }
-                    if (StrUtil.isNotBlank(perf.getString("user", null))) {
+                    if (StringUtils.isNotBlank(perf.getString("user", null))) {
                         activeAccounts.add(i);
                     }
                 }
@@ -1773,7 +1772,7 @@ public class SharedConfig {
                     lnk.getQueryParameter("user"),
                     lnk.getQueryParameter("pass"),
                     lnk.getQueryParameter("secret"));
-            if (StrUtil.isNotBlank(lnk.getFragment())) {
+            if (StringUtils.isNotBlank(lnk.getFragment())) {
                 info.setRemarks(lnk.getFragment());
             }
             return info;

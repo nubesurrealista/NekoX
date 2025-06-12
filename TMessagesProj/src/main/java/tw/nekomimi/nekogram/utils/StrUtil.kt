@@ -1,8 +1,10 @@
 package tw.nekomimi.nekogram.utils
 
 import android.text.SpannableStringBuilder
+import android.util.Log
 import android.view.View
 import android.widget.TextView
+import org.apache.commons.lang3.StringUtils
 import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.FileLog
 import org.telegram.messenger.LocaleController
@@ -10,12 +12,16 @@ import org.telegram.messenger.R
 import org.telegram.ui.ActionBar.BaseFragment
 import org.telegram.ui.Components.URLSpanNoUnderline
 import tw.nekomimi.nekogram.NekoConfig
+import java.util.TreeSet
+import java.util.UUID
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 object StrUtil {
 
     private val urlPattern = Pattern.compile("@[a-zA-Z\\d_]{1,32}")
+    private val groupVarPattern = Pattern.compile("\\$(\\d+)")
+    private val RE_KEYS = setOf('$', '(', ')', '*', '+', '.', '[', ']', '?', '\\', '^', '{', '}', '|')
 
     @JvmStatic
     fun setText(fragment: BaseFragment?, textView: TextView, text: String) {
@@ -52,23 +58,100 @@ object StrUtil {
     }
 
     @JvmStatic
-    fun getSubString(text: String, left: String?, right: String?): String {
-        var llen: Int
-        if (left == null || left.isEmpty()) {
-            llen = 0
+    @JvmOverloads
+    fun getSubString(text: String, left: String?, right: String?, lastOrFirst: Boolean = false): String {
+        val llen = if (left.isNullOrEmpty()) {
+            0
         } else {
-            llen = text.indexOf(left)
-            if (llen > -1) {
-                llen += left.length
-            } else {
-                llen = 0
+            val i = text.indexOf(left)
+            if (i >= 0) i + left.length else 0
+        }
+
+        val rlen = if (right.isNullOrEmpty()) {
+            text.length
+        } else {
+            val i = if (lastOrFirst) text.lastIndexOf(right) else text.indexOf(right, llen)
+            if (i >= 0) i else text.length
+        }
+
+        val ret = text.substring(llen, rlen)
+        Log.d("030-str", "getSubString($text, $left, $right, $lastOrFirst) => $ret")
+        return ret
+    }
+
+    @JvmStatic
+    fun isInteger(str: String): Boolean {
+        return str.toIntOrNull() != null
+    }
+
+    @JvmStatic
+    fun replaceAllRegex(
+        content: CharSequence,
+        patternStr: String,
+        replacementTemplate: String?
+    ): String {
+        if (StringUtils.isEmpty(content)) {
+            return ""
+        }
+
+        val pattern = Pattern.compile(patternStr, Pattern.DOTALL)
+        val matcher = pattern.matcher(content)
+        var result = matcher.find()
+        if (result) {
+            val groupVarMatcher = replacementTemplate?.let { groupVarPattern.matcher(it) }
+            val varNums = TreeSet(Comparator<CharSequence> { a, b ->
+                var ret = b.length.compareTo(a.length)
+                if (ret == 0) {
+                    ret = b.toString().compareTo(a.toString())
+                }
+                ret
+            })
+            if (groupVarMatcher != null) {
+                while (groupVarMatcher.find()) {
+                    val groupStr = groupVarMatcher.group(1)
+                    if (!groupStr.isNullOrEmpty()) {
+                        varNums.add(groupStr)
+                    }
+                }
             }
+
+            val sb = StringBuffer()
+            do {
+                var replacement = replacementTemplate
+                for (`var` in varNums) {
+                    val group = `var`.toString().toInt()
+                    replacement = matcher.group(group)?.let { replacement!!.replace("$$`var`", it) }
+                }
+                replacement?.let { escape(it) }?.let { matcher.appendReplacement(sb, it) }
+                result = matcher.find()
+            } while (result)
+            matcher.appendTail(sb)
+            return sb.toString()
         }
-        var rlen = text.indexOf(right!!, llen)
-        if (rlen < 0 || right.isEmpty()) {
-            rlen = text.length
+        return content.toString()
+    }
+
+    fun escape(content: String): String {
+        if (StringUtils.isBlank(content)) {
+            return content
         }
-        return text.substring(llen, rlen)
+
+        val builder = StringBuilder()
+        val len = content.length
+        var current: Char
+        for (i in 0..<len) {
+            current = content[i]
+            if (RE_KEYS.contains(current)) {
+                builder.append('\\')
+            }
+            builder.append(current)
+        }
+        return builder.toString()
+    }
+
+    @JvmStatic
+    fun getSimpleUUID(): String {
+        return UUID.randomUUID().toString().replace("-", "")
     }
 
     @JvmStatic
@@ -88,6 +171,12 @@ object StrUtil {
         }
 
         return false
+    }
+
+    @JvmStatic
+    fun firstCharUpper(str: String?): String? {
+        if (str == null || StringUtils.isBlank(str)) return str
+        return "${str[0].uppercaseChar()}${str.substring(1)}"
     }
 
     @JvmStatic

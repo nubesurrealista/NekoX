@@ -24,6 +24,7 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 //import com.google.android.play.core.integrity.IntegrityTokenResponse;
 //import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AccountInstance;
@@ -81,7 +82,6 @@ import java.util.stream.Collectors;
 
 import javax.net.ssl.SSLException;
 
-import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.proxynext.Utils;
@@ -255,7 +255,7 @@ public class ConnectionsManager extends BaseController {
         try {
             String idStr = NekoConfig.customApiId.String();
             String hashStr = NekoConfig.customApiHash.String();
-            if (StrUtil.isNotBlank(idStr) && StrUtil.isNotBlank(hashStr))
+            if (StringUtils.isNotBlank(idStr) && StringUtils.isNotBlank(hashStr))
                 appId = Integer.parseInt(idStr);
         } catch (Exception e) {
             Log.e("030-api", "failed to parse custom api credential", e);

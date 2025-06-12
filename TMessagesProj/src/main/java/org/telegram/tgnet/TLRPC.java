@@ -43,7 +43,7 @@ import org.telegram.ui.Stories.MessageMediaStoryFull_old;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import cn.hutool.core.util.ArrayUtil;
+import moe.hx030.momogram.util.ArrayUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 
@@ -21435,7 +21435,7 @@ public class TLRPC {
         public long send_paid_messages_stars;
 
         public boolean verifiedExtended() {
-            return verified || (ArrayUtil.contains(NekoXConfig.developers, id) && NekoXConfig.isDeveloper());
+            return verified || ArrayUtil.contains(NekoXConfig.developers, id);
         }
 
         public static User TLdeserialize(InputSerializedData stream, int constructor, boolean exception) {
@@ -41785,7 +41785,7 @@ public class TLRPC {
         public ArrayList<TL_username> usernames = new ArrayList<>();
 
         public boolean verifiedExtended() {
-            return verified ||( ArrayUtil.contains(NekoXConfig.officialChats, id) && NekoXConfig.isDeveloper());
+            return verified || ArrayUtil.contains(NekoXConfig.officialChats, (Long) id);
         }
 
         public static Chat TLdeserialize(InputSerializedData stream, int constructor, boolean exception) {

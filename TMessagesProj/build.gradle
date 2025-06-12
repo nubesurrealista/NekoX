@@ -1,4 +1,4 @@
-import cn.hutool.core.util.RuntimeUtil
+import java.nio.charset.StandardCharsets
 
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
@@ -6,7 +6,13 @@ apply plugin: "kotlin-android"
 def verName = APP_VERSION_NAME
 def verCode = 10919
 
-verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1").trim().replace('\'','')
+def gitHashProc = new ProcessBuilder("git", "log", "--pretty=format:'%h'", "-n", "1").redirectErrorStream(true).start()
+def gitHashBuf = new byte[16]
+gitHashProc.getInputStream().read(gitHashBuf)
+def gitHash = new String(gitHashBuf, StandardCharsets.UTF_8).trim().replace('\'','')
+
+verName += "-" + gitHash
+println(gitHash)
 
 def archs = List.of("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
 
@@ -356,9 +362,6 @@ dependencies {
     implementation 'io.github.jaredmdobson:concentus:1.0.2'
     implementation "org.gagravarr:vorbis-java-core:0.8"
 
-    implementation "cn.hutool:hutool-core:5.8.32"
-    implementation "cn.hutool:hutool-crypto:5.8.32"
-    implementation 'cn.hutool:hutool-http:5.8.32'
     implementation "com.jakewharton:process-phoenix:2.1.2"
     implementation 'com.google.guava:guava:31.1-android'
 //    implementation 'com.airbnb.android:lottie:6.4.0' // 030: removed from upstream

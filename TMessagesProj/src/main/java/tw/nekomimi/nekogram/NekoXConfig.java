@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.apache.commons.lang3.StringUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildConfig;
@@ -35,10 +36,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.StrUtil;
+import moe.hx030.momogram.util.ArrayUtil;
 import tw.nekomimi.nekogram.database.NitritesKt;
 import tw.nekomimi.nekogram.helpers.CustomStatusHelper;
+import tw.nekomimi.nekogram.utils.StrUtil;
 
 public class NekoXConfig {
 
@@ -46,19 +47,19 @@ public class NekoXConfig {
     //  public static String FAQ_URL = "https://github.com/NekoX-Dev/NekoX#faq";
     public static String FAQ_URL = "https://github.com/dic1911/Momogram#faq";
     public static long releaseChannel = 2137047153;
-    public static long[] officialChats = {
-            1305127566, // NekoX Updates
-            1151172683, // NekoX Chat
-            1299578049, // NekoX Chat Channel
-            1137038259, // NekoX APKs
-            2137047153, // ghetto channel
-            2037198618, // ghetto chat
+    public static Long[] officialChats = {
+            1305127566L, // NekoX Updates
+            1151172683L, // NekoX Chat
+            1299578049L, // NekoX Chat Channel
+            1137038259L, // NekoX APKs
+            2137047153L, // ghetto channel
+            2037198618L, // ghetto chat
     };
 
-    public static long[] developers = {
-            896711046, // nekohasekai
-            380570774, // Haruhi
-            150725478, // HenTaku
+    public static Long[] developers = {
+            896711046L, // nekohasekai
+            380570774L, // Haruhi
+            150725478L, // HenTaku
     };
 
     public static HashSet<Long> devSet = new HashSet<>();
@@ -161,7 +162,7 @@ public class NekoXConfig {
 
     public static String currentAppHash() {
         String hashStr = NekoConfig.customApiHash.String();
-        return StrUtil.isNotBlank(hashStr) ? hashStr : BuildConfig.APP_HASH;
+        return StringUtils.isNotBlank(hashStr) ? hashStr : BuildConfig.APP_HASH;
     }
 
     public static boolean isDeveloper() {
@@ -180,7 +181,7 @@ public class NekoXConfig {
     }
 
     public static String getOpenPGPAppName() {
-        if (StrUtil.isNotBlank(NekoConfig.openPGPApp.String())) {
+        if (StringUtils.isNotBlank(NekoConfig.openPGPApp.String())) {
             try {
                 PackageManager manager = ApplicationLoader.applicationContext.getPackageManager();
                 ApplicationInfo info = manager.getApplicationInfo(NekoConfig.openPGPApp.String(), PackageManager.GET_META_DATA);
@@ -197,7 +198,8 @@ public class NekoXConfig {
             return LocaleController.getString(R.string.Default);
         } else {
             if (name.contains("-")) {
-                return new Locale(StrUtil.subBefore(name, "-", false), StrUtil.subAfter(name, "-", false)).getDisplayName(LocaleController.getInstance().currentLocale);
+                String sub = StrUtil.getSubString(name, null, "-");
+                return new Locale(sub, sub).getDisplayName(LocaleController.getInstance().currentLocale);
             } else {
                 return new Locale(name).getDisplayName(LocaleController.getInstance().currentLocale);
             }

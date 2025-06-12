@@ -325,10 +325,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import cn.hutool.core.thread.ThreadUtil;
-import cn.hutool.core.util.RuntimeUtil;
-import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
+import moe.hx030.momogram.util.ThreadUtil;
 import tw.nekomimi.nekogram.MomoUpdater;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
@@ -342,6 +340,7 @@ import tw.nekomimi.nekogram.settings.NekoXSettingActivity;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.IoUtil;
 import tw.nekomimi.nekogram.utils.LangsKt;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.TelegramUtil;
@@ -2555,7 +2554,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         String text = null;
                         if (userId != 0) {
                             TLRPC.User user = getMessagesController().getUser(userId);
-                            if (user == null || StrUtil.isBlank(user.username)) {
+                            if (user == null || StringUtils.isBlank(user.username)) {
                                 return;
                             }
                             if (botInfo != null && userInfo != null && !TextUtils.isEmpty(userInfo.about) && id == share) {
@@ -2570,7 +2569,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             }
                             if (chatInfo != null && !TextUtils.isEmpty(chatInfo.about) && id == share) {
                                 text = String.format("%s\nhttps://" + getMessagesController().linkPrefix + "/%s", chatInfo.about, ChatObject.getPublicUsername(chat));
-                            } else if (StrUtil.isNotBlank(chat.username)) {
+                            } else if (StringUtils.isNotBlank(chat.username)) {
                                 text = String.format("https://" + getMessagesController().linkPrefix + "/%s", ChatObject.getPublicUsername(chat));
                             } else if (id == qr_code && ChatObject.canUserDoAdminAction(chat, ChatObject.ACTION_INVITE)) {
                                 if (chatInfo != null && chatInfo.exported_invite != null) {
@@ -4379,7 +4378,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             } else if (position == numberRow) {
                 TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
                 String number;
-                if (user == null || StrUtil.isBlank(user.phone)) {
+                if (user == null || StringUtils.isBlank(user.phone)) {
                     return;
                 }
                 number = PhoneFormat.getInstance().format("+" + user.phone);
@@ -4766,7 +4765,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                     } else {
                                         perf = ApplicationLoader.applicationContext.getSharedPreferences("userconfig" + i, Context.MODE_PRIVATE);
                                     }
-                                    if (StrUtil.isNotBlank(perf.getString("user", null))) {
+                                    if (StringUtils.isNotBlank(perf.getString("user", null))) {
                                         SharedConfig.activeAccounts.add(i);
                                     }
                                 }
@@ -11123,7 +11122,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     otherItem.addSubItem(start_secret_chat, R.drawable.msg_secret, LocaleController.getString(R.string.StartEncryptedChat));
                     otherItem.setSubItemShown(start_secret_chat, DialogObject.isEmpty(getMessagesController().isUserContactBlocked(userId)));
                 }
-                if (StrUtil.isNotBlank(user.username)) {
+                if (StringUtils.isNotBlank(user.username)) {
                     otherItem.addSubItem(qr_code, R.drawable.wallet_qr, LocaleController.getString(R.string.ShareQRCode));
                 }
                 if (!isBot && getContactsController().contactsDict.get(userId) != null) {
@@ -11232,7 +11231,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 otherItem.addSubItem(leave_group, R.drawable.baseline_exit_to_app_24, LocaleController.getString(R.string.DeleteAndExit));
             }
-            if (StrUtil.isNotBlank(chat.username) || ChatObject.canUserDoAdminAction(chat, ChatObject.ACTION_INVITE)) {
+            if (StringUtils.isNotBlank(chat.username) || ChatObject.canUserDoAdminAction(chat, ChatObject.ACTION_INVITE)) {
                 otherItem.addSubItem(qr_code, R.drawable.wallet_qr, LocaleController.getString(R.string.ShareQRCode));
             }
             if (topicId == 0) {
@@ -11869,8 +11868,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
                 File logcatFile = new File(dir, "momo-" + System.currentTimeMillis() + ".log");
                 try {
-                    RuntimeUtil.exec("logcat", "-df", logcatFile.getPath()).waitFor();
-                    RuntimeUtil.exec("logcat", "-c").waitFor();
+                    IoUtil.exec("logcat", "-df", logcatFile.getPath()).waitFor();
+                    IoUtil.exec("logcat", "-c").waitFor();
                 } catch (Exception e) {
                     AlertUtil.showToast(e);
                 }
