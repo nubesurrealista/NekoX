@@ -6007,8 +6007,10 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
         Intent intent = new Intent();
 
-        if (NekoConfig.openPGPKeyId.Long() != 0L && save)
-            intent.putExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, NekoConfig.openPGPKeyId.Long());
+        if (NekoConfig.openPGPKeyId.Long() != 0L) {
+            intent.putExtra(OpenPgpApi.EXTRA_USER_IDS, new long[] { NekoConfig.openPGPKeyId.Long() }); // encrypt for self
+            if (save) intent.putExtra(OpenPgpApi.EXTRA_SIGN_KEY_ID, NekoConfig.openPGPKeyId.Long());
+        }
 
         invokePGPAction(intent, save, OpenPgpApi.ACTION_SIGN_AND_ENCRYPT);
         if (messageSendPreview != null) messageSendPreview.dismiss(false);
