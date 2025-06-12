@@ -5312,6 +5312,8 @@ public class MessageObject {
                 }
             } else if (messageOwner.translated) {
                 messageText = messageOwner.translatedMessage;
+            } else if (messageOwner.decrypted) {
+                messageText = messageOwner.decryptedMessage;
             } else {
                 if (messageOwner.message != null) {
                     try {
@@ -6441,6 +6443,8 @@ public class MessageObject {
             // NekoX Translate
             text = messageOwner.translatedMessage;
             // keep the entities as is
+        } else if (messageOwner.decrypted) {
+            text = messageOwner.decryptedMessage;
         }
         if (!isMediaEmpty() && !(getMedia(messageOwner) instanceof TLRPC.TL_messageMediaGame) && !TextUtils.isEmpty(text)) {
             caption = Emoji.replaceEmoji(text, Theme.chat_msgTextPaint.getFontMetricsInt(), false);

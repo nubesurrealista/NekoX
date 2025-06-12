@@ -60056,6 +60056,8 @@ public class TLRPC {
         // NekoX Customs
         public String translatedMessage; //custom
         public boolean translated; // custom
+        public String decryptedMessage = null; // custom
+        public boolean decrypted; // custom
         public boolean hide; // custom
 
         public static Message TLdeserialize(InputSerializedData stream, int constructor, boolean exception) {

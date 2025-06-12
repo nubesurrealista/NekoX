@@ -139,7 +139,9 @@ import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.zxing.common.detector.MathUtils;
 
 import org.apache.commons.lang3.StringUtils;
+import org.openintents.openpgp.OpenPgpDecryptionResult;
 import org.openintents.openpgp.OpenPgpError;
+import org.openintents.openpgp.OpenPgpSignatureResult;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.sufficientlysecure.keychain.pgp.PgpHelper;
 import org.telegram.PhoneFormat.PhoneFormat;
@@ -284,6 +286,7 @@ import org.telegram.ui.bots.WebViewRequestProps;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -315,6 +318,7 @@ import java.util.stream.Collectors;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.ui.MessageDetailsActivity;
+import tw.nekomimi.nekogram.ui.MessageHelper;
 import tw.nekomimi.nekogram.ui.PopupBuilder;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.NekoConfig;
@@ -31171,6 +31175,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (messageObject.isVoiceTranscriptionOpen() && !TranscribeButton.isTranscribing(messageObject)) {
             return messageObject.getVoiceTranscription();
         }
+        if (messageObject.messageOwner.decrypted) {
+            return messageObject.messageOwner.decryptedMessage;
+        }
         if (messageObject.caption != null) {
             return messageObject.caption;
         }
@@ -31913,7 +31920,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     items.add(LocaleController.getString(R.string.PGPVerify));
                                     options.add(nkbtn_PGPVerify);
                                     icons.add(R.drawable.baseline_vpn_key_24);
-                                } else if (PgpHelper.PGP_MESSAGE.matcher(selectedObject.messageOwner.message).matches()) {
+                                } else if (!selectedObject.messageOwner.decrypted && PgpHelper.PGP_MESSAGE.matcher(selectedObject.messageOwner.message).matches()) {
                                     items.add(LocaleController.getString(R.string.PGPDecrypt));
                                     options.add(nkbtn_PGPDecrypt);
                                     icons.add(R.drawable.baseline_vpn_key_24);
@@ -44277,33 +44284,53 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     return;
                 }
 
-                Intent open = new Intent(Intent.ACTION_SEND);
-                open.setType("application/pgp-message");
-                open.putExtra(Intent.EXTRA_TEXT, messageObject.messageOwner.message);
-                open.setClassName(NekoConfig.openPGPApp.String(), NekoConfig.openPGPApp.String() + ".ui.DecryptActivity");
+                ByteArrayInputStream is = new ByteArrayInputStream(selectedObject.messageOwner.message.getBytes());
+                ByteArrayOutputStream os = new ByteArrayOutputStream();
 
-                try {
+                MessageObject finalMessageObject = messageObject;
+                Runnable openInKeyChain = () -> {
+                    Intent open = new Intent(Intent.ACTION_SEND);
+                    open.setType("application/pgp-message");
+                    open.putExtra(Intent.EXTRA_TEXT, finalMessageObject.messageOwner.message);
+                    open.setClassName(NekoConfig.openPGPApp.String(), NekoConfig.openPGPApp.String() + ".ui.DecryptActivity");
 
-                    getParentActivity().startActivity(open);
-
-                } catch (Exception e) {
-
-                    AlertUtil.showToast(e);
-
+                    try {
+                        getParentActivity().startActivity(open);
+                    } catch (Exception e) {
+                        AlertUtil.showToast(e);
+                    }
+                };
+                if (id == nkbtn_PGPVerify) {
+                    openInKeyChain.run();
+                    return;
                 }
+                PGPUtil.post(() -> PGPUtil.api.executeApiAsync(new Intent(OpenPgpApi.ACTION_DECRYPT_VERIFY), is, os, new OpenPgpApi.IOpenPgpCallback() {
 
-//                ByteArrayInputStream is = IoUtil.toUtf8Stream(selectedObject.messageOwner.message);
-//
-//                PGPUtil.post(() -> PGPUtil.api.executeApiAsync(new Intent(OpenPgpApi.ACTION_DECRYPT_VERIFY), is, null, new OpenPgpApi.IOpenPgpCallback() {
-//
-//                    @Override
-//                    public void onReturn(Intent result) {
-//
-//                        OpenPgpSignatureResult s = result.getParcelableExtra(OpenPgpApi.RESULT_SIGNATURE);
-//
-//                    }
-//
-//                }));
+                    @Override
+                    public void onReturn(Intent result) {
+                        int code = result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR);
+
+                        if (code != OpenPgpApi.RESULT_CODE_SUCCESS) {
+                            new AlertDialog.Builder(getContext())
+                                    .setTitle(String.format("UNEXPECTED_PGP_CODE_%d", code))
+                                    .setMessage(getString(R.string.PGPDecryptErr))
+                                    .setPositiveButton(getString(R.string.OK), (__, ___) -> {
+                                        openInKeyChain.run();
+                                    })
+                                    .setNegativeButton(getString(R.string.Cancel), null)
+                                    .show();
+                            return;
+                        }
+
+                        String decrypted = os.toString(StandardCharsets.UTF_8);
+                        finalMessageObject.messageOwner.decrypted = true;
+                        finalMessageObject.messageOwner.decryptedMessage = decrypted;
+                        finalMessageObject.applyNewText(decrypted);
+                        finalMessageObject.generateCaption();
+                        MessageHelper.getInstance(currentAccount).resetMessageContent(getDialogId(), finalMessageObject);
+                    }
+
+                }));
 
                 break;
             }

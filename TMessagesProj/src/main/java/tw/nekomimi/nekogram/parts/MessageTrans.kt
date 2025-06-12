@@ -36,7 +36,9 @@ fun MessageObject.toRawString(): String {
 
     } else {
 
-        content = messageOwner.message ?: ""
+        content =
+            if (messageOwner.decrypted) messageOwner.decryptedMessage
+            else messageOwner.message
 
     }
 
@@ -68,10 +70,16 @@ fun MessageObject.translateFinished(locale: Locale): Int {
 
     } else {
 
-        val text = db.query(messageOwner.message.takeIf { !it.isNullOrBlank() } ?: return 1)
+        var originalText =
+            if (messageOwner.decrypted) messageOwner.decryptedMessage
+            else messageOwner.message
+
+        val text = db.query(originalText.takeIf { !it.isNullOrBlank() } ?: return 1)
                 ?: return 0
 
-        messageOwner.translatedMessage = if (hideOriginalText) text else messageOwner.message + "\n\n--------\n\n" + text
+        messageOwner.translatedMessage =
+            if (hideOriginalText) text
+            else "$originalText\n\n--------\n\n$text"
 
     }
 
@@ -242,13 +250,19 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
 
                 } else {
 
-                    var text = db.query(selectedObject.messageOwner.message)
+                    var originalText =
+                        if (selectedObject.messageOwner.decrypted)
+                            selectedObject.messageOwner.decryptedMessage
+                        else
+                            selectedObject.messageOwner.message
+
+                    var text = db.query(originalText)
 
                     if (text == null) {
 
                         runCatching {
 
-                            text = Translator.translate(target, selectedObject.messageOwner.message)
+                            text = Translator.translate(target, originalText)
 
                         }.onFailure {
 
@@ -274,7 +288,9 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
 
                     }
 
-                    selectedObject.messageOwner.translatedMessage = if (NekoConfig.hideOriginalTextAfterTranslate.Bool()) text else (selectedObject.messageOwner.message + "\n\n--------\n\n" + text)
+                    selectedObject.messageOwner.translatedMessage =
+                        if (NekoConfig.hideOriginalTextAfterTranslate.Bool()) text
+                        else "$originalText\n\n--------\n\n$text"
 
                 }
 
