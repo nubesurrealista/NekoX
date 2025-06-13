@@ -192,8 +192,10 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
+import tw.nekomimi.nekogram.ui.MessageDetailsActivity;
 
 public class PeerStoriesView extends SizeNotifierFrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
@@ -1604,6 +1606,7 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
 //                            });
 //                        });
 
+                        // 030: copied from below
                         if (currentStory.storyItem != null) {
                             if (currentStory.storyItem.translated /* && TextUtils.equals(currentStory.storyItem.translatedLng, TranslateAlert2.getToLanguage()) */) {
                                 ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_translate, LocaleController.getString(R.string.HideTranslation), false, resourcesProvider).setOnClickListener(v -> {
@@ -1641,6 +1644,16 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                                     }
                                 });
                             }
+                        }
+
+                        if (NekoConfig.showMessageDetails.Bool()) {
+                            ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_info, LocaleController.getString(R.string.MessageDetails), false, resourcesProvider).setOnClickListener(v -> {
+                                MessageDetailsActivity activity = new MessageDetailsActivity(storyItem);
+                                LaunchActivity.getLastFragment().presentFragment(activity);
+                                if (popupMenu != null) {
+                                    popupMenu.dismiss();
+                                }
+                            });
                         }
 
                         if (isSelf || MessagesController.getInstance(currentAccount).getStoriesController().canDeleteStory(currentStory.storyItem)) {

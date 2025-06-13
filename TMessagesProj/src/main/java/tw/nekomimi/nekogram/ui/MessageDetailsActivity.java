@@ -39,6 +39,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.tl.TL_stories;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -50,9 +51,6 @@ import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextSettingsCell;
-import org.telegram.ui.ChatActivity;
-import org.telegram.ui.Components.Bulletin;
-import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
@@ -62,7 +60,6 @@ import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class MessageDetailsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -70,6 +67,8 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
     private ListAdapter listAdapter;
 
     private MessageObject messageObject;
+    private TL_stories.StoryItem storyItem;
+    private TLRPC.MessageMedia media;
     private TLRPC.Chat fromChat;
     private TLRPC.User fromUser;
     private String filePath;
@@ -136,65 +135,16 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
 
     public MessageDetailsActivity(MessageObject messageObject) {
         this.messageObject = messageObject;
-        if (messageObject.messageOwner.peer_id != null && messageObject.messageOwner.peer_id.channel_id != 0) {
-            fromChat = getMessagesController().getChat(messageObject.messageOwner.peer_id.channel_id);
-        } else if (messageObject.messageOwner.peer_id != null && messageObject.messageOwner.peer_id.chat_id != 0) {
-            fromChat = getMessagesController().getChat(messageObject.messageOwner.peer_id.chat_id);
-        }
-        if (messageObject.messageOwner.from_id != null && messageObject.messageOwner.from_id.user_id != 0) {
-            fromUser = getMessagesController().getUser(messageObject.messageOwner.from_id.user_id);
-        }
-        filePath = messageObject.messageOwner.attachPath;
-        if (!TextUtils.isEmpty(filePath)) {
-            File temp = new File(filePath);
-            if (!temp.exists()) {
-                filePath = null;
-            }
-        }
-        if (TextUtils.isEmpty(filePath)) {
-            filePath = FileLoader.getInstance(currentAccount).getPathToMessage(messageObject.messageOwner).toString();
-            File temp = new File(filePath);
-            if (!temp.exists()) {
-                filePath = null;
-            }
-        }
-        if (TextUtils.isEmpty(filePath)) {
-            filePath = FileLoader.getInstance(currentAccount).getPathToAttach(messageObject.getDocument(), true).toString();
-            File temp = new File(filePath);
-            if (!temp.isFile()) {
-                filePath = null;
-            }
-        }
-        if (messageObject.messageOwner.media != null && messageObject.messageOwner.media.document != null) {
-            if (TextUtils.isEmpty(messageObject.messageOwner.media.document.file_name)) {
-                for (int a = 0; a < messageObject.messageOwner.media.document.attributes.size(); a++) {
-                    if (messageObject.messageOwner.media.document.attributes.get(a) instanceof TLRPC.TL_documentAttributeFilename) {
-                        fileName = messageObject.messageOwner.media.document.attributes.get(a).file_name;
-                    }
-                }
-            } else {
-                fileName = messageObject.messageOwner.media.document.file_name;
-            }
-        }
+        initFromPeer(messageObject.messageOwner.from_id);
+        initFile();
+        generateJson(messageObject);
+    }
 
-        try {
-            messageDetailsJson = "failed to generate json";
-            try {
-                messageDetailsJson = gson.toJson(messageObject.messageOwner);
-                messageDetailsPrettyJson = prettyGson.toJson(messageObject.messageOwner);
-                String[] spl = messageDetailsPrettyJson.split("\n");
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < 3; ++i) sb.append(spl[i]).append("\n");
-                sb.append("...");
-                messageDetailsPrettyJsonHead = sb.toString();
-            } catch (Exception e) {
-                messageDetailsJson += (", " + e.getMessage());
-                messageDetailsPrettyJson = messageDetailsJson;
-                FileLog.e(e);
-            }
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
+    public MessageDetailsActivity(TL_stories.StoryItem story) {
+        this.storyItem = story;
+        initFromPeer(story.from_id);
+        initFile();
+        generateJson(story);
     }
 
     @Override
@@ -320,28 +270,26 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
     private void updateRows() {
         rowCount = 0;
         idRow = rowCount++;
-        scheduledRow = messageObject.scheduled ? rowCount++ : -1;
-        messageRow = TextUtils.isEmpty(messageObject.messageText) ? -1 : rowCount++;
-        captionRow = TextUtils.isEmpty(messageObject.caption) ? -1 : rowCount++;
+        scheduledRow = !isStory() && messageObject.scheduled ? rowCount++ : -1;
+        messageRow = isStory() || TextUtils.isEmpty(messageObject.messageText) ? -1 : rowCount++;
+        captionRow = TextUtils.isEmpty(getCaption()) ? -1 : rowCount++;
         groupRow = fromChat != null && !fromChat.broadcast ? rowCount++ : -1;
         channelRow = fromChat != null && fromChat.broadcast ? rowCount++ : -1;
-        fromRow = fromUser != null || messageObject.messageOwner.post_author != null ? rowCount++ : -1;
+        fromRow = fromUser != null || (messageObject != null && messageObject.messageOwner.post_author != null) ? rowCount++ : -1;
         botRow = fromUser != null && fromUser.bot ? rowCount++ : -1;
-        dateRow = messageObject.messageOwner.date != 0 ? rowCount++ : -1;
-        editedRow = messageObject.messageOwner.edit_date != 0 ? rowCount++ : -1;
-        forwardRow = messageObject.isForwarded() ? rowCount++ : -1;
+        dateRow = getDate() != 0 ? rowCount++ : -1;
+        editedRow = getEditDate() != 0 ? rowCount++ : -1;
+        forwardRow = !isStory() && messageObject.isForwarded() ? rowCount++ : -1;
         fileNameRow = TextUtils.isEmpty(fileName) ? -1 : rowCount++;
         filePathRow = TextUtils.isEmpty(filePath) ? -1 : rowCount++;
-        fileSizeRow = messageObject.getSize() != 0 ? rowCount++ : -1;
-        if (messageObject.messageOwner.media != null && (
-                (messageObject.messageOwner.media.photo != null && messageObject.messageOwner.media.photo.dc_id > 0) ||
-                        (messageObject.messageOwner.media.document != null && messageObject.messageOwner.media.document.dc_id > 0)
-        )) {
+        fileSizeRow = !isStory() && messageObject.getSize() != 0 ? rowCount++ : -1;
+        if (media != null && ((media.photo != null && media.photo.dc_id > 0) ||
+                        (media.document != null && media.document.dc_id > 0))) {
             dcRow = rowCount++;
         } else {
             dcRow = -1;
         }
-        buttonsRow = messageObject.messageOwner.reply_markup instanceof TLRPC.TL_replyInlineMarkup ? rowCount++ : -1;
+        buttonsRow = messageObject != null && messageObject.messageOwner.reply_markup instanceof TLRPC.TL_replyInlineMarkup ? rowCount++ : -1;
         emptyRow = rowCount++;
         rawRow = rowCount++;
         emptyRow2 = rowCount++;
@@ -408,6 +356,97 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
 //        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
     }
 
+    private void initFromPeer(TLRPC.Peer from_id) {
+        if (from_id != null && from_id.channel_id != 0) {
+            fromChat = getMessagesController().getChat(from_id.channel_id);
+        } else if (from_id != null && from_id.chat_id != 0) {
+            fromChat = getMessagesController().getChat(from_id.chat_id);
+        }
+        if (from_id != null && from_id.user_id != 0) {
+            fromUser = getMessagesController().getUser(from_id.user_id);
+        }
+    }
+
+    private void initFile() {
+        TLRPC.Message messageOwner = (storyItem != null) ? null : messageObject.messageOwner;
+        filePath = (storyItem != null) ? storyItem.attachPath : messageOwner.attachPath;
+
+        if (!TextUtils.isEmpty(filePath)) {
+            File temp = new File(filePath);
+            if (!temp.exists()) {
+                filePath = null;
+            }
+        }
+        if (filePath == null && storyItem != null) return;
+        if (TextUtils.isEmpty(filePath)) {
+            filePath = FileLoader.getInstance(currentAccount).getPathToMessage(messageOwner).toString();
+            File temp = new File(filePath);
+            if (!temp.exists()) {
+                filePath = null;
+            }
+        }
+        if (TextUtils.isEmpty(filePath)) {
+            filePath = FileLoader.getInstance(currentAccount).getPathToAttach(messageObject.getDocument(), true).toString();
+            File temp = new File(filePath);
+            if (!temp.isFile()) {
+                filePath = null;
+            }
+        }
+
+        media = isStory() ? storyItem.media : messageObject.messageOwner.media;
+        if (media != null && media.document != null) {
+            if (TextUtils.isEmpty(media.document.file_name)) {
+                for (int a = 0; a < media.document.attributes.size(); a++) {
+                    if (media.document.attributes.get(a) instanceof TLRPC.TL_documentAttributeFilename) {
+                        fileName = media.document.attributes.get(a).file_name;
+                    }
+                }
+            } else {
+                fileName = media.document.file_name;
+            }
+        }
+    }
+
+    private void generateJson(Object obj) {
+        try {
+            messageDetailsJson = "failed to generate json";
+            try {
+                messageDetailsJson = gson.toJson(obj);
+                messageDetailsPrettyJson = prettyGson.toJson(obj);
+                String[] spl = messageDetailsPrettyJson.split("\n");
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < 3; ++i) sb.append(spl[i]).append("\n");
+                sb.append("...");
+                messageDetailsPrettyJsonHead = sb.toString();
+            } catch (Exception e) {
+                messageDetailsJson += (", " + e.getMessage());
+                messageDetailsPrettyJson = messageDetailsJson;
+                FileLog.e(e);
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+    }
+
+    private boolean isStory() {
+        return storyItem != null;
+    }
+
+    private CharSequence getCaption() {
+        if (isStory()) return storyItem.caption;
+        return messageObject.caption;
+    }
+
+    private int getDate() {
+        if (isStory()) return storyItem.date;
+        return messageObject.messageOwner.date;
+    }
+
+    private int getEditDate() {
+        if (isStory()) return storyItem.edited ? 1 : 0;
+        return messageObject.messageOwner.edit_date;
+    }
+
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
 
         private Context mContext;
@@ -437,11 +476,11 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                     textCell.setMultilineDetail(true);
                     boolean divider = position + 1 != emptyRow;
                     if (position == idRow) {
-                        textCell.setTextAndValue("ID", String.valueOf(messageObject.messageOwner.id), divider);
+                        textCell.setTextAndValue("ID", String.valueOf(isStory() ? storyItem.id : messageObject.messageOwner.id), divider);
                     } else if (position == messageRow) {
                         textCell.setTextAndValue("Message", messageObject.messageText, divider);
                     } else if (position == captionRow) {
-                        textCell.setTextAndValue("Caption", messageObject.caption, divider);
+                        textCell.setTextAndValue("Caption", getCaption(), divider);
                     } else if (position == channelRow || position == groupRow) {
                         StringBuilder builder = new StringBuilder();
                         builder.append(fromChat.title);
@@ -464,18 +503,24 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                                 builder.append("\n");
                             }
                             builder.append(fromUser.id);
-                        } else {
+                        } else if (!isStory()) {
                             builder.append(messageObject.messageOwner.post_author);
                         }
                         textCell.setTextAndValue("From", builder.toString(), divider);
                     } else if (position == botRow) {
                         textCell.setTextAndValue("Bot", "Yes", divider);
                     } else if (position == dateRow) {
-                        long date = (long) messageObject.messageOwner.date * 1000;
-                        textCell.setTextAndValue(messageObject.scheduled ? "Scheduled date" : "Date", messageObject.messageOwner.date == 0x7ffffffe ? "When online" : LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().getFormatterYear().format(new Date(date)), LocaleController.getInstance().getFormatterDay().format(new Date(date))), divider);
+                        long date = (long) getDate() * 1000;
+                        textCell.setTextAndValue((!isStory() && messageObject.scheduled) ? "Scheduled date" : "Date",
+                                getDate() == 0x7ffffffe ? "When online" :
+                                        LocaleController.formatString(R.string.formatDateAtTime, LocaleController.getInstance().getFormatterYear().format(new Date(date)),
+                                            LocaleController.getInstance().getFormatterDay().format(new Date(date))), divider);
                     } else if (position == editedRow) {
-                        long date = (long) messageObject.messageOwner.edit_date * 1000;
-                        textCell.setTextAndValue("Edited", LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().getFormatterYear().format(new Date(date)), LocaleController.getInstance().getFormatterDay().format(new Date(date))), divider);
+                        long date = getEditDate();
+                        String dateStr = (date == 1) ? "Unknown" :
+                                LocaleController.formatString(R.string.formatDateAtTime,
+                                    LocaleController.getInstance().getFormatterYear().format(new Date(date * 1000)), LocaleController.getInstance().getFormatterDay().format(new Date(date)));
+                        textCell.setTextAndValue("Edited", dateStr, divider);
                     } else if (position == forwardRow) {
                         StringBuilder builder = new StringBuilder();
                         if (messageObject.messageOwner.fwd_from.from_id == null) {
@@ -522,10 +567,10 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                     } else if (position == fileSizeRow) {
                         textCell.setTextAndValue("File size", AndroidUtilities.formatFileSize(messageObject.getSize()), divider);
                     } else if (position == dcRow) {
-                        if (messageObject.messageOwner.media.photo != null && messageObject.messageOwner.media.photo.dc_id > 0) {
-                            textCell.setTextAndValue("DC", String.valueOf(messageObject.messageOwner.media.photo.dc_id), divider);
-                        } else if (messageObject.messageOwner.media.document != null && messageObject.messageOwner.media.document.dc_id > 0) {
-                            textCell.setTextAndValue("DC", String.valueOf(messageObject.messageOwner.media.document.dc_id), divider);
+                        if (media.photo != null && media.photo.dc_id > 0) {
+                            textCell.setTextAndValue("DC", String.valueOf(media.photo.dc_id), divider);
+                        } else if (media.document != null && media.document.dc_id > 0) {
+                            textCell.setTextAndValue("DC", String.valueOf(media.document.dc_id), divider);
                         }
                     } else if (position == scheduledRow) {
                         textCell.setTextAndValue("Scheduled", "Yes", divider);
