@@ -373,7 +373,7 @@ public class NekoXConfig {
     public static void saveMusicPlaybackState(Runnable callback) {
         MessageObject msg = MediaController.getInstance().getPlayingMessageObject();
         if (msg == null) {
-            callback.run();
+            if (callback != null) callback.run();
             return;
         }
 
