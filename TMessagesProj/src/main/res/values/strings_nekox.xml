@@ -264,4 +264,5 @@
     <string name="KeepSamePositionOnNewMsg">Keep scroll position on new message sent from other session</string>
     <string name="UseAdGuardDNS">Use AdGuard DNS</string>
     <string name="DisableSaveDraftToCloud">Disable saving draft to cloud</string>
+    <string name="ShareGroupMediaMessage">Would you like to share...</string>
 </resources>
