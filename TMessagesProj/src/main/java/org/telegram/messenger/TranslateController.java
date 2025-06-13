@@ -90,10 +90,13 @@ public class TranslateController extends BaseController {
             return false;
         }
         final TLRPC.Chat chat = getMessagesController().getChat(-dialogId);
-        return (
+        // if allowed by us and not using Lingva as provider
+        boolean forceAutoTranslate = NekoConfig.autoTranslate.Bool() &&
+                !(NekoConfig.useCustomProviderForAutoTranslate.Bool() &&
+                        NekoConfig.translationProvider.Int() == Translator.providerLingva);
+        return (forceAutoTranslate ||
             UserConfig.getInstance(currentAccount).isPremium() ||
-            chat != null && chat.autotranslation
-        );
+            (chat != null && chat.autotranslation));
     }
 
     private Boolean chatTranslateEnabled;
@@ -103,7 +106,7 @@ public class TranslateController extends BaseController {
         if (chatTranslateEnabled == null) {
             chatTranslateEnabled = messagesController.getMainSettings().getBoolean("translate_chat_button", true);
         }
-        return chatTranslateEnabled;
+        return true; // || chatTranslateEnabled;
     }
 
     public boolean isContextTranslateEnabled() {
@@ -142,14 +145,22 @@ public class TranslateController extends BaseController {
         );
     }
 
+    boolean logged = false;
     public boolean isDialogTranslatable(long dialogId) {
-        return (
-            translatableDialogs.contains(dialogId) &&
+        boolean ret = (
+            // translatableDialogs.contains(dialogId) &&
             isFeatureAvailable(dialogId) &&
             !DialogObject.isEncryptedDialog(dialogId) &&
             getUserConfig().getClientUserId() != dialogId
             /* DialogObject.isChatDialog(dialogId) &&*/
         );
+        if (!logged) {
+            logged = true;
+            Log.d("030-tx", String.format("%s = avail(%s) && notEnc(%s) && notSelf(%s)",
+                    ret, isFeatureAvailable(dialogId), !DialogObject.isEncryptedDialog(dialogId),
+                    getUserConfig().getClientUserId() != dialogId));
+        }
+        return ret;
     }
 
     public boolean isTranslateDialogHidden(long dialogId) {
