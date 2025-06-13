@@ -1381,10 +1381,11 @@ public class TranslateController extends BaseController {
     }
 
     public boolean canTranslateStory(TL_stories.StoryItem storyItem) {
-        return storyItem != null && !TextUtils.isEmpty(storyItem.caption) && !Emoji.fullyConsistsOfEmojis(storyItem.caption) && (
-            storyItem.detectedLng == null && storyItem.translatedText != null && TextUtils.equals(storyItem.translatedLng, TranslateAlert2.getToLanguage()) ||
-            storyItem.detectedLng != null && !isLanguageRestricted(storyItem.detectedLng)
-        );
+        return storyItem != null && !TextUtils.isEmpty(storyItem.caption) && !Emoji.fullyConsistsOfEmojis(storyItem.caption);
+//            && (
+//            storyItem.detectedLng == null && storyItem.translatedText != null && TextUtils.equals(storyItem.translatedLng, TranslateAlert2.getToLanguage()) ||
+//            storyItem.detectedLng != null && !isLanguageRestricted(storyItem.detectedLng)
+//        );
     }
 
     public void translateStory(TL_stories.StoryItem storyItem, Runnable done) {

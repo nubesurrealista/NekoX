@@ -192,6 +192,9 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
+import tw.nekomimi.nekogram.transtale.Translator;
+import tw.nekomimi.nekogram.transtale.TranslatorKt;
+
 public class PeerStoriesView extends SizeNotifierFrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
     public static boolean DISABLE_STORY_REPOSTING = false;
@@ -1581,6 +1584,65 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                             });
                         }
 
+//                        ActionBarMenuSubItem translateItem = ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_translate, LocaleController.getString(R.string.Delete), false, resourcesProvider);
+//                        translateItem.setOnClickListener(v -> {
+//                            Translator.translate(currentStory.caption.toString(), new Translator.Companion.TranslateCallBack() {
+//                                @Override
+//                                public void onSuccess(@NonNull String translation) {
+//                                    // WIP
+//                                    currentStory.caption = translation;
+//                                    currentStory.forceTranslated = true;
+//                                    currentStory.updateCaption();
+//                                }
+//
+//                                @Override
+//                                public void onFailed(boolean unsupported, @NonNull String message) {
+//                                    BulletinFactory.of(storyViewer.fragment)
+//                                            .createErrorBulletin(LocaleController.getString(R.string.TranslationFailedAlert2))
+//                                            .show();
+//                                }
+//                            });
+//                        });
+
+                        if (currentStory.storyItem != null) {
+                            if (currentStory.storyItem.translated /* && TextUtils.equals(currentStory.storyItem.translatedLng, TranslateAlert2.getToLanguage()) */) {
+                                ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_translate, LocaleController.getString(R.string.HideTranslation), false, resourcesProvider).setOnClickListener(v -> {
+                                    currentStory.storyItem.translated = false;
+                                    MessagesController.getInstance(currentAccount).getStoriesController().getStoriesStorage().updateStoryItem(currentStory.storyItem.dialogId, currentStory.storyItem);
+                                    cancelTextSelection();
+                                    updatePosition();
+                                    if (popupMenu != null) {
+                                        popupMenu.dismiss();
+                                    }
+                                });
+                            } else if (MessagesController.getInstance(currentAccount).getTranslateController().canTranslateStory(currentStory.storyItem)) {
+                                ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_translate, LocaleController.getString(R.string.TranslateMessage), false, resourcesProvider).setOnClickListener(v -> {
+                                    currentStory.storyItem.translated = true;
+                                    cancelTextSelection();
+                                    if (delegate != null) {
+                                        delegate.setTranslating(true);
+                                    }
+                                    MessagesController.getInstance(currentAccount).getStoriesController().getStoriesStorage().updateStoryItem(currentStory.storyItem.dialogId, currentStory.storyItem);
+                                    final long start = System.currentTimeMillis();
+                                    final Runnable finishTranslate = () -> {
+                                        if (delegate != null) {
+                                            delegate.setTranslating(false);
+                                        }
+                                        PeerStoriesView.this.updatePosition();
+                                        checkBlackoutMode = true;
+                                        storyCaptionView.expand(true);
+                                    };
+                                    MessagesController.getInstance(currentAccount).getTranslateController().translateStory(currentStory.storyItem, () -> AndroidUtilities.runOnUIThread(finishTranslate, Math.max(0, 500L - (System.currentTimeMillis() - start))));
+                                    updatePosition();
+                                    checkBlackoutMode = true;
+                                    storyCaptionView.expand(true);
+                                    if (popupMenu != null) {
+                                        popupMenu.dismiss();
+                                    }
+                                });
+                            }
+                        }
+
                         if (isSelf || MessagesController.getInstance(currentAccount).getStoriesController().canDeleteStory(currentStory.storyItem)) {
                             ActionBarMenuSubItem deleteItem = ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_delete, LocaleController.getString(R.string.Delete), false, resourcesProvider);
                             deleteItem.setSelectorColor(Theme.multAlpha(Theme.getColor(Theme.key_text_RedBold, resourcesProvider), .12f));
@@ -1733,7 +1795,7 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                         }
 
                         if (currentStory.storyItem != null) {
-                            if (currentStory.storyItem.translated && TextUtils.equals(currentStory.storyItem.translatedLng, TranslateAlert2.getToLanguage())) {
+                            if (currentStory.storyItem.translated /* && TextUtils.equals(currentStory.storyItem.translatedLng, TranslateAlert2.getToLanguage()) */) {
                                 ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_translate, LocaleController.getString(R.string.HideTranslation), false, resourcesProvider).setOnClickListener(v -> {
                                     currentStory.storyItem.translated = false;
                                     MessagesController.getInstance(currentAccount).getStoriesController().getStoriesStorage().updateStoryItem(currentStory.storyItem.dialogId, currentStory.storyItem);
