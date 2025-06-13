@@ -63,7 +63,7 @@ object StrUtil {
         val llen = if (left.isNullOrEmpty()) {
             0
         } else {
-            val i = text.indexOf(left)
+            val i = if (lastOrFirst) text.lastIndexOf(left) else text.indexOf(left)
             if (i >= 0) i + left.length else 0
         }
 
