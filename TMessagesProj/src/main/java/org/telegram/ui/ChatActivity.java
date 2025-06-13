@@ -44322,7 +44322,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             return;
                         }
 
-                        String decrypted = os.toString(StandardCharsets.UTF_8);
+                        String decrypted = new String(os.toByteArray(), StandardCharsets.UTF_8);
                         finalMessageObject.messageOwner.decrypted = true;
                         finalMessageObject.messageOwner.decryptedMessage = decrypted;
                         finalMessageObject.applyNewText(decrypted);
