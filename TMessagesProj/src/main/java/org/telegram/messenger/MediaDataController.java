@@ -7616,6 +7616,7 @@ public class MediaDataController extends BaseController {
         }
 
         saveDraft(dialogId, threadId, draftMessage, replyToMessage, false);
+        if (NekoConfig.disableSaveDraftToCloud.Bool()) return;
 
         if (threadId == 0 || ChatObject.isForum(chat) || ChatObject.isMonoForum(chat)) {
             if (!DialogObject.isEncryptedDialog(dialogId)) {

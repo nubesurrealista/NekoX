@@ -363,6 +363,7 @@ public class NekoConfig {
     public static ConfigItem checkMemLeak = addConfig(R.string.CheckMemLeak , "CheckMemLeak", configTypeBool, GENERAL, true);
     public static ConfigItem autoRestartOnLeak = addConfig(R.string.AutoRestartOnLeak , "AutoRestartOnLeak", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem memLeakThreshold = addConfig(R.string.MemLeakThreshold , "MemLeakThreshold", configTypeInt, EXPERIMENTAL, EvilLeakerKiller.setThreshold(1.2F));
+    public static ConfigItem disableSaveDraftToCloud = addConfig(R.string.DisableSaveDraftToCloud , "DisableSaveDraftToCloud", configTypeBool, CHAT, false);
 
     static {
         loadConfig(false);

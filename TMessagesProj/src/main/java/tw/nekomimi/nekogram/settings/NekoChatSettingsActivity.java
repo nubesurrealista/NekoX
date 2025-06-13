@@ -118,6 +118,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final AbstractConfigCell alwaysLoadStickerSetFromServerRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.alwaysLoadStickerSetFromServer));
     private final AbstractConfigCell showChannelMsgFwdCountRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showChannelMsgFwdCount));
     private final AbstractConfigCell keepSamePositionOnNewMsgRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.keepSamePositionOnNewMsg));
+    private final AbstractConfigCell disableSaveDraftToCloudRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableSaveDraftToCloud));
     private final AbstractConfigCell hideMessageRegexRow = cellGroup.appendCell(new ConfigCellTextInput(null, NekoConfig.hideMessageRegex, null));
     private final AbstractConfigCell dividerChat = cellGroup.appendCell(new ConfigCellDivider());
 
