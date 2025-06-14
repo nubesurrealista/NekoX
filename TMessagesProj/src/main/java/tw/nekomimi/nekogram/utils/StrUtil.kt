@@ -75,7 +75,6 @@ object StrUtil {
         }
 
         val ret = text.substring(llen, rlen)
-        Log.d("030-str", "getSubString($text, $left, $right, $lastOrFirst) => $ret")
         return ret
     }
 

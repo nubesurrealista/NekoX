@@ -154,10 +154,10 @@ public class TranslateController extends BaseController {
             getUserConfig().getClientUserId() != dialogId
             /* DialogObject.isChatDialog(dialogId) &&*/
         );
-        if (!logged) {
+        if (!logged && !ret) {
             logged = true;
-            Log.d("030-tx", String.format("%s = avail(%s) && notEnc(%s) && notSelf(%s)",
-                    ret, isFeatureAvailable(dialogId), !DialogObject.isEncryptedDialog(dialogId),
+            Log.d("030-tx", String.format("not avail = avail(%s) && notEnc(%s) && notSelf(%s)",
+                    isFeatureAvailable(dialogId), !DialogObject.isEncryptedDialog(dialogId),
                     getUserConfig().getClientUserId() != dialogId));
         }
         return ret;
