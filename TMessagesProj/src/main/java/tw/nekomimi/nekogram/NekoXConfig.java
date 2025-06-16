@@ -419,7 +419,7 @@ public class NekoXConfig {
         }
 
         Bundle ret = new Bundle();
-        ret.putBoolean("paused", preferences.getBoolean(LAST_PLAYING_MSG_PAUSED, false));
+        ret.putBoolean("paused", preferences.getBoolean(LAST_PLAYING_MSG_PAUSED, true));
         ret.putFloat("progress", preferences.getFloat(LAST_PLAYING_MSG_PROGRESS, 0));
         ret.putInt("ms", preferences.getInt(LAST_PLAYING_MSG_PROGRESS_MS, 0));
         ret.putInt("sec", preferences.getInt(LAST_PLAYING_MSG_PROGRESS_SEC, 0));
@@ -428,6 +428,8 @@ public class NekoXConfig {
 
     public static void doneRestoreMusicPlaybackState() {
         Log.d("030-music", "remove last playback state flag");
-        preferences.edit().remove(LAST_PLAYING_MSG_DIALOG_ID).apply();
+        preferences.edit()
+                .remove(LAST_PLAYING_MSG_DIALOG_ID)
+                .remove(LAST_PLAYING_MSG_ID).commit();
     }
 }
