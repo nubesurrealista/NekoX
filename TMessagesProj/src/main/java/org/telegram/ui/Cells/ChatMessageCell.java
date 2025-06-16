@@ -10486,7 +10486,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             cache.put(currentMessageObject.getId(), videoRotation);
             Log.d("030-r", String.format("value=%d", videoRotation));
         } catch (Exception e) {
-            if (e instanceof IllegalArgumentException && e.getMessage().contains("not exist")) {
+            String msg = e.getMessage();
+            if (e instanceof IllegalArgumentException && (msg != null && msg.contains("not exist"))) {
                 Log.w("030-r", String.format("can't read metadata because %s is not downloaded yet", String.valueOf(path)));
             } else {
                 Log.e("030-r", "", e);
