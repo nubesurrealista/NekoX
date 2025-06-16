@@ -10478,13 +10478,19 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                                 __ -> new ConcurrentHashMap<>());
         Integer cached = cache.get(currentMessageObject.getId());
         if (cached != null) return cached;
+        String path = null;
         try {
-            retriever.setDataSource(FileLoader.getInstance(currentAccount).getPathToMessage(currentMessageObject.messageOwner).getPath());
+            path = FileLoader.getInstance(currentAccount).getPathToMessage(currentMessageObject.messageOwner).getPath();
+            retriever.setDataSource(path);
             videoRotation = Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION));
             cache.put(currentMessageObject.getId(), videoRotation);
             Log.d("030-r", String.format("value=%d", videoRotation));
         } catch (Exception e) {
-            Log.e("030-r", "", e);
+            if (e instanceof IllegalArgumentException && e.getMessage().contains("not exist")) {
+                Log.w("030-r", String.format("can't read metadata because %s is not downloaded yet", String.valueOf(path)));
+            } else {
+                Log.e("030-r", "", e);
+            }
         }
         return videoRotation;
     }
