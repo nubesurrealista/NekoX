@@ -4012,9 +4012,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 } else if (id == search) {
                     openSearchWithText(isSupportedTags() ? "" : null);
                 } else if (id == translate) {
+                    boolean forceUpdate = isSideMenued() || ChatObject.isMonoForum(currentChat);
                     shownTranslate = true;
                     getMessagesController().getTranslateController().setHideTranslateDialog(getDialogId(), false, !isReplyChatComment());
-                    if (!getMessagesController().getTranslateController().toggleTranslatingDialog(getDialogId(), true) || isReplyChatComment()) {
+                    if (!getMessagesController().getTranslateController().toggleTranslatingDialog(getDialogId(), true) || isReplyChatComment() || forceUpdate) {
                         updateTopPanel(true);
                     }
                 } else if (id == call || id == video_call) {
@@ -11654,7 +11655,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         boolean allowed = NekoConfig.autoTranslate.Bool();
         // boolean hidden = getMessagesController().getTranslateController().isTranslateDialogHidden(getDialogId());
-        boolean translatable = getMessagesController().getTranslateController().isDialogTranslatable(getDialogId());
+        boolean forceTranslatable = isSideMenued() || ChatObject.isMonoForum(currentChat);
+        boolean translatable = forceTranslatable || getMessagesController().getTranslateController().isDialogTranslatable(getDialogId());
+        boolean show = allowed && translatable;
         translateItem.setVisibility(allowed && translatable ? View.VISIBLE : View.GONE);
     }
 
@@ -29385,7 +29388,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private boolean shownBotVerification;
     public static final boolean DEBUG_TOP_PANELS = false;
     public void updateTopPanel(boolean animated) {
-        if (chatMode != 0) {
+        boolean forceTranslatable = isSideMenued() || ChatObject.isMonoForum(currentChat);
+        if (chatMode != 0 && !forceTranslatable) {
             return;
         }
         SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
@@ -29433,11 +29437,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             show = true;
         }
         boolean showRestartTopic = !isInPreviewMode() && forumTopic != null && forumTopic.closed && !forumTopic.hidden && ChatObject.canManageTopic(currentAccount, currentChat, forumTopic);
-        boolean showTranslate = (getMessagesController().getTranslateController().isDialogTranslatable(getDialogId()) &&
+        boolean showTranslate = ((forceTranslatable || getMessagesController().getTranslateController().isDialogTranslatable(getDialogId())) &&
                 (shownTranslate || getMessagesController().getTranslateController().isTranslatingDialog(getDialogId())) &&
                 !getMessagesController().getTranslateController().isTranslateDialogHidden(getDialogId())) || DEBUG_TOP_PANELS;
         boolean showBizBot = currentEncryptedChat == null && getUserConfig().isPremium() && preferences.getLong("dialog_botid" + did, 0) != 0 || DEBUG_TOP_PANELS;
         boolean showBotAd = currentUser != null && currentUser.bot && messages.size() >= 2 && botSponsoredMessage != null;
+        if (showTranslate && forceTranslatable) {
+            show = true;
+        }
         if (showRestartTopic) {
             shownRestartTopic = true;
         }
