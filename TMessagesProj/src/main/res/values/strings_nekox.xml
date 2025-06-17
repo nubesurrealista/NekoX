@@ -265,4 +265,5 @@
     <string name="UseAdGuardDNS">Use AdGuard DNS</string>
     <string name="DisableSaveDraftToCloud">Disable saving draft to cloud</string>
     <string name="ShareGroupMediaMessage">Would you like to share...</string>
+    <string name="OnlyShowStoriesFromUsers">Only show stories from users</string>
 </resources>

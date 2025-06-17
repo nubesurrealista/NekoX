@@ -1123,7 +1123,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter implements
     @Override
     public void openStory(DialogCell dialogCell, Runnable onDone) {
         MessagesController messagesController = MessagesController.getInstance(currentAccount);
-        if (MessagesController.getInstance(currentAccount).getStoriesController().hasStories(dialogCell.getDialogId())) {
+        if (messagesController.getStoriesController().hasStories(dialogCell.getDialogId())) {
             parentFragment.getOrCreateStoryViewer().doOnAnimationReady(onDone);
             parentFragment.getOrCreateStoryViewer().open(parentFragment.getContext(), dialogCell.getDialogId(), StoriesListPlaceProvider.of((RecyclerListView) dialogCell.getParent()));
             return;

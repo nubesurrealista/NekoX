@@ -182,6 +182,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     // Story
     private final AbstractConfigCell headerStory = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.Story)));
     private final AbstractConfigCell disableStoriesRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableStories));
+    private final AbstractConfigCell onlyShowStoriesFromUsersRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.onlyShowStoriesFromUsers));
     private final AbstractConfigCell disableSendReadStoriesRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableSendReadStories));
     private final AbstractConfigCell dividerStory = cellGroup.appendCell(new ConfigCellDivider());
 

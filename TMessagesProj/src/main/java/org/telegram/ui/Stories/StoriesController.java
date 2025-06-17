@@ -251,6 +251,9 @@ public class StoriesController {
         if (isLastUploadingFailed(dialogId)) {
             return true;
         }
+        if (dialogId <= 0 && NekoConfig.onlyShowStoriesFromUsers.Bool()) {
+            return false;
+        }
         TL_stories.PeerStories stories = allStoriesMap.get(dialogId);
         if (stories == null) {
             stories = getStoriesFromFullPeer(dialogId);

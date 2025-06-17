@@ -1259,6 +1259,7 @@ public class StoriesUtilities {
 
         public void openStory(long dialogId, Runnable onDone) {
             if (NekoConfig.disableStories.Bool()) return;
+            if (dialogId < 0 && NekoConfig.onlyShowStoriesFromUsers.Bool()) return;
             BaseFragment fragment = LaunchActivity.getLastFragment();
             if (fragment != null && child != null) {
                 fragment.getOrCreateStoryViewer().doOnAnimationReady(onDone);
