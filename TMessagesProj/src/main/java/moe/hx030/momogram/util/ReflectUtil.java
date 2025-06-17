@@ -19,16 +19,12 @@ public class ReflectUtil {
     public static HashSet<Field> getFieldsDirectly(Class<?> beanClass, boolean withSuperClassFields) throws SecurityException {
         assert (null != beanClass);
 
-        HashSet<Field> allFields = null;
+        HashSet<Field> allFields = new HashSet<>();
         Class<?> searchType = beanClass;
         Field[] declaredFields;
         while (searchType != null) {
             declaredFields = searchType.getDeclaredFields();
-            if (null == allFields) {
-                allFields = new HashSet<>();
-            } else {
-                allFields = new HashSet<>(Arrays.asList(declaredFields));
-            }
+            allFields.addAll(Arrays.asList(declaredFields));
             searchType = withSuperClassFields ? searchType.getSuperclass() : null;
         }
 
