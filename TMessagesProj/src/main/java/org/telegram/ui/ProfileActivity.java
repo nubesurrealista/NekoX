@@ -4607,7 +4607,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 getString(R.string.DebugMenuReloadContacts),
                                 getString(R.string.DebugMenuResetContacts),
                                 getString(R.string.DebugMenuResetDialogs),
-                                BuildVars.DEBUG_VERSION ? null : (BuildVars.LOGS_ENABLED ? getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs)),
+                                BuildVars.DEBUG_VERSION ? null : (BuildVars.LOGS_ENABLED ? getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs)), // 4
                                 SharedConfig.inappCamera ? getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera) : getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera),
                                 getString("DebugMenuClearMediaCache", R.string.DebugMenuClearMediaCache),
                                 getString(R.string.DebugMenuCallSettings),
@@ -4629,22 +4629,22 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ? getString(SharedConfig.debugWebView ? R.string.DebugMenuDisableWebViewDebug : R.string.DebugMenuEnableWebViewDebug) : null,
                                 (AndroidUtilities.isTabletInternal() && BuildVars.DEBUG_PRIVATE_VERSION) ? (SharedConfig.forceDisableTabletMode ? "Enable tablet mode" : "Disable tablet mode") : null,
                                 BuildVars.DEBUG_PRIVATE_VERSION ? getString(SharedConfig.isFloatingDebugActive ? R.string.FloatingDebugDisable : R.string.FloatingDebugEnable) : null,
-                                BuildVars.DEBUG_PRIVATE_VERSION ? "Force remove premium suggestions" : null,
+                                BuildVars.DEBUG_PRIVATE_VERSION ? "Force remove premium suggestions" : null, // 25
                                 BuildVars.DEBUG_PRIVATE_VERSION ? "Share device info" : null,
                                 BuildVars.DEBUG_PRIVATE_VERSION ? "Force performance class" : null,
                                 BuildVars.DEBUG_PRIVATE_VERSION && !InstantCameraView.allowBigSizeCameraDebug() ? (!SharedConfig.bigCameraForRound ? "Force big camera for round" : "Disable big camera for round") : null,
                                 getString(DualCameraView.dualAvailableStatic(getContext()) ? "DebugMenuDualOff" : "DebugMenuDualOn"),
-                                BuildVars.DEBUG_VERSION ? (SharedConfig.useSurfaceInStories ? "back to TextureView in stories" : "use SurfaceView in stories") : null,
+                                BuildVars.DEBUG_VERSION ? (SharedConfig.useSurfaceInStories ? "back to TextureView in stories" : "use SurfaceView in stories") : null, // 30
                                 BuildVars.DEBUG_PRIVATE_VERSION ? (SharedConfig.photoViewerBlur ? "do not blur in photoviewer" : "blur in photoviewer") : null,
                                 !SharedConfig.payByInvoice ? "Enable Invoice Payment" : "Disable Invoice Payment",
                                 BuildVars.DEBUG_PRIVATE_VERSION ? "Update Attach Bots" : null,
                                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? (!SharedConfig.isUsingCamera2(currentAccount) ? "Use Camera 2 API" : "Use old Camera 1 API") : null,
-                                BuildVars.DEBUG_VERSION ? "Clear Mini Apps Permissions and Files" : null,
+                                BuildVars.DEBUG_VERSION ? "Clear Mini Apps Permissions and Files" : null, // 35
                                 BuildVars.DEBUG_PRIVATE_VERSION ? "Clear all login tokens" : null,
                                 SharedConfig.canBlurChat() && Build.VERSION.SDK_INT >= 31 ? (SharedConfig.useNewBlur ? "back to cpu blur" : "use new gpu blur") : null,
                                 SharedConfig.adaptableColorInBrowser ? "Disabled adaptive browser colors" : "Enable adaptive browser colors",
                                 SharedConfig.debugVideoQualities ? "Disable video qualities debug" : "Enable video qualities debug",
-                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ? getString(SharedConfig.useSystemBoldFont ? R.string.DebugMenuDontUseSystemBoldFont : R.string.DebugMenuUseSystemBoldFont) : null,
+                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ? getString(SharedConfig.useSystemBoldFont ? R.string.DebugMenuDontUseSystemBoldFont : R.string.DebugMenuUseSystemBoldFont) : null, // 40
                                 "Reload app config",
                                 !SharedConfig.forceForumTabs ? "Force Forum Tabs" : "Do Not Force Forum Tabs"
                         };
@@ -4986,11 +4986,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 SharedConfig.toggleBrowserAdaptableColors();
                             } else if (which == 39) {
                                 SharedConfig.toggleDebugVideoQualities();
-                            } else if (which == 34) {
+                            } else if (which == 40) {
                                 SharedConfig.toggleUseSystemBoldFont();
-                            } else if (which == 35) {
+                            } else if (which == 41) {
                                 MessagesController.getInstance(currentAccount).loadAppConfig(true);
-                            } else if (which == 36) {
+                            } else if (which == 42) {
                                 SharedConfig.toggleForceForumTabs();
                             }
                         });
