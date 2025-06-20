@@ -408,7 +408,9 @@ public class NekoXConfig {
     }
 
     public static long getLastMusicMessageId() {
-        return preferences.getLong(LAST_PLAYING_MSG_ID, -1L);
+        long value = preferences.getLong(LAST_PLAYING_MSG_ID, -1L);
+        preferences.edit().putLong(LAST_PLAYING_MSG_ID, -1L).commit();
+        return value;
     }
 
     public static Bundle getLastMusicPlaybackProgress() {
@@ -430,6 +432,6 @@ public class NekoXConfig {
         Log.d("030-music", "remove last playback state flag");
         preferences.edit()
                 .remove(LAST_PLAYING_MSG_DIALOG_ID)
-                .remove(LAST_PLAYING_MSG_ID).commit();
+                .commit();
     }
 }
