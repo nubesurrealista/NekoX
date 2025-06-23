@@ -30321,7 +30321,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         boolean hideTabWhenSharing = NekoConfig.hideWebViewTabOverlayWhenSharing.Bool();
         boolean hideTabInChat = NekoConfig.hideWebViewTabOverlayInChat.Bool();
-        if (hideTabWhenSharing || hideTabInChat) {
+        if ((LaunchActivity.instance != null) && (hideTabWhenSharing || hideTabInChat)) {
             BottomSheetTabsOverlay overlay = LaunchActivity.instance.getBottomSheetTabsOverlay();
             BottomSheetTabs tabs = overlay.tabsView;
             boolean visible = !hideTabInChat;
