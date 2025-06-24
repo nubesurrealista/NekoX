@@ -1646,15 +1646,7 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                             }
                         }
 
-                        if (NekoConfig.showMessageDetails.Bool()) {
-                            ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_info, LocaleController.getString(R.string.MessageDetails), false, resourcesProvider).setOnClickListener(v -> {
-                                MessageDetailsActivity activity = new MessageDetailsActivity(storyItem);
-                                LaunchActivity.getLastFragment().presentFragment(activity);
-                                if (popupMenu != null) {
-                                    popupMenu.dismiss();
-                                }
-                            });
-                        }
+                        shouldAddDetailsButton(popupLayout);
 
                         if (isSelf || MessagesController.getInstance(currentAccount).getStoriesController().canDeleteStory(currentStory.storyItem)) {
                             ActionBarMenuSubItem deleteItem = ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_delete, LocaleController.getString(R.string.Delete), false, resourcesProvider);
@@ -1863,6 +1855,8 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                         }
                     }
 
+                    shouldAddDetailsButton(popupLayout);
+
                     final boolean hasStickers = currentStory != null && (
 //                        currentStory.uploadingStory != null && currentStory.uploadingStory.entry != null && currentStory.uploadingStory.entry.stickers != null && !currentStory.uploadingStory.entry.stickers.isEmpty() ||
                         currentStory.storyItem != null && currentStory.storyItem.media != null && (
@@ -1888,6 +1882,21 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                         });
                         btn.setTag(R.id.fit_width_tag, 1);
                         popupLayout.addView(btn, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+                    }
+                }
+
+                private boolean addedDetails = false;
+                private void shouldAddDetailsButton(ActionBarPopupWindow.ActionBarPopupWindowLayout popupLayout) {
+                    if (addedDetails) return;
+                    addedDetails = true;
+                    if (NekoConfig.showMessageDetails.Bool()) {
+                        ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_info, LocaleController.getString(R.string.MessageDetails), false, resourcesProvider).setOnClickListener(v -> {
+                            MessageDetailsActivity activity = new MessageDetailsActivity(currentStory.storyItem);
+                            LaunchActivity.getLastFragment().presentFragment(activity);
+                            if (popupMenu != null) {
+                                popupMenu.dismiss();
+                            }
+                        });
                     }
                 }
 
