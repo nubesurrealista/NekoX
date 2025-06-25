@@ -11,6 +11,7 @@ Built with unique customization and features, get ready and let Momogram take yo
 
 ### General
 - Additional translation provider (Lingva)
+- Allow bots to be shown in direct share
 - Allow chat preview for tablet mode if in portrait mode
 - Disable auto login with Telegram account when opening certain links
 - Filter languages shown in translate target
@@ -22,21 +23,26 @@ Built with unique customization and features, get ready and let Momogram take yo
 - Override device performance class
 - Remove tracking queries from URL for better privacy
 - Restart the app automatically whenever critical problem occurs
+- Stream video with external player
+- Swipe music player bar to switch tracks
 - Uncheck "share my number" when adding contact by default
 
 ### Chat
 - Auto select best video quality if available
 - Ban button in join request list
 - Block specified chat/channel from search results
+- Client side fban
 - Copy image/sticker button in menu
 - Detect data saver and use roaming auto download preset when enabled
 - Enable spoiler for all media in specified chats
 - Local only custom chat name
+- Mute group chat notifications from blocked users/bots
 - New double tap actions
 - Reply as quote by default
 - Remove single emoji from recently used list
 - Schedule send message after slow mode timer ends without having to wait in the same chat
 - Search message by type
+- Speech to text via Cloudflare/local Whisper inference
 - Translate text messages before send
 - Translate forwarding text message before send (without quote)
 - Use marquee for long chat titles
@@ -71,7 +77,7 @@ Built with unique customization and features, get ready and let Momogram take yo
 
 #### How do I get notifications working?
 
-Momogram has basic UnifiedPush support(enabled by default), but you need to install distributor in order to get it working.
+Momogram has basic UnifiedPush support, but you need to install distributor in order to get it working.
 
 Here are 3 easy choices for you:
 
