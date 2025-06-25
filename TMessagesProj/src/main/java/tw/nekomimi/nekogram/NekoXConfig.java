@@ -396,11 +396,14 @@ public class NekoXConfig {
     }
 
     public static void restoreMusicPlaybackState(int currentAccount) {
+        if (!NekoConfig.resumeAudioPlaybackOnLaunch.Bool()) return;
+
         long dialogId = preferences.getLong(LAST_PLAYING_MSG_DIALOG_ID, -1L);
         if (dialogId == -1L) {
             Log.d("030-music", "no saved state to restore");
             return;
         }
+
         MediaDataController mediaDataController =  MediaDataController.getInstance(currentAccount);
         long lastPlayingMessageId = preferences.getLong(LAST_PLAYING_MSG_ID, -1L);
         Log.d("030-music", String.format("restore playback %d %d", dialogId, lastPlayingMessageId));

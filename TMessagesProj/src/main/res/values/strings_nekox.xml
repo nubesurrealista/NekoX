@@ -266,4 +266,5 @@
     <string name="DisableSaveDraftToCloud">Disable saving draft to cloud</string>
     <string name="ShareGroupMediaMessage">Would you like to share...</string>
     <string name="OnlyShowStoriesFromUsers">Only show stories from users</string>
+    <string name="ResumeAudioPlaybackOnLaunch">Resume audio playback on launch</string>
 </resources>

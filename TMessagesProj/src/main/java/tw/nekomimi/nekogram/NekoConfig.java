@@ -44,7 +44,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import kotlin.text.Regex;
 import tw.nekomimi.nekogram.config.ConfigItem;
 import tw.nekomimi.nekogram.helpers.EvilLeakerKiller;
 import tw.nekomimi.nekogram.utils.FileUtil;
@@ -365,6 +364,7 @@ public class NekoConfig {
     public static ConfigItem autoRestartOnLeak = addConfig(R.string.AutoRestartOnLeak , "AutoRestartOnLeak", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem memLeakThreshold = addConfig(R.string.MemLeakThreshold , "MemLeakThreshold", configTypeInt, EXPERIMENTAL, EvilLeakerKiller.setThreshold(1.2F));
     public static ConfigItem disableSaveDraftToCloud = addConfig(R.string.DisableSaveDraftToCloud , "DisableSaveDraftToCloud", configTypeBool, CHAT, false);
+    public static ConfigItem resumeAudioPlaybackOnLaunch = addConfig(R.string.ResumeAudioPlaybackOnLaunch, "ResumeAudioPlaybackOnLaunch", configTypeBool, EXPERIMENTAL, false);
 
     static {
         loadConfig(false);
