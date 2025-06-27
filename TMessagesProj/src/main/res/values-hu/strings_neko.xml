@@ -180,4 +180,20 @@
     <string name="UseBotWebviewForGames">Bot webview használata játékokhoz és más egyéb web app-hoz</string>
     <string name="OpenAvatarInsteadOfExpand">Koppintásnál az avatár megnyitása a helyben kinyújtás helyett</string>
     <string name="ForceAllowChooseBrowser">Erőltesse a böngésző kiválasztást hivatkozás megnyitásnál</string>
+    <string name="ForceAllowChooseBrowserDesc">Csak azon hivatkozások esetében működik, amelyek nem app-ban nyílnak meg</string>
+    <string name="PatchAndCleanupLinks">Hivatkozások tisztítása a csevegésben</string>
+    <string name="PatchAndCleanupLinksDesc">min például kicseréli az összes Twitter orientált tartományt twitter.com-ra, hasonlóan pár követőhöz</string>
+    <string name="ShowSharedMediaOnOpeningProfile">Megosztott média megjelenítése a profilnál a sztorik helyett</string>
+    <string name="ConfirmOpenLinkInWebView">Webview-ból külső böngészőben való megnyitásnál megerősítés szükséges</string>
+    <string name="DisableAddBirthdayReminder">Születésnap megadás emlékeztető kikapcsolása</string>
+    <string name="DisableBirthdayReminder">Kapcsolatok születésnapjának emlékeztetőjének kikapcsolása</string>
+    <string name="AlwaysShowBotCommandButton">Bot művelet gomb mindig jelenjen meg</string>
+    <string name="AlwaysHideBotCommandButton">Bot művelet gomb mindig elrejtése</string>
+    <string name="AlwaysDisableSafeBrowsingInWebView">Soha nem használja a Biztonságos Google Böngészést</string>
+    <string name="NoTextToTranslate">Nincs lefordítható szöveg :(</string>
+    <string name="RemovePremiumAnnoyance">Pár prémium reklám promóció eltávolítása</string>
+    <string name="RemovePremiumAnnoyanceDesc">Prémium előnézet megjelenítés blokkolása</string>
+    <string name="NoStarsForReaction">Nincs (elég) csillag a fiokján, de élvezheti az effektet :)</string>
+    <string name="ShowEditTimestampInPopupMenu">A felugró menüben megjeleníti a szerkesztés időbélyegét</string>
+    <string name="ShowForwardTimestampInPopupMenu">Felugró menüben megjelenik a továbbítás időbélyege</string>
 </resources>
