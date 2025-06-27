@@ -179,4 +179,5 @@
     <string name="AutoArchiveAndMuteAbout">Következmény: Az ellenőrzéshez helyi adatbázis felhasználásra, emiatt nem 100% -ig pontos. Más szóval előfordulhatnak FALS POZITÍV esetek</string>
     <string name="UseBotWebviewForGames">Bot webview használata játékokhoz és más egyéb web app-hoz</string>
     <string name="OpenAvatarInsteadOfExpand">Koppintásnál az avatár megnyitása a helyben kinyújtás helyett</string>
+    <string name="ForceAllowChooseBrowser">Erőltesse a böngésző kiválasztást hivatkozás megnyitásnál</string>
 </resources>
