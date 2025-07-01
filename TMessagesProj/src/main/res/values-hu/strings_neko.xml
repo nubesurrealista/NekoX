@@ -274,5 +274,6 @@
     <string name="TriggerCrash">Összeomlás kioldó</string>
     <string name="MapMobileDataSaverToRoaming">Roaming beállítások használata az adatcsökkentőnél</string>
     <string name="MapMobileDataSaverToRoamingNote">Csak az Android 9 vagy újabb esetén működik</string>
-    <string name="OverridePerformanceClass">Eszköz teljesítmény osztály felülírása</string>
+    <string name="OverridePerformanceClass">Eszköz teljesítmény besorolás felülírása</string>
+    <string name="KeepBlockedBotChatHistory">Bot előzmények megtartása a blokkolást követően</string>
 </resources>
