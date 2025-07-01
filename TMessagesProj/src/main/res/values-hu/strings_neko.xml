@@ -204,5 +204,11 @@
     <string name="CustomSearchEngine">Egyedi kereső motor</string>
     <string name="CustomSearchEngineError">A megadott egyedi kereső motor hibás URI lánc!</string>
     <string name="OverrideSettings">Átfogó fő beállítások felülírása (NE HASZNÁLJA, HA NINCS TISZTÁBAN VELE!!)</string>
-    <string name="OverrideSettingBoolean">Változó felülírása</string>
+    <string name="OverrideSettingBoolean">Logikai változó felülírása</string>
+    <string name="OverrideSettingInteger">Szám érték felülírása</string>
+    <string name="OverrideSettingString">Szál felülírása</string>
+    <string name="OverrideSettingLong">Hosszú érték felülírása</string>
+    <string name="OverrideSettingFloat">Tört érték felülírása</string>
+    <string name="OverrideSettingHint">&lt;key&gt; &lt;value&gt;</string>
+    <string name="BlacklistUrlQueryAdd">Kérdés blokkolása</string>
 </resources>
