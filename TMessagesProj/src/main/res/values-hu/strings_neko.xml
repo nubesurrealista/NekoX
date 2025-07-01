@@ -268,6 +268,11 @@
     <string name="CopyPhotoSticker">Kép/Matrica másolása</string>
     <string name="HideUnreadCounterOnFolderTabs">olvasatlan számoló elrejtése a mappa füleken</string>
     <string name="ChooseBestVideoQualityByDefault">Alapból a legjobb videó minőség választása</string>
-    <string name="CrashDialogTitle">A NekoX összedőlt!</string>
-    <string name="CrashDialogMomoTitle">A Momogram összedőlt!</string>
+    <string name="CrashDialogTitle">A NekoX összeomlott!</string>
+    <string name="CrashDialogMomoTitle">A Momogram összeomlott!</string>
+    <string name="CrashDialogMessage">Akar segíteni a fejlesztőknek a probléma megoldásán azáltal, hogy megosztja a kapcsolatos infókat?</string>
+    <string name="TriggerCrash">Összeomlás kioldó</string>
+    <string name="MapMobileDataSaverToRoaming">Roaming beállítások használata az adatcsökkentőnél</string>
+    <string name="MapMobileDataSaverToRoamingNote">Csak az Android 9 vagy újabb esetén működik</string>
+    <string name="OverridePerformanceClass">Eszköz teljesítmény osztály felülírása</string>
 </resources>
