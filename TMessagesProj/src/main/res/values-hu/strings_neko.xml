@@ -196,4 +196,13 @@
     <string name="NoStarsForReaction">Nincs (elég) csillag a fiokján, de élvezheti az effektet :)</string>
     <string name="ShowEditTimestampInPopupMenu">A felugró menüben megjeleníti a szerkesztés időbélyegét</string>
     <string name="ShowForwardTimestampInPopupMenu">Felugró menüben megjelenik a továbbítás időbélyege</string>
+    <string name="AlwaysUseSpoilerForMedia">Egyes csevegéseknél mindig használjon spoilert a médiatartalmakhoz</string>
+    <string name="AlwaysUseSpoilerForMediaDesc">Csevegés ID-k elválasztása vesszővel, pl: chat_id1,chat_id2…</string>
+    <string name="PreferredTranslateTargetLang">Csak egyes cél nyelvek megjelenítése a nyelvek között</string>
+    <string name="PreferredTranslateTargetLangExample">Pl. en, ja, zh_tw</string>
+    <string name="PreferredTranslateTargetLangTitle">Preferált Nyelvek</string>
+    <string name="CustomSearchEngine">Egyedi kereső motor</string>
+    <string name="CustomSearchEngineError">A megadott egyedi kereső motor hibás URI lánc!</string>
+    <string name="OverrideSettings">Átfogó fő beállítások felülírása (NE HASZNÁLJA, HA NINCS TISZTÁBAN VELE!!)</string>
+    <string name="OverrideSettingBoolean">Változó felülírása</string>
 </resources>
