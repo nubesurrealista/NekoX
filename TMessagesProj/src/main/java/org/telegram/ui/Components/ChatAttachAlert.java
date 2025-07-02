@@ -5004,6 +5004,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 pollsEnabled = UserObject.isBot(user) || UserObject.isUserSelf(user);
                 todoEnabled = !(baseFragment instanceof ChatActivity) || ((ChatActivity) baseFragment).getCurrentEncryptedChat() == null;
             }
+            todoEnabled = todoEnabled && UserConfig.getInstance(currentAccount).isPremium();
         }
         photoLayout.onInit(videosEnabled, photosEnabled, documentsEnabled);
         if (commentTextView == null) commentTextView = createCommentTextView(null);
