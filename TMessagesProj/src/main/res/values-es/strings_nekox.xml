@@ -260,4 +260,6 @@
     <string name="PositionLeft">Izquierda</string>
     <string name="PositionRight">Derecha</string>
     <string name="MemLeak">Fuga de memoria</string>
+    <string name="KeepSamePositionOnNewMsg">Mantener la posición de desplazamiento al recibir un nuevo mensaje desde otra sesión</string>
+    <string name="UseAdGuardDNS">Usar AdGuard DNS</string>
 </resources>
