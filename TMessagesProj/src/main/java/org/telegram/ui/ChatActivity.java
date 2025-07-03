@@ -46019,7 +46019,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     private void updatePollContent(MessageObject object) {
         if (chatAdapter != null) {
-            chatAdapter.updateRowWithMessageObject(object, true, true);
+            AndroidUtilities.runOnUIThread(() ->
+                    chatAdapter.updateRowWithMessageObject(object, true, true));
         }
     }
 
