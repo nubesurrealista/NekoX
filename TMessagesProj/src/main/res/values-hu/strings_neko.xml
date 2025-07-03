@@ -276,4 +276,12 @@
     <string name="MapMobileDataSaverToRoamingNote">Csak az Android 9 vagy újabb esetén működik</string>
     <string name="OverridePerformanceClass">Eszköz teljesítmény besorolás felülírása</string>
     <string name="KeepBlockedBotChatHistory">Bot előzmények megtartása a blokkolást követően</string>
+    <string name="DontSendStartCmdOnUnblockBot">Ne küldjön \"/start\"-ot tiltás feloldást követően</string>
+    <string name="SmallerEmojisInChooser">Kisebb hangulatjelek a kiválasztóban</string>
+    <string name="ChatNameOverride">Csevegési név felülírása</string>
+    <string name="ChatNameOverrideDesc">Felülírt név használata a csevegés profil menüben</string>
+    <string name="ChatNameOverrideMenu">Felülírt név</string>
+    <string name="NameAsTitleText">Név használata mint címszöveg</string>
+    <string name="EnableUnifiedPush">UnifiedPush engedélyezése</string>
+    <string name="RestartApp">App újraindítása</string>
 </resources>
