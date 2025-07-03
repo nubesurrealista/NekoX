@@ -7073,10 +7073,10 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 builder.setMessage(LocaleController.getString(R.string.NobodyLikesSpam2));
                 builder.setPositiveButton(LocaleController.getString(R.string.OK), null);
             } else if (reason == 2) {
-                SpannableStringBuilder span = SpannableStringBuilder.valueOf((String) args[1]);
+                String msg = (String) args[1], translationUnavail = "Translations are currently unavailable.";
                 String type = (String) args[2];
+                SpannableStringBuilder span = SpannableStringBuilder.valueOf(msg);
                 if (type.startsWith("PREMIUM_GIFT_SELF_REQUIRED_")) {
-                    String msg = (String) args[1];
                     int start = msg.indexOf('*'), end = msg.indexOf('*', start + 1);
                     if (start != -1 && end != -1 && start != end) {
                         span.replace(start, end + 1, msg.substring(start + 1, end));
@@ -7093,6 +7093,8 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                             }
                         }, start, end - 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     }
+                } else if (msg.contains(translationUnavail) || translationUnavail.contains(msg)) {
+                    return; // ignore translation not available cuz we fallback
                 }
                 builder.setMessage(span);
                 if (type.startsWith("AUTH_KEY_DROP_")) {

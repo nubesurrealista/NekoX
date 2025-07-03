@@ -1019,6 +1019,12 @@ public class TranslateController extends BaseController {
                     return;
                 }*/
 
+                // fuck durov
+                if (shownFallbackHint) {
+                    alternativeTranslate(pendingTranslation1, dialogId);
+                    return;
+                }
+
                 TLRPC.TL_messages_translateText req = new TLRPC.TL_messages_translateText();
                 req.flags |= 1;
                 req.peer = getMessagesController().getInputPeer(dialogId);
@@ -1189,6 +1195,34 @@ public class TranslateController extends BaseController {
 //            });
 //        });
 //    }
+
+    private void alternativeTranslate(final PendingTranslation pendingTranslation1, long dialogId) {
+        final ArrayList<Integer> ids;
+        final ArrayList<Utilities.Callback3<Integer, TLRPC.TL_textWithEntities, String>> callbacks;
+        final ArrayList<TLRPC.TL_textWithEntities> texts;
+        final String toLanguage;
+        synchronized (TranslateController.this) {
+            ids = pendingTranslation1.messageIds;
+            callbacks = pendingTranslation1.callbacks;
+            texts = pendingTranslation1.messageTexts;
+            toLanguage = pendingTranslation1.language;
+        }
+        for (int i = 0; i < ids.size(); ++i) {
+            final int id = ids.get(i);
+            final Utilities.Callback3<Integer, TLRPC.TL_textWithEntities, String> _callback = callbacks.get(i);
+            final String _text = texts.get(i).text;
+            TranslateAlert2.alternativeTranslate(_text, null, toLanguage, (result, rateLimit) -> {
+                if (result != null) {
+                    final TLRPC.TL_textWithEntities resultWithEntities = new TLRPC.TL_textWithEntities();
+                    resultWithEntities.text = result;
+                    _callback.run(id, resultWithEntities, toLanguage);
+                } else {
+                    toggleTranslatingDialog(dialogId, false);
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_ERROR, LocaleController.getString(rateLimit ? R.string.TranslationFailedAlert1 : R.string.TranslationFailedAlert2));
+                }
+            });
+        }
+    }
 
     private final HashMap<Long, ArrayList<PendingPollTranslation>> pendingPollTranslations = new HashMap<>();
 
