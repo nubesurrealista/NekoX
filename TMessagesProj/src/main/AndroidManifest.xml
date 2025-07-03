@@ -13,7 +13,7 @@
     </queries>
 
 
-    <uses-sdk tools:overrideLibrary="io.nekohasekai.ss_rust,io.nekohasekai.ssr_libev" />
+    <uses-sdk tools:overrideLibrary="org.tensorflow.lite" />
 
     <supports-screens android:anyDensity="true"
                       android:largeScreens="true"
