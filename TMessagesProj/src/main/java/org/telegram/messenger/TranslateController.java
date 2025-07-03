@@ -15,6 +15,7 @@ import android.util.Pair;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -94,6 +95,7 @@ public class TranslateController extends BaseController {
     private final HashMap<Long, String> detectedDialogLanguage = new HashMap<>();
     private final HashMap<Long, HashMap<Integer, MessageObject>> keptReplyMessageObjects = new HashMap<>();
     private final Set<Long> hideTranslateDialogs = new HashSet<>();
+    private boolean shownFallbackHint = false;
 
     static class TranslatableDecision {
         Set<Integer> certainlyTranslatable = new HashSet<>();
@@ -1034,13 +1036,22 @@ public class TranslateController extends BaseController {
                         texts = pendingTranslation1.messageTexts;
                         toLanguage = pendingTranslation1.language;
                     }
+                    if (err != null) {
+                        Log.d("030-tx", String.format("pushToTranslate err %d - %s", err.code, err.text));
+                        err.text = err.text.toUpperCase();
+                    }
                     if (res instanceof TLRPC.TL_messages_translateResult) {
                         ArrayList<TLRPC.TL_textWithEntities> translated = ((TLRPC.TL_messages_translateResult) res).result;
                         final int count = Math.min(callbacks.size(), translated.size());
                         for (int i = 0; i < count; ++i) {
                             callbacks.get(i).run(ids.get(i), TranslateAlert2.preprocess(texts.get(i), translated.get(i)), toLanguage);
                         }
-                    } else if (err != null && "TRANSLATIONS_DISABLED_ALT".equalsIgnoreCase(err.text)) {
+                    } else if (err != null && "TRANSLATIONS_DISABLED_ALT".contains(err.text)) {
+                        if (!shownFallbackHint) {
+                            shownFallbackHint = true;
+                            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin,
+                                    Bulletin.TYPE_ERROR, LocaleController.getString(R.string.TranslationUnavailable));
+                        }
                         for (int i = 0; i < ids.size(); ++i) {
                             final int id = ids.get(i);
                             final Utilities.Callback3<Integer, TLRPC.TL_textWithEntities, String> _callback = callbacks.get(i);

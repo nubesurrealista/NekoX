@@ -318,7 +318,11 @@ public class TranslateAlert2 extends BottomSheet implements NotificationCenter.N
         reqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (res, err) -> {
             AndroidUtilities.runOnUIThread(() -> {
                 reqId = null;
-                if (err != null && "TRANSLATIONS_DISABLED_ALT".equalsIgnoreCase(err.text)) {
+                if (err != null) {
+                    err.text = err.text.toUpperCase();
+                }
+                if (err != null && "TRANSLATIONS_DISABLED_ALT".contains(err.text)) {
+                    BulletinFactory.of((FrameLayout) containerView, resourcesProvider).createErrorBulletin(LocaleController.getString(R.string.TranslationUnavailable)).show();
                     translateAlt();
                 } else if (res instanceof TLRPC.TL_messages_translateResult &&
                     !((TLRPC.TL_messages_translateResult) res).result.isEmpty() &&
