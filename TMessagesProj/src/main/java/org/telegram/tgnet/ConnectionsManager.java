@@ -42,6 +42,7 @@ import org.telegram.messenger.FileUploadOperation;
 import org.telegram.messenger.KeepAliveJob;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NativeLoader;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.PushListenerController;
 import org.telegram.messenger.SharedConfig;
@@ -752,7 +753,21 @@ public class ConnectionsManager extends BaseController {
     }
 
     public boolean isTestBackend() {
-        return native_isTestBackend(currentAccount) != 0;
+        try {
+            if (!NativeLoader.loaded()) {
+                Log.w("030-tgnet", "native lib isn't loaded yet, try again here");
+                NativeLoader.initNativeLibs(ApplicationLoader.applicationContext);
+                if (!NativeLoader.loaded()) {
+                    Log.e("030-tgnet", "failed to load native lib!");
+                }
+            }
+            return native_isTestBackend(currentAccount) != 0;
+        } catch (UnsatisfiedLinkError e) {
+            Log.e("030-tgnet", "UnsatisfiedLinkError on calling native_isTestBackend", e);
+        } catch (Throwable t) {
+            Log.e("030-tgnet", t.getClass().getName(), t);
+        }
+        return false;
     }
 
     public void resumeNetworkMaybe() {
@@ -1363,7 +1378,7 @@ public class ConnectionsManager extends BaseController {
             ByteArrayOutputStream outbuf = null;
             InputStream httpConnectionStream = null;
             try {
-                String domain = native_isTestBackend(currentAccount) != 0 ? "tapv3.stel.com" : AccountInstance.getInstance(currentAccount).getMessagesController().dcDomainName;
+                String domain = getInstance(currentAccount).isTestBackend() ? "tapv3.stel.com" : AccountInstance.getInstance(currentAccount).getMessagesController().dcDomainName;
                 int len = Utilities.random.nextInt(116) + 13;
                 final String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -1483,7 +1498,7 @@ public class ConnectionsManager extends BaseController {
             ByteArrayOutputStream outbuf = null;
             InputStream httpConnectionStream = null;
             try {
-                String domain = native_isTestBackend(currentAccount) != 0 ? "tapv3.stel.com" : AccountInstance.getInstance(currentAccount).getMessagesController().dcDomainName;
+                String domain = getInstance(currentAccount).isTestBackend() ? "tapv3.stel.com" : AccountInstance.getInstance(currentAccount).getMessagesController().dcDomainName;
                 int len = Utilities.random.nextInt(116) + 13;
                 final String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 

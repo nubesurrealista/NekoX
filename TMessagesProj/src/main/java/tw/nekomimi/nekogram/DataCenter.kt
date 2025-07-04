@@ -8,7 +8,7 @@ object DataCenter {
     @JvmStatic
     fun applyOfficalDataCanter(account: Int) {
 
-        if (ConnectionsManager.native_isTestBackend(account) != 0) {
+        if (ConnectionsManager.getInstance(account).isTestBackend) {
             ConnectionsManager.getInstance(account).switchBackend(false)
         }
 
@@ -19,7 +19,7 @@ object DataCenter {
     @JvmStatic
     fun applyTestDataCenter(account: Int) {
 
-        if (ConnectionsManager.native_isTestBackend(account) == 0) {
+        if (!ConnectionsManager.getInstance(account).isTestBackend) {
             ConnectionsManager.getInstance(account).switchBackend(false)
         }
 

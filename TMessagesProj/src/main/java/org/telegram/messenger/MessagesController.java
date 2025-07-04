@@ -1686,7 +1686,21 @@ public class MessagesController extends BaseController implements NotificationCe
         giveawayPeriodMax = mainPreferences.getLong("giveaway_period_max", 7);
         stealthModePast = mainPreferences.getInt("stories_stealth_past_period", 5 * 60);
         stealthModeCooldown = mainPreferences.getInt("stories_stealth_cooldown_period", 60 * 60);
-        boolean isTest = ConnectionsManager.native_isTestBackend(currentAccount) != 0;
+        boolean isTest = false;
+        try {
+            if (!NativeLoader.loaded()) {
+                Log.w("030-tgnet", "native lib isn't loaded yet, try again here");
+                NativeLoader.initNativeLibs(ApplicationLoader.applicationContext);
+                if (!NativeLoader.loaded()) {
+                    Log.e("030-tgnet", "failed to load native lib!");
+                }
+            }
+            isTest = ConnectionsManager.native_isTestBackend(currentAccount) != 0;
+        } catch (UnsatisfiedLinkError e) {
+            Log.e("030-tgnet", "UnsatisfiedLinkError on calling native_isTestBackend", e);
+        } catch (Throwable t) {
+            Log.e("030-tgnet", t.getClass().getName(), t);
+        }
         chatlistInvitesLimitDefault = mainPreferences.getInt("chatlistInvitesLimitDefault", 3);
         storyExpiringLimitDefault = mainPreferences.getInt("storyExpiringLimitDefault", 50);
         storyExpiringLimitPremium = mainPreferences.getInt("storyExpiringLimitPremium", 100);
@@ -15293,7 +15307,7 @@ public class MessagesController extends BaseController implements NotificationCe
         getMessagesStorage().cleanup(false);
         cleanup();
         getContactsController().deleteUnknownAppAccounts();
-        if (ConnectionsManager.native_isTestBackend(currentAccount) != 0) {
+        if (ConnectionsManager.getInstance(currentAccount).isTestBackend()) {
             ConnectionsManager.native_switchBackend(currentAccount, false);
         }
         SharedConfig.activeAccounts.remove(currentAccount);
