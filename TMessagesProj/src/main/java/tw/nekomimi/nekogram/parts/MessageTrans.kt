@@ -55,6 +55,7 @@ val STATUS_DONE = 2
 fun MessageObject.translateFinished(locale: Locale): Int {
 
     val db = TranslateDb.forLocale(locale)
+    val map = if (db != null) null else translatedTexts
 
     val hideOriginalText = NekoConfig.hideOriginalTextAfterTranslate.Bool()
 
@@ -62,7 +63,8 @@ fun MessageObject.translateFinished(locale: Locale): Int {
 
         val pool = (messageOwner.media as TLRPC.TL_messageMediaPoll).poll
 
-        val question = db.query(pool.question.text) ?: return STATUS_UNFINISHED
+        val question = map?.get(locale)?.get(pool.question.text) ?: db?.query(pool.question.text)
+        if (question == null) return STATUS_UNFINISHED
 
         pool.translatedQuestion = if (hideOriginalText) question else (pool.question.text + "\n\n--------\n\n" + question)
 
@@ -72,7 +74,8 @@ fun MessageObject.translateFinished(locale: Locale): Int {
 
         pool.answers.forEach {
 
-            val answer = db.query(it.text.text) ?: return STATUS_UNFINISHED
+            val answer = map?.get(locale)?.get(it.text.text) ?: db?.query(it.text.text)
+            if (answer == null) return STATUS_UNFINISHED
 
             it.translatedText = if (hideOriginalText) answer else (answer + " | " + it.text.text)
 
@@ -87,7 +90,8 @@ fun MessageObject.translateFinished(locale: Locale): Int {
         messageOwner.translatedPoll = translatedPoll
     } else if (isTodo) {
         val todo = (messageOwner.media as TLRPC.TL_messageMediaToDo).todo
-        val title = db.query(todo.title.text) ?: return 0
+        val title = map?.get(locale)?.get(todo.title.text) ?: db?.query(todo.title.text)
+        if (title == null) return STATUS_UNFINISHED
 
         todo.translatedTitle = if (hideOriginalText) title.toTextWithEntities() else (title + "\n\n--------\n\n" + todo.title.text).toTextWithEntities()
 
@@ -97,7 +101,8 @@ fun MessageObject.translateFinished(locale: Locale): Int {
 
         todo.list.forEach {
 
-            val answer = db.query(it.title.text) ?: return STATUS_UNFINISHED
+            val answer = map?.get(locale)?.get(it.title.text) ?: db?.query(it.title.text)
+            if (answer == null) return STATUS_UNFINISHED
 
             it.translatedTitle = if (hideOriginalText) answer.toTextWithEntities() else (answer + " | " + it.title.text).toTextWithEntities()
 
@@ -117,8 +122,9 @@ fun MessageObject.translateFinished(locale: Locale): Int {
             if (messageOwner.decrypted) messageOwner.decryptedMessage
             else messageOwner.message
 
-        val text = db.query(originalText.takeIf { !it.isNullOrBlank() } ?: return STATUS_SKIPPED_NO_TEXT)
-                ?: return STATUS_UNFINISHED
+        val text = map?.get(locale)?.get(originalText)
+            ?: db?.query(originalText.takeIf { !it.isNullOrBlank() } ?: return STATUS_SKIPPED_NO_TEXT)
+            ?: return STATUS_UNFINISHED
 
         messageOwner.translatedMessage =
             if (hideOriginalText) text
@@ -140,6 +146,8 @@ fun ChatActivity.translateMessages2(target: Locale) = translateMessages(target)
 
 @JvmName("translateMessages")
 fun ChatActivity.translateMessages3(messages: List<MessageObject>) = translateMessages(messages = messages)
+
+val translatedTexts = HashMap<Locale, HashMap<String, String>>()
 
 fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.String().code2Locale
                                    , messages: List<MessageObject> = messageForTranslate?.let { listOf(it) }
@@ -212,13 +220,14 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
             deferreds.add(async(transPool) trans@{
 
                 val db = TranslateDb.forLocale(target)
+                val map = if (db != null) null else translatedTexts
                 val hideOriginalText = NekoConfig.hideOriginalTextAfterTranslate.Bool()
 
                 if (selectedObject.isPoll) {
 
                     val pool = (selectedObject.messageOwner.media as TLRPC.TL_messageMediaPoll).poll
 
-                    var question = db.query(pool.question.text)
+                    var question = map?.get(target)?.get(pool.question.text) ?: db?.query(pool.question.text)
 
                     if (question == null) {
 
@@ -260,7 +269,7 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
 
                     pool.answers.forEach {
 
-                        var answer = db.query(it.text.text)
+                        var answer = map?.get(target)?.get(it.text.text) ?: db?.query(it.text.text)
 
                         if (answer == null) {
 
@@ -307,7 +316,7 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
                 } else if (selectedObject.isTodo) {
                     val todo = (selectedObject.messageOwner.media as TLRPC.TL_messageMediaToDo).todo
 
-                    var title = db.query(todo.title.text)
+                    var title = map?.get(target)?.get(todo.title.text) ?: db?.query(todo.title.text)
 
                     if (title == null) {
 
@@ -349,7 +358,7 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
 
                     todo.list.forEach {
 
-                        var item = db.query(it.title.text)
+                        var item = map?.get(target)?.get(it.title.text) ?: db?.query(it.title.text)
 
                         if (item == null) {
 
@@ -402,7 +411,7 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
                         else
                             selectedObject.messageOwner.message
 
-                    var text = db.query(originalText)
+                    var text = map?.get(target)?.get(originalText) ?: db?.query(originalText)
 
                     if (text == null) {
 
@@ -478,3 +487,13 @@ fun String.toTextWithEntities(): TLRPC.TL_textWithEntities {
     ret.entities = ArrayList()
     return ret
 }
+
+//class MessageTrans {
+//    companion object {
+//
+//        @JvmStatic
+//        fun getTranslatedTexts() : HashMap<Locale, HashMap<String, String>> {
+//            return translatedTexts
+//        }
+//    }
+//}

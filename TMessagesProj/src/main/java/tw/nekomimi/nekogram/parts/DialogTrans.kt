@@ -7,10 +7,10 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import tw.nekomimi.nekogram.transtale.TranslateDb
 import tw.nekomimi.nekogram.transtale.Translator
-import tw.nekomimi.nekogram.transtale.code2Locale
 import tw.nekomimi.nekogram.utils.AlertUtil
 import tw.nekomimi.nekogram.utils.UIUtil
 import tw.nekomimi.nekogram.utils.uDismiss
+import java.util.HashMap
 import java.util.concurrent.atomic.AtomicBoolean
 
 fun startTrans(ctx: Context, text: String) {
@@ -35,13 +35,15 @@ fun startTrans(ctx: Context, text: String) {
 
     GlobalScope.launch(Dispatchers.IO) {
 
-        val target = TranslateDb.currentTarget()
+        val target = TranslateDb.currentTarget() ?: translatedTexts[TranslateDb.currentTargetLocale()]
 
-        if (target.contains(text)) {
+        if ( if (target is TranslateDb) target.contains(text) else (target as HashMap<*, *>).contains(text) ) {
+
+            val result = if (target is TranslateDb) target.query(text) else (target as HashMap<*, *>)[text]
 
             dialog.uDismiss()
 
-            AlertUtil.showCopyAlert(ctx, target.query(text) ?: "")
+            AlertUtil.showCopyAlert(ctx, (result as String?) ?: "")
 
             return@launch
 
@@ -49,7 +51,7 @@ fun startTrans(ctx: Context, text: String) {
 
         runCatching {
 
-            val result = Translator.translate(target.code.code2Locale, text)
+            val result = Translator.translate(TranslateDb.currentTargetLocale(), text)
 
             if (!canceled.get()) {
 

@@ -91,7 +91,7 @@ fun ArticleViewer.doTransLATE() {
             }?.also { str ->
                 deferreds.add(async(transPool) {
 
-                    if (TranslateDb.currentTarget().contains(str)) {
+                    if (TranslateDb.currentTarget()?.contains(str) == true || translatedTexts[TranslateDb.currentTargetLocale()]?.contains(str) == true) {
 
                         status.uUpdate("${all - taskCount.get()} / $all")
 

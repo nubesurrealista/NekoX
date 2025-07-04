@@ -17,7 +17,9 @@ fun postPollTrans(messageObject: MessageObject, media: TLRPC.TL_messageMediaPoll
         else if (answer != null) {
             // workaround for null stuff
             val db = TranslateDb.forLocale(NekoConfig.translateToLang.String().code2Locale)
-            answer.translatedText = db.query(answer.text.text) + " | " + answer.text.text
+            val txtFromDb = db?.query(answer.text.text)
+            val txt = txtFromDb ?: translatedTexts[NekoConfig.translateToLang.String().code2Locale]?.get(answer.text.text)
+            answer.translatedText = txt + " | " + answer.text.text
         }
     }
 }

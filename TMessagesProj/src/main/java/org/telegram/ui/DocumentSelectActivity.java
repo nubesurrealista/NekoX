@@ -99,6 +99,7 @@ import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import kotlin.Unit;
+import tw.nekomimi.nekogram.parts.MessageTransKt;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
@@ -837,13 +838,21 @@ public class DocumentSelectActivity extends BaseFragment {
         TranslateDb db = TranslateDb.forLocale(target);
         String origin = commentTextView.getText().toString();
 
-        if (db.contains(origin)) {
+        if (db != null && db.contains(origin)) {
 
             String translated = db.query(origin);
             commentTextView.getEditText().setText(translated);
 
             return;
 
+        } else {
+            String translatedText = null;
+            boolean hasLocale = MessageTransKt.getTranslatedTexts().containsKey(target);
+            boolean translated = hasLocale && (translatedText = MessageTransKt.getTranslatedTexts().get(target).get(origin)) != null;
+            if (translated) {
+                commentTextView.getEditText().setText(translatedText);
+                return;
+            }
         }
 
         Translator.translate(target, origin, new Translator.Companion.TranslateCallBack() {

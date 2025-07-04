@@ -1,5 +1,6 @@
 package tw.nekomimi.nekogram.transtale
 
+import android.os.Build
 import android.text.SpannableStringBuilder
 import android.view.View
 import org.apache.commons.lang3.LocaleUtils
@@ -21,12 +22,14 @@ import org.apache.commons.lang3.StringUtils
 import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.cc.CCConverter
 import tw.nekomimi.nekogram.cc.CCTarget
+import tw.nekomimi.nekogram.parts.translatedTexts
 import tw.nekomimi.nekogram.transtale.source.*
 import tw.nekomimi.nekogram.ui.PopupBuilder
 import tw.nekomimi.nekogram.utils.UIUtil
 import tw.nekomimi.nekogram.utils.receive
 import tw.nekomimi.nekogram.utils.receiveLazy
 import java.util.*
+import kotlin.collections.HashMap
 
 
 val String.code2Locale: Locale by receiveLazy<String, Locale> {
@@ -57,7 +60,8 @@ val Locale.locale2code by receiveLazy<Locale, String> {
 
 val LocaleController.LocaleInfo.locale by receiveLazy<LocaleController.LocaleInfo, Locale> { pluralLangCode.code2Locale }
 
-val Locale.transDb by receive<Locale, TranslateDb> {
+val Locale.transDb by receive<Locale, TranslateDb?> {
+    if (Build.VERSION.SDK_INT < 26) return@receive null
 
     TranslateDb.repo[this] ?: TranslateDb(locale2code).also {
 
@@ -67,7 +71,7 @@ val Locale.transDb by receive<Locale, TranslateDb> {
 
 }
 
-val String.transDbByCode by receive<String, TranslateDb> { code2Locale.transDb }
+val String.transDbByCode by receive<String, TranslateDb?> { code2Locale.transDb }
 
 interface Translator {
 
@@ -134,8 +138,11 @@ interface Translator {
             // FileLog.d("[Trans] use provider ${translator.javaClass.simpleName}, toLang: $toLang, query: $query")
 
             val result =  translator.doTranslate("auto", language, query).also {
-
-                to.transDb.save(query, it)
+                if (Build.VERSION.SDK_INT < 26) {
+                    translatedTexts.computeIfAbsent(to) { HashMap() }[query] = it
+                } else {
+                    to.transDb?.save(query, it)
+                }
 
             }
 

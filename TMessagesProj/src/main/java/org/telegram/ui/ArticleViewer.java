@@ -2567,8 +2567,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             return spannableStringBuilder;
         } else if (richText instanceof TLRPC.TL_textPlain) {
             String plainText = ((TLRPC.TL_textPlain) richText).text;
-            if (!noTranslate && StringUtils.isNotBlank(plainText) && pages[0].adapter.trans && TranslateDb.currentTarget().contains(plainText)) {
-                plainText = TranslateDb.currentTarget().query(plainText);
+            if (!noTranslate && StringUtils.isNotBlank(plainText) && pages[0].adapter.trans) {
+                TranslateDb transDb = TranslateDb.currentTarget();
+                plainText = (transDb == null) ? null: transDb.query(plainText);
                 if (plainText == null) {
                     plainText = ((TLRPC.TL_textPlain) richText).text + " (Not translated)";
                 }
@@ -2705,8 +2706,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             return getPlainText(((TLRPC.TL_textUrl) richText).text);
         } else if (richText instanceof TLRPC.TL_textPlain) {
             String plainText = ((TLRPC.TL_textPlain) richText).text;
-            if (plainText != null && Instance != null && Instance.pages != null && Instance.pages.length > 0 && Instance.pages[0] != null && Instance.pages[0].adapter != null && Instance.pages[0].adapter.trans && TranslateDb.currentTarget().contains(plainText)) {
-                plainText = TranslateDb.currentTarget().query(plainText);
+            if (plainText != null && Instance != null && Instance.pages != null && Instance.pages.length > 0 && Instance.pages[0] != null && Instance.pages[0].adapter != null && Instance.pages[0].adapter.trans) {
+                TranslateDb transDb = TranslateDb.currentTarget();
+                String plainText2 = (transDb == null) ? null: transDb.query(plainText);
+                if (plainText2 != null) plainText = plainText2;
             }
             return plainText;
         } else if (richText instanceof TLRPC.TL_textAnchor) {
@@ -3018,7 +3021,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         CharSequence text;
         if (plainText != null) {
-            text = (parentAdapter.trans && TranslateDb.currentTarget().contains(plainText.toString())) ? TranslateDb.currentTarget().query(plainText.toString()) : plainText;
+            TranslateDb transDb = TranslateDb.currentTarget();
+            String plainText2 = (transDb == null) ? null: transDb.query(plainText.toString());
+            text = (parentAdapter.trans && plainText2 != null) ? plainText2 : plainText;
         } else {
             text = getText(parentAdapter, parentView, richText, richText, parentBlock, width);
         }

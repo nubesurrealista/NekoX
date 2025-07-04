@@ -216,6 +216,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import kotlin.Unit;
 import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.parts.MessageTransKt;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.cc.CCConverter;
@@ -6175,7 +6176,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         TranslateDb db = TranslateDb.forLocale(target);
         String origin = text.toString();
 
-        if (db.contains(origin)) {
+        if (db != null && db.contains(origin)) {
 
             String translated = db.query(origin);
             if (start == end) messageEditText.setText(translated);
@@ -6183,6 +6184,15 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
             return;
 
+        } else {
+            String translatedText = null;
+            boolean hasLocale = MessageTransKt.getTranslatedTexts().containsKey(target);
+            boolean translated = hasLocale && (translatedText = MessageTransKt.getTranslatedTexts().get(target).get(origin)) != null;
+            if (translated) {
+                if (start == end) messageEditText.setText(translatedText);
+                else messageEditText.getText().replace(start, end, translatedText);
+                return;
+            }
         }
 
         Translator.translate(target, origin, new Translator.Companion.TranslateCallBack() {

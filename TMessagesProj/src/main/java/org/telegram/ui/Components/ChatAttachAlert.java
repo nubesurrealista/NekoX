@@ -3509,13 +3509,14 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         return currentAttachLayout == photoLayout && photoLayout.cameraExpanded;
     }
 
+    // TODO: 030 - remove?
     private void translateComment(Context ctx, Locale target) {
         if (commentTextView == null) return;
 
         TranslateDb db = TranslateDb.forLocale(target);
         String origin = commentTextView.getText().toString();
 
-        if (db.contains(origin)) {
+        if (db != null && db.contains(origin)) {
 
             String translated = db.query(origin);
             commentTextView.getEditText().setText(translated);
