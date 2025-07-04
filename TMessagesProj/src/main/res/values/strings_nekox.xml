@@ -272,4 +272,5 @@
     <string name="ClearTranslatorCache">Clear translator cache</string>
     <string name="IgnoreTranslatorCache">Ignore translator cache</string>
     <string name="TranslationUnavailable">Official translation is unavailable, using alternative Google API</string>
+    <string name="GrantMediaPermission">Grant media permission</string>
 </resources>

@@ -246,11 +246,13 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     public final static int preview = 7;
     public final static int caption = 8;
     public final static int stars = 9;
+    public final static int grant_more = -69;
 
     private ActionBarMenuSubItem spoilerItem;
     private ActionBarMenuSubItem compressItem;
     private ActionBarMenuSubItem qualityItem;
     private ActionBarMenuSubItem starsItem;
+    private ActionBarMenuSubItem grantMoreItem = null;
     protected ActionBarMenuSubItem previewItem;
     public MessagePreviewView.ToggleButton captionItem;
 
@@ -634,6 +636,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             View view = cameraPhotoRecyclerView.getChildAt(a);
             if (view instanceof PhotoAttachPhotoCell) {
                 PhotoAttachPhotoCell cell = (PhotoAttachPhotoCell) view;
+                if (cell == null || cell.getTag() == null) continue;
                 MediaController.PhotoEntry photoEntry = getPhotoEntryAtPosition((Integer) cell.getTag());
                 if (photoEntry != null) {
                     cell.setNum(selectedPhotosOrder.indexOf(photoEntry.imageId));
@@ -901,6 +904,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             if (fragment == null) {
                 return;
             }
+            boolean isPhotoCell = (view instanceof PhotoAttachPhotoCell);
             boolean limitedGalleryPermission = isGalleryPermissionLimited();
             if (Build.VERSION.SDK_INT >= 23) {
                 if (adapter.needCamera && selectedAlbumEntry == galleryAlbumEntry && position == 0 && noCameraPermissions) {
@@ -910,11 +914,11 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
 
                     }
                     return;
-                } else if ((noGalleryPermissions || limitedGalleryPermission) && (position == (this.needCamera ? 1 : 0))) {
+                } else if ((noGalleryPermissions || limitedGalleryPermission) && !isPhotoCell) {
                     try {
                         if (position == adapter.itemsCount - 2) {
                             menu.onItemClick(open_in); // NekoX: Use system photo picker
-                        } else {
+                        } else if (adapter.getItemViewType(position) != 0) {
                             if (Build.VERSION.SDK_INT >= 33) {
                                 fragment.getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_MEDIA_IMAGES}, BasePermissionsActivity.REQUEST_CODE_EXTERNAL_STORAGE);
                             } else {
@@ -927,11 +931,13 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     return;
                 }
             }
-            // TODO: check if need `!limitedGalleryPermission` here
-            if (position != 0 || !this.needCamera || NekoConfig.hideCameraInAttachMenu.Bool() || selectedAlbumEntry != galleryAlbumEntry) {
-                if (selectedAlbumEntry == galleryAlbumEntry && this.needCamera) {
-                    position--;
-                }
+            int offset = 0;
+            if (selectedAlbumEntry == galleryAlbumEntry) {
+                if (this.needCamera) --offset;
+                if (limitedGalleryPermission) --offset;
+            }
+            position += offset;
+            if (position > -1 || !this.needCamera || NekoConfig.hideCameraInAttachMenu.Bool() || selectedAlbumEntry != galleryAlbumEntry) {
                 if (showAvatarConstructor) {
                     if (position == 0) {
                         if (!(view instanceof AvatarConstructorPreviewCell)) {
@@ -2493,6 +2499,21 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         }
     }
 
+    private static boolean fullyAllowed = false;
+    private void checkFullyAllowed() {
+        if (fullyAllowed) return;
+        Log.d("030-cnt", String.format("count=%d max=%d", adapter.itemsCount, PhotoAttachAdapter.maxItemsCount));
+        adapter.getItemCount(); // re-calc
+        // final boolean wasFullyAllowed = fullyAllowed;
+        fullyAllowed = (adapter.itemsCount == PhotoAttachAdapter.maxItemsCount);
+        PhotoAttachAdapter.maxItemsCount = Math.max(adapter.itemsCount, PhotoAttachAdapter.maxItemsCount);
+        if (wasLimited && fullyAllowed) {
+            adapter.notifyDataSetChanged();
+            cameraAttachAdapter.notifyDataSetChanged();
+            parentAlert.selectedMenuItem.hideSubItem(grant_more);
+        }
+    }
+
     private boolean shouldLoadAllMedia() {
         return !parentAlert.isPhotoPicker && (parentAlert.baseFragment instanceof ChatActivity || parentAlert.storyMediaPicker || parentAlert.avatarPicker == 2);
     }
@@ -3269,16 +3290,31 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         );
     }
 
+    private static Boolean wasLimited = false;
     private boolean isGalleryPermissionLimited() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE || fullyAllowed) return false;
+
         Activity activity = AndroidUtilities.findActivity(getContext());
         if (activity == null) {
             activity = parentAlert.baseFragment.getParentActivity();
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE
-                && activity.checkSelfPermission(Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED) == PackageManager.PERMISSION_GRANTED) {
-            return true;
+        boolean hasFullImages = activity.checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED;
+        boolean hasFullVideos = activity.checkSelfPermission(Manifest.permission.READ_MEDIA_VIDEO) == PackageManager.PERMISSION_GRANTED;
+        boolean hasLimitedPerm = activity.checkSelfPermission(Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED) == PackageManager.PERMISSION_GRANTED;
+        // Log.d("030-perm", String.format("limited=%s img=%s vid=%s", hasLimitedPerm, hasFullImages, hasFullVideos));
+        // limited: on launch -> img=false,vid=false,limited=true, after partial grant -> img=true,vid=true,limited=true
+
+        boolean ret = hasLimitedPerm && !(hasFullImages && hasFullVideos);
+        synchronized (this) {
+            if (!wasLimited) {
+                wasLimited = ret;
+            }
         }
-        return false;
+        if (grantMoreItem == null && wasLimited) {
+            grantMoreItem = parentAlert.selectedMenuItem
+                    .addSubItem(grant_more, R.drawable.filled_add_photo, getString(R.string.GrantMediaPermission));
+        }
+        return ret;
     }
 
     public void checkStorage() {
@@ -3291,6 +3327,8 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             }
             adapter.notifyDataSetChanged();
             cameraAttachAdapter.notifyDataSetChanged();
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            checkFullyAllowed();
         }
     }
 
@@ -3489,6 +3527,20 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 done.run();
                 setStarsPrice(price);
             }, resourcesProvider);
+        } else if (id == grant_more) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return;
+            BaseFragment fragment = parentAlert.baseFragment;
+            if (fragment == null) {
+                fragment = LaunchActivity.getLastFragment();
+            }
+            if (fragment == null || fragment.getParentActivity() == null) {
+                return;
+            }
+            if (Build.VERSION.SDK_INT >= 33) {
+                fragment.getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_MEDIA_IMAGES}, BasePermissionsActivity.REQUEST_CODE_EXTERNAL_STORAGE);
+            } else {
+                fragment.getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, BasePermissionsActivity.REQUEST_CODE_EXTERNAL_STORAGE);
+            }
         } else if (id >= 10) {
             selectedAlbumEntry = dropDownAlbums.get(id - 10);
             if (selectedAlbumEntry == galleryAlbumEntry) {
@@ -4370,6 +4422,8 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         private int photosStartRow;
         private int photosEndRow;
 
+        private static int maxItemsCount;
+
         public PhotoAttachAdapter(Context context, boolean camera, boolean limitedPermission) {
             mContext = context;
             needCamera = camera && !NekoConfig.hideCameraInAttachMenu.Bool();
@@ -4485,9 +4539,9 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     if (needCamera && selectedAlbumEntry == galleryAlbumEntry) {
                         position--;
                     }
-//                    if (limitedMediaAccess && selectedAlbumEntry == galleryAlbumEntry) {
-//                        position--;
-//                    }
+                    if (limitedMediaAccess && selectedAlbumEntry == galleryAlbumEntry) {
+                        position--;
+                    }
                     if (showAvatarConstructor) {
                         position--;
                     }
@@ -4630,15 +4684,12 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             }
             boolean limitedGalleryPermission = isGalleryPermissionLimited();
             if ((noGalleryPermissions || limitedGalleryPermission) && this == adapter) {
-                Log.d("030-?", "inc 2 count cuz no/limited gallery");
                 count++;
                 count++; // NekoX: Additional Open In picker
             } else if (!noGalleryPermissions && limitedGalleryPermission) {
-                Log.d("030-?", "inc count cuz limited gallery");
                 ++count;
             }
             photosStartRow = count;
-            Log.d("030-?", "photosStartRow = " + photosStartRow);
             if (!noGalleryPermissions) {
                 count += cameraPhotos.size();
                 if (selectedAlbumEntry != null) {
