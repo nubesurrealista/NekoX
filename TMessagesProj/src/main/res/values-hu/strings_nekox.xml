@@ -256,4 +256,15 @@
     <string name="ShowQuickReconnect">Újracsatlakozásnál gyors újracsatlakozás gomb megjelenítése</string>
     <string name="ShowQuickReconnectDesc">Hasonló a korábbi újracsatlakozási hackhez, de manuálisan indítandó.</string>
     <string name="GenerateMonetTheme">Monet téma generálása</string>
+    <string name="UseAdGuardDNS"></string>
+    <string name="AppNameShort" translatable="false"></string>
+    <string name="DisableSaveDraftToCloud"></string>
+    <string name="PGPDecryptErr"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="Momogram" translatable="false"></string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="KeepSamePositionOnNewMsg"></string>
+    <string name="ShareGroupMediaMessage"></string>
+    <string name="OnlyShowStoriesFromUsers"></string>
+    <string name="ResumeAudioPlaybackOnLaunch"></string>
 </resources>
