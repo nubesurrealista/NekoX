@@ -316,4 +316,5 @@
     <string name="AutoSendAfterSlowModeHint"></string>
     <string name="SensitiveDisableFiltering"></string>
     <string name="CleanupLeftoversResults"></string>
+    <string name="OpenAvatarInsteadOfExpand"></string>
 </resources>
