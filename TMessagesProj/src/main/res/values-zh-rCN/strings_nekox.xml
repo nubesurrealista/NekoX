@@ -11,9 +11,7 @@
     <string name="DisableLinkPreviewByDefault">默认禁用链接预览</string>
     <string name="DisableLinkPreviewByDefaultNotice">默认情况下, 在输入过程中禁用链接预览请求，以防止服务器知道该链接在 Telegram 被分享。</string>
     <string name="CustomApi">自定义 API</string>
-    <string name="UseCustomApiNotice">使用自定义 Api 登录，如果您无法注册或登录，这可能会有帮助。
-\n
-\n注意：如果您正在使用 release 版本，谷歌云推送将无法工作。</string>
+    <string name="UseCustomApiNotice">使用自定义 Api 登录，如果您无法注册或登录，这可能会有帮助。 \n \n注意：如果您正在使用 release 版本，谷歌云推送将无法工作。</string>
     <string name="CustomApiNo">不使用自定义 API</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
@@ -144,8 +142,7 @@
     <string name="UnpinSticker">取消置顶</string>
     <string name="PinSticker">置顶</string>
     <string name="EnableStickerPinTip">此功能仍在开发中，云同步可能无法正常工作。</string>
-    <string name="EnableStickerPinAbout">固定贴纸并在添加新贴纸时与云同步。
-\n与 \"禁用收藏夹和最近\" 配对。</string>
+    <string name="EnableStickerPinAbout">固定贴纸并在添加新贴纸时与云同步。 \n与 \"禁用收藏夹和最近\" 配对。</string>
     <string name="EnableStickerPin">启用贴纸集置顶</string>
     <string name="AppLinkFDroid">F-Droid</string>
     <string name="UsePersiancalendar">使用伊朗历</string>
@@ -159,8 +156,7 @@
     <string name="VersionUpdateNotNow">以后再说</string>
     <string name="VersionUpdateIgnore">忽略</string>
     <string name="VersionUpdateConfirm">更新</string>
-    <string name="VersionUpdateVariantNotMatch">版本自动检测失败，
-\n请手动从GitHub下载。</string>
+    <string name="VersionUpdateVariantNotMatch">版本自动检测失败， \n请手动从GitHub下载。</string>
     <string name="VersionUpdateTitle">新版本可用</string>
     <string name="nekoXPaymentRemovedToast">支付功能已被移除。</string>
     <string name="unreadBadgeOnBackButton">聊天窗口返回按钮上显示未读数</string>
@@ -171,9 +167,7 @@
     <string name="useCustomEmojiInvalid">非有效 emoji ZIP文件。</string>
     <string name="repeatConfirm">复读前确认</string>
     <string name="repeatConfirmText">确定要复读这条消息？</string>
-    <string name="valuesLargeAvatarInDrawer">Telegram 默认
-\n使用头像作为背景
-\n使用大只头像作为背景</string>
+    <string name="valuesLargeAvatarInDrawer">Telegram 默认 \n使用头像作为背景 \n使用大只头像作为背景</string>
     <string name="hideSponsoredMessage">隐藏赞助消息</string>
     <string name="DisableInstantCamera">禁用相机即时预览</string>
     <string name="showSeconds">以秒为单位显示时间戳</string>
@@ -234,4 +228,43 @@
     <string name="MuteBlockedFromGroup">忽略来自封锁账号的群组消息通知</string>
     <string name="MuteBotsFromGroup">忽略来自封锁机器人的群组消息通知</string>
     <string name="MuteBotsFromGroupDesc">仍会收到已知的群组管理相关消息</string>
+    <string name="MemLeak"></string>
+    <string name="AlwaysLabelAnonAdmin"></string>
+    <string name="CustomStatusInfo"></string>
+    <string name="UseAdGuardDNS"></string>
+    <string name="AppNameShort" translatable="false"></string>
+    <string name="DisableSaveDraftToCloud"></string>
+    <string name="ShowAddedToFoldersAtTitle"></string>
+    <string name="BanForAllModeratingChats"></string>
+    <string name="ResetSettingsDesc"></string>
+    <string name="MemLeakInfo"></string>
+    <string name="PGPDecryptErr"></string>
+    <string name="AutoRestartOnLeak"></string>
+    <string name="WhisperModelInUse"></string>
+    <string name="UnblockDeleted"></string>
+    <string name="WhisperLocal"></string>
+    <string name="ReplyInPrivate"></string>
+    <string name="AutoRestartOnLeakInfo"></string>
+    <string name="WhisperLocalProcessing"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="UnblockDeletedWarn"></string>
+    <string name="Momogram" translatable="false"></string>
+    <string name="DeleteUnusedWhisperModel"></string>
+    <string name="FBan"></string>
+    <string name="RecentChatFolderSize"></string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="KeepSamePositionOnNewMsg"></string>
+    <string name="WhisperModelRemoved"></string>
+    <string name="CheckMemLeak"></string>
+    <string name="PGPEncrypt"></string>
+    <string name="ShareGroupMediaMessage"></string>
+    <string name="MemLeakThreshold"></string>
+    <string name="OnlyShowStoriesFromUsers"></string>
+    <string name="ResumeAudioPlaybackOnLaunch"></string>
+    <string name="PositionRight"></string>
+    <string name="HideMessageRegex"></string>
+    <string name="VideoBitrateToggled"></string>
+    <string name="BannedForChats"></string>
+    <string name="ResetSettings"></string>
+    <string name="PositionLeft"></string>
 </resources>
