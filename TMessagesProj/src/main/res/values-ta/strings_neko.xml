@@ -313,4 +313,7 @@
     <string name="CloudflareCredentialsDialog">கிளவுட்ஃப்ளேர் கணக்கு ஐடி மற்றும் பநிஇ கிள்ளாக்கை உள்ளமைக்கவும்.\n ** எவ்வாறு பெறுவது? **</string>
     <string name="CloudflareCredentialsObtainDesc">1. கிளவுட்ஃப்ளேர் டாச்போர்டைத் திறந்து உங்கள் கணக்கில் உள்நுழைக\n\n 2. பக்க மெனுவிலிருந்து AI ஐ விரிவுபடுத்தி, தொழிலாளர்கள் AI ஐக் சொடுக்கு செய்க\n\n 3. பயன்பாட்டு REST பநிஇ இல் சொடுக்கு செய்க\n\n 4. உங்கள் கணக்கு ஐடியைக் கவனியுங்கள், பின்னர் அந்தப் பக்கத்தில் ஒரு பநிஇ கிள்ளாக்கை உருவாக்கவும்.</string>
     <string name="SwipeActionInTopicList">தலைப்பு பட்டியலில் அதிரடி (மறை/காட்டு)</string>
+    <string name="enhancedFileLoaderWarning"></string>
+    <string name="AllowTestingUpdate"></string>
+    <string name="AllowBotInDirectShare"></string>
 </resources>
