@@ -11,9 +11,7 @@
     <string name="DisableLinkPreviewByDefault">השבת תצוגה מקדימה של קישור כברירת מחדל</string>
     <string name="DisableLinkPreviewByDefaultNotice">השבת את בקשת התצוגה המקדימה של הקישור במהלך הקלט כברירת מחדל כדי למנוע מהשרת לדעת שהקישור משותף באמצעות Telegram.</string>
     <string name="CustomApi">ממשק API מותאם אישית</string>
-    <string name="UseCustomApiNotice">התחבר באמצעות ה- api המותאם אישית, אם אינך מצליח להירשם או להתחבר, הדבר עשוי לעזור.
-\n
-\nהערה: fcm לא יעבוד אם אתה משתמש בגרסת המהדורה.</string>
+    <string name="UseCustomApiNotice">התחבר באמצעות ה- api המותאם אישית, אם אינך מצליח להירשם או להתחבר, הדבר עשוי לעזור. \n \nהערה: fcm לא יעבוד אם אתה משתמש בגרסת המהדורה.</string>
     <string name="CustomApiNo">אל תשתמש בממשק API מותאם אישית</string>
     <string name="CustomApiOfficial">טלגרם אנדרואיד</string>
     <string name="CustomApiTGX">טלגרם אנדרואיד</string>
@@ -85,7 +83,7 @@
     <string name="HideProxyByDefault">הסתר את הגדרות ה- proxy כברירת מחדל</string>
     <string name="SkipOpenLinkConfirm">דלג על קישור פתוח לאשר</string>
     <string name="UnblockAll">בטל את חסימת הכל</string>
-    <string name="UnblockAllWarn">האם אתה בטוח שברצונך לבטל את חסימת ** כל המשתמשים והבוטים **\?</string>
+    <string name="UnblockAllWarn">האם אתה בטוח שברצונך לבטל את חסימת ** כל המשתמשים והבוטים **?</string>
     <string name="BlockedListEmpty">לא חסמת אף אחד :)</string>
     <string name="ImportProxyList">ייבא שרתי פרוקסי</string>
     <string name="ExportStickers">ייצוא מדבקות</string>
@@ -119,10 +117,10 @@
     <string name="UnpinMessagesAll">בטל את הצמדה של כל ההודעות</string>
     <string name="DismissForYourself">דחה בעצמך</string>
     <string name="ImportLogin">כניסה QR</string>
-    <string name="QRLoginNotice">קוד / קישור QR זה מאפשר למישהו להיכנס לחשבון הטלגרם שלך. האם זו פעולה משלך\?</string>
+    <string name="QRLoginNotice">קוד / קישור QR זה מאפשר למישהו להיכנס לחשבון הטלגרם שלך. האם זו פעולה משלך?</string>
     <string name="QRLoginConfirm">אשר כניסה</string>
     <string name="FCTitle">אודות עדכוני יישומים</string>
-    <string name="FCInfo">עקוב אחר ערוץ ההכרזות והעדכונים שלנו\?</string>
+    <string name="FCInfo">עקוב אחר ערוץ ההכרזות והעדכונים שלנו?</string>
     <string name="CCNo">אף אחד</string>
     <string name="CCTC">סינית מסורתית</string>
     <string name="CCHK">סינית מסורתית (הונג קונג)</string>
@@ -143,19 +141,17 @@
     <string name="SetPinnedSuffix">(נעוץ)</string>
     <string name="UnpinSticker">שחרור</string>
     <string name="PinSticker">הצמדה</string>
-    <string name="EnableStickerPinAbout">ניתן להצמיד מדבקות ולסנכרן עם הענן אפילו בעת הוספת מדבקות חדשות.
-\nצמוד להשבתת מועדף והאחרונים.</string>
+    <string name="EnableStickerPinAbout">ניתן להצמיד מדבקות ולסנכרן עם הענן אפילו בעת הוספת מדבקות חדשות. \nצמוד להשבתת מועדף והאחרונים.</string>
     <string name="EnableStickerPin">הפעלת מדבקה נצמדת</string>
     <string name="ArchiveFiles">קובצי ארכיון</string>
     <string name="Win32ExecutableFiles">קובצי הפעלה מסוג Win32</string>
     <string name="AutoDownload">הורדה אוטומטית</string>
-    <string name="VersionUpdateVariantNotMatch">תיאום הגווני הגרסאות אוטומטית כשל.
-\nנא להוריד ידנית מ־GitHub.</string>
+    <string name="VersionUpdateVariantNotMatch">תיאום הגווני הגרסאות אוטומטית כשל. \nנא להוריד ידנית מ־GitHub.</string>
     <string name="VersionUpdateConfirm">עדכון</string>
     <string name="VersionUpdateTitle">קיימת גרסה חדשה</string>
     <string name="nekoXPaymentRemovedToast">יכולת התשלום הוסרה.</string>
     <string name="ImportSettings">ייבוא הגדות</string>
-    <string name="ImportSettingsAlert">לשכתב את ההגדרות\? ייבוא הגדרות ממקורות לא ידועים עלול לשכתב את הקוד הסודי ולהוביל לנעילת היישום.</string>
+    <string name="ImportSettingsAlert">לשכתב את ההגדרות? ייבוא הגדרות ממקורות לא ידועים עלול לשכתב את הקוד הסודי ולהוביל לנעילת היישום.</string>
     <string name="BackupSettings">הגדרות גיבוי</string>
     <string name="AutoLockImmediately">מיידית</string>
     <string name="DisplayPersianCalendarByLatin">הצגת לוח שנה פרסי בכתב לטיני</string>
@@ -163,7 +159,7 @@
     <string name="VersionUpdateNoUpdate">אין עדכון.</string>
     <string name="VersionUpdateNotNow">לא עכשיו</string>
     <string name="VersionUpdateIgnore">התעלמות</string>
-    <string name="DeleteDownloadedFileConfirm">למחוק את הקובץ הזה מהמטמון המקומי\?</string>
+    <string name="DeleteDownloadedFileConfirm">למחוק את הקובץ הזה מהמטמון המקומי?</string>
     <string name="unreadBadgeOnBackButton">עיטור „לא נקראו” על כפתור החזרה</string>
     <string name="DeleteDownloadedFileSucceed">נמחק</string>
     <string name="useCustomEmoji">להשתמש באמוג׳י משלך</string>
@@ -172,11 +168,9 @@
     <string name="showSeconds">הצגת חותמת הזמן בשניות</string>
     <string name="DisableInstantCamera">השבתת מצלמה מיידית</string>
     <string name="useCustomEmojiInvalid">לא zip תקני של אמוג׳י.</string>
-    <string name="valuesLargeAvatarInDrawer">ברירת המחדל של טלגרם
-\nתמונה ייצוגית כרקע
-\nתמונה ייצוגית גדולה כרקע</string>
+    <string name="valuesLargeAvatarInDrawer">ברירת המחדל של טלגרם \nתמונה ייצוגית כרקע \nתמונה ייצוגית גדולה כרקע</string>
     <string name="repeatConfirm">לשאול לפני חזרה</string>
-    <string name="repeatConfirmText">לחזור\?</string>
+    <string name="repeatConfirmText">לחזור?</string>
     <string name="hideSponsoredMessage">הסתרת הודעות פרסומיות</string>
     <string name="ShareMessages">שיתוף</string>
     <string name="AppUpdateNekoX">עדכון Nekogram X</string>
@@ -185,4 +179,92 @@
     <string name="setChannelAliasName">הגדרת כינוי</string>
     <string name="labelChannelUserDetails">אם שולח ההודעה הוא „ערוץ”, יתווסף הסימון „ערוץ”.</string>
     <string name="labelChannelUser">הוספת תווית על משתמש בערוץ</string>
+    <string name="DebugSendLogsExt"></string>
+    <string name="doubleTapShowReactionsMenu"></string>
+    <string name="MonetAvatarGradient"></string>
+    <string name="MemLeak"></string>
+    <string name="ForceExternalBrowserForBots"></string>
+    <string name="AlwaysLabelAnonAdmin"></string>
+    <string name="MuteBotsFromGroup"></string>
+    <string name="UseCamera2API"></string>
+    <string name="FasterReconnectHackAbout"></string>
+    <string name="FeatureRemovedWhyDetail"></string>
+    <string name="CustomStatusInfo"></string>
+    <string name="FasterReconnectHack"></string>
+    <string name="UseAdGuardDNS"></string>
+    <string name="AppNameShort" translatable="false"></string>
+    <string name="UnsupportedProxy"></string>
+    <string name="DisableSaveDraftToCloud"></string>
+    <string name="ShowAddedToFoldersAtTitle"></string>
+    <string name="DisableCustomWallpaperUser"></string>
+    <string name="MonetAlterOut"></string>
+    <string name="CustomMaxCacheSizeBulletin"></string>
+    <string name="AlwaysDestroyPhotoViewer"></string>
+    <string name="ShowSelfInsteadOfSavedMessages"></string>
+    <string name="HideCameraInAttachMenu"></string>
+    <string name="BanForAllModeratingChats"></string>
+    <string name="FeatureRemovedWhy"></string>
+    <string name="ShowQuickReconnect"></string>
+    <string name="ResetSettingsDesc"></string>
+    <string name="ForceExternalBrowserForBotsDesc"></string>
+    <string name="MemLeakInfo"></string>
+    <string name="MonetNickname"></string>
+    <string name="disableReactionsWhenSelecting"></string>
+    <string name="UseOldAppNameDesc"></string>
+    <string name="PGPDecryptErr"></string>
+    <string name="MonetAmoled"></string>
+    <string name="CustomApiId"></string>
+    <string name="ReactionSettings"></string>
+    <string name="PauseInactiveTabAnimation"></string>
+    <string name="AutoRestartOnLeak"></string>
+    <string name="UseOldAppName"></string>
+    <string name="MonetLightMode"></string>
+    <string name="AllowDupLoginInfo"></string>
+    <string name="WhisperModelInUse"></string>
+    <string name="UnblockDeleted"></string>
+    <string name="WhisperLocal"></string>
+    <string name="ReplyInPrivate"></string>
+    <string name="StickerSettings"></string>
+    <string name="GenerateMonetTheme"></string>
+    <string name="AutoRestartOnLeakInfo"></string>
+    <string name="WhisperLocalProcessing"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="UnblockDeletedWarn"></string>
+    <string name="CustomMaxCacheSize"></string>
+    <string name="doubleTapSendReaction"></string>
+    <string name="Momogram" translatable="false"></string>
+    <string name="ShowQuickReconnectDesc"></string>
+    <string name="ConfirmSettings"></string>
+    <string name="doubleTapAndReactions"></string>
+    <string name="DeleteUnusedWhisperModel"></string>
+    <string name="InteractionSettings"></string>
+    <string name="FBan"></string>
+    <string name="FeatureRemoved"></string>
+    <string name="RecentChatFolderSize"></string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="KeepSamePositionOnNewMsg"></string>
+    <string name="DisableCustomWallpaperChannel"></string>
+    <string name="doubleTapDisable"></string>
+    <string name="WhisperModelRemoved"></string>
+    <string name="CheckMemLeak"></string>
+    <string name="PGPEncrypt"></string>
+    <string name="ShareGroupMediaMessage"></string>
+    <string name="MemLeakThreshold"></string>
+    <string name="OnlyShowStoriesFromUsers"></string>
+    <string name="MuteBotsFromGroupDesc"></string>
+    <string name="ResumeAudioPlaybackOnLaunch"></string>
+    <string name="CustomApiHash"></string>
+    <string name="OpenLinkInApp"></string>
+    <string name="HideChannelBottomNotiToggle"></string>
+    <string name="ShowPhoneNumTemp"></string>
+    <string name="AllowDupLogin"></string>
+    <string name="PositionRight"></string>
+    <string name="HideMessageRegex"></string>
+    <string name="VideoBitrateToggled"></string>
+    <string name="CustomMaxCacheSizeHint"></string>
+    <string name="BannedForChats"></string>
+    <string name="MonetGradient"></string>
+    <string name="MuteBlockedFromGroup"></string>
+    <string name="ResetSettings"></string>
+    <string name="PositionLeft"></string>
 </resources>
