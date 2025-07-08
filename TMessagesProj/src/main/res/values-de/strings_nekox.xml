@@ -8,9 +8,7 @@
     <string name="ChatAttachEnterMenuEnableLinkPreview">Linkvorschau aktivieren</string>
     <string name="DisableLinkPreviewByDefault">Linkvorschau standardmäßig deaktivieren</string>
     <string name="CustomApi">Benutzerdefinierte API</string>
-    <string name="UseCustomApiNotice">Mit benutzerdefinierten API anmelden. Wenn du dich nicht registrieren oder anmelden kannst, kann dies hilfreich sein.
-\n
-\nHinweis: fcm funktioniert nicht, wenn Sie die Release-Version verwenden.</string>
+    <string name="UseCustomApiNotice">Mit benutzerdefinierten API anmelden. Wenn du dich nicht registrieren oder anmelden kannst, kann dies hilfreich sein. \n \nHinweis: fcm funktioniert nicht, wenn Sie die Release-Version verwenden.</string>
     <string name="CustomApiNo">Keine benutzerdefinierte API verwenden</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
@@ -82,7 +80,7 @@
     <string name="HideProxyByDefault">Proxy Einstellungen standardmäßig ausblenden</string>
     <string name="SkipOpenLinkConfirm">Bestätigung zum Öffnen von Links überspringen</string>
     <string name="UnblockAll">Alle entsperren</string>
-    <string name="UnblockAllWarn">Bist du sicher, dass du **alle Benutzer und Bots** entsperren möchtest\?</string>
+    <string name="UnblockAllWarn">Bist du sicher, dass du **alle Benutzer und Bots** entsperren möchtest?</string>
     <string name="BlockedListEmpty">Du hast niemanden blockiert :)</string>
     <string name="ImportProxyList">Proxy-Server importieren</string>
     <string name="ExportStickers">Sticker exportieren</string>
@@ -116,7 +114,7 @@
     <string name="UnpinMessagesAll">Alle Nachrichten lösen</string>
     <string name="ImportLogin">Anmeldung mit QR-Code</string>
     <string name="QRLoginConfirm">Anmeldung bestätigen</string>
-    <string name="FCInfo">Unseren Ankündigungs- und Aktualisierungskanal verfolgen\?</string>
+    <string name="FCInfo">Unseren Ankündigungs- und Aktualisierungskanal verfolgen?</string>
     <string name="CCNo">Keiner</string>
     <string name="CCTC">Traditionelles Chinesisch</string>
     <string name="CCHK">Traditionelles Chinesisch (Hong Kong)</string>
@@ -132,7 +130,7 @@
     <string name="TabletModeDefault">Abhängig vom Gerät</string>
     <string name="CCJP">Neues japanisches Kanji (Shinjitai)</string>
     <string name="FCTitle">Über Anwendungs-Updates</string>
-    <string name="QRLoginNotice">Mit diesem QR-Code / Link ist die Anmeldung in diesem Telegram-Konto möglich. Sind Sie sicher, dass Sie dies wollen\?</string>
+    <string name="QRLoginNotice">Mit diesem QR-Code / Link ist die Anmeldung in diesem Telegram-Konto möglich. Sind Sie sicher, dass Sie dies wollen?</string>
     <string name="DisableLinkPreviewByDefaultNotice">Linkvorschau-Anforderung standardmäßig während der Eingabe deaktivieren, um zu verhindern, dass der Server weiß, dass der Link über Telegram freigegeben wird.</string>
     <string name="UseChatAttachEnterMenuNotice">Aufnahmetaste in ein Eingabemenü ändern und Linkvorschau-Toggle hinzufügen.</string>
     <string name="UseChatAttachEnterMenu">Eingabemenü verwenden</string>
@@ -145,38 +143,34 @@
     <string name="ShareMessages">Teilen</string>
     <string name="AutoDownload">Automatisches Herunterladen</string>
     <string name="ArchiveFiles">Archiv-Dateien</string>
-    <string name="EnableStickerPinAbout">Heftet Sticker an und synchronisiert diese mit der Cloud, selbst wenn neue Sticker hinzugefügt werden.
-\nDeaktiviert zugleich beliebte und letzte Sticker.</string>
+    <string name="EnableStickerPinAbout">Heftet Sticker an und synchronisiert diese mit der Cloud, selbst wenn neue Sticker hinzugefügt werden. \nDeaktiviert zugleich beliebte und letzte Sticker.</string>
     <string name="UsePersiancalendar">Persischen Kalender benutzen</string>
     <string name="AutoLockImmediately">Sofort</string>
     <string name="BackupSettings">Sicherungseinstellungen</string>
     <string name="UsePersiancalendarInfo">Datum auf Basis des Hijri-Sonnenkalenders anzeigen</string>
     <string name="VersionUpdateTitle">Neue Version verfügbar</string>
-    <string name="repeatConfirmText">Möchtest du wirklich wiederholen\?</string>
-    <string name="VersionUpdateVariantNotMatch">Versionsvarianten konnten nicht automatisch zugeordnet werden.
-\nBitte manuell von GitHub herunterladen.</string>
+    <string name="repeatConfirmText">Möchtest du wirklich wiederholen?</string>
+    <string name="VersionUpdateVariantNotMatch">Versionsvarianten konnten nicht automatisch zugeordnet werden. \nBitte manuell von GitHub herunterladen.</string>
     <string name="useCustomEmoji">Benutzerdefinierte Emojis verwenden</string>
     <string name="DisableInstantCamera">Sofortkamera deaktivieren</string>
     <string name="showSeconds">Zeitstempel in Sekunden anzeigen</string>
     <string name="DeleteDownloadedFileExternal">Externe Datei wurde übersprungen.</string>
     <string name="rememberAllBackMessages">Erinnere alle geklickten Antworten</string>
     <string name="useCustomEmojiInvalid">Keine gültige Emoji ZIP-Datei.</string>
-    <string name="valuesLargeAvatarInDrawer">Telegram Standard
-\nAvatar als Hintergrund
-\nGroßer Avatar als Hintergrund</string>
+    <string name="valuesLargeAvatarInDrawer">Telegram Standard \nAvatar als Hintergrund \nGroßer Avatar als Hintergrund</string>
     <string name="hideSponsoredMessage">Verstecke gesponserte Nachrichten</string>
     <string name="repeatConfirm">Vorm Wiederholen Fragen</string>
     <string name="DisplayPersianCalendarByLatin">Lateinische Schriftzeichen für persischen Kalender nutzen</string>
     <string name="ImportSettings">Einstellungen importieren</string>
     <string name="VersionUpdateConfirm">AKTUALISIERUNG</string>
     <string name="EnableStickerPinTip">Diese Funktion befindet sich in der Entwicklung. Die Synchronisierung mit der Cloud funktioniert möglicherweise nicht.</string>
-    <string name="ImportSettingsAlert">Die Einstellungen überschreiben\? Das Importieren von Einstellungen aus unbekannten Quellen kann dazu führen, dass die Pin überschrieben und die App gesperrt wird.</string>
+    <string name="ImportSettingsAlert">Die Einstellungen überschreiben? Das Importieren von Einstellungen aus unbekannten Quellen kann dazu führen, dass die Pin überschrieben und die App gesperrt wird.</string>
     <string name="nekoXPaymentRemovedToast">Die Zahlungsfunktion wurde entfernt.</string>
     <string name="VersionUpdateIgnore">Ignorieren</string>
     <string name="unreadBadgeOnBackButton">Ungelesen-Abzeichen auf Zurück-Taste</string>
     <string name="VersionUpdateNotNow">Nicht jetzt</string>
     <string name="VersionUpdateNoUpdate">Keine Aktualisierung.</string>
-    <string name="DeleteDownloadedFileConfirm">Diese Datei aus dem lokalen Speicher (cache) löschen\?</string>
+    <string name="DeleteDownloadedFileConfirm">Diese Datei aus dem lokalen Speicher (cache) löschen?</string>
     <string name="DeleteDownloadedFileSucceed">Gelöscht</string>
     <string name="Win32ExecutableFiles">Ausführbare Win32-Dateien</string>
     <string name="labelChannelUserDetails">Wenn Absender der Nachricht \"Kanal\" ist, wird sie als \"Kanal\" bezeichnet.</string>
@@ -193,4 +187,84 @@
     <string name="doubleTapShowReactionsMenu">Zeige Reaktionenmenü</string>
     <string name="doubleTapSendReaction">Sende Reaktion</string>
     <string name="doubleTapDisable">Deaktiviere</string>
+    <string name="DebugSendLogsExt"></string>
+    <string name="MonetAvatarGradient"></string>
+    <string name="MemLeak"></string>
+    <string name="ForceExternalBrowserForBots"></string>
+    <string name="AlwaysLabelAnonAdmin"></string>
+    <string name="MuteBotsFromGroup"></string>
+    <string name="UseCamera2API"></string>
+    <string name="FasterReconnectHackAbout"></string>
+    <string name="FeatureRemovedWhyDetail"></string>
+    <string name="CustomStatusInfo"></string>
+    <string name="FasterReconnectHack"></string>
+    <string name="UseAdGuardDNS"></string>
+    <string name="AppNameShort" translatable="false"></string>
+    <string name="UnsupportedProxy"></string>
+    <string name="DisableSaveDraftToCloud"></string>
+    <string name="ShowAddedToFoldersAtTitle"></string>
+    <string name="DisableCustomWallpaperUser"></string>
+    <string name="MonetAlterOut"></string>
+    <string name="CustomMaxCacheSizeBulletin"></string>
+    <string name="AlwaysDestroyPhotoViewer"></string>
+    <string name="ShowSelfInsteadOfSavedMessages"></string>
+    <string name="HideCameraInAttachMenu"></string>
+    <string name="BanForAllModeratingChats"></string>
+    <string name="FeatureRemovedWhy"></string>
+    <string name="ShowQuickReconnect"></string>
+    <string name="ResetSettingsDesc"></string>
+    <string name="ForceExternalBrowserForBotsDesc"></string>
+    <string name="MemLeakInfo"></string>
+    <string name="MonetNickname"></string>
+    <string name="disableReactionsWhenSelecting"></string>
+    <string name="UseOldAppNameDesc"></string>
+    <string name="PGPDecryptErr"></string>
+    <string name="MonetAmoled"></string>
+    <string name="CustomApiId"></string>
+    <string name="PauseInactiveTabAnimation"></string>
+    <string name="AutoRestartOnLeak"></string>
+    <string name="UseOldAppName"></string>
+    <string name="MonetLightMode"></string>
+    <string name="AllowDupLoginInfo"></string>
+    <string name="WhisperModelInUse"></string>
+    <string name="UnblockDeleted"></string>
+    <string name="WhisperLocal"></string>
+    <string name="ReplyInPrivate"></string>
+    <string name="GenerateMonetTheme"></string>
+    <string name="AutoRestartOnLeakInfo"></string>
+    <string name="WhisperLocalProcessing"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="UnblockDeletedWarn"></string>
+    <string name="CustomMaxCacheSize"></string>
+    <string name="Momogram" translatable="false"></string>
+    <string name="ShowQuickReconnectDesc"></string>
+    <string name="DeleteUnusedWhisperModel"></string>
+    <string name="FBan"></string>
+    <string name="FeatureRemoved"></string>
+    <string name="RecentChatFolderSize"></string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="KeepSamePositionOnNewMsg"></string>
+    <string name="DisableCustomWallpaperChannel"></string>
+    <string name="WhisperModelRemoved"></string>
+    <string name="CheckMemLeak"></string>
+    <string name="PGPEncrypt"></string>
+    <string name="ShareGroupMediaMessage"></string>
+    <string name="MemLeakThreshold"></string>
+    <string name="OnlyShowStoriesFromUsers"></string>
+    <string name="MuteBotsFromGroupDesc"></string>
+    <string name="ResumeAudioPlaybackOnLaunch"></string>
+    <string name="CustomApiHash"></string>
+    <string name="OpenLinkInApp"></string>
+    <string name="HideChannelBottomNotiToggle"></string>
+    <string name="ShowPhoneNumTemp"></string>
+    <string name="AllowDupLogin"></string>
+    <string name="PositionRight"></string>
+    <string name="HideMessageRegex"></string>
+    <string name="VideoBitrateToggled"></string>
+    <string name="CustomMaxCacheSizeHint"></string>
+    <string name="BannedForChats"></string>
+    <string name="MonetGradient"></string>
+    <string name="MuteBlockedFromGroup"></string>
+    <string name="ResetSettings"></string>
+    <string name="PositionLeft"></string>
 </resources>
