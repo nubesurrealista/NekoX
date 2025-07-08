@@ -316,4 +316,5 @@
     <string name="AccDescrShowKeyboard"></string>
     <string name="AutoSendAfterSlowModeHint"></string>
     <string name="CleanupLeftoversResults"></string>
+    <string name="OpenAvatarInsteadOfExpand"></string>
 </resources>
