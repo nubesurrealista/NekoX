@@ -73,7 +73,7 @@
     <string name="HideProxyByDefault">Masquer les paramètres de proxy par défaut</string>
     <string name="SkipOpenLinkConfirm">Ignorer la confirmation d\'ouverture du lien</string>
     <string name="UnblockAll">Tout débloquer</string>
-    <string name="UnblockAllWarn">Êtes-vous sûr(e) de vouloir débloquer **tous les utilisateurs et tous les bots** \?</string>
+    <string name="UnblockAllWarn">Êtes-vous sûr(e) de vouloir débloquer **tous les utilisateurs et tous les bots** ?</string>
     <string name="BlockedListEmpty">Vous n\'avez bloqué personne :)</string>
     <string name="ImportProxyList">Importer des serveurs proxy</string>
     <string name="ExportStickers">Exporter des autocollants</string>
@@ -105,10 +105,10 @@
     <string name="UnpinMessageX">Désépingler le message</string>
     <string name="UnpinMessagesAll">Désépingler tous les messages</string>
     <string name="ImportLogin">Connection via QR Code</string>
-    <string name="QRLoginNotice">Ce QR code / lien permet à quelqu\'un de se connecter à votre compte Telegram. Est-ce vous \?</string>
+    <string name="QRLoginNotice">Ce QR code / lien permet à quelqu\'un de se connecter à votre compte Telegram. Est-ce vous ?</string>
     <string name="QRLoginConfirm">Confirmer la connexion</string>
     <string name="FCTitle">À propos des mises à jour de l\'application</string>
-    <string name="FCInfo">Rejoindre notre canal d\'annonces et de mises à jour \?</string>
+    <string name="FCInfo">Rejoindre notre canal d\'annonces et de mises à jour ?</string>
     <string name="CCNo">Aucune</string>
     <string name="CCTC">Chinois traditionnel</string>
     <string name="CCHK">Chinois traditionnel (Hong Kong)</string>
@@ -130,9 +130,7 @@
     <string name="UseChatAttachEnterMenuNotice">Remplacez le bouton d\'enregistrement par un menu de saisie et ajoutez un commutateur d\'aperçu de lien.</string>
     <string name="AccDescrChatAttachEnterMenu">Menu de saisie de la discussion</string>
     <string name="CustomBackendNotice">Cette fonction n\'est fournie que pour les utilisateurs experts, si vous ne savez pas ce que les options suivantes représentent, ignorez-les.</string>
-    <string name="UseCustomApiNotice">Connectez-vous à l\'aide de l\'API personnalisée. Si vous ne parvenez pas à vous enregistrer ou à vous connecter, ceci peut vous aider.
-\n
-\nNote : fcm ne fonctionnera pas si vous utilisez la version release.</string>
+    <string name="UseCustomApiNotice">Connectez-vous à l\'aide de l\'API personnalisée. Si vous ne parvenez pas à vous enregistrer ou à vous connecter, ceci peut vous aider. \n \nNote : fcm ne fonctionnera pas si vous utilisez la version release.</string>
     <string name="DisableLinkPreviewByDefaultNotice">Désactiver l\'aperçu de lien par défaut afin d\'empêcher le serveur Telegram de lire vos liens échangés.</string>
     <string name="PrivacyNoticeAddByPhone">Le paramètre \"Autoriser à me trouver par le biais de mon numéro de téléphone\" n\'a pas été désactivé, ce qui peut permettre à un pirate contrôlé par le gouvernement de trouver votre véritable identité, désactivez-le !</string>
     <string name="IgnoreMutedCount">Ignorer les compteurs de messages non lus mis en sourdine dans l\'onglet des dossiers</string>
@@ -142,13 +140,11 @@
     <string name="DismissForYourself">Rejeter pour soi-même</string>
     <string name="EnableStickerPin">Activer l\'épinglage des vignettes</string>
     <string name="Win32ExecutableFiles">Fichiers exécutables Win32</string>
-    <string name="EnableStickerPinAbout">Épingler les vignettes et les synchroniser dans le cloud lors de l\'ajout de nouvelles.
-\nAssocié avec l\'option \"Désactiver les vignettes favorites et récentes\".</string>
+    <string name="EnableStickerPinAbout">Épingler les vignettes et les synchroniser dans le cloud lors de l\'ajout de nouvelles. \nAssocié avec l\'option \"Désactiver les vignettes favorites et récentes\".</string>
     <string name="VersionUpdateConfirm">MISE À JOUR</string>
     <string name="EnableStickerPinTip">Cette fonction est toujours en développement, la synchronisation dans le cloud peut ne pas fonctionner comme prévu.</string>
     <string name="UsePersiancalendarInfo">Afficher la date avec le calendrier solaire Hijiri</string>
-    <string name="VersionUpdateVariantNotMatch">Les variantes de version échouent à correspondre automatiquement.
-\nVeuillez télécharger manuellement depuis GitHub.</string>
+    <string name="VersionUpdateVariantNotMatch">Les variantes de version échouent à correspondre automatiquement. \nVeuillez télécharger manuellement depuis GitHub.</string>
     <string name="ImportSettings">Importer les paramètres</string>
     <string name="VersionUpdateNoUpdate">Pas de Mise à jour.</string>
     <string name="DisplayPersianCalendarByLatin">Afficher le calendrier persan en caractères latins</string>
@@ -162,15 +158,13 @@
     <string name="DeleteDownloadedFileExternal">Le fichier externe est ignoré.</string>
     <string name="DeleteDownloadedFileSucceed">Supprimé</string>
     <string name="repeatConfirm">Demander avant de répéter</string>
-    <string name="repeatConfirmText">Êtes-vous sûr de répéter \?</string>
-    <string name="DeleteDownloadedFileConfirm">Supprimer ce fichier du cache local \?</string>
+    <string name="repeatConfirmText">Êtes-vous sûr de répéter ?</string>
+    <string name="DeleteDownloadedFileConfirm">Supprimer ce fichier du cache local ?</string>
     <string name="VersionUpdateTitle">Nouvelle version disponible</string>
     <string name="hideSponsoredMessage">Cacher les messages sponsorisés</string>
     <string name="VersionUpdateIgnore">Ignorer</string>
-    <string name="valuesLargeAvatarInDrawer">Par défaut de Telegram
-\nAvatar comme arrière-plan
-\nGrand avatar comme arrière-plan</string>
-    <string name="ImportSettingsAlert">Êtes-vous sûr de vouloir écraser les paramètres \? Importer des paramètres d\'une source inconnue peut entraîner le changement du code PIN et par conséquent le verrouillage de l\'application.</string>
+    <string name="valuesLargeAvatarInDrawer">Par défaut de Telegram \nAvatar comme arrière-plan \nGrand avatar comme arrière-plan</string>
+    <string name="ImportSettingsAlert">Êtes-vous sûr de vouloir écraser les paramètres ? Importer des paramètres d\'une source inconnue peut entraîner le changement du code PIN et par conséquent le verrouillage de l\'application.</string>
     <string name="DisableInstantCamera">Désactiver la caméra instantanée</string>
     <string name="VersionUpdateNotNow">Pas maintenant</string>
     <string name="showSeconds">Afficher l\'horodatage en secondes</string>
@@ -200,4 +194,77 @@
     <string name="FasterReconnectHackAbout">Ce hack ne fonctionne qu\'avec un bon environnement réseau.</string>
     <string name="ConfirmSettings">Confirmation</string>
     <string name="InteractionSettings">Interaction</string>
+    <string name="DebugSendLogsExt"></string>
+    <string name="MonetAvatarGradient"></string>
+    <string name="MemLeak"></string>
+    <string name="ForceExternalBrowserForBots"></string>
+    <string name="AlwaysLabelAnonAdmin"></string>
+    <string name="MuteBotsFromGroup"></string>
+    <string name="UseCamera2API"></string>
+    <string name="FeatureRemovedWhyDetail"></string>
+    <string name="CustomStatusInfo"></string>
+    <string name="UseAdGuardDNS"></string>
+    <string name="AppNameShort" translatable="false"></string>
+    <string name="DisableSaveDraftToCloud"></string>
+    <string name="ShowAddedToFoldersAtTitle"></string>
+    <string name="MonetAlterOut"></string>
+    <string name="CustomMaxCacheSizeBulletin"></string>
+    <string name="AlwaysDestroyPhotoViewer"></string>
+    <string name="HideCameraInAttachMenu"></string>
+    <string name="BanForAllModeratingChats"></string>
+    <string name="FeatureRemovedWhy"></string>
+    <string name="ShowQuickReconnect"></string>
+    <string name="ResetSettingsDesc"></string>
+    <string name="ForceExternalBrowserForBotsDesc"></string>
+    <string name="MemLeakInfo"></string>
+    <string name="MonetNickname"></string>
+    <string name="UseOldAppNameDesc"></string>
+    <string name="PGPDecryptErr"></string>
+    <string name="MonetAmoled"></string>
+    <string name="CustomApiId"></string>
+    <string name="PauseInactiveTabAnimation"></string>
+    <string name="AutoRestartOnLeak"></string>
+    <string name="UseOldAppName"></string>
+    <string name="MonetLightMode"></string>
+    <string name="AllowDupLoginInfo"></string>
+    <string name="WhisperModelInUse"></string>
+    <string name="UnblockDeleted"></string>
+    <string name="WhisperLocal"></string>
+    <string name="ReplyInPrivate"></string>
+    <string name="GenerateMonetTheme"></string>
+    <string name="AutoRestartOnLeakInfo"></string>
+    <string name="WhisperLocalProcessing"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="UnblockDeletedWarn"></string>
+    <string name="CustomMaxCacheSize"></string>
+    <string name="Momogram" translatable="false"></string>
+    <string name="ShowQuickReconnectDesc"></string>
+    <string name="DeleteUnusedWhisperModel"></string>
+    <string name="FBan"></string>
+    <string name="FeatureRemoved"></string>
+    <string name="RecentChatFolderSize"></string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="KeepSamePositionOnNewMsg"></string>
+    <string name="WhisperModelRemoved"></string>
+    <string name="CheckMemLeak"></string>
+    <string name="PGPEncrypt"></string>
+    <string name="ShareGroupMediaMessage"></string>
+    <string name="MemLeakThreshold"></string>
+    <string name="OnlyShowStoriesFromUsers"></string>
+    <string name="MuteBotsFromGroupDesc"></string>
+    <string name="ResumeAudioPlaybackOnLaunch"></string>
+    <string name="CustomApiHash"></string>
+    <string name="OpenLinkInApp"></string>
+    <string name="HideChannelBottomNotiToggle"></string>
+    <string name="ShowPhoneNumTemp"></string>
+    <string name="AllowDupLogin"></string>
+    <string name="PositionRight"></string>
+    <string name="HideMessageRegex"></string>
+    <string name="VideoBitrateToggled"></string>
+    <string name="CustomMaxCacheSizeHint"></string>
+    <string name="BannedForChats"></string>
+    <string name="MonetGradient"></string>
+    <string name="MuteBlockedFromGroup"></string>
+    <string name="ResetSettings"></string>
+    <string name="PositionLeft"></string>
 </resources>
