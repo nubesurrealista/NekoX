@@ -11,9 +11,7 @@
     <string name="DisableLinkPreviewByDefault">Bağlantı Önizlemesini Varsayılan Olarak Devre Dışı Bırak</string>
     <string name="DisableLinkPreviewByDefaultNotice">Sunucunun bağlantının Telegram aracılığıyla paylaşıldığını bilmesini önlemek için, giriş sırasında bağlantı önizleme isteğini varsayılan olarak devre dışı bırakın.</string>
     <string name="CustomApi">Özel API</string>
-    <string name="UseCustomApiNotice">Özel API kullanarak giriş yapın, eğer kayıt veya giriş yapamıyorsanız,
-\n
-\n yardımcı olabilir. Not: Yayınlanmış sürümü kullanıyorsanız fcm çalışmaz.</string>
+    <string name="UseCustomApiNotice">Özel API kullanarak giriş yapın, eğer kayıt veya giriş yapamıyorsanız, \n \n yardımcı olabilir. Not: Yayınlanmış sürümü kullanıyorsanız fcm çalışmaz.</string>
     <string name="CustomApiNo">Özel API kullanmayın</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
@@ -85,7 +83,7 @@
     <string name="HideProxyByDefault">Vekil sunucu ayarlarını varsayılan olarak gizle</string>
     <string name="SkipOpenLinkConfirm">Bağlantıyı açma onay kutusunu atla</string>
     <string name="UnblockAll">Tümünün Engelini Kaldır</string>
-    <string name="UnblockAllWarn">**Tüm kullanıcıların ve botların** engellemesini kaldırmak istediğinize emin misiniz\?</string>
+    <string name="UnblockAllWarn">**Tüm kullanıcıların ve botların** engellemesini kaldırmak istediğinize emin misiniz?</string>
     <string name="BlockedListEmpty">Kimseyi engellemedin :)</string>
     <string name="ImportProxyList">Vekil sunucuları içe aktar</string>
     <string name="ExportStickers">Çıkartmaları Dışa Aktar</string>
@@ -119,10 +117,10 @@
     <string name="UnpinMessagesAll">Tüm mesajların sabitlemesini kaldır</string>
     <string name="DismissForYourself">Kendin için reddet</string>
     <string name="ImportLogin">QR Girişi</string>
-    <string name="QRLoginNotice">Bu QR kodu / bağlantısı Telegram hesabınıza giriş yapılmasına izin verir. Bu işlemi siz mi gerçekleştirdiniz\?</string>
+    <string name="QRLoginNotice">Bu QR kodu / bağlantısı Telegram hesabınıza giriş yapılmasına izin verir. Bu işlemi siz mi gerçekleştirdiniz?</string>
     <string name="QRLoginConfirm">Girişi Onayla</string>
     <string name="FCTitle">Uygulama güncellemeleri hakkında</string>
-    <string name="FCInfo">Duyuru ve güncellemeler kanalımızı takip etmek ister misiniz\?</string>
+    <string name="FCInfo">Duyuru ve güncellemeler kanalımızı takip etmek ister misiniz?</string>
     <string name="CCNo">Yok</string>
     <string name="CCTC">Geleneksel Çince</string>
     <string name="CCHK">Geleneksel Çince (Hong Kong)</string>
@@ -145,7 +143,7 @@
     <string name="DisplayPersianCalendarByLatin">Farsça takvimini Latince olarak görüntüle</string>
     <string name="UsePersiancalendar">Farsça takvimi kullan</string>
     <string name="nekoXPaymentRemovedToast">Ödeme işlevi kaldırıldı.</string>
-    <string name="ImportSettingsAlert">Ayarların üzerine yazmak istediğinize emin misiniz\? Bilinmeyen kaynaklardan ayarları içe aktarmak, PIN kodunun üzerine yazılmasına ve uygulamanın kilitlenmesine neden olabilir.</string>
+    <string name="ImportSettingsAlert">Ayarların üzerine yazmak istediğinize emin misiniz? Bilinmeyen kaynaklardan ayarları içe aktarmak, PIN kodunun üzerine yazılmasına ve uygulamanın kilitlenmesine neden olabilir.</string>
     <string name="ImportSettings">Ayarları içe aktar</string>
     <string name="BackupSettings">Yedekleme ayarları</string>
     <string name="AutoLockImmediately">Hemen</string>
@@ -153,24 +151,22 @@
     <string name="UnpinSticker">Sabitlemeyi kaldır</string>
     <string name="PinSticker">Sabitle</string>
     <string name="EnableStickerPinTip">Bu işlev hala geliştirilme aşamasındadır, bulut ile eşzamanlama düşünüldüğü gibi çalışmayabilir.</string>
-    <string name="EnableStickerPinAbout">Çıkartmaları sabitleyin ve yeni çıkartmalar eklerken bile bulut ile eşzamanlayın.
-\nSık Kullanılanları ve Son Kullanılanları Devre Dışı Bırak özellikleri ile eşleştirilir.</string>
+    <string name="EnableStickerPinAbout">Çıkartmaları sabitleyin ve yeni çıkartmalar eklerken bile bulut ile eşzamanlayın. \nSık Kullanılanları ve Son Kullanılanları Devre Dışı Bırak özellikleri ile eşleştirilir.</string>
     <string name="EnableStickerPin">Çıkartma sabitlemeyi etkinleştir</string>
     <string name="VersionUpdateNoUpdate">Güncelleme Yok.</string>
     <string name="VersionUpdateNotNow">Şimdi değil</string>
     <string name="VersionUpdateIgnore">Görmezden gel</string>
     <string name="VersionUpdateConfirm">GÜNCELLE</string>
-    <string name="VersionUpdateVariantNotMatch">Sürüm türü otomatik olarak eşleşmiyor.
-\nLütfen GitHub\'tan elle indirin.</string>
+    <string name="VersionUpdateVariantNotMatch">Sürüm türü otomatik olarak eşleşmiyor. \nLütfen GitHub\'tan elle indirin.</string>
     <string name="VersionUpdateTitle">Yeni Sürüm Var</string>
     <string name="ShareMessages">Paylaş</string>
     <string name="unreadBadgeOnBackButton">Geri tuşunda okunmamış mesaj sayısını göster</string>
-    <string name="DeleteDownloadedFileConfirm">Bu dosyayı yerel önbellekten sil\?</string>
+    <string name="DeleteDownloadedFileConfirm">Bu dosyayı yerel önbellekten sil?</string>
     <string name="useCustomEmoji">Özel emoji paketi kullan</string>
     <string name="showSeconds">Zaman bilgisini saniye türünde göster</string>
     <string name="AppUpdateNekoX">Nekogram X\'i güncelle</string>
     <string name="DeleteDownloadedFileExternal">Harici dosya atlandı.</string>
-    <string name="repeatConfirmText">Tekrarlamak istediğinize emin misiniz\?</string>
+    <string name="repeatConfirmText">Tekrarlamak istediğinize emin misiniz?</string>
     <string name="DisableInstantCamera">Hızlı kamerayı devre dışı bırak</string>
     <string name="labelChannelUserDetails">Mesajı gönderen \"Kanal\" ise, bu \"Kanal\" olarak etiketlenir.</string>
     <string name="channelAlias">Kanal takma adı</string>
@@ -178,9 +174,7 @@
     <string name="DeleteDownloadedFileSucceed">Silindi</string>
     <string name="useCustomEmojiInvalid">Geçerli bir emoji ZIP dosyası değil.</string>
     <string name="repeatConfirm">Tekrarlamadan önce sor</string>
-    <string name="valuesLargeAvatarInDrawer">Telegram Varsayılanı
-\nProfil resmini arkaplanda kullan
-\nBüyük profil resmini arkaplanda kullan</string>
+    <string name="valuesLargeAvatarInDrawer">Telegram Varsayılanı \nProfil resmini arkaplanda kullan \nBüyük profil resmini arkaplanda kullan</string>
     <string name="hideSponsoredMessage">Reklam içeren mesajları gizle</string>
     <string name="rememberAllBackMessages">Bütün dokunulmuş yanıtları hatırla</string>
     <string name="Name">İsim</string>
@@ -223,4 +217,54 @@
     <string name="CustomMaxCacheSizeHint">MB cinsinden boyut (ör. 512)</string>
     <string name="CustomMaxCacheSizeBulletin">En fazla önbellek miktarı %1$s MB\'a ayarlandı</string>
     <string name="UseCamera2API">Camera 2 altyapısına geç</string>
+    <string name="DebugSendLogsExt"></string>
+    <string name="MemLeak"></string>
+    <string name="AlwaysLabelAnonAdmin"></string>
+    <string name="MuteBotsFromGroup"></string>
+    <string name="FeatureRemovedWhyDetail"></string>
+    <string name="CustomStatusInfo"></string>
+    <string name="UseAdGuardDNS"></string>
+    <string name="AppNameShort" translatable="false"></string>
+    <string name="DisableSaveDraftToCloud"></string>
+    <string name="ShowAddedToFoldersAtTitle"></string>
+    <string name="BanForAllModeratingChats"></string>
+    <string name="FeatureRemovedWhy"></string>
+    <string name="ShowQuickReconnect"></string>
+    <string name="ResetSettingsDesc"></string>
+    <string name="MemLeakInfo"></string>
+    <string name="PGPDecryptErr"></string>
+    <string name="PauseInactiveTabAnimation"></string>
+    <string name="AutoRestartOnLeak"></string>
+    <string name="WhisperModelInUse"></string>
+    <string name="UnblockDeleted"></string>
+    <string name="WhisperLocal"></string>
+    <string name="ReplyInPrivate"></string>
+    <string name="AutoRestartOnLeakInfo"></string>
+    <string name="WhisperLocalProcessing"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="UnblockDeletedWarn"></string>
+    <string name="Momogram" translatable="false"></string>
+    <string name="ShowQuickReconnectDesc"></string>
+    <string name="DeleteUnusedWhisperModel"></string>
+    <string name="FBan"></string>
+    <string name="FeatureRemoved"></string>
+    <string name="RecentChatFolderSize"></string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="KeepSamePositionOnNewMsg"></string>
+    <string name="WhisperModelRemoved"></string>
+    <string name="CheckMemLeak"></string>
+    <string name="PGPEncrypt"></string>
+    <string name="ShareGroupMediaMessage"></string>
+    <string name="MemLeakThreshold"></string>
+    <string name="OnlyShowStoriesFromUsers"></string>
+    <string name="MuteBotsFromGroupDesc"></string>
+    <string name="ResumeAudioPlaybackOnLaunch"></string>
+    <string name="ShowPhoneNumTemp"></string>
+    <string name="PositionRight"></string>
+    <string name="HideMessageRegex"></string>
+    <string name="VideoBitrateToggled"></string>
+    <string name="BannedForChats"></string>
+    <string name="MuteBlockedFromGroup"></string>
+    <string name="ResetSettings"></string>
+    <string name="PositionLeft"></string>
 </resources>
