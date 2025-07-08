@@ -11,9 +11,7 @@
     <string name="DisableLinkPreviewByDefault">Disabilita anteprima link da default</string>
     <string name="DisableLinkPreviewByDefaultNotice">Disabilita la richiesta di anteprima dei link durante l\'input da default per evitare che il server sappia che il link è condiviso tramite Telegram.</string>
     <string name="CustomApi">API personalizzata</string>
-    <string name="UseCustomApiNotice">Accedi utilizzando l\'API personalizzata, se non riesci a registrarti o accedere, questo può essere d\'aiuto.
-\n
-\nNota: fcm non funzionerà se si utilizza la versione di rilascio.</string>
+    <string name="UseCustomApiNotice">Accedi utilizzando l\'API personalizzata, se non riesci a registrarti o accedere, questo può essere d\'aiuto. \n \nNota: fcm non funzionerà se si utilizza la versione di rilascio.</string>
     <string name="CustomApiNo">Non utilizzare l\'API personalizzata</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
@@ -85,7 +83,7 @@
     <string name="HideProxyByDefault">Nascondi impostazioni proxy per impostazione predefinita</string>
     <string name="SkipOpenLinkConfirm">Salta conferma apri link</string>
     <string name="UnblockAll">Sblocca Tutto</string>
-    <string name="UnblockAllWarn">Sei sicuro di voler sbloccare **tutti gli utenti e bot**\?</string>
+    <string name="UnblockAllWarn">Sei sicuro di voler sbloccare **tutti gli utenti e bot**?</string>
     <string name="BlockedListEmpty">Non hai bloccato nessuno :)</string>
     <string name="ImportProxyList">Importa i proxy dei server</string>
     <string name="ExportStickers">Esporta Stickers</string>
@@ -118,10 +116,10 @@
     <string name="UnpinMessagesAll">Togli tutti i messaggi fissati</string>
     <string name="DismissForYourself">Togli per te stesso</string>
     <string name="ImportLogin">Login QR</string>
-    <string name="QRLoginNotice">Questo codice QR / link consente a qualcuno di accedere al tuo account Telegram. Questa è una tua operazione\?</string>
+    <string name="QRLoginNotice">Questo codice QR / link consente a qualcuno di accedere al tuo account Telegram. Questa è una tua operazione?</string>
     <string name="QRLoginConfirm">Conferma Login</string>
     <string name="FCTitle">Informazioni aggiornamento applicazione</string>
-    <string name="FCInfo">Seguire il nostro canale di annunci e aggiornamenti\?</string>
+    <string name="FCInfo">Seguire il nostro canale di annunci e aggiornamenti?</string>
     <string name="CCNo">Nessuno</string>
     <string name="CCTC">Cinese Tradizionale</string>
     <string name="CCHK">Cinese Tradizionale (Hong Kong)</string>
@@ -137,7 +135,7 @@
     <string name="TextOrigin">Origine</string>
     <string name="ReplaceText">Sostituisci Testo</string>
     <string name="nekoXPaymentRemovedToast">La funzione di pagamento è stata rimossa.</string>
-    <string name="ImportSettingsAlert">Sei sicuro di voler sovrascrivere le impostazioni\? L\'importazione delle impostazioni da fonti sconosciute può causare la sovrascrittura delle conversazioni fissate e causare il blocco dell\'applicazione.</string>
+    <string name="ImportSettingsAlert">Sei sicuro di voler sovrascrivere le impostazioni? L\'importazione delle impostazioni da fonti sconosciute può causare la sovrascrittura delle conversazioni fissate e causare il blocco dell\'applicazione.</string>
     <string name="ImportSettings">Importa impostazioni</string>
     <string name="BackupSettings">Impostazioni backup</string>
     <string name="AutoLockImmediately">Immediatamente</string>
@@ -149,15 +147,13 @@
     <string name="UnpinSticker">Togli Fissato</string>
     <string name="PinSticker">Fissa</string>
     <string name="EnableStickerPinTip">Questa funzione è ancora in fase di sviluppo, la sincronizzazione con il cloud potrebbe non funzionare come previsto.</string>
-    <string name="EnableStickerPinAbout">Fissa Stickers e sincronizzali con il cloud anche quando si aggiungono nuovi stickers.
-\nAccoppiato con Disabilita Preferito e Recente.</string>
+    <string name="EnableStickerPinAbout">Fissa Stickers e sincronizzali con il cloud anche quando si aggiungono nuovi stickers. \nAccoppiato con Disabilita Preferito e Recente.</string>
     <string name="EnableStickerPin">Abilita fissaggio sticker</string>
     <string name="ArchiveFiles">File Archivio</string>
     <string name="Win32ExecutableFiles">File eseguibili Win32</string>
     <string name="AutoDownload">Download Automatico</string>
     <string name="VersionUpdateConfirm">AGGIORNA</string>
-    <string name="VersionUpdateVariantNotMatch">La versione selezionata ha fallito nell\'abbinarsi automaticamente.
-\nPer favore scaricala manualmente da GitHub.</string>
+    <string name="VersionUpdateVariantNotMatch">La versione selezionata ha fallito nell\'abbinarsi automaticamente. \nPer favore scaricala manualmente da GitHub.</string>
     <string name="VersionUpdateNoUpdate">Nessun Aggiornamento.</string>
     <string name="VersionUpdateNotNow">Non ora</string>
     <string name="VersionUpdateIgnore">Ignora</string>
@@ -166,14 +162,12 @@
     <string name="useCustomEmojiInvalid">File zip delle emoji non valido.</string>
     <string name="DeleteDownloadedFileExternal">File esterno ignorato.</string>
     <string name="unreadBadgeOnBackButton">Badge non letto sul pulsante indietro</string>
-    <string name="valuesLargeAvatarInDrawer">Predefinito Telegram
-\nAvatar come sfondo
-\nAvatar grande come sfondo</string>
+    <string name="valuesLargeAvatarInDrawer">Predefinito Telegram \nAvatar come sfondo \nAvatar grande come sfondo</string>
     <string name="repeatConfirm">Chiedi prima di ripetere</string>
     <string name="hideSponsoredMessage">Nascondi messaggi sponsorizzati</string>
     <string name="useCustomEmoji">Usa emoji personalizzata</string>
-    <string name="DeleteDownloadedFileConfirm">Eliminare questo file dalla cache locale\?</string>
-    <string name="repeatConfirmText">Sei sicuro di ripetere\?</string>
+    <string name="DeleteDownloadedFileConfirm">Eliminare questo file dalla cache locale?</string>
+    <string name="repeatConfirmText">Sei sicuro di ripetere?</string>
     <string name="DisableInstantCamera">Disabilita fotocamera istantanea</string>
     <string name="showSeconds">Mostra i secondi nell\'orario</string>
     <string name="rememberAllBackMessages">Ricorda tutte le risposte cliccate</string>
@@ -187,4 +181,89 @@
     <string name="StickerSettings">Sticker</string>
     <string name="ConfirmSettings">Conferma</string>
     <string name="InteractionSettings">Interazione</string>
+    <string name="DebugSendLogsExt"></string>
+    <string name="doubleTapShowReactionsMenu"></string>
+    <string name="MonetAvatarGradient"></string>
+    <string name="MemLeak"></string>
+    <string name="ForceExternalBrowserForBots"></string>
+    <string name="AlwaysLabelAnonAdmin"></string>
+    <string name="MuteBotsFromGroup"></string>
+    <string name="UseCamera2API"></string>
+    <string name="FasterReconnectHackAbout"></string>
+    <string name="FeatureRemovedWhyDetail"></string>
+    <string name="CustomStatusInfo"></string>
+    <string name="FasterReconnectHack"></string>
+    <string name="UseAdGuardDNS"></string>
+    <string name="AppNameShort" translatable="false"></string>
+    <string name="UnsupportedProxy"></string>
+    <string name="DisableSaveDraftToCloud"></string>
+    <string name="ShowAddedToFoldersAtTitle"></string>
+    <string name="DisableCustomWallpaperUser"></string>
+    <string name="MonetAlterOut"></string>
+    <string name="CustomMaxCacheSizeBulletin"></string>
+    <string name="AlwaysDestroyPhotoViewer"></string>
+    <string name="ShowSelfInsteadOfSavedMessages"></string>
+    <string name="HideCameraInAttachMenu"></string>
+    <string name="BanForAllModeratingChats"></string>
+    <string name="FeatureRemovedWhy"></string>
+    <string name="ShowQuickReconnect"></string>
+    <string name="ResetSettingsDesc"></string>
+    <string name="ForceExternalBrowserForBotsDesc"></string>
+    <string name="MemLeakInfo"></string>
+    <string name="MonetNickname"></string>
+    <string name="disableReactionsWhenSelecting"></string>
+    <string name="UseOldAppNameDesc"></string>
+    <string name="PGPDecryptErr"></string>
+    <string name="MonetAmoled"></string>
+    <string name="CustomApiId"></string>
+    <string name="ReactionSettings"></string>
+    <string name="PauseInactiveTabAnimation"></string>
+    <string name="AutoRestartOnLeak"></string>
+    <string name="UseOldAppName"></string>
+    <string name="MonetLightMode"></string>
+    <string name="AllowDupLoginInfo"></string>
+    <string name="WhisperModelInUse"></string>
+    <string name="UnblockDeleted"></string>
+    <string name="WhisperLocal"></string>
+    <string name="ReplyInPrivate"></string>
+    <string name="GenerateMonetTheme"></string>
+    <string name="AutoRestartOnLeakInfo"></string>
+    <string name="WhisperLocalProcessing"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="UnblockDeletedWarn"></string>
+    <string name="CustomMaxCacheSize"></string>
+    <string name="doubleTapSendReaction"></string>
+    <string name="Momogram" translatable="false"></string>
+    <string name="ShowQuickReconnectDesc"></string>
+    <string name="doubleTapAndReactions"></string>
+    <string name="DeleteUnusedWhisperModel"></string>
+    <string name="FBan"></string>
+    <string name="FeatureRemoved"></string>
+    <string name="RecentChatFolderSize"></string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="KeepSamePositionOnNewMsg"></string>
+    <string name="DisableCustomWallpaperChannel"></string>
+    <string name="doubleTapDisable"></string>
+    <string name="WhisperModelRemoved"></string>
+    <string name="CheckMemLeak"></string>
+    <string name="PGPEncrypt"></string>
+    <string name="ShareGroupMediaMessage"></string>
+    <string name="MemLeakThreshold"></string>
+    <string name="OnlyShowStoriesFromUsers"></string>
+    <string name="MuteBotsFromGroupDesc"></string>
+    <string name="ResumeAudioPlaybackOnLaunch"></string>
+    <string name="CustomApiHash"></string>
+    <string name="OpenLinkInApp"></string>
+    <string name="HideChannelBottomNotiToggle"></string>
+    <string name="ShowPhoneNumTemp"></string>
+    <string name="AllowDupLogin"></string>
+    <string name="PositionRight"></string>
+    <string name="HideMessageRegex"></string>
+    <string name="VideoBitrateToggled"></string>
+    <string name="CustomMaxCacheSizeHint"></string>
+    <string name="BannedForChats"></string>
+    <string name="MonetGradient"></string>
+    <string name="MuteBlockedFromGroup"></string>
+    <string name="ResetSettings"></string>
+    <string name="PositionLeft"></string>
 </resources>
