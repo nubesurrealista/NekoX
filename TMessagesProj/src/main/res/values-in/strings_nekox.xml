@@ -228,43 +228,4 @@
     <string name="MuteBlockedFromGroup">Pemberitahuan obrolan grup bisu jika dari pengguna yang diblokir</string>
     <string name="MuteBotsFromGroup">Pemberitahuan obrolan grup bisu jika dari bot</string>
     <string name="MuteBotsFromGroupDesc">Pesan yang diketahui untuk admin tidak akan di bisukan</string>
-    <string name="MemLeak"></string>
-    <string name="AlwaysLabelAnonAdmin"></string>
-    <string name="CustomStatusInfo"></string>
-    <string name="UseAdGuardDNS"></string>
-    <string name="AppNameShort" translatable="false"></string>
-    <string name="DisableSaveDraftToCloud"></string>
-    <string name="ShowAddedToFoldersAtTitle"></string>
-    <string name="BanForAllModeratingChats"></string>
-    <string name="ResetSettingsDesc"></string>
-    <string name="MemLeakInfo"></string>
-    <string name="PGPDecryptErr"></string>
-    <string name="AutoRestartOnLeak"></string>
-    <string name="WhisperModelInUse"></string>
-    <string name="UnblockDeleted"></string>
-    <string name="WhisperLocal"></string>
-    <string name="ReplyInPrivate"></string>
-    <string name="AutoRestartOnLeakInfo"></string>
-    <string name="WhisperLocalProcessing"></string>
-    <string name="NekoX" translatable="false"></string>
-    <string name="UnblockDeletedWarn"></string>
-    <string name="Momogram" translatable="false"></string>
-    <string name="DeleteUnusedWhisperModel"></string>
-    <string name="FBan"></string>
-    <string name="RecentChatFolderSize"></string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="KeepSamePositionOnNewMsg"></string>
-    <string name="WhisperModelRemoved"></string>
-    <string name="CheckMemLeak"></string>
-    <string name="PGPEncrypt"></string>
-    <string name="ShareGroupMediaMessage"></string>
-    <string name="MemLeakThreshold"></string>
-    <string name="OnlyShowStoriesFromUsers"></string>
-    <string name="ResumeAudioPlaybackOnLaunch"></string>
-    <string name="PositionRight"></string>
-    <string name="HideMessageRegex"></string>
-    <string name="VideoBitrateToggled"></string>
-    <string name="BannedForChats"></string>
-    <string name="ResetSettings"></string>
-    <string name="PositionLeft"></string>
 </resources>

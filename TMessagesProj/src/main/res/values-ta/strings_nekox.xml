@@ -255,15 +255,4 @@
     <string name="AutoRestartOnLeakInfo">குறிப்பு. தொடர்ந்து பதிவிறக்கம்/பதிவேற்ற நடவடிக்கைகள் இல்லாதபோது மட்டுமே பொருந்தும்</string>
     <string name="AlwaysLabelAnonAdmin">எப்போதும் அநாமதேய நிர்வாகியை அரட்டையில் லேபிளிடுங்கள்</string>
     <string name="MemLeakInfo">OMG! அது கசிந்து கொண்டிருக்கிறது! (தற்போதைய ரேம் பயன்பாடு: %1$.2f MB) பயன்பாட்டை மறுதொடக்கம் செய்யவா? \n\nகுறிப்பு. இந்த நினைவூட்டலை பொது அமைப்புகளில் முடக்கலாம்.</string>
-    <string name="UseAdGuardDNS"></string>
-    <string name="AppNameShort" translatable="false"></string>
-    <string name="DisableSaveDraftToCloud"></string>
-    <string name="PGPDecryptErr"></string>
-    <string name="NekoX" translatable="false"></string>
-    <string name="Momogram" translatable="false"></string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="KeepSamePositionOnNewMsg"></string>
-    <string name="ShareGroupMediaMessage"></string>
-    <string name="OnlyShowStoriesFromUsers"></string>
-    <string name="ResumeAudioPlaybackOnLaunch"></string>
 </resources>

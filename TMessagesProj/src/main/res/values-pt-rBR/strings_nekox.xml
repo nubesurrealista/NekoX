@@ -223,48 +223,4 @@
     <string name="AlwaysDestroyPhotoViewer">Sempre destruir o PhotoViewer</string>
     <string name="CustomMaxCacheSizeHint">Tamanho em MB (ex. 512)</string>
     <string name="UseCamera2API">Usar API da Câmera 2</string>
-    <string name="MemLeak"></string>
-    <string name="AlwaysLabelAnonAdmin"></string>
-    <string name="MuteBotsFromGroup"></string>
-    <string name="CustomStatusInfo"></string>
-    <string name="UseAdGuardDNS"></string>
-    <string name="AppNameShort" translatable="false"></string>
-    <string name="DisableSaveDraftToCloud"></string>
-    <string name="ShowAddedToFoldersAtTitle"></string>
-    <string name="BanForAllModeratingChats"></string>
-    <string name="ResetSettingsDesc"></string>
-    <string name="MemLeakInfo"></string>
-    <string name="PGPDecryptErr"></string>
-    <string name="PauseInactiveTabAnimation"></string>
-    <string name="AutoRestartOnLeak"></string>
-    <string name="WhisperModelInUse"></string>
-    <string name="UnblockDeleted"></string>
-    <string name="WhisperLocal"></string>
-    <string name="ReplyInPrivate"></string>
-    <string name="AutoRestartOnLeakInfo"></string>
-    <string name="WhisperLocalProcessing"></string>
-    <string name="NekoX" translatable="false"></string>
-    <string name="UnblockDeletedWarn"></string>
-    <string name="Momogram" translatable="false"></string>
-    <string name="DeleteUnusedWhisperModel"></string>
-    <string name="FBan"></string>
-    <string name="RecentChatFolderSize"></string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="KeepSamePositionOnNewMsg"></string>
-    <string name="WhisperModelRemoved"></string>
-    <string name="CheckMemLeak"></string>
-    <string name="PGPEncrypt"></string>
-    <string name="ShareGroupMediaMessage"></string>
-    <string name="MemLeakThreshold"></string>
-    <string name="OnlyShowStoriesFromUsers"></string>
-    <string name="MuteBotsFromGroupDesc"></string>
-    <string name="ResumeAudioPlaybackOnLaunch"></string>
-    <string name="ShowPhoneNumTemp"></string>
-    <string name="PositionRight"></string>
-    <string name="HideMessageRegex"></string>
-    <string name="VideoBitrateToggled"></string>
-    <string name="BannedForChats"></string>
-    <string name="MuteBlockedFromGroup"></string>
-    <string name="ResetSettings"></string>
-    <string name="PositionLeft"></string>
 </resources>

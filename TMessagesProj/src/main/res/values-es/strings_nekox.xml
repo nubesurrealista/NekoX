@@ -257,13 +257,4 @@
     <string name="MemLeak">Fuga de memoria</string>
     <string name="KeepSamePositionOnNewMsg">Mantener la posición de desplazamiento al recibir un nuevo mensaje desde otra sesión</string>
     <string name="UseAdGuardDNS">Usar AdGuard DNS</string>
-    <string name="AppNameShort" translatable="false"></string>
-    <string name="DisableSaveDraftToCloud"></string>
-    <string name="PGPDecryptErr"></string>
-    <string name="NekoX" translatable="false"></string>
-    <string name="Momogram" translatable="false"></string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="ShareGroupMediaMessage"></string>
-    <string name="OnlyShowStoriesFromUsers"></string>
-    <string name="ResumeAudioPlaybackOnLaunch"></string>
 </resources>

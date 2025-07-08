@@ -240,31 +240,4 @@
     <string name="MonetAlterOut">替代的外送訊息樣式</string>
     <string name="AlwaysDestroyPhotoViewer">總是銷毀圖片檢視器物件</string>
     <string name="BannedForChats">已在 %2$d 個群組中將 %1$s 封鎖</string>
-    <string name="CustomStatusInfo"></string>
-    <string name="UseAdGuardDNS"></string>
-    <string name="AppNameShort" translatable="false"></string>
-    <string name="DisableSaveDraftToCloud"></string>
-    <string name="ResetSettingsDesc"></string>
-    <string name="PGPDecryptErr"></string>
-    <string name="MonetAmoled"></string>
-    <string name="AutoRestartOnLeak"></string>
-    <string name="WhisperModelInUse"></string>
-    <string name="UnblockDeleted"></string>
-    <string name="ReplyInPrivate"></string>
-    <string name="AutoRestartOnLeakInfo"></string>
-    <string name="NekoX" translatable="false"></string>
-    <string name="UnblockDeletedWarn"></string>
-    <string name="Momogram" translatable="false"></string>
-    <string name="ShowQuickReconnectDesc"></string>
-    <string name="DeleteUnusedWhisperModel"></string>
-    <string name="FBan"></string>
-    <string name="KeepSamePositionOnNewMsg"></string>
-    <string name="WhisperModelRemoved"></string>
-    <string name="PGPEncrypt"></string>
-    <string name="ShareGroupMediaMessage"></string>
-    <string name="MemLeakThreshold"></string>
-    <string name="OnlyShowStoriesFromUsers"></string>
-    <string name="ResumeAudioPlaybackOnLaunch"></string>
-    <string name="HideMessageRegex"></string>
-    <string name="ResetSettings"></string>
 </resources>
