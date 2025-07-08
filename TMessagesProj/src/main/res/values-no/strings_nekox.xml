@@ -93,9 +93,7 @@
     <string name="DialogsSettings">Dialog-innstillinger</string>
     <string name="SkipOpenLinkConfirm">Hopp over lenkebekreftelse</string>
     <string name="DisableLinkPreviewByDefaultNotice">Skru av visninger av lenkeforespørsler under skriving som forvalg, for å forhindre tjeneren for å ta rede på at lenken er delt gjennom Telegram.</string>
-    <string name="UseCustomApiNotice">Logg inn med det egendefinerte API-et, noe som kan hjelpe hvis du ikke kan registrere deg eller logge inn.
-\n
-\nMerk: fcm vil ikke virke hvis du bruker utgivelsesversjonen.</string>
+    <string name="UseCustomApiNotice">Logg inn med det egendefinerte API-et, noe som kan hjelpe hvis du ikke kan registrere deg eller logge inn. \n \nMerk: fcm vil ikke virke hvis du bruker utgivelsesversjonen.</string>
     <string name="CheckUpdate">Se etter nye versjoner</string>
     <string name="UpdateAvailable">Ny versjon tilgjengelig</string>
     <string name="UpdateDownloaded">En ny versjon har blitt lastet ned</string>
@@ -120,7 +118,7 @@
     <string name="VersionUpdateNotNow">Ikke nå</string>
     <string name="UseProxyItem">Bruk mellomtjener fra sidefelt istedenfor fra knapp</string>
     <string name="DevModeNotice">Vi er ikke ansvarlige for uriktig bruk av utviklerfunksjoner.</string>
-    <string name="repeatConfirmText">Er du sikker på at du vil gjenta\?</string>
+    <string name="repeatConfirmText">Er du sikker på at du vil gjenta?</string>
     <string name="CustomBackendProduction">Offisielt produksjonsdatasenter</string>
     <string name="ShowIdAndDc">Vis ID/DC i profil</string>
     <string name="showSeconds">Vis tidsstempel i sekuder</string>
@@ -130,11 +128,9 @@
     <string name="nekoXPaymentRemovedToast">Betalingsfunksjonen har blitt fjernet.</string>
     <string name="VersionUpdateTitle">Ny versjon tilgjengelig</string>
     <string name="useCustomEmoji">Bruk egendefinerte emoji-er</string>
-    <string name="UnblockAllWarn">Avblokker **alle brukere og botter**\?</string>
+    <string name="UnblockAllWarn">Avblokker **alle brukere og botter**?</string>
     <string name="Win32ExecutableFiles">Kjørbare filer i Win32-variant</string>
-    <string name="valuesLargeAvatarInDrawer">Telegramforvalg
-\nAvatar som bakgrunn
-\nStor avatar som bakgrunn</string>
+    <string name="valuesLargeAvatarInDrawer">Telegramforvalg \nAvatar som bakgrunn \nStor avatar som bakgrunn</string>
     <string name="ShareMessages">Del</string>
     <string name="UsePersiancalendar">Bruk persisk kalender</string>
     <string name="AutoLockImmediately">Umiddelbart</string>
@@ -142,7 +138,7 @@
     <string name="ImportSettings">Importer innstillinger</string>
     <string name="VersionUpdateNoUpdate">Ingen oppgradering.</string>
     <string name="unreadBadgeOnBackButton">Ulest-skilt på tilbakeknappen</string>
-    <string name="DeleteDownloadedFileConfirm">Slett denne filen fra lokalt hurtiglager\?</string>
+    <string name="DeleteDownloadedFileConfirm">Slett denne filen fra lokalt hurtiglager?</string>
     <string name="DeleteDownloadedFileSucceed">Slettet</string>
     <string name="CCSP">Forenklet kinesisk (Kina)</string>
     <string name="TransInputToLang">Inndataspråk for oversettelse</string>
@@ -158,9 +154,9 @@
     <string name="FCTitle">Om programoppgraderinger</string>
     <string name="DismissForYourself">Skru av for deg selv</string>
     <string name="VersionUpdateConfirm">Oppgrader</string>
-    <string name="FCInfo">Følg vår kanal for kunngjøringer og oppgraderinger\?</string>
+    <string name="FCInfo">Følg vår kanal for kunngjøringer og oppgraderinger?</string>
     <string name="UsePersiancalendarInfo">Vis dato med sol-hijrakalender</string>
-    <string name="QRLoginNotice">Denne QR-koden/lenken lar noen logge inn på din Telegram-konto\? Er dette noe du har bedt om\?</string>
+    <string name="QRLoginNotice">Denne QR-koden/lenken lar noen logge inn på din Telegram-konto? Er dette noe du har bedt om?</string>
     <string name="CCSC">Forenklet kinesisk</string>
     <string name="EnableStickerPin">Skru på festing av klistremerker</string>
     <string name="PrivacyNoticeP2p">Du har ikke skrudd av «Tillat P2P-anrop», noe som lar myndighetskontrollerte hackere ta rede på din sanne identitet. Skru det av.</string>
@@ -168,18 +164,16 @@
     <string name="DisableTrending">Skru av «På vei opp»</string>
     <string name="AutoDownload">Automatisk nedlasting</string>
     <string name="EnableStickerPinTip">Denne funksjonen er under utvikling. Det er ikke sikkert synkronisering til skyen virker.</string>
-    <string name="EnableStickerPinAbout">Fest klistremerker med synkroniser med sky når du legger til nye.
-\nParret med «skru av favoritter og nylige»</string>
+    <string name="EnableStickerPinAbout">Fest klistremerker med synkroniser med sky når du legger til nye. \nParret med «skru av favoritter og nylige»</string>
     <string name="SendCommentAfterForward">Send kommentar etter videresending</string>
     <string name="CCHK">Tradisjonell kinesisk (Hongkong)</string>
     <string name="DisplayPersianCalendarByLatin">Vis persisk kalender (latinsk)</string>
-    <string name="ImportSettingsAlert">Overskriv innstillingene\? Importering av innstillinger fra ukjente kilder kan forårsake at festingen overskrives og at programmet låses.</string>
+    <string name="ImportSettingsAlert">Overskriv innstillingene? Importering av innstillinger fra ukjente kilder kan forårsake at festingen overskrives og at programmet låses.</string>
     <string name="PrivacyNoticePhoneVisible">Mobiltelefonnummeret ditt er synlig for alle, som kan la myndighetssponsede hackere ta rede på din sanne identitet. Skru det av!</string>
     <string name="CCNo">Ingen</string>
     <string name="CCTC">Tradisjonell kinesisk</string>
     <string name="CCTT">Tradisjonell kinesisk (Taiwan)</string>
-    <string name="VersionUpdateVariantNotMatch">Kunne ikke jamføre varianter automatisk.
-\nLast ned manuelt fra GitHub.</string>
+    <string name="VersionUpdateVariantNotMatch">Kunne ikke jamføre varianter automatisk. \nLast ned manuelt fra GitHub.</string>
     <string name="labelChannelUserDetails">Hvis meldingsforsendeler er «Kanal», vil etiketten være «Kanal».</string>
     <string name="ProviderYandexTranslate">Yandex.Translate</string>
     <string name="PrivacyNotice2fa">Du har ikke satt et passord, noe som lar myndighetskontrollerte hackere ta rede på din sanne identitet. Sett et nå!</string>
@@ -188,4 +182,89 @@
     <string name="ConfirmSettings">Bekreftelse</string>
     <string name="InteractionSettings">Interaksjon</string>
     <string name="PrivacyNoticeAddByPhone">Du har ikke skrudd av \"Tillat å finne meg med mitt telefonnummer\", som lar statskontrollerte hackere finne din sanne identitet. Vennligst skru det av!!</string>
+    <string name="DebugSendLogsExt"></string>
+    <string name="doubleTapShowReactionsMenu"></string>
+    <string name="MonetAvatarGradient"></string>
+    <string name="MemLeak"></string>
+    <string name="ForceExternalBrowserForBots"></string>
+    <string name="AlwaysLabelAnonAdmin"></string>
+    <string name="MuteBotsFromGroup"></string>
+    <string name="UseCamera2API"></string>
+    <string name="FasterReconnectHackAbout"></string>
+    <string name="FeatureRemovedWhyDetail"></string>
+    <string name="CustomStatusInfo"></string>
+    <string name="FasterReconnectHack"></string>
+    <string name="UseAdGuardDNS"></string>
+    <string name="AppNameShort" translatable="false"></string>
+    <string name="UnsupportedProxy"></string>
+    <string name="DisableSaveDraftToCloud"></string>
+    <string name="ShowAddedToFoldersAtTitle"></string>
+    <string name="DisableCustomWallpaperUser"></string>
+    <string name="MonetAlterOut"></string>
+    <string name="CustomMaxCacheSizeBulletin"></string>
+    <string name="AlwaysDestroyPhotoViewer"></string>
+    <string name="ShowSelfInsteadOfSavedMessages"></string>
+    <string name="HideCameraInAttachMenu"></string>
+    <string name="BanForAllModeratingChats"></string>
+    <string name="FeatureRemovedWhy"></string>
+    <string name="ShowQuickReconnect"></string>
+    <string name="ResetSettingsDesc"></string>
+    <string name="ForceExternalBrowserForBotsDesc"></string>
+    <string name="MemLeakInfo"></string>
+    <string name="MonetNickname"></string>
+    <string name="disableReactionsWhenSelecting"></string>
+    <string name="UseOldAppNameDesc"></string>
+    <string name="PGPDecryptErr"></string>
+    <string name="MonetAmoled"></string>
+    <string name="CustomApiId"></string>
+    <string name="ReactionSettings"></string>
+    <string name="PauseInactiveTabAnimation"></string>
+    <string name="AutoRestartOnLeak"></string>
+    <string name="UseOldAppName"></string>
+    <string name="MonetLightMode"></string>
+    <string name="AllowDupLoginInfo"></string>
+    <string name="WhisperModelInUse"></string>
+    <string name="UnblockDeleted"></string>
+    <string name="WhisperLocal"></string>
+    <string name="ReplyInPrivate"></string>
+    <string name="GenerateMonetTheme"></string>
+    <string name="AutoRestartOnLeakInfo"></string>
+    <string name="WhisperLocalProcessing"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="UnblockDeletedWarn"></string>
+    <string name="CustomMaxCacheSize"></string>
+    <string name="doubleTapSendReaction"></string>
+    <string name="Momogram" translatable="false"></string>
+    <string name="ShowQuickReconnectDesc"></string>
+    <string name="doubleTapAndReactions"></string>
+    <string name="DeleteUnusedWhisperModel"></string>
+    <string name="FBan"></string>
+    <string name="FeatureRemoved"></string>
+    <string name="RecentChatFolderSize"></string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="KeepSamePositionOnNewMsg"></string>
+    <string name="DisableCustomWallpaperChannel"></string>
+    <string name="doubleTapDisable"></string>
+    <string name="WhisperModelRemoved"></string>
+    <string name="CheckMemLeak"></string>
+    <string name="PGPEncrypt"></string>
+    <string name="ShareGroupMediaMessage"></string>
+    <string name="MemLeakThreshold"></string>
+    <string name="OnlyShowStoriesFromUsers"></string>
+    <string name="MuteBotsFromGroupDesc"></string>
+    <string name="ResumeAudioPlaybackOnLaunch"></string>
+    <string name="CustomApiHash"></string>
+    <string name="OpenLinkInApp"></string>
+    <string name="HideChannelBottomNotiToggle"></string>
+    <string name="ShowPhoneNumTemp"></string>
+    <string name="AllowDupLogin"></string>
+    <string name="PositionRight"></string>
+    <string name="HideMessageRegex"></string>
+    <string name="VideoBitrateToggled"></string>
+    <string name="CustomMaxCacheSizeHint"></string>
+    <string name="BannedForChats"></string>
+    <string name="MonetGradient"></string>
+    <string name="MuteBlockedFromGroup"></string>
+    <string name="ResetSettings"></string>
+    <string name="PositionLeft"></string>
 </resources>
