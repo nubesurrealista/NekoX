@@ -314,7 +314,4 @@
     <string name="AllowBotInDirectShare">允許機器人出現在快速分享選單</string>
     <string name="AllowTestingUpdate">自動檢查更新時包含測試版</string>
     <string name="enhancedFileLoaderWarning">本功能可能導致實際下載速度變得更慢, 對非高級會員帳號而言更是如此, 是否確認開啟?</string>
-    <string name="AutoCheckUpdateInfo"></string>
-    <string name="AutoCheckUpdate"></string>
-    <string name="AlwaysLoadStickerSetFromServer"></string>
 </resources>

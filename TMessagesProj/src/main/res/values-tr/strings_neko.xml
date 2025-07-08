@@ -314,7 +314,4 @@
     <string name="CloudflareCredentialsDialog">Cloudflare Hesap ID ve API anahtarını ayarlayın.\n**Nasıl elde edebilirim?**</string>
     <string name="CloudflareCredentialsObtainDesc">1. Cloudflare panelini açın ve kendi hesabınızla oturum açın\n\n2. AI seçeneğini yan menüden genişletin ve Workers AI seçeneğine tıklayın\n\n3. REST API Kullan seçeneğine tıklayın\n\n4. Bu ekrandaki Hesap ID\'yi not edin ve bir API anahtarı oluşturun.</string>
     <string name="SwipeActionInTopicList">Konu listesinde kaydırma eylemi (Gizle/Göster)</string>
-    <string name="enhancedFileLoaderWarning"></string>
-    <string name="AllowTestingUpdate"></string>
-    <string name="AllowBotInDirectShare"></string>
 </resources>

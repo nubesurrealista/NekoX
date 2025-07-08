@@ -313,8 +313,4 @@
     <string name="SwipeActionInTopicList">話題リストのスワイプ操作 (非表示/表示)</string>
     <string name="AllowBotInDirectShare">ボットのダイレクトシェアへの表示を許可する</string>
     <string name="enhancedFileLoaderWarning">本機能により実際のダウンロード速度が低下する可能性があります, 特にプレミアムではないアカウントの場合、可能性は高くなります, それでもよろしいでしょうか?</string>
-    <string name="AutoCheckUpdateInfo"></string>
-    <string name="AutoCheckUpdate"></string>
-    <string name="AlwaysLoadStickerSetFromServer"></string>
-    <string name="AllowTestingUpdate"></string>
 </resources>
