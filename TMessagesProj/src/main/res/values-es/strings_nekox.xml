@@ -11,9 +11,7 @@
     <string name="DisableLinkPreviewByDefault">Deshabilitar la vista previa de enlaces por defecto</string>
     <string name="DisableLinkPreviewByDefaultNotice">Desactiva la solicitud de vista previa de enlaces de forma predeterminada para evitar que el servidor sepa que el enlace se comparte a través de Telegram.</string>
     <string name="CustomApi">API personalizada</string>
-    <string name="UseCustomApiNotice">Inicie sesión con la Api personalizada, si no puede registrarse o iniciar sesión, esto puede ayudar.
-\n
-\n Nota: fcm no funcionará si está utilizando la versión estable.</string>
+    <string name="UseCustomApiNotice">Inicie sesión con la Api personalizada, si no puede registrarse o iniciar sesión, esto puede ayudar. \n \n Nota: fcm no funcionará si está utilizando la versión estable.</string>
     <string name="CustomApiNo">No usar API personalizada</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
@@ -85,7 +83,7 @@
     <string name="HideProxyByDefault">Ocultar ajustes de proxy por defecto</string>
     <string name="SkipOpenLinkConfirm">Omitir confirmación de enlace abierto</string>
     <string name="UnblockAll">Desbloquear todo</string>
-    <string name="UnblockAllWarn">¿Estás seguro de que quieres desbloquear **todos los usuarios y bots**\?</string>
+    <string name="UnblockAllWarn">¿Estás seguro de que quieres desbloquear **todos los usuarios y bots**?</string>
     <string name="BlockedListEmpty">No has bloqueado a nadie :)</string>
     <string name="ImportProxyList">Importar servidores proxy</string>
     <string name="ExportStickers">Exportar Stickers</string>
@@ -118,10 +116,10 @@
     <string name="UnpinMessagesAll">Desfijar todos los mensajes</string>
     <string name="DismissForYourself">Descartar para ti mismo</string>
     <string name="ImportLogin">Iniciar sesión con QR</string>
-    <string name="QRLoginNotice">Este código / enlace QR permite que alguien inicie sesión en su cuenta de Telegram. ¿Es esta tu propia operación\?</string>
+    <string name="QRLoginNotice">Este código / enlace QR permite que alguien inicie sesión en su cuenta de Telegram. ¿Es esta tu propia operación?</string>
     <string name="QRLoginConfirm">Confirmar inicio de sesión</string>
     <string name="FCTitle">Acerca de las actualizaciones de la aplicación</string>
-    <string name="FCInfo">¿Sigue nuestro canal de anuncios y actualizaciones\?</string>
+    <string name="FCInfo">¿Sigue nuestro canal de anuncios y actualizaciones?</string>
     <string name="CCNo">Ninguna</string>
     <string name="CCTC">Chino Tradicional</string>
     <string name="CCHK">Chino Tradicional (Hong Kong)</string>
@@ -140,8 +138,7 @@
     <string name="DisplayPersianCalendarByLatin">Mostrar el calendario Persa en lugar del Latino</string>
     <string name="SetPinnedSuffix">(Fijado)</string>
     <string name="AutoLockImmediately">Inmediatamente</string>
-    <string name="VersionUpdateVariantNotMatch">Las variantes de la versión no coincidieron automáticamente.
-\nPor favor descargar manualmente desde GitHub.</string>
+    <string name="VersionUpdateVariantNotMatch">Las variantes de la versión no coincidieron automáticamente. \nPor favor descargar manualmente desde GitHub.</string>
     <string name="UsePersiancalendarInfo">Mostrar la fecha con el calendario Solar Hijri</string>
     <string name="DisableTrending">Deshabilitar tendencia</string>
     <string name="ImportSettings">Importar ajustes</string>
@@ -152,21 +149,19 @@
     <string name="nekoXPaymentRemovedToast">La función de pago ha sido eliminada.</string>
     <string name="useCustomEmojiInvalid">No es un archivo ZIP válido de emoji.</string>
     <string name="repeatConfirm">Preguntar antes de repetir</string>
-    <string name="repeatConfirmText">¿Está seguro de que quiere repetir\?</string>
+    <string name="repeatConfirmText">¿Está seguro de que quiere repetir?</string>
     <string name="UsePersiancalendar">Usar el calendario Persa</string>
     <string name="hideSponsoredMessage">Ocultar mensajes patrocinados</string>
     <string name="DeleteDownloadedFileConfirm">¿Eliminar este archivo de la caché local?</string>
     <string name="unreadBadgeOnBackButton">Indicador de no leído sobre el botón de retroceso</string>
     <string name="DeleteDownloadedFileSucceed">Eliminado</string>
     <string name="DeleteDownloadedFileExternal">El archivo externo se omitió.</string>
-    <string name="valuesLargeAvatarInDrawer">Telegram por defecto
-\nAvatar como fondo
-\nAvatar grande como fondo</string>
+    <string name="valuesLargeAvatarInDrawer">Telegram por defecto \nAvatar como fondo \nAvatar grande como fondo</string>
     <string name="ReplaceText">Reemplazar texto</string>
     <string name="VersionUpdateNotNow">Ahora no</string>
     <string name="VersionUpdateTitle">Nueva Versión Disponible</string>
     <string name="useCustomEmoji">Usar emoji personalizado</string>
-    <string name="ImportSettingsAlert">¿Está seguro de sobrescribir las configuraciones\? Importar configuraciones de fuentes desconocidas puede ocasionar que el pin sea sobre sobreescrito y causar bloqueo de la aplicación.</string>
+    <string name="ImportSettingsAlert">¿Está seguro de sobrescribir las configuraciones? Importar configuraciones de fuentes desconocidas puede ocasionar que el pin sea sobre sobreescrito y causar bloqueo de la aplicación.</string>
     <string name="VersionUpdateConfirm">ACTUALIZAR</string>
     <string name="VersionUpdateIgnore">Ignorar</string>
     <string name="EnableStickerPin">Fijar stickers</string>
@@ -193,7 +188,7 @@
     <string name="doubleTapDisable">Deshabilitado</string>
     <string name="disableReactionsWhenSelecting">Ocultar reacciones al seleccionar</string>
     <string name="UnsupportedProxy">Proxy no soportado</string>
-    <string name="ShowSelfInsteadOfSavedMessages">Mostrar como uno mismo en lugar de "Mensajes guardados"</string>
+    <string name="ShowSelfInsteadOfSavedMessages">Mostrar como uno mismo en lugar de Mensajes guardados</string>
     <string name="DisableCustomWallpaperUser">Deshabilitar fondo personalizado de usuario</string>
     <string name="DisableCustomWallpaperChannel">Deshabilitar fondo personalizado de canal</string>
     <string name="FasterReconnectHack">Reconexión más rapida de proxy al encender/apagar</string>
@@ -262,4 +257,13 @@
     <string name="MemLeak">Fuga de memoria</string>
     <string name="KeepSamePositionOnNewMsg">Mantener la posición de desplazamiento al recibir un nuevo mensaje desde otra sesión</string>
     <string name="UseAdGuardDNS">Usar AdGuard DNS</string>
+    <string name="AppNameShort" translatable="false"></string>
+    <string name="DisableSaveDraftToCloud"></string>
+    <string name="PGPDecryptErr"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="Momogram" translatable="false"></string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="ShareGroupMediaMessage"></string>
+    <string name="OnlyShowStoriesFromUsers"></string>
+    <string name="ResumeAudioPlaybackOnLaunch"></string>
 </resources>
