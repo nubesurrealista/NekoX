@@ -21,10 +21,10 @@
     <string name="CCHK">Chinês Tradicional (Hong Kong)</string>
     <string name="CCTC">Chinês Tradicional</string>
     <string name="CCNo">Nenhuma</string>
-    <string name="FCInfo">Seguir nosso canal de novidades e atualizações\?</string>
+    <string name="FCInfo">Seguir nosso canal de novidades e atualizações?</string>
     <string name="FCTitle">Sobre atualizações do aplicativo</string>
     <string name="QRLoginConfirm">Confirmar Login</string>
-    <string name="QRLoginNotice">Este código QR / link permite que alguém acesse sua conta do Telegram. Tem certeza\?</string>
+    <string name="QRLoginNotice">Este código QR / link permite que alguém acesse sua conta do Telegram. Tem certeza?</string>
     <string name="ImportLogin">Login via Código QR</string>
     <string name="DismissForYourself">Dispensar para si mesmo</string>
     <string name="UnpinMessagesAll">Desafixar todas as mensagens</string>
@@ -58,7 +58,7 @@
     <string name="ExportStickers">Exportar Stickers</string>
     <string name="ImportProxyList">Importar servidores proxy</string>
     <string name="BlockedListEmpty">Não bloqueou ninguém :)</string>
-    <string name="UnblockAllWarn">Tem certeza de que deseja desbloquear **todos os utilizadores e bots**\?</string>
+    <string name="UnblockAllWarn">Tem certeza de que deseja desbloquear **todos os utilizadores e bots**?</string>
     <string name="UnblockAll">Desbloquear Tudo</string>
     <string name="SkipOpenLinkConfirm">Ignorar confirmação para abrir links</string>
     <string name="HideProxyByDefault">Ocultar configurações de proxy por padrão</string>
@@ -129,9 +129,7 @@
     <string name="CustomApiTGX">Telegram Android X</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiNo">Não use a API personalizada</string>
-    <string name="UseCustomApiNotice">Faça login usando a API personalizada. Se você não conseguir se registrar ou fazer o login, isso pode ajudar.
-\n
-\nNota: o fcm não funcionará se você estiver usando a versão final de lançamento.</string>
+    <string name="UseCustomApiNotice">Faça login usando a API personalizada. Se você não conseguir se registrar ou fazer o login, isso pode ajudar. \n \nNota: o fcm não funcionará se você estiver usando a versão final de lançamento.</string>
     <string name="CustomApi">API personalizada</string>
     <string name="DisableLinkPreviewByDefaultNotice">Desativa a solicitação da prévia de link enquanto digita, por padrão, para evitar que o servidor saiba que o link é compartilhado através do Telegram.</string>
     <string name="DisableLinkPreviewByDefault">Desativar a prévia de link por padrão</string>
@@ -141,11 +139,10 @@
     <string name="VersionUpdateNotNow">Agora não</string>
     <string name="VersionUpdateIgnore">Ignorar</string>
     <string name="VersionUpdateConfirm">ATUALIZAR</string>
-    <string name="VersionUpdateVariantNotMatch">Não foi possível determinar a versão do seu aplicativo automaticamente.
-\nPor favor, descarregue manualmente no GitHub.</string>
+    <string name="VersionUpdateVariantNotMatch">Não foi possível determinar a versão do seu aplicativo automaticamente. \nPor favor, descarregue manualmente no GitHub.</string>
     <string name="VersionUpdateTitle">Nova Versão Disponível</string>
     <string name="nekoXPaymentRemovedToast">A função de pagamento foi removida.</string>
-    <string name="ImportSettingsAlert">Tem certeza de que deseja substituir as configurações\? Importar configurações de fontes desconhecidas pode fazer com que o PIN seja sobrescrito e isso faça com que o aplicativo seja bloqueado.</string>
+    <string name="ImportSettingsAlert">Tem certeza de que deseja substituir as configurações? Importar configurações de fontes desconhecidas pode fazer com que o PIN seja sobrescrito e isso faça com que o aplicativo seja bloqueado.</string>
     <string name="ImportSettings">Configurações de importação</string>
     <string name="BackupSettings">Configurações de backup</string>
     <string name="AutoLockImmediately">Imediatamente</string>
@@ -156,8 +153,7 @@
     <string name="UnpinSticker">Desafixar</string>
     <string name="PinSticker">Fixar</string>
     <string name="EnableStickerPinTip">Esta função ainda está em desenvolvimento. A sincronização com a nuvem pode não funcionar.</string>
-    <string name="EnableStickerPinAbout">Fixa os stickers e os sincroniza com a nuvem, mesmo que novos deles sejam adicionados.
-\nEmparelhado com Desativar Favoritos e Recentes.</string>
+    <string name="EnableStickerPinAbout">Fixa os stickers e os sincroniza com a nuvem, mesmo que novos deles sejam adicionados. \nEmparelhado com Desativar Favoritos e Recentes.</string>
     <string name="EnableStickerPin">Ativar fixação de sticker</string>
     <string name="ArchiveFiles">Ficheiros mortos</string>
     <string name="AutoDownload">Download Automático</string>
@@ -167,16 +163,14 @@
     <string name="AppLinkFDroid">F-Droid</string>
     <string name="unreadBadgeOnBackButton">Selo de não lido no botão de voltar</string>
     <string name="ShareMessages">Compartilhar</string>
-    <string name="DeleteDownloadedFileConfirm">Excluir este ficheiro do cache local\?</string>
+    <string name="DeleteDownloadedFileConfirm">Excluir este ficheiro do cache local?</string>
     <string name="DeleteDownloadedFileSucceed">Excluído</string>
     <string name="DeleteDownloadedFileExternal">O ficheiro externo é ignorado.</string>
-    <string name="repeatConfirmText">Tem certeza de que deseja repetir\?</string>
+    <string name="repeatConfirmText">Tem certeza de que deseja repetir?</string>
     <string name="useCustomEmoji">Usar emoji personalizado</string>
     <string name="useCustomEmojiInvalid">Ficheiro zip de emojis inválido.</string>
     <string name="repeatConfirm">Perguntar antes de repetir</string>
-    <string name="valuesLargeAvatarInDrawer">Padrão do Telegram
-\nAvatar como plano de fundo
-\nAvatar grande como plano de fundo</string>
+    <string name="valuesLargeAvatarInDrawer">Padrão do Telegram \nAvatar como plano de fundo \nAvatar grande como plano de fundo</string>
     <string name="hideSponsoredMessage">Ocultar mensagens patrocinadas</string>
     <string name="rememberAllBackMessages">Lembrar de todas as respostas clicadas</string>
     <string name="AppUpdateNekoX">Atualizar Nekogram X</string>
@@ -206,4 +200,71 @@
     <string name="doubleTapDisable">Desabilitar</string>
     <string name="disableReactionsWhenSelecting">Ocultar reações ao selecionar</string>
     <string name="DisableCustomWallpaperUser">Desativar papel de parede personalizado do usuário</string>
+    <string name="DebugSendLogsExt"></string>
+    <string name="MonetAvatarGradient"></string>
+    <string name="MemLeak"></string>
+    <string name="ForceExternalBrowserForBots"></string>
+    <string name="AlwaysLabelAnonAdmin"></string>
+    <string name="MuteBotsFromGroup"></string>
+    <string name="UseCamera2API"></string>
+    <string name="FeatureRemovedWhyDetail"></string>
+    <string name="CustomStatusInfo"></string>
+    <string name="UseAdGuardDNS"></string>
+    <string name="AppNameShort" translatable="false"></string>
+    <string name="DisableSaveDraftToCloud"></string>
+    <string name="ShowAddedToFoldersAtTitle"></string>
+    <string name="MonetAlterOut"></string>
+    <string name="CustomMaxCacheSizeBulletin"></string>
+    <string name="AlwaysDestroyPhotoViewer"></string>
+    <string name="HideCameraInAttachMenu"></string>
+    <string name="BanForAllModeratingChats"></string>
+    <string name="FeatureRemovedWhy"></string>
+    <string name="ShowQuickReconnect"></string>
+    <string name="ResetSettingsDesc"></string>
+    <string name="ForceExternalBrowserForBotsDesc"></string>
+    <string name="MemLeakInfo"></string>
+    <string name="MonetNickname"></string>
+    <string name="PGPDecryptErr"></string>
+    <string name="MonetAmoled"></string>
+    <string name="PauseInactiveTabAnimation"></string>
+    <string name="AutoRestartOnLeak"></string>
+    <string name="MonetLightMode"></string>
+    <string name="WhisperModelInUse"></string>
+    <string name="UnblockDeleted"></string>
+    <string name="WhisperLocal"></string>
+    <string name="ReplyInPrivate"></string>
+    <string name="GenerateMonetTheme"></string>
+    <string name="AutoRestartOnLeakInfo"></string>
+    <string name="WhisperLocalProcessing"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="UnblockDeletedWarn"></string>
+    <string name="CustomMaxCacheSize"></string>
+    <string name="Momogram" translatable="false"></string>
+    <string name="ShowQuickReconnectDesc"></string>
+    <string name="DeleteUnusedWhisperModel"></string>
+    <string name="FBan"></string>
+    <string name="FeatureRemoved"></string>
+    <string name="RecentChatFolderSize"></string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="KeepSamePositionOnNewMsg"></string>
+    <string name="WhisperModelRemoved"></string>
+    <string name="CheckMemLeak"></string>
+    <string name="PGPEncrypt"></string>
+    <string name="ShareGroupMediaMessage"></string>
+    <string name="MemLeakThreshold"></string>
+    <string name="OnlyShowStoriesFromUsers"></string>
+    <string name="MuteBotsFromGroupDesc"></string>
+    <string name="ResumeAudioPlaybackOnLaunch"></string>
+    <string name="OpenLinkInApp"></string>
+    <string name="HideChannelBottomNotiToggle"></string>
+    <string name="ShowPhoneNumTemp"></string>
+    <string name="PositionRight"></string>
+    <string name="HideMessageRegex"></string>
+    <string name="VideoBitrateToggled"></string>
+    <string name="CustomMaxCacheSizeHint"></string>
+    <string name="BannedForChats"></string>
+    <string name="MonetGradient"></string>
+    <string name="MuteBlockedFromGroup"></string>
+    <string name="ResetSettings"></string>
+    <string name="PositionLeft"></string>
 </resources>
