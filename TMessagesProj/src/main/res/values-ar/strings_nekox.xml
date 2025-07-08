@@ -11,9 +11,7 @@
     <string name="DisableLinkPreviewByDefault">تعطيل معاينة الارتباط بشكل افتراضي</string>
     <string name="DisableLinkPreviewByDefaultNotice">قم بتعطيل طلب معاينة الرابط أثناء الإدخال بشكل افتراضي لمنع الخادم من معرفة أن الرابط مشترك عبر Telegram.</string>
     <string name="CustomApi">API مخصص</string>
-    <string name="UseCustomApiNotice">قم بتسجيل الدخول باستخدام واجهة برمجة التطبيقات المخصصة ، إذا كنت غير قادر على التسجيل أو تسجيل الدخول ، فقد يساعدك ذلك.
-\n
-\nملاحظة: لن يعمل fcm إذا كنت تستخدم نسخة الإصدار.</string>
+    <string name="UseCustomApiNotice">قم بتسجيل الدخول باستخدام واجهة برمجة التطبيقات المخصصة ، إذا كنت غير قادر على التسجيل أو تسجيل الدخول ، فقد يساعدك ذلك. \n \nملاحظة: لن يعمل fcm إذا كنت تستخدم نسخة الإصدار.</string>
     <string name="CustomApiNo">لا تستخدم API مخصص</string>
     <string name="CustomApiOfficial">تيليجرام أندرويد</string>
     <string name="CustomApiTGX">تيليجرام أندرويد X</string>
@@ -140,8 +138,7 @@
     <string name="UnpinSticker">ألغِ التثبيت</string>
     <string name="PinSticker">تثبيت</string>
     <string name="EnableStickerPinTip">وهذه الوظيفة قيد التطوير. قد لا تعمل المزامنة مع السحابة.</string>
-    <string name="EnableStickerPinAbout">قم بتثبيت الملصقات والمزامنة مع السحابة حتى عند إضافة ملصقات جديدة.
-\nيقترن بتعطيل المفضلة والحديثة.</string>
+    <string name="EnableStickerPinAbout">قم بتثبيت الملصقات والمزامنة مع السحابة حتى عند إضافة ملصقات جديدة. \nيقترن بتعطيل المفضلة والحديثة.</string>
     <string name="EnableStickerPin">تفعيل تثبيت الملصق</string>
     <string name="ArchiveFiles">ملفات الأرشيف</string>
     <string name="Win32ExecutableFiles">ملفات Win32 القابلة للتنفيذ</string>
@@ -159,15 +156,12 @@
     <string name="VersionUpdateNotNow">ليس الآن</string>
     <string name="VersionUpdateIgnore">تجاهل</string>
     <string name="VersionUpdateConfirm">تحديث</string>
-    <string name="VersionUpdateVariantNotMatch">تعذر مطابقة متغيرات الإصدار تلقائيا.
-\nيرجى التنزيل يدويا من GitHub.</string>
+    <string name="VersionUpdateVariantNotMatch">تعذر مطابقة متغيرات الإصدار تلقائيا. \nيرجى التنزيل يدويا من GitHub.</string>
     <string name="VersionUpdateTitle">يتوفر إصدار جديد</string>
     <string name="unreadBadgeOnBackButton">شارة غير المقروءة على زر الرجوع</string>
     <string name="DeleteDownloadedFileConfirm">حذف هذا الملف من ذاكرة التخزين المؤقت المحلية؟</string>
     <string name="hideSponsoredMessage">إخفاء الرسائل الدعائية</string>
-    <string name="valuesLargeAvatarInDrawer">تيليجرام الافتراضي
-\nالصورة الرمزية كخلفية
-\nصورة رمزية كبيرة كخلفية</string>
+    <string name="valuesLargeAvatarInDrawer">تيليجرام الافتراضي \nالصورة الرمزية كخلفية \nصورة رمزية كبيرة كخلفية</string>
     <string name="repeatConfirm">اسأل قبل التكرار</string>
     <string name="DeleteDownloadedFileExternal">تم تخطي الملف الخارجي.</string>
     <string name="repeatConfirmText">هل أنت متأكد من التكرار؟</string>
@@ -187,4 +181,89 @@
     <string name="StickerSettings">ملصق</string>
     <string name="ConfirmSettings">تأكيد</string>
     <string name="InteractionSettings">التفاعل</string>
+    <string name="DebugSendLogsExt"></string>
+    <string name="doubleTapShowReactionsMenu"></string>
+    <string name="MonetAvatarGradient"></string>
+    <string name="MemLeak"></string>
+    <string name="ForceExternalBrowserForBots"></string>
+    <string name="AlwaysLabelAnonAdmin"></string>
+    <string name="MuteBotsFromGroup"></string>
+    <string name="UseCamera2API"></string>
+    <string name="FasterReconnectHackAbout"></string>
+    <string name="FeatureRemovedWhyDetail"></string>
+    <string name="CustomStatusInfo"></string>
+    <string name="FasterReconnectHack"></string>
+    <string name="UseAdGuardDNS"></string>
+    <string name="AppNameShort" translatable="false"></string>
+    <string name="UnsupportedProxy"></string>
+    <string name="DisableSaveDraftToCloud"></string>
+    <string name="ShowAddedToFoldersAtTitle"></string>
+    <string name="DisableCustomWallpaperUser"></string>
+    <string name="MonetAlterOut"></string>
+    <string name="CustomMaxCacheSizeBulletin"></string>
+    <string name="AlwaysDestroyPhotoViewer"></string>
+    <string name="ShowSelfInsteadOfSavedMessages"></string>
+    <string name="HideCameraInAttachMenu"></string>
+    <string name="BanForAllModeratingChats"></string>
+    <string name="FeatureRemovedWhy"></string>
+    <string name="ShowQuickReconnect"></string>
+    <string name="ResetSettingsDesc"></string>
+    <string name="ForceExternalBrowserForBotsDesc"></string>
+    <string name="MemLeakInfo"></string>
+    <string name="MonetNickname"></string>
+    <string name="disableReactionsWhenSelecting"></string>
+    <string name="UseOldAppNameDesc"></string>
+    <string name="PGPDecryptErr"></string>
+    <string name="MonetAmoled"></string>
+    <string name="CustomApiId"></string>
+    <string name="ReactionSettings"></string>
+    <string name="PauseInactiveTabAnimation"></string>
+    <string name="AutoRestartOnLeak"></string>
+    <string name="UseOldAppName"></string>
+    <string name="MonetLightMode"></string>
+    <string name="AllowDupLoginInfo"></string>
+    <string name="WhisperModelInUse"></string>
+    <string name="UnblockDeleted"></string>
+    <string name="WhisperLocal"></string>
+    <string name="ReplyInPrivate"></string>
+    <string name="GenerateMonetTheme"></string>
+    <string name="AutoRestartOnLeakInfo"></string>
+    <string name="WhisperLocalProcessing"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="UnblockDeletedWarn"></string>
+    <string name="CustomMaxCacheSize"></string>
+    <string name="doubleTapSendReaction"></string>
+    <string name="Momogram" translatable="false"></string>
+    <string name="ShowQuickReconnectDesc"></string>
+    <string name="doubleTapAndReactions"></string>
+    <string name="DeleteUnusedWhisperModel"></string>
+    <string name="FBan"></string>
+    <string name="FeatureRemoved"></string>
+    <string name="RecentChatFolderSize"></string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="KeepSamePositionOnNewMsg"></string>
+    <string name="DisableCustomWallpaperChannel"></string>
+    <string name="doubleTapDisable"></string>
+    <string name="WhisperModelRemoved"></string>
+    <string name="CheckMemLeak"></string>
+    <string name="PGPEncrypt"></string>
+    <string name="ShareGroupMediaMessage"></string>
+    <string name="MemLeakThreshold"></string>
+    <string name="OnlyShowStoriesFromUsers"></string>
+    <string name="MuteBotsFromGroupDesc"></string>
+    <string name="ResumeAudioPlaybackOnLaunch"></string>
+    <string name="CustomApiHash"></string>
+    <string name="OpenLinkInApp"></string>
+    <string name="HideChannelBottomNotiToggle"></string>
+    <string name="ShowPhoneNumTemp"></string>
+    <string name="AllowDupLogin"></string>
+    <string name="PositionRight"></string>
+    <string name="HideMessageRegex"></string>
+    <string name="VideoBitrateToggled"></string>
+    <string name="CustomMaxCacheSizeHint"></string>
+    <string name="BannedForChats"></string>
+    <string name="MonetGradient"></string>
+    <string name="MuteBlockedFromGroup"></string>
+    <string name="ResetSettings"></string>
+    <string name="PositionLeft"></string>
 </resources>
