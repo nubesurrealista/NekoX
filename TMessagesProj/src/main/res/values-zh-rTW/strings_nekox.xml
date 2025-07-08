@@ -156,8 +156,7 @@
     <string name="ImportSettingsAlert">確定要覆蓋設定嗎？從未知來源匯入設定可能導致 PIN 被覆蓋從而導致應用程式被鎖定。</string>
     <string name="nekoXPaymentRemovedToast">支付功能已被移除.</string>
     <string name="VersionUpdateTitle">新版本可用</string>
-    <string name="VersionUpdateVariantNotMatch">版本變體自動匹配失敗。
-\n請從 GitHub 手動下載.</string>
+    <string name="VersionUpdateVariantNotMatch">版本變體自動匹配失敗。 \n請從 GitHub 手動下載.</string>
     <string name="VersionUpdateConfirm">更新</string>
     <string name="VersionUpdateIgnore">忽略</string>
     <string name="VersionUpdateNotNow">稍後</string>
