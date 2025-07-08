@@ -263,7 +263,7 @@
     <string name="DontSendStartCmdOnUnblockBot">ボットをブロック解除時は /start を発送しない</string>
     <string name="SmallerEmojisInChooser">入力時に小さい絵文字を使用する</string>
     <string name="ChatNameOverride">ローカルチャット名変更</string>
-    <string name="ChatNameOverrideDesc">チャットプロフィールメニューの"ローカルチャット名"で設定する</string>
+    <string name="ChatNameOverrideDesc">チャットプロフィールメニューのローカルチャット名で設定する</string>
     <string name="ChatNameOverrideMenu">チャット名変更</string>
     <string name="NameAsTitleText">アカウントの名前はタイトル文字として使う</string>
     <string name="DontSendGreetingSticker">挨拶用のステッカーを使用しない</string>

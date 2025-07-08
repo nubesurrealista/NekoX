@@ -275,7 +275,7 @@
     <string name="DontSendStartCmdOnUnblockBot">解除封锁机器人后不发送 /start</string>
     <string name="SmallerEmojisInChooser">输入时使用较小的颜文字</string>
     <string name="ChatNameOverride">使用本地自定义对话名称</string>
-    <string name="ChatNameOverrideDesc">在对话信息页菜单使用"自定对话名称"设定名称</string>
+    <string name="ChatNameOverrideDesc">在对话信息页菜单使用自定对话名称设定名称</string>
     <string name="ChatNameOverrideMenu">自定义对话名称</string>
     <string name="HideUnreadCounterOnFolderTabs">隐藏资料夹分页未读数量标示</string>
     <string name="NameAsTitleText">使用账号名字作为标题文字</string>
@@ -308,7 +308,7 @@
     <string name="CloudflareAccountID">帐户 ID</string>
     <string name="CloudflareAPIToken">API 令牌</string>
     <string name="CloudflareCredentialsDialog">填入 Cloudflare 账户 ID 和 API 令牌.\n**如何获取?**</string>
-    <string name="CloudflareCredentialsObtainDesc">1. 开启 Cloudflare 仪表板并登入您的账户\n\n2. 展开侧边菜单的 AI 分类并点选 Workers AI\n\n3. 点击 "Use REST API"\n\n4. 记下您的 "Account ID" 后于同一页面创建 API token.</string>
+    <string name="CloudflareCredentialsObtainDesc">1. 开启 Cloudflare 仪表板并登入您的账户\n\n2. 展开侧边菜单的 AI 分类并点选 Workers AI\n\n3. 点击 Use REST API\n\n4. 记下您的 Account ID 后于同一页面创建 API token.</string>
     <string name="SwipeActionInTopicList">话题列表滑动操作 (隐藏/显示)</string>
     <string name="AllowBotInDirectShare">允许机器人出现在快速分享菜单</string>
     <string name="AutoCheckUpdate">自动检查更新</string>

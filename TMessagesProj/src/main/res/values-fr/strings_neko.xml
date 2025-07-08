@@ -99,7 +99,7 @@
     <string name="DisableProximityEvents">Désactiver les événements de proximité</string>
     <string name="DeleteAllFromSelf">Supprimer tous mes messages</string>
     <string name="EventType">Set d\'icônes de la barre latérale</string>
-    <string name="DeleteAllFromSelfAlert">Attention ! Cette action **supprimera tous vos messages** dans ce groupe de discussion pour **tous** les participants.</string>
+    <string name="DeleteAllFromSelfAlert">Attention ! Cette action **supprimera tous vos messages** dans ce groupe de discussion pour **tous** les participants.</string>
     <string name="TestBackendOff">Ce compte se connectera au serveur principal.</string>
     <string name="SaveCacheToExternalFilesDirAbout">Enregistrer le dossier \"Telegram\" dans le répertoire dédié à l\'application afin de garder l\'espace partagé bien rangé.</string>
     <string name="Snowflakes">Flocons de neige</string>
