@@ -583,7 +583,7 @@ public class MediaDataController extends BaseController {
 
     public void loadPremiumPromo(boolean cache) {
         isLoadingPremiumPromo = true;
-        if (NekoConfig.removePremiumAnnoyance.Bool()) return;
+        if (NekoConfig.removePremiumAnnoyance.Bool() || UserConfig.isBot(currentAccount)) return;
         if (cache) {
             getMessagesStorage().getStorageQueue().postRunnable(() -> {
                 SQLiteCursor c = null;
