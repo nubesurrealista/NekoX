@@ -255,7 +255,7 @@
     <string name="ForceHideShowAsList">Sembunyikan teks \"Tampilkan sebagai Daftar\" saat mencari</string>
     <string name="CleanupLeftovers">Membersihkan Sisa Makanan</string>
     <string name="CleanupLeftoversResults">Membebaskan penyimpanan sebesar %1$.2f KB.</string>
-    <string name="CleanupLeftoversResultsMB">Membebaskan %1$.2f MB penyimpanan.</string>
+    <string name="CleanupLeftoversResultsMB">Membebaskan %1$.2f MB penyimpanan.</string>
     <string name="IgnoreFilterEmoticonUpdate">Abaikan pembaruan ikon folder dari server</string>
     <string name="ArticleViewerBottomActionBar">Pindahkan bilah tindakan penampil artikel ke bawah</string>
     <string name="AlwaysTranslateBeforeSend">Selalu terjemahkan</string>
