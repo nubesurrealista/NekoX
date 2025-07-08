@@ -11,9 +11,7 @@
     <string name="DisableLinkPreviewByDefault">Отправлять ссылки без превью</string>
     <string name="DisableLinkPreviewByDefaultNotice">Чтобы сервер не узнал о передаче ссылки через Telegram.</string>
     <string name="CustomApi">Выбрать API</string>
-    <string name="UseCustomApiNotice">Используйте на свой страх и риск. Есть шанс, что ваш аккаунт будет удалён, а номер заблокирован.
-\n
-\nПримечание: push-уведомления от Google работать не будут.</string>
+    <string name="UseCustomApiNotice">Используйте на свой страх и риск. Есть шанс, что ваш аккаунт будет удалён, а номер заблокирован. \n \nПримечание: push-уведомления от Google работать не будут.</string>
     <string name="CustomApiNo">Не использовать (рекомендуется)</string>
     <string name="CustomApiOfficial">Telegram для Android</string>
     <string name="CustomApiTGX">Telegram X</string>
@@ -85,7 +83,7 @@
     <string name="HideProxyByDefault">Скрыть настройки прокси в боковом меню по умолчанию</string>
     <string name="SkipOpenLinkConfirm">Открывать ссылки без подтверждения</string>
     <string name="UnblockAll">Очистить ЧС</string>
-    <string name="UnblockAllWarn">Вы уверены, что хотите разблокировать **всех пользователей и ботов**\?</string>
+    <string name="UnblockAllWarn">Вы уверены, что хотите разблокировать **всех пользователей и ботов**?</string>
     <string name="BlockedListEmpty">В вашем ЧС пусто, как у гоблина в голове :)</string>
     <string name="ImportProxyList">Импорт прокси</string>
     <string name="ExportStickers">Экспорт стикеров</string>
@@ -120,10 +118,10 @@
     <string name="UnpinMessagesAll">Открепить все сообщения</string>
     <string name="DismissForYourself">Скрыть для себя</string>
     <string name="ImportLogin">Вход по QR коду</string>
-    <string name="QRLoginNotice">Этот QR-код/ссылка позволяет кому-либо войти в ваш аккаунт Telegram. Вы уверены\?</string>
+    <string name="QRLoginNotice">Этот QR-код/ссылка позволяет кому-либо войти в ваш аккаунт Telegram. Вы уверены?</string>
     <string name="QRLoginConfirm">Подтвердить вход</string>
     <string name="FCTitle">Об обновлениях приложения</string>
-    <string name="FCInfo">Подписаться на наш канал новостей и обновлений\?</string>
+    <string name="FCInfo">Подписаться на наш канал новостей и обновлений?</string>
     <string name="CCNo">Отсутствует</string>
     <string name="CCTC">Традиционный китайский</string>
     <string name="CCHK">Традиционный китайский (Гонконг)</string>
@@ -139,8 +137,7 @@
     <string name="ReplaceRegex">Используйте регулярные выражения</string>
     <string name="DisableTrending">Скрывать рекомендации стикеров</string>
     <string name="EnableStickerPinTip">Функция в разработке, облачная синхронизация может работать с ошибками.</string>
-    <string name="EnableStickerPinAbout">Закрепляйте стикеры и синхронизируйте их с облаком даже при добавлении новых стикеров.
-\nВ паре с «Отключить» «Избранное» и «Недавнее».</string>
+    <string name="EnableStickerPinAbout">Закрепляйте стикеры и синхронизируйте их с облаком даже при добавлении новых стикеров. \nВ паре с «Отключить» «Избранное» и «Недавнее».</string>
     <string name="EnableStickerPin">Включить закрепление стикера</string>
     <string name="ArchiveFiles">Архивы</string>
     <string name="Win32ExecutableFiles">Исполняемые файлы Win32</string>
@@ -156,22 +153,19 @@
     <string name="ImportSettings">Импорт настроек</string>
     <string name="BackupSettings">Экспорт настроек</string>
     <string name="AutoLockImmediately">Немедленно</string>
-    <string name="ImportSettingsAlert">Перезаписать настройки\? Импорт настроек из ненадежных источников может привести к блокировке приложения.</string>
+    <string name="ImportSettingsAlert">Перезаписать настройки? Импорт настроек из ненадежных источников может привести к блокировке приложения.</string>
     <string name="VersionUpdateNoUpdate">Обновлений не найдено.</string>
     <string name="VersionUpdateNotNow">Не сейчас</string>
     <string name="VersionUpdateIgnore">Игнорировать</string>
     <string name="VersionUpdateConfirm">Обновить</string>
-    <string name="VersionUpdateVariantNotMatch">Невозможно определить вашу версию приложения.
-\nСкачайте обновление вручную.</string>
+    <string name="VersionUpdateVariantNotMatch">Невозможно определить вашу версию приложения. \nСкачайте обновление вручную.</string>
     <string name="VersionUpdateTitle">Доступна новая версия</string>
-    <string name="repeatConfirmText">Вы хотите повторить сообщение\?</string>
-    <string name="DeleteDownloadedFileConfirm">Удалить загруженный файл\?</string>
+    <string name="repeatConfirmText">Вы хотите повторить сообщение?</string>
+    <string name="DeleteDownloadedFileConfirm">Удалить загруженный файл?</string>
     <string name="repeatConfirm">Подтверждать повтор сообщения</string>
     <string name="useCustomEmoji">Свой набор эмодзи</string>
     <string name="DeleteDownloadedFileExternal">Внешний файл пропущен.</string>
-    <string name="valuesLargeAvatarInDrawer">По умолчанию
-\nАватар
-\nУвеличенный аватар</string>
+    <string name="valuesLargeAvatarInDrawer">По умолчанию \nАватар \nУвеличенный аватар</string>
     <string name="hideSponsoredMessage">Скрывать сообщения с меткой «спонсировано»</string>
     <string name="unreadBadgeOnBackButton">Счётчик непрочтённых рядом с кнопкой «Назад»</string>
     <string name="useCustomEmojiInvalid">С ZIP-архивом эмодзи что-то не так.</string>
@@ -200,4 +194,77 @@
     <string name="ReactionSettings">Реакции</string>
     <string name="ShowSelfInsteadOfSavedMessages">Чат с собой вместо \'Избранного\'</string>
     <string name="UnsupportedProxy">Неподдерживаемый прокси</string>
+    <string name="DebugSendLogsExt"></string>
+    <string name="MonetAvatarGradient"></string>
+    <string name="MemLeak"></string>
+    <string name="ForceExternalBrowserForBots"></string>
+    <string name="AlwaysLabelAnonAdmin"></string>
+    <string name="MuteBotsFromGroup"></string>
+    <string name="UseCamera2API"></string>
+    <string name="FeatureRemovedWhyDetail"></string>
+    <string name="CustomStatusInfo"></string>
+    <string name="UseAdGuardDNS"></string>
+    <string name="AppNameShort" translatable="false"></string>
+    <string name="DisableSaveDraftToCloud"></string>
+    <string name="ShowAddedToFoldersAtTitle"></string>
+    <string name="MonetAlterOut"></string>
+    <string name="CustomMaxCacheSizeBulletin"></string>
+    <string name="AlwaysDestroyPhotoViewer"></string>
+    <string name="HideCameraInAttachMenu"></string>
+    <string name="BanForAllModeratingChats"></string>
+    <string name="FeatureRemovedWhy"></string>
+    <string name="ShowQuickReconnect"></string>
+    <string name="ResetSettingsDesc"></string>
+    <string name="ForceExternalBrowserForBotsDesc"></string>
+    <string name="MemLeakInfo"></string>
+    <string name="MonetNickname"></string>
+    <string name="UseOldAppNameDesc"></string>
+    <string name="PGPDecryptErr"></string>
+    <string name="MonetAmoled"></string>
+    <string name="CustomApiId"></string>
+    <string name="PauseInactiveTabAnimation"></string>
+    <string name="AutoRestartOnLeak"></string>
+    <string name="UseOldAppName"></string>
+    <string name="MonetLightMode"></string>
+    <string name="AllowDupLoginInfo"></string>
+    <string name="WhisperModelInUse"></string>
+    <string name="UnblockDeleted"></string>
+    <string name="WhisperLocal"></string>
+    <string name="ReplyInPrivate"></string>
+    <string name="GenerateMonetTheme"></string>
+    <string name="AutoRestartOnLeakInfo"></string>
+    <string name="WhisperLocalProcessing"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="UnblockDeletedWarn"></string>
+    <string name="CustomMaxCacheSize"></string>
+    <string name="Momogram" translatable="false"></string>
+    <string name="ShowQuickReconnectDesc"></string>
+    <string name="DeleteUnusedWhisperModel"></string>
+    <string name="FBan"></string>
+    <string name="FeatureRemoved"></string>
+    <string name="RecentChatFolderSize"></string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="KeepSamePositionOnNewMsg"></string>
+    <string name="WhisperModelRemoved"></string>
+    <string name="CheckMemLeak"></string>
+    <string name="PGPEncrypt"></string>
+    <string name="ShareGroupMediaMessage"></string>
+    <string name="MemLeakThreshold"></string>
+    <string name="OnlyShowStoriesFromUsers"></string>
+    <string name="MuteBotsFromGroupDesc"></string>
+    <string name="ResumeAudioPlaybackOnLaunch"></string>
+    <string name="CustomApiHash"></string>
+    <string name="OpenLinkInApp"></string>
+    <string name="HideChannelBottomNotiToggle"></string>
+    <string name="ShowPhoneNumTemp"></string>
+    <string name="AllowDupLogin"></string>
+    <string name="PositionRight"></string>
+    <string name="HideMessageRegex"></string>
+    <string name="VideoBitrateToggled"></string>
+    <string name="CustomMaxCacheSizeHint"></string>
+    <string name="BannedForChats"></string>
+    <string name="MonetGradient"></string>
+    <string name="MuteBlockedFromGroup"></string>
+    <string name="ResetSettings"></string>
+    <string name="PositionLeft"></string>
 </resources>
