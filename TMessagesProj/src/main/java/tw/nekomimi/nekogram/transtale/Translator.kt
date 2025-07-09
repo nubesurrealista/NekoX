@@ -403,9 +403,16 @@ interface Translator {
 
         }
 
+        var translationDisabled = false
+
         @JvmStatic
         fun doTranslateWithOfficialApi(currentAccount: Int, text: CharSequence?, targetLang: String, onSuccess: ((CharSequence) -> Unit)?, onFailure: ((CharSequence) -> Unit)?) {
             if (text.isNullOrBlank()) return
+            if (translationDisabled) {
+                useAlternativeTranslate(text, targetLang, onSuccess, onFailure)
+                return
+            }
+
             val req: TLRPC.TL_messages_translateText = TLRPC.TL_messages_translateText()
             val textWithEntities: TLRPC.TL_textWithEntities = TLRPC.TL_textWithEntities()
             textWithEntities.text = text.toString()
@@ -447,11 +454,29 @@ interface Translator {
                         if (err != null) {
                             errMsg = " ${err.code} - ${err.text}"
                             FileLog.e("030-tx $errMsg")
+
+                            if (err.code == 406 || err.text == "TRANSLATIONS_DISABLED") {
+                                translationDisabled = true
+                                useAlternativeTranslate(text, targetLang, onSuccess, onFailure)
+                                return@runOnUIThread
+                            }
                         }
 
                         if (onFailure != null) {
                             onFailure(errMsg)
                         }
+                    }
+                }
+            }
+        }
+
+        private fun useAlternativeTranslate(text: CharSequence?, targetLang: String, onSuccess: ((CharSequence) -> Unit)?, onFailure: ((CharSequence) -> Unit)?) {
+            TranslateAlert2.alternativeTranslate(text.toString(), "auto", targetLang) { result, rateLimit ->
+                AndroidUtilities.runOnUIThread {
+                    if (result != null) {
+                        onSuccess?.invoke(result)
+                    } else {
+                        onFailure?.invoke(LocaleController.getString(if (rateLimit) R.string.TranslationFailedAlert1 else R.string.TranslationFailedAlert2))
                     }
                 }
             }

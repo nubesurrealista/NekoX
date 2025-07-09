@@ -2809,6 +2809,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 triggeredTranslate = true;
                 CharSequence text = commentTextView.getText();
                 Locale toDefault = TranslatorKt.getCode2Locale("en");
+                // TODO: 030: check if use alternative/custom method
                 Translator.translateMessageBeforeSent(currentAccount, text,
                         TranslatorKt.getLocale2code(TranslateDb.getChatLanguage(dialogId, toDefault)));
                 translateSpinner = new AlertDialog(parentFragment.getParentActivity(), AlertDialog.ALERT_TYPE_SPINNER);
