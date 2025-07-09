@@ -81,11 +81,12 @@ Momogram has basic UnifiedPush support, but you need to install distributor in o
 
 Here are 3 easy choices for you:
 
-- [ntfy](https://github.com/binwiederhier/ntfy-android/releases/latest)
+- [ntfy (Recommended)](https://github.com/binwiederhier/ntfy-android/releases/latest)
 - [Sunup](https://unifiedpush.org/users/distributors/sunup/)
-- [UP-FCM Distributor (relies on Google, but faster)](https://codeberg.org/UnifiedPush/fcm-distributor/releases)
+- [UP-FCM Distributor (relies on Google)](https://codeberg.org/UnifiedPush/fcm-distributor/releases)
 
-Just choose one of the distributor from above, install and open it at least once to finish setup, then choose it in the notification settings page of Momogram and you're good to go!
+Note that we now only recommends use ntfy with Momogram as it's the only verified provider that works the best (whereas it's more of a hit-or-miss with other distributors),
+you can use an external device to periodically send messages to the topic used for UnifiedPush for reduced latency. 
 
 In case of UnifiedPush doesn't work well on your device, you can disable it from Momo general settings (or just search for UnifiedPush) and enable original background service.
 
