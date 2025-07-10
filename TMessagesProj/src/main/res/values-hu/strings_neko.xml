@@ -307,5 +307,14 @@
     <string name="TranscribeProviderAuto">Automata kiválasztás</string>
     <string name="TranscribeProviderWorkersAI">Suttogások (Workers AI)</string>
     <string name="TranscribeProviderDesc">Az automata kiválasztóval a %s kiszolgálót fogja használni, ha nem elérhető a Telegram Prémium.</string>
-    <string name="CloudflareCredentials">Cloudflare megfelelőség</string>
+    <string name="CloudflareCredentials">Cloudflare adatok</string>
+    <string name="CloudflareCredentialsNotSet">A Cloudflare adatok nem kerültek beállításra.</string>
+    <string name="CloudflareAccountID">Fiók ID</string>
+    <string name="CloudflareAPIToken">API Token</string>
+    <string name="CloudflareCredentialsDialog">A Cloudflare Fiók ID és API Token beállítása.\n**Hogyan szerezhető be?**</string>
+    <string name="CloudflareCredentialsObtainDesc">1. nyissa meg a Cloudflare vezérlőpultot és jelentkezzen be a fiókjába\n\n2. Nyissa ki az AI menüt, és nyomjon a Workers AI-ra\n\n3. Kattintson a REST API használatára\n\n4. Jegyezze fel a Fiók ID-jét, és hozza létre az API tokent az oldalon.</string>
+    <string name="SwipeActionInTopicList">Elhúzás művelet a téma listánál (Megjelenít/Elrejt)</string>
+    <string name="AllowBotInDirectShare">Engedélyezze a botok felé a direkt megosztást</string>
+    <string name="AllowTestingUpdate">Keressen teszt verziókat is a frissítés kereséskor</string>
+    <string name="enhancedFileLoaderWarning">Ez negatívan érintheti a letöltési sebességet, főleg ha a fiókja nem Prémium. Valóban folytatja?</string>
 </resources>
