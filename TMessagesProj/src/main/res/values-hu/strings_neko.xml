@@ -5,7 +5,7 @@
     <string name="HidePhone">Saját telefonszám elrejtése</string>
     <string name="Hide">Elrejt</string>
     <string name="DeleteAllFromSelf">Minden saját törlése</string>
-    <string name="DeleteAllFromSelfAlert">Figyelem! Ezzel **törli az összes üzenetét** a csevegésben **mindenki** számára.</string>
+    <string name="DeleteAllFromSelfAlert">Figyelem! Ezzel **törli az összes üzenetét** a csevegésben **minden résztvevő** számára.</string>
     <string name="BotLogin">Bot Bejelentkezés</string>
     <string name="InvalidAccessToken">Érvénytelen hozzáférési token</string>
     <string name="IgnoreBlocked">Blokkolt felhasználók üzeneteinek rejtése</string>
@@ -284,4 +284,6 @@
     <string name="NameAsTitleText">Név használata mint címszöveg</string>
     <string name="EnableUnifiedPush">UnifiedPush engedélyezése</string>
     <string name="RestartApp">App újraindítása</string>
+    <string name="SetupUnifiedPush">UnifiedPush beállítása</string>
+    <string name="SetupUnifiedPushInfo">A UnifiedPush bekapcsolásra került, de legalább egy használót fel kell telepíteni a működéshez.</string>
 </resources>
