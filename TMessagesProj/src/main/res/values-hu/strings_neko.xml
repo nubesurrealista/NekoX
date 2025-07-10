@@ -286,4 +286,8 @@
     <string name="RestartApp">App újraindítása</string>
     <string name="SetupUnifiedPush">UnifiedPush beállítása</string>
     <string name="SetupUnifiedPushInfo">A UnifiedPush bekapcsolásra került, de legalább egy használót fel kell telepíteni a működéshez.</string>
+    <string name="AlwaysLoadStickerSetFromServer">A részletek megtekintésénél töltse be a szerverhez tartozó matrica készleteket</string>
+    <string name="AutoAttemptInstantView">Instant nézet megnyitásának automatikus kísérlete ha elérhető</string>
+    <string name="LoadingInstantView">Instant nézet betöltésének próbája…</string>
+    <string name="OpenExternalOnInstantViewFail">Ha nem érhető el az instant nézet, külső böngésző hanszálata</string>
 </resources>
