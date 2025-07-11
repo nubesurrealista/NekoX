@@ -71,6 +71,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
     private TextView adminTextView;
     private TextView addButton;
     private Drawable premiumDrawable;
+    private static Drawable mutualDrawable;
     private final AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable botVerification;
     private final AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable emojiStatus;
     private ImageView closeView;
@@ -311,6 +312,11 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
         needDivider = divider;
         setWillNotDraw(!needDivider);
         update(0);
+    }
+
+    private boolean isMutualContact = false;
+    public void setIsMutualContact() {
+        isMutualContact = true;
     }
 
     public Object getCurrentObject() {
@@ -614,6 +620,26 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
         } else {
             nameTextView.setRightDrawable(null);
             nameTextView.setRightDrawableTopPadding(0);
+        }
+        if (isMutualContact) {
+            if (mutualDrawable == null) {
+                mutualDrawable = getContext().getResources().getDrawable(R.drawable.baseline_group_16).mutate();
+                mutualDrawable = new AnimatedEmojiDrawable.WrapSizeDrawable(mutualDrawable, dp(14), dp(14)) {
+                    @Override
+                    public void draw(@NonNull Canvas canvas) {
+                        canvas.save();
+                        canvas.translate(0, dp(1));
+                        super.draw(canvas);
+                        canvas.restore();
+                    }
+                };
+                mutualDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider), PorterDuff.Mode.SRC_IN));
+            }
+            if (nameTextView.getRightDrawable() == null)
+                nameTextView.setRightDrawable(mutualDrawable);
+            else
+                nameTextView.setRightDrawable2(mutualDrawable);
+            nameTextView.setRightDrawableTopPadding(-dp(0.5f));
         }
         if (currentStatus != null) {
             statusTextView.setTextColor(statusColor);
