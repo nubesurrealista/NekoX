@@ -11769,8 +11769,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         // boolean hidden = getMessagesController().getTranslateController().isTranslateDialogHidden(getDialogId());
         boolean forceTranslatable = isSideMenued() || ChatObject.isMonoForum(currentChat);
         boolean translatable = forceTranslatable || getMessagesController().getTranslateController().isDialogTranslatable(getDialogId());
-        boolean show = allowed && translatable;
-        translateItem.setVisibility(allowed && translatable ? View.VISIBLE : View.GONE);
+        boolean show = allowed || translatable;
+        translateItem.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     private Animator infoTopViewAnimator;

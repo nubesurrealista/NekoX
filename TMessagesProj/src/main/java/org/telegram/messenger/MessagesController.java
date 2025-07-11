@@ -757,10 +757,16 @@ public class MessagesController extends BaseController implements NotificationCe
     public String translationsAutoEnabled; // "enabled", "alternative", "system", "disabled"
 
     public boolean isTranslationsManualEnabled() {
-        return !"disabled".equals(translationsManualEnabled);
+        return !isTranslationsAutoEnabled() && !"disabled".equals(translationsManualEnabled);
     }
     public boolean isTranslationsAutoEnabled() {
-        return !"disabled".equals(translationsAutoEnabled);
+        return !NekoConfig.autoTranslate.Bool() && !"disabled".equals(translationsAutoEnabled);
+    }
+
+    // 030: for future use
+    public boolean forceCustomTranslate() {
+        return "disabled".equals(translationsManualEnabled) ||
+                "disabled".equals(translationsAutoEnabled);
     }
 
     public final AppGlobalConfig config = new AppGlobalConfig();
