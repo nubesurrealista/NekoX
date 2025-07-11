@@ -71,7 +71,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
     private TextView adminTextView;
     private TextView addButton;
     private Drawable premiumDrawable;
-    private static Drawable mutualDrawable;
+    private Drawable mutualDrawable;
     private final AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable botVerification;
     private final AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable emojiStatus;
     private ImageView closeView;
@@ -315,8 +315,9 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
     }
 
     private boolean isMutualContact = false;
-    public void setIsMutualContact() {
-        isMutualContact = true;
+    private int mutualContactAt = 0;
+    public void setIsMutualContact(boolean val) {
+        isMutualContact = val;
     }
 
     public Object getCurrentObject() {
@@ -621,6 +622,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             nameTextView.setRightDrawable(null);
             nameTextView.setRightDrawableTopPadding(0);
         }
+        boolean invalidate = false;
         if (isMutualContact) {
             if (mutualDrawable == null) {
                 mutualDrawable = getContext().getResources().getDrawable(R.drawable.baseline_group_16).mutate();
@@ -635,11 +637,20 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
                 };
                 mutualDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider), PorterDuff.Mode.SRC_IN));
             }
-            if (nameTextView.getRightDrawable() == null)
-                nameTextView.setRightDrawable(mutualDrawable);
-            else
-                nameTextView.setRightDrawable2(mutualDrawable);
+
+            invalidate = (mutualContactAt != 2);
+            nameTextView.setRightDrawable2(mutualDrawable);
+            mutualContactAt = 2;
             nameTextView.setRightDrawableTopPadding(-dp(0.5f));
+        } else {
+            invalidate = (mutualContactAt != 0);
+            if (mutualContactAt == 2) {
+                nameTextView.setRightDrawable2(null);
+            }
+
+            if (nameTextView.getRightDrawable() == null)
+                nameTextView.setRightDrawableTopPadding(0);
+            mutualContactAt = 0;
         }
         if (currentStatus != null) {
             statusTextView.setTextColor(statusColor);
@@ -683,6 +694,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
         if (adminTextView != null) {
             adminTextView.setTextColor(Theme.getColor(Theme.key_profile_creatorIcon, resourcesProvider));
         }
+        if (invalidate) nameTextView.invalidate();
     }
 
     public void setSelfAsSavedMessages(boolean value) {
