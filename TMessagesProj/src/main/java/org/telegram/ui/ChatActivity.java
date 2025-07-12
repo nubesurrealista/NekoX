@@ -46354,6 +46354,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 items.add(LocaleController.getString(R.string.SaveToGallery));
                                 options.add(OPTION_SAVE_TO_GALLERY);
                                 icons.add(R.drawable.baseline_image_24);
+
+                                if (NekoConfig.showCopyPhoto.Bool()) {
+                                    items.add(LocaleController.getString(R.string.CopyPhoto));
+                                    options.add(OPTION_COPY_PHOTO);
+                                    icons.add(R.drawable.msg_copy);
+                                }
                             }
                         }
                     }
@@ -46404,7 +46410,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(nkbtn_stickerdl);
                             icons.add(R.drawable.baseline_image_24);
 
-                            if (NekoConfig.showCopyPhoto.Bool()){
+                            if (NekoConfig.showCopyPhoto.Bool()) {
                                 items.add(LocaleController.getString(R.string.CopySticker));
                                 options.add(OPTION_COPY_PHOTO);
                                 icons.add(R.drawable.msg_copy);
@@ -46453,7 +46459,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         options.add(nkbtn_stickerdl);
                         icons.add(R.drawable.baseline_image_24);
 
-                        if (NekoConfig.showCopyPhoto.Bool()){
+                        if (NekoConfig.showCopyPhoto.Bool()) {
                             items.add(LocaleController.getString(R.string.CopySticker));
                             options.add(OPTION_COPY_PHOTO);
                             icons.add(R.drawable.msg_copy);
@@ -46691,6 +46697,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         items.add(LocaleController.getString(R.string.SaveToGallery));
                         options.add(OPTION_SAVE_TO_GALLERY);
                         icons.add(R.drawable.baseline_image_24);
+
+                        if (selectedObject.isPhoto() && NekoConfig.showCopyPhoto.Bool()){
+                            items.add(LocaleController.getString(R.string.CopyPhoto));
+                            options.add(OPTION_COPY_PHOTO);
+                            icons.add(R.drawable.msg_copy);
+                        }
                     }
                 } else if (type == 5) {
                     items.add(LocaleController.getString(R.string.ApplyLocalizationFile));
