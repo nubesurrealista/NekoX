@@ -46260,9 +46260,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     options.add(OPTION_VIEW_REPLIES_OR_THREAD);
                     icons.add(R.drawable.baseline_forum_24);
                 }
-                if (!selectedObject.isSponsored() && chatMode != MODE_SCHEDULED && ChatObject.isChannel(currentChat) && !ChatObject.isMonoForum(currentChat) && selectedObject.getDialogId() != mergeDialogId) {
+                if (!selectedObject.isSponsored() && chatMode != MODE_SCHEDULED && !ChatObject.isMonoForum(currentChat) && selectedObject.getDialogId() != mergeDialogId) {
                     items.add(LocaleController.getString(R.string.CopyLink));
-                    options.add(OPTION_COPY_LINK);
+                    options.add(ChatObject.isChannel(currentChat) ? OPTION_COPY_LINK : nkbtn_copy_link_in_pm);
                     icons.add(R.drawable.baseline_link_24);
                 }
                 if (selectedObject != null && selectedObject.messageOwner != null && selectedObject.messageOwner.action == null && currentChat != null && currentChat.forum && !isTopic && selectedObject.messageOwner != null && selectedObject.messageOwner.reply_to != null && selectedObject.messageOwner.reply_to.forum_topic) {
