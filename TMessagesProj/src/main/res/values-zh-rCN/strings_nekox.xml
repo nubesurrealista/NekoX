@@ -256,5 +256,17 @@
     <string name="WhisperModelRemoved">本地 Whisper 模型已被移除</string>
     <string name="MemLeakThreshold">内存使用阈值</string>
     <string name="ResetSettings">重置设置</string>
-    <string name="ResetSettingsDesc">重置设置（API密钥和自定义别名除外）？\n\n除非您已提前备份设置，否则此操作将无法撤销！</string>
+    <string name="ResetSettingsDesc">重置设置（API密钥和自定义别名除外）？\n除非您已提前备份设置，否则此操作将无法撤销！</string>
+    <string name="KeepSamePositionOnNewMsg">在其他会话发送新消息时保持当前滚动位置</string>
+    <string name="UseAdGuardDNS">使用 AdGuard DNS</string>
+    <string name="DisableSaveDraftToCloud">禁用将草稿保存到云端</string>
+    <string name="ShareGroupMediaMessage">您想要分享...</string>
+    <string name="OnlyShowStoriesFromUsers">仅显示来自用户的动态</string>
+    <string name="ResumeAudioPlaybackOnLaunch">启动时恢复音频播放</string>
+    <string name="MuteAccountNoti">屏蔽所有通知</string>
+    <string name="UnMuteAccountNoti">取消静音通知</string>
+    <string name="ClearTranslatorCache">清除翻译缓存</string>
+    <string name="IgnoreTranslatorCache">忽略翻译缓存</string>
+    <string name="TranslationUnavailable">官方翻译不可用，正在使用替代的 Google API</string>
+    <string name="GrantMediaPermission">授予媒体权限</string>
 </resources>
