@@ -42,7 +42,6 @@ import android.provider.Settings;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Pair;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -123,17 +122,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.core.graphics.ColorUtils;
-
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
 
 public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayout implements NotificationCenter.NotificationCenterDelegate {
 
     private static final int VIEW_TYPE_AVATAR_CONSTRUCTOR = 4;
     private static final int SHOW_FAST_SCROLL_MIN_COUNT = 30;
     private final boolean needCamera;
-    private final boolean hideMediaPermCell;
 
     private RecyclerListView cameraPhotoRecyclerView;
     private LinearLayoutManager cameraPhotoLayoutManager;
@@ -728,7 +723,6 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         super(alert, context, resourcesProvider);
         this.forceDarkTheme = forceDarkTheme;
         this.needCamera = needCamera = (needCamera && !NekoConfig.hideCameraInAttachMenu.Bool());
-        this.hideMediaPermCell = wasLimited && !isGalleryPermissionLimited();
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.albumsDidLoad);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.cameraInitied);
         FrameLayout container = alert.getContainer();
@@ -896,7 +890,6 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         });
         gridView.setLayoutManager(layoutManager);
         gridView.setOnItemClickListener((view, position, x, y) -> {
-            Log.d("030-p", String.format("clicked %s @ %d", view.getClass().getName(), position));
             if (!mediaEnabled || parentAlert.destroyed) {
                 return;
             }
@@ -907,8 +900,6 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             if (fragment == null) {
                 return;
             }
-            boolean isPhotoCell = (view instanceof PhotoAttachPhotoCell);
-            boolean limitedGalleryPermission = isGalleryPermissionLimited();
             if (Build.VERSION.SDK_INT >= 23) {
                 if (adapter.needCamera && selectedAlbumEntry == galleryAlbumEntry && position == 0 && noCameraPermissions) {
                     try {
@@ -917,11 +908,11 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
 
                     }
                     return;
-                } else if (!isPhotoCell && !hideMediaPermCell) {
+                } else if (noGalleryPermissions && (!this.needCamera || position != 0)) {
                     try {
                         if (position == adapter.itemsCount - 2) {
                             menu.onItemClick(open_in); // NekoX: Use system photo picker
-                        } else if (adapter.getItemViewType(position) != 0) {
+                        } else {
                             if (Build.VERSION.SDK_INT >= 33) {
                                 fragment.getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_MEDIA_IMAGES}, BasePermissionsActivity.REQUEST_CODE_EXTERNAL_STORAGE);
                             } else {
@@ -934,14 +925,10 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     return;
                 }
             }
-            int offset = 0;
-            if (selectedAlbumEntry == galleryAlbumEntry) {
-                if (this.needCamera) --offset;
-                // if initial state(limited) or not hidden yet
-                if (limitedGalleryPermission || (wasLimited && !hideMediaPermCell)) --offset;
-            }
-            position += offset;
-            if (position > -1 || !this.needCamera || NekoConfig.hideCameraInAttachMenu.Bool() || selectedAlbumEntry != galleryAlbumEntry) {
+            if (position != 0 || !this.needCamera || NekoConfig.hideCameraInAttachMenu.Bool() || selectedAlbumEntry != galleryAlbumEntry) {
+                if (selectedAlbumEntry == galleryAlbumEntry && this.needCamera) {
+                    position--;
+                }
                 if (showAvatarConstructor) {
                     if (position == 0) {
                         if (!(view instanceof AvatarConstructorPreviewCell)) {
@@ -2506,7 +2493,6 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     private static boolean fullyAllowed = false;
     private void checkFullyAllowed() {
         if (fullyAllowed) return;
-        Log.d("030-cnt", String.format("count=%d max=%d", adapter.itemsCount, PhotoAttachAdapter.maxItemsCount));
         adapter.getItemCount(); // re-calc
         // final boolean wasFullyAllowed = fullyAllowed;
         fullyAllowed = (adapter.itemsCount == PhotoAttachAdapter.maxItemsCount);
@@ -4452,9 +4438,6 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                         if (needCamera && selectedAlbumEntry == galleryAlbumEntry) {
                             position++;
                         }
-//                        if (limitedMediaAccess && selectedAlbumEntry == galleryAlbumEntry) {
-//                            ++position;
-//                        }
                         if (showAvatarConstructor) {
                             position++;
                         }
@@ -4528,9 +4511,6 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             if (needCamera && selectedAlbumEntry == galleryAlbumEntry) {
                 position--;
             }
-//            if (limitedMediaAccess && selectedAlbumEntry == galleryAlbumEntry) {
-//                --position;
-//            }
             return getPhotoEntryAtPosition(position);
         }
 
@@ -4539,9 +4519,6 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             switch (holder.getItemViewType()) {
                 case 0: {
                     if (needCamera && selectedAlbumEntry == galleryAlbumEntry) {
-                        position--;
-                    }
-                    if (limitedMediaAccess && selectedAlbumEntry == galleryAlbumEntry) {
                         position--;
                     }
                     if (showAvatarConstructor) {
@@ -4598,12 +4575,6 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     cell.setType(type);
                     break;
                 }
-                case 114: { // gallery perm req when no camera
-                    PhotoAttachPermissionCell cell = (PhotoAttachPermissionCell) holder.itemView;
-                    cell.setItemSize(itemSize);
-                    cell.setType(1);
-                    break;
-                }
             }
         }
 
@@ -4647,7 +4618,6 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     });
                     break;
                 case 3:
-                case 114: // momo
                 default:
                     holder = new RecyclerListView.Holder(new PhotoAttachPermissionCell(mContext, resourcesProvider));
                     break;
@@ -4684,12 +4654,9 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             if (showAvatarConstructor) {
                 count++;
             }
-            boolean limitedGalleryPermission = isGalleryPermissionLimited();
-            if ((noGalleryPermissions || limitedGalleryPermission) && this == adapter) {
+            if (noGalleryPermissions && this == adapter) {
                 count++;
                 count++; // NekoX: Additional Open In picker
-            } else if (!noGalleryPermissions && limitedGalleryPermission) {
-                ++count;
             }
             photosStartRow = count;
             if (!noGalleryPermissions) {
@@ -4711,15 +4678,12 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 return 2;
             }
             int localPosition = position;
-            boolean all = selectedAlbumEntry == galleryAlbumEntry;
-            if (needCamera && position == 0 && all) {
+            if (needCamera && position == 0 && selectedAlbumEntry == galleryAlbumEntry) {
                 if (noCameraPermissions) {
                     return 3;
                 } else {
                     return 1;
                 }
-            } else if ((noGalleryPermissions || wasLimited) && !hideMediaPermCell && position == (needCamera ? 1 : 0) && all) {
-                return 114;
             }
             if (needCamera) {
                 localPosition--;
