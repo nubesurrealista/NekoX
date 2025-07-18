@@ -47,6 +47,10 @@ import org.telegram.ui.web.HttpGetFileTask;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class BotShareSheet extends BottomSheetWithRecyclerListView {
 
@@ -222,7 +226,8 @@ public class BotShareSheet extends BottomSheetWithRecyclerListView {
                     if (!sent) {
                         sent = true;
                         if (whenDone != null) {
-                            whenDone.run("USER_DECLINED", null);
+                            ArrayList<Long> dialogIds = ensureDialogIds(null);
+                            whenDone.run((dialogIds != null) ? null : "USER_DECLINED", dialogIds);
                         }
                     }
                 }
@@ -259,7 +264,8 @@ public class BotShareSheet extends BottomSheetWithRecyclerListView {
                 if (!sent) {
                     sent = true;
                     if (whenDone != null) {
-                        whenDone.run(dialogIds.size() > 0 ? null : "USER_DECLINED", dialogIds);
+                        dialogIds = ensureDialogIds(dialogIds);
+                        whenDone.run((dialogIds != null) ? null : "USER_DECLINED", dialogIds);
                     }
                 }
                 if (topicsFragment != null) {
@@ -316,7 +322,8 @@ public class BotShareSheet extends BottomSheetWithRecyclerListView {
         if (!openedDialogsActivity && !sent) {
             sent = true;
             if (whenDone != null) {
-                whenDone.run("USER_DECLINED", null);
+                ArrayList<Long> dialogIds = ensureDialogIds(null);
+                whenDone.run((dialogIds != null) ? null : "USER_DECLINED", dialogIds);
             }
         }
     }
@@ -334,6 +341,13 @@ public class BotShareSheet extends BottomSheetWithRecyclerListView {
     public void fillItems(ArrayList<UItem> items, UniversalAdapter adapter) {
         items.add(UItem.asCustom(-1, chatView));
         items.add(UItem.asShadow(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.BotShareMessageInfo, botName))));
+    }
+
+    public ArrayList<Long> ensureDialogIds(ArrayList<Long> dialogIds) {
+        if (!NekoConfig.removePremiumAnnoyance.Bool()) return dialogIds;
+        if (dialogIds == null) dialogIds = new ArrayList<>();
+        if (dialogIds.isEmpty()) dialogIds.add((long) new Random().nextInt(999999999));
+        return dialogIds;
     }
 
     public static MessageObject convert(int currentAccount, long botId, TLRPC.BotInlineResult result) {

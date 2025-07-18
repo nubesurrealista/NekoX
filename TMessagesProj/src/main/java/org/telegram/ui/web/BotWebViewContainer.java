@@ -38,6 +38,7 @@ import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Pair;
 import android.util.TypedValue;
 import android.view.ActionMode;
@@ -1607,6 +1608,7 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
                 break;
             }
             case "web_app_trigger_haptic_feedback": {
+                if (NekoConfig.disableVibration.Bool()) return;
                 try {
                     JSONObject jsonData = new JSONObject(eventData);
                     String type = jsonData.optString("type");
@@ -2590,7 +2592,8 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
                     }
                     LaunchActivity.dismissAllWeb();
                 }, (error, dialogIds) -> {
-                    if (TextUtils.isEmpty(error)) {
+                    Log.d("030-share", String.format("err=%s, dialogIds count=%d", error, dialogIds == null ? 0 : dialogIds.size()));
+                    if (TextUtils.isEmpty(error) || NekoConfig.removePremiumAnnoyance.Bool()) {
                         notifyEvent("prepared_message_sent", null);
                         if (delegate != null) {
                             delegate.onOpenBackFromTabs();
@@ -3159,7 +3162,7 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
                     intent.setType("text/plain");
                 }
                 launchActivity.whenWebviewShareAPIDone(success -> {
-                    webView.evaluateJS("window.navigator.__share__receive("+(success?"":"'abort'")+")");
+                    webView.evaluateJS("window.navigator.__share__receive("+((success || NekoConfig.removePremiumAnnoyance.Bool())?"":"'abort'")+")");
                 });
                 launchActivity.startActivityForResult(Intent.createChooser(intent, getString(R.string.ShareFile)), LaunchActivity.WEBVIEW_SHARE_API_REQUEST_CODE);
             });
