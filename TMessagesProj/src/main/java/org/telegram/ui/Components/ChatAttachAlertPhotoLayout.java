@@ -1042,8 +1042,9 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 }, hasSpoiler ? 250 : 0);
             } else {
                 if (SharedConfig.inappCamera) {
-                    if (NekoConfig.disableInstantCamera.Bool()) showCamera();
-                    else openCamera(true);
+//                    if (NekoConfig.disableInstantCamera.Bool()) showCamera();
+//                    else
+                        openCamera(true);
                 } else {
                     if (parentAlert.delegate != null) {
                         parentAlert.delegate.didPressedButton(0, false, true, 0, 0, parentAlert.isCaptionAbove(), false, 0);
@@ -2347,21 +2348,19 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
 
                         }
                     }
-                    deviceHasGoodCamera = false;
                 } else {
                     if (request || SharedConfig.hasCameraCache) {
                         CameraController.getInstance().initCamera(null);
                     }
-                    deviceHasGoodCamera = CameraController.getInstance().isCameraInitied();
                 }
             } else {
                 if (request || SharedConfig.hasCameraCache) {
                     CameraController.getInstance().initCamera(null);
                 }
-                deviceHasGoodCamera = CameraController.getInstance().isCameraInitied();
             }
+            deviceHasGoodCamera = CameraController.getInstance().isCameraInitied();
         }
-        if (deviceHasGoodCamera && NekoConfig.disableInstantCamera.Bool()) {
+        if (deviceHasGoodCamera /* && NekoConfig.disableInstantCamera.Bool() */) {
             // Clear cached bitmap
             File file = new File(ApplicationLoader.getFilesDirFixed(), "cthumb.jpg");
             if (file.exists()) file.delete();
@@ -2369,7 +2368,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         if ((old != deviceHasGoodCamera || old2 != noCameraPermissions) && adapter != null) {
             adapter.notifyDataSetChanged();
         }
-        if (!parentAlert.destroyed && parentAlert.isShowing() && deviceHasGoodCamera && parentAlert.getBackDrawable().getAlpha() != 0 && !cameraOpened && !NekoConfig.disableInstantCamera.Bool()) {
+        if (!parentAlert.destroyed && parentAlert.isShowing() && deviceHasGoodCamera && parentAlert.getBackDrawable().getAlpha() != 0 && !cameraOpened /* && !NekoConfig.disableInstantCamera.Bool() */) {
             showCamera();
         }
     }
@@ -2732,7 +2731,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     }
 
     private void saveLastCameraBitmap() {
-        if (!canSaveCameraPreview || NekoConfig.disableInstantCamera.Bool()) {
+        if (!canSaveCameraPreview /* || NekoConfig.disableInstantCamera.Bool() */) {
             return;
         }
         try {
