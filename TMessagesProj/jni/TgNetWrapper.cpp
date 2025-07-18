@@ -100,6 +100,10 @@ jint isTestBackend(JNIEnv *env, jclass c, jint instanceNum) {
     return ConnectionsManager::getInstance(instanceNum).isTestBackend() ? 1 : 0;
 }
 
+jint isCustomBackend(JNIEnv *env, jclass c, jint instanceNum) {
+    return ConnectionsManager::getInstance(instanceNum).isCustomBackend() ? 1 : 0;
+}
+
 jint getTimeDifference(JNIEnv *env, jclass c, jint instanceNum) {
     return ConnectionsManager::getInstance(instanceNum).getTimeDifference();
 }
@@ -269,6 +273,10 @@ void setUserPremium(JNIEnv *env, jclass c, jint instanceNum, bool premium) {
 
 void switchBackend(JNIEnv *env, jclass c, jint instanceNum, jboolean restart) {
     ConnectionsManager::getInstance(instanceNum).switchBackend(restart);
+}
+
+void switchCustomBackend(JNIEnv *env, jclass c, jint instanceNum, jboolean value, jboolean restart) {
+    ConnectionsManager::getInstance(instanceNum).switchCustomBackend(value, restart);
 }
 
 void pauseNetwork(JNIEnv *env, jclass c, jint instanceNum) {
@@ -583,6 +591,7 @@ static JNINativeMethod ConnectionsManagerMethods[] = {
         {"native_getCurrentPingTime", "(I)I", (void *) getCurrentPingTime},
         {"native_getCurrentDatacenterId", "(I)I", (void *) getCurrentDatacenterId},
         {"native_isTestBackend", "(I)I", (void *) isTestBackend},
+        {"native_isCustomBackend", "(I)I", (void *) isCustomBackend},
         {"native_getTimeDifference", "(I)I", (void *) getTimeDifference},
         {"native_sendRequest", "(IJIIIZI)V", (void *) sendRequest},
         {"native_cancelRequest", "(IIZ)V", (void *) cancelRequest},
@@ -599,6 +608,7 @@ static JNINativeMethod ConnectionsManagerMethods[] = {
         {"native_setRegId", "(ILjava/lang/String;)V", (void *) setRegId},
         {"native_setSystemLangCode", "(ILjava/lang/String;)V", (void *) setSystemLangCode},
         {"native_switchBackend", "(IZ)V", (void *) switchBackend},
+        {"native_switchCustomBackend", "(IZZ)V", (void *) switchCustomBackend},
         {"native_pauseNetwork", "(I)V", (void *) pauseNetwork},
         {"native_resumeNetwork", "(IZ)V", (void *) resumeNetwork},
         {"native_updateDcSettings", "(I)V", (void *) updateDcSettings},

@@ -350,6 +350,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     private boolean newAccount;
     private boolean syncContacts = false;
     private boolean testBackend = false;
+    private boolean customBackend = false;
 
     @ActivityMode
     private int activityMode = MODE_LOGIN;
@@ -812,6 +813,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                         phoneView.testBackendCheckBox.setVisibility(View.VISIBLE);
                     else
                         phoneView.testBackendCheckBox.setVisibility(View.GONE);
+                }
+                if (phoneView.customBackendCheckBox != null) {
+                    phoneView.customBackendCheckBox.setVisibility(
+                            phoneView.customBackendCheckBox.getVisibility() == View.GONE ?
+                                    View.VISIBLE : View.GONE);
                 }
             } else if (id == menu_custom_api) {
                 doCustomApi();
@@ -1979,6 +1985,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         private ImageView chevronRight;
         private CheckBoxCell syncContactsBox;
         private CheckBoxCell testBackendCheckBox;
+        private CheckBoxCell customBackendCheckBox;
 
         @CountryState
         private int countryState = COUNTRY_STATE_NOT_SET_OR_VALID;
@@ -2461,6 +2468,27 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     loadCountries();
                 });
                 testBackendCheckBox.setVisibility(GONE);
+
+
+                customBackendCheckBox = new CheckBoxCell(context, 2);
+                customBackendCheckBox.setText(getString(R.string.CustomServer), "", customBackend = getConnectionsManager().isCustomBackend(), false);
+                addView(customBackendCheckBox, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 16, 0, 16 + (LocaleController.isRTL && AndroidUtilities.isSmallScreen() ? Build.VERSION.SDK_INT >= 21 ? 56 : 60 : 0), 0));
+                bottomMargin -= 24;
+                customBackendCheckBox.setOnClickListener(v -> {
+                    if (getParentActivity() == null) {
+                        return;
+                    }
+                    CheckBoxCell cell = (CheckBoxCell) v;
+                    customBackend = !customBackend;
+                    cell.setChecked(customBackend, true);
+
+                    boolean customBackend = getConnectionsManager().isCustomBackend();
+                    if (customBackend != LoginActivity.this.customBackend) {
+                        getConnectionsManager().switchCustomBackend(false);
+                    }
+                    loadCountries();
+                });
+                customBackendCheckBox.setVisibility(GONE);
             }
             if (bottomMargin > 0 && !AndroidUtilities.isSmallScreen()) {
                 Space bottomSpacer = new Space(context);
@@ -2674,6 +2702,10 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             if (testBackendCheckBox != null) {
                 testBackendCheckBox.setSquareCheckBoxColor(Theme.key_checkboxSquareUnchecked, Theme.key_checkboxSquareBackground, Theme.key_checkboxSquareCheck);
                 testBackendCheckBox.updateTextColor();
+            }
+            if (customBackendCheckBox != null) {
+                customBackendCheckBox.setSquareCheckBoxColor(Theme.key_checkboxSquareUnchecked, Theme.key_checkboxSquareBackground, Theme.key_checkboxSquareCheck);
+                customBackendCheckBox.updateTextColor();
             }
 
             phoneOutlineView.updateColor();

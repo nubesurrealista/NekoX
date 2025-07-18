@@ -587,6 +587,10 @@ bool ConnectionsManager::isTestBackend() {
     return testBackend;
 }
 
+bool ConnectionsManager::isCustomBackend() {
+    return customBackend;
+}
+
 int32_t ConnectionsManager::getTimeDifference() {
     return timeDifference;
 }
@@ -1830,7 +1834,11 @@ uint8_t ConnectionsManager::getIpStratagy() {
 
 void ConnectionsManager::initDatacenters() {
     Datacenter *datacenter;
-    if (!testBackend) {
+    if (customBackend) {
+        datacenter = new Datacenter(instanceNum, 1);
+        datacenter->addAddressAndPort("43.155.11.190", 10443, 0, "");
+        datacenters[1] = datacenter;
+    } else if (!testBackend) {
         if (datacenters.find(1) == datacenters.end()) {
             datacenter = new Datacenter(instanceNum, 1);
             datacenter->addAddressAndPort("149.154.175.50", 443, 0, "");
@@ -2059,6 +2067,22 @@ void ConnectionsManager::switchBackend(bool restart) {
     scheduleTask([&, restart] {
         currentDatacenterId = 1;
         testBackend = !testBackend;
+        if (!restart) {
+            Handshake::cleanupServerKeys();
+        }
+        datacenters.clear();
+        initDatacenters();
+        saveConfig();
+        if (restart) {
+            exit(1);
+        }
+    });
+}
+
+void ConnectionsManager::switchCustomBackend(bool value, bool restart) {
+    scheduleTask([&, value, restart] {
+        currentDatacenterId = 1;
+        customBackend = value;
         if (!restart) {
             Handshake::cleanupServerKeys();
         }
@@ -2551,7 +2575,7 @@ void ConnectionsManager::processRequestQueue(uint32_t connectionTypes, uint32_t 
 
         Datacenter *requestDatacenter = getDatacenterWithId(datacenterId);
         if (requestDatacenter == nullptr) {
-            if (std::find(unknownDatacenterIds.begin(), unknownDatacenterIds.end(), datacenterId) == unknownDatacenterIds.end()) {
+            if (!customBackend && std::find(unknownDatacenterIds.begin(), unknownDatacenterIds.end(), datacenterId) == unknownDatacenterIds.end()) {
                 unknownDatacenterIds.push_back(datacenterId);
             }
             iter++;
@@ -2803,7 +2827,7 @@ void ConnectionsManager::processRequestQueue(uint32_t connectionTypes, uint32_t 
 
         Datacenter *requestDatacenter = getDatacenterWithId(datacenterId);
         if (requestDatacenter == nullptr) {
-            if (std::find(unknownDatacenterIds.begin(), unknownDatacenterIds.end(), datacenterId) == unknownDatacenterIds.end()) {
+            if (!customBackend && std::find(unknownDatacenterIds.begin(), unknownDatacenterIds.end(), datacenterId) == unknownDatacenterIds.end()) {
                 unknownDatacenterIds.push_back(datacenterId);
             }
             if (LOGS_ENABLED)
@@ -3595,6 +3619,7 @@ inline bool checkPhoneByPrefixesRules(std::string phone, std::string rules) {
 }
 
 void ConnectionsManager::applyDnsConfig(NativeByteBuffer *buffer, std::string phone, int32_t date) {
+    if (customBackend) return;
     scheduleTask([&, buffer, phone, date] {
         int32_t realDate = date;
         if (LOGS_ENABLED) DEBUG_D("trying to decrypt config %d", requestingSecondAddress);

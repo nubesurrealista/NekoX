@@ -770,6 +770,30 @@ public class ConnectionsManager extends BaseController {
         return false;
     }
 
+    public void switchCustomBackend(boolean restart) {
+        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        // preferences.edit().remove("language_showed2").apply();
+        native_switchCustomBackend(currentAccount, !isCustomBackend(), restart);
+    }
+
+    public boolean isCustomBackend() {
+        try {
+            if (!NativeLoader.loaded()) {
+                Log.w("030-tgnet", "native lib isn't loaded yet, try again here");
+                NativeLoader.initNativeLibs(ApplicationLoader.applicationContext);
+                if (!NativeLoader.loaded()) {
+                    Log.e("030-tgnet", "failed to load native lib!");
+                }
+            }
+            return native_isCustomBackend(currentAccount) != 0;
+        } catch (UnsatisfiedLinkError e) {
+            Log.e("030-tgnet", "UnsatisfiedLinkError on calling native_isCustomBackend", e);
+        } catch (Throwable t) {
+            Log.e("030-tgnet", t.getClass().getName(), t);
+        }
+        return false;
+    }
+
     public void resumeNetworkMaybe() {
         native_resumeNetwork(currentAccount, true);
     }
@@ -1093,6 +1117,8 @@ public class ConnectionsManager extends BaseController {
     }
 
     public static native void native_switchBackend(int currentAccount, boolean restart);
+    public static native void native_switchCustomBackend(int currentAccount, boolean value, boolean restart);
+    public static native int native_isCustomBackend(int currentAccount);
     public static native int native_isTestBackend(int currentAccount);
 
     public static native void native_pauseNetwork(int currentAccount);

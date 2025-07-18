@@ -25,4 +25,9 @@ object DataCenter {
 
     }
 
+    @JvmStatic
+    fun toggleCustomDataCenter(account: Int) {
+        ConnectionsManager.getInstance(account).switchCustomBackend(false)
+    }
+
 }
