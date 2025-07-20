@@ -289,9 +289,9 @@ public class Emoji {
         public void preload() {}
     }
 
+    // 030: fullSize in SimpleEmojiDrawable removed
     public static class SimpleEmojiDrawable extends EmojiDrawable {
         private DrawableInfo info;
-        public boolean fullSize = false;
         private static final Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
         private static final Rect rect = new Rect();
         private static final TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);

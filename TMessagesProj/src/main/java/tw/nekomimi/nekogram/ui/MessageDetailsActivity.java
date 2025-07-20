@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,9 @@ import com.google.gson.JsonSerializer;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildConfig;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -52,6 +55,7 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.QuoteSpan;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.ProfileActivity;
@@ -129,9 +133,22 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
         }
 
         public boolean shouldSkipField(FieldAttributes f) {
-            return f.getName().equals("disableFree") || f.getName().equals("networkType") || f.getDeclaringClass() == android.content.res.ColorStateList.class;
+            boolean ret = f.getName().equals("disableFree") ||
+                    f.getName().equals("networkType") ||
+                    f.getDeclaringClass() == android.content.res.ColorStateList.class ||
+//                    f.getDeclaringClass() == TLRPC.TL_messageEntityBlockquote.class ||
+                    f.getDeclaringClass() == QuoteSpan.class;
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d(String.format("serializing field %s (%s) = %s",
+                        f.getName(), f.getDeclaringClass().getName(), ret));
+            } else if (ret) {
+                Log.d("030-json", String.format("skipped unsupported field with name '%s' %s",
+                        f.getName(), f.getDeclaringClass().getName()));
+            }
+            return ret;
         }
     }
+
 
     public MessageDetailsActivity(MessageObject messageObject) {
         this.messageObject = messageObject;
