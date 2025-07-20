@@ -94,6 +94,7 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
     private int selected = 0;
     private int selectedFullIndex = 0;
     private int wasIndex = 0;
+    private int packIndexOffset = 0;
 
     public boolean animateAppear = true;
 
@@ -588,15 +589,17 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
                 EmojiTabsView tabsView = (EmojiTabsView) child;
                 for (int a = 0; a < tabsView.contentView.getChildCount(); ++a, ++j) {
                     final int index = j;
+                    final int offset = packIndexOffset;
                     tabsView.contentView.getChildAt(a).setOnClickListener(e -> {
-                        onTabClick(index);
+                        onTabClick(Math.max(0, index + offset));
                     });
                 }
                 --j;
             } else if (child != null) {
                 final int index = j;
+                final int offset = packIndexOffset;
                 child.setOnClickListener(e -> {
-                    onTabClick(index);
+                    onTabClick(Math.max(0, index + offset));
                 });
             }
         }
@@ -1431,6 +1434,10 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
                 EmojiTabsStrip.this.contentView.invalidate();
             }
         }
+    }
+
+    public void setPackIndexOffset(int offset) {
+        packIndexOffset = offset;
     }
 }
 
