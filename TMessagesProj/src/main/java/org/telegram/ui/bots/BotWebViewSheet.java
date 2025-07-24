@@ -1638,7 +1638,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
 
         if (initialUrl != null) {
             o.add(R.drawable.msg_openin, LocaleController.getString(R.string.OpenInExternalApp), () -> {
-                Browser.openUrl(fragment.getContext(), initialUrl);
+                Browser.openUrl(fragment == null ? getActivity() : fragment.getContext(), initialUrl);
             });
         }
 
