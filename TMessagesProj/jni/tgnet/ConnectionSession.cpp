@@ -32,10 +32,7 @@ void ConnectionSession::genereateNewSessionId() {
 #if USE_DEBUG_SESSION
     sessionId = (0xabcd000000000000L | (newSessionId & 0x0000ffffffffffffL));
 #else
-    if (ConnectionsManager::getInstance(instanceNum).customBackend)
-        sessionId = (0xabcd000000000000L | (newSessionId & 0x0000ffffffffffffL));
-    else
-        sessionId = newSessionId;
+    sessionId = newSessionId;
 #endif
 }
 

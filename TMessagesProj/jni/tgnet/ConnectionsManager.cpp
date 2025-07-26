@@ -428,16 +428,14 @@ void ConnectionsManager::loadConfig() {
         }
     }
 
-    if (datacenters.empty()) {
-        initDatacenters();
-    }
+    initDatacenters();
 
     if ((!datacenters.empty() && currentDatacenterId == 0) || pushSessionId == 0) {
         if (pushSessionId == 0) {
             RAND_bytes((uint8_t *) &pushSessionId, 8);
         }
         if (currentDatacenterId == 0) {
-            currentDatacenterId = customBackend ? 1 : 2;
+            currentDatacenterId = 2;
         }
         saveConfig();
     }
@@ -717,7 +715,7 @@ void ConnectionsManager::onConnectionClosed(Connection *connection, int reason) 
                         } else {
                             requestingSecondAddress = 0;
                         }
-                        if (!customBackend) delegate->onRequestNewServerIpAndPort(requestingSecondAddress, instanceNum);
+                        delegate->onRequestNewServerIpAndPort(requestingSecondAddress, instanceNum);
                     } else {
                         if (LOGS_ENABLED) DEBUG_D("connection has usefull data, don't request anything");
                     }

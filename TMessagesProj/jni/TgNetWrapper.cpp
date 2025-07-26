@@ -217,7 +217,6 @@ void bindRequestToGuid(JNIEnv *env, jclass c, jint instanceNum, jint requestToke
 
 void applyDatacenterAddress(JNIEnv *env, jclass c, jint instanceNum, jint datacenterId,
                             jstring ipAddress, jint port) {
-    if (ConnectionsManager::getInstance(instanceNum).isCustomBackend()) return;
     const char *valueStr = env->GetStringUTFChars(ipAddress, 0);
 
     ConnectionsManager::getInstance(instanceNum).applyDatacenterAddress((uint32_t) datacenterId,
@@ -305,8 +304,8 @@ void setPushConnectionEnabled(JNIEnv *env, jclass c, jint instanceNum, jboolean 
     ConnectionsManager::getInstance(instanceNum).setPushConnectionEnabled(value);
 }
 
-void applyDnsConfig(JNIEnv *env, jclass c, jint instanceNum, jlong address, jstring phone, jint date) {
-    if (ConnectionsManager::getInstance(instanceNum).isCustomBackend()) return;
+void
+applyDnsConfig(JNIEnv *env, jclass c, jint instanceNum, jlong address, jstring phone, jint date) {
     const char *phoneStr = env->GetStringUTFChars(phone, 0);
 
     ConnectionsManager::getInstance(instanceNum).applyDnsConfig(
