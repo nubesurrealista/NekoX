@@ -1060,7 +1060,7 @@ TLObject *ConnectionsManager::TLdeserialize(TLObject *request, uint32_t bytes, N
             auto apiRequest = dynamic_cast<TL_api_request *>(request);
             if (apiRequest != nullptr) {
                 object = apiRequest->deserializeResponse(data, bytes, instanceNum, error);
-                if (LOGS_ENABLED) DEBUG_D("api request constructor 0x%x, don't parse", constructor);
+                if (LOGS_ENABLED) DEBUG_D("[%d] api request constructor 0x%x, don't parse", instanceNum, constructor);
             } else {
                 object = request->deserializeResponse(data, constructor, instanceNum, error);
                 if (object != nullptr && error) {
@@ -1072,7 +1072,7 @@ TLObject *ConnectionsManager::TLdeserialize(TLObject *request, uint32_t bytes, N
             if (constructor == 0x96a18d5) {
                 if (LOGS_ENABLED) DEBUG_D("not found file 0x%x", constructor);
             }
-            if (LOGS_ENABLED) DEBUG_D("not found request to parse constructor 0x%x", constructor);
+            if (LOGS_ENABLED) DEBUG_D("[%d] not found request to parse constructor 0x%x", instanceNum, constructor);
         }
     }
     if (object == nullptr) {
