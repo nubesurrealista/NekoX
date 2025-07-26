@@ -814,7 +814,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     else
                         phoneView.testBackendCheckBox.setVisibility(View.GONE);
                 }
-                if (phoneView.customBackendCheckBox != null && NekoXConfig.isDeveloper()) {
+                if (phoneView.customBackendCheckBox != null) {
                     phoneView.customBackendCheckBox.setVisibility(
                             phoneView.customBackendCheckBox.getVisibility() == View.GONE ?
                                     View.VISIBLE : View.GONE);
