@@ -82,9 +82,6 @@ private:
     ByteArray *getAuthKey(ConnectionType connectionType, bool perm, int64_t *authKeyId, int32_t allowPendingKey);
 
     const int32_t *defaultPorts = new int32_t[4] {-1, 443, 5222, -1};
-    const int32_t *teamgramDefaultPorts = new int32_t[4] {-1, 10443, -1, -1};
-    const std::string teamgramServerIp = "43.155.11.190";
-    const int32_t teamgramServerPort = 10443;
 
     int32_t instanceNum;
     uint32_t datacenterId;

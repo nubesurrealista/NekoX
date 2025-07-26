@@ -1692,7 +1692,7 @@ public class MessagesController extends BaseController implements NotificationCe
         giveawayPeriodMax = mainPreferences.getLong("giveaway_period_max", 7);
         stealthModePast = mainPreferences.getInt("stories_stealth_past_period", 5 * 60);
         stealthModeCooldown = mainPreferences.getInt("stories_stealth_cooldown_period", 60 * 60);
-        boolean isTest = false, isCustomServer = false;
+        boolean isTest = false;
         try {
             if (!NativeLoader.loaded()) {
                 Log.w("030-tgnet", "native lib isn't loaded yet, try again here");
@@ -1704,15 +1704,6 @@ public class MessagesController extends BaseController implements NotificationCe
             isTest = ConnectionsManager.native_isTestBackend(currentAccount) != 0;
         } catch (UnsatisfiedLinkError e) {
             Log.e("030-tgnet", "UnsatisfiedLinkError on calling native_isTestBackend", e);
-        } catch (Throwable t) {
-            Log.e("030-tgnet", t.getClass().getName(), t);
-        }
-        try {
-            if (NativeLoader.loaded()) {
-                isCustomServer = ConnectionsManager.native_isCustomBackend(currentAccount) != 0;
-            }
-        } catch (UnsatisfiedLinkError e) {
-            Log.e("030-tgnet", "UnsatisfiedLinkError on calling native_isCustomBackend", e);
         } catch (Throwable t) {
             Log.e("030-tgnet", t.getClass().getName(), t);
         }
@@ -1738,9 +1729,9 @@ public class MessagesController extends BaseController implements NotificationCe
         quickReplyMessagesLimit = mainPreferences.getInt("quickReplyMessagesLimit", 20);
         channelWallpaperLevelMin = mainPreferences.getInt("channelWallpaperLevelMin", 1);
         channelCustomWallpaperLevelMin = mainPreferences.getInt("channelCustomWallpaperLevelMin", 1);
-        chatlistInvitesLimitPremium = mainPreferences.getInt("chatlistInvitesLimitPremium",  !isCustomServer && isTest ? 5 : 20);
+        chatlistInvitesLimitPremium = mainPreferences.getInt("chatlistInvitesLimitPremium",  isTest ? 5 : 20);
         chatlistJoinedLimitDefault = mainPreferences.getInt("chatlistJoinedLimitDefault", 2);
-        chatlistJoinedLimitPremium = mainPreferences.getInt("chatlistJoinedLimitPremium",  !isCustomServer && isTest ? 5 : 20);
+        chatlistJoinedLimitPremium = mainPreferences.getInt("chatlistJoinedLimitPremium",  isTest ? 5 : 20);
         stargiftsMessageLengthMax = mainPreferences.getInt("stargiftsMessageLengthMax", 255);
         stargiftsConvertPeriodMax = mainPreferences.getInt("stargiftsConvertPeriodMax", isTest ? 300 : 90 * 86400);
         videoIgnoreAltDocuments = mainPreferences.getBoolean("videoIgnoreAltDocuments", false);
@@ -1752,10 +1743,10 @@ public class MessagesController extends BaseController implements NotificationCe
         starsPaidMessagesAvailable = mainPreferences.getBoolean("starsPaidMessagesAvailable", true);
         freezeSinceDate = mainPreferences.getLong("freezeSinceDate", 0L);
         freezeUntilDate = mainPreferences.getLong("freezeUntilDate", 0L);
-        conferenceCallSizeLimit = mainPreferences.getInt("conferenceCallSizeLimit", !isCustomServer && isTest ? 5 : 100);
+        conferenceCallSizeLimit = mainPreferences.getInt("conferenceCallSizeLimit", isTest ? 5 : 100);
         callRequestsDisabled = mainPreferences.getBoolean("callRequestsDisabled", false);
         pollAnswersMax = mainPreferences.getInt("pollAnswersMax", 12);
-        todoItemsMax = mainPreferences.getInt("todoItemsMax", !isCustomServer && isTest ? 10 : 30);
+        todoItemsMax = mainPreferences.getInt("todoItemsMax", isTest ? 10 : 30);
         todoTitleLengthMax = mainPreferences.getInt("todoTitleLengthMax", 32);
         todoItemLengthMax = mainPreferences.getInt("todoItemLengthMax", 64);
         translationsManualEnabled = mainPreferences.getString("translationsManualEnabled", "enabled");

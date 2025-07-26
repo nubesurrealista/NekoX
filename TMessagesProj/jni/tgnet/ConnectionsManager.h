@@ -49,7 +49,6 @@ public:
     int32_t getCurrentPingTime();
     uint32_t getCurrentDatacenterId();
     bool isTestBackend();
-    bool isCustomBackend();
     int32_t getTimeDifference();
     int32_t sendRequest(TLObject *object, onCompleteFunc onComplete, onQuickAckFunc onQuickAck, onRequestClearFunc onClear, uint32_t flags, uint32_t datacenterId, ConnectionType connectionType, bool immediate);
     int32_t sendRequest(TLObject *object, onCompleteFunc onComplete, onQuickAckFunc onQuickAck, onRequestClearFunc onClear, uint32_t flags, uint32_t datacenterId, ConnectionType connectionType, bool immediate, int32_t requestToken);
@@ -63,7 +62,6 @@ public:
     void setUserId(int64_t userId);
     void setUserPremium(bool premium);
     void switchBackend(bool restart);
-    void switchCustomBackend(bool value, bool restart);
     void resumeNetwork(bool partial);
     void pauseNetwork();
     void setNetworkAvailable(bool value, int32_t type, bool slow);
@@ -150,7 +148,6 @@ private:
     int32_t pingTime;
     int64_t pingTimeMs;
     bool testBackend = false;
-    bool customBackend = false;
     bool clientBlocked = true;
     std::string lastInitSystemLangcode = "";
     std::atomic<uint32_t> lastRequestToken{50000000};

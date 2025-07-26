@@ -283,9 +283,6 @@ int32_t Datacenter::getCurrentPort(uint32_t flags) {
         }
     }
     if (addresses->empty()) {
-        if (ConnectionsManager::getInstance(instanceNum).customBackend)
-            return 10443;
-
         return 443;
     }
 
@@ -339,8 +336,6 @@ int32_t Datacenter::getCurrentPort(uint32_t flags) {
     int32_t port;
     if (!address->secret.empty()) {
         port = -1;
-    } else if (ConnectionsManager::getInstance(instanceNum).customBackend) {
-        port = teamgramDefaultPorts[currentPortNum];
     } else {
         port = defaultPorts[currentPortNum];
     }
@@ -466,8 +461,6 @@ bool Datacenter::isCustomPort(uint32_t flags) {
             currentPortNum = currentPortNumIpv4;
         }
     }
-    if (ConnectionsManager::getInstance(instanceNum).customBackend)
-        return teamgramDefaultPorts[currentPortNum] != -1;
     return defaultPorts[currentPortNum] != -1;
 }
 
