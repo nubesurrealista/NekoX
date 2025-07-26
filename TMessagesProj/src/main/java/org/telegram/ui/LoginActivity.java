@@ -111,6 +111,7 @@ import com.google.zxing.common.detector.MathUtils;
 //import com.android.billingclient.api.ProductDetails;
 //import com.android.billingclient.api.Purchase;
 //import com.android.billingclient.api.QueryProductDetailsParams;
+import com.jakewharton.processphoenix.ProcessPhoenix;
 //import com.google.android.gms.auth.api.signin.GoogleSignIn;
 //import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 //import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -234,6 +235,7 @@ import tw.nekomimi.nekogram.ui.EditTextAutoFill;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.StrUtil;
+import tw.nekomimi.nekogram.utils.TelegramUtil;
 
 @SuppressLint("HardwareIds")
 public class LoginActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -10023,7 +10025,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 true,
                 LocaleController.getString(R.string.UseCustomApiNotice));
         builder.addRadioItem(LocaleController.getString(R.string.CustomApiNo), NekoXConfig.loginApiType.get() == -1, (cell) -> {
-            NekoXConfig.loginApiType.set(-1);
+            NekoXConfig.setLoginApiType(-1);
             builder.doRadioCheck(cell);
             for (EditText input : inputs) {
                 input.setVisibility(View.GONE);
@@ -10032,7 +10034,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         });
         builder.addRadioItem(LocaleController.getString(R.string.CustomApiOfficial),
                 NekoXConfig.loginApiType.get() == 0, (cell) -> {
-            NekoXConfig.loginApiType.set(0);
+            NekoXConfig.setLoginApiType(0);
             builder.doRadioCheck(cell);
             for (EditText input : inputs) {
                 input.setVisibility(View.GONE);
@@ -10042,7 +10044,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         builder.addRadioItem(LocaleController.getString(R.string.CustomApiInput),
                 hasCustomApiCreds && NekoXConfig.loginApiType.get() == 1, (cell) -> {
             builder.doRadioCheck(cell);
-            NekoXConfig.loginApiType.set(1);
+            NekoXConfig.setLoginApiType(1);
             for (EditText input : inputs) {
                 input.setVisibility(View.VISIBLE);
             }
@@ -10071,6 +10073,15 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 NekoConfig.customApiId.setConfigString("");
                 NekoConfig.customApiHash.setConfigString("");
             }
+
+
+            AlertDialog restart = new AlertDialog(getContext(), 0);
+            restart.setTitle(StrUtil.getAppName());
+            restart.setMessage(LocaleController.getString(R.string.RestartAppToTakeEffect));
+            restart.setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) -> {
+                TelegramUtil.restartApp(false);
+            });
+            restart.show();
             return Unit.INSTANCE;
         });
         builder.show();
