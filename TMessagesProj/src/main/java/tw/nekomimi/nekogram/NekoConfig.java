@@ -988,6 +988,9 @@ public class NekoConfig {
                         .setPositiveButton(LocaleController.getString(R.string.Close), null)
                         .create().show();
             });
+            if (NekoConfig.disableSystemAccount.Bool()) {
+                NekoXConfig.ensureSystemAccountState(UserConfig.selectedAccount, true);
+            }
         } catch (Exception ex) {
             Log.e("030-neko", "failed to load part of neko config", ex);
         }

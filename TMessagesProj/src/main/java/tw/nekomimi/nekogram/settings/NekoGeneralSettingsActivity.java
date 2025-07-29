@@ -504,13 +504,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             } else if (key.equals(NekoConfig.hideUnreadCounterOnFolderTabs.getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (key.equals(NekoConfig.disableSystemAccount.getKey())) {
-                if ((boolean) newValue) {
-                    getContactsController().deleteUnknownAppAccounts();
-                } else {
-                    for (int a : SharedConfig.activeAccounts) {
-                        ContactsController.getInstance(a).checkAppAccount();
-                    }
-                }
+                NekoXConfig.ensureSystemAccountState(currentAccount, (boolean) newValue);
             } else if (key.equals(NekoConfig.largeAvatarInDrawer.getKey())) {
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
                 TransitionManager.beginDelayedTransition(profilePreviewCell);

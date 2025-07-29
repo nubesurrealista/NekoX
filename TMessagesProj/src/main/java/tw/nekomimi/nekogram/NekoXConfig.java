@@ -15,6 +15,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
@@ -486,5 +487,14 @@ public class NekoXConfig {
             }
         }
         return mutedAccountSet.contains(account);
+    }
+
+    public static void ensureSystemAccountState(int currentAccount, boolean disable) {
+        if (disable) {
+            ContactsController.getInstance(currentAccount).deleteUnknownAppAccounts();
+        } else {
+            for (int a : SharedConfig.activeAccounts)
+                ContactsController.getInstance(a).checkAppAccount();
+        }
     }
 }
