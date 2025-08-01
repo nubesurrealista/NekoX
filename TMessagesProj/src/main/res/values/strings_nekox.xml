@@ -274,4 +274,5 @@
     <string name="TranslationUnavailable">Official translation is unavailable, using alternative Google API</string>
     <string name="GrantMediaPermission">Grant media permission</string>
     <string name="IgnoreTopicTabView">Force classic topic view</string>
+    <string name="NoPreloadTrackIfRepeatOne">Don\'t preload next track if repeating single</string>
 </resources>

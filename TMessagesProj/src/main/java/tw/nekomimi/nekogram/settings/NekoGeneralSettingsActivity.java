@@ -283,6 +283,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell mapMobileDataSaverToRoamingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.mapMobileDataSaverToRoaming, LocaleController.getString(R.string.MapMobileDataSaverToRoamingNote)));
     private final AbstractConfigCell win32Row = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAutoDownloadingWin32Executable));
     private final AbstractConfigCell archiveRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAutoDownloadingArchive));
+    private final AbstractConfigCell noPreloadTrackIfRepeatOneRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.noPreloadTrackIfRepeatOne));
     private final AbstractConfigCell dividerAutoDownload = cellGroup.appendCell(new ConfigCellDivider());
 
     private ChatBlurAlphaSeekBar chatBlurAlphaSeekbar;
