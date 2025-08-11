@@ -90,6 +90,7 @@ import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.WebFile;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.messenger.utils.tlutils.AmountUtils;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
@@ -2641,6 +2642,7 @@ public class StarsIntroActivity extends GradientHeaderActivity implements Notifi
         public static final int TYPE_STAR_GIFT_TRANSFER = 11;
         public static final int TYPE_STAR_GIFT_BUY_CHANNEL = 12;
         public static final int TYPE_PRIVATE_MESSAGE = 13;
+        public static final int TYPE_STAR_GIFT_BUY_RESALE = 14;
 
         public StarsNeededSheet(
             Context context,
@@ -2706,6 +2708,8 @@ public class StarsIntroActivity extends GradientHeaderActivity implements Notifi
                 stringRes = "StarsNeededTextGiftTransfer";
             } else if (type == TYPE_BIZ) {
                 stringRes = "StarsNeededBizText";
+            } else if (type == TYPE_STAR_GIFT_BUY_RESALE) {
+                stringRes = "StarsNeededTextGiftBuyResale";
             } else {
                 stringRes = "StarsNeededText";
             }
@@ -5124,14 +5128,33 @@ public class StarsIntroActivity extends GradientHeaderActivity implements Notifi
         return sheet[0];
     }
 
-    public static BottomSheet showGiftResellPriceSheet(Context context, int currentAccount, Utilities.Callback2<Long, Runnable> whenDone, Theme.ResourcesProvider resourcesProvider) {
-        return showGiftResellPriceSheet(context, currentAccount, MessagesController.getInstance(currentAccount).starsStargiftResaleAmountMin, whenDone, resourcesProvider);
+    public static BottomSheet showGiftResellPriceSheet(Context context, int currentAccount, Utilities.Callback2<AmountUtils.Amount, Runnable> whenDone, Theme.ResourcesProvider resourcesProvider) {
+        return showGiftResellPriceSheet(context, currentAccount, null, null, whenDone, resourcesProvider);
     }
 
-    public static BottomSheet showGiftResellPriceSheet(Context context, int currentAccount, long amount, Utilities.Callback2<Long, Runnable> whenDone, Theme.ResourcesProvider resourcesProvider) {
-        final long min = MessagesController.getInstance(currentAccount).starsStargiftResaleAmountMin;
-        final long max = MessagesController.getInstance(currentAccount).starsStargiftResaleAmountMax;
-        final int commission = MessagesController.getInstance(currentAccount).starsStargiftResaleCommisionPermille;
+    public static BottomSheet showGiftResellPriceSheet(Context context, int currentAccount, @Nullable TL_stars.StarGift gift, @Nullable AmountUtils.Amount price, Utilities.Callback2<AmountUtils.Amount, Runnable> whenDone, Theme.ResourcesProvider resourcesProvider) {
+        if (price == null) {
+            if (gift == null) {
+                price = AmountUtils.Amount.fromDecimal(
+                    MessagesController.getInstance(currentAccount).config.starsStarGiftResaleAmountMin.get(),
+                    AmountUtils.Currency.STARS
+                );
+            } else if (gift.resale_ton_only) {
+                price = gift.getResellAmount(AmountUtils.Currency.TON);
+            } else {
+                price = gift.getResellAmount(AmountUtils.Currency.STARS);
+            }
+        }
+
+        SellGiftEnterPriceSheet[] sheets = new SellGiftEnterPriceSheet[1];
+        sheets[0] = new SellGiftEnterPriceSheet(context, resourcesProvider, currentAccount, price, (a) -> whenDone.run(a, () -> sheets[0].dismiss()));
+        sheets[0].show();
+        return sheets[0];
+
+
+        /*final long min = MessagesController.getInstance(currentAccount).config.starsStarGiftResaleAmountMin.get();
+        final long max = MessagesController.getInstance(currentAccount).config.starsStarGiftResaleAmountMax.get();
+        final int commission = MessagesController.getInstance(currentAccount).config.starsStarGiftResaleCommissionPermille.get();
 
         final BottomSheet.Builder b = new BottomSheet.Builder(context, false, resourcesProvider);
         final BottomSheet[] sheet = new BottomSheet[1];
@@ -5284,7 +5307,7 @@ public class StarsIntroActivity extends GradientHeaderActivity implements Notifi
                         AndroidUtilities.shakeViewSpring(editTextContainer);
                         return true;
                     }
-                    whenDone.run(price, () -> {
+                    whenDone.run(AmountUtils.Amount.fromDecimal(price, AmountUtils.Currency.STARS), () -> {
                         sheet[0].dismiss();
                     });
                 } else {
@@ -5310,7 +5333,7 @@ public class StarsIntroActivity extends GradientHeaderActivity implements Notifi
                     AndroidUtilities.shakeViewSpring(editTextContainer);
                     return;
                 }
-                whenDone.run(price, () -> {
+                whenDone.run(AmountUtils.Amount.fromDecimal(price, AmountUtils.Currency.STARS), () -> {
                     sheet[0].dismiss();
                 });
             } else {
@@ -5332,7 +5355,7 @@ public class StarsIntroActivity extends GradientHeaderActivity implements Notifi
             AndroidUtilities.runOnUIThread(() -> AndroidUtilities.showKeyboard(editText));
         }, keyboardVisible ? 200 : 80);
 
-        return sheet[0];
+        return sheet[0];*/
     }
 
     public static void setGiftImage(ImageReceiver imageReceiver, TLRPC.Document document, int size) {
@@ -5506,11 +5529,15 @@ public class StarsIntroActivity extends GradientHeaderActivity implements Notifi
             floatFormat = new DecimalFormat("0.################", new DecimalFormatSymbols(Locale.US));
         SpannableStringBuilder ssb = new SpannableStringBuilder();
         if (starsAmount instanceof TL_stars.TL_starsTonAmount) {
-            String str = floatFormat.format(starsAmount.amount / 1_000_000_000.0);
-            ssb.append(str);
-            int index;
-            if ((index = str.indexOf(".")) >= 0) {
-                ssb.setSpan(new RelativeSizeSpan(relativeSize), index, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if (starsAmount.amount % 1_000_000_000 != 0) {
+                String str = floatFormat.format(starsAmount.amount / 1_000_000_000.0);
+                ssb.append(str);
+                int index;
+                if ((index = str.indexOf(".")) >= 0) {
+                    ssb.setSpan(new RelativeSizeSpan(relativeSize), index, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            } else {
+                ssb.append((starsAmount.negative() ? "-" : "") + LocaleController.formatNumber(Math.abs(starsAmount.amount / 1_000_000_000L), symbol));
             }
         } else {
             final long amount = starsAmount.amount + (starsAmount.nanos < 0 && starsAmount.amount > 0 ? -1 : (starsAmount.nanos > 0 && starsAmount.amount < 0 ? +1 : 0));
@@ -5525,7 +5552,7 @@ public class StarsIntroActivity extends GradientHeaderActivity implements Notifi
                     ssb.setSpan(new RelativeSizeSpan(relativeSize), fromIndex + 1, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             } else {
-                ssb.append((negative ? "-" : "") + LocaleController.formatNumber(Math.abs(amount), ' '));
+                ssb.append((negative ? "-" : "") + LocaleController.formatNumber(Math.abs(amount), symbol));
             }
         }
         return ssb;
@@ -5577,6 +5604,8 @@ public class StarsIntroActivity extends GradientHeaderActivity implements Notifi
     public static CharSequence formatStarsAmountString(TL_stars.StarsAmount starsAmount, float relativeSize, char symbol) {
         SpannableStringBuilder ssb = new SpannableStringBuilder();
         if (starsAmount instanceof TL_stars.TL_starsTonAmount) {
+            if (floatFormat == null)
+                floatFormat = new DecimalFormat("0.################", new DecimalFormatSymbols(Locale.US));
             String str = floatFormat.format(starsAmount.amount / 1_000_000_000.0);
             ssb.append(str);
             int index;

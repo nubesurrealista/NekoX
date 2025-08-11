@@ -1945,6 +1945,7 @@ public class StarsController {
         final TLRPC.TL_inputInvoiceStarGiftResale inputInvoice = new TLRPC.TL_inputInvoiceStarGiftResale();
         inputInvoice.slug = gift.slug;
         inputInvoice.to_id = MessagesController.getInstance(currentAccount).getInputPeer(dialogId);
+        inputInvoice.ton = ton;
 
         final TLRPC.TL_payments_getPaymentForm req = new TLRPC.TL_payments_getPaymentForm();
         final JSONObject themeParams = BotWebViewSheet.makeThemeParams(resourcesProvider);
@@ -2002,6 +2003,7 @@ public class StarsController {
         final TLRPC.TL_inputInvoiceStarGiftResale inputInvoice = new TLRPC.TL_inputInvoiceStarGiftResale();
         inputInvoice.slug = gift.slug;
         inputInvoice.to_id = MessagesController.getInstance(currentAccount).getInputPeer(dialogId);
+        inputInvoice.ton = ton;
 
         final TLRPC.TL_payments_getPaymentForm req = new TLRPC.TL_payments_getPaymentForm();
         final JSONObject themeParams = BotWebViewSheet.makeThemeParams(resourcesProvider);

@@ -168,10 +168,18 @@ public class ApplicationLoader extends Application {
     }
 
     public static boolean isStandaloneBuild() {
-        return false;
+        return applicationLoaderInstance.isStandalone();
+    }
+
+    public static boolean isAndroidTestEnvironment() {
+        return applicationLoaderInstance.isAndroidTestEnv();
     }
 
     protected boolean isStandalone() {
+        return false;
+    }
+
+    protected boolean isAndroidTestEnv() {
         return false;
     }
 
