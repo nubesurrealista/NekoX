@@ -5703,6 +5703,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         idTextView.setTextSize(14);
         idTextView.setGravity(Gravity.LEFT);
         idTextView.setAlpha(1.0f);
+        frameLayout.addView(idTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 118, 0, 48, 0));
 
         ratingView = new StarRatingView(context);
         ratingView.setLayoutParams(LayoutHelper.createFrame(32, 32, Gravity.LEFT, 118 - 6, -2, 0, 0));
