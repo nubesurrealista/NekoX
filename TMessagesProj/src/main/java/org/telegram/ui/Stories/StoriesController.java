@@ -18,6 +18,7 @@ import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+// import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DialogObject;
@@ -50,7 +51,6 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.Vector;
 import org.telegram.tgnet.tl.TL_bots;
-import org.telegram.tgnet.tl.TL_stars;
 import org.telegram.tgnet.tl.TL_stories;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -83,7 +83,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import tw.nekomimi.nekogram.NekoConfig;
@@ -2480,7 +2479,7 @@ public class StoriesController {
 
     @Nullable
     private StoriesList getStoriesList(long dialogId, int type, int albumId, boolean createIfNotExist) {
-        if (type == StoriesList.TYPE_PINNED && albumId > 0) {
+        if (type == StoriesList.TYPE_ALBUMS && albumId > 0) {
             HashMap<Integer, StoriesList> map = storiesAlbumsLists.get(dialogId);
             if (map == null) {
                 map = new HashMap<>();
@@ -2559,6 +2558,16 @@ public class StoriesController {
         for (SearchStoriesList list : attachedSearchLists) {
             list.updateStories(storyItems);
         }
+        StoriesCollections collections = getStoryAlbumsList(dialogId, false);
+        if (collections != null && collections.collections != null) {
+            for (StoryAlbum album: collections.collections) {
+                StoriesList list = getStoriesList(dialogId, StoriesList.TYPE_ALBUMS, album.album_id, false);
+                if (list == null) {
+                    continue;
+                }
+                list.updateStories(storyItems);
+            }
+        }
     }
 
     public void updateDeletedStoriesInLists(long dialogId, List<TL_stories.StoryItem> storyItems) {
@@ -2575,7 +2584,7 @@ public class StoriesController {
         StoriesCollections collections = getStoryAlbumsList(dialogId, false);
         if (collections != null && collections.collections != null) {
             for (StoryAlbum album: collections.collections) {
-                StoriesList list = getStoriesList(dialogId, StoriesList.TYPE_PINNED, album.album_id, false);
+                StoriesList list = getStoriesList(dialogId, StoriesList.TYPE_ALBUMS, album.album_id, false);
                 if (list == null) {
                     continue;
                 }
@@ -2585,7 +2594,7 @@ public class StoriesController {
     }
 
     public void destroyStoryList(StoriesList list) {
-        if (list.type == StoriesList.TYPE_PINNED && list.albumId > 0) {
+        if (list.type == StoriesList.TYPE_ALBUMS && list.albumId > 0) {
             HashMap<Integer, StoriesList> map = storiesAlbumsLists.get(list.dialogId);
             if (map == null) {
                 return;
@@ -3094,6 +3103,7 @@ public class StoriesController {
         public static final int TYPE_STATISTICS = 2;
         public static final int TYPE_SEARCH = 3;
         public static final int TYPE_BOTS = 4;
+        public static final int TYPE_ALBUMS = TYPE_PINNED; // todo: separate types: 5;
 
         public final int currentAccount;
         public final long dialogId;
@@ -3206,7 +3216,11 @@ public class StoriesController {
             this.albumId = albumId;
             this.destroyRunnable = () -> destroy.run(this);
 
-            if (albumId > 0) {
+            /*if (BuildConfig.DEBUG_PRIVATE_VERSION && type != TYPE_ALBUMS && albumId > 0 || type == TYPE_ALBUMS && albumId <= 0) {
+                throw new IllegalArgumentException();
+            }*/
+
+            if (type == TYPE_ALBUMS && albumId > 0) {
                 cachedObjects = new LinkedHashSet<>();
                 loadedObjects = new LinkedHashSet<>();
             } else {
@@ -3390,6 +3404,16 @@ public class StoriesController {
             final ArrayList<Long> keys = new ArrayList<>(groupedByDay.keySet());
             Collections.sort(keys, (a, b) -> (int) (b - a));
             final ArrayList<ArrayList<Integer>> days = new ArrayList<>();
+
+            if (type == TYPE_ALBUMS && albumId > 0) {
+                final ArrayList<Integer> res = new ArrayList<>();
+                for (MessageObject m: messageObjects) {
+                    res.add(m.storyItem.id);
+                }
+                days.add(res);
+                return days;
+            }
+
             if (type == TYPE_PINNED && !pinnedIds.isEmpty()) {
                 days.add(new ArrayList<>(pinnedIds));
             }
@@ -3586,21 +3610,19 @@ public class StoriesController {
 
             final int offset_id;
             TLObject request;
-            if (type == TYPE_PINNED) {
-                if (albumId > 0) {
-                    TL_stories.TL_stories_getAlbumStories req = new TL_stories.TL_stories_getAlbumStories();
-                    req.album_id = albumId;
-                    req.peer = MessagesController.getInstance(currentAccount).getInputPeer(dialogId);
-                    req.offset = offset_id = loadedObjects.size(); //lastLoadedId();
-                    req.limit = count;
-                    request = req;
-                } else {
-                    TL_stories.TL_stories_getPinnedStories req = new TL_stories.TL_stories_getPinnedStories();
-                    req.peer = MessagesController.getInstance(currentAccount).getInputPeer(dialogId);
-                    req.offset_id = offset_id = lastLoadedId();
-                    req.limit = count;
-                    request = req;
-                }
+            if (type == TYPE_ALBUMS && albumId > 0) {
+                TL_stories.TL_stories_getAlbumStories req = new TL_stories.TL_stories_getAlbumStories();
+                req.album_id = albumId;
+                req.peer = MessagesController.getInstance(currentAccount).getInputPeer(dialogId);
+                req.offset = offset_id = loadedObjects.size();
+                req.limit = count;
+                request = req;
+            } else if (type == TYPE_PINNED) {
+                TL_stories.TL_stories_getPinnedStories req = new TL_stories.TL_stories_getPinnedStories();
+                req.peer = MessagesController.getInstance(currentAccount).getInputPeer(dialogId);
+                req.offset_id = offset_id = lastLoadedId();
+                req.limit = count;
+                request = req;
             } else if (type == TYPE_STATISTICS) {
                 TL_stories.TL_stories_getStoriesByID req = new TL_stories.TL_stories_getStoriesByID();
                 req.peer = MessagesController.getInstance(currentAccount).getInputPeer(dialogId);
@@ -3689,17 +3711,18 @@ public class StoriesController {
             return true;
         }
 
-//        public void invalidate() {
-//            resetCanLoad();
-//            final int wasCount = messageObjects.size();
-//            messageObjectsMap.clear();
-//            loadedObjects.clear();
-//            cachedObjects.clear();
-//            invalidateCache();
-//            done = false;
-//            error = false;
-//            load(true, Utilities.clamp(wasCount, 50, 10));
-//        }
+        public void reload() {
+            resetCanLoad();
+            final int wasCount = messageObjects.size();
+            messageObjectsMap.clear();
+            loadedObjects.clear();
+            cachedObjects.clear();
+            invalidateCache();
+            done = false;
+            error = false;
+            load(true, Utilities.clamp(wasCount, 50, 10));
+        }
+
 
         public void updateDeletedStories(List<TL_stories.StoryItem> storyItems) {
             FileLog.d("StoriesList " + type + "{"+ dialogId +"} updateDeletedStories {" + storyItemIds(storyItems) + "}");
@@ -3756,13 +3779,18 @@ public class StoriesController {
                 return;
             }
             boolean changed = false;
+            ArrayList<Integer> newStories = new ArrayList<>();
             for (int i = 0; i < storyItems.size(); ++i) {
                 TL_stories.StoryItem storyItem = storyItems.get(i);
                 if (storyItem == null) {
                     continue;
                 }
                 boolean contains = loadedObjects.contains(storyItem.id) || cachedObjects.contains(storyItem.id);
-                boolean shouldContain = type == TYPE_ARCHIVE || albumId > 0 ? true : storyItem.pinned;
+                boolean shouldContain = type == TYPE_ARCHIVE || storyItem.pinned;
+                if (albumId > 0) {
+                    shouldContain = storyItem.albums != null && storyItem.albums.contains(albumId);
+                }
+
                 if (storyItem instanceof TL_stories.TL_storyItemDeleted) {
                     shouldContain = false;
                 }
@@ -3775,10 +3803,16 @@ public class StoriesController {
                             totalCount--;
                         }
                     } else {
-                        FileLog.d("StoriesList put story " + storyItem.id);
-                        pushObject(toMessageObject(storyItem, null), false);
-                        if (totalCount != -1) {
-                            totalCount++;
+                        if (done) {
+                            FileLog.d("StoriesList put story " + storyItem.id);
+                            pushObject(toMessageObject(storyItem, null), false);
+                            newStories.add(storyItem.id);
+                            if (totalCount != -1) {
+                                totalCount++;
+                            }
+                        } else if (!loading) {
+                            FileLog.d("StoriesList cannot put story " + storyItem.id + " -> reload");
+                            reload();
                         }
                     }
                 } else if (contains && shouldContain) {
@@ -3789,6 +3823,9 @@ public class StoriesController {
                         changed = true;
                     }
                 }
+            }
+            if (albumId > 0 && !newStories.isEmpty()) {
+                updateOrderInAlbum(newStories, false);
             }
             if (changed) {
                 fill(true);
@@ -3914,7 +3951,7 @@ public class StoriesController {
             return hitLimit;
         }
 
-        public void updateOrderInAlbum(ArrayList<Integer> ids, boolean apply) {
+        public void updateOrderInAlbum(List<Integer> ids, boolean apply) {
             reorder(cachedObjects, ids);
             reorder(loadedObjects, ids);
             fill(false);
@@ -4562,7 +4599,11 @@ public class StoriesController {
     }
 
     public void createAlbum(long dialogId, String name) {
-        getStoryAlbumsList(dialogId).createCollection(name, null);
+        createAlbum(dialogId, name, null);
+    }
+
+    public void createAlbum(long dialogId, String name, Utilities.Callback<StoryAlbum> onCreate) {
+        getStoryAlbumsList(dialogId).createCollection(name, onCreate);
     }
 
     public void renameAlbum(long dialogId, int albumId, String name) {
@@ -4845,11 +4886,23 @@ public class StoriesController {
                 req.add_stories.add(item.id);
             }
 
+            for (TL_stories.StoryItem item: storyItems) {
+                if (item.albums == null) {
+                    item.albums = new ArrayList<>();
+                    item.albums.add(album_id);
+                } else if (!item.albums.contains(album_id)) {
+                    item.albums.add(album_id);
+                }
+            }
+
             ConnectionsManager.getInstance(currentAccount).sendRequest(req, null);
-            getStoriesList(dialogId, StoriesList.TYPE_PINNED, album_id).updateStories(storyItems);
+            StoriesList l = getStoriesList(dialogId, StoriesList.TYPE_ALBUMS, album_id, false);
+            if (l != null) {
+                l.updateStories(storyItems);
+            }
 
             for (StoryAlbum album: collections) {
-                StoriesList list = getStoriesList(dialogId, StoriesList.TYPE_PINNED, album.album_id, false);
+                StoriesList list = getStoriesList(dialogId, StoriesList.TYPE_ALBUMS, album.album_id, false);
                 if (list == null) {
                     continue;
                 }
@@ -4866,11 +4919,23 @@ public class StoriesController {
                 req.delete_stories.add(item.id);
             }
 
+            for (TL_stories.StoryItem item: storyItems) {
+                if (item.albums != null) {
+                    item.albums.remove((Integer) album_id);
+                    if (item.albums.isEmpty()) {
+                        item.albums = null;
+                    }
+                }
+            }
+
             ConnectionsManager.getInstance(currentAccount).sendRequest(req, null);
-            getStoriesList(dialogId, StoriesList.TYPE_PINNED, album_id).updateDeletedStories(storyItems);
+            StoriesList l = getStoriesList(dialogId, StoriesList.TYPE_ALBUMS, album_id, false);
+            if (l != null) {
+                l.updateDeletedStories(storyItems);
+            }
 
             for (StoryAlbum album: collections) {
-                StoriesList list = getStoriesList(dialogId, StoriesList.TYPE_PINNED, album.album_id, false);
+                StoriesList list = getStoriesList(dialogId, StoriesList.TYPE_ALBUMS, album.album_id, false);
                 if (list == null) {
                     continue;
                 }
