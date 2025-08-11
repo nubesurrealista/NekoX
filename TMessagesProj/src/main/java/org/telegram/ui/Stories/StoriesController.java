@@ -4846,7 +4846,7 @@ public class StoriesController {
             }
 
             ConnectionsManager.getInstance(currentAccount).sendRequest(req, null);
-            getStoriesList(dialogId, StoriesList.TYPE_PINNED, album_id).updateStories(storyItems, true);
+            getStoriesList(dialogId, StoriesList.TYPE_PINNED, album_id).updateStories(storyItems);
 
             for (StoryAlbum album: collections) {
                 StoriesList list = getStoriesList(dialogId, StoriesList.TYPE_PINNED, album.album_id, false);
