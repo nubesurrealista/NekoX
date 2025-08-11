@@ -46615,8 +46615,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         options.add(nkbtn_repeat);
                         icons.add(R.drawable.msg_repeat);
                     }
-                    boolean allowViewHistory = currentUser == null
-                            && (currentChat != null && !currentChat.broadcast && message.isFromUser());
 
                     if (NekoConfig.showDeleteDownloadedFile.Bool() && TelegramUtil.messageObjectIsFile(type, selectedObject)) {
                         items.add(LocaleController.getString(R.string.DeleteDownloadedFile));
@@ -46624,11 +46622,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         icons.add(R.drawable.baseline_delete_sweep_24);
                     }
 
-                    if (allowViewHistory && NekoConfig.showViewHistory.Bool()) {
-                        items.add(LocaleController.getString(R.string.ViewHistory));
-                        options.add(nkbtn_view_history);
-                        icons.add(R.drawable.baseline_schedule_24);
-                    }
                     MessageObject messageObject = getMessageForTranslate();
                     boolean docsWithMessages = false;
                     if (selectedObjectGroup != null && selectedObjectGroup.isDocuments) {
@@ -46677,11 +46670,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             icons.add(R.drawable.baseline_vpn_key_24);
                         }
                     }
-                }
-                if (NekoConfig.showMessageDetails.Bool()) {
-                    items.add(LocaleController.getString(R.string.MessageDetails));
-                    options.add(nkbtn_detail);
-                    icons.add(R.drawable.menu_info);
                 }
                 if (NekoConfig.showMessageHide.Bool()) {
                     items.add(LocaleController.getString(R.string.Hide));
@@ -46939,6 +46927,23 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }
                     }
                 }
+            }
+        }
+        if (currentEncryptedChat == null) {
+            FileLog.d("030-menu: fillMessageMenu, type=" + type);
+
+            boolean allowViewHistory = currentUser == null
+                    && (currentChat != null && !currentChat.broadcast && message.isFromUser());
+            if (allowViewHistory && NekoConfig.showViewHistory.Bool() && selectedObject.messageOwner.from_id != null) {
+                items.add(LocaleController.getString(R.string.ViewHistory));
+                options.add(nkbtn_view_history);
+                icons.add(R.drawable.baseline_schedule_24);
+            }
+
+            if (NekoConfig.showMessageDetails.Bool()) {
+                items.add(LocaleController.getString(R.string.MessageDetails));
+                options.add(nkbtn_detail);
+                icons.add(R.drawable.menu_info);
             }
         }
     }
