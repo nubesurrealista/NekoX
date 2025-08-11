@@ -399,8 +399,8 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
             AndroidUtilities.removeFromParent(replaceWith);
         }
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && SharedConfig.debugWebView) {
-                WebView.setWebContentsDebuggingEnabled(true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                WebView.setWebContentsDebuggingEnabled(SharedConfig.debugWebView && !isVerifyingAge());
             }
         } catch (Exception e) {
             FileLog.e(e);
@@ -448,6 +448,9 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 settings.setSafeBrowsingEnabled(!disableSafeBrowsing);
             }
+        }
+        if (isVerifyingAge()) {
+            settings.setMediaPlaybackRequiresUserGesture(false);
         }
 
         if (disableSafeBrowsing && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -2670,6 +2673,28 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
                 }
                 break;
             }
+            case "web_app_verify_age": {
+                if (onVerifiedAge != null) {
+                    final boolean passed;
+                    final double age;
+                    final String gender;
+                    final double genderProbability;
+                    try {
+                        JSONObject o = new JSONObject(eventData);
+                        passed = o.getBoolean("passed");
+                        age = o.getDouble("age");
+                        gender = o.optString("gender");
+                        genderProbability = o.optDouble("genderProbability");
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                        return;
+                    }
+                    AndroidUtilities.runOnUIThread(() -> {
+                        onVerifiedAge.run(passed, age, gender, genderProbability);
+                    });
+                }
+                break;
+            }
             default: {
                 FileLog.d("unknown webapp event " + eventType);
                 break;
@@ -3840,7 +3865,9 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
 
                 @Override
                 public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                    getSettings().setMediaPlaybackRequiresUserGesture(true);
+                    if (botWebViewContainer == null || !botWebViewContainer.isVerifyingAge()) {
+                        getSettings().setMediaPlaybackRequiresUserGesture(true);
+                    }
                     if (currentSheet != null) {
                         currentSheet.dismiss();
                         currentSheet = null;
@@ -4324,6 +4351,11 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
                             return;
                         }
 
+                        if (botWebViewContainer.isVerifyingAge()) {
+                            request.grant(resources);
+                            return;
+                        }
+
                         switch (resource) {
                             case PermissionRequest.RESOURCE_AUDIO_CAPTURE: {
                                 lastPermissionsDialog = AlertsCreator.createWebViewPermissionsRequestDialog(
@@ -4684,7 +4716,9 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
         public boolean onTouchEvent(MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 botWebViewContainer.lastClickMs = System.currentTimeMillis();
-                getSettings().setMediaPlaybackRequiresUserGesture(false);
+                if (!botWebViewContainer.isVerifyingAge()) {
+                    getSettings().setMediaPlaybackRequiresUserGesture(false);
+                }
             }
             return super.onTouchEvent(event);
         }
@@ -5025,4 +5059,13 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
             return null;
         }
     }
+
+    private Utilities.Callback4<Boolean, Double, String, Double> onVerifiedAge;
+    private boolean isVerifyingAge() {
+        return onVerifiedAge != null;
+    }
+    public void setOnVerifiedAge(Utilities.Callback4<Boolean, Double, String, Double> callback) {
+        onVerifiedAge = callback;
+    }
+
 }
