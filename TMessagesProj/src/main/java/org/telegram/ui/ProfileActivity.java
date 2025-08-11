@@ -5698,6 +5698,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
         checkPhotoDescriptionAlpha();
         avatarContainer2.addView(animatedStatusView);
+        idTextView = new SimpleTextView(context);
+        idTextView.setTextColor(applyPeerColor(getThemedColor(Theme.key_avatar_subtitleInProfileBlue), true, false));
+        idTextView.setTextSize(14);
+        idTextView.setGravity(Gravity.LEFT);
+        idTextView.setAlpha(1.0f);
 
         ratingView = new StarRatingView(context);
         ratingView.setLayoutParams(LayoutHelper.createFrame(32, 32, Gravity.LEFT, 118 - 6, -2, 0, 0));
