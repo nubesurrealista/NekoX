@@ -8655,7 +8655,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (uid == userId) {
                 userInfo = (TLRPC.UserFull) args[1];
                 if (ratingView != null) {
-                    ratingView.set(userInfo.stars_rating);
+                    ratingView.set(NekoXConfig.getProfileRating(currentAccount, userInfo));
                 }
                 if (storyView != null) {
                     storyView.setStories(userInfo.stories);
@@ -9607,7 +9607,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     ) {
         userInfo = value;
         if (ratingView != null) {
-            ratingView.set(userInfo.stars_rating);
+            ratingView.set(NekoXConfig.getProfileRating(currentAccount, value));
         }
         if (storyView != null) {
             storyView.setStories(userInfo.stories);

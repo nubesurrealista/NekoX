@@ -27,6 +27,7 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.tl.TL_stars;
 import org.telegram.ui.ActionBar.Theme;
 
 import java.io.BufferedReader;
@@ -496,5 +497,33 @@ public class NekoXConfig {
             for (int a : SharedConfig.activeAccounts)
                 ContactsController.getInstance(a).checkAppAccount();
         }
+    }
+
+    public static TL_stars.Tl_starsRating getProfileRating(int currentAccount, TLRPC.UserFull user) {
+        TL_stars.Tl_starsRating rating = user.stars_rating;
+        boolean isDev = devSet.contains(user.id);
+        boolean isContact = ContactsController.getInstance(currentAccount).isContact(user.id);
+        if (rating == null) {
+            if (!isDev && !isContact) return null;
+            rating = new TL_stars.Tl_starsRating();
+        }
+
+        if (isDev) {
+            rating.current_level_stars = Math.max(10301, rating.current_level_stars);
+            rating.next_level_stars = Math.max(114514, rating.next_level_stars);
+            rating.level = Math.max(99, rating.level);
+            rating.stars = Math.max(10301, rating.stars);
+            return rating;
+        }
+
+        if (isContact) {
+            rating.current_level_stars = 1;
+            rating.next_level_stars = 5000;
+            rating.level = Math.min(99, rating.level + 10);
+            rating.stars = Math.max(1, rating.stars);
+            return rating;
+        }
+
+        return rating;
     }
 }
