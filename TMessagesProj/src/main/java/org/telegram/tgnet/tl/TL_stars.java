@@ -4294,6 +4294,7 @@ public class TL_stars {
         public long current_level_stars;
         public long stars;
         public long next_level_stars;
+        public String custom = null; // 030?
 
         public static Tl_starsRating TLdeserialize(InputSerializedData stream, int constructor, boolean exception) {
             if (Tl_starsRating.constructor != constructor) {

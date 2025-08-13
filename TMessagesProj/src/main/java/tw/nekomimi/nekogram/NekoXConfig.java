@@ -509,18 +509,23 @@ public class NekoXConfig {
         }
 
         if (isDev) {
-            rating.current_level_stars = Math.max(10301, rating.current_level_stars);
-            rating.next_level_stars = Math.max(114514, rating.next_level_stars);
+            if (rating.stars == 0 || rating.next_level_stars == 0) {
+                rating.current_level_stars = Math.max(10301, rating.current_level_stars);
+                rating.next_level_stars = Math.max(114514, rating.next_level_stars);
+                rating.stars = Math.max(10301, rating.stars);
+            }
             rating.level = Math.max(99, rating.level);
-            rating.stars = Math.max(10301, rating.stars);
             return rating;
         }
 
         if (isContact) {
-            rating.current_level_stars = 1;
-            rating.next_level_stars = 5000;
+            if (rating.stars == 0 || rating.next_level_stars == 0) {
+                rating.current_level_stars = 1;
+                rating.next_level_stars = 5000;
+                rating.stars = Math.max(1, rating.stars);
+            }
+            rating.custom = "🤝";
             rating.level = Math.min(99, rating.level + 10);
-            rating.stars = Math.max(1, rating.stars);
             return rating;
         }
 

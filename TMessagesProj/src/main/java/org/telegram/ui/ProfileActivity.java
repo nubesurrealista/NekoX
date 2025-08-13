@@ -6297,21 +6297,21 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         final float onlineTextViewX = (1 - value) * (1 - value) * onlineX + 2 * (1 - value) * value * onlineTextViewCx + value * value * onlineTextViewXEnd;
         final float onlineTextViewY = (1 - value) * (1 - value) * onlineY + 2 * (1 - value) * value * onlineTextViewCy + value * value * onlineTextViewYEnd;
 
-        final float idTextViewXEnd = AndroidUtilities.dpf2(16f) - idTextView.getLeft();
-        final float idTextViewYEnd = newTop + extraHeight - AndroidUtilities.dpf2(3f) - idTextView.getBottom();
-        final float idTextViewCx = k + idX + (idTextViewXEnd - idX) / 2f;
-        final float idTextViewCy = k + idY + (idTextViewYEnd - idY) / 2f;
-        final float idTextViewX = (1 - value) * (1 - value) * idX + 2 * (1 - value) * value * idTextViewCx + value * value * idTextViewXEnd;
-        final float idTextViewY = (1 - value) * (1 - value) * idY + 2 * (1 - value) * value * idTextViewCy + value * value * idTextViewYEnd;
-
         nameTextView[1].setTranslationX(nameTextViewX);
         nameTextView[1].setTranslationY(nameTextViewY);
         onlineTextView[1].setTranslationX(getOnlineTextViewTranslationXWithOffsets(onlineTextViewX));
         onlineTextView[1].setTranslationY(getOnlineTextViewTranslationYWithOffsets(onlineTextViewY));
-        idTextView.setTranslationX(idTextViewX);
-        idTextView.setTranslationY(idTextViewY);
         mediaCounterTextView.setTranslationX(onlineTextViewX);
         mediaCounterTextView.setTranslationY(onlineTextViewY);
+
+        final float idTextViewXEnd = AndroidUtilities.dpf2(16f) - idTextView.getLeft();
+        final float idTextViewYEnd = newTop + extraHeight - AndroidUtilities.dpf2(3f) - idTextView.getBottom();
+        final float idTextViewCx = k + idX + (idTextViewXEnd - idX) / 2f;
+        final float idTextViewCy = k + idY + (idTextViewYEnd - idY) / 2f;
+        final float idTextViewX = (1 - value) * (1 - value) * idX + 2 * (1 - value) * value * idTextViewCx + value * value * idTextViewXEnd + onlineTextXOffsets;
+        final float idTextViewY = (1 - value) * (1 - value) * idY + 2 * (1 - value) * value * idTextViewCy + value * value * idTextViewYEnd;// + ((ratingView == null) ? 0 : dp(4) + onlineTextYOffsets);
+        idTextView.setTranslationX(idTextViewX);
+        idTextView.setTranslationY(idTextViewY);
         final Object onlineTextViewTag = onlineTextView[1].getTag();
         int statusColor;
         boolean online = false;
@@ -8271,7 +8271,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 onlineX = -21 * AndroidUtilities.density * diff;
                 onlineY = (float) Math.floor(avatarY) + AndroidUtilities.dp(24) + (float) Math.floor(11 * AndroidUtilities.density) * diff;
                 idX = -21 * AndroidUtilities.density * diff;
-                idY = (float) Math.floor(avatarY) + AndroidUtilities.dp(32) + (float) Math.floor(22 * AndroidUtilities.density) * diff;
+                idY = (float) Math.floor(avatarY) + AndroidUtilities.dp(32) + (float) Math.floor(22 * AndroidUtilities.density) * diff + ((ratingView == null) ? 0 : dp(4) + onlineTextYOffsets);
                 if (showStatusButton != null) {
                     showStatusButton.setAlpha((int) (0xFF * diff));
                 }
@@ -8351,7 +8351,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         onlineX = AndroidUtilities.dp(-21f) + avatarContainer.getMeasuredWidth() * (avatarScale - (42f + 18f) / 42f);
         onlineY = (float) Math.floor(avatarY) + AndroidUtilities.dp(24) + (float) Math.floor(11 * AndroidUtilities.density) + avatarContainer.getMeasuredHeight() * (avatarScale - (42f + 18f) / 42f) / 2f;
         idX = AndroidUtilities.dp(-21f) + avatarImage.getMeasuredWidth() * (avatarScale - (42f + 18f) / 42f);
-        idY = (float) Math.floor(avatarY) + AndroidUtilities.dp(32) + (float) Math.floor(22 * AndroidUtilities.density) + avatarImage.getMeasuredHeight() * (avatarScale - (42f + 18f) / 42f) / 2f;
+        idY = (float) Math.floor(avatarY) + AndroidUtilities.dp(32) + (float) Math.floor(22 * AndroidUtilities.density) + avatarImage.getMeasuredHeight() * (avatarScale - (42f + 18f) / 42f) / 2f + ((ratingView == null) ? 0 : dp(4) + onlineTextYOffsets);
     }
 
     public RecyclerListView getListView() {
@@ -14842,12 +14842,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
     }
 
+    private float onlineTextXOffsets = 0f, onlineTextYOffsets = 0f;
     private float getOnlineTextViewTranslationXWithOffsets(float onlineX) {
-        return onlineX + customPhotoOffset + getRatingViewTranslationXOffset();
+        return onlineX + (onlineTextXOffsets = (customPhotoOffset + getRatingViewTranslationXOffset()));
     }
 
     private float getOnlineTextViewTranslationYWithOffsets(float onlineY) {
-        return onlineY + getRatingViewTranslationYOffset();
+        return onlineY + (onlineTextYOffsets = getRatingViewTranslationYOffset());
     }
 
     private float lastRatingViewTranslationXOffset;
@@ -15654,7 +15655,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private void showStarRatingBottomSheet(View ignoreView) {
         final Context context = getContext();
         final TLRPC.UserFull userFull = getUserInfo();
-        if (userFull == null || userFull.stars_rating == null) {
+        final TL_stars.Tl_starsRating starsRating = NekoXConfig.getProfileRating(currentAccount, userFull);
+        if (userFull == null || starsRating == null) {
             return;
         }
 
@@ -15670,17 +15672,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         {
             limitPreviewView = new LimitPreviewView(getContext(), R.drawable.filled_rating_crown, 0, 0, resourcesProvider);
             limitPreviewView.setHideNegativeValues(getDialogId() != UserConfig.getInstance(currentAccount).getClientUserId());
-            limitPreviewView.setStarRating(userFull.stars_rating);
+            limitPreviewView.setStarRating(starsRating);
             limitPreviewView.setTranslationY(-dp(14));
             linearLayout.addView(limitPreviewView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0, 20, 0, 10));
         }
 
         if (BuildVars.DEBUG_PRIVATE_VERSION && userFull.stars_my_pending_rating == null) {
             userFull.stars_my_pending_rating = new TL_stars.Tl_starsRating();
-            userFull.stars_my_pending_rating.current_level_stars = userFull.stars_rating.stars < 0 ? 0 : userFull.stars_rating.current_level_stars;
-            userFull.stars_my_pending_rating.next_level_stars = userFull.stars_rating.next_level_stars + 1000;
-            userFull.stars_my_pending_rating.level = userFull.stars_rating.level + 1;
-            userFull.stars_my_pending_rating.stars = userFull.stars_rating.next_level_stars + 500;
+            userFull.stars_my_pending_rating.current_level_stars = starsRating.stars < 0 ? 0 : starsRating.current_level_stars;
+            userFull.stars_my_pending_rating.next_level_stars = starsRating.next_level_stars + 1000;
+            userFull.stars_my_pending_rating.level = starsRating.level + 1;
+            userFull.stars_my_pending_rating.stars = starsRating.next_level_stars + 500;
             userFull.stars_my_pending_rating_date = ConnectionsManager.getInstance(currentAccount).getCurrentTime() + 60 * 60 * 24 * 21;
         }
 
@@ -15727,14 +15729,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
             final boolean isSelf = getDialogId() == UserConfig.getInstance(currentAccount).getClientUserId();
 
-            final long dcurrent = userFull.stars_rating.stars;
-            final long dpoints = userFull.stars_my_pending_rating != null ? userFull.stars_my_pending_rating.stars - userFull.stars_rating.stars : 0;
+            final long dcurrent = starsRating.stars;
+            final long dpoints = userFull.stars_my_pending_rating != null ? userFull.stars_my_pending_rating.stars - starsRating.stars : 0;
             final long debt = -dcurrent - dpoints;
             final int days = Math.max(1, (userFull.stars_my_pending_rating_date - ConnectionsManager.getInstance(currentAccount).getCurrentTime()) / (24 * 60 * 60));
-            final long points = userFull.stars_my_pending_rating.stars - userFull.stars_rating.stars;
+            final long points = userFull.stars_my_pending_rating.stars - starsRating.stars;
 
             SpannableStringBuilder sb;
-            if (userFull.stars_rating.stars < 0 && !isSelf || isSelf && debt > 0) {
+            if (starsRating.stars < 0 && !isSelf || isSelf && debt > 0) {
                 textView[0].setTextColor(Theme.getColor(Theme.key_text_RedBold));
                 if (isSelf) {
                     textView[0].setText(AndroidUtilities.replaceTags(formatPluralStringComma("StarRatingLevelNegativeYou", (int) debt)));
@@ -15749,11 +15751,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 ));
                 sb.append(" ");
                 sb.append(AndroidUtilities.replaceArrows(AndroidUtilities.premiumText(getString(R.string.StarRatingFuturePendingPointsPreview), () -> {
-                    limitPreviewView.animateStarRating(userFull.stars_rating, userFull.stars_my_pending_rating);
+                    limitPreviewView.animateStarRating(starsRating, userFull.stars_my_pending_rating);
                     update.run(true);
                 }), true));
                 textView[0].setOnClickListener(v -> {
-                    limitPreviewView.animateStarRating(userFull.stars_rating, userFull.stars_my_pending_rating);
+                    limitPreviewView.animateStarRating(starsRating, userFull.stars_my_pending_rating);
                     update.run(true);
                 });
                 textView[0].setText(sb);
@@ -15766,11 +15768,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             ));
             sb.append(" ");
             sb.append(AndroidUtilities.replaceArrows(AndroidUtilities.premiumText(getString(R.string.StarRatingFuturePendingPointsPreviewBack), () -> {
-                limitPreviewView.animateStarRating(userFull.stars_my_pending_rating, userFull.stars_rating);
+                limitPreviewView.animateStarRating(userFull.stars_my_pending_rating, starsRating);
                 update.run(false);
             }), true));
             textView[1].setOnClickListener(v -> {
-                limitPreviewView.animateStarRating(userFull.stars_my_pending_rating, userFull.stars_rating);
+                limitPreviewView.animateStarRating(userFull.stars_my_pending_rating, starsRating);
                 update.run(false);
             });
             textView[1].setText(sb);
@@ -15810,6 +15812,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             cell.description.setText(LocaleController.formatSpannable(R.string.StarRatingDescription2, createNewSpan(getString(R.string.StarRatingAdded), Theme.getColor(Theme.key_featuredStickers_addButton, resourcesProvider))));
             cell.nextIcon.setVisibility(View.GONE);
             cell.imageView.setImageResource(R.drawable.menu_stars_gift);
+            cell.imageView.setColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider));
+            linearLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 6, 0, 6, -2));
+        }
+        // 030
+        if (NekoConfig.boostedContactRatingInProfile.Bool()) {
+            PremiumFeatureCell cell = new PremiumFeatureCell(context, resourcesProvider);
+            cell.title.setText(getString(R.string.BoostedContactRatingInProfile));
+            cell.description.setText(LocaleController.formatSpannable(R.string.BoostedContactRatingInProfileDesc, createNewSpan(getString(R.string.StarRatingAdded), Theme.getColor(Theme.key_featuredStickers_addButton, resourcesProvider))));
+            cell.nextIcon.setVisibility(View.GONE);
+            cell.imageView.setImageResource(R.drawable.menu_contact_existing);
             cell.imageView.setColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider));
             linearLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 6, 0, 6, -2));
         }

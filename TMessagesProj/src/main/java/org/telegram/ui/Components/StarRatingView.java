@@ -55,6 +55,7 @@ public class StarRatingView extends View {
             return;
         }
 
+        drawable.setText(starsRating.custom);
         drawable.setBadgeLevel(starsRating.level, true);
         invalidate();
     }

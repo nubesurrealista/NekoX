@@ -31,6 +31,7 @@ public class BadgeLevelDrawable extends Drawable implements Drawable.Callback {
 
     private int lastLevelIndex;
     private int level;
+    private String customText = null;
 
     // private final Runnable update = this::debugUpdateStart;
 
@@ -48,7 +49,8 @@ public class BadgeLevelDrawable extends Drawable implements Drawable.Callback {
 
     public void setBadgeLevel(int level, boolean animated) {
         if (this.level != level || inner == null || outer == null) {
-            text.setText(level >= 0 ? Integer.toString(level) : "!", animated);
+            if (customText != null) text.setText(customText);
+            else text.setText(level >= 0 ? Integer.toString(level) : "!", animated);
             setLevelIndex(getIndexByLevel(this.level = level));
             invalidateSelf();
         }
@@ -171,6 +173,10 @@ public class BadgeLevelDrawable extends Drawable implements Drawable.Callback {
         if (outer != null) {
             outer.setBounds(getBounds());
         }
+    }
+
+    public void setText(String v) {
+        customText = v;
     }
 
     private static @DrawableRes int[] res;
