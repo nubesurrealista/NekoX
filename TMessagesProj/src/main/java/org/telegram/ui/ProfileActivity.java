@@ -8412,7 +8412,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (prevWidth != layoutParams.width) {
             onlineTextView[2].getLayoutParams().width = layoutParams.width;
             onlineTextView[2].requestLayout();
-            onlineTextView[3].getLayoutParams().width = layoutParams.width;
+            if (onlineTextView[3].getLayoutParams() != null) // WTF
+                onlineTextView[3].getLayoutParams().width = layoutParams.width;
             onlineTextView[3].requestLayout();
             onlineTextView[1].requestLayout();
             mediaCounterTextView.requestLayout();
