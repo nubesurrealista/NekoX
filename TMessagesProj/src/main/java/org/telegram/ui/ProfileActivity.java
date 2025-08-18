@@ -7430,12 +7430,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         TLObject target = userInfo.user;
         long targetId = dialogId;
         if (targetId == 0 || target == null) {
-            AndroidUtilities.runOnUIThread(() -> {
-                bulletinFactory.createSimpleBulletin(R.raw.error, "ERR_GET_TARGET").show();
-            });
+            if (target != null && ((TLRPC.User) target).id != 0) {
+                targetId = ((TLRPC.User) target).id;
+            } else {
+                AndroidUtilities.runOnUIThread(() -> {
+                    bulletinFactory.createSimpleBulletin(R.raw.error, "ERR_GET_TARGET").show();
+                });
+            }
             return;
         }
-        Log.d("030-fban", String.format("%s %d", target != null, targetId));
+        Log.d("030-fban", String.format("banning %d", targetId));
         getMessagesController().banUserFromAllModeratingChat(target, (response, error) -> {
             Log.d("030-fban", String.format("r: %s %s, e: %s %s",
                     response != null, (response == null ? "" : response.getClass().getName()),
