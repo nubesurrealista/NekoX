@@ -46261,6 +46261,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     items.add(LocaleController.formatPluralString("ViewReplies", primaryMessage.getRepliesCount()));
                     options.add(OPTION_VIEW_REPLIES_OR_THREAD);
                     icons.add(R.drawable.msg_viewreplies);
+                } else if (isThreadChat() && !isTopic && chatMode != MODE_SCHEDULED && currentChat != null) {
+                    options.add(nkbtn_view_in_chat);
+                    icons.add(R.drawable.baseline_forum_24);
+                    items.add(LocaleController.getString(R.string.ViewInChat));
                 }
                 if (selectedObject != null && selectedObject.messageOwner != null && selectedObject.messageOwner.action == null && currentChat != null && currentChat.forum && !isTopic && selectedObject.messageOwner != null && selectedObject.messageOwner.reply_to != null && selectedObject.messageOwner.reply_to.forum_topic) {
                     items.add(LocaleController.getString(R.string.ViewInTopic));
@@ -46366,6 +46370,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                     options.add(OPTION_VIEW_REPLIES_OR_THREAD);
                     icons.add(R.drawable.baseline_forum_24);
+                } else if (isThreadChat() && !isTopic && chatMode != MODE_SCHEDULED && currentChat != null) {
+                    options.add(nkbtn_view_in_chat);
+                    icons.add(R.drawable.baseline_forum_24);
+                    items.add(LocaleController.getString(R.string.ViewInChat));
                 }
                 if (!selectedObject.isSponsored() && chatMode != MODE_SCHEDULED && !ChatObject.isMonoForum(currentChat) && selectedObject.getDialogId() != mergeDialogId) {
                     items.add(LocaleController.getString(R.string.CopyLink));
@@ -46760,6 +46768,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                     options.add(OPTION_VIEW_REPLIES_OR_THREAD);
                     icons.add(R.drawable.msg_viewreplies);
+                } else if (isThreadChat() && !isTopic && chatMode != MODE_SCHEDULED && currentChat != null) {
+                    options.add(nkbtn_view_in_chat);
+                    icons.add(R.drawable.baseline_forum_24);
+                    items.add(LocaleController.getString(R.string.ViewInChat));
                 }
                 if (selectedObject != null && selectedObject.messageOwner != null && selectedObject.messageOwner.action == null && currentChat != null && currentChat.forum && !isTopic && selectedObject.messageOwner != null && selectedObject.messageOwner.reply_to != null && selectedObject.messageOwner.reply_to.forum_topic) {
                     items.add(LocaleController.getString(R.string.ViewInTopic));
