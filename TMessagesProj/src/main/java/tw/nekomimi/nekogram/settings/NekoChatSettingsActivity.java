@@ -144,6 +144,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
 
     private final AbstractConfigCell increasedMaxPhotoResolutionRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.increasedMaxPhotoResolution));
     private final AbstractConfigCell enhancedVideoBitrateRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.enhancedVideoBitrate, LocaleController.getString(R.string.EnhancedVideoBitrateInfo)));
+    private final AbstractConfigCell noStarReactionPlaceholderRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.noStarReactionPlaceholder));
     private final AbstractConfigCell dividerInteractions = cellGroup.appendCell(new ConfigCellDivider());
 
     // Sticker

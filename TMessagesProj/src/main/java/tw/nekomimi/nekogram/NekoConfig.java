@@ -369,6 +369,7 @@ public class NekoConfig {
     public static ConfigItem ignoreTopicTabView = addConfig(R.string.IgnoreTopicTabView, "IgnoreTopicTabView", configTypeBool, CHAT, false);
     public static ConfigItem noPreloadTrackIfRepeatOne = addConfig(R.string.NoPreloadTrackIfRepeatOne, "NoPreloadTrackIfRepeatOne", configTypeBool, GENERAL, false);
     public static ConfigItem boostedContactRatingInProfile = addConfig(R.string.BoostedContactRatingInProfile, "BoostedContactRatingInProfile", configTypeBool, GENERAL, true);
+    public static ConfigItem noStarReactionPlaceholder = addConfig(R.string.NoStarReactionPlaceholder, "NoStarReactionPlaceholder", configTypeBool, CHAT, true);
 
     static {
         loadConfig(false);
