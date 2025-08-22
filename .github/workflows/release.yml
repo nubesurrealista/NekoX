@@ -7,7 +7,7 @@ on:
 
 jobs:
   ffmpeg:
-    name: Native Build (FFmpeg)
+    name: Native Build (FFmpeg and libvpx)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -40,7 +40,7 @@ jobs:
           git submodule status TMessagesProj/jni/libvpx > libvpx_status
           cat ffmpeg_status libvpx_status
 
-      - name: Cache FFmpeg
+      - name: Cache FFmpeg and libvpx
         id: cache-ffmpeg
         uses: actions/cache@v4
         with:
@@ -49,12 +49,19 @@ jobs:
             TMessagesProj/jni/libvpx/build
           key: ffmpeg-${{ hashFiles('ffmpeg_status', 'libvpx_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
 
-      - name: Build FFmpeg
+      - name: Patch libvpx.sh to remove incompatible flags
+        if: steps.cache-ffmpeg.outputs.cache-hit != 'true'
+        run: |
+          sed -i 's/-march=x86-64 -mtune=intel -msse4.2 -mpopcnt -m64//g' TMessagesProj/jni/libvpx.sh || true
+          cat TMessagesProj/jni/libvpx.sh
+
+      - name: Build libvpx and FFmpeg
         if: steps.cache-ffmpeg.outputs.cache-hit != 'true'
         run: |
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
-          ./run init libs libvpx
+          ./run init libs libvpx || (cat TMessagesProj/jni/libvpx/config.log && exit 1)
           ./run init libs ffmpeg
+          ls -l TMessagesProj/jni/libvpx/build/x86_64/lib || echo "libvpx build directory not found"
           ls -l TMessagesProj/jni/ffmpeg/build/arm64-v8a/lib || echo "FFmpeg build directory not found"
 
   boringssl:
