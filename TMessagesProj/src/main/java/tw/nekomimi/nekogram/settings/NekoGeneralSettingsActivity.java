@@ -254,6 +254,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell checkMemLeakRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.checkMemLeak));
     private final AbstractConfigCell memLeakThresholdRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractConfigCell useOldNameRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useOldName, LocaleController.getString(R.string.UseOldAppNameDesc)));
+    private final AbstractConfigCell noForwardToStoriesRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.noForwardToStories));
 
     private final AbstractConfigCell customApiIdRow = cellGroup.appendCell(new ConfigCellTextDetail(NekoConfig.customApiId, (view, position) -> {
         customDialog_BottomInputString(position, NekoConfig.customApiId, LocaleController.getString(R.string.UseCustomApiNotice), "api_id");

@@ -82,6 +82,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class DialogsAdapter extends RecyclerListView.SelectionAdapter implements DialogCell.DialogCellDelegate {
     public final static int VIEW_TYPE_DIALOG = 0,
             VIEW_TYPE_FLICKER = 1,
@@ -1593,7 +1595,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter implements
             itemInternals.add(new ItemInternal(VIEW_TYPE_TEXT));
         }
 
-        if (allowForwardAsStories && dialogsType == DialogsActivity.DIALOGS_TYPE_FORWARD) {
+        if (allowForwardAsStories && dialogsType == DialogsActivity.DIALOGS_TYPE_FORWARD && (!NekoConfig.noForwardToStories.Bool() || NekoConfig.disableStories.Bool())) {
             itemInternals.add(new ItemInternal(VIEW_TYPE_FORWARD_TO_STORIES_CELL));
         }
 
