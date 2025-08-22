@@ -1,11 +1,12 @@
----
 name: Build Release APK
+
 on:
   workflow_dispatch:
     branches:
       - deepLX-test
+
 jobs:
-  build:
+  native:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -13,13 +14,16 @@ jobs:
         with:
           submodules: recursive
           ref: deepLX-test
+
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: "17"
+          distribution: 'temurin'
+          java-version: '17'
+
       - name: Install yasm
         run: sudo apt install -y yasm
+
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         with:
@@ -27,6 +31,15 @@ jobs:
           target-level: 34
           build-tools: 34.0.0
           ndk: 25.2.9519653
+          cmake: 3.22.1
+
+      - name: Verify submodules
+        run: |
+          git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
+          git submodule status TMessagesProj/jni/libvpx > libvpx_status
+          git submodule status TMessagesProj/jni/boringssl > boringssl_status
+          cat ffmpeg_status libvpx_status boringssl_status
+
       - name: Cache native dependencies
         id: cache-native
         uses: actions/cache@v4
@@ -35,39 +48,73 @@ jobs:
             TMessagesProj/jni/ffmpeg/build
             TMessagesProj/jni/libvpx/build
             TMessagesProj/jni/boringssl/build
-          key: native-${{ hashFiles('TMessagesProj/jni/**',
-            'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh',
-            'TMessagesProj/jni/patches/ffmpeg/*',
-            'TMessagesProj/jni/boringssl/**') }}
-      - name: Cache Gradle
-        uses: actions/cache@v4
-        with:
-          path: ~/.gradle
-          key: gradle-${{ hashFiles('**/*.gradle', '**/*.gradle.kts') }}
+          key: native-${{ hashFiles('ffmpeg_status', 'libvpx_status', 'boringssl_status', 'TMessagesProj/jni/**', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
+
       - name: Build native dependencies
         if: steps.cache-native.outputs.cache-hit != 'true'
         run: |
           ./run init libs
           ./run libs update
+          ls -l TMessagesProj/jni/ffmpeg/build/arm64-v8a/lib || echo "FFmpeg build directory not found"
+
+  build:
+    runs-on: ubuntu-latest
+    needs: native
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: deepLX-test
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: 34
+          target-level: 34
+          build-tools: 34.0.0
+          ndk: 25.2.9519653
+          cmake: 3.22.1
+
+      - name: Cache native dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            TMessagesProj/jni/ffmpeg/build
+            TMessagesProj/jni/libvpx/build
+            TMessagesProj/jni/boringssl/build
+          key: native-${{ hashFiles('TMessagesProj/jni/**', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle
+          key: gradle-${{ hashFiles('**/*.gradle', '**/*.gradle.kts') }}
+
       - name: Create local.properties
-        run: >
+        run: |
           echo "sdk.dir=${ANDROID_HOME}" >> local.properties
-
           echo "TELEGRAM_APP_ID=${{ secrets.TELEGRAM_APP_ID }}" >> local.properties
-
           echo "TELEGRAM_APP_HASH=${{ secrets.TELEGRAM_APP_HASH }}" >> local.properties
-
           echo "ALIAS_NAME=${{ secrets.ALIAS_NAME }}" >> local.properties
-
           echo "KEYSTORE_PASS=${{ secrets.KEYSTORE_PASS }}" >> local.properties
-
           echo "ALIAS_PASS=${{ secrets.ALIAS_PASS }}" >> local.properties
+
       - name: Decode and place keystore
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > release.keystore
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
       - name: Build Release APK
-        run: ./gradlew assembleRelease
+        run: ./gradlew assembleRelease --stacktrace --info
+
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
