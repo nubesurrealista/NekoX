@@ -3239,11 +3239,15 @@ import java.util.concurrent.TimeoutException;
 
   @Override
   public void addVideoListener(VideoListener listener) {
-    videoListeners.add(listener);
+    synchronized (videoListeners) {
+      videoListeners.add(listener);
+    }
   }
 
   @Override
   public void removeVideoListener(VideoListener listener) {
-    videoListeners.remove(listener);
+    synchronized (videoListeners) {
+      videoListeners.remove(listener);
+    }
   }
 }

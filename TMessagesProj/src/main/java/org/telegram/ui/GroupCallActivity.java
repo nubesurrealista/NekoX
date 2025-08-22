@@ -198,6 +198,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -1929,7 +1930,9 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             }
         };
         setOnDismissListener(dialog -> {
-            BaseFragment fragment = parentActivity.getActionBarLayout().getFragmentStack().get(parentActivity.getActionBarLayout().getFragmentStack().size() - 1);
+            List<BaseFragment> stack = parentActivity.getActionBarLayout().getFragmentStack();
+            if (stack == null || stack.isEmpty()) return; // prevent NPE & OOB
+            BaseFragment fragment = stack.get(stack.size() - 1);
             if (anyEnterEventSent) {
                 if (fragment instanceof ChatActivity) {
                     ((ChatActivity) fragment).onEditTextDialogClose(true, true);

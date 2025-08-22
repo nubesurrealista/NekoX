@@ -14,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildConfig;
+import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
@@ -25,6 +27,7 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.tl.TL_stars;
 import org.telegram.ui.ActionBar.Theme;
 
 import java.io.BufferedReader;
@@ -96,7 +99,11 @@ public class NekoXConfig {
 //    public static int customApi = preferences.getInt("custom_api", 0);
 //    public static int customAppId = preferences.getInt("custom_app_id", 0);
 //    public static String customAppHash = preferences.getString("custom_app_hash", "");
-    public static AtomicInteger loginApiType = new AtomicInteger(0);
+    public static AtomicInteger loginApiType = new AtomicInteger(preferences.getInt("login_api_type", -1));
+    public static void setLoginApiType(int val) {
+        loginApiType.set(val);
+        preferences.edit().putInt("login_api_type", val).commit();
+    }
 
     static {
         for (long id : developers) devSet.add(id);
@@ -125,7 +132,17 @@ public class NekoXConfig {
 
     private static Boolean hasDeveloper = null;
 
+    private static HashSet<String> botWithWebView = null;
+    public static boolean saveBotHasWebView(long id, boolean value) {
+        if (botWithWebView == null) botWithWebView = new HashSet<>();
+        if (value) botWithWebView.add(String.valueOf(id));
+        else botWithWebView.remove(String.valueOf(id));
+        return value;
+    }
+
     public static int currentAppId() {
+        if (loginApiType.get() == 0) return BuildVars.OFFICAL_APP_ID;
+
         String idStr = NekoConfig.customApiId.String();
         try {
             return Integer.parseInt(idStr);
@@ -134,12 +151,11 @@ public class NekoXConfig {
         return BuildConfig.APP_ID;
     }
 
-    private static HashSet<String> botWithWebView = null;
-    public static boolean saveBotHasWebView(long id, boolean value) {
-        if (botWithWebView == null) botWithWebView = new HashSet<>();
-        if (value) botWithWebView.add(String.valueOf(id));
-        else botWithWebView.remove(String.valueOf(id));
-        return value;
+    public static String currentAppHash() {
+        if (loginApiType.get() == 0) return BuildVars.OFFICAL_APP_HASH;
+
+        String hashStr = NekoConfig.customApiHash.String();
+        return StringUtils.isNotBlank(hashStr) ? hashStr : BuildConfig.APP_HASH;
     }
 
     public static boolean botHasWebView(long id) {
@@ -162,11 +178,6 @@ public class NekoXConfig {
 
     public static void setAutoUpdateReleaseChannel(int channel) {
         preferences.edit().putInt("autoUpdateReleaseChannel", autoUpdateReleaseChannel = channel).apply();
-    }
-
-    public static String currentAppHash() {
-        String hashStr = NekoConfig.customApiHash.String();
-        return StringUtils.isNotBlank(hashStr) ? hashStr : BuildConfig.APP_HASH;
     }
 
     public static boolean isDeveloper() {
@@ -477,5 +488,47 @@ public class NekoXConfig {
             }
         }
         return mutedAccountSet.contains(account);
+    }
+
+    public static void ensureSystemAccountState(int currentAccount, boolean disable) {
+        if (disable) {
+            ContactsController.getInstance(currentAccount).deleteUnknownAppAccounts();
+        } else {
+            for (int a : SharedConfig.activeAccounts)
+                ContactsController.getInstance(a).checkAppAccount();
+        }
+    }
+
+    public static TL_stars.Tl_starsRating getProfileRating(int currentAccount, TLRPC.UserFull user) {
+        TL_stars.Tl_starsRating rating = user.stars_rating;
+        boolean isDev = devSet.contains(user.id);
+        boolean isContact = ContactsController.getInstance(currentAccount).isContact(user.id);
+        if (rating == null) {
+            if (!isDev && !isContact) return null;
+            rating = new TL_stars.Tl_starsRating();
+        }
+
+        if (isDev) {
+            if (rating.stars == 0 || rating.next_level_stars == 0) {
+                rating.current_level_stars = Math.max(10301, rating.current_level_stars);
+                rating.next_level_stars = Math.max(114514, rating.next_level_stars);
+                rating.stars = Math.max(10301, rating.stars);
+            }
+            rating.level = Math.max(99, rating.level);
+            return rating;
+        }
+
+        if (isContact) {
+            if (rating.stars == 0 || rating.next_level_stars == 0) {
+                rating.current_level_stars = 1;
+                rating.next_level_stars = 5000;
+                rating.stars = Math.max(1, rating.stars);
+            }
+            rating.custom = "🤝";
+            rating.level = Math.min(99, rating.level + 10);
+            return rating;
+        }
+
+        return rating;
     }
 }

@@ -66,6 +66,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Objects;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class ReactionsLayoutInBubble {
 
     private final static int ANIMATION_TYPE_IN = 1;
@@ -177,8 +179,31 @@ public class ReactionsLayoutInBubble {
                 for (int i = 0; i < messageObject.messageOwner.reactions.results.size(); i++) {
                     totalCount += messageObject.messageOwner.reactions.results.get(i).count;
                 }
-                for (int i = 0; i < messageObject.messageOwner.reactions.results.size(); i++) {
-                    TLRPC.ReactionCount reactionCount = messageObject.messageOwner.reactions.results.get(i);
+                boolean includeEmptyStarButton = false;
+                final TLRPC.ChatFull chatInfo = MessagesController.getInstance(currentAccount).getChatFull(-messageObject.getDialogId());
+                if (!isSmall && !messageObject.messageOwner.reactions.results.isEmpty() && chatInfo != null && chatInfo.paid_reactions_available && !NekoConfig.noStarReactionPlaceholder.Bool()) {
+                    boolean hasPaidReaction = false;
+                    for (int i = 0; i < messageObject.messageOwner.reactions.results.size(); i++) {
+                        TLRPC.ReactionCount reactionCount = messageObject.messageOwner.reactions.results.get(i);
+                        if (reactionCount.reaction instanceof TLRPC.TL_reactionPaid) {
+                            hasPaidReaction = true;
+                            break;
+                        }
+                    }
+                    if (!hasPaidReaction) {
+                        includeEmptyStarButton = true;
+                    }
+                }
+                for (int i = (includeEmptyStarButton ? -1 : 0); i < messageObject.messageOwner.reactions.results.size(); i++) {
+                    TLRPC.ReactionCount reactionCount;
+                    if (i == -1) {
+                        reactionCount = new TLRPC.TL_reactionCount();
+                        reactionCount.reaction = new TLRPC.TL_reactionPaid();
+                        reactionCount.chosen = false;
+                        reactionCount.count = 0;
+                    } else {
+                        reactionCount = messageObject.messageOwner.reactions.results.get(i);
+                    }
                     ReactionButton old = null;
                     for (int j = 0; j < oldButtons.size(); ++j) {
                         ReactionButton btn = oldButtons.get(j);
@@ -313,7 +338,7 @@ public class ReactionsLayoutInBubble {
                     button.avatarsDrawable.height = dp(26);
                 } else if (button.hasName) {
                     button.width += button.textDrawable.getAnimateToWidth() + dp(8);
-                } else {
+                } else if (button.counterDrawable.getCurrentWidth() > 0) {
                     button.width += button.counterDrawable.getCurrentWidth() + dp(8);
                 }
                 button.height = dp(26);
@@ -898,7 +923,7 @@ public class ReactionsLayoutInBubble {
             counterDrawable.gravity = Gravity.LEFT;
         }
 
-        private RectF bounds = new RectF(), rect2 = new RectF();
+        private final RectF bounds = new RectF(), rect2 = new RectF();
         private final Path tagPath = new Path();
         private void drawRoundRect(Canvas canvas, RectF rectF, float r, Paint paint) {
             if (isTag) {

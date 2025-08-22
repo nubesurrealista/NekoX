@@ -34,6 +34,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -676,8 +677,8 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                         }
 //                        index--;
                     }
-                    int position = 0;
-                    int f = 1 + (isGiftsVisible() ? 1 : 0);
+                    int position = 0; // index by row
+                    int f = 1 + (isGiftsVisible() ? 1 : 0); // was off by 1
                     if (isGiftsVisible() && index == 1) {
                         position = giftsSectionRow;
                     } else if (type == TYPE_AVATAR_CONSTRUCTOR && index == 0) {
@@ -703,6 +704,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                     }
                 }
             };
+            emojiTabs.setPackIndexOffset(-1);
             if (emojiTabs.recentTab != null) {
                 emojiTabs.recentTab.setOnLongClickListener(e -> {
                     onRecentLongClick();
@@ -1279,7 +1281,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                     }
                     final int count = pack.expanded ? pack.documents.size() : Math.min(maxlen, pack.documents.size());
                     if (position > startPosition && position <= startPosition + 1 + count) {
-                        emojiTabs.select((emojiTabs.recentTab != null ? 1 : 0) + (emojiTabs.isGiftsVisible() ? 1 : 0) + index);
+                        emojiTabs.select((emojiTabs.recentTab != null ? 2 : 1) + (emojiTabs.isGiftsVisible() ? 1 : 0) + index);
                         return;
                     }
                 }
@@ -3996,8 +3998,8 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                     continue;
                 }
                 if ((set.set.emojis || showStickers) && !installedEmojiSets.contains(set.set.id)) {
-                    positionToSection.put(totalCount, packs.size());
-                    sectionToPosition.put(packs.size(), totalCount);
+                    positionToSection.put(totalCount, packs.size() - (emojiTabs.isGiftsVisible() ? 1 : 0));
+                    sectionToPosition.put(packs.size() - (emojiTabs.isGiftsVisible() ? 1 : 0), totalCount);
                     totalCount++;
                     rowHashCodes.add(9211 + 13L * set.set.id);
 
@@ -4067,8 +4069,8 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                     continue;
                 }
 
-                positionToSection.put(totalCount, packs.size());
-                sectionToPosition.put(packs.size(), totalCount);
+                positionToSection.put(totalCount, packs.size() - (emojiTabs.isGiftsVisible() ? 1 : 0));
+                sectionToPosition.put(packs.size() - (emojiTabs.isGiftsVisible() ? 1 : 0), totalCount);
                 totalCount++;
                 rowHashCodes.add(9211 + 13L * set.id);
 

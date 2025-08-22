@@ -190,7 +190,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
     private final AbstractConfigCell header5 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Appearance")));
     private final AbstractConfigCell typefaceRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.typeface));
-    private final AbstractConfigCell customTitleTextRow = cellGroup.appendCell(new ConfigCellTextInput(null, NekoConfig.customTitleText, "Nekogram X", null));
+    private final AbstractConfigCell customTitleTextRow = cellGroup.appendCell(new ConfigCellTextInput(null, NekoConfig.customTitleText, "Momogram", null));
     private final AbstractConfigCell nameTitleTextRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.nameAsTitleText));
     private final AbstractConfigCell transparentStatusBarRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.transparentStatusBar));
     private final AbstractConfigCell appBarShadowRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAppBarShadow));
@@ -254,6 +254,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell checkMemLeakRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.checkMemLeak));
     private final AbstractConfigCell memLeakThresholdRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractConfigCell useOldNameRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useOldName, LocaleController.getString(R.string.UseOldAppNameDesc)));
+    private final AbstractConfigCell noForwardToStoriesRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.noForwardToStories));
 
     private final AbstractConfigCell customApiIdRow = cellGroup.appendCell(new ConfigCellTextDetail(NekoConfig.customApiId, (view, position) -> {
         customDialog_BottomInputString(position, NekoConfig.customApiId, LocaleController.getString(R.string.UseCustomApiNotice), "api_id");
@@ -283,6 +284,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell mapMobileDataSaverToRoamingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.mapMobileDataSaverToRoaming, LocaleController.getString(R.string.MapMobileDataSaverToRoamingNote)));
     private final AbstractConfigCell win32Row = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAutoDownloadingWin32Executable));
     private final AbstractConfigCell archiveRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAutoDownloadingArchive));
+    private final AbstractConfigCell noPreloadTrackIfRepeatOneRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.noPreloadTrackIfRepeatOne));
     private final AbstractConfigCell dividerAutoDownload = cellGroup.appendCell(new ConfigCellDivider());
 
     private ChatBlurAlphaSeekBar chatBlurAlphaSeekbar;
@@ -504,13 +506,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             } else if (key.equals(NekoConfig.hideUnreadCounterOnFolderTabs.getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (key.equals(NekoConfig.disableSystemAccount.getKey())) {
-                if ((boolean) newValue) {
-                    getContactsController().deleteUnknownAppAccounts();
-                } else {
-                    for (int a : SharedConfig.activeAccounts) {
-                        ContactsController.getInstance(a).checkAppAccount();
-                    }
-                }
+                NekoXConfig.ensureSystemAccountState(currentAccount, (boolean) newValue);
             } else if (key.equals(NekoConfig.largeAvatarInDrawer.getKey())) {
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
                 TransitionManager.beginDelayedTransition(profilePreviewCell);

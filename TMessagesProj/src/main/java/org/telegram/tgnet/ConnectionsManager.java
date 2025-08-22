@@ -241,54 +241,30 @@ public class ConnectionsManager extends BaseController {
             systemLangCode = LocaleController.getSystemLocaleStringIso639().toLowerCase();
             langCode = MessagesController.getGlobalMainSettings().getString("lang_code", systemLangCode);
             deviceModel = Build.MANUFACTURER + Build.MODEL;
+            appVersion = BuildConfig.OFFICIAL_VERSION + " (" + (BuildConfig.OFFICIAL_VERSION_CODE * 10 + 9) + ")";
             systemVersion = "SDK " + Build.VERSION.SDK_INT;
         } catch (Exception ignored) {
-            systemLangCode = "";
+            systemLangCode = "en";
             langCode = "";
-            deviceModel = "";
-            systemVersion = "";
+            deviceModel = "Android unknown";
+            appVersion = "App version unknown";
+            systemVersion = "SDK " + Build.VERSION.SDK_INT;
         }
-
-        int version;
-        int appId = 0;
-        String fingerprint;
-
-        try {
-            String idStr = NekoConfig.customApiId.String();
-            String hashStr = NekoConfig.customApiHash.String();
-            if (StringUtils.isNotBlank(idStr) && StringUtils.isNotBlank(hashStr))
-                appId = Integer.parseInt(idStr);
-        } catch (Exception e) {
-            Log.e("030-api", "failed to parse custom api credential", e);
-            FileLog.e(e);
-        }
-
-        final boolean loggedIn = getUserConfig().isClientActivated();
-        final int loginApiType = NekoXConfig.loginApiType.get();
-        if (appId != 0 && (loggedIn || loginApiType == 1)) {
-            fingerprint = AndroidUtilities.getCertificateSHA256Fingerprint();
-            version = BuildConfig.VERSION_CODE;
-            Log.d("030-api", "using custom app id");
-        } else if (getUserConfig().official || (!loggedIn && loginApiType == 0)) {
-            fingerprint = "49C1522548EBACD46CE322B6FD47F6092BB745D0F88082145CAF35E14DCC38E1";
-            version = BuildConfig.OFFICIAL_VERSION_CODE * 10 + 9;
-            appId = BuildVars.OFFICAL_APP_ID;
-            Log.d("030-api", "(temp) using official app id");
-        } else {
-            fingerprint = AndroidUtilities.getCertificateSHA256Fingerprint();
-            version = BuildConfig.VERSION_CODE;
-            appId = BuildConfig.APP_ID;
-            Log.d("030-api", "using builtin app id");
-        }
-        // always be following official version code
-        appVersion = BuildConfig.OFFICIAL_VERSION + " (" + (BuildConfig.OFFICIAL_VERSION_CODE * 10 + 9) + ")";
-
         if (systemLangCode.trim().length() == 0) {
             systemLangCode = "en";
         }
-
+        if (deviceModel.trim().length() == 0) {
+            deviceModel = "Android unknown";
+        }
+        if (appVersion.trim().length() == 0) {
+            appVersion = "App version unknown";
+        }
+        if (systemVersion.trim().length() == 0) {
+            systemVersion = "SDK Unknown";
+        }
         getUserConfig().loadConfig();
         String pushString = getRegId();
+        String fingerprint = AndroidUtilities.getCertificateSHA256Fingerprint();
 
         int timezoneOffset = (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000;
         SharedPreferences mainPreferences;
@@ -302,7 +278,7 @@ public class ConnectionsManager extends BaseController {
         if (getUserConfig().getCurrentUser() != null) {
             userPremium = getUserConfig().getCurrentUser().premium;
         }
-        init(version, TLRPC.LAYER, appId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), userPremium, enablePushConnection);
+        init(BuildConfig.OFFICIAL_VERSION_CODE, TLRPC.LAYER, NekoXConfig.currentAppId(), deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), userPremium, enablePushConnection);
     }
 
     private String getRegId() {
@@ -704,6 +680,7 @@ public class ConnectionsManager extends BaseController {
             packageId = "";
         }
 
+        Log.d("030-con", "using api id " + apiId);
         native_init(currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, regId, cFingerprint, installer, packageId, timezoneOffset, userId, userPremium, enablePushConnection, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType(), SharedConfig.measureDevicePerformanceClass());
         Utilities.stageQueue.postRunnable(() -> {
             if (SharedConfig.isProxyEnabled()) {

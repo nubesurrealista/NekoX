@@ -1761,7 +1761,7 @@ public class VideoPlayer implements Player.Listener, VideoListener, AnalyticsLis
 
     @Override
     public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
-        Player.videoListeners.remove(this);
+        player.removeVideoListener(this);
         return delegate.onSurfaceDestroyed(surfaceTexture);
     }
 

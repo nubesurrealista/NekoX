@@ -175,7 +175,7 @@
     <string name="AutoArchiveAndMuteNoCommonGroupOnlyAbout">需要查询远程服务器，可能导致操作前出现延迟。</string>
     <string name="IncreasedMaxPhotoResolution">增加上传图片最大宽度 (2560px)</string>
     <string name="CopyPhotoAsSticker">作为贴纸复制</string>
-    <string name="OpenAvatarInsteadOfExpand">点击时开启完整头像显示界面而不是在原页面放大</string>
+    <string name="OpenAvatarInsteadOfExpand">点击时显示头像而非原地展开</string>
     <string name="CustomTitleText">自定义标题文字</string>
     <string name="Links">链接</string>
     <string name="ForceAllowChooseBrowserDesc">只对没有预设开启程序的链接有效</string>

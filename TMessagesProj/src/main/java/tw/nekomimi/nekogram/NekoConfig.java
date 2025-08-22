@@ -78,7 +78,7 @@ public class NekoConfig {
     public static ConfigItem useCustomEmoji = addConfig(R.string.useCustomEmoji, "useCustomEmoji", configTypeBool, false);
     public static ConfigItem repeatConfirm = addConfig(R.string.repeatConfirm, "repeatConfirm", configTypeBool, CHAT, false);
     public static ConfigItem disableInstantCamera = addConfig(R.string.DisableInstantCamera, "DisableInstantCamera", configTypeBool, CHAT, false);
-    public static ConfigItem hideCameraInAttachMenu = addConfig(R.string.HideCameraInAttachMenu, "DisableInstantCamera", configTypeBool, CHAT, false);
+    public static ConfigItem hideCameraInAttachMenu = addConfig(R.string.HideCameraInAttachMenu, "HideCameraInAttachMenu", configTypeBool, CHAT, false);
     public static ConfigItem showSeconds = addConfig(R.string.showSeconds, "showSeconds", configTypeBool, CHAT, false);
 
     public static ConfigItem nextPromptUpdateTime = addConfig("nextPromptUpdateTime", configTypeLong, 0L);
@@ -307,7 +307,7 @@ public class NekoConfig {
     public static ConfigItem mapMobileDataSaverToRoaming = addConfig(R.string.MapMobileDataSaverToRoaming , "MapMobileDataSaverToRoaming", configTypeBool, false);
     public static ConfigItem keepBlockedBotChatHistory = addConfig(R.string.KeepBlockedBotChatHistory , "KeepBlockedBotChatHistory", configTypeBool, false);
     public static ConfigItem dontSendStartCmdOnUnblockBot = addConfig(R.string.DontSendStartCmdOnUnblockBot , "DontSendStartCmdOnUnblockBot", configTypeBool, false);
-    public static ConfigItem smallerEmojiInChooser = addConfig(R.string.SmallerEmojisInChooser , "SmallerEmojisInChooser", configTypeBool, true);
+    public static ConfigItem smallerEmojiInChooser = addConfig(R.string.SmallerEmojisInChooser , "SmallerEmojisInChooser", configTypeBool, CHAT, false);
     public static ConfigItem chatNameOverride = addConfig(R.string.ChatNameOverride , "ChatNameOverride", configTypeBool, false);
     public static ConfigItem nameAsTitleText = addConfig(R.string.NameAsTitleText , "NameAsTitleText", configTypeBool, GENERAL, false);
     public static ConfigItem enableUnifiedPush = addConfig(R.string.EnableUnifiedPush , "EnableUnifiedPush", configTypeBool, GENERAL, false);
@@ -366,6 +366,11 @@ public class NekoConfig {
     public static ConfigItem disableSaveDraftToCloud = addConfig(R.string.DisableSaveDraftToCloud , "DisableSaveDraftToCloud", configTypeBool, CHAT, false);
     public static ConfigItem resumeAudioPlaybackOnLaunch = addConfig(R.string.ResumeAudioPlaybackOnLaunch, "ResumeAudioPlaybackOnLaunch", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem ignoreTranslatorCache = addConfig(R.string.IgnoreTranslatorCache, "IgnoreTranslatorCache", configTypeBool, EXPERIMENTAL, false);
+    public static ConfigItem ignoreTopicTabView = addConfig(R.string.IgnoreTopicTabView, "IgnoreTopicTabView", configTypeBool, CHAT, false);
+    public static ConfigItem noPreloadTrackIfRepeatOne = addConfig(R.string.NoPreloadTrackIfRepeatOne, "NoPreloadTrackIfRepeatOne", configTypeBool, GENERAL, false);
+    public static ConfigItem boostedContactRatingInProfile = addConfig(R.string.BoostedContactRatingInProfile, "BoostedContactRatingInProfile", configTypeBool, GENERAL, true);
+    public static ConfigItem noStarReactionPlaceholder = addConfig(R.string.NoStarReactionPlaceholder, "NoStarReactionPlaceholder", configTypeBool, CHAT, true);
+    public static ConfigItem noForwardToStories = addConfig(R.string.HideForwardToStories, "HideForwardToStories", configTypeBool, GENERAL, false);
 
     static {
         loadConfig(false);
@@ -987,6 +992,9 @@ public class NekoConfig {
                         .setPositiveButton(LocaleController.getString(R.string.Close), null)
                         .create().show();
             });
+            if (NekoConfig.disableSystemAccount.Bool()) {
+                NekoXConfig.ensureSystemAccountState(UserConfig.selectedAccount, true);
+            }
         } catch (Exception ex) {
             Log.e("030-neko", "failed to load part of neko config", ex);
         }

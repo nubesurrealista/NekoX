@@ -273,4 +273,10 @@
     <string name="IgnoreTranslatorCache">Ignore translator cache</string>
     <string name="TranslationUnavailable">Official translation is unavailable, using alternative Google API</string>
     <string name="GrantMediaPermission">Grant media permission</string>
+    <string name="IgnoreTopicTabView">Force classic topic view</string>
+    <string name="NoPreloadTrackIfRepeatOne">Don\'t preload next track if repeating single</string>
+    <string name="BoostedContactRatingInProfile">Boosted contact rating in profile</string>
+    <string name="BoostedContactRatingInProfileDesc">%s Rating level is boosted by 10 locally for all your contacts and displayed with handshake emoji.</string>
+    <string name="NoStarReactionPlaceholder">Disable star reaction placeholder</string>
+    <string name="HideForwardToStories">Hide forward to stories</string>
 </resources>

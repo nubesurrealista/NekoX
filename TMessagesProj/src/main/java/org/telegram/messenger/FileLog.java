@@ -10,6 +10,7 @@ package org.telegram.messenger;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.os.Debug;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -174,24 +175,6 @@ public class FileLog {
         }
     }
 
-    private void dumpANR() {
-        StringBuilder sb = new StringBuilder();
-        Map<Thread, StackTraceElement[]> allThreads = Thread.getAllStackTraces();
-
-        for (Map.Entry<Thread, StackTraceElement[]> entry : allThreads.entrySet()) {
-            Thread thread = entry.getKey();
-            StackTraceElement[] stackTrace = entry.getValue();
-
-            sb.append("Thread: ").append(thread.getName()).append("\n");
-            for (StackTraceElement element : stackTrace) {
-                sb.append("\tat ").append(element).append("\n");
-            }
-            sb.append("\n\n");
-        }
-
-        FileLog.e("ANR thread dump\n" + sb.toString());
-    }
-
     private static boolean gsonDisabled;
     public static void disableGson(boolean disable) {
         gsonDisabled = disable;
@@ -215,6 +198,9 @@ public class FileLog {
             privateFields.add("mContext");
             privateFields.add("priority");
             privateFields.add("constructor");
+            for (int i = 0; i < 32; i++) {
+                privateFields.add("FLAG_" + i);
+            }
 
             //exclude file loading
             excludeRequests = new HashSet<>();
@@ -484,9 +470,42 @@ public class FileLog {
         fatal(e, true);
     }
 
+    private static long dumpedHeap;
+    public void dumpMemory(boolean force) {
+        if (!force && System.currentTimeMillis() - dumpedHeap < 30_000) return;
+        dumpedHeap = System.currentTimeMillis();
+        try {
+            Debug.dumpHprofData(new File(AndroidUtilities.getLogsDir(), getInstance().dateFormat.format(System.currentTimeMillis()) + "_heap.hprof").getAbsolutePath());
+        } catch (Exception e2) {
+            FileLog.e(e2);
+        }
+    }
+
+    private void dumpANR() {
+        StringBuilder sb = new StringBuilder();
+        Map<Thread, StackTraceElement[]> allThreads = Thread.getAllStackTraces();
+
+        for (Map.Entry<Thread, StackTraceElement[]> entry : allThreads.entrySet()) {
+            Thread thread = entry.getKey();
+            StackTraceElement[] stackTrace = entry.getValue();
+
+            sb.append("Thread: ").append(thread.getName()).append("\n");
+            for (StackTraceElement element : stackTrace) {
+                sb.append("\tat ").append(element).append("\n");
+            }
+            sb.append("\n\n");
+        }
+
+        FileLog.e("ANR thread dump\n" + sb.toString());
+        dumpMemory(false);
+    }
+
     public static void fatal(final Throwable e, boolean logToAppCenter) {
         if (!BuildVars.LOGS_ENABLED) {
             return;
+        }
+        if (e instanceof OutOfMemoryError) {
+            getInstance().dumpMemory(false);
         }
 //        if (logToAppCenter && BuildVars.DEBUG_VERSION && needSent(e)) {
 //            AndroidUtilities.appCenterLog(e);

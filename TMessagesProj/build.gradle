@@ -4,7 +4,7 @@ apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
 def verName = APP_VERSION_NAME
-def verCode = 10949
+def verCode = 10979
 
 def gitHashProc = new ProcessBuilder("git", "log", "--pretty=format:'%h'", "-n", "1").redirectErrorStream(true).start()
 def gitHashBuf = new byte[16]
@@ -144,6 +144,7 @@ android {
         buildConfigField "int", "OFFICIAL_VERSION_CODE", officialCode + ""
         buildConfigField "int", "APP_ID", appId
         buildConfigField "String", "APP_HASH", "\"" + appHash + "\""
+        buildConfigField "int", "VERSION_NUM", "6"
         resValue "string", "package_name", APP_PACKAGE
 
 //        ndk {
@@ -393,6 +394,8 @@ dependencies {
     testImplementation "junit:junit:4.13.2"
     testImplementation "androidx.test:core:1.6.1"
     testImplementation "org.robolectric:robolectric:4.5.1"
+
+//    implementation 'com.google.mlkit:translate:17.0.3'
 
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0") {
