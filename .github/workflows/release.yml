@@ -6,10 +6,11 @@ on:
       - deepLX-test
 
 jobs:
-  native:
+  ffmpeg:
+    name: Native Build (FFmpeg)
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           submodules: recursive
@@ -30,38 +31,37 @@ jobs:
           api-level: 34
           target-level: 34
           build-tools: 34.0.0
-          ndk: 25.2.9519653
+          ndk: 21.4.7075529
           cmake: 3.22.1
 
-      - name: Verify submodules
+      - name: Fetch Status
         run: |
           git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
           git submodule status TMessagesProj/jni/libvpx > libvpx_status
-          git submodule status TMessagesProj/jni/boringssl > boringssl_status
-          cat ffmpeg_status libvpx_status boringssl_status
+          cat ffmpeg_status libvpx_status
 
-      - name: Cache native dependencies
-        id: cache-native
+      - name: Cache FFmpeg
+        id: cache-ffmpeg
         uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/jni/ffmpeg/build
             TMessagesProj/jni/libvpx/build
-            TMessagesProj/jni/boringssl/build
-          key: native-${{ hashFiles('ffmpeg_status', 'libvpx_status', 'boringssl_status', 'TMessagesProj/jni/**', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
+          key: ffmpeg-${{ hashFiles('ffmpeg_status', 'libvpx_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
 
-      - name: Build native dependencies
-        if: steps.cache-native.outputs.cache-hit != 'true'
+      - name: Build FFmpeg
+        if: steps.cache-ffmpeg.outputs.cache-hit != 'true'
         run: |
-          ./run init libs
-          ./run libs update
+          echo "sdk.dir=${ANDROID_HOME}" > local.properties
+          ./run init libs libvpx
+          ./run init libs ffmpeg
           ls -l TMessagesProj/jni/ffmpeg/build/arm64-v8a/lib || echo "FFmpeg build directory not found"
 
-  build:
+  boringssl:
+    name: Native Build (BoringSSL)
     runs-on: ubuntu-latest
-    needs: native
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           submodules: recursive
@@ -79,17 +79,150 @@ jobs:
           api-level: 34
           target-level: 34
           build-tools: 34.0.0
-          ndk: 25.2.9519653
+          ndk: 21.4.7075529
           cmake: 3.22.1
 
-      - name: Cache native dependencies
+      - name: Fetch Status
+        run: git submodule status TMessagesProj/jni/boringssl > boringssl_status
+
+      - name: Cache BoringSSL
+        id: cache-boringssl
+        uses: actions/cache@v4
+        with:
+          path: TMessagesProj/jni/boringssl/build
+          key: boringssl-${{ hashFiles('boringssl_status') }}
+
+      - name: Build BoringSSL
+        if: steps.cache-boringssl.outputs.cache-hit != 'true'
+        run: |
+          echo "sdk.dir=${ANDROID_HOME}" > local.properties
+          ./run init libs boringssl
+          ls -l TMessagesProj/jni/boringssl/build/arm64-v8a/lib || echo "BoringSSL build directory not found"
+
+  native:
+    name: Native Build (Telegram)
+    runs-on: ubuntu-latest
+    needs:
+      - ffmpeg
+      - boringssl
+    strategy:
+      matrix:
+        flavor: [armeabi-v7a, arm64-v8a, x86, x86_64]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: deepLX-test
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: 34
+          target-level: 34
+          build-tools: 34.0.0
+          ndk: 21.4.7075529
+          cmake: 3.22.1
+
+      - name: Fetch Status
+        run: |
+          git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
+          git submodule status TMessagesProj/jni/libvpx > libvpx_status
+          git submodule status TMessagesProj/jni/boringssl > boringssl_status
+          cat ffmpeg_status libvpx_status boringssl_status
+
+      - name: Cache Native
+        id: cache-native
+        uses: actions/cache@v4
+        with:
+          path: TMessagesProj/src/main/libs
+          key: native-${{ matrix.flavor }}-${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status') }}
+
+      - name: Restore FFmpeg Cache
         uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/jni/ffmpeg/build
             TMessagesProj/jni/libvpx/build
-            TMessagesProj/jni/boringssl/build
-          key: native-${{ hashFiles('TMessagesProj/jni/**', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
+          key: ffmpeg-${{ hashFiles('ffmpeg_status', 'libvpx_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
+
+      - name: Restore BoringSSL Cache
+        uses: actions/cache@v4
+        with:
+          path: TMessagesProj/jni/boringssl/build
+          key: boringssl-${{ hashFiles('boringssl_status') }}
+
+      - name: Fix BoringSSL Patch
+        run: |
+          cd TMessagesProj/jni
+          ./patch_boringssl.sh || true
+          ls -l boringssl/build/arm64-v8a/lib || echo "BoringSSL patch failed or directory not found"
+
+      - name: Build Native
+        run: |
+          echo "sdk.dir=${ANDROID_HOME}" > local.properties
+          export NATIVE_TARGET="${{ matrix.flavor }}"
+          ./run libs native
+          ls -l TMessagesProj/src/main/libs/${{ matrix.flavor }} || echo "Native libs directory not found"
+
+  build:
+    name: Gradle Build
+    runs-on: ubuntu-latest
+    needs: native
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          ref: deepLX-test
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: 34
+          target-level: 34
+          build-tools: 34.0.0
+          ndk: 21.4.7075529
+          cmake: 3.22.1
+
+      - name: Fetch Status
+        run: |
+          git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
+          git submodule status TMessagesProj/jni/libvpx > libvpx_status
+          git submodule status TMessagesProj/jni/boringssl > boringssl_status
+          cat ffmpeg_status libvpx_status boringssl_status
+
+      - name: Restore Native Caches for All Flavors
+        uses: actions/cache@v4
+        with:
+          path: TMessagesProj/src/main/libs
+          key: native-${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status') }}
+
+      - name: Restore FFmpeg Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            TMessagesProj/jni/ffmpeg/build
+            TMessagesProj/jni/libvpx/build
+          key: ffmpeg-${{ hashFiles('ffmpeg_status', 'libvpx_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
+
+      - name: Restore BoringSSL Cache
+        uses: actions/cache@v4
+        with:
+          path: TMessagesProj/jni/boringssl/build
+          key: boringssl-${{ hashFiles('boringssl_status') }}
 
       - name: Cache Gradle
         uses: actions/cache@v4
