@@ -44618,7 +44618,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             case nkbtn_view_history: {
                 // same as "search_from_user_id"
                 TLRPC.User user = getMessagesController().getUser(selectedObject.messageOwner.from_id.user_id);
-                if (user != null) {
+                if (user != null && searchUserButton != null) {
                     openSearchWithText("");
                     searchUserButton.callOnClick();
                     searchUserMessages(user, null);
@@ -46945,14 +46945,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             FileLog.d("030-menu: fillMessageMenu, type=" + type);
 
             boolean allowViewHistory = currentUser == null
-                    && (currentChat != null && !currentChat.broadcast && message.isFromUser());
-            if (allowViewHistory && NekoConfig.showViewHistory.Bool() && selectedObject.messageOwner.from_id != null) {
+                    && (currentChat != null && !currentChat.broadcast && message.isFromUser())
+                    && selectedObject.messageOwner.from_id != null;
+            boolean showViewHistory = allowViewHistory && chatMode != MODE_PINNED;
+            if (showViewHistory && NekoConfig.showViewHistory.Bool()) {
+                if (searchContainer == null || searchUserButton == null) createSearchContainer();
+                if (searchContainer == null || searchUserButton == null) return;
                 items.add(LocaleController.getString(R.string.ViewHistory));
                 options.add(nkbtn_view_history);
                 icons.add(R.drawable.baseline_schedule_24);
             }
 
-            if (NekoConfig.showMessageDetails.Bool()) {
+            if (NekoConfig.showMessageDetails.Bool() && (chatMode != MODE_PINNED || !message.isFromUser())) {
                 items.add(LocaleController.getString(R.string.MessageDetails));
                 options.add(nkbtn_detail);
                 icons.add(R.drawable.menu_info);
