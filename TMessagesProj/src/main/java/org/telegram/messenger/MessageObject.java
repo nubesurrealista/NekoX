@@ -6725,10 +6725,6 @@ public class MessageObject {
             text = messageOwner.message = messageOwner.media.description;
         }
         if (messageOwner.translatedText != null && (captionTranslated = translated)) {
-            text = messageOwner.translatedText.text;
-            entities = messageOwner.translatedText.entities;
-        }
-        if (captionTranslated = translated) {
             // Official Translate
             text = messageOwner.translatedText.text;
             entities = messageOwner.translatedText.entities;
