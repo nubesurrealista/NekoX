@@ -100,13 +100,16 @@ public class TranslateController extends BaseController {
         }
         final TLRPC.Chat chat = getMessagesController().getChat(-dialogId);
         // if allowed by us and not using 'community' provider
-        boolean forceAutoTranslate = NekoConfig.autoTranslate.Bool() &&
-                !(NekoConfig.useCustomProviderForAutoTranslate.Bool() &&
-                        NekoConfig.translationProvider.Int() == Translator.providerLingva &&
-                        NekoConfig.translationProvider.Int() == Translator.providerDeepLX);
+        boolean forceAutoTranslate = NekoConfig.autoTranslate.Bool() && usingCustomProviderForAutoTranslate();
         return (forceAutoTranslate ||
             UserConfig.getInstance(currentAccount).isPremium() ||
             (chat != null && chat.autotranslation));
+    }
+
+    public boolean usingCustomProviderForAutoTranslate() {
+        return (NekoConfig.useCustomProviderForAutoTranslate.Bool() &&
+                NekoConfig.translationProvider.Int() != Translator.providerLingva &&
+                NekoConfig.translationProvider.Int() != Translator.providerDeepLX);
     }
 
     private Boolean chatTranslateEnabled;
@@ -603,9 +606,7 @@ public class TranslateController extends BaseController {
             final MessageObject finalMessageObject = messageObject;
             if (finalMessageObject.messageOwner.translatedText == null && finalMessageObject.messageOwner.translatedPoll == null || finalMessageObject.messageOwner.translatedPoll != null && !PollText.isFullyTranslated(finalMessageObject, finalMessageObject.messageOwner.translatedPoll) || !language.equals(finalMessageObject.messageOwner.translatedToLanguage)) {
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.messageTranslating, finalMessageObject);
-                if (NekoConfig.useCustomProviderForAutoTranslate.Bool()
-                        && NekoConfig.translationProvider.Int() != Translator.providerTelegram
-                        && NekoConfig.translationProvider.Int() != Translator.providerLingva) {
+                if (usingCustomProviderForAutoTranslate()) {
                     Translator.translate(TranslatorKt.getCode2Locale(language), finalMessageObject.messageOwner.message, new Translator.Companion.TranslateCallBack() {
                         @Override
                         public void onSuccess(@NonNull String translation) {
