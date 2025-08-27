@@ -75,7 +75,7 @@
     <string name="ProviderGoogleTranslate">Google Translate</string>
     <string name="UserRestrictionsSendStickers2">Send klistremerker</string>
     <string name="UserRestrictionsSendGifs">Send GIF-er</string>
-    <string name="ProviderDeepLTranslate">DeepL Translate</string>
+    <string name="ProviderDeepLXTranslate">DeepLX Translate</string>
     <string name="useSystemDNS">Bruk system-DNS</string>
     <string name="hideSendAsChannel">Skjul «Send som kanal»</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Translator</string>

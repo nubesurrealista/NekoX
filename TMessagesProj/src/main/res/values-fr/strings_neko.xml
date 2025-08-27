@@ -48,7 +48,7 @@
     <string name="AvatarAsBackground">Image de profil comme arrière-plan</string>
     <string name="BlurAvatarBackground">Flouter l\'image de profil</string>
     <string name="DarkenAvatarBackground">Assombrir la photo de profil</string>
-    <string name="ProviderDeepLTranslate">DeepL Translate</string>
+    <string name="ProviderDeepLXTranslate">DeepLX Translate</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Translator</string>
     <string name="ProviderYouDao">YouDao Translate</string>
     <string name="pressTitleToOpenAllChats">Appuyer sur le titre pour ouvrir l\'onglet \"Toutes les conversations\"</string>

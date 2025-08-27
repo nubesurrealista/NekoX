@@ -24,7 +24,7 @@
     <string name="pressTitleToOpenAllChats">Stisknutím názvu otevřete kartu „Všechny chaty“</string>
     <string name="ProviderYouDao">YouDao Překladač</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Překladač</string>
-    <string name="ProviderDeepLTranslate">DeepL Překlad</string>
+    <string name="ProviderDeepLXTranslate">DeepLX Překlad</string>
     <string name="DarkenAvatarBackground">Ztmavit profilový obrázek</string>
     <string name="BlurAvatarBackground">Rozostření profilového obrázku</string>
     <string name="AvatarAsBackground">Profilový obrázek jako pozadí</string>

@@ -105,7 +105,7 @@
     <string name="AvatarAsBackground">Profil fotoğrafını arkaplan olarak kullan</string>
     <string name="BlurAvatarBackground">Profil fotoğrafını bulanıklaştır</string>
     <string name="DarkenAvatarBackground">Profil fotoğrafını karart</string>
-    <string name="ProviderDeepLTranslate">DeepL Çeviri</string>
+    <string name="ProviderDeepLXTranslate">DeepLX Çeviri</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Tercüman</string>
     <string name="ProviderYouDao">YouDao Çeviri</string>
     <string name="pressTitleToOpenAllChats">\"Tüm Sohbetler\" sekmesini açmak için başlığa basın</string>

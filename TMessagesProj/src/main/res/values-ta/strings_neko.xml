@@ -124,7 +124,7 @@
     <string name="AvatarAsBackground">சுயவிவரப் படம் பின்னணியாக</string>
     <string name="BlurAvatarBackground">மங்கலான சுயவிவரப் படம்</string>
     <string name="DarkenAvatarBackground">சுயவிவர படம் இருண்ட படம்</string>
-    <string name="ProviderDeepLTranslate">ஆழம்எல் மொழிபெயர்க்கவும்</string>
+    <string name="ProviderDeepLXTranslate">ஆழம்எல் மொழிபெயர்க்கவும்</string>
     <string name="ProviderMicrosoftTranslator">நுண்மென் மொழிபெயர்ப்பாளர்</string>
     <string name="ProviderYouDao">நீங்கள் தாவோ மொழிபெயர்க்கிறீர்கள்</string>
     <string name="AutoArchiveAndMuteAbout">பக்க விளைவு: இது சரிபார்க்க உள்ளக தரவுத்தளத்தைப் பயன்படுத்துகிறது, இது 100% துல்லியமாக இல்லை, வேறுவிதமாகக் கூறினால், தவறான நேர்மறை இருக்கலாம்</string>

@@ -279,4 +279,6 @@
     <string name="BoostedContactRatingInProfileDesc">%s Rating level is boosted by 10 locally for all your contacts and displayed with handshake emoji.</string>
     <string name="NoStarReactionPlaceholder">Disable star reaction placeholder</string>
     <string name="HideForwardToStories">Hide forward to stories</string>
+    <string name="CustomDeepLXInstance">Custom DeepLX endpoint</string>
+    <string name="TranslatorInstanceNote">Search online for public instance or host one yourself, note that this won\'t work with auto translate.</string>
 </resources>

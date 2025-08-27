@@ -105,7 +105,7 @@
     <string name="AvatarAsBackground">Gambar profil sebagai latar belakang</string>
     <string name="BlurAvatarBackground">Buramkan gambar profil</string>
     <string name="DarkenAvatarBackground">Gelapkan gambar profil</string>
-    <string name="ProviderDeepLTranslate">Terjemahan DeepL</string>
+    <string name="ProviderDeepLXTranslate">Terjemahan DeepLX</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Penerjemah</string>
     <string name="ProviderYouDao">Terjemahan YouDao</string>
     <string name="pressTitleToOpenAllChats">Tekan judul untuk membuka tab \"Semua Obrolan\"</string>

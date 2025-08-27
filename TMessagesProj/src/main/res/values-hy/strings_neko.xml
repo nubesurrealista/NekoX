@@ -105,7 +105,7 @@
     <string name="AvatarAsBackground">Պրոֆիլի նկարը որպես ֆոն</string>
     <string name="BlurAvatarBackground">Պղտոր պրոֆիլի նկարը</string>
     <string name="DarkenAvatarBackground">Մութացնել պրոֆիլի նկարը</string>
-    <string name="ProviderDeepLTranslate">DeepL Translate</string>
+    <string name="ProviderDeepLXTranslate">DeepLX Translate</string>
     <string name="ProviderMicrosoftTranslator">Microsoft- ի թարգմանիչ</string>
     <string name="ProviderYouDao">YouDao Translate</string>
     <string name="pressTitleToOpenAllChats">Սեղմեք վերնագիրը ՝ «Բոլոր զրույցները» ներդիրը բացելու համար</string>

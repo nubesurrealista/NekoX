@@ -105,7 +105,7 @@
     <string name="AvatarAsBackground">Arxa planda profil şəkli</string>
     <string name="BlurAvatarBackground">Profil şəklini bulanıklaşdırın</string>
     <string name="DarkenAvatarBackground">Profil şəklini tündləşdirin</string>
-    <string name="ProviderDeepLTranslate">DeepL Tərcümə edin</string>
+    <string name="ProviderDeepLXTranslate">DeepLX Tərcümə edin</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Translator</string>
     <string name="ProviderYouDao">YouDao Tərcümə edin</string>
 </resources>

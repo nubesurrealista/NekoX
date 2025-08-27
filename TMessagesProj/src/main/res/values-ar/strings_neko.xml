@@ -105,7 +105,7 @@
     <string name="AvatarAsBackground">صورة الملف الشخصي كخلفية</string>
     <string name="BlurAvatarBackground">طمس صورة الملف الشخصي</string>
     <string name="DarkenAvatarBackground">تعتيم صورة الملف الشخصي</string>
-    <string name="ProviderDeepLTranslate">ترجمة DeepL</string>
+    <string name="ProviderDeepLXTranslate">ترجمة DeepLX</string>
     <string name="ProviderMicrosoftTranslator">مترجم مايكروسوفت</string>
     <string name="ProviderYouDao">ترجمة YouDao</string>
     <string name="pressTitleToOpenAllChats">اضغط على العنوان لفتح علامة التبويب \"كافة الدردشات\"</string>

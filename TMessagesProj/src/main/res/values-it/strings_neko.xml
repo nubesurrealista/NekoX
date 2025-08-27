@@ -105,7 +105,7 @@
     <string name="AvatarAsBackground">Foto profilo come sfondo</string>
     <string name="BlurAvatarBackground">Sfoca la foto profilo</string>
     <string name="DarkenAvatarBackground">Scurisci la foto profilo</string>
-    <string name="ProviderDeepLTranslate">Traduttore DeepL</string>
+    <string name="ProviderDeepLXTranslate">Traduttore DeepLX</string>
     <string name="ProviderMicrosoftTranslator">Traduttore Microsoft</string>
     <string name="ProviderYouDao">Traduttore YouDao</string>
     <string name="pressTitleToOpenAllChats">Premi il titolo per aprire la scheda \"Tutte le chat\"</string>

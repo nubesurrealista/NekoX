@@ -104,7 +104,7 @@
     <string name="AvatarAsBackground">Profilbild als Hintergrund</string>
     <string name="BlurAvatarBackground">Profilbild verwischen</string>
     <string name="DarkenAvatarBackground">Profilbild abdunkeln</string>
-    <string name="ProviderDeepLTranslate">DeepL Translate</string>
+    <string name="ProviderDeepLXTranslate">DeepLX Translate</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Translator</string>
     <string name="ProviderYouDao">YouDao Translate</string>
     <string name="AutoPauseVideoAbout">Beim Bildschirmsperren/umschalten auf Hintergrund.</string>

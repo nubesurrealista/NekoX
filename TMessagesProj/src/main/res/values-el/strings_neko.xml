@@ -42,7 +42,7 @@
     <string name="HideAllTab">Απόκρυψη καρτέλας \"Όλες\"</string>
     <string name="ConfirmAVMessage">Επιβεβ. αποστ. βίντεο/φωνητ. μηνύμ.</string>
     <string name="DisableProximityEvents">Απεν/ποίηση Συμβάντων Εγγύτητας</string>
-    <string name="ProviderDeepLTranslate">DeepL</string>
+    <string name="ProviderDeepLXTranslate">DeepLX</string>
     <string name="UseMediaStreamInVoip">Χρήση ροής πολυμέσων σε VoIP</string>
     <string name="DeleteDownloadedFile">Διαγραφή ληφθέντος αρχείου</string>
     <string name="SaveCacheToExternalFilesDirAbout">Αποθηκεύστε το φάκελο \"Telegram\" σε κατάλογο συγκεκριμένης εφαρμογής για να διατηρήσετε τον κοινόχρηστο αποθηκευτικό χώρο τακτοποιημένο.</string>

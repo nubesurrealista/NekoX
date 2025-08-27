@@ -100,7 +100,7 @@
     <string name="ProviderLingocloud">Lingocloud</string>
     <string name="BotToken">Token</string>
     <string name="GooglePlay">Google Play</string>
-    <string name="ProviderDeepLTranslate">DeepL Översätt</string>
+    <string name="ProviderDeepLXTranslate">DeepLX Översätt</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Översätt</string>
     <string name="useSystemDNS">Använd systemets DNS</string>
     <string name="customDoH">Anpassad DoH</string>

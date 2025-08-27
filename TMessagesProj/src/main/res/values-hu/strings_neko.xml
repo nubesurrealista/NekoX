@@ -112,7 +112,7 @@
     <string name="customSavePath">Egyedi tárhely útvonal</string>
     <string name="showBottomActionsWhenSelecting">Alsó műveletek megjelenítése kijelöléskor</string>
     <string name="disablePremiumStickerAnimation">Prémium matrica animáció letiltása</string>
-    <string name="ProviderDeepLTranslate">DeepL Fordító</string>
+    <string name="ProviderDeepLXTranslate">DeepLX Fordító</string>
     <string name="pressTitleToOpenAllChats">Koppintson a címre az \"Összes Csevegés\" lap megnyitásához</string>
     <string name="UseMediaStreamInVoip">Médiafolyam használata VoIP-ben</string>
     <string name="hideGroupSticker">Csoportmatrica elrejtése</string>

@@ -129,7 +129,7 @@ interface Translator {
                 providerLingo -> LingoTranslator
                 providerMicrosoft -> MicrosoftTranslator
                 providerYouDao -> YouDaoTranslator
-                providerDeepLX -> DeepLTranslator
+                providerDeepLX -> DeepLXTranslator
                 providerTelegram -> TelegramAPITranslator
                 providerLingva -> LingvaTranslator
                 else -> throw IllegalArgumentException()

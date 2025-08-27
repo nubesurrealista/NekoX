@@ -105,7 +105,7 @@
     <string name="AvatarAsBackground">Đặt ảnh hồ sơ làm nền</string>
     <string name="BlurAvatarBackground">Làm mờ ảnh hồ sơ</string>
     <string name="DarkenAvatarBackground">Làm tối ảnh hồ sơ</string>
-    <string name="ProviderDeepLTranslate">Dịch DeepL</string>
+    <string name="ProviderDeepLXTranslate">Dịch DeepLX</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Dịch</string>
     <string name="ProviderYouDao">YouDao Dịch</string>
     <string name="pressTitleToOpenAllChats">Nhấn vào tiêu đề để mở tab \"Tất cả các cuộc trò chuyện\"</string>

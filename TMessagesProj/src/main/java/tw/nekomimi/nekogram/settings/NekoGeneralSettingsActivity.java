@@ -122,6 +122,9 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell customLingvaApiEndpointRow = cellGroup.appendCell(new ConfigCellTextDetail(NekoConfig.customLingvaInstance, (view, position) -> {
         customDialog_BottomInputString(position, NekoConfig.customLingvaInstance, LocaleController.getString(R.string.LingvaInstanceNote), "https://lingva.example.com");
     }, LocaleController.getString(R.string.None)));
+    private final AbstractConfigCell customDeepLXInstanceRow = cellGroup.appendCell(new ConfigCellTextDetail(NekoConfig.customDeepLXInstance, (view, position) -> {
+        customDialog_BottomInputString(position, NekoConfig.customDeepLXInstance, LocaleController.getString(R.string.TranslatorInstanceNote), "https://dplx.xi-xu.me/deepl");
+    }, LocaleController.getString(R.string.None)));
     private final AbstractConfigCell preferredTranslateTargetLangRow = cellGroup.appendCell(
             new ConfigCellTextInput(LocaleController.getString(R.string.PreferredTranslateTargetLang),
                     NekoConfig.preferredTranslateTargetLang, LocaleController.getString(R.string.PreferredTranslateTargetLangExample),
@@ -398,7 +401,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                             LocaleController.getString(R.string.ProviderLingocloud),
                             LocaleController.getString(R.string.ProviderMicrosoftTranslator),
                             LocaleController.getString(R.string.ProviderYouDao),
-                            LocaleController.getString(R.string.ProviderDeepLTranslate),
+                            LocaleController.getString(R.string.ProviderDeepLXTranslate),
                             LocaleController.getString(R.string.ProviderTelegramAPI),
                             LocaleController.getString(R.string.ProviderLingva)
                     }, (i, __) -> {
@@ -857,7 +860,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                                     value = LocaleController.getString(R.string.ProviderYouDao);
                                     break;
                                 case Translator.providerDeepLX:
-                                    value = LocaleController.getString(R.string.ProviderDeepLTranslate);
+                                    value = LocaleController.getString(R.string.ProviderDeepLXTranslate);
                                     break;
                                 case Translator.providerTelegram:
                                     value = LocaleController.getString(R.string.ProviderTelegramAPI);

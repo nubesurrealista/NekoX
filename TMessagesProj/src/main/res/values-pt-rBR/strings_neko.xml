@@ -105,7 +105,7 @@
     <string name="AvatarAsBackground">Imagem do perfil como plano de fundo</string>
     <string name="BlurAvatarBackground">Desfocar foto de perfil</string>
     <string name="DarkenAvatarBackground">Escurecer foto de perfil</string>
-    <string name="ProviderDeepLTranslate">Tradutor DeepL</string>
+    <string name="ProviderDeepLXTranslate">Tradutor DeepLX</string>
     <string name="ProviderMicrosoftTranslator">Tradutor Microsoft</string>
     <string name="ProviderYouDao">Tradutor YouDao</string>
     <string name="pressTitleToOpenAllChats">Toque e segure no título para abrir a guia \"Todos os Chats\"</string>

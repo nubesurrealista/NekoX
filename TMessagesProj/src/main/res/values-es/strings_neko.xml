@@ -105,7 +105,7 @@
     <string name="AvatarAsBackground">Imagen de perfil como fondo</string>
     <string name="BlurAvatarBackground">Desenfocar la imagen de perfil</string>
     <string name="DarkenAvatarBackground">Oscurecer la imagen de perfil</string>
-    <string name="ProviderDeepLTranslate">Traductor de DeepL</string>
+    <string name="ProviderDeepLXTranslate">Traductor de DeepLX</string>
     <string name="ProviderMicrosoftTranslator">Traductor de Microsoft</string>
     <string name="ProviderYouDao">Traductor de YouDao</string>
     <string name="UseMediaStreamInVoip">Usar el flujo de medios en VoIP</string>

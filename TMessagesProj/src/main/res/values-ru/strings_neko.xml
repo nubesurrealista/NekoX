@@ -105,7 +105,7 @@
     <string name="AvatarAsBackground">Фон бокового меню</string>
     <string name="BlurAvatarBackground">Размыть аватар</string>
     <string name="DarkenAvatarBackground">Затемнить аватар</string>
-    <string name="ProviderDeepLTranslate">DeepL</string>
+    <string name="ProviderDeepLXTranslate">DeepLX</string>
     <string name="ProviderMicrosoftTranslator">Microsoft</string>
     <string name="ProviderYouDao">YouDao (кит.)</string>
     <string name="pressTitleToOpenAllChats">Открывать вкладку «Все» удержанием заголовка</string>

@@ -10,7 +10,7 @@
     <string name="NekoSettings">Configurações Neko</string>
     <string name="ProviderYouDao">YouDao Translate</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Translator</string>
-    <string name="ProviderDeepLTranslate">DeepL Translate</string>
+    <string name="ProviderDeepLXTranslate">DeepLX Translate</string>
     <string name="DarkenAvatarBackground">Escurecer foto de perfil</string>
     <string name="BlurAvatarBackground">Desfocar foto de perfil</string>
     <string name="AvatarAsBackground">Imagem do perfil como plano de fundo</string>

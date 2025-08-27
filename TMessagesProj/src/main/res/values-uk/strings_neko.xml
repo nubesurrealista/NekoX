@@ -105,7 +105,7 @@
     <string name="AvatarAsBackground">Тло профілю</string>
     <string name="BlurAvatarBackground">Розмити зображення профілю</string>
     <string name="DarkenAvatarBackground">Затемнити зображення профілю</string>
-    <string name="ProviderDeepLTranslate">DeepL Translate</string>
+    <string name="ProviderDeepLXTranslate">DeepLX Translate</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Translator</string>
     <string name="ProviderYouDao">YouDao Translate</string>
     <string name="pressTitleToOpenAllChats">Натисніть на заголовок, щоб відкрити теку \"Всі чати\"</string>

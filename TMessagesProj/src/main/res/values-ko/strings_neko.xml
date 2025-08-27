@@ -105,7 +105,7 @@
     <string name="AvatarAsBackground">배경으로 프로필 사진</string>
     <string name="BlurAvatarBackground">프로필 사진 흐림</string>
     <string name="DarkenAvatarBackground">프로필 사진 어둡게</string>
-    <string name="ProviderDeepLTranslate">DeepL 번역</string>
+    <string name="ProviderDeepLXTranslate">DeepLX 번역</string>
     <string name="ProviderMicrosoftTranslator">Microsoft 번역기</string>
     <string name="ProviderYouDao">YouDao 번역</string>
 </resources>

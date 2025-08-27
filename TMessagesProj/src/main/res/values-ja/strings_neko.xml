@@ -106,7 +106,7 @@
     <string name="AvatarAsBackground">背景としてのプロフィール写真</string>
     <string name="BlurAvatarBackground">プロフィール写真をぼかす</string>
     <string name="DarkenAvatarBackground">プロフィール写真を暗くする</string>
-    <string name="ProviderDeepLTranslate">DeepL 翻訳</string>
+    <string name="ProviderDeepLXTranslate">DeepLX 翻訳</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Translator</string>
     <string name="ProviderYouDao">YouDao 翻訳</string>
     <string name="maxRecentStickerCount">最大数の最近使ったステッカー</string>

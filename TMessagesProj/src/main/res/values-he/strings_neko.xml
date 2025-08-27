@@ -105,7 +105,7 @@
     <string name="AvatarAsBackground">תמונת פרופיל כרקע</string>
     <string name="BlurAvatarBackground">טשטש תמונת פרופיל</string>
     <string name="DarkenAvatarBackground">תמונת פרופיל כהה יותר</string>
-    <string name="ProviderDeepLTranslate">תרגום DeepL</string>
+    <string name="ProviderDeepLXTranslate">תרגום DeepLX</string>
     <string name="ProviderMicrosoftTranslator">מתרגם מיקרוסופט</string>
     <string name="ProviderYouDao">YouDao Translate</string>
     <string name="maxRecentStickerCount">כמות המדבקות האחרונות המרבית</string>

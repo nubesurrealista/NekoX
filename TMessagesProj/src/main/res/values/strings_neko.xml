@@ -109,7 +109,7 @@
     <string name="AvatarAsBackground">Profile picture as background</string>
     <string name="BlurAvatarBackground">Blur profile picture</string>
     <string name="DarkenAvatarBackground">Darken profile picture</string>
-    <string name="ProviderDeepLTranslate">DeepL Translate</string>
+    <string name="ProviderDeepLXTranslate">DeepLX Translate</string>
     <string name="ProviderMicrosoftTranslator">Microsoft Translator</string>
     <string name="ProviderYouDao">YouDao Translate</string>
     <string name="pressTitleToOpenAllChats">Press title to open \"All Chats\" tab</string>

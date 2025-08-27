@@ -2,18 +2,17 @@ package tw.nekomimi.nekogram.transtale.source
 
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Request
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
+import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.transtale.Translator
 import tw.nekomimi.nekogram.transtale.Translator.Companion.httpClient
 
-object DeepLTranslator : Translator {
+object DeepLXTranslator : Translator {
 
-    // TODO: add option to set custom instance
-    var url = "https://dplx.xi-xu.me/deepl"
+    var defaultUrl = "https://dplx.xi-xu.me/deepl" // credit: https://github.com/xixu-me/DeepLX
     val targetLanguages = listOf("DE", "EN", "ES", "FR", "IT", "JA", "NL", "PL", "PT", "RU", "ZH")
 
     // val client = DeepLTranslatorRaw()
@@ -25,6 +24,9 @@ object DeepLTranslator : Translator {
             throw UnsupportedOperationException(LocaleController.getString(R.string.TranslateApiUnsupported))
 
         }
+
+        var url = NekoConfig.customDeepLXInstance.String()
+        if (url.isNullOrBlank()) url = defaultUrl
 
         val body = JSONObject()
         body.put("text", query)

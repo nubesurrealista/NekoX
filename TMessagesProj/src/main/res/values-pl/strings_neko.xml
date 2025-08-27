@@ -105,7 +105,7 @@
     <string name="AvatarAsBackground">Zdjęcie profilowe jako tło</string>
     <string name="BlurAvatarBackground">Rozmyj zdjęcie profilowe</string>
     <string name="DarkenAvatarBackground">Przyciemnij zdjęcie profilowe</string>
-    <string name="ProviderDeepLTranslate">DeepL</string>
+    <string name="ProviderDeepLXTranslate">DeepLX</string>
     <string name="ProviderMicrosoftTranslator">Bing (Microsoft)</string>
     <string name="ProviderYouDao">YouDao</string>
     <string name="customDoH">Własne ustawienia DoH</string>
