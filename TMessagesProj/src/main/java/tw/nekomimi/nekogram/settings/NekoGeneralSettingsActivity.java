@@ -32,7 +32,6 @@ import org.openintents.openpgp.util.OpenPgpApi;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -857,7 +856,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                                 case Translator.providerYouDao:
                                     value = LocaleController.getString(R.string.ProviderYouDao);
                                     break;
-                                case Translator.providerDeepL:
+                                case Translator.providerDeepLX:
                                     value = LocaleController.getString(R.string.ProviderDeepLTranslate);
                                     break;
                                 case Translator.providerTelegram:

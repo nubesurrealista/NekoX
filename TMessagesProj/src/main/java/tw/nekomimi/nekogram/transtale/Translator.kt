@@ -92,7 +92,7 @@ interface Translator {
         const val providerLingo = 4
         const val providerMicrosoft = 5
         const val providerYouDao = 6
-        const val providerDeepL = 7
+        const val providerDeepLX = 7
         const val providerTelegram = 8
         const val providerLingva = 9
 
@@ -110,7 +110,7 @@ interface Translator {
                 providerYouDao -> if (language == "zh") {
                     language = "zh-CHS"
                 }
-                providerDeepL -> language = language.uppercase()
+                providerDeepLX -> language = language.uppercase()
                 providerMicrosoft,
                 providerGoogle,
                 providerGoogleCN -> if (language == "zh") {
@@ -129,7 +129,7 @@ interface Translator {
                 providerLingo -> LingoTranslator
                 providerMicrosoft -> MicrosoftTranslator
                 providerYouDao -> YouDaoTranslator
-                providerDeepL -> DeepLTranslator
+                providerDeepLX -> DeepLTranslator
                 providerTelegram -> TelegramAPITranslator
                 providerLingva -> LingvaTranslator
                 else -> throw IllegalArgumentException()

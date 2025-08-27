@@ -1,17 +1,22 @@
 package tw.nekomimi.nekogram.transtale.source
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.transtale.Translator
-import tw.nekomimi.nekogram.transtale.deepl.DeepLTranslatorRaw
+import tw.nekomimi.nekogram.transtale.Translator.Companion.httpClient
 
 object DeepLTranslator : Translator {
 
+    // TODO: add option to set custom instance
+    var url = "https://dplx.xi-xu.me/deepl"
     val targetLanguages = listOf("DE", "EN", "ES", "FR", "IT", "JA", "NL", "PL", "PT", "RU", "ZH")
 
-    val client = DeepLTranslatorRaw()
+    // val client = DeepLTranslatorRaw()
 
     override suspend fun doTranslate(from: String, to: String, query: String): String {
 
@@ -21,6 +26,30 @@ object DeepLTranslator : Translator {
 
         }
 
-        return withContext(Dispatchers.IO) { client.translate(query, "auto", to) }
+        val body = JSONObject()
+        body.put("text", query)
+        body.put("target_lang", to)
+        body.put("source_lang", from)
+
+        var req = Request.Builder()
+            .header("Content-Type", "application/json")
+            .url(url)
+            .apply {
+                post(body.toString().toRequestBody("application/json".toMediaType()))
+            }
+
+        val response = httpClient.newCall(req.build()).execute()
+
+        if (response.code != 200) {
+
+            error("HTTP ${response.code} : ${response.body.string()}")
+
+        }
+
+        var respObj = JSONObject(response.body.string())
+
+        if (respObj.isNull("data")) error(respObj.toString(4))
+
+        return respObj.getString("data")
     }
 }

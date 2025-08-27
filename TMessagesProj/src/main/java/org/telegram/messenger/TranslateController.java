@@ -1,13 +1,8 @@
 package org.telegram.messenger;
 
-import static org.telegram.ui.Components.TranslateAlert2.userAgents;
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.icu.text.Collator;
-import android.net.Uri;
-import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.LongSparseArray;
@@ -15,15 +10,9 @@ import android.util.Pair;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.InputMethodSubtype;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.google.common.base.Charsets;
-
-import org.json.JSONArray;
-import org.json.JSONTokener;
 
 //import com.google.mlkit.common.model.RemoteModelManager;
 //import com.google.mlkit.common.sdkinternal.MlKitContext;
@@ -40,20 +29,10 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.Vector;
 import org.telegram.tgnet.tl.TL_stories;
-import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.Bulletin;
-import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.TranslateAlert2;
-import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.RestrictedLanguagesSelectActivity;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.HttpURLConnection;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -70,7 +49,6 @@ import java.util.Set;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
 
 public class TranslateController extends BaseController {
 
@@ -121,10 +99,11 @@ public class TranslateController extends BaseController {
             return false;
         }
         final TLRPC.Chat chat = getMessagesController().getChat(-dialogId);
-        // if allowed by us and not using Lingva as provider
+        // if allowed by us and not using 'community' provider
         boolean forceAutoTranslate = NekoConfig.autoTranslate.Bool() &&
                 !(NekoConfig.useCustomProviderForAutoTranslate.Bool() &&
-                        NekoConfig.translationProvider.Int() == Translator.providerLingva);
+                        NekoConfig.translationProvider.Int() == Translator.providerLingva &&
+                        NekoConfig.translationProvider.Int() == Translator.providerDeepLX);
         return (forceAutoTranslate ||
             UserConfig.getInstance(currentAccount).isPremium() ||
             (chat != null && chat.autotranslation));
