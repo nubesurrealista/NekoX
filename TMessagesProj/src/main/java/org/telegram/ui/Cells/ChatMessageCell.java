@@ -353,7 +353,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     public void setSpoilersSuppressed(boolean s) {
-        s |= NekoConfig.showSpoilersDirectly.Bool();
+        if (s && currentMessageObject != null && currentMessageObject.isCustomSpoiler()) return;
+//        s |= NekoConfig.showSpoilersDirectly.Bool();
         for (int i = 0; i < replySpoilers.size(); i++) {
             SpoilerEffect eff = replySpoilers.get(i);
             eff.setSuppressUpdates(s);
@@ -379,8 +380,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     public boolean hasSpoilers() {
-        if (NekoConfig.showSpoilersDirectly.Bool()) return spoilerOverride;
-        if (spoilerOverride) return true;
+        if (NekoConfig.showSpoilersDirectly.Bool() || spoilerOverride)
+            return spoilerOverride;
         if (captionLayout != null && captionLayout.textLayoutBlocks != null) {
             for (MessageObject.TextLayoutBlock bl : captionLayout.textLayoutBlocks) {
                 if (!bl.spoilers.isEmpty()) {
@@ -6024,9 +6025,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             messageChanged = true;
         }
 
-        spoilerOverride =
-                NekoConfig.ignoreBlocked.Bool() &&
-                MessagesController.getInstance(currentAccount).blockedPeers.indexOfKey(messageObject.getSenderId()) >= 0;
+        spoilerOverride = messageObject.isCustomSpoiler();
 
         if (messageObject.updateSideMenuEnabled(isSideMenuEnabled)) {
             messageChanged = true;
@@ -18032,7 +18031,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         stringFinalText = Emoji.replaceEmoji(stringFinalText, textPaint.getFontMetricsInt(), false);
                         if (messageObject.messageOwner.reply_to.quote_entities != null) {
                             stringFinalText = MessageObject.replaceAnimatedEmoji(stringFinalText, messageObject.messageOwner.reply_to.quote_entities, textPaint.getFontMetricsInt(), true);
-                            if (NekoConfig.showSpoilersDirectly.Bool()) messageObject.messageOwner.reply_to.quote_entities.removeIf(x -> x instanceof TLRPC.TL_messageEntitySpoiler);
+                            if (NekoConfig.showSpoilersDirectly.Bool() && (currentMessageObject != null && !currentMessageObject.isCustomSpoiler()))
+                                messageObject.messageOwner.reply_to.quote_entities.removeIf(x -> x instanceof TLRPC.TL_messageEntitySpoiler);
                             MessageObject.addEntitiesToText(stringFinalText, messageObject.messageOwner.reply_to.quote_entities, currentMessageObject.isOutOwner(), false, false, false);
                         }
                     } else if (messageObject.messageOwner.reply_to != null && messageObject.messageOwner.reply_to.reply_from != null && messageObject.messageOwner.reply_to.reply_media != null) {
@@ -18225,7 +18225,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             replyTextWidth += dp(16);
                         }
                         replySpoilers.clear();
-                        if (hasReplyQuote || getMessageObject().replyMessageObject != null && !getMessageObject().replyMessageObject.isSpoilersRevealed) {
+                        getMessageObject().reloadCustomSpoiler();
+                        if (hasReplyQuote || getMessageObject().replyMessageObject != null
+                                && !getMessageObject().replyMessageObject.isSpoilersRevealed
+                                && (!NekoConfig.showSpoilersDirectly.Bool() || getMessageObject().isCustomSpoiler())) {
                             SpoilerEffect.addSpoilers(this, replyTextLayout, replyTextOffset, replyTextOffset + replyTextWidth, replySpoilersPool, replySpoilers);
                         }
                         animatedEmojiReplyStack = AnimatedEmojiSpan.update(AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES, this, false, animatedEmojiReplyStack, replyTextLayout);

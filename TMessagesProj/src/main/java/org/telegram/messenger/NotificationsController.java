@@ -2464,7 +2464,7 @@ public class NotificationsController extends BaseController {
             return null;
         }
         StringBuilder stringBuilder = new StringBuilder(text);
-        if (NekoConfig.showSpoilersDirectly.Bool() || (messageObject != null && messageObject.didSpoilLoginCode())) {
+        if ((NekoConfig.showSpoilersDirectly.Bool() && !messageObject.isCustomSpoiler()) || (messageObject != null && messageObject.didSpoilLoginCode())) {
             return stringBuilder.toString();
         }
         for (int i = 0; i < messageObject.messageOwner.entities.size(); i++) {

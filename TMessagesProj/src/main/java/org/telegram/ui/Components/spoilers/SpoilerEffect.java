@@ -39,11 +39,13 @@ import androidx.core.math.MathUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LiteMode;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.CachedStaticLayout;
 import org.telegram.ui.Cells.BaseCell;
+import org.telegram.ui.Cells.DialogCell;
 import org.telegram.ui.Components.Easings;
 import org.telegram.ui.Components.QuoteSpan;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
@@ -580,7 +582,18 @@ public class SpoilerEffect extends Drawable {
      * @param spoilers     Spoilers list to populate
      */
     public static void addSpoilers(@Nullable View v, Layout textLayout, @Nullable Stack<SpoilerEffect> spoilersPool, List<SpoilerEffect> spoilers) {
-        if (NekoConfig.showSpoilersDirectly.Bool()) return;
+        MessageObject message = null;
+        if (v instanceof DialogCell) {
+            message = ((DialogCell) v).getMessage();
+        } else if (v instanceof org.telegram.ui.Cells.ChatMessageCell) {
+            message = ((org.telegram.ui.Cells.ChatMessageCell) v).getMessageObject();
+        }
+
+        boolean forceSpoilers = message != null && message.isCustomSpoiler();
+
+        if (!forceSpoilers && NekoConfig.showSpoilersDirectly.Bool()) {
+            return;
+        }
         if (textLayout.getText() instanceof Spanned) {
             addSpoilers(v, textLayout, (Spanned) textLayout.getText(), spoilersPool, spoilers);
         }

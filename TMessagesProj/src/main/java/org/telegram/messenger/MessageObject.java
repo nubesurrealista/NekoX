@@ -235,7 +235,7 @@ public class MessageObject {
     public long actionDeleteGroupEventId = -1;
     public HashSet<Integer> expandedQuotes;
 
-    public boolean isSpoilersRevealed = NekoConfig.showSpoilersDirectly.Bool();
+    public boolean isSpoilersRevealed;// = NekoConfig.showSpoilersDirectly.Bool();
     public boolean isMediaSpoilersRevealed;
     public boolean isMediaSpoilersRevealedInSharedMedia;
     public boolean revealingMediaSpoilers;
@@ -584,12 +584,35 @@ public class MessageObject {
     }
 
     public boolean hasMediaSpoilers() {
-        boolean hasMedia = messageOwner.media != null;
-        boolean maskForBlockedUser = (NekoConfig.ignoreBlocked.Bool() && MessagesController.getInstance(currentAccount).blockedPeers.indexOfKey(getSenderId()) >= 0);
-        boolean maskForSpecifiedChat = NekoConfig.alwaysUseSpoilerForMediaChats.contains(messageOwner.dialog_id);
-        return maskForBlockedUser || (hasMedia && maskForSpecifiedChat)
-                || !isRepostPreview && (hasMedia && (messageOwner.media.spoiler && !NekoConfig.showSpoilersDirectly.Bool()) || needDrawBluredPreview())
+        boolean showSpoilersDirectly = NekoConfig.showSpoilersDirectly.Bool() && !isCustomSpoiler();
+        return isCustomSpoiler()
+                || !isRepostPreview && (messageOwner.media != null && (messageOwner.media.spoiler && !showSpoilersDirectly) || needDrawBluredPreview())
                 || isHiddenSensitive();
+    }
+
+    private Boolean isCustomSpoiler = null;
+    public boolean isCustomSpoiler() {
+        if (messageOwner == null) return false;
+        if (isCustomSpoiler != null) return isCustomSpoiler;
+        boolean maskForBlockedUser = (NekoConfig.ignoreBlocked.Bool() && MessagesController.getInstance(currentAccount).blockedPeers.indexOfKey(getSenderId()) >= 0);
+        boolean maskForSpecifiedChat = isCustomMediaSpoiler();
+        boolean is = (maskForBlockedUser || maskForSpecifiedChat);
+//        if (is) isCustomSpoiler = true;
+        return isCustomSpoiler = is;
+    }
+
+    public boolean reloadCustomSpoiler() {
+        isCustomSpoiler = null;
+        isSpoilersRevealed = NekoConfig.showSpoilersDirectly.Bool() && !isCustomSpoiler();
+        return isCustomSpoiler();
+    }
+
+    private Boolean isCustomMediaSpoiler = null;
+    public boolean isCustomMediaSpoiler() {
+        if (messageOwner == null) return false;
+        if (isCustomMediaSpoiler != null) return isCustomMediaSpoiler;
+        return isCustomMediaSpoiler = (messageOwner.media != null) &&
+                NekoConfig.alwaysUseSpoilerForMediaChats.contains(messageOwner.dialog_id);
     }
 
     public Boolean isSensitiveCached;
@@ -1778,6 +1801,7 @@ public class MessageObject {
         localChannel = isChannel;
         localSupergroup = supergroup;
         localEdit = edit;
+        reloadCustomSpoiler();
     }
 
     public MessageObject(int accountNum, TLRPC.Message message, AbstractMap<Long, TLRPC.User> users, boolean generateLayout, boolean checkMediaExists) {
@@ -1833,6 +1857,7 @@ public class MessageObject {
         replyMessageObject = replyToMessage;
         eventId = eid;
         wasUnread = !messageOwner.out && messageOwner.unread;
+        reloadCustomSpoiler();
 
         if (message.replyMessage != null) {
             replyMessageObject = new MessageObject(currentAccount, message.replyMessage, null, users, chats, sUsers, sChats, false, checkMediaExists, eid);
