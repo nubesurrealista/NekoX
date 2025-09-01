@@ -677,8 +677,11 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                         }
 //                        index--;
                     }
-                    int position = 0; // index by row
-                    int f = 1 + (isGiftsVisible() ? 1 : 0); // was off by 1
+                    int position = 0;
+                    int f = 1 + (isGiftsVisible() ? 1 : 0);
+                    if (!isGiftsVisible()) {
+                        index--;
+                    }
                     if (isGiftsVisible() && index == 1) {
                         position = giftsSectionRow;
                     } else if (type == TYPE_AVATAR_CONSTRUCTOR && index == 0) {
