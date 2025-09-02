@@ -54,6 +54,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
@@ -216,6 +217,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     long lastUpdateRewindingPlayerTime;
 
     private boolean wasLight;
+    public boolean dummy = false; // custom
 
     private final static float[] speeds = new float[] {
             .5f, 1f, 1.2f, 1.5f, 1.7f, 2f
@@ -776,8 +778,8 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         if (Build.VERSION.SDK_INT >= 21) {
             repeatButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector), 1, dp(18)));
         }
-        if (!messageObject.isVoice()) {
-        bottomView.addView(repeatButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
+        if (messageObject != null && !messageObject.isVoice()) {
+            bottomView.addView(repeatButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
         }
         repeatButton.setOnClickListener(v -> {
             updateSubMenu();
@@ -964,7 +966,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         if (Build.VERSION.SDK_INT >= 21) {
             prevButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector), 1, dp(22)));
         }
-        if (!messageObject.isVoice()) {
+        if (messageObject != null && !messageObject.isVoice()) {
             bottomView.addView(prevButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
         }
         prevButton.setContentDescription(LocaleController.getString(R.string.AccDescrPrevious));
@@ -1090,7 +1092,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         if (Build.VERSION.SDK_INT >= 21) {
             nextButton.setBackground(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector), 1, dp(22)));
         }
-        if (!messageObject.isVoice()) {
+        if (messageObject != null && !messageObject.isVoice()) {
             bottomView.addView(nextButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
         }
         nextButton.setContentDescription(LocaleController.getString(R.string.Next));
@@ -2587,7 +2589,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         return themeDescriptions;
     }
 
-    private void saveToProfile(MessageObject messageObject, boolean save, Runnable done, boolean triedFileRef) {
+    public void saveToProfile(MessageObject messageObject, boolean save, Runnable done, boolean triedFileRef) {
         final TLRPC.Document document = messageObject.getDocument();
         if (document == null) {
             return;
@@ -2605,6 +2607,10 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         ConnectionsManager.getInstance(currentAccount).sendRequest(req, (res, err) -> {
             if (err != null && FileRefController.isFileRefError(err.text)) {
                 if (triedFileRef || messageObject.getId() < 0) {
+                    if (dummy) {
+                        Toast.makeText(LaunchActivity.instance.getApplicationContext(), err.text, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     AndroidUtilities.runOnUIThread(() -> {
                         BulletinFactory.of((FrameLayout) containerView, resourcesProvider)
                             .showForError(err);
@@ -2627,14 +2633,22 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                             }
                             if (message != null) {
                                 saveToProfile(new MessageObject(currentAccount, message, false, true), save, done, true);
-                            } else {
+                            } else if (!dummy) {
                                 AndroidUtilities.runOnUIThread(() -> {
                                     BulletinFactory.of((FrameLayout) containerView, resourcesProvider)
                                         .createErrorBulletin(LocaleController.formatString(R.string.UnknownErrorCode, "CLIENT_MESSAGE_NOT_FOUND"))
                                         .show();
                                 });
+                            } else {
+                                Toast.makeText(LaunchActivity.instance.getApplicationContext(),
+                                        LocaleController.formatString(R.string.UnknownErrorCode, "CLIENT_MESSAGE_NOT_FOUND"),
+                                        Toast.LENGTH_SHORT).show();
                             }
                         } else if (err1 != null) {
+                            if (dummy) {
+                                Toast.makeText(LaunchActivity.instance.getApplicationContext(), err.text, Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                             AndroidUtilities.runOnUIThread(() -> {
                                 BulletinFactory.of((FrameLayout) containerView, resourcesProvider)
                                     .showForError(err1);
@@ -2659,6 +2673,12 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                             if (message != null) {
                                 saveToProfile(new MessageObject(currentAccount, message, false, true), save, done, true);
                             } else {
+                                if (dummy) {
+                                    Toast.makeText(LaunchActivity.instance.getApplicationContext(),
+                                            LocaleController.formatString(R.string.UnknownErrorCode, "CLIENT_MESSAGE_NOT_FOUND"),
+                                            Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
                                 AndroidUtilities.runOnUIThread(() -> {
                                     BulletinFactory.of((FrameLayout) containerView, resourcesProvider)
                                         .createErrorBulletin(LocaleController.formatString(R.string.UnknownErrorCode, "CLIENT_MESSAGE_NOT_FOUND"))
@@ -2666,6 +2686,12 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                                 });
                             }
                         } else if (err1 != null) {
+                            if (dummy) {
+                                Toast.makeText(LaunchActivity.instance.getApplicationContext(),
+                                        err1.text,
+                                        Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                             AndroidUtilities.runOnUIThread(() -> {
                                 BulletinFactory.of((FrameLayout) containerView, resourcesProvider)
                                     .showForError(err1);
@@ -2675,6 +2701,12 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                 }
                 return;
             } else if (err != null) {
+                if (dummy) {
+                    Toast.makeText(LaunchActivity.instance.getApplicationContext(),
+                            err.text,
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 AndroidUtilities.runOnUIThread(() -> {
                     BulletinFactory.of((FrameLayout) containerView, resourcesProvider)
                         .showForError(err);
@@ -2805,7 +2837,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         o.show();
     }
 
-    private void setVisibleInProfile(boolean visible) {
+    public void setVisibleInProfile(boolean visible) {
         if (isMyList() || noforwards) {
             saveToProfileButton.setVisibility(View.GONE);
             unsaveFromProfileTextView.setVisibility(View.GONE);

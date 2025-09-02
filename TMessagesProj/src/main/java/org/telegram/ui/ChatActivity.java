@@ -142,9 +142,7 @@ import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.zxing.common.detector.MathUtils;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openintents.openpgp.OpenPgpDecryptionResult;
 import org.openintents.openpgp.OpenPgpError;
-import org.openintents.openpgp.OpenPgpSignatureResult;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.sufficientlysecure.keychain.pgp.PgpHelper;
 import org.telegram.PhoneFormat.PhoneFormat;
@@ -1259,6 +1257,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     private final static int OPTION_COPY_PHOTO = 1001;
     private final static int OPTION_COPY_PHOTO_AS_STICKER = 1002;
+    private final static int OPTION_ADD_MUSIC_TO_PROFILE = 1003;
 
     private final static int[] allowedNotificationsDuringChatListAnimations = new int[]{
             NotificationCenter.messagesRead,
@@ -31880,6 +31879,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         case OPTION_SAVE_TO_GALLERY:
                         case OPTION_SAVE_TO_GALLERY2:
                         case OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC:
+                        case OPTION_ADD_MUSIC_TO_PROFILE:
                         case OPTION_SHARE:
                         case OPTION_FORWARD:
                         case OPTION_REPLY:
@@ -34335,6 +34335,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         BulletinFactory.of(this).createDownloadBulletin(fileType, themeDelegate).show();
                     });
                 }
+                break;
+            }
+            case OPTION_ADD_MUSIC_TO_PROFILE: {
+                addMusicToProfile(selectedObject);
                 break;
             }
             case OPTION_ADD_TO_GIFS: {
@@ -46198,6 +46202,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
     }
 
+    private void addMusicToProfile(MessageObject msg) {
+        if (msg == null) {
+            return;
+        }
+        AudioPlayerAlert dummy = new AudioPlayerAlert(getContext(), themeDelegate);
+        dummy.dummy = true;
+        dummy.saveToProfile(msg, true, () -> {}, false);
+        BulletinFactory.of(this)
+                .createSimpleBulletin(R.raw.saved_messages, getString(R.string.AudioSaveToMyProfileSaved))
+                .show();
+    }
+
     public void fillMessageMenu(
         MessageObject primaryMessage,
 
@@ -46489,6 +46505,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             items.add(LocaleController.getString(R.string.SaveToMusic));
                             options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
                             icons.add(R.drawable.baseline_file_download_24);
+
+                            // 030
+                            items.add(getString(R.string.AudioAddToProfile));
+                            options.add(OPTION_ADD_MUSIC_TO_PROFILE);
+                            icons.add(R.drawable.filled_track_add);
                         } else if (selectedObject.isDocument() && !noforwardsOrPaidMedia && !selectedObject.isVoiceOnce() && !selectedObject.isRoundOnce()) {
                             items.add(LocaleController.getString(R.string.SaveToDownloads));
                             options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
@@ -46519,6 +46540,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             items.add(LocaleController.getString(R.string.ShareFile));
                             options.add(OPTION_SHARE);
                             icons.add(R.drawable.baseline_share_24);
+
+                            // 030
+                            items.add(getString(R.string.AudioAddToProfile));
+                            options.add(OPTION_ADD_MUSIC_TO_PROFILE);
+                            icons.add(R.drawable.filled_track_add);
                         } else if (selectedObject.getDocument() != null && !selectedObject.isVoiceOnce() && !selectedObject.isRoundOnce()) {
                             if (MessageObject.isNewGifDocument(selectedObject.getDocument())) {
                                 items.add(LocaleController.getString(R.string.SaveToGIFs));
@@ -46860,6 +46886,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         items.add(LocaleController.getString(R.string.ShareFile));
                         options.add(OPTION_SHARE);
                         icons.add(R.drawable.baseline_share_24);
+
+                        // 030
+                        items.add(getString(R.string.AudioAddToProfile));
+                        options.add(OPTION_ADD_MUSIC_TO_PROFILE);
+                        icons.add(R.drawable.filled_track_add);
                     } else if (!selectedObject.isVideo() && selectedObject.getDocument() != null && !selectedObject.isVoiceOnce() && !selectedObject.isRoundOnce()) {
                         items.add(LocaleController.getString(R.string.SaveToDownloads));
                         options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
