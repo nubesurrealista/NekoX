@@ -764,7 +764,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     private boolean firstLayout = true;
     private boolean invalidateScroll = true;
-    private boolean isQrItemVisible = true;
+    // private boolean isQrItemVisible = true;
     private boolean showPhoneTemp = false;
 
     PinchToZoomHelper pinchToZoomHelper;
@@ -8928,16 +8928,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
         }
 
-        if (qrItem != null) {
-            updateQrItemVisibility(animated);
-            if (!animated) {
-                float translation = AndroidUtilities.dp(48) * qrItem.getAlpha();
-                qrItem.setTranslationX(translation);
-                if (avatarsViewPagerIndicatorView != null) {
-                    avatarsViewPagerIndicatorView.setTranslationX(translation - AndroidUtilities.dp(48));
-                }
-            }
-        }
         if (storyView != null) {
             storyView.setExpandCoords(avatarContainer2.getMeasuredWidth() - AndroidUtilities.dp(40), writeButtonVisible, (actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + ActionBar.getCurrentActionBarHeight() / 2.0f/* + extraHeight + searchTransitionOffset*/);
         }
@@ -9539,9 +9529,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (videoCallItemVisible) {
             extra += 48;
         }
-        if (isQrItemVisible && qrItem != null) {
-            extra += 48;
-        }
+//        if (isQrItemVisible && qrItem != null) {
+//            extra += 48;
+//        }
         if (searchItem != null) {
             extra += 48;
         }
@@ -9580,7 +9570,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             mediaCounterTextView.requestLayout();
         }
 
-        width2 = idTextView.getPaint().measureText(idTextView.getText().toString());
+        int width2 = (int) idTextView.getPaint().measureText(idTextView.getText().toString());
         layoutParams = (FrameLayout.LayoutParams) idTextView.getLayoutParams();
         prevWidth = layoutParams.width;
         layoutParams.rightMargin = (int) Math.ceil(idTextView.getTranslationX() + AndroidUtilities.dp(8) + AndroidUtilities.dp(40) * (1.0f - diff));

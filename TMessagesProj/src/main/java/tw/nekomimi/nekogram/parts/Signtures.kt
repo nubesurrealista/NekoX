@@ -19,20 +19,20 @@ val devKeys = arrayOf(
     "32250A4B5F3A6733DF57A3B9EC16C38D2C7FC5F2F693A9636F8F7B3BE3549641"
 )
 
-fun Context.getSignature(): Signature {
+fun Context.getSignature(): Signature? {
     val appInfo = packageManager.getPackageInfo(
         packageName,
         if (Build.VERSION.SDK_INT >= 28) GET_SIGNING_CERTIFICATES else GET_SIGNATURES
     )
     return if (Build.VERSION.SDK_INT >= 28) {
-        appInfo.signingInfo.apkContentsSigners[0]
+        appInfo.signingInfo?.apkContentsSigners[0]
     } else {
-        appInfo.signatures[0]
+        appInfo.signatures?.get(0)
     }
 }
 
 fun Context.getSha256Signature(): String {
-    return Hashing.sha256().hashBytes(getSignature().toByteArray()).toString().uppercase()
+    return getSignature()?.let { Hashing.sha256().hashBytes(it.toByteArray()) }.toString().uppercase()
 }
 
 fun Context.isVerified(): Boolean {
