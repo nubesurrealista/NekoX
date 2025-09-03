@@ -29,6 +29,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.gson.Strictness;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildConfig;
@@ -61,9 +62,19 @@ import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.ProfileActivity;
 
 import java.io.File;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class MessageDetailsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -109,11 +120,13 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
     private UndoView copyTooltip;
 
     public static final Gson gson = new GsonBuilder()
+            .setStrictness(Strictness.LENIENT)
             .setExclusionStrategies(new Exclusion())
             .registerTypeHierarchyAdapter(byte[].class, new ByteArrayToBase64TypeAdapter()).create();
 
     public static final Gson prettyGson = new GsonBuilder()
             .setPrettyPrinting()
+            .setStrictness(Strictness.LENIENT)
             .setExclusionStrategies(new Exclusion())
             .registerTypeHierarchyAdapter(byte[].class, new ByteArrayToBase64TypeAdapter()).create();
 
@@ -215,8 +228,7 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
             } else if (position == rawRow) {
                 ((TextDetailSettingsCell) view).setValue(detailExpanded ? messageDetailsPrettyJsonHead : messageDetailsPrettyJson);
                 detailExpanded = !detailExpanded;
-            } else if (position != endRow && position != emptyRow) {
-                TextDetailSettingsCell textCell = (TextDetailSettingsCell) view;
+            } else if (position != endRow && position != emptyRow && (view instanceof TextDetailSettingsCell textCell)) {
                 try {
                     if (AndroidUtilities.addToClipboard(textCell.getValueTextView().getText())) {
                         copyTooltip.showWithAction(0, UndoView.ACTION_TEXT_COPIED, null, null);
@@ -428,11 +440,11 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
         try {
             messageDetailsJson = "failed to generate json";
             try {
-                messageDetailsJson = gson.toJson(obj);
-                messageDetailsPrettyJson = prettyGson.toJson(obj);
+                messageDetailsJson = safeToJson(obj);
+                messageDetailsPrettyJson = safeToPrettyJson(obj);
                 String[] spl = messageDetailsPrettyJson.split("\n");
                 StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < 3; ++i) sb.append(spl[i]).append("\n");
+                for (int i = 0; i < Math.min(3, spl.length); ++i) sb.append(spl[i]).append("\n");
                 sb.append("...");
                 messageDetailsPrettyJsonHead = sb.toString();
             } catch (Exception e) {
@@ -444,6 +456,112 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
             FileLog.e(e);
         }
     }
+    
+    // Safe JSON serialization methods with circular reference protection
+    private String safeToJson(Object obj) {
+        return safeToJson(obj, false);
+    }
+    
+    private String safeToPrettyJson(Object obj) {
+        return safeToJson(obj, true);
+    }
+    
+    private String safeToJson(Object obj, boolean pretty) {
+        Set<Object> visited = Collections.newSetFromMap(new IdentityHashMap<>());
+        try {
+            return serializeObjectSafely(obj, visited, pretty);
+        } catch (Exception e) {
+            return "{\"error\": \"Serialization failed: " + e.getMessage() + "\"}";
+        }
+    }
+    
+    private String serializeObjectSafely(Object obj, Set<Object> visited, boolean pretty) {
+        if (obj == null) return "null";
+        if (visited.contains(obj)) return "\"[CIRCULAR]\"";
+        Object safeCopy = buildSafeCopy(obj, visited, 0, 10);
+        try {
+            if (pretty) {
+                return prettyGson.toJson(safeCopy);
+            } else {
+                return gson.toJson(safeCopy);
+            }
+        } catch (StackOverflowError | OutOfMemoryError e) {
+            return "\"[OBJECT:" + obj.getClass().getSimpleName() + "@" + System.identityHashCode(obj) + "]\"";
+        } finally {
+            visited.remove(obj);
+        }
+    }
+
+    private Object buildSafeCopy(Object obj, Set<Object> visited, int depth, int maxDepth) {
+        if (obj == null) return null;
+        if (depth > maxDepth) return "[MAX_DEPTH]";
+        if (visited.contains(obj)) return "[CIRCULAR]";
+
+        // Primitives and strings
+        if (obj instanceof String || obj instanceof Number || obj instanceof Boolean || obj instanceof Character) {
+            return obj;
+        }
+
+        // Collections
+        if (obj instanceof Collection<?>) {
+            visited.add(obj);
+            Collection<?> col = (Collection<?>) obj;
+            List<Object> copy = new ArrayList<>(col.size());
+            for (Object item : col) {
+                copy.add(buildSafeCopy(item, visited, depth + 1, maxDepth));
+            }
+            visited.remove(obj);
+            return copy;
+        }
+
+        // Maps
+        if (obj instanceof Map<?, ?>) {
+            visited.add(obj);
+            Map<Object, Object> copy = new LinkedHashMap<>();
+            for (Map.Entry<?, ?> entry : ((Map<?, ?>) obj).entrySet()) {
+                Object key = entry.getKey();
+                Object value = entry.getValue();
+                copy.put(buildSafeCopy(key, visited, depth + 1, maxDepth),
+                        buildSafeCopy(value, visited, depth + 1, maxDepth));
+            }
+            visited.remove(obj);
+            return copy;
+        }
+
+        // Arrays
+        if (obj.getClass().isArray()) {
+            visited.add(obj);
+            int len = Array.getLength(obj);
+            List<Object> copy = new ArrayList<>(len);
+            for (int i = 0; i < len; i++) {
+                copy.add(buildSafeCopy(Array.get(obj, i), visited, depth + 1, maxDepth));
+            }
+            visited.remove(obj);
+            return copy;
+        }
+
+        // Fallback: arbitrary object
+        visited.add(obj);
+        Map<String, Object> copy = new LinkedHashMap<>();
+        Class<?> cls = obj.getClass();
+        while (cls != null) {
+            Field[] fields = cls.getDeclaredFields();
+            for (Field f : fields) {
+                if (Modifier.isStatic(f.getModifiers())) continue; // skip static
+                f.setAccessible(true);
+                try {
+                    Object value = f.get(obj);
+                    copy.put(f.getName(), buildSafeCopy(value, visited, depth + 1, maxDepth));
+                } catch (IllegalAccessException e) {
+                    copy.put(f.getName(), "[ACCESS_ERROR]");
+                }
+            }
+            cls = cls.getSuperclass();
+        }
+        visited.remove(obj);
+        return copy;
+    }
+
 
     private boolean isStory() {
         return storyItem != null;
@@ -592,7 +710,7 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                     } else if (position == scheduledRow) {
                         textCell.setTextAndValue("Scheduled", "Yes", divider);
                     } else if (position == buttonsRow) {
-                        textCell.setTextAndValue("Buttons", gson.toJson(messageObject.messageOwner.reply_markup), divider);
+                        textCell.setTextAndValue("Buttons", safeToJson(messageObject.messageOwner.reply_markup), divider);
                     } else if (position == rawRow) {
                         textCell.setTextAndValue("Raw JSON", messageDetailsPrettyJsonHead, divider);
                     }
