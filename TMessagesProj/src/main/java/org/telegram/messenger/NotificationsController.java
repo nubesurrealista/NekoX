@@ -161,6 +161,7 @@ public class NotificationsController extends BaseController {
     protected static AudioManager audioManager;
     private AlarmManager alarmManager;
 
+    private int classGuid;
     private int notificationId;
     private String notificationGroup;
 
@@ -199,6 +200,7 @@ public class NotificationsController extends BaseController {
     public NotificationsController(int instance) {
         super(instance);
 
+        classGuid = ConnectionsManager.generateClassGuid();
         notificationId = currentAccount + 1;
         notificationGroup = "messages" + (currentAccount == 0 ? "" : currentAccount);
         SharedPreferences preferences = getAccountInstance().getNotificationsSettings();
@@ -1101,8 +1103,27 @@ public class NotificationsController extends BaseController {
                     continue;
                 }
 
-                if (NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockedPeers.indexOfKey(messageObject.getSenderId()) >= 0) {
+                long senderId = messageObject.getSenderId();
+                if (NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockedPeers.indexOfKey(senderId) >= 0) {
                     continue;
+                }
+
+                if (NekoConfig.debugAntiSpam.Bool() && senderId > 0) {
+                    FileLog.d(String.format("PM?, id=%d, isSvc=%s, isContact=%s",
+                            senderId, UserObject.isService(senderId),
+                            getContactsController().isContact(senderId)));
+                    if (!getContactsController().isContact(senderId)) {
+                        getMessagesStorage().getStorageQueue().postRunnable(() -> {
+                            TLRPC.User currentUser = getMessagesStorage().getUserSync(senderId);
+                            if (currentUser.bot) return; // bots can't send first msg
+                            final ArrayList<Long> list = new ArrayList<>(1);
+                            list.add(senderId);
+                            AndroidUtilities.runOnUIThread(() -> {
+                                getMessagesController().addDialogToFolder(list, 1, -1, null, 0);
+                                getNotificationsController().setDialogNotificationsSettings(senderId, 0, NotificationsController.SETTING_MUTE_FOREVER);
+                            });
+                        });
+                    }
                 }
 
                 if (messageObject.isStoryPush) {

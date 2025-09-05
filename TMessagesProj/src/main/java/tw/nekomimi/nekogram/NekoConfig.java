@@ -372,6 +372,7 @@ public class NekoConfig {
     public static ConfigItem boostedContactRatingInProfile = addConfig(R.string.BoostedContactRatingInProfile, "BoostedContactRatingInProfile", configTypeBool, GENERAL, true);
     public static ConfigItem noStarReactionPlaceholder = addConfig(R.string.NoStarReactionPlaceholder, "NoStarReactionPlaceholder", configTypeBool, CHAT, true);
     public static ConfigItem noForwardToStories = addConfig(R.string.HideForwardToStories, "HideForwardToStories", configTypeBool, GENERAL, false);
+    public static ConfigItem debugAntiSpam = addConfig(R.string.DebugAntiSpam, "DebugAntiSpam", configTypeBool, EXPERIMENTAL, false);
 
     static {
         loadConfig(false);

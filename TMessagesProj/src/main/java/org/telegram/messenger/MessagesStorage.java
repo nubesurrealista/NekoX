@@ -16277,11 +16277,15 @@ public class MessagesStorage extends BaseController {
                     }
 
                     // 030 note: most fields are not initialized here
-                    if (autoArchiveAndMute && !exists && dialog.id > 0
+                    boolean debugAntiSpam = NekoConfig.debugAntiSpam.Bool();
+                    if (autoArchiveAndMute && (!exists || debugAntiSpam) && dialog.id > 0
                             && !UserObject.isService(dialog.id)
                             && !contactsController.isContact(dialog.id)) {
                         // TODO: check if self msg?
                         toArchiveAndMute.add(dialog.id);
+                    } else if (autoArchiveAndMute && debugAntiSpam && dialog.id > 0) {
+                        FileLog.d(String.format("PM exists=%s, dialog.id=%d, isSvc=%s, isContact=%s",
+                                exists, dialog.id, UserObject.isService(dialog.id), contactsController.isContact(dialog.id)));
                     }
 
                     int messageDate = 0;
