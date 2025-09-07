@@ -1036,8 +1036,9 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     if (parentAlert.isStickerMode) {
                         PhotoViewer.getInstance().enableStickerMode(null, false, parentAlert.customStickerHandler);
                     }
-                    if (captionForAllMedia()) {
-                        PhotoViewer.getInstance().setCaption(parentAlert.getCommentView().getText());
+                    EditTextEmoji e = parentAlert.getCommentView();
+                    if (e != null && captionForAllMedia()) {
+                        PhotoViewer.getInstance().setCaption(e.getText());
                     }
                 }, hasSpoiler ? 250 : 0);
             } else {
