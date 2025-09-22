@@ -162,4 +162,8 @@
     <string name="useTelegramTranslateInChat">Usa Interfaccia Utente del Traduttore Telegram in chat</string>
     <string name="DisableStories">Disabilita Storie</string>
     <string name="ConfirmToSendCommand">Sei sicuro di voler inviare questo comando?</string>
+    <string name="AutoArchiveAndMuteAbout">Effetto collaterale: Usa un database locale per il controllo, e non accurato al 100%, in altre parole, potrebbe causare dei falsi positivi</string>
+    <string name="AutoArchiveAndMuteNoCommonGroupOnly">Archivia e muta soltanto gli utenti con cui non si hanno gruppi in comune</string>
+    <string name="CloseWebViewWithoutConfirmation">Chiude sempre l\'applicazione web senza chiedere conferma</string>
+    <string name="OpenWebViewTabWithoutBot">Ri-apre l\'applicazione web senza bot</string>
 </resources>
