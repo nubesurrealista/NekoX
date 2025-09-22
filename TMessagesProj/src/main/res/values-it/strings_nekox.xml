@@ -181,4 +181,8 @@
     <string name="StickerSettings">Sticker</string>
     <string name="ConfirmSettings">Conferma</string>
     <string name="InteractionSettings">Interazione</string>
+    <string name="UnblockDeleted">Sblocca account eliminati</string>
+    <string name="UnblockDeletedWarn">Sei sicuro di volere sbloccare **tutti gli utenti/bot eliminati?</string>
+    <string name="PGPEncrypt">Cifra</string>
+    <string name="PGPDecryptErr">Decifratura fallita, clicca OK per provare di nuovo con OpenKeychain UI</string>
 </resources>
