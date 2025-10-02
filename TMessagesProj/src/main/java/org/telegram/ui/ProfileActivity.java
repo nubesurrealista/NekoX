@@ -5856,7 +5856,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         });
         ratingView.setOnClickListener(this::showStarRatingBottomSheet);
         if (userInfo != null) {
-            ratingView.set(userInfo.stars_rating);
+            ratingView.set(NekoXConfig.getProfileRating(currentAccount, userInfo));
         }
 
         avatarContainer2.addView(ratingView);

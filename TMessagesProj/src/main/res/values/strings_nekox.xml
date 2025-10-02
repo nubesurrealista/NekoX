@@ -286,4 +286,5 @@
     <string name="SquareAvatar">Use square avatars</string>
     <string name="FirefoxAidlSvcFailed">Failed to bind service for translation, is the translator installed?</string>
     <string name="EnableAvatarBlur">Enable avatar blur</string>
+    <string name="HideProfileRating">Hide profile rating</string>
 </resources>

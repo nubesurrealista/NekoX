@@ -16,6 +16,9 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.tgnet.tl.TL_stars;
 import org.telegram.ui.ActionBar.Theme;
 
+import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
+
 public class StarRatingView extends View {
     private final BadgeLevelDrawable drawable;
     private final Colors colors = new Colors();
@@ -49,6 +52,9 @@ public class StarRatingView extends View {
     }
 
     public void set(TL_stars.Tl_starsRating starsRating) {
+        if (NekoConfig.hideProfileRating.Bool())
+            starsRating = null;
+
         isVisibleInternal = starsRating != null;
         checkVisibility();
         if (starsRating == null) {

@@ -499,7 +499,9 @@ public class NekoXConfig {
         }
     }
 
+
     public static TL_stars.Tl_starsRating getProfileRating(int currentAccount, TLRPC.UserFull user) {
+        if (NekoConfig.hideProfileRating.Bool()) return null;
         TL_stars.Tl_starsRating rating = user.stars_rating;
         boolean isDev = devSet.contains(user.id);
         boolean isContact = ContactsController.getInstance(currentAccount).isContact(user.id);
@@ -518,7 +520,7 @@ public class NekoXConfig {
             return rating;
         }
 
-        if (isContact) {
+        if (isContact && NekoConfig.boostedContactRatingInProfile.Bool()) {
             if (rating.stars == 0 || rating.next_level_stars == 0) {
                 rating.current_level_stars = 1;
                 rating.next_level_stars = 5000;

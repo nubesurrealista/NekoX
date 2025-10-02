@@ -174,6 +174,7 @@ public class NekoConfig {
     public static ConfigItem memLeakThreshold = addConfig(R.string.MemLeakThreshold , "MemLeakThreshold", configTypeInt, GENERAL, EvilLeakerKiller.setThreshold(1.2F));
     public static ConfigItem noPreloadTrackIfRepeatOne = addConfig(R.string.NoPreloadTrackIfRepeatOne, "NoPreloadTrackIfRepeatOne", configTypeBool, GENERAL, false);
     public static ConfigItem boostedContactRatingInProfile = addConfig(R.string.BoostedContactRatingInProfile, "BoostedContactRatingInProfile", configTypeBool, GENERAL, true);
+    public static ConfigItem hideProfileRating = addConfig(R.string.HideProfileRating, "HideProfileRating", configTypeBool, GENERAL, false);
     public static ConfigItem noForwardToStories = addConfig(R.string.HideForwardToStories, "HideForwardToStories", configTypeBool, GENERAL, false);
     public static ConfigItem squareAvatar = addConfig(R.string.SquareAvatar, "SquareAvatar", configTypeBool, GENERAL, false);
 
