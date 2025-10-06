@@ -1855,7 +1855,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 MessagesController.DialogFilter selected = filters.get(tab.id);
                 searchAdapter.filterDialogs(selected);
                 selectedTab = !tab.isDefault;
-                recentCell.setVisibility(selectedTab ? View.GONE : View.VISIBLE);
+                if (recentCell != null) {
+                    recentCell.setVisibility(selectedTab ? View.GONE : View.VISIBLE);
+                }
             }
 
             @Override
