@@ -285,4 +285,5 @@
     <string name="ProviderFirefox">Firefox Local Translate</string>
     <string name="SquareAvatar">Use square avatars</string>
     <string name="FirefoxAidlSvcFailed">Failed to bind service for translation, is the translator installed?</string>
+    <string name="EnableAvatarBlur">Enable avatar blur</string>
 </resources>

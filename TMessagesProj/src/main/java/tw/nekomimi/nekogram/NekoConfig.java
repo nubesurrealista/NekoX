@@ -87,6 +87,7 @@ public class NekoConfig {
     public static ConfigItem nameOrder = addConfig(R.string.NameOrder, "NameOrder", configTypeInt, GENERAL, 1);
     public static ConfigItem mapPreviewProvider = addConfig(R.string.MapPreviewProvider, "MapPreviewProvider", configTypeInt, GENERAL, 0);
     public static ConfigItem transparentStatusBar = addConfig(R.string.TransparentStatusBar, "TransparentStatusBar", configTypeBool, GENERAL, true);
+    public static ConfigItem enableAvatarBlur = addConfig(R.string.EnableAvatarBlur, "EnableAvatarBlur", configTypeBool, GENERAL, true);
     public static ConfigItem forceBlurInChat = addConfig(R.string.forceBlurInChat, "forceBlurInChat", configTypeBool, GENERAL, false);
     public static ConfigItem chatBlueAlphaValue = addConfig("forceBlurInChatAlphaValue", configTypeInt, GENERAL, 127);
     public static ConfigItem actionBarDecoration = addConfig(R.string.ActionBarDecoration, "ActionBarDecoration", configTypeInt, GENERAL, 0);
