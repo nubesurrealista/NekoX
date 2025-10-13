@@ -380,7 +380,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                             @Override
                             protected void didChangedSizeValue(int value) {
                                 if (position == videosRow) {
-                                    infoCell.setText(LocaleController.formatString("AutoDownloadPreloadVideoInfo", R.string.AutoDownloadPreloadVideoInfo, AndroidUtilities.formatFileSize(value)));
+                                    infoCell.setText(LocaleController.formatString(R.string.AutoDownloadPreloadVideoInfo, AndroidUtilities.formatFileSize(value)));
                                     boolean enabled = value > 2 * 1024 * 1024;
                                     if (enabled != checkCell[0].isEnabled()) {
                                         ArrayList<Animator> animators = new ArrayList<>();
@@ -422,7 +422,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                         if (position == videosRow) {
                             sizeCell[0].setText(LocaleController.getString(R.string.AutoDownloadMaxVideoSize));
                             checkCell[0].setTextAndCheck(LocaleController.getString(R.string.AutoDownloadPreloadVideo), currentPreset.preloadVideo, false);
-                            infoCell.setText(LocaleController.formatString("AutoDownloadPreloadVideoInfo", R.string.AutoDownloadPreloadVideoInfo, AndroidUtilities.formatFileSize(currentPreset.sizes[index])));
+                            infoCell.setText(LocaleController.formatString(R.string.AutoDownloadPreloadVideoInfo, AndroidUtilities.formatFileSize(currentPreset.sizes[index])));
                         } else {
                             sizeCell[0].setText(LocaleController.getString(R.string.AutoDownloadMaxFileSize));
                             checkCell[0].setTextAndCheck(LocaleController.getString(R.string.AutoDownloadPreloadMusic), currentPreset.preloadMusic, false);
@@ -717,10 +717,10 @@ public class DataAutoDownloadActivity extends BaseFragment {
                     StringBuilder builder = new StringBuilder();
                     if (position == storiesRow) {
                         if (preset.preloadStories) {
-                            builder = new StringBuilder(LocaleController.formatString("AutoDownloadOn", R.string.AutoDownloadOn, builder.toString()));
+                            builder = new StringBuilder(LocaleController.formatString(R.string.AutoDownloadOn, builder.toString()));
                             count = 1;
                         } else {
-                            builder = new StringBuilder(LocaleController.formatString("AutoDownloadOff", R.string.AutoDownloadOff, builder.toString()));
+                            builder = new StringBuilder(LocaleController.formatString(R.string.AutoDownloadOff, builder.toString()));
                             count = 0;
                         }
                     } else {
@@ -751,15 +751,15 @@ public class DataAutoDownloadActivity extends BaseFragment {
                             if (position == photosRow) {
                                 builder.append(LocaleController.getString(R.string.AutoDownloadOnAllChats));
                             } else {
-                                builder.append(LocaleController.formatString("AutoDownloadUpToOnAllChats", R.string.AutoDownloadUpToOnAllChats, AndroidUtilities.formatFileSize(maxSize)));
+                                builder.append(LocaleController.formatString(R.string.AutoDownloadUpToOnAllChats, AndroidUtilities.formatFileSize(maxSize)));
                             }
                         } else if (count == 0) {
                             builder.append(LocaleController.getString(R.string.AutoDownloadOff));
                         } else {
                             if (position == photosRow) {
-                                builder = new StringBuilder(LocaleController.formatString("AutoDownloadOnFor", R.string.AutoDownloadOnFor, builder.toString()));
+                                builder = new StringBuilder(LocaleController.formatString(R.string.AutoDownloadOnFor, builder.toString()));
                             } else {
-                                builder = new StringBuilder(LocaleController.formatString("AutoDownloadOnUpToFor", R.string.AutoDownloadOnUpToFor, AndroidUtilities.formatFileSize(maxSize), builder.toString()));
+                                builder = new StringBuilder(LocaleController.formatString(R.string.AutoDownloadOnUpToFor, AndroidUtilities.formatFileSize(maxSize), builder.toString()));
                             }
                         }
                     }

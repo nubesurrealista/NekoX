@@ -1066,7 +1066,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
         final boolean hasDescription = descriptionLayout != null && !TextUtils.isEmpty(descriptionLayout.getText());
         if (documentAttachType == DOCUMENT_ATTACH_TYPE_MUSIC && hasTitle && hasDescription) {
             sbuf.append(", ");
-            sbuf.append(LocaleController.formatString("AccDescrMusicInfo", R.string.AccDescrMusicInfo, descriptionLayout.getText(), titleLayout.getText()));
+            sbuf.append(LocaleController.formatString(R.string.AccDescrMusicInfo, descriptionLayout.getText(), titleLayout.getText()));
         } else {
             if (hasTitle) {
                 if (sbuf.length() > 0) {

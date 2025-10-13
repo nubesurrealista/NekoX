@@ -251,7 +251,7 @@ public class WebActionBar extends FrameLayout {
             isMenuShown = true;
         });
         menuButton.setBackground(menuButtonSelector = Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
-        menuButton.setContentDescription(getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
+        menuButton.setContentDescription(getString(R.string.AccDescrMoreOptions));
         rightmenu.addView(menuButton, LayoutHelper.createLinear(54, 56));
 
         searchEditText = new EditTextBoldCursor(context) {

@@ -10680,9 +10680,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
             String description;
             if (item.published_date != 0 && !TextUtils.isEmpty(item.author)) {
-                description = LocaleController.formatString("ArticleDateByAuthor", R.string.ArticleDateByAuthor, LocaleController.getInstance().getChatFullDate().format((long) item.published_date * 1000), item.author);
+                description = LocaleController.formatString(R.string.ArticleDateByAuthor, LocaleController.getInstance().getChatFullDate().format((long) item.published_date * 1000), item.author);
             } else if (!TextUtils.isEmpty(item.author)) {
-                description = LocaleController.formatString("ArticleByAuthor", R.string.ArticleByAuthor, item.author);
+                description = LocaleController.formatString(R.string.ArticleByAuthor, item.author);
             } else if (item.published_date != 0) {
                 description = LocaleController.getInstance().getChatFullDate().format((long) item.published_date * 1000);
             } else if (!TextUtils.isEmpty(item.description)) {
@@ -11988,9 +11988,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
                 try {
                     if (currentBlock.published_date != 0 && !TextUtils.isEmpty(author)) {
-                        text = LocaleController.formatString("ArticleDateByAuthor", R.string.ArticleDateByAuthor, LocaleController.getInstance().getChatFullDate().format((long) currentBlock.published_date * 1000), author);
+                        text = LocaleController.formatString(R.string.ArticleDateByAuthor, LocaleController.getInstance().getChatFullDate().format((long) currentBlock.published_date * 1000), author);
                     } else if (!TextUtils.isEmpty(author)) {
-                        text = LocaleController.formatString("ArticleByAuthor", R.string.ArticleByAuthor, author);
+                        text = LocaleController.formatString(R.string.ArticleByAuthor, author);
                     } else {
                         text = LocaleController.getInstance().getChatFullDate().format((long) currentBlock.published_date * 1000);
                     }

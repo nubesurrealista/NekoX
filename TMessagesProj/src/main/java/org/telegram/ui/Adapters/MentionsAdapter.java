@@ -1941,7 +1941,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
                 } else if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
                     textView.setText(LocaleController.getString(R.string.AttachInlineRestrictedForever));
                 } else {
-                    textView.setText(LocaleController.formatString("AttachInlineRestricted", R.string.AttachInlineRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
+                    textView.setText(LocaleController.formatString(R.string.AttachInlineRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
                 }
             }
         } else if (type == 5) {

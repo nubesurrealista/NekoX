@@ -622,12 +622,12 @@ public class LimitPreviewView extends LinearLayout {
         boolean isZeroLevelBoosts = boosts.current_level_boosts == boosts.boosts;
         if ((isZeroLevelBoosts && boosted) || boosts.next_level_boosts == 0) {
             percent = 1f;
-            defaultText.setText(LocaleController.formatString("BoostsLevel", R.string.BoostsLevel, boosts.level - 1));
-            premiumCount.setText(LocaleController.formatString("BoostsLevel", R.string.BoostsLevel, boosts.level));
+            defaultText.setText(LocaleController.formatString(R.string.BoostsLevel, boosts.level - 1));
+            premiumCount.setText(LocaleController.formatString(R.string.BoostsLevel, boosts.level));
         } else {
             percent = MathUtils.clamp((boosts.boosts - k) / (float) (boosts.next_level_boosts - k), 0, 1f);
-            defaultText.setText(LocaleController.formatString("BoostsLevel", R.string.BoostsLevel, boosts.level));
-            premiumCount.setText(LocaleController.formatString("BoostsLevel", R.string.BoostsLevel, boosts.level + 1));
+            defaultText.setText(LocaleController.formatString(R.string.BoostsLevel, boosts.level));
+            premiumCount.setText(LocaleController.formatString(R.string.BoostsLevel, boosts.level + 1));
         }
         ((FrameLayout.LayoutParams) premiumCount.getLayoutParams()).gravity = Gravity.RIGHT;
         setType(LimitReachedBottomSheet.TYPE_BOOSTS);

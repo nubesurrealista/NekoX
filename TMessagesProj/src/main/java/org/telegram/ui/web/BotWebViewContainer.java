@@ -2602,14 +2602,13 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
                     }
                     LaunchActivity.dismissAllWeb();
                 }, (error, dialogIds) -> {
-                    Log.d("030-share", String.format("err=%s, dialogIds count=%d", error, dialogIds == null ? 0 : dialogIds.size()));
                     if (TextUtils.isEmpty(error) || NekoConfig.removePremiumAnnoyance.Bool()) {
                         notifyEvent("prepared_message_sent", null);
                         if (delegate != null) {
                             delegate.onOpenBackFromTabs();
                         }
                         AndroidUtilities.runOnUIThread(() -> {
-                            if (proxy != null && proxy.container != null && proxy.container.delegate != null) {
+                            if (dialogIds != null && proxy != null && proxy.container != null && proxy.container.delegate != null) {
                                 proxy.container.delegate.onSharedTo(dialogIds);
                             }
                         }, 500);
@@ -2928,7 +2927,7 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
     }
 
     private void unknownError(String errCode) {
-        error(getString("UnknownError", R.string.UnknownError) + (errCode != null ? ": " + errCode : ""));
+        error(getString(R.string.UnknownError) + (errCode != null ? ": " + errCode : ""));
     }
 
     private void error(String reason) {

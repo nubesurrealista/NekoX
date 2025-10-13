@@ -421,7 +421,7 @@ public class MessageSeenView extends FrameLayout {
         @Override
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
             super.onInitializeAccessibilityNodeInfo(info);
-            String text = LocaleController.formatString("AccDescrPersonHasSeen", R.string.AccDescrPersonHasSeen, nameView.getText());
+            String text = LocaleController.formatString(R.string.AccDescrPersonHasSeen, nameView.getText());
             if (readView.getVisibility() == VISIBLE) {
                 text += " " + readView.getText();
             }

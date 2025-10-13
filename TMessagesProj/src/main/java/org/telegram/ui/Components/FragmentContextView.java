@@ -742,9 +742,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     TLRPC.Chat chat = chatActivity.getCurrentChat();
                     TLRPC.User user = chatActivity.getCurrentUser();
                     if (chat != null) {
-                        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("StopLiveLocationAlertToGroupText", R.string.StopLiveLocationAlertToGroupText, chat.title)));
+                        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.StopLiveLocationAlertToGroupText, chat.title)));
                     } else if (user != null) {
-                        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("StopLiveLocationAlertToUserText", R.string.StopLiveLocationAlertToUserText, UserObject.getFirstName(user))));
+                        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.StopLiveLocationAlertToUserText, UserObject.getFirstName(user))));
                     } else {
                         builder.setMessage(getString(R.string.AreYouSure));
                     }
@@ -1109,13 +1109,13 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 resId = R.raw.speed_fast;
             }
         } else if (byTap && equals(newValue, 1.5f) && equals(oldValue, 1f)) {
-            text = LocaleController.formatString("AudioSpeedCustom", R.string.AudioSpeedCustom, SpeedIconDrawable.formatNumber(newValue));
+            text = LocaleController.formatString(R.string.AudioSpeedCustom, SpeedIconDrawable.formatNumber(newValue));
             resId = R.raw.speed_1to15;
         } else if (byTap && equals(newValue, 2f) && equals(oldValue, 1.5f)) {
             text = getString(R.string.AudioSpeedFast);
             resId = R.raw.speed_15to2;
         } else {
-            text = LocaleController.formatString("AudioSpeedCustom", R.string.AudioSpeedCustom, SpeedIconDrawable.formatNumber(newValue));
+            text = LocaleController.formatString(R.string.AudioSpeedCustom, SpeedIconDrawable.formatNumber(newValue));
             resId = newValue < 1 ? R.raw.speed_slow : R.raw.speed_fast;
         }
         Bulletin bulletin = BulletinFactory.of(fragment).createSimpleBulletin(resId, text);
@@ -1708,7 +1708,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             if (LocationController.getInstance(currentAccount).isSharingLocation(dialogId)) {
                 if (otherSharingCount != 0) {
                     if (otherSharingCount == 1 && notYouUser != null) {
-                        fullString = String.format("%1$s - %2$s", liveLocation, LocaleController.formatString("SharingYouAndOtherName", R.string.SharingYouAndOtherName, UserObject.getFirstName(notYouUser)));
+                        fullString = String.format("%1$s - %2$s", liveLocation, LocaleController.formatString(R.string.SharingYouAndOtherName, UserObject.getFirstName(notYouUser)));
                     } else {
                         fullString = String.format("%1$s - %2$s %3$s", liveLocation, getString(R.string.ChatYourSelfName), LocaleController.formatPluralString("AndOther", otherSharingCount));
                     }
@@ -2061,7 +2061,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
             if (currentProgress != importingHistory.uploadProgress) {
                 currentProgress = importingHistory.uploadProgress;
-                titleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ImportUploading", R.string.ImportUploading, importingHistory.uploadProgress)), false);
+                titleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.ImportUploading, importingHistory.uploadProgress)), false);
             }
         }
     }

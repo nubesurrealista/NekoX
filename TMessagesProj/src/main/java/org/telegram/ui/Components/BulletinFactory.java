@@ -658,9 +658,9 @@ public final class BulletinFactory {
             text = null;
         } else if (users.size() == 1) {
             if (ChatObject.isChannelAndNotMegaGroup(chat)) {
-                text = AndroidUtilities.replaceTags(LocaleController.formatString("HasBeenAddedToChannel", R.string.HasBeenAddedToChannel, "**" + UserObject.getFirstName(users.get(0)) + "**"));
+                text = AndroidUtilities.replaceTags(LocaleController.formatString(R.string.HasBeenAddedToChannel, "**" + UserObject.getFirstName(users.get(0)) + "**"));
             } else {
-                text = AndroidUtilities.replaceTags(LocaleController.formatString("HasBeenAddedToGroup", R.string.HasBeenAddedToGroup, "**" + UserObject.getFirstName(users.get(0)) + "**"));
+                text = AndroidUtilities.replaceTags(LocaleController.formatString(R.string.HasBeenAddedToGroup, "**" + UserObject.getFirstName(users.get(0)) + "**"));
             }
         } else {
             if (ChatObject.isChannelAndNotMegaGroup(chat)) {
@@ -783,11 +783,11 @@ public final class BulletinFactory {
             final String loadingPlaceholder = "<{LOADING}>";
             SpannableStringBuilder stringBuilder;
             if (type == CONTAINS_EMOJI_IN_TOPIC) {
-                stringBuilder = new SpannableStringBuilder(AndroidUtilities.replaceTags(LocaleController.formatString("TopicContainsEmojiPackSingle", R.string.TopicContainsEmojiPackSingle, loadingPlaceholder)));
+                stringBuilder = new SpannableStringBuilder(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.TopicContainsEmojiPackSingle, loadingPlaceholder)));
             } else if (type == CONTAINS_EMOJI_IN_STORY) {
-                stringBuilder = new SpannableStringBuilder(AndroidUtilities.replaceTags(LocaleController.formatString("StoryContainsEmojiPackSingle", R.string.StoryContainsEmojiPackSingle, loadingPlaceholder)));
+                stringBuilder = new SpannableStringBuilder(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.StoryContainsEmojiPackSingle, loadingPlaceholder)));
             } else {
-                stringBuilder = new SpannableStringBuilder(AndroidUtilities.replaceTags(LocaleController.formatString("MessageContainsEmojiPackSingle", R.string.MessageContainsEmojiPackSingle, loadingPlaceholder)));
+                stringBuilder = new SpannableStringBuilder(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.MessageContainsEmojiPackSingle, loadingPlaceholder)));
             }
             LoadingSpan loadingSpan = null;
             int index;
@@ -808,11 +808,11 @@ public final class BulletinFactory {
                 CharSequence message;
                 if (set != null && set.set != null) {
                     if (type == CONTAINS_EMOJI_IN_TOPIC) {
-                        message = AndroidUtilities.replaceTags(LocaleController.formatString("TopicContainsEmojiPackSingle", R.string.TopicContainsEmojiPackSingle, set.set.title));
+                        message = AndroidUtilities.replaceTags(LocaleController.formatString(R.string.TopicContainsEmojiPackSingle, set.set.title));
                     } else if (type == CONTAINS_EMOJI_IN_STORY) {
-                        message = AndroidUtilities.replaceTags(LocaleController.formatString("StoryContainsEmojiPackSingle", R.string.StoryContainsEmojiPackSingle, set.set.title));
+                        message = AndroidUtilities.replaceTags(LocaleController.formatString(R.string.StoryContainsEmojiPackSingle, set.set.title));
                     } else {
-                        message = AndroidUtilities.replaceTags(LocaleController.formatString("MessageContainsEmojiPackSingle", R.string.MessageContainsEmojiPackSingle, set.set.title));
+                        message = AndroidUtilities.replaceTags(LocaleController.formatString(R.string.MessageContainsEmojiPackSingle, set.set.title));
                     }
                 } else {
                     message = LocaleController.getString(R.string.AddEmojiNotFound);
@@ -825,11 +825,11 @@ public final class BulletinFactory {
         } else {
             CharSequence message;
             if (type == CONTAINS_EMOJI_IN_TOPIC) {
-                message = AndroidUtilities.replaceTags(LocaleController.formatString("TopicContainsEmojiPackSingle", R.string.TopicContainsEmojiPackSingle, cachedSet.set.title));
+                message = AndroidUtilities.replaceTags(LocaleController.formatString(R.string.TopicContainsEmojiPackSingle, cachedSet.set.title));
             } else if (type == CONTAINS_EMOJI_IN_STORY) {
-                message = AndroidUtilities.replaceTags(LocaleController.formatString("StoryContainsEmojiPackSingle", R.string.StoryContainsEmojiPackSingle, cachedSet.set.title));
+                message = AndroidUtilities.replaceTags(LocaleController.formatString(R.string.StoryContainsEmojiPackSingle, cachedSet.set.title));
             } else {
-                message = AndroidUtilities.replaceTags(LocaleController.formatString("MessageContainsEmojiPackSingle", R.string.MessageContainsEmojiPackSingle, cachedSet.set.title));
+                message = AndroidUtilities.replaceTags(LocaleController.formatString(R.string.MessageContainsEmojiPackSingle, cachedSet.set.title));
             }
             return createEmojiBulletin(document, message, LocaleController.getString(R.string.ViewAction), () -> openSet.run(inputStickerSet));
         }
@@ -1066,20 +1066,20 @@ public final class BulletinFactory {
 
         switch (setting) {
             case NotificationsController.SETTING_MUTE_CUSTOM:
-                text = LocaleController.formatString("NotificationsMutedForHint", R.string.NotificationsMutedForHint, LocaleController.formatTTLString(timeInSeconds));
+                text = LocaleController.formatString(R.string.NotificationsMutedForHint, LocaleController.formatTTLString(timeInSeconds));
                 mute = true;
                 muteFor = true;
                 break;
             case NotificationsController.SETTING_MUTE_HOUR:
-                text = LocaleController.formatString("NotificationsMutedForHint", R.string.NotificationsMutedForHint, LocaleController.formatPluralString("Hours", 1));
+                text = LocaleController.formatString(R.string.NotificationsMutedForHint, LocaleController.formatPluralString("Hours", 1));
                 mute = true;
                 break;
             case NotificationsController.SETTING_MUTE_8_HOURS:
-                text = LocaleController.formatString("NotificationsMutedForHint", R.string.NotificationsMutedForHint, LocaleController.formatPluralString("Hours", 8));
+                text = LocaleController.formatString(R.string.NotificationsMutedForHint, LocaleController.formatPluralString("Hours", 8));
                 mute = true;
                 break;
             case NotificationsController.SETTING_MUTE_2_DAYS:
-                text = LocaleController.formatString("NotificationsMutedForHint", R.string.NotificationsMutedForHint, LocaleController.formatPluralString("Days", 2));
+                text = LocaleController.formatString(R.string.NotificationsMutedForHint, LocaleController.formatPluralString("Days", 2));
                 mute = true;
                 break;
             case NotificationsController.SETTING_MUTE_FOREVER:
@@ -1184,7 +1184,7 @@ public final class BulletinFactory {
     public static Bulletin createPromoteToAdminBulletin(BaseFragment fragment, String userFirstName) {
         final Bulletin.LottieLayout layout = new Bulletin.LottieLayout(fragment.getParentActivity(), fragment.getResourceProvider());
         layout.setAnimation(R.raw.ic_admin, "Shield");
-        layout.textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("UserSetAsAdminHint", R.string.UserSetAsAdminHint, userFirstName)));
+        layout.textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.UserSetAsAdminHint, userFirstName)));
         return Bulletin.make(fragment, layout, Bulletin.DURATION_SHORT);
     }
 
@@ -1192,7 +1192,7 @@ public final class BulletinFactory {
     public static Bulletin createAddedAsAdminBulletin(BaseFragment fragment, String userFirstName) {
         final Bulletin.LottieLayout layout = new Bulletin.LottieLayout(fragment.getParentActivity(), fragment.getResourceProvider());
         layout.setAnimation(R.raw.ic_admin, "Shield");
-        layout.textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("UserAddedAsAdminHint", R.string.UserAddedAsAdminHint, userFirstName)));
+        layout.textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.UserAddedAsAdminHint, userFirstName)));
         return Bulletin.make(fragment, layout, Bulletin.DURATION_SHORT);
     }
 
@@ -1208,16 +1208,16 @@ public final class BulletinFactory {
             } else {
                 if (DialogObject.isChatDialog(did)) {
                     TLRPC.Chat chat = MessagesController.getInstance(UserConfig.selectedAccount).getChat(-did);
-                    text = AndroidUtilities.replaceTags(LocaleController.formatString("InvLinkToGroup", R.string.InvLinkToGroup, chat.title));
+                    text = AndroidUtilities.replaceTags(LocaleController.formatString(R.string.InvLinkToGroup, chat.title));
                 } else {
                     TLRPC.User user = MessagesController.getInstance(UserConfig.selectedAccount).getUser(did);
-                    text = AndroidUtilities.replaceTags(LocaleController.formatString("InvLinkToUser", R.string.InvLinkToUser, UserObject.getFirstName(user)));
+                    text = AndroidUtilities.replaceTags(LocaleController.formatString(R.string.InvLinkToUser, UserObject.getFirstName(user)));
                 }
                 layout.setAnimation(R.raw.forward, 30, 30);
                 hapticDelay = 300;
             }
         } else {
-            text = AndroidUtilities.replaceTags(LocaleController.formatString("InvLinkToChats", R.string.InvLinkToChats, LocaleController.formatPluralString("Chats", dialogsCount)));
+            text = AndroidUtilities.replaceTags(LocaleController.formatString(R.string.InvLinkToChats, LocaleController.formatPluralString("Chats", dialogsCount)));
             layout.setAnimation(R.raw.forward, 30, 30);
             hapticDelay = 300;
         }
@@ -1395,11 +1395,11 @@ public final class BulletinFactory {
         layout.setAnimation(R.raw.ic_ban, "Hand");
         String name;
         if (user.deleted) {
-            name = LocaleController.formatString("HiddenName", R.string.HiddenName);
+            name = LocaleController.formatString(R.string.HiddenName);
         } else {
             name = user.first_name;
         }
-        layout.textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("UserRemovedFromChatHint", R.string.UserRemovedFromChatHint, name, chatName)));
+        layout.textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.UserRemovedFromChatHint, name, chatName)));
         return Bulletin.make(fragment, layout, Bulletin.DURATION_SHORT);
     }
 

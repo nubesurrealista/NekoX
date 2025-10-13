@@ -5265,9 +5265,9 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
         }
         String date = LocaleController.formatDateAudio(lastDate, true);
         if (message.isOut()) {
-            sb.append(LocaleController.formatString("AccDescrSentDate", R.string.AccDescrSentDate, date));
+            sb.append(LocaleController.formatString(R.string.AccDescrSentDate, date));
         } else {
-            sb.append(LocaleController.formatString("AccDescrReceivedDate", R.string.AccDescrReceivedDate, date));
+            sb.append(LocaleController.formatString(R.string.AccDescrReceivedDate, date));
         }
         sb.append(". ");
         if (chat != null && !message.isOut() && message.isFromUser() && message.messageOwner.action == null) {

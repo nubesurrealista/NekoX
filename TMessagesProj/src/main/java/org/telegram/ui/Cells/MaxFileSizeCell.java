@@ -99,7 +99,7 @@ public class MaxFileSizeCell extends FrameLayout {
                         }
                     }
                 }
-                sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(size)));
+                sizeTextView.setText(LocaleController.formatString(R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(size)));
                 currentSize = size;
                 didChangedSizeValue(size);
             }
@@ -174,7 +174,7 @@ public class MaxFileSizeCell extends FrameLayout {
 
     public void setSize(long size) {
         currentSize = size;
-        sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(size)));
+        sizeTextView.setText(LocaleController.formatString(R.string.AutodownloadSizeLimitUpTo, AndroidUtilities.formatFileSize(size)));
 
         float progress = 0.0f;
         size -= 500 * 1024;

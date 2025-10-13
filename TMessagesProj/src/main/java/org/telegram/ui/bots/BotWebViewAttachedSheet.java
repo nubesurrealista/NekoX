@@ -122,11 +122,11 @@ public class BotWebViewAttachedSheet implements NotificationCenter.NotificationC
         }
         String str;
         if (currentBot.show_in_side_menu && currentBot.show_in_attach_menu) {
-            str = LocaleController.formatString("BotAttachMenuShortcatAddedAttachAndSide", R.string.BotAttachMenuShortcatAddedAttachAndSide, user.first_name);
+            str = LocaleController.formatString(R.string.BotAttachMenuShortcatAddedAttachAndSide, user.first_name);
         } else if (currentBot.show_in_side_menu) {
-            str = LocaleController.formatString("BotAttachMenuShortcatAddedSide", R.string.BotAttachMenuShortcatAddedSide, user.first_name);
+            str = LocaleController.formatString(R.string.BotAttachMenuShortcatAddedSide, user.first_name);
         } else {
-            str = LocaleController.formatString("BotAttachMenuShortcatAddedAttach", R.string.BotAttachMenuShortcatAddedAttach, user.first_name);
+            str = LocaleController.formatString(R.string.BotAttachMenuShortcatAddedAttach, user.first_name);
         }
         AndroidUtilities.runOnUIThread(() -> {
             BulletinFactory.of(windowView, resourcesProvider)
@@ -1309,7 +1309,7 @@ public class BotWebViewAttachedSheet implements NotificationCenter.NotificationC
             return;
         }
         String botName = currentBot.short_name;
-        description = LocaleController.formatString("BotRemoveFromMenu", R.string.BotRemoveFromMenu, botName);
+        description = LocaleController.formatString(R.string.BotRemoveFromMenu, botName);
         TLRPC.TL_attachMenuBot finalCurrentBot = currentBot;
         new AlertDialog.Builder(LaunchActivity.getLastFragment().getContext())
                 .setTitle(LocaleController.getString(R.string.BotRemoveFromMenuTitle))

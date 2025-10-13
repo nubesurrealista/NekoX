@@ -10760,77 +10760,77 @@ public class MessagesController extends BaseController implements NotificationCe
                     final boolean isGroup = key < 0 && !isEncryptedChat;
                     if (pu.action instanceof TLRPC.TL_sendMessageRecordAudioAction) {
                         if (isGroup) {
-                            text = LocaleController.formatString("IsRecordingAudio", R.string.IsRecordingAudio, getUserNameForTyping(user));
+                            text = LocaleController.formatString(R.string.IsRecordingAudio, getUserNameForTyping(user));
                         } else {
                             text = LocaleController.getString(R.string.RecordingAudio);
                         }
                         type = 1;
                     } else if (pu.action instanceof TLRPC.TL_sendMessageRecordRoundAction) {
                         if (isGroup) {
-                            text = LocaleController.formatString("IsRecordingRound", R.string.IsRecordingRound, getUserNameForTyping(user));
+                            text = LocaleController.formatString(R.string.IsRecordingRound, getUserNameForTyping(user));
                         } else {
                             text = LocaleController.getString(R.string.RecordingRound);
                         }
                         type = 4;
                     } else if (pu.action instanceof TLRPC.TL_sendMessageUploadRoundAction) {
                         if (isGroup) {
-                            text = LocaleController.formatString("IsSendingVideo", R.string.IsSendingVideo, getUserNameForTyping(user));
+                            text = LocaleController.formatString(R.string.IsSendingVideo, getUserNameForTyping(user));
                         } else {
                             text = LocaleController.getString(R.string.SendingVideoStatus);
                         }
                         type = 4;
                     } else if (pu.action instanceof TLRPC.TL_sendMessageUploadAudioAction) {
                         if (isGroup) {
-                            text = LocaleController.formatString("IsSendingAudio", R.string.IsSendingAudio, getUserNameForTyping(user));
+                            text = LocaleController.formatString(R.string.IsSendingAudio, getUserNameForTyping(user));
                         } else {
                             text = LocaleController.getString(R.string.SendingAudio);
                         }
                         type = 2;
                     } else if (pu.action instanceof TLRPC.TL_sendMessageUploadVideoAction) {
                         if (isGroup) {
-                            text = LocaleController.formatString("IsSendingVideo", R.string.IsSendingVideo, getUserNameForTyping(user));
+                            text = LocaleController.formatString(R.string.IsSendingVideo, getUserNameForTyping(user));
                         } else {
                             text = LocaleController.getString(R.string.SendingVideoStatus);
                         }
                         type = 2;
                     } else if (pu.action instanceof TLRPC.TL_sendMessageRecordVideoAction) {
                         if (isGroup) {
-                            text = LocaleController.formatString("IsRecordingVideo", R.string.IsRecordingVideo, getUserNameForTyping(user));
+                            text = LocaleController.formatString(R.string.IsRecordingVideo, getUserNameForTyping(user));
                         } else {
                             text = LocaleController.getString(R.string.RecordingVideoStatus);
                         }
                         type = 2;
                     } else if (pu.action instanceof TLRPC.TL_sendMessageUploadDocumentAction) {
                         if (isGroup) {
-                            text = LocaleController.formatString("IsSendingFile", R.string.IsSendingFile, getUserNameForTyping(user));
+                            text = LocaleController.formatString(R.string.IsSendingFile, getUserNameForTyping(user));
                         } else {
                             text = LocaleController.getString(R.string.SendingFile);
                         }
                         type = 2;
                     } else if (pu.action instanceof TLRPC.TL_sendMessageUploadPhotoAction) {
                         if (isGroup) {
-                            text = LocaleController.formatString("IsSendingPhoto", R.string.IsSendingPhoto, getUserNameForTyping(user));
+                            text = LocaleController.formatString(R.string.IsSendingPhoto, getUserNameForTyping(user));
                         } else {
                             text = LocaleController.getString(R.string.SendingPhoto);
                         }
                         type = 2;
                     } else if (pu.action instanceof TLRPC.TL_sendMessageGamePlayAction) {
                         if (isGroup) {
-                            text = LocaleController.formatString("IsSendingGame", R.string.IsSendingGame, getUserNameForTyping(user));
+                            text = LocaleController.formatString(R.string.IsSendingGame, getUserNameForTyping(user));
                         } else {
                             text = LocaleController.getString(R.string.SendingGame);
                         }
                         type = 3;
                     } else if (pu.action instanceof TLRPC.TL_sendMessageGeoLocationAction) {
                         if (isGroup) {
-                            text = LocaleController.formatString("IsSelectingLocation", R.string.IsSelectingLocation, getUserNameForTyping(user));
+                            text = LocaleController.formatString(R.string.IsSelectingLocation, getUserNameForTyping(user));
                         } else {
                             text = LocaleController.getString(R.string.SelectingLocation);
                         }
                         type = 0;
                     } else if (pu.action instanceof TLRPC.TL_sendMessageChooseContactAction) {
                         if (isGroup) {
-                            text = LocaleController.formatString("IsSelectingContact", R.string.IsSelectingContact, getUserNameForTyping(user));
+                            text = LocaleController.formatString(R.string.IsSelectingContact, getUserNameForTyping(user));
                         } else {
                             text = LocaleController.getString(R.string.SelectingContact);
                         }
@@ -10838,21 +10838,21 @@ public class MessagesController extends BaseController implements NotificationCe
                     } else if (pu.action instanceof TLRPC.TL_sendMessageEmojiInteractionSeen) {
                         final String emoji = ((TLRPC.TL_sendMessageEmojiInteractionSeen) pu.action).emoticon;
                         if (isGroup) {
-                            text = LocaleController.formatString("IsEnjoyngAnimations", R.string.IsEnjoyngAnimations, getUserNameForTyping(user), emoji);
+                            text = LocaleController.formatString(R.string.IsEnjoyngAnimations, getUserNameForTyping(user), emoji);
                         } else {
-                            text = LocaleController.formatString("EnjoyngAnimations", R.string.EnjoyngAnimations, emoji);
+                            text = LocaleController.formatString(R.string.EnjoyngAnimations, emoji);
                         }
                         type = 5;
                     } else if (pu.action instanceof TLRPC.TL_sendMessageChooseStickerAction) {
                         if (isGroup) {
-                            text = LocaleController.formatString("IsChoosingSticker", R.string.IsChoosingSticker, getUserNameForTyping(user));
+                            text = LocaleController.formatString(R.string.IsChoosingSticker, getUserNameForTyping(user));
                         } else {
                             text = LocaleController.getString(R.string.ChoosingSticker);
                         }
                         type = 5;
                     } else {
                         if (isGroup) {
-                            text = LocaleController.formatString("IsTypingGroup", R.string.IsTypingGroup, getUserNameForTyping(user));
+                            text = LocaleController.formatString(R.string.IsTypingGroup, getUserNameForTyping(user));
                         } else {
                             text = LocaleController.getString(R.string.Typing);
                         }
@@ -10876,7 +10876,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                     if (label.length() != 0) {
                         if (count == 1) {
-                            text = LocaleController.formatString("IsTypingGroup", R.string.IsTypingGroup, label.toString());
+                            text = LocaleController.formatString(R.string.IsTypingGroup, label.toString());
                         } else {
                             if (arr.size() > 2) {
                                 String plural = LocaleController.getPluralString("AndMoreTypingGroup", arr.size() - 2);
@@ -10886,7 +10886,7 @@ public class MessagesController extends BaseController implements NotificationCe
                                     text = "LOC_ERR: AndMoreTypingGroup";
                                 }
                             } else {
-                                text = LocaleController.formatString("AreTypingGroup", R.string.AreTypingGroup, label.toString());
+                                text = LocaleController.formatString(R.string.AreTypingGroup, label.toString());
                             }
                         }
                         type = 0;
@@ -22007,7 +22007,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (getMessagesController().isDialogMuted(dialogId, topicId)) {
             int mute_until = notificationsPreferences.getInt("notifyuntil_" + NotificationsController.getSharedPrefKey(dialogId, topicId), 0);
             if (mute_until >= getConnectionsManager().getCurrentTime()) {
-                return LocaleController.formatString("NotificationsMutedForHint", R.string.NotificationsMutedForHint, LocaleController.formatTTLString(mute_until));
+                return LocaleController.formatString(R.string.NotificationsMutedForHint, LocaleController.formatTTLString(mute_until));
             }
             return LocaleController.getString(R.string.NotificationsMuted);
         } else {

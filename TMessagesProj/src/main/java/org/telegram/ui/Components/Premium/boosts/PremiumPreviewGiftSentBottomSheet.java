@@ -94,17 +94,17 @@ public class PremiumPreviewGiftSentBottomSheet extends PremiumPreviewBottomSheet
                 break;
             }
             case 2: {
-                String names = formatString("GiftPremiumUsersTwo", R.string.GiftPremiumUsersTwo, UserObject.getFirstName(selectedUsers.get(0)), UserObject.getFirstName(selectedUsers.get(1)));
-                subTitle = formatString("GiftPremiumUsersPurchasedManyZero", R.string.GiftPremiumUsersPurchasedManyZero, names);
+                String names = formatString(R.string.GiftPremiumUsersTwo, UserObject.getFirstName(selectedUsers.get(0)), UserObject.getFirstName(selectedUsers.get(1)));
+                subTitle = formatString(R.string.GiftPremiumUsersPurchasedManyZero, names);
                 break;
             }
             case 3: {
-                String names = formatString("GiftPremiumUsersThree", R.string.GiftPremiumUsersThree, UserObject.getFirstName(selectedUsers.get(0)), UserObject.getFirstName(selectedUsers.get(1)), UserObject.getFirstName(selectedUsers.get(2)));
-                subTitle = formatString("GiftPremiumUsersPurchasedManyZero", R.string.GiftPremiumUsersPurchasedManyZero, names);
+                String names = formatString(R.string.GiftPremiumUsersThree, UserObject.getFirstName(selectedUsers.get(0)), UserObject.getFirstName(selectedUsers.get(1)), UserObject.getFirstName(selectedUsers.get(2)));
+                subTitle = formatString(R.string.GiftPremiumUsersPurchasedManyZero, names);
                 break;
             }
             default: {
-                String names = formatString("GiftPremiumUsersThree", R.string.GiftPremiumUsersThree, UserObject.getFirstName(selectedUsers.get(0)), UserObject.getFirstName(selectedUsers.get(1)), UserObject.getFirstName(selectedUsers.get(2)));
+                String names = formatString(R.string.GiftPremiumUsersThree, UserObject.getFirstName(selectedUsers.get(0)), UserObject.getFirstName(selectedUsers.get(1)), UserObject.getFirstName(selectedUsers.get(2)));
                 subTitle = formatPluralString("GiftPremiumUsersPurchasedMany", selectedUsers.size() - 3, names);
                 break;
             }
@@ -115,9 +115,9 @@ public class PremiumPreviewGiftSentBottomSheet extends PremiumPreviewBottomSheet
         subtitleView.append("\n");
 
         if (selectedUsers.size() == 1) {
-            subtitleView.append(replaceTags(formatString("GiftPremiumGiftsSentStatusForUser", R.string.GiftPremiumGiftsSentStatusForUser, UserObject.getFirstName(selectedUsers.get(0)))));
+            subtitleView.append(replaceTags(formatString(R.string.GiftPremiumGiftsSentStatusForUser, UserObject.getFirstName(selectedUsers.get(0)))));
         } else {
-            subtitleView.append(replaceTags(getString("GiftPremiumGiftsSentStatus", R.string.GiftPremiumGiftsSentStatus)));
+            subtitleView.append(replaceTags(getString(R.string.GiftPremiumGiftsSentStatus)));
         }
     }
 

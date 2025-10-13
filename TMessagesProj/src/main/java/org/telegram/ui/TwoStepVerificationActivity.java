@@ -552,7 +552,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 } else {
                     timeString = LocaleController.formatPluralString("Seconds", Math.max(1, time));
                 }
-                showAlertWithText(getString(R.string.ResetPassword), LocaleController.formatString("ResetPasswordWait", R.string.ResetPasswordWait, timeString));
+                showAlertWithText(getString(R.string.ResetPassword), LocaleController.formatString(R.string.ResetPasswordWait, timeString));
             }
         }));
     }
@@ -584,7 +584,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             } else {
                 time = String.format(Locale.US, "%02d:%02d", t / 60, t % 60);
             }
-            resetWaitView.setText(LocaleController.formatString("RestorePasswordResetIn", R.string.RestorePasswordResetIn, time));
+            resetWaitView.setText(LocaleController.formatString(R.string.RestorePasswordResetIn, time));
             resetWaitView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
             if (bottomButton.getVisibility() != View.GONE) {
                 bottomButton.setVisibility(View.GONE);
@@ -632,7 +632,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                         } else {
                             timeString = LocaleController.formatPluralString("Minutes", time / 60);
                         }
-                        showAlertWithText(getString(R.string.AppName), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                        showAlertWithText(getString(R.string.AppName), LocaleController.formatString(R.string.FloodWaitTime, timeString));
                     } else {
                         showAlertWithText(getString(R.string.AppName), error.text);
                     }
@@ -1007,7 +1007,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                         } else {
                             timeString = LocaleController.formatPluralString("Minutes", time / 60);
                         }
-                        showAlertWithText(StrUtil.getAppName(), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                        showAlertWithText(StrUtil.getAppName(), LocaleController.formatString(R.string.FloodWaitTime, timeString));
                     } else {
                         showAlertWithText(StrUtil.getAppName(), error.text);
                     }
@@ -1146,7 +1146,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                                 } else {
                                     timeString = LocaleController.formatPluralString("Minutes", time / 60);
                                 }
-                                showAlertWithText(StrUtil.getAppName(), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                                showAlertWithText(StrUtil.getAppName(), LocaleController.formatString(R.string.FloodWaitTime, timeString));
                             } else {
                                 showAlertWithText(StrUtil.getAppName(), error.text);
                             }

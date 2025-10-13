@@ -244,9 +244,9 @@ public class SaveToGallerySettingsHelper {
                     }
 
                     if (limitVideo > 0 && limitVideo < 4L * 1000 * 1024 * 1024) {
-                        builder.append(LocaleController.formatString("SaveToGalleryVideosUpTo", R.string.SaveToGalleryVideosUpTo, AndroidUtilities.formatFileSize(limitVideo, true, false)));
+                        builder.append(LocaleController.formatString(R.string.SaveToGalleryVideosUpTo, AndroidUtilities.formatFileSize(limitVideo, true, false)));
                     } else {
-                        builder.append(LocaleController.formatString("SaveToGalleryVideos", R.string.SaveToGalleryVideos));
+                        builder.append(LocaleController.formatString(R.string.SaveToGalleryVideos));
                     }
                 }
             } else {

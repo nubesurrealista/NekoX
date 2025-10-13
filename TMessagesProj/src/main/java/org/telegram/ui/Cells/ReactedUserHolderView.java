@@ -213,7 +213,7 @@ public class ReactedUserHolderView extends FrameLayout {
             Drawable likeDrawableFilled = ContextCompat.getDrawable(getContext(), R.drawable.media_like_active).mutate();
             reactView.setColorFilter(new PorterDuffColorFilter(0xFFFF2E38, PorterDuff.Mode.MULTIPLY));
             reactView.setImageDrawable(likeDrawableFilled);
-            contentDescription = LocaleController.formatString("AccDescrLike", R.string.AccDescrLike);
+            contentDescription = LocaleController.formatString(R.string.AccDescrLike);
         } else if (reaction != null) {
             ReactionsLayoutInBubble.VisibleReaction visibleReaction = ReactionsLayoutInBubble.VisibleReaction.fromTL(reaction);
             if (visibleReaction.emojicon != null) {
@@ -239,13 +239,13 @@ public class ReactedUserHolderView extends FrameLayout {
                 }
                 hasReactImage = true;
             }
-            contentDescription = LocaleController.formatString("AccDescrReactedWith", R.string.AccDescrReactedWith, titleView.getText(), visibleReaction.emojicon != null ? visibleReaction.emojicon : reaction);
+            contentDescription = LocaleController.formatString(R.string.AccDescrReactedWith, titleView.getText(), visibleReaction.emojicon != null ? visibleReaction.emojicon : reaction);
         } else {
             if (reactView != null) {
                 reactView.setAnimatedEmojiDrawable(null);
                 reactView.setImageDrawable(null);
             }
-            contentDescription = LocaleController.formatString("AccDescrPersonHasSeen", R.string.AccDescrPersonHasSeen, titleView.getText());
+            contentDescription = LocaleController.formatString(R.string.AccDescrPersonHasSeen, titleView.getText());
         }
 
         if (storyItem != null) {

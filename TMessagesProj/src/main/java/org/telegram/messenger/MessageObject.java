@@ -2165,9 +2165,9 @@ public class MessageObject {
         if (event.action instanceof TLRPC.TL_channelAdminLogEventActionChangeTitle) {
             String title = ((TLRPC.TL_channelAdminLogEventActionChangeTitle) event.action).new_value;
             if (chat.megagroup) {
-                messageText = replaceWithLink(formatString("EventLogEditedGroupTitle", R.string.EventLogEditedGroupTitle, title), "un1", fromUser);
+                messageText = replaceWithLink(formatString(R.string.EventLogEditedGroupTitle, title), "un1", fromUser);
             } else {
-                messageText = replaceWithLink(formatString("EventLogEditedChannelTitle", R.string.EventLogEditedChannelTitle, title), "un1", fromUser);
+                messageText = replaceWithLink(formatString(R.string.EventLogEditedChannelTitle, title), "un1", fromUser);
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionChangePhoto) {
             TLRPC.TL_channelAdminLogEventActionChangePhoto action = (TLRPC.TL_channelAdminLogEventActionChangePhoto) event.action;
@@ -2284,7 +2284,7 @@ public class MessageObject {
                         rights.append(getString(R.string.EventLogPromotedRemovedTitle));
                     } else {
                         rights.append('\n').append('+').append(' ');
-                        rights.append(formatString("EventLogPromotedTitle", R.string.EventLogPromotedTitle, new_participant.rank));
+                        rights.append(formatString(R.string.EventLogPromotedTitle, new_participant.rank));
                     }
                 }
                 if (o.change_info != n.change_info) {
@@ -2849,7 +2849,7 @@ public class MessageObject {
                 messageText = replaceWithLink(getString(R.string.EventLogRemovedLocation), "un1", fromUser);
             } else {
                 TLRPC.TL_channelLocation channelLocation = (TLRPC.TL_channelLocation) location.new_value;
-                messageText = replaceWithLink(formatString("EventLogChangedLocation", R.string.EventLogChangedLocation, channelLocation.address), "un1", fromUser);
+                messageText = replaceWithLink(formatString(R.string.EventLogChangedLocation, channelLocation.address), "un1", fromUser);
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionToggleSlowMode) {
             TLRPC.TL_channelAdminLogEventActionToggleSlowMode slowMode = (TLRPC.TL_channelAdminLogEventActionToggleSlowMode) event.action;
@@ -2938,18 +2938,18 @@ public class MessageObject {
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionExportedInviteDelete) {
             TLRPC.TL_channelAdminLogEventActionExportedInviteDelete action = (TLRPC.TL_channelAdminLogEventActionExportedInviteDelete) event.action;
-            messageText = replaceWithLink(formatString("ActionDeletedInviteLinkClickable", R.string.ActionDeletedInviteLinkClickable), "un1", fromUser);
+            messageText = replaceWithLink(formatString(R.string.ActionDeletedInviteLinkClickable), "un1", fromUser);
             messageText = replaceWithLink(messageText, "un2", action.invite);
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionExportedInviteRevoke) {
             TLRPC.TL_channelAdminLogEventActionExportedInviteRevoke action = (TLRPC.TL_channelAdminLogEventActionExportedInviteRevoke) event.action;
-            messageText = replaceWithLink(formatString("ActionRevokedInviteLinkClickable", R.string.ActionRevokedInviteLinkClickable, action.invite.link), "un1", fromUser);
+            messageText = replaceWithLink(formatString(R.string.ActionRevokedInviteLinkClickable, action.invite.link), "un1", fromUser);
             messageText = replaceWithLink(messageText, "un2", action.invite);
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionExportedInviteEdit) {
             TLRPC.TL_channelAdminLogEventActionExportedInviteEdit action = (TLRPC.TL_channelAdminLogEventActionExportedInviteEdit) event.action;
             if (action.prev_invite.link != null && action.prev_invite.link.equals(action.new_invite.link)) {
-                messageText = replaceWithLink(formatString("ActionEditedInviteLinkToSameClickable", R.string.ActionEditedInviteLinkToSameClickable), "un1", fromUser);
+                messageText = replaceWithLink(formatString(R.string.ActionEditedInviteLinkToSameClickable), "un1", fromUser);
             } else {
-                messageText = replaceWithLink(formatString("ActionEditedInviteLinkClickable", R.string.ActionEditedInviteLinkClickable), "un1", fromUser);
+                messageText = replaceWithLink(formatString(R.string.ActionEditedInviteLinkClickable), "un1", fromUser);
             }
             messageText = replaceWithLink(messageText, "un2", action.prev_invite);
             messageText = replaceWithLink(messageText, "un3", action.new_invite);
@@ -2963,13 +2963,13 @@ public class MessageObject {
                 object = MessagesController.getInstance(currentAccount).getChat(-id);
             }
             double vol = ChatObject.getParticipantVolume(action.participant) / 100.0;
-            messageText = replaceWithLink(formatString("ActionVolumeChanged", R.string.ActionVolumeChanged, (int) (vol > 0 ? Math.max(vol, 1) : 0)), "un1", fromUser);
+            messageText = replaceWithLink(formatString(R.string.ActionVolumeChanged, (int) (vol > 0 ? Math.max(vol, 1) : 0)), "un1", fromUser);
             messageText = replaceWithLink(messageText, "un2", object);
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionChangeHistoryTTL) {
             TLRPC.TL_channelAdminLogEventActionChangeHistoryTTL action = (TLRPC.TL_channelAdminLogEventActionChangeHistoryTTL) event.action;
             if (!chat.megagroup) {
                 if (action.new_value != 0) {
-                    messageText = formatString("ActionTTLChannelChanged", R.string.ActionTTLChannelChanged, LocaleController.formatTTLString(action.new_value));
+                    messageText = formatString(R.string.ActionTTLChannelChanged, LocaleController.formatTTLString(action.new_value));
                 } else {
                     messageText = getString(R.string.ActionTTLChannelDisabled);
                 }
@@ -2986,7 +2986,7 @@ public class MessageObject {
                 } else {
                     time = LocaleController.formatPluralString("Seconds", action.new_value);
                 }
-                messageText = replaceWithLink(formatString("ActionTTLChanged", R.string.ActionTTLChanged, time), "un1", fromUser);
+                messageText = replaceWithLink(formatString(R.string.ActionTTLChanged, time), "un1", fromUser);
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionParticipantJoinByRequest) {
             TLRPC.TL_channelAdminLogEventActionParticipantJoinByRequest action = (TLRPC.TL_channelAdminLogEventActionParticipantJoinByRequest) event.action;
@@ -3010,7 +3010,7 @@ public class MessageObject {
             String newStr = "**new**";
             String oldStr = "**old**";
             if (customReactionsChanged) {
-                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(replaceWithLink(formatString("ActionReactionsChangedList", R.string.ActionReactionsChangedList, newStr), "un1", fromUser));
+                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(replaceWithLink(formatString(R.string.ActionReactionsChangedList, newStr), "un1", fromUser));
                 int i = spannableStringBuilder.toString().indexOf(newStr);
                 if (i > 0) {
                     spannableStringBuilder.replace(i, i + newStr.length(), newReactions);
@@ -3018,7 +3018,7 @@ public class MessageObject {
                 messageText = spannableStringBuilder;
             } else {
                 CharSequence oldReactions = getStringFrom(eventActionChangeAvailableReactions.prev_value);
-                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(replaceWithLink(formatString("ActionReactionsChanged", R.string.ActionReactionsChanged, oldStr, newStr), "un1", fromUser));
+                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(replaceWithLink(formatString(R.string.ActionReactionsChanged, oldStr, newStr), "un1", fromUser));
                 int i = spannableStringBuilder.toString().indexOf(oldStr);
                 if (i > 0) {
                     spannableStringBuilder.replace(i, i + oldStr.length(), oldReactions);
@@ -3053,7 +3053,7 @@ public class MessageObject {
                     }
                     if (removed != null) {
                         messageText = replaceWithLink(
-                            formatString("EventLogDeactivatedUsername", R.string.EventLogDeactivatedUsername, "@" + removed),
+                            formatString(R.string.EventLogDeactivatedUsername, "@" + removed),
                             "un1", fromUser
                         );
                     }
@@ -3072,7 +3072,7 @@ public class MessageObject {
                     }
                     if (added != null) {
                         messageText = replaceWithLink(
-                            formatString("EventLogActivatedUsername", R.string.EventLogActivatedUsername, "@" + added),
+                            formatString(R.string.EventLogActivatedUsername, "@" + added),
                             "un1", fromUser
                         );
                     }
@@ -3081,7 +3081,7 @@ public class MessageObject {
 
             if (messageText == null) {
                 messageText = replaceWithLink(
-                    formatString("EventLogChangeUsernames", R.string.EventLogChangeUsernames, getUsernamesString(oldUsernames), getUsernamesString(newUsernames)),
+                    formatString(R.string.EventLogChangeUsernames, getUsernamesString(oldUsernames), getUsernamesString(newUsernames)),
                     "un1", fromUser
                 );
             }
@@ -3089,19 +3089,19 @@ public class MessageObject {
             TLRPC.TL_channelAdminLogEventActionToggleForum toggleForum = (TLRPC.TL_channelAdminLogEventActionToggleForum) event.action;
             if (toggleForum.new_value) {
                 messageText = replaceWithLink(
-                        formatString("EventLogSwitchToForum", R.string.EventLogSwitchToForum),
+                        formatString(R.string.EventLogSwitchToForum),
                         "un1", fromUser
                 );
             } else {
                 messageText = replaceWithLink(
-                        formatString("EventLogSwitchToGroup", R.string.EventLogSwitchToGroup),
+                        formatString(R.string.EventLogSwitchToGroup),
                         "un1", fromUser
                 );
             }
         } else if (event.action instanceof TLRPC.TL_channelAdminLogEventActionCreateTopic) {
             TLRPC.TL_channelAdminLogEventActionCreateTopic createTopic = (TLRPC.TL_channelAdminLogEventActionCreateTopic) event.action;
             messageText = replaceWithLink(
-                    formatString("EventLogCreateTopic", R.string.EventLogCreateTopic),
+                    formatString(R.string.EventLogCreateTopic),
                     "un1", fromUser
             );
             messageText = replaceWithLink(messageText, "un2", createTopic.topic);
@@ -3142,13 +3142,13 @@ public class MessageObject {
             TLRPC.TL_channelAdminLogEventActionPinTopic pinTopic = (TLRPC.TL_channelAdminLogEventActionPinTopic) event.action;
             if (pinTopic.new_topic instanceof TLRPC.TL_forumTopic && ((TLRPC.TL_forumTopic)pinTopic.new_topic).pinned) {
                 messageText = replaceWithLink(
-                        formatString("EventLogPinTopic", R.string.EventLogPinTopic),
+                        formatString(R.string.EventLogPinTopic),
                         "un1", fromUser
                 );
                 messageText = replaceWithLink(messageText, "un2", pinTopic.new_topic);
             } else {
                 messageText = replaceWithLink(
-                        formatString("EventLogUnpinTopic", R.string.EventLogUnpinTopic),
+                        formatString(R.string.EventLogUnpinTopic),
                         "un1", fromUser
                 );
                 messageText = replaceWithLink(messageText, "un2", pinTopic.new_topic);
@@ -3619,15 +3619,15 @@ public class MessageObject {
         }
         if (game == null) {
             if (fromUser != null && fromUser.id == UserConfig.getInstance(currentAccount).getClientUserId()) {
-                messageText = formatString("ActionYouScored", R.string.ActionYouScored, LocaleController.formatPluralString("Points", messageOwner.action.score));
+                messageText = formatString(R.string.ActionYouScored, LocaleController.formatPluralString("Points", messageOwner.action.score));
             } else {
-                messageText = replaceWithLink(formatString("ActionUserScored", R.string.ActionUserScored, LocaleController.formatPluralString("Points", messageOwner.action.score)), "un1", fromUser);
+                messageText = replaceWithLink(formatString(R.string.ActionUserScored, LocaleController.formatPluralString("Points", messageOwner.action.score)), "un1", fromUser);
             }
         } else {
             if (fromUser != null && fromUser.id == UserConfig.getInstance(currentAccount).getClientUserId()) {
-                messageText = formatString("ActionYouScoredInGame", R.string.ActionYouScoredInGame, LocaleController.formatPluralString("Points", messageOwner.action.score));
+                messageText = formatString(R.string.ActionYouScoredInGame, LocaleController.formatPluralString("Points", messageOwner.action.score));
             } else {
-                messageText = replaceWithLink(formatString("ActionUserScoredInGame", R.string.ActionUserScoredInGame, LocaleController.formatPluralString("Points", messageOwner.action.score)), "un1", fromUser);
+                messageText = replaceWithLink(formatString(R.string.ActionUserScoredInGame, LocaleController.formatPluralString("Points", messageOwner.action.score)), "un1", fromUser);
             }
             messageText = replaceWithLink(messageText, "un2", game);
         }
@@ -3740,7 +3740,7 @@ public class MessageObject {
                 String username = chat != null ? chat.title : UserObject.getUserName(fromUser);
                 messageText = LocaleController.formatPluralString("NotificationPinnedPaidMedia", (int) paidMedia.stars_amount, username);
             } else if (getMedia(replyMessageObject) instanceof TLRPC.TL_messageMediaGame) {
-                messageText = replaceWithLink(formatString("ActionPinnedGame", R.string.ActionPinnedGame, "\uD83C\uDFAE " + getMedia(replyMessageObject).game.title), "un1", fromUser != null ? fromUser : chat);
+                messageText = replaceWithLink(formatString(R.string.ActionPinnedGame, "\uD83C\uDFAE " + getMedia(replyMessageObject).game.title), "un1", fromUser != null ? fromUser : chat);
                 messageText = Emoji.replaceEmoji(messageText, Theme.chat_msgTextPaint.getFontMetricsInt(), false);
             } else if (replyMessageObject.messageText != null && replyMessageObject.messageText.length() > 0) {
                 CharSequence mess = AnimatedEmojiSpan.cloneSpans(replyMessageObject.messageText);

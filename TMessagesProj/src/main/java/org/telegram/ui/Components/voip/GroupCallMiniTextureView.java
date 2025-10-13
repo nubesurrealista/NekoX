@@ -194,7 +194,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
         StaticLayout staticLayout = new StaticLayout(LocaleController.getString(R.string.VoipVideoScreenSharingTwoLines), textPaint, dp(400), Layout.Alignment.ALIGN_CENTER, 1.0f, 0, false);
         TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(call.chatId);
         String text = LocaleController.formatPluralString("Participants", MessagesController.getInstance(currentAccount).groupCallVideoMaxParticipants);
-        StaticLayout noVideoLayout = new StaticLayout(LocaleController.formatString("VoipVideoNotAvailable", R.string.VoipVideoNotAvailable, text), textPaint, dp(400), Layout.Alignment.ALIGN_CENTER, 1.0f, 0, false);
+        StaticLayout noVideoLayout = new StaticLayout(LocaleController.formatString(R.string.VoipVideoNotAvailable, text), textPaint, dp(400), Layout.Alignment.ALIGN_CENTER, 1.0f, 0, false);
         String sharingScreenString = LocaleController.getString(R.string.VoipVideoScreenSharing);
 
         float textW = textPaint.measureText(videoOnPauseString);
@@ -571,7 +571,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
         if (ChatObject.canManageCalls(chat)) {
             noRtmpStreamTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString(R.string.NoRtmpStreamFromAppOwner)));
         } else {
-            noRtmpStreamTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoRtmpStreamFromAppViewer", R.string.NoRtmpStreamFromAppViewer, chat.title)));
+            noRtmpStreamTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.NoRtmpStreamFromAppViewer, chat.title)));
         }
         addView(noRtmpStreamTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP));
     }

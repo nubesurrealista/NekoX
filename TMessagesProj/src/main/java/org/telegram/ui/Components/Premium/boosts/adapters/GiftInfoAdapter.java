@@ -191,8 +191,8 @@ public abstract class GiftInfoAdapter extends RecyclerListView.SelectionAdapter 
                     Date date = new Date(giftCode.used_date * 1000L);
                     String monthTxt = LocaleController.getInstance().getFormatterYear().format(date);
                     String timeTxt = LocaleController.getInstance().getFormatterDay().format(date);
-                    String fullDateStr = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, monthTxt, timeTxt);
-                    cell.setText(LocaleController.formatString("BoostingUsedLinkDate", R.string.BoostingUsedLinkDate, fullDateStr));
+                    String fullDateStr = LocaleController.formatString(R.string.formatDateAtTime, monthTxt, timeTxt);
+                    cell.setText(LocaleController.formatString(R.string.BoostingUsedLinkDate, fullDateStr));
                 }
                 break;
             }

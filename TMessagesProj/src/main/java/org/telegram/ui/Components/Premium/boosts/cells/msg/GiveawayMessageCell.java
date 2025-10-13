@@ -312,7 +312,7 @@ public class GiveawayMessageCell {
 
         topStringBuilder.setSpan(new RelativeSizeSpan(0.4f), topStringBuilder.length() - 1, topStringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        CharSequence participants = replaceTags(getString("BoostingGiveawayMsgParticipants", R.string.BoostingGiveawayMsgParticipants));
+        CharSequence participants = replaceTags(getString(R.string.BoostingGiveawayMsgParticipants));
         topStringBuilder.append(participants);
         topStringBuilder.setSpan(new RelativeSizeSpan(1.05f), subTitleBuilder.length() + 2, subTitleBuilder.length() + 2 + participants.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         topStringBuilder.append("\n");
@@ -323,14 +323,14 @@ public class GiveawayMessageCell {
             topStringBuilder.append(formatPluralString(isChannel ? "BoostingGiveawayMsgAllSubsPlural" : "BoostingGiveawayMsgAllSubsGroupPlural", giveaway.channels.size()));
         }
 
-        CharSequence dateTitle = replaceTags(getString("BoostingWinnersDate", R.string.BoostingWinnersDate));
+        CharSequence dateTitle = replaceTags(getString(R.string.BoostingWinnersDate));
         SpannableStringBuilder bottomStringBuilder = new SpannableStringBuilder(dateTitle);
         bottomStringBuilder.setSpan(new RelativeSizeSpan(1.05f), 0, dateTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         Date date = new Date(giveaway.until_date * 1000L);
         String monthTxt = LocaleController.getInstance().getFormatterGiveawayCard().format(date);
         String timeTxt = LocaleController.getInstance().getFormatterDay().format(date);
         bottomStringBuilder.append("\n");
-        bottomStringBuilder.append(formatString("formatDateAtTime", R.string.formatDateAtTime, monthTxt, timeTxt));
+        bottomStringBuilder.append(formatString(R.string.formatDateAtTime, monthTxt, timeTxt));
 
         titleLayout = StaticLayoutEx.createStaticLayout(titleStringBuilder, textPaint, maxWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, AndroidUtilities.dp(2), false, TextUtils.TruncateAt.END, maxWidth, 10);
         topLayout = StaticLayoutEx.createStaticLayout(topStringBuilder, textPaint, maxWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, AndroidUtilities.dp(2), false, TextUtils.TruncateAt.END, maxWidth, 10);
@@ -372,7 +372,7 @@ public class GiveawayMessageCell {
                 countriesWithFlags.add(builder);
             }
             if (!countriesWithFlags.isEmpty()) {
-                CharSequence txt = replaceTags(formatString("BoostingGiveAwayFromCountries", R.string.BoostingGiveAwayFromCountries, TextUtils.join(", ", countriesWithFlags)));
+                CharSequence txt = replaceTags(formatString(R.string.BoostingGiveAwayFromCountries, TextUtils.join(", ", countriesWithFlags)));
                 txt = Emoji.replaceEmoji(txt, countriesTextPaint.getFontMetricsInt(), false);
                 countriesLayout = StaticLayoutEx.createStaticLayout(txt, countriesTextPaint, maxRowLength, Layout.Alignment.ALIGN_CENTER, 1.0f, 0, false, TextUtils.TruncateAt.END, maxRowLength, 10);
             }

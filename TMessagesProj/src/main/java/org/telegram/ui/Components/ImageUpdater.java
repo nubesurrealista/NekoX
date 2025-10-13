@@ -271,9 +271,9 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         BottomSheet.NekoXBuilder builder = new BottomSheet.NekoXBuilder(parentFragment.getParentActivity());
 
         if (type == TYPE_SET_PHOTO_FOR_USER) {
-            builder.setTitle(LocaleController.formatString("SetPhotoFor", R.string.SetPhotoFor, user.first_name), true);
+            builder.setTitle(LocaleController.formatString(R.string.SetPhotoFor, user.first_name), true);
         } else if (type == TYPE_SUGGEST_PHOTO_FOR_USER) {
-            builder.setTitle(LocaleController.formatString("SuggestPhotoFor", R.string.SuggestPhotoFor, user.first_name), true);
+            builder.setTitle(LocaleController.formatString(R.string.SuggestPhotoFor, user.first_name), true);
         } else {
             builder.setTitle(LocaleController.getString(R.string.ChoosePhoto), true);
         }
@@ -604,9 +604,9 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             chatAttachAlert.setImageUpdater(this);
         }
         if (type == TYPE_SET_PHOTO_FOR_USER) {
-            chatAttachAlert.getSelectedTextView().setText(LocaleController.formatString("SetPhotoFor", R.string.SetPhotoFor, user.first_name));
+            chatAttachAlert.getSelectedTextView().setText(LocaleController.formatString(R.string.SetPhotoFor, user.first_name));
         } else if (type == TYPE_SUGGEST_PHOTO_FOR_USER) {
-            chatAttachAlert.getSelectedTextView().setText(LocaleController.formatString("SuggestPhotoFor", R.string.SuggestPhotoFor, user.first_name));
+            chatAttachAlert.getSelectedTextView().setText(LocaleController.formatString(R.string.SuggestPhotoFor, user.first_name));
         }
     }
 

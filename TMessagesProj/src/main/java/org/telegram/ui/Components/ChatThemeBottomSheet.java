@@ -350,7 +350,7 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             } else if (chatActivity.getCurrentChat() != null) {
                 name = chatActivity.getCurrentChat().title;
             }
-            themeHintTextView.setText(LocaleController.formatString("ChatThemeApplyHint", R.string.ChatThemeApplyHint, name));
+            themeHintTextView.setText(LocaleController.formatString(R.string.ChatThemeApplyHint, name));
             themeHintTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             rootLayout.addView(themeHintTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.START, 16, 214, 16, 12));
         }
@@ -573,9 +573,9 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
             hintView.setShowingDuration(5000);
             hintView.setBottomOffset(-dp(8));
             if (forceDark) {
-                hintView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ChatThemeDaySwitchTooltip", R.string.ChatThemeDaySwitchTooltip)));
+                hintView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.ChatThemeDaySwitchTooltip)));
             } else {
-                hintView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ChatThemeNightSwitchTooltip", R.string.ChatThemeNightSwitchTooltip)));
+                hintView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.ChatThemeNightSwitchTooltip)));
             }
             AndroidUtilities.runOnUIThread(() -> {
                 hintView.showForView(darkThemeView, true);
@@ -1051,9 +1051,9 @@ public class ChatThemeBottomSheet extends BottomSheet implements NotificationCen
                 StickerSetBulletinLayout layout = new StickerSetBulletinLayout(getContext(), null, StickerSetBulletinLayout.TYPE_EMPTY, document, chatActivity.getResourceProvider());
                 layout.subtitleTextView.setVisibility(View.GONE);
                 if (themeDisabled) {
-                    layout.titleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ThemeAlsoDisabledForHint", R.string.ThemeAlsoDisabledForHint, user.first_name)));
+                    layout.titleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.ThemeAlsoDisabledForHint, user.first_name)));
                 } else {
-                    layout.titleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ThemeAlsoAppliedForHint", R.string.ThemeAlsoAppliedForHint, user.first_name)));
+                    layout.titleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.ThemeAlsoAppliedForHint, user.first_name)));
                 }
                 layout.titleTextView.setTypeface(null);
                 bulletin = Bulletin.make(chatActivity, layout, Bulletin.DURATION_LONG);

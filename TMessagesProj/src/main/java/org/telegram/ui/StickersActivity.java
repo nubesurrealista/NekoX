@@ -1295,12 +1295,12 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
                         String buttonText;
                         if (which == MENU_DELETE) {
-                            builder.setTitle(LocaleController.formatString("DeleteStickerSetsAlertTitle", R.string.DeleteStickerSetsAlertTitle, LocaleController.formatPluralString("StickerSets", count)));
-                            builder.setMessage(LocaleController.formatString("DeleteStickersAlertMessage", R.string.DeleteStickersAlertMessage, count));
+                            builder.setTitle(LocaleController.formatString(R.string.DeleteStickerSetsAlertTitle, LocaleController.formatPluralString("StickerSets", count)));
+                            builder.setMessage(LocaleController.formatString(R.string.DeleteStickersAlertMessage, count));
                             buttonText = LocaleController.getString(R.string.Delete);
                         } else {
-                            builder.setTitle(LocaleController.formatString("ArchiveStickerSetsAlertTitle", R.string.ArchiveStickerSetsAlertTitle, LocaleController.formatPluralString("StickerSets", count)));
-                            builder.setMessage(LocaleController.formatString("ArchiveStickersAlertMessage", R.string.ArchiveStickersAlertMessage, count));
+                            builder.setTitle(LocaleController.formatString(R.string.ArchiveStickerSetsAlertTitle, LocaleController.formatPluralString("StickerSets", count)));
+                            builder.setMessage(LocaleController.formatString(R.string.ArchiveStickersAlertMessage, count));
                             buttonText = LocaleController.getString(R.string.Archive);
                         }
                         builder.setPositiveButton(buttonText, (dialog, which1) -> {

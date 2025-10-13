@@ -3044,7 +3044,7 @@ public class NotificationsController extends BaseController {
                             if (TextUtils.isEmpty(emoticon)) {
                                 msg = dialogId == selfUsedId
                                         ? LocaleController.formatString(R.string.ChatThemeDisabledYou)
-                                        : LocaleController.formatString("ChatThemeDisabled", R.string.ChatThemeDisabled, name, emoticon);
+                                        : LocaleController.formatString(R.string.ChatThemeDisabled, name, emoticon);
                             } else {
                                 msg = dialogId == selfUsedId
                                         ? LocaleController.formatString(R.string.ChatThemeChangedYou, emoticon)
@@ -3184,7 +3184,7 @@ public class NotificationsController extends BaseController {
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGiveawayResults) {
                             msg = LocaleController.formatString(R.string.BoostingGiveawayResults);
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGeo || messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaVenue) {
-                            msg = LocaleController.formatString("NotificationMessageGroupMap", R.string.NotificationMessageGroupMap, name, getTitle(chat));
+                            msg = LocaleController.formatString(R.string.NotificationMessageGroupMap, name, getTitle(chat));
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGeoLive) {
                             msg = LocaleController.formatString(R.string.NotificationMessageGroupLiveLocation, name, getTitle(chat));
                         } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaDocument) {

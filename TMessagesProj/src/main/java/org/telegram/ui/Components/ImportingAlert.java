@@ -194,7 +194,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             SendMessagesHelper.ImportingHistory importingHistory = parentFragment.getSendMessagesHelper().getImportingHistory(parentFragment.getDialogId());
             percentTextView.setText(String.format("%d%%", importingHistory.uploadProgress));
             lineProgressView.setProgress(importingHistory.uploadProgress / 100.0f, false);
-            importCountTextView[0].setText(LocaleController.formatString("ImportCount", R.string.ImportCount, AndroidUtilities.formatFileSize(importingHistory.getUploadedCount()), AndroidUtilities.formatFileSize(importingHistory.getTotalCount())));
+            importCountTextView[0].setText(LocaleController.formatString(R.string.ImportCount, AndroidUtilities.formatFileSize(importingHistory.getUploadedCount()), AndroidUtilities.formatFileSize(importingHistory.getTotalCount())));
             infoTextView[1].setText(LocaleController.getString(R.string.ImportDoneInfo));
             importCountTextView[1].setText(LocaleController.getString(R.string.ImportDoneTitle));
 
@@ -204,7 +204,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             SendMessagesHelper.ImportingStickers importingStickers = SendMessagesHelper.getInstance(currentAccount).getImportingStickers(shortName);
             percentTextView.setText(String.format("%d%%", importingStickers.uploadProgress));
             lineProgressView.setProgress(importingStickers.uploadProgress / 100.0f, false);
-            importCountTextView[0].setText(LocaleController.formatString("ImportCount", R.string.ImportCount, AndroidUtilities.formatFileSize(importingStickers.getUploadedCount()), AndroidUtilities.formatFileSize(importingStickers.getTotalCount())));
+            importCountTextView[0].setText(LocaleController.formatString(R.string.ImportCount, AndroidUtilities.formatFileSize(importingStickers.getUploadedCount()), AndroidUtilities.formatFileSize(importingStickers.getTotalCount())));
             infoTextView[1].setText(LocaleController.getString(R.string.ImportStickersDoneInfo));
             importCountTextView[1].setText(LocaleController.getString(R.string.ImportStickersDoneTitle));
 
@@ -261,7 +261,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             }
 
             percentTextView.setText(String.format("%d%%", importingHistory.uploadProgress));
-            importCountTextView[0].setText(LocaleController.formatString("ImportCount", R.string.ImportCount, AndroidUtilities.formatFileSize(importingHistory.getUploadedCount()), AndroidUtilities.formatFileSize(importingHistory.getTotalCount())));
+            importCountTextView[0].setText(LocaleController.formatString(R.string.ImportCount, AndroidUtilities.formatFileSize(importingHistory.getUploadedCount()), AndroidUtilities.formatFileSize(importingHistory.getTotalCount())));
             lineProgressView.setProgress(importingHistory.uploadProgress / 100.0f, true);
         } else if (id == NotificationCenter.stickersImportProgressChanged) {
             if (args.length > 1) {
@@ -283,7 +283,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             }
 
             percentTextView.setText(String.format("%d%%", importingStickers.uploadProgress));
-            importCountTextView[0].setText(LocaleController.formatString("ImportCount", R.string.ImportCount, AndroidUtilities.formatFileSize(importingStickers.getUploadedCount()), AndroidUtilities.formatFileSize(importingStickers.getTotalCount())));
+            importCountTextView[0].setText(LocaleController.formatString(R.string.ImportCount, AndroidUtilities.formatFileSize(importingStickers.getUploadedCount()), AndroidUtilities.formatFileSize(importingStickers.getTotalCount())));
             lineProgressView.setProgress(importingStickers.uploadProgress / 100.0f, true);
         }
     }

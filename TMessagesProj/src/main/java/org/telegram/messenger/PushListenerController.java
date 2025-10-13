@@ -505,23 +505,23 @@ public class PushListenerController {
                                             break;
                                         }
                                         case "MESSAGE_SAME_WALLPAPER": {
-                                            messageText = LocaleController.formatString("ActionSetSameWallpaperForThisChat", R.string.ActionSetSameWallpaperForThisChat, args[0]);
+                                            messageText = LocaleController.formatString(R.string.ActionSetSameWallpaperForThisChat, args[0]);
                                             message1 = getString(R.string.WallpaperSameNotification);
                                             break;
                                         }
                                         case "MESSAGE_WALLPAPER": {
-                                            messageText = LocaleController.formatString("ActionSetWallpaperForThisChat", R.string.ActionSetWallpaperForThisChat, args[0]);
+                                            messageText = LocaleController.formatString(R.string.ActionSetWallpaperForThisChat, args[0]);
                                             message1 = getString(R.string.WallpaperNotification);
                                             break;
                                         }
                                         case "MESSAGE_RECURRING_PAY": {
-                                            messageText = LocaleController.formatString("NotificationMessageRecurringPay", R.string.NotificationMessageRecurringPay, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageRecurringPay, args[0], args[1]);
                                             message1 = getString(R.string.PaymentInvoice);
                                             break;
                                         }
                                         case "MESSAGE_TEXT":
                                         case "CHANNEL_MESSAGE_TEXT": {
-                                            messageText = LocaleController.formatString("NotificationMessageText", R.string.NotificationMessageText, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageText, args[0], args[1]);
                                             message1 = args[1];
                                             break;
                                         }
@@ -574,12 +574,12 @@ public class PushListenerController {
                                             break;
                                         }
                                         case "MESSAGE_NOTEXT": {
-                                            messageText = LocaleController.formatString("NotificationMessageNoText", R.string.NotificationMessageNoText, args[0]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageNoText, args[0]);
                                             message1 = getString(R.string.Message);
                                             break;
                                         }
                                         case "MESSAGE_STORY": {
-                                            messageText = LocaleController.formatString("NotificationStory", R.string.NotificationStory, args[0]);
+                                            messageText = LocaleController.formatString(R.string.NotificationStory, args[0]);
                                             message1 = getString(R.string.Story);
                                             break;
                                         }
@@ -589,22 +589,22 @@ public class PushListenerController {
                                             break;
                                         }
                                         case "MESSAGE_PHOTO": {
-                                            messageText = LocaleController.formatString("NotificationMessagePhoto", R.string.NotificationMessagePhoto, args[0]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessagePhoto, args[0]);
                                             message1 = getString(R.string.AttachPhoto);
                                             break;
                                         }
                                         case "MESSAGE_PHOTO_SECRET": {
-                                            messageText = LocaleController.formatString("NotificationMessageSDPhoto", R.string.NotificationMessageSDPhoto, args[0]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageSDPhoto, args[0]);
                                             message1 = getString(R.string.AttachDestructingPhoto);
                                             break;
                                         }
                                         case "MESSAGE_VIDEO": {
-                                            messageText = LocaleController.formatString("NotificationMessageVideo", R.string.NotificationMessageVideo, args[0]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageVideo, args[0]);
                                             message1 = getString(R.string.AttachVideo);
                                             break;
                                         }
                                         case "MESSAGE_VIDEO_SECRET": {
-                                            messageText = LocaleController.formatString("NotificationMessageSDVideo", R.string.NotificationMessageSDVideo, args[0]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageSDVideo, args[0]);
                                             message1 = getString(R.string.AttachDestructingVideo);
                                             break;
                                         }
@@ -613,21 +613,21 @@ public class PushListenerController {
                                             break;
                                         }
                                         case "MESSAGE_ROUND": {
-                                            messageText = LocaleController.formatString("NotificationMessageRound", R.string.NotificationMessageRound, args[0]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageRound, args[0]);
                                             message1 = getString(R.string.AttachRound);
                                             break;
                                         }
                                         case "MESSAGE_DOC": {
-                                            messageText = LocaleController.formatString("NotificationMessageDocument", R.string.NotificationMessageDocument, args[0]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageDocument, args[0]);
                                             message1 = getString(R.string.AttachDocument);
                                             break;
                                         }
                                         case "MESSAGE_STICKER": {
                                             if (args.length > 1 && !TextUtils.isEmpty(args[1])) {
-                                                messageText = LocaleController.formatString("NotificationMessageStickerEmoji", R.string.NotificationMessageStickerEmoji, args[0], args[1]);
+                                                messageText = LocaleController.formatString(R.string.NotificationMessageStickerEmoji, args[0], args[1]);
                                                 message1 = args[1] + " " + getString(R.string.AttachSticker);
                                             } else {
-                                                messageText = LocaleController.formatString("NotificationMessageSticker", R.string.NotificationMessageSticker, args[0]);
+                                                messageText = LocaleController.formatString(R.string.NotificationMessageSticker, args[0]);
                                                 message1 = getString(R.string.AttachSticker);
                                             }
                                             break;
@@ -658,67 +658,67 @@ public class PushListenerController {
                                             break;
                                         }
                                         case "MESSAGE_GEO": {
-                                            messageText = LocaleController.formatString("NotificationMessageMap", R.string.NotificationMessageMap, args[0]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageMap, args[0]);
                                             message1 = getString(R.string.AttachLocation);
                                             break;
                                         }
                                         case "MESSAGE_GEOLIVE": {
-                                            messageText = LocaleController.formatString("NotificationMessageLiveLocation", R.string.NotificationMessageLiveLocation, args[0]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageLiveLocation, args[0]);
                                             message1 = getString(R.string.AttachLiveLocation);
                                             break;
                                         }
                                         case "MESSAGE_GIF": {
-                                            messageText = LocaleController.formatString("NotificationMessageGif", R.string.NotificationMessageGif, args[0]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageGif, args[0]);
                                             message1 = getString(R.string.AttachGif);
                                             break;
                                         }
                                         case "MESSAGE_GAME": {
-                                            messageText = LocaleController.formatString("NotificationMessageGame", R.string.NotificationMessageGame, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageGame, args[0], args[1]);
                                             message1 = getString(R.string.AttachGame);
                                             break;
                                         }
                                         case "MESSAGE_GAME_SCORE":
                                         case "CHANNEL_MESSAGE_GAME_SCORE": {
-                                            messageText = LocaleController.formatString("NotificationMessageGameScored", R.string.NotificationMessageGameScored, args[0], args[1], args[2]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageGameScored, args[0], args[1], args[2]);
                                             break;
                                         }
                                         case "MESSAGE_INVOICE": {
-                                            messageText = LocaleController.formatString("NotificationMessageInvoice", R.string.NotificationMessageInvoice, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageInvoice, args[0], args[1]);
                                             message1 = getString(R.string.PaymentInvoice);
                                             break;
                                         }
                                         case "MESSAGE_FWDS": {
-                                            messageText = LocaleController.formatString("NotificationMessageForwardFew", R.string.NotificationMessageForwardFew, args[0], LocaleController.formatPluralString("messages", Utilities.parseInt(args[1])));
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageForwardFew, args[0], LocaleController.formatPluralString("messages", Utilities.parseInt(args[1])));
                                             localMessage = true;
                                             break;
                                         }
                                         case "MESSAGE_PHOTOS": {
-                                            messageText = LocaleController.formatString("NotificationMessageFew", R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[1])));
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[1])));
                                             localMessage = true;
                                             break;
                                         }
                                         case "MESSAGE_VIDEOS": {
-                                            messageText = LocaleController.formatString("NotificationMessageFew", R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("Videos", Utilities.parseInt(args[1])));
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("Videos", Utilities.parseInt(args[1])));
                                             localMessage = true;
                                             break;
                                         }
                                         case "MESSAGE_PLAYLIST": {
-                                            messageText = LocaleController.formatString("NotificationMessageFew", R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("MusicFiles", Utilities.parseInt(args[1])));
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("MusicFiles", Utilities.parseInt(args[1])));
                                             localMessage = true;
                                             break;
                                         }
                                         case "MESSAGE_DOCS": {
-                                            messageText = LocaleController.formatString("NotificationMessageFew", R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("Files", Utilities.parseInt(args[1])));
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageFew, args[0], LocaleController.formatPluralString("Files", Utilities.parseInt(args[1])));
                                             localMessage = true;
                                             break;
                                         }
                                         case "MESSAGE_GIFTCODE": {
-                                            messageText = LocaleController.formatString("NotificationMessageGiftCode", R.string.NotificationMessageGiftCode, args[0], LocaleController.formatPluralString("Months", Utilities.parseInt(args[1])));
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageGiftCode, args[0], LocaleController.formatPluralString("Months", Utilities.parseInt(args[1])));
                                             localMessage = true;
                                             break;
                                         }
                                         case "MESSAGE_GIVEAWAY": {
-                                            messageText = LocaleController.formatString("NotificationMessageGiveaway", R.string.NotificationMessageGiveaway, args[0], args[1], args[2]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageGiveaway, args[0], args[1], args[2]);
                                             localMessage = true;
                                             break;
                                         }
@@ -732,12 +732,12 @@ public class PushListenerController {
                                             break;
                                         }
                                         case "MESSAGES": {
-                                            messageText = LocaleController.formatString("NotificationMessageAlbum", R.string.NotificationMessageAlbum, args[0]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageAlbum, args[0]);
                                             localMessage = true;
                                             break;
                                         }
                                         case "CHANNEL_MESSAGE_GIVEAWAY": {
-                                            messageText = LocaleController.formatString("NotificationMessageChannelGiveaway", R.string.NotificationMessageChannelGiveaway, args[0], args[1], args[2]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageChannelGiveaway, args[0], args[1], args[2]);
                                             message1 = getString(R.string.BoostingGiveaway);
                                             break;
                                         }
@@ -751,47 +751,47 @@ public class PushListenerController {
                                             break;
                                         }
                                         case "CHANNEL_MESSAGE_NOTEXT": {
-                                            messageText = LocaleController.formatString("ChannelMessageNoText", R.string.ChannelMessageNoText, args[0]);
+                                            messageText = LocaleController.formatString(R.string.ChannelMessageNoText, args[0]);
                                             message1 = getString(R.string.Message);
                                             break;
                                         }
                                         case "CHANNEL_MESSAGE_STORY": {
-                                            messageText = LocaleController.formatString("NotificationChannelStory", R.string.NotificationChannelStory, args[0]);
+                                            messageText = LocaleController.formatString(R.string.NotificationChannelStory, args[0]);
                                             message1 = getString(R.string.Story);
                                             break;
                                         }
                                         case "CHANNEL_MESSAGE_PHOTO": {
-                                            messageText = LocaleController.formatString("ChannelMessagePhoto", R.string.ChannelMessagePhoto, args[0]);
+                                            messageText = LocaleController.formatString(R.string.ChannelMessagePhoto, args[0]);
                                             message1 = getString(R.string.AttachPhoto);
                                             break;
                                         }
                                         case "CHANNEL_MESSAGE_VIDEO": {
-                                            messageText = LocaleController.formatString("ChannelMessageVideo", R.string.ChannelMessageVideo, args[0]);
+                                            messageText = LocaleController.formatString(R.string.ChannelMessageVideo, args[0]);
                                             message1 = getString(R.string.AttachVideo);
                                             break;
                                         }
                                         case "CHANNEL_MESSAGE_ROUND": {
-                                            messageText = LocaleController.formatString("ChannelMessageRound", R.string.ChannelMessageRound, args[0]);
+                                            messageText = LocaleController.formatString(R.string.ChannelMessageRound, args[0]);
                                             message1 = getString(R.string.AttachRound);
                                             break;
                                         }
                                         case "CHANNEL_MESSAGE_DOC": {
-                                            messageText = LocaleController.formatString("ChannelMessageDocument", R.string.ChannelMessageDocument, args[0]);
+                                            messageText = LocaleController.formatString(R.string.ChannelMessageDocument, args[0]);
                                             message1 = getString(R.string.AttachDocument);
                                             break;
                                         }
                                         case "CHANNEL_MESSAGE_STICKER": {
                                             if (args.length > 1 && !TextUtils.isEmpty(args[1])) {
-                                                messageText = LocaleController.formatString("ChannelMessageStickerEmoji", R.string.ChannelMessageStickerEmoji, args[0], args[1]);
+                                                messageText = LocaleController.formatString(R.string.ChannelMessageStickerEmoji, args[0], args[1]);
                                                 message1 = args[1] + " " + getString(R.string.AttachSticker);
                                             } else {
-                                                messageText = LocaleController.formatString("ChannelMessageSticker", R.string.ChannelMessageSticker, args[0]);
+                                                messageText = LocaleController.formatString(R.string.ChannelMessageSticker, args[0]);
                                                 message1 = getString(R.string.AttachSticker);
                                             }
                                             break;
                                         }
                                         case "CHANNEL_MESSAGE_AUDIO": {
-                                            messageText = LocaleController.formatString("ChannelMessageAudio", R.string.ChannelMessageAudio, args[0]);
+                                            messageText = LocaleController.formatString(R.string.ChannelMessageAudio, args[0]);
                                             message1 = getString(R.string.AttachAudio);
                                             break;
                                         }
@@ -824,57 +824,57 @@ public class PushListenerController {
                                             break;
                                         }
                                         case "CHANNEL_MESSAGE_GEO": {
-                                            messageText = LocaleController.formatString("ChannelMessageMap", R.string.ChannelMessageMap, args[0]);
+                                            messageText = LocaleController.formatString(R.string.ChannelMessageMap, args[0]);
                                             message1 = getString(R.string.AttachLocation);
                                             break;
                                         }
                                         case "CHANNEL_MESSAGE_GEOLIVE": {
-                                            messageText = LocaleController.formatString("ChannelMessageLiveLocation", R.string.ChannelMessageLiveLocation, args[0]);
+                                            messageText = LocaleController.formatString(R.string.ChannelMessageLiveLocation, args[0]);
                                             message1 = getString(R.string.AttachLiveLocation);
                                             break;
                                         }
                                         case "CHANNEL_MESSAGE_GIF": {
-                                            messageText = LocaleController.formatString("ChannelMessageGIF", R.string.ChannelMessageGIF, args[0]);
+                                            messageText = LocaleController.formatString(R.string.ChannelMessageGIF, args[0]);
                                             message1 = getString(R.string.AttachGif);
                                             break;
                                         }
                                         case "CHANNEL_MESSAGE_GAME": {
-                                            messageText = LocaleController.formatString("NotificationMessageGame", R.string.NotificationMessageGame, args[0]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageGame, args[0]);
                                             message1 = getString(R.string.AttachGame);
                                             break;
                                         }
                                         case "CHANNEL_MESSAGE_FWDS": {
-                                            messageText = LocaleController.formatString("ChannelMessageFew", R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("ForwardedMessageCount", Utilities.parseInt(args[1])).toLowerCase());
+                                            messageText = LocaleController.formatString(R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("ForwardedMessageCount", Utilities.parseInt(args[1])).toLowerCase());
                                             localMessage = true;
                                             break;
                                         }
                                         case "CHANNEL_MESSAGE_PHOTOS": {
-                                            messageText = LocaleController.formatString("ChannelMessageFew", R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[1])));
+                                            messageText = LocaleController.formatString(R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[1])));
                                             localMessage = true;
                                             break;
                                         }
                                         case "CHANNEL_MESSAGE_VIDEOS": {
-                                            messageText = LocaleController.formatString("ChannelMessageFew", R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("Videos", Utilities.parseInt(args[1])));
+                                            messageText = LocaleController.formatString(R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("Videos", Utilities.parseInt(args[1])));
                                             localMessage = true;
                                             break;
                                         }
                                         case "CHANNEL_MESSAGE_PLAYLIST": {
-                                            messageText = LocaleController.formatString("ChannelMessageFew", R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("MusicFiles", Utilities.parseInt(args[1])));
+                                            messageText = LocaleController.formatString(R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("MusicFiles", Utilities.parseInt(args[1])));
                                             localMessage = true;
                                             break;
                                         }
                                         case "CHANNEL_MESSAGE_DOCS": {
-                                            messageText = LocaleController.formatString("ChannelMessageFew", R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("Files", Utilities.parseInt(args[1])));
+                                            messageText = LocaleController.formatString(R.string.ChannelMessageFew, args[0], LocaleController.formatPluralString("Files", Utilities.parseInt(args[1])));
                                             localMessage = true;
                                             break;
                                         }
                                         case "CHANNEL_MESSAGES": {
-                                            messageText = LocaleController.formatString("ChannelMessageAlbum", R.string.ChannelMessageAlbum, args[0]);
+                                            messageText = LocaleController.formatString(R.string.ChannelMessageAlbum, args[0]);
                                             localMessage = true;
                                             break;
                                         }
                                         case "CHAT_MESSAGE_GIVEAWAY": {
-                                            messageText = LocaleController.formatString("NotificationMessageChatGiveaway", R.string.NotificationMessageChatGiveaway, args[0], args[1], args[2], args[3]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageChatGiveaway, args[0], args[1], args[2], args[3]);
                                             message1 = getString(R.string.BoostingGiveaway);
                                             break;
                                         }
@@ -888,52 +888,52 @@ public class PushListenerController {
                                             break;
                                         }
                                         case "CHAT_MESSAGE_TEXT": {
-                                            messageText = LocaleController.formatString("NotificationMessageGroupText", R.string.NotificationMessageGroupText, args[0], args[1], args[2]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageGroupText, args[0], args[1], args[2]);
                                             message1 = args[2];
                                             break;
                                         }
                                         case "CHAT_MESSAGE_NOTEXT": {
-                                            messageText = LocaleController.formatString("NotificationMessageGroupNoText", R.string.NotificationMessageGroupNoText, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageGroupNoText, args[0], args[1]);
                                             message1 = getString(R.string.Message);
                                             break;
                                         }
                                         case "CHAT_MESSAGE_STORY": {
-                                            messageText = LocaleController.formatString("NotificationChatStory", R.string.NotificationChatStory, args[0]);
+                                            messageText = LocaleController.formatString(R.string.NotificationChatStory, args[0]);
                                             message1 = getString(R.string.Story);
                                             break;
                                         }
                                         case "CHAT_MESSAGE_PHOTO": {
-                                            messageText = LocaleController.formatString("NotificationMessageGroupPhoto", R.string.NotificationMessageGroupPhoto, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageGroupPhoto, args[0], args[1]);
                                             message1 = getString(R.string.AttachPhoto);
                                             break;
                                         }
                                         case "CHAT_MESSAGE_VIDEO": {
-                                            messageText = LocaleController.formatString("NotificationMessageGroupVideo", R.string.NotificationMessageGroupVideo, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageGroupVideo, args[0], args[1]);
                                             message1 = getString(R.string.AttachVideo);
                                             break;
                                         }
                                         case "CHAT_MESSAGE_ROUND": {
-                                            messageText = LocaleController.formatString("NotificationMessageGroupRound", R.string.NotificationMessageGroupRound, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageGroupRound, args[0], args[1]);
                                             message1 = getString(R.string.AttachRound);
                                             break;
                                         }
                                         case "CHAT_MESSAGE_DOC": {
-                                            messageText = LocaleController.formatString("NotificationMessageGroupDocument", R.string.NotificationMessageGroupDocument, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageGroupDocument, args[0], args[1]);
                                             message1 = getString(R.string.AttachDocument);
                                             break;
                                         }
                                         case "CHAT_MESSAGE_STICKER": {
                                             if (args.length > 2 && !TextUtils.isEmpty(args[2])) {
-                                                messageText = LocaleController.formatString("NotificationMessageGroupStickerEmoji", R.string.NotificationMessageGroupStickerEmoji, args[0], args[1], args[2]);
+                                                messageText = LocaleController.formatString(R.string.NotificationMessageGroupStickerEmoji, args[0], args[1], args[2]);
                                                 message1 = args[2] + " " + getString(R.string.AttachSticker);
                                             } else {
-                                                messageText = LocaleController.formatString("NotificationMessageGroupSticker", R.string.NotificationMessageGroupSticker, args[0], args[1]);
+                                                messageText = LocaleController.formatString(R.string.NotificationMessageGroupSticker, args[0], args[1]);
                                                 message1 = args[1] + " " + getString(R.string.AttachSticker);
                                             }
                                             break;
                                         }
                                         case "CHAT_MESSAGE_AUDIO": {
-                                            messageText = LocaleController.formatString("NotificationMessageGroupAudio", R.string.NotificationMessageGroupAudio, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageGroupAudio, args[0], args[1]);
                                             message1 = getString(R.string.AttachAudio);
                                             break;
                                         }
@@ -966,189 +966,189 @@ public class PushListenerController {
                                             break;
                                         }
                                         case "CHAT_MESSAGE_GEO": {
-                                            messageText = LocaleController.formatString("NotificationMessageGroupMap", R.string.NotificationMessageGroupMap, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageGroupMap, args[0], args[1]);
                                             message1 = getString(R.string.AttachLocation);
                                             break;
                                         }
                                         case "CHAT_MESSAGE_GEOLIVE": {
-                                            messageText = LocaleController.formatString("NotificationMessageGroupLiveLocation", R.string.NotificationMessageGroupLiveLocation, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageGroupLiveLocation, args[0], args[1]);
                                             message1 = getString(R.string.AttachLiveLocation);
                                             break;
                                         }
                                         case "CHAT_MESSAGE_GIF": {
-                                            messageText = LocaleController.formatString("NotificationMessageGroupGif", R.string.NotificationMessageGroupGif, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageGroupGif, args[0], args[1]);
                                             message1 = getString(R.string.AttachGif);
                                             break;
                                         }
                                         case "CHAT_MESSAGE_GAME": {
-                                            messageText = LocaleController.formatString("NotificationMessageGroupGame", R.string.NotificationMessageGroupGame, args[0], args[1], args[2]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageGroupGame, args[0], args[1], args[2]);
                                             message1 = getString(R.string.AttachGame);
                                             break;
                                         }
                                         case "CHAT_MESSAGE_GAME_SCORE": {
-                                            messageText = LocaleController.formatString("NotificationMessageGroupGameScored", R.string.NotificationMessageGroupGameScored, args[0], args[1], args[2], args[3]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageGroupGameScored, args[0], args[1], args[2], args[3]);
                                             break;
                                         }
                                         case "CHAT_MESSAGE_INVOICE": {
-                                            messageText = LocaleController.formatString("NotificationMessageGroupInvoice", R.string.NotificationMessageGroupInvoice, args[0], args[1], args[2]);
+                                            messageText = LocaleController.formatString(R.string.NotificationMessageGroupInvoice, args[0], args[1], args[2]);
                                             message1 = getString(R.string.PaymentInvoice);
                                             break;
                                         }
                                         case "CHAT_CREATED":
                                         case "CHAT_ADD_YOU": {
-                                            messageText = LocaleController.formatString("NotificationInvitedToGroup", R.string.NotificationInvitedToGroup, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationInvitedToGroup, args[0], args[1]);
                                             break;
                                         }
                                         case "CHAT_TITLE_EDITED": {
-                                            messageText = LocaleController.formatString("NotificationEditedGroupName", R.string.NotificationEditedGroupName, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationEditedGroupName, args[0], args[1]);
                                             break;
                                         }
                                         case "CHAT_PHOTO_EDITED": {
-                                            messageText = LocaleController.formatString("NotificationEditedGroupPhoto", R.string.NotificationEditedGroupPhoto, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationEditedGroupPhoto, args[0], args[1]);
                                             break;
                                         }
                                         case "CHAT_ADD_MEMBER": {
-                                            messageText = LocaleController.formatString("NotificationGroupAddMember", R.string.NotificationGroupAddMember, args[0], args[1], args[2]);
+                                            messageText = LocaleController.formatString(R.string.NotificationGroupAddMember, args[0], args[1], args[2]);
                                             break;
                                         }
                                         case "CHAT_VOICECHAT_START": {
-                                            messageText = LocaleController.formatString("NotificationGroupCreatedCall", R.string.NotificationGroupCreatedCall, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationGroupCreatedCall, args[0], args[1]);
                                             break;
                                         }
                                         case "CHAT_VOICECHAT_INVITE": {
-                                            messageText = LocaleController.formatString("NotificationGroupInvitedToCall", R.string.NotificationGroupInvitedToCall, args[0], args[1], args[2]);
+                                            messageText = LocaleController.formatString(R.string.NotificationGroupInvitedToCall, args[0], args[1], args[2]);
                                             break;
                                         }
                                         case "CHAT_VOICECHAT_END": {
-                                            messageText = LocaleController.formatString("NotificationGroupEndedCall", R.string.NotificationGroupEndedCall, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationGroupEndedCall, args[0], args[1]);
                                             break;
                                         }
                                         case "CHAT_VOICECHAT_INVITE_YOU": {
-                                            messageText = LocaleController.formatString("NotificationGroupInvitedYouToCall", R.string.NotificationGroupInvitedYouToCall, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationGroupInvitedYouToCall, args[0], args[1]);
                                             break;
                                         }
                                         case "CHAT_DELETE_MEMBER": {
-                                            messageText = LocaleController.formatString("NotificationGroupKickMember", R.string.NotificationGroupKickMember, args[0], args[1], args.length <= 2 ? "" : args[2]);
+                                            messageText = LocaleController.formatString(R.string.NotificationGroupKickMember, args[0], args[1], args.length <= 2 ? "" : args[2]);
                                             break;
                                         }
                                         case "CHAT_DELETE_YOU": {
-                                            messageText = LocaleController.formatString("NotificationGroupKickYou", R.string.NotificationGroupKickYou, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationGroupKickYou, args[0], args[1]);
                                             break;
                                         }
                                         case "CHAT_LEFT": {
-                                            messageText = LocaleController.formatString("NotificationGroupLeftMember", R.string.NotificationGroupLeftMember, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationGroupLeftMember, args[0], args[1]);
                                             break;
                                         }
                                         case "CHAT_RETURNED": {
-                                            messageText = LocaleController.formatString("NotificationGroupAddSelf", R.string.NotificationGroupAddSelf, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationGroupAddSelf, args[0], args[1]);
                                             break;
                                         }
                                         case "CHAT_JOINED": {
-                                            messageText = LocaleController.formatString("NotificationGroupAddSelfMega", R.string.NotificationGroupAddSelfMega, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationGroupAddSelfMega, args[0], args[1]);
                                             break;
                                         }
                                         case "CHAT_REQ_JOINED": {
-                                            messageText = LocaleController.formatString("UserAcceptedToGroupPushWithGroup", R.string.UserAcceptedToGroupPushWithGroup, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.UserAcceptedToGroupPushWithGroup, args[0], args[1]);
                                             break;
                                         }
                                         case "CHAT_MESSAGE_FWDS": {
-                                            messageText = LocaleController.formatString("NotificationGroupForwardedFew", R.string.NotificationGroupForwardedFew, args[0], args[1], LocaleController.formatPluralString("messages", Utilities.parseInt(args[2])));
+                                            messageText = LocaleController.formatString(R.string.NotificationGroupForwardedFew, args[0], args[1], LocaleController.formatPluralString("messages", Utilities.parseInt(args[2])));
                                             localMessage = true;
                                             break;
                                         }
                                         case "CHAT_MESSAGE_PHOTOS": {
-                                            messageText = LocaleController.formatString("NotificationGroupFew", R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[2])));
+                                            messageText = LocaleController.formatString(R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("Photos", Utilities.parseInt(args[2])));
                                             localMessage = true;
                                             break;
                                         }
                                         case "CHAT_MESSAGE_VIDEOS": {
-                                            messageText = LocaleController.formatString("NotificationGroupFew", R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("Videos", Utilities.parseInt(args[2])));
+                                            messageText = LocaleController.formatString(R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("Videos", Utilities.parseInt(args[2])));
                                             localMessage = true;
                                             break;
                                         }
                                         case "CHAT_MESSAGE_PLAYLIST": {
-                                            messageText = LocaleController.formatString("NotificationGroupFew", R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("MusicFiles", Utilities.parseInt(args[2])));
+                                            messageText = LocaleController.formatString(R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("MusicFiles", Utilities.parseInt(args[2])));
                                             localMessage = true;
                                             break;
                                         }
                                         case "CHAT_MESSAGE_DOCS": {
-                                            messageText = LocaleController.formatString("NotificationGroupFew", R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("Files", Utilities.parseInt(args[2])));
+                                            messageText = LocaleController.formatString(R.string.NotificationGroupFew, args[0], args[1], LocaleController.formatPluralString("Files", Utilities.parseInt(args[2])));
                                             localMessage = true;
                                             break;
                                         }
                                         case "CHAT_MESSAGES": {
-                                            messageText = LocaleController.formatString("NotificationGroupAlbum", R.string.NotificationGroupAlbum, args[0], args[1]);
+                                            messageText = LocaleController.formatString(R.string.NotificationGroupAlbum, args[0], args[1]);
                                             localMessage = true;
                                             break;
                                         }
                                         case "PINNED_TEXT": {
                                             if (dialogId > 0) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedTextUser", R.string.NotificationActionPinnedTextUser, args[0], args[1]);
+                                                messageText = LocaleController.formatString(R.string.NotificationActionPinnedTextUser, args[0], args[1]);
                                             } else {
                                                 if (isGroup) {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedText", R.string.NotificationActionPinnedText, args[0], args[1], args[2]);
+                                                    messageText = LocaleController.formatString(R.string.NotificationActionPinnedText, args[0], args[1], args[2]);
                                                 } else {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedTextChannel", R.string.NotificationActionPinnedTextChannel, args[0], args[1]);
+                                                    messageText = LocaleController.formatString(R.string.NotificationActionPinnedTextChannel, args[0], args[1]);
                                                 }
                                             }
                                             break;
                                         }
                                         case "PINNED_NOTEXT": {
                                             if (dialogId > 0) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedNoTextUser", R.string.NotificationActionPinnedNoTextUser, args[0], args[1]);
+                                                messageText = LocaleController.formatString(R.string.NotificationActionPinnedNoTextUser, args[0], args[1]);
                                             } else {
                                                 if (isGroup) {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedNoText", R.string.NotificationActionPinnedNoText, args[0], args[1]);
+                                                    messageText = LocaleController.formatString(R.string.NotificationActionPinnedNoText, args[0], args[1]);
                                                 } else {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedNoTextChannel", R.string.NotificationActionPinnedNoTextChannel, args[0]);
+                                                    messageText = LocaleController.formatString(R.string.NotificationActionPinnedNoTextChannel, args[0]);
                                                 }
                                             }
                                             break;
                                         }
                                         case "PINNED_PHOTO": {
                                             if (dialogId > 0) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedPhotoUser", R.string.NotificationActionPinnedPhotoUser, args[0], args[1]);
+                                                messageText = LocaleController.formatString(R.string.NotificationActionPinnedPhotoUser, args[0], args[1]);
                                             } else {
                                                 if (isGroup) {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedPhoto", R.string.NotificationActionPinnedPhoto, args[0], args[1]);
+                                                    messageText = LocaleController.formatString(R.string.NotificationActionPinnedPhoto, args[0], args[1]);
                                                 } else {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedPhotoChannel", R.string.NotificationActionPinnedPhotoChannel, args[0]);
+                                                    messageText = LocaleController.formatString(R.string.NotificationActionPinnedPhotoChannel, args[0]);
                                                 }
                                             }
                                             break;
                                         }
                                         case "PINNED_VIDEO": {
                                             if (dialogId > 0) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedVideoUser", R.string.NotificationActionPinnedVideoUser, args[0], args[1]);
+                                                messageText = LocaleController.formatString(R.string.NotificationActionPinnedVideoUser, args[0], args[1]);
                                             } else {
                                                 if (isGroup) {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedVideo", R.string.NotificationActionPinnedVideo, args[0], args[1]);
+                                                    messageText = LocaleController.formatString(R.string.NotificationActionPinnedVideo, args[0], args[1]);
                                                 } else {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedVideoChannel", R.string.NotificationActionPinnedVideoChannel, args[0]);
+                                                    messageText = LocaleController.formatString(R.string.NotificationActionPinnedVideoChannel, args[0]);
                                                 }
                                             }
                                             break;
                                         }
                                         case "PINNED_ROUND": {
                                             if (dialogId > 0) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedRoundUser", R.string.NotificationActionPinnedRoundUser, args[0], args[1]);
+                                                messageText = LocaleController.formatString(R.string.NotificationActionPinnedRoundUser, args[0], args[1]);
                                             } else {
                                                 if (isGroup) {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedRound", R.string.NotificationActionPinnedRound, args[0], args[1]);
+                                                    messageText = LocaleController.formatString(R.string.NotificationActionPinnedRound, args[0], args[1]);
                                                 } else {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedRoundChannel", R.string.NotificationActionPinnedRoundChannel, args[0]);
+                                                    messageText = LocaleController.formatString(R.string.NotificationActionPinnedRoundChannel, args[0]);
                                                 }
                                             }
                                             break;
                                         }
                                         case "PINNED_DOC": {
                                             if (dialogId > 0) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedFileUser", R.string.NotificationActionPinnedFileUser, args[0], args[1]);
+                                                messageText = LocaleController.formatString(R.string.NotificationActionPinnedFileUser, args[0], args[1]);
                                             } else {
                                                 if (isGroup) {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedFile", R.string.NotificationActionPinnedFile, args[0], args[1]);
+                                                    messageText = LocaleController.formatString(R.string.NotificationActionPinnedFile, args[0], args[1]);
                                                 } else {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedFileChannel", R.string.NotificationActionPinnedFileChannel, args[0]);
+                                                    messageText = LocaleController.formatString(R.string.NotificationActionPinnedFileChannel, args[0]);
                                                 }
                                             }
                                             break;
@@ -1156,22 +1156,22 @@ public class PushListenerController {
                                         case "PINNED_STICKER": {
                                             if (dialogId > 0) {
                                                 if (args.length > 1 && !TextUtils.isEmpty(args[1])) {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedStickerEmojiUser", R.string.NotificationActionPinnedStickerEmojiUser, args[0], args[1]);
+                                                    messageText = LocaleController.formatString(R.string.NotificationActionPinnedStickerEmojiUser, args[0], args[1]);
                                                 } else {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedStickerUser", R.string.NotificationActionPinnedStickerUser, args[0]);
+                                                    messageText = LocaleController.formatString(R.string.NotificationActionPinnedStickerUser, args[0]);
                                                 }
                                             } else {
                                                 if (isGroup) {
                                                     if (args.length > 2 && !TextUtils.isEmpty(args[2])) {
-                                                        messageText = LocaleController.formatString("NotificationActionPinnedStickerEmoji", R.string.NotificationActionPinnedStickerEmoji, args[0], args[2], args[1]);
+                                                        messageText = LocaleController.formatString(R.string.NotificationActionPinnedStickerEmoji, args[0], args[2], args[1]);
                                                     } else {
-                                                        messageText = LocaleController.formatString("NotificationActionPinnedSticker", R.string.NotificationActionPinnedSticker, args[0], args[1]);
+                                                        messageText = LocaleController.formatString(R.string.NotificationActionPinnedSticker, args[0], args[1]);
                                                     }
                                                 } else {
                                                     if (args.length > 1 && !TextUtils.isEmpty(args[1])) {
-                                                        messageText = LocaleController.formatString("NotificationActionPinnedStickerEmojiChannel", R.string.NotificationActionPinnedStickerEmojiChannel, args[0], args[1]);
+                                                        messageText = LocaleController.formatString(R.string.NotificationActionPinnedStickerEmojiChannel, args[0], args[1]);
                                                     } else {
-                                                        messageText = LocaleController.formatString("NotificationActionPinnedStickerChannel", R.string.NotificationActionPinnedStickerChannel, args[0]);
+                                                        messageText = LocaleController.formatString(R.string.NotificationActionPinnedStickerChannel, args[0]);
                                                     }
                                                 }
                                             }
@@ -1179,19 +1179,19 @@ public class PushListenerController {
                                         }
                                         case "PINNED_AUDIO": {
                                             if (dialogId > 0) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedVoiceUser", R.string.NotificationActionPinnedVoiceUser, args[0], args[1]);
+                                                messageText = LocaleController.formatString(R.string.NotificationActionPinnedVoiceUser, args[0], args[1]);
                                             } else {
                                                 if (isGroup) {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedVoice", R.string.NotificationActionPinnedVoice, args[0], args[1]);
+                                                    messageText = LocaleController.formatString(R.string.NotificationActionPinnedVoice, args[0], args[1]);
                                                 } else {
-                                                    messageText = LocaleController.formatString("NotificationActionPinnedVoiceChannel", R.string.NotificationActionPinnedVoiceChannel, args[0]);
+                                                    messageText = LocaleController.formatString(R.string.NotificationActionPinnedVoiceChannel, args[0]);
                                                 }
                                             }
                                             break;
                                         }
                                         case "PINNED_CONTACT": {
                                             if (dialogId > 0) {
-                                                messageText = LocaleController.formatString("NotificationActionPinnedContactUser", R.string.NotificationActionPinnedContactUser, args[0], args[1]);
+                                                messageText = LocaleController.formatString(R.string.NotificationActionPinnedContactUser, args[0], args[1]);
                                             } else {
                                                 if (isGroup) {
                                                     messageText = LocaleController.formatString("NotificationActionPinnedContact2", R.string.NotificationActionPinnedContact2, args[0], args[2], args[1]);

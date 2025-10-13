@@ -3610,7 +3610,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     final String finalNewContactPhone = NewContactBottomSheet.getPhoneNumber(this, UserConfig.getInstance(currentAccount).getCurrentUser(), newContactPhone, false);
                     final AlertDialog newContactAlertDialog = new AlertDialog.Builder(lastFragment.getParentActivity())
                             .setTitle(LocaleController.getString(R.string.NewContactAlertTitle))
-                            .setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("NewContactAlertMessage", R.string.NewContactAlertMessage, PhoneFormat.getInstance().format(finalNewContactPhone))))
+                            .setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.NewContactAlertMessage, PhoneFormat.getInstance().format(finalNewContactPhone))))
                             .setPositiveButton(LocaleController.getString(R.string.NewContactAlertButton), (d, i) -> {
                                 final NewContactBottomSheet fragment = new NewContactBottomSheet(lastFragment, this);
                                 fragment.setInitialPhoneNumber(finalNewContactPhone, false);
@@ -4719,7 +4719,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                             args.putBoolean("allowGroups", botChat != null);
                             args.putBoolean("allowChannels", botChannel != null);
                             final String botHash = TextUtils.isEmpty(botChat) ? (TextUtils.isEmpty(botChannel) ? null : botChannel) : botChat;
-//                            args.putString("addToGroupAlertString", LocaleController.formatString("AddToTheGroupAlertText", R.string.AddToTheGroupAlertText, UserObject.getUserName(user), "%1$s"));
+//                            args.putString("addToGroupAlertString", LocaleController.formatString(R.string.AddToTheGroupAlertText, UserObject.getUserName(user), "%1$s"));
                             DialogsActivity fragment = new DialogsActivity(args);
                             fragment.setDelegate((fragment12, dids, message1, param, notify, scheduleDate, topicsFragment) -> {
                                 long did = dids.get(0).dialogId;
@@ -4830,7 +4830,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                                     builder.setTitle(LocaleController.getString(R.string.AddBot));
                                     String chatName = chat == null ? "" : chat.title;
-                                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", R.string.AddMembersAlertNamesText, UserObject.getUserName(user), chatName)));
+                                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.AddMembersAlertNamesText, UserObject.getUserName(user), chatName)));
                                     builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
                                     builder.setPositiveButton(LocaleController.getString(R.string.AddBot), (di, i) -> {
                                         Bundle args12 = new Bundle();
@@ -6690,7 +6690,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         BulletinFactory.of(lastFragment).createSimpleBulletin(
             new BatteryDrawable(percent / 100F, Color.WHITE, lastFragment.getThemedColor(Theme.key_dialogSwipeRemove), 1.3f),
             LocaleController.getString(R.string.LowPowerEnabledTitle),
-            LocaleController.formatString("LowPowerEnabledSubtitle", R.string.LowPowerEnabledSubtitle, String.format("%d%%", percent)),
+            LocaleController.formatString(R.string.LowPowerEnabledSubtitle, String.format("%d%%", percent)),
             LocaleController.getString(R.string.Disable),
             () -> presentFragment(new LiteModeSettingsActivity())
         ).setDuration(Bulletin.DURATION_PROLONG).show();

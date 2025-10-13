@@ -317,7 +317,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
                 }
                 case 1: {
                     if (textView != null) {
-                        textView.setText(LocaleController.formatString("SharingLiveLocationTitle", R.string.SharingLiveLocationTitle, LocaleController.formatPluralString("Chats", LocationController.getLocationsCount())));
+                        textView.setText(LocaleController.formatString(R.string.SharingLiveLocationTitle, LocaleController.formatPluralString("Chats", LocationController.getLocationsCount())));
                     }
                     break;
                 }

@@ -476,7 +476,7 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
             add = false;
         } else {
             if (maxSelectedFiles >= 0 && selectedAudios.size() >= maxSelectedFiles) {
-                showErrorBox(LocaleController.formatString("PassportUploadMaxReached", R.string.PassportUploadMaxReached, LocaleController.formatPluralString("Files", maxSelectedFiles)));
+                showErrorBox(LocaleController.formatString(R.string.PassportUploadMaxReached, LocaleController.formatPluralString("Files", maxSelectedFiles)));
                 return;
             }
             selectedAudios.put(audioEntry.id, audioEntry);
@@ -761,7 +761,7 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
                     listView.setAdapter(searchAdapter);
                 }
                 if (listView.getAdapter() == searchAdapter) {
-                    emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoAudioFoundInfo", R.string.NoAudioFoundInfo, query)));
+                    emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.NoAudioFoundInfo, query)));
                 }
                 searchResult = result;
                 notifyDataSetChanged();

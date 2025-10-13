@@ -86,11 +86,11 @@ public class RingtoneUploader implements NotificationCenter.NotificationCenterDe
         if (error != null) {
             NotificationCenter.getInstance(currentAccount).doOnIdle(() -> {
                 if (error.text.equals("RINGTONE_DURATION_TOO_LONG")) {
-                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_ERROR_SUBTITLE, LocaleController.formatString("TooLongError", R.string.TooLongError), LocaleController.formatString("ErrorRingtoneDurationTooLong", R.string.ErrorRingtoneDurationTooLong, MessagesController.getInstance(currentAccount).ringtoneDurationMax));
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_ERROR_SUBTITLE, LocaleController.formatString(R.string.TooLongError), LocaleController.formatString(R.string.ErrorRingtoneDurationTooLong, MessagesController.getInstance(currentAccount).ringtoneDurationMax));
                 } else if (error.text.equals("RINGTONE_SIZE_TOO_BIG")) {
-                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_ERROR_SUBTITLE, LocaleController.formatString("TooLargeError", R.string.TooLargeError), LocaleController.formatString("ErrorRingtoneSizeTooBig", R.string.ErrorRingtoneSizeTooBig, (MessagesController.getInstance(currentAccount).ringtoneSizeMax / 1024)));
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_ERROR_SUBTITLE, LocaleController.formatString(R.string.TooLargeError), LocaleController.formatString(R.string.ErrorRingtoneSizeTooBig, (MessagesController.getInstance(currentAccount).ringtoneSizeMax / 1024)));
                 } else {
-                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_ERROR_SUBTITLE, LocaleController.formatString("InvalidFormatError", R.string.InvalidFormatError), LocaleController.getString(R.string.ErrorRingtoneInvalidFormat));
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_ERROR_SUBTITLE, LocaleController.formatString(R.string.InvalidFormatError), LocaleController.getString(R.string.ErrorRingtoneInvalidFormat));
                 }
             });
         }

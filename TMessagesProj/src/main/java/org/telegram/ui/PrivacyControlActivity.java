@@ -287,10 +287,10 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
     private void updateAvatarForRestInfo() {
         if (setAvatarCell != null) {
             if (avatarForRest == null) {
-                setAvatarCell.getTextView().setText(formatString("SetPhotoForRest", R.string.SetPhotoForRest));
+                setAvatarCell.getTextView().setText(formatString(R.string.SetPhotoForRest));
                 setAvatarCell.setNeedDivider(false);
             } else {
-                setAvatarCell.getTextView().setText(formatString("UpdatePhotoForRest", R.string.UpdatePhotoForRest));
+                setAvatarCell.getTextView().setText(formatString(R.string.UpdatePhotoForRest));
                 setAvatarCell.setNeedDivider(true);
             }
         }
@@ -1737,7 +1737,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                     if (avatarForRest == null) {
                         setAvatarCell.setTextAndIcon(formatString(R.string.SetPhotoForRest), R.drawable.msg_addphoto, false);
                     } else {
-                        setAvatarCell.setTextAndIcon(formatString("UpdatePhotoForRest", R.string.UpdatePhotoForRest), R.drawable.msg_addphoto, true);
+                        setAvatarCell.setTextAndIcon(formatString(R.string.UpdatePhotoForRest), R.drawable.msg_addphoto, true);
                     }
                     setAvatarCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                     setAvatarCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);

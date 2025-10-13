@@ -1767,12 +1767,12 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             });
             searchItem.setTranslationY(dp(10));
             searchItem.setSearchFieldHint(getString(searchTagsList != null && searchTagsList.hasFilters() && getSelectedTab() == TAB_SAVED_DIALOGS ? R.string.SavedTagSearchHint : R.string.Search));
-            searchItem.setContentDescription(getString("Search", R.string.Search));
+            searchItem.setContentDescription(getString(R.string.Search));
             searchItem.setVisibility(isStoriesView() ? View.GONE : View.INVISIBLE);
         }
 
         photoVideoOptionsItem = new ImageView(context);
-        photoVideoOptionsItem.setContentDescription(getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
+        photoVideoOptionsItem.setContentDescription(getString(R.string.AccDescrMoreOptions));
         photoVideoOptionsItem.setTranslationY(dp(10));
         photoVideoOptionsItem.setVisibility(View.INVISIBLE);
 
@@ -2001,10 +2001,10 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                         ActionBarMenuSubItem showPhotosItem = new ActionBarMenuSubItem(context, true, false, false, resourcesProvider);
                         ActionBarMenuSubItem showVideosItem = new ActionBarMenuSubItem(context, true, false, true, resourcesProvider);
 
-                        showPhotosItem.setTextAndIcon(getString("MediaShowPhotos", R.string.MediaShowPhotos), 0);
+                        showPhotosItem.setTextAndIcon(getString(R.string.MediaShowPhotos), 0);
                         options.getLayout().addView(showPhotosItem);
 
-                        showVideosItem.setTextAndIcon(getString("MediaShowVideos", R.string.MediaShowVideos), 0);
+                        showVideosItem.setTextAndIcon(getString(R.string.MediaShowVideos), 0);
                         options.getLayout().addView(showVideosItem);
 
                         if (isStories) {
@@ -2117,7 +2117,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         closeButton.setImageDrawable(backDrawable = new BackDrawable(true));
         backDrawable.setColor(getThemedColor(Theme.key_actionBarActionModeDefaultIcon));
         closeButton.setBackground(Theme.createSelectorDrawable(getThemedColor(Theme.key_actionBarActionModeDefaultSelector), 1));
-        closeButton.setContentDescription(getString("Close", R.string.Close));
+        closeButton.setContentDescription(getString(R.string.Close));
         actionModeLayout.addView(closeButton, new LinearLayout.LayoutParams(dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
         actionModeViews.add(closeButton);
         closeButton.setOnClickListener(v -> closeActionMode());
@@ -2133,7 +2133,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             if (!isStoriesView()) {
                 gotoItem = new ActionBarMenuItem(context, null, getThemedColor(Theme.key_actionBarActionModeDefaultSelector), getThemedColor(Theme.key_actionBarActionModeDefaultIcon), false);
                 gotoItem.setIcon(R.drawable.msg_message);
-                gotoItem.setContentDescription(getString("AccDescrGoToMessage", R.string.AccDescrGoToMessage));
+                gotoItem.setContentDescription(getString(R.string.AccDescrGoToMessage));
                 gotoItem.setDuplicateParentStateEnabled(false);
                 actionModeLayout.addView(gotoItem, new LinearLayout.LayoutParams(dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
                 actionModeViews.add(gotoItem);
@@ -2141,7 +2141,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
 
                 forwardNoQuoteItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), Theme.getColor(Theme.key_actionBarActionModeDefaultIcon), false);
                 forwardNoQuoteItem.setIcon(R.drawable.baseline_fast_forward_24);
-                forwardNoQuoteItem.setContentDescription(getString("NoQuoteForward", R.string.NoQuoteForward));
+                forwardNoQuoteItem.setContentDescription(getString(R.string.NoQuoteForward));
                 forwardNoQuoteItem.setDuplicateParentStateEnabled(false);
                 actionModeLayout.addView(forwardNoQuoteItem, new LinearLayout.LayoutParams(dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
                 actionModeViews.add(forwardNoQuoteItem);
@@ -2149,7 +2149,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
 
                 forwardItem = new ActionBarMenuItem(context, null, getThemedColor(Theme.key_actionBarActionModeDefaultSelector), getThemedColor(Theme.key_actionBarActionModeDefaultIcon), false);
                 forwardItem.setIcon(R.drawable.msg_forward);
-                forwardItem.setContentDescription(getString("Forward", R.string.Forward));
+                forwardItem.setContentDescription(getString(R.string.Forward));
                 forwardItem.setDuplicateParentStateEnabled(false);
                 actionModeLayout.addView(forwardItem, new LinearLayout.LayoutParams(dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
                 actionModeViews.add(forwardItem);
@@ -2178,7 +2178,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         }
         deleteItem = new ActionBarMenuItem(context, null, getThemedColor(Theme.key_actionBarActionModeDefaultSelector), getThemedColor(Theme.key_actionBarActionModeDefaultIcon), false);
         deleteItem.setIcon(R.drawable.msg_delete);
-        deleteItem.setContentDescription(getString("Delete", R.string.Delete));
+        deleteItem.setContentDescription(getString(R.string.Delete));
         deleteItem.setDuplicateParentStateEnabled(false);
         actionModeLayout.addView(deleteItem, new LinearLayout.LayoutParams(dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
         actionModeViews.add(deleteItem);
@@ -3425,7 +3425,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             mediaPages[a].addView(mediaPages[a].emptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
             mediaPages[a].emptyView.setOnTouchListener((v, event) -> true);
             mediaPages[a].emptyView.showProgress(true, false);
-            mediaPages[a].emptyView.title.setText(getString("NoResult", R.string.NoResult));
+            mediaPages[a].emptyView.title.setText(getString(R.string.NoResult));
             mediaPages[a].emptyView.button.setVisibility(View.GONE);
             mediaPages[a].emptyView.subtitle.setText(getString("SearchEmptyViewFilteredSubtitle2", R.string.SearchEmptyViewFilteredSubtitle2));
             mediaPages[a].emptyView.button.setVisibility(View.GONE);
@@ -5022,8 +5022,8 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 TLRPC.Chat chat = profileActivity.getMessagesController().getChat(info.id);
                 if (profileActivity.getMessagesController().isChatNoForwards(chat)) {
                     if (fwdRestrictedHint != null) {
-                        fwdRestrictedHint.setText(ChatObject.isChannel(chat) && !chat.megagroup ? getString("ForwardsRestrictedInfoChannel", R.string.ForwardsRestrictedInfoChannel) :
-                                getString("ForwardsRestrictedInfoGroup", R.string.ForwardsRestrictedInfoGroup));
+                        fwdRestrictedHint.setText(ChatObject.isChannel(chat) && !chat.megagroup ? getString(R.string.ForwardsRestrictedInfoChannel) :
+                                getString(R.string.ForwardsRestrictedInfoGroup));
                         fwdRestrictedHint.showForView(v, true);
                     }
                     return;
@@ -5031,7 +5031,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             }
             if (hasNoforwardsMessage()) {
                 if (fwdRestrictedHint != null) {
-                    fwdRestrictedHint.setText(getString("ForwardsRestrictedInfoBot", R.string.ForwardsRestrictedInfoBot));
+                    fwdRestrictedHint.setText(getString(R.string.ForwardsRestrictedInfoBot));
                     fwdRestrictedHint.showForView(v, true);
                 }
                 return;
@@ -7594,8 +7594,8 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 builder.addTitle(urlFinal);
                 boolean hasQueries = urlFinal.contains("?");
                 String[] buttonStrings = hasQueries ?
-                        new String[] {getString("Open", R.string.Open), getString("Copy", R.string.Copy), getString("ShareQRCode", R.string.ShareQRCode), getString(R.string.BlacklistUrlQueryAdd)} :
-                        new String[] {getString("Open", R.string.Open), getString("Copy", R.string.Copy), getString("ShareQRCode", R.string.ShareQRCode)};
+                        new String[] {getString(R.string.Open), getString(R.string.Copy), getString(R.string.ShareQRCode), getString(R.string.BlacklistUrlQueryAdd)} :
+                        new String[] {getString(R.string.Open), getString(R.string.Copy), getString(R.string.ShareQRCode)};
                 int[] iconIds = hasQueries ? new int[]{R.drawable.baseline_open_in_browser_24, R.drawable.baseline_content_copy_24, R.drawable.wallet_qr, R.drawable.msg_block} :
                         new int[]{R.drawable.baseline_open_in_browser_24, R.drawable.baseline_content_copy_24, R.drawable.wallet_qr};
                 builder.addItems(buttonStrings, iconIds, (which, text, __) -> {
@@ -8501,7 +8501,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                             for (int a = 0; a < mediaPages.length; a++) {
                                 if (mediaPages[a].selectedType == currentType) {
                                     if (searchesInProgress == 0 && count == 0) {
-                                        mediaPages[a].emptyView.title.setText(LocaleController.formatString("NoResultFoundFor", R.string.NoResultFoundFor, query));
+                                        mediaPages[a].emptyView.title.setText(LocaleController.formatString(R.string.NoResultFoundFor, query));
                                         mediaPages[a].emptyView.button.setVisibility(View.GONE);
                                         mediaPages[a].emptyView.showProgress(false, true);
                                     } else if (oldItemCounts == 0) {
@@ -8641,7 +8641,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 for (int a = 0; a < mediaPages.length; a++) {
                     if (mediaPages[a].selectedType == currentType) {
                         if (searchesInProgress == 0 && count == 0) {
-                            mediaPages[a].emptyView.title.setText(getString("NoResult", R.string.NoResult));
+                            mediaPages[a].emptyView.title.setText(getString(R.string.NoResult));
                             mediaPages[a].emptyView.button.setVisibility(View.GONE);
                             mediaPages[a].emptyView.showProgress(false, true);
                         } else if (oldItemCount == 0) {
@@ -10154,18 +10154,18 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                         role = channelParticipant.rank;
                     } else {
                         if (channelParticipant instanceof TLRPC.TL_channelParticipantCreator) {
-                            role = getString("ChannelCreator", R.string.ChannelCreator);
+                            role = getString(R.string.ChannelCreator);
                         } else if (channelParticipant instanceof TLRPC.TL_channelParticipantAdmin) {
-                            role = getString("ChannelAdmin", R.string.ChannelAdmin);
+                            role = getString(R.string.ChannelAdmin);
                         } else {
                             role = null;
                         }
                     }
                 } else {
                     if (part instanceof TLRPC.TL_chatParticipantCreator) {
-                        role = getString("ChannelCreator", R.string.ChannelCreator);
+                        role = getString(R.string.ChannelCreator);
                     } else if (part instanceof TLRPC.TL_chatParticipantAdmin) {
-                        role = getString("ChannelAdmin", R.string.ChannelAdmin);
+                        role = getString(R.string.ChannelAdmin);
                     } else {
                         role = null;
                     }

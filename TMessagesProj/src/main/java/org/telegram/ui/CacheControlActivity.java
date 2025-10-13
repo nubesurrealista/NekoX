@@ -1218,7 +1218,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
 
             getMediaDataController().ringtoneDataStore.checkRingtoneSoundsLoaded();
             AndroidUtilities.runOnUIThread(() -> {
-                cacheRemovedTooltip.setInfoText(LocaleController.formatString("CacheWasCleared", R.string.CacheWasCleared, AndroidUtilities.formatFileSize(finalClearedSize)));
+                cacheRemovedTooltip.setInfoText(LocaleController.formatString(R.string.CacheWasCleared, AndroidUtilities.formatFileSize(finalClearedSize)));
                 cacheRemovedTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
             }, 150);
             MediaDataController.getInstance(currentAccount).checkAllMedia(true);
@@ -1649,7 +1649,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
             this.cacheModel.onFileDeleted(fileInfo);
         }
 
-        cacheRemovedTooltip.setInfoText(LocaleController.formatString("CacheWasCleared", R.string.CacheWasCleared, AndroidUtilities.formatFileSize(totalSizeBefore - totalSize)));
+        cacheRemovedTooltip.setInfoText(LocaleController.formatString(R.string.CacheWasCleared, AndroidUtilities.formatFileSize(totalSizeBefore - totalSize)));
         cacheRemovedTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
 
         ArrayList<CacheModel.FileInfo> fileInfos = new ArrayList<>(filesToRemove);

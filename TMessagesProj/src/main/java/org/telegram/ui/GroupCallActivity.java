@@ -6605,9 +6605,9 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             String message;
             if (urlMuted == null && withMessage) {
                 if (ChatObject.isChannelOrGiga(currentChat)) {
-                    message = formatString("VoipChannelInviteText", R.string.VoipChannelInviteText, urlUnmuted);
+                    message = formatString(R.string.VoipChannelInviteText, urlUnmuted);
                 } else {
-                    message = formatString("VoipGroupInviteText", R.string.VoipGroupInviteText, urlUnmuted);
+                    message = formatString(R.string.VoipGroupInviteText, urlUnmuted);
                 }
             } else {
                 message = urlUnmuted;

@@ -907,12 +907,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 //updateSearchButtons(0, 0, 0);
             }
         });
-        searchItem.setSearchFieldHint(getString("Search", R.string.Search));
+        searchItem.setSearchFieldHint(getString(R.string.Search));
 
         avatarContainer.setEnabled(false);
 
         avatarContainer.setTitle(currentChat.title);
-        avatarContainer.setSubtitle(getString("EventLogAllEvents", R.string.EventLogAllEvents));
+        avatarContainer.setSubtitle(getString(R.string.EventLogAllEvents));
         avatarContainer.setChatAvatar(currentChat);
 
         fragmentView = new SizeNotifierFrameLayout(context) {
@@ -1449,9 +1449,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 currentFilter = filter;
                 selectedAdmins = admins;
                 if (currentFilter != null || selectedAdmins != null) {
-                    avatarContainer.setSubtitle(getString("EventLogSelectedEvents", R.string.EventLogSelectedEvents));
+                    avatarContainer.setSubtitle(getString(R.string.EventLogSelectedEvents));
                 } else {
-                    avatarContainer.setSubtitle(getString("EventLogAllEvents", R.string.EventLogAllEvents));
+                    avatarContainer.setSubtitle(getString(R.string.EventLogAllEvents));
                 }
                 loadMessages(true);
             });
@@ -1462,7 +1462,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         bottomOverlayChatText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         bottomOverlayChatText.setTypeface(AndroidUtilities.bold());
         bottomOverlayChatText.setTextColor(Theme.getColor(Theme.key_chat_fieldOverlayText));
-        bottomOverlayChatText.setText(getString("SETTINGS", R.string.SETTINGS).toUpperCase());
+        bottomOverlayChatText.setText(getString(R.string.SETTINGS).toUpperCase());
         bottomOverlayChat.addView(bottomOverlayChatText, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER));
 
         bottomOverlayImage = new ImageView(context);
@@ -1470,16 +1470,16 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         bottomOverlayImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_fieldOverlayText), PorterDuff.Mode.SRC_IN));
         bottomOverlayImage.setScaleType(ImageView.ScaleType.CENTER);
         bottomOverlayChat.addView(bottomOverlayImage, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.TOP, 3, 0, 0, 0));
-        bottomOverlayImage.setContentDescription(getString("BotHelp", R.string.BotHelp));
+        bottomOverlayImage.setContentDescription(getString(R.string.BotHelp));
         bottomOverlayImage.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
             if (currentChat.megagroup) {
-                builder.setMessage(AndroidUtilities.replaceTags(getString("EventLogInfoDetail", R.string.EventLogInfoDetail)));
+                builder.setMessage(AndroidUtilities.replaceTags(getString(R.string.EventLogInfoDetail)));
             } else {
-                builder.setMessage(AndroidUtilities.replaceTags(getString("EventLogInfoDetailChannel", R.string.EventLogInfoDetailChannel)));
+                builder.setMessage(AndroidUtilities.replaceTags(getString(R.string.EventLogInfoDetailChannel)));
             }
-            builder.setPositiveButton(getString("OK", R.string.OK), null);
-            builder.setTitle(getString("EventLogInfoTitle", R.string.EventLogInfoTitle));
+            builder.setPositiveButton(getString(R.string.OK), null);
+            builder.setTitle(getString(R.string.EventLogInfoTitle));
             showDialog(builder.create());
         });
 
@@ -1631,11 +1631,11 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 arrow.setSpan(new ImageSpan(arrowDrawable, DynamicDrawableSpan.ALIGN_CENTER), 0, arrow.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 SpannableStringBuilder link = new SpannableStringBuilder();
                 link
-                    .append(getString("EventLogFilterGroupInfo", R.string.EventLogFilterGroupInfo))
+                    .append(getString(R.string.EventLogFilterGroupInfo))
                     .append(" ")
                     .append(arrow)
                     .append(" ")
-                    .append(getString("ChannelAdministrators", R.string.ChannelAdministrators));
+                    .append(getString(R.string.ChannelAdministrators));
                 link.setSpan(new ClickableSpan() {
                     @Override
                     public void onClick(@NonNull View view) {
@@ -1650,12 +1650,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 }, 0, link.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 CharSequence text = getString("ChannelAntiSpamInfo2", R.string.ChannelAntiSpamInfo2);
                 text = AndroidUtilities.replaceCharSequence("%s", text, link);
-                Bulletin bulletin = BulletinFactory.of(this).createSimpleBulletin(R.raw.msg_antispam, getString("ChannelAntiSpamUser", R.string.ChannelAntiSpamUser), text);
+                Bulletin bulletin = BulletinFactory.of(this).createSimpleBulletin(R.raw.msg_antispam, getString(R.string.ChannelAntiSpamUser), text);
                 bulletin.setDuration(Bulletin.DURATION_PROLONG);
                 bulletin.show();
                 return true;
             }
-            items.add(getString("ReportFalsePositive", R.string.ReportFalsePositive));
+            items.add(getString(R.string.ReportFalsePositive));
             icons.add(R.drawable.msg_notspam);
             options.add(OPTION_REPORT_FALSE_POSITIVE);
             items.add(null);
@@ -1664,7 +1664,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         }
 
         if (selectedObject.type == MessageObject.TYPE_TEXT || selectedObject.caption != null) {
-            items.add(getString("Copy", R.string.Copy));
+            items.add(getString(R.string.Copy));
             icons.add(R.drawable.msg_copy);
             options.add(OPTION_COPY);
         }
@@ -1705,77 +1705,77 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
         } else if (type == 3) {
             if (selectedObject.messageOwner.media instanceof TLRPC.TL_messageMediaWebPage && MessageObject.isNewGifDocument(selectedObject.messageOwner.media.webpage.document)) {
-                items.add(getString("SaveToGIFs", R.string.SaveToGIFs));
+                items.add(getString(R.string.SaveToGIFs));
                 icons.add(R.drawable.msg_gif);
                 options.add(OPTION_SAVE_TO_GIFS);
             }
         } else if (type == 4) {
             if (selectedObject.isVideo()) {
-                items.add(getString("SaveToGallery", R.string.SaveToGallery));
+                items.add(getString(R.string.SaveToGallery));
                 icons.add(R.drawable.msg_gallery);
                 options.add(OPTION_SAVE_TO_GALLERY);
-                items.add(getString("ShareFile", R.string.ShareFile));
+                items.add(getString(R.string.ShareFile));
                 icons.add(R.drawable.msg_share);
                 options.add(OPTION_SHARE);
             } else if (selectedObject.isMusic()) {
-                items.add(getString("SaveToMusic", R.string.SaveToMusic));
+                items.add(getString(R.string.SaveToMusic));
                 icons.add(R.drawable.msg_download);
                 options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
-                items.add(getString("ShareFile", R.string.ShareFile));
+                items.add(getString(R.string.ShareFile));
                 icons.add(R.drawable.msg_share);
                 options.add(OPTION_SHARE);
             } else if (selectedObject.getDocument() != null) {
                 if (MessageObject.isNewGifDocument(selectedObject.getDocument())) {
-                    items.add(getString("SaveToGIFs", R.string.SaveToGIFs));
+                    items.add(getString(R.string.SaveToGIFs));
                     icons.add(R.drawable.msg_gif);
                     options.add(OPTION_SAVE_TO_GIFS);
                 }
-                items.add(getString("SaveToDownloads", R.string.SaveToDownloads));
+                items.add(getString(R.string.SaveToDownloads));
                 icons.add(R.drawable.msg_download);
                 options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
-                items.add(getString("ShareFile", R.string.ShareFile));
+                items.add(getString(R.string.ShareFile));
                 icons.add(R.drawable.msg_share);
                 options.add(OPTION_SHARE);
             } else {
-                items.add(getString("SaveToGallery", R.string.SaveToGallery));
+                items.add(getString(R.string.SaveToGallery));
                 icons.add(R.drawable.msg_gallery);
                 options.add(OPTION_SAVE_TO_GALLERY);
             }
         } else if (type == 5) {
-            items.add(getString("ApplyLocalizationFile", R.string.ApplyLocalizationFile));
+            items.add(getString(R.string.ApplyLocalizationFile));
             icons.add(R.drawable.msg_language);
             options.add(OPTION_APPLY_FILE);
-            items.add(getString("SaveToDownloads", R.string.SaveToDownloads));
+            items.add(getString(R.string.SaveToDownloads));
             icons.add(R.drawable.msg_download);
             options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
-            items.add(getString("ShareFile", R.string.ShareFile));
+            items.add(getString(R.string.ShareFile));
             icons.add(R.drawable.msg_share);
             options.add(OPTION_SHARE);
         } else if (type == 10) {
-            items.add(getString("ApplyThemeFile", R.string.ApplyThemeFile));
+            items.add(getString(R.string.ApplyThemeFile));
             icons.add(R.drawable.msg_theme);
             options.add(OPTION_APPLY_FILE);
-            items.add(getString("SaveToDownloads", R.string.SaveToDownloads));
+            items.add(getString(R.string.SaveToDownloads));
             icons.add(R.drawable.msg_download);
             options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
-            items.add(getString("ShareFile", R.string.ShareFile));
+            items.add(getString(R.string.ShareFile));
             icons.add(R.drawable.msg_share);
             options.add(OPTION_SHARE);
         } else if (type == 6) {
-            items.add(getString("SaveToGallery", R.string.SaveToGallery));
+            items.add(getString(R.string.SaveToGallery));
             icons.add(R.drawable.msg_gallery);
             options.add(OPTION_SAVE_TO_GALLERY2);
-            items.add(getString("SaveToDownloads", R.string.SaveToDownloads));
+            items.add(getString(R.string.SaveToDownloads));
             icons.add(R.drawable.msg_download);
             options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
-            items.add(getString("ShareFile", R.string.ShareFile));
+            items.add(getString(R.string.ShareFile));
             icons.add(R.drawable.msg_share);
             options.add(OPTION_SHARE);
         } else if (type == 7) {
             if (selectedObject.isMask()) {
-                items.add(getString("AddToMasks", R.string.AddToMasks));
+                items.add(getString(R.string.AddToMasks));
             } else {
-                items.add(getString("AddToStickers", R.string.AddToStickers));
+                items.add(getString(R.string.AddToStickers));
             }
             icons.add(R.drawable.msg_sticker);
             options.add(OPTION_SAVE_STICKER);
@@ -1786,15 +1786,15 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 user = MessagesController.getInstance(currentAccount).getUser(uid);
             }
             if (user != null && user.id != UserConfig.getInstance(currentAccount).getClientUserId() && ContactsController.getInstance(currentAccount).contactsDict.get(user.id) == null) {
-                items.add(getString("AddContactTitle", R.string.AddContactTitle));
+                items.add(getString(R.string.AddContactTitle));
                 icons.add(R.drawable.msg_addcontact);
                 options.add(OPTION_ADD_CONTACT);
             }
             if (!TextUtils.isEmpty(selectedObject.messageOwner.media.phone_number)) {
-                items.add(getString("Copy", R.string.Copy));
+                items.add(getString(R.string.Copy));
                 icons.add(R.drawable.msg_copy);
                 options.add(OPTION_COPY_PHONE);
-                items.add(getString("Call", R.string.Call));
+                items.add(getString(R.string.Call));
                 icons.add(R.drawable.msg_calls);
                 options.add(OPTION_CALL);
             }
@@ -2088,7 +2088,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         switch (option) {
             case OPTION_COPY: {
                 AndroidUtilities.addToClipboard(getMessageContent(selectedObject, 0, true));
-                BulletinFactory.of(ChannelAdminLogActivity.this).createCopyBulletin(getString("MessageCopied", R.string.MessageCopied)).show();
+                BulletinFactory.of(ChannelAdminLogActivity.this).createCopyBulletin(getString(R.string.MessageCopied)).show();
                 break;
             }
             case OPTION_SAVE_TO_GALLERY: {
@@ -2154,9 +2154,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                 return;
                             }
                             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                            builder.setTitle(getString("AppName", R.string.AppName));
-                            builder.setMessage(getString("IncorrectTheme", R.string.IncorrectTheme));
-                            builder.setPositiveButton(getString("OK", R.string.OK), null);
+                            builder.setTitle(getString(R.string.AppName));
+                            builder.setMessage(getString(R.string.IncorrectTheme));
+                            builder.setPositiveButton(getString(R.string.OK), null);
                             showDialog(builder.create());
                         }
                     } else {
@@ -2169,9 +2169,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                 return;
                             }
                             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                            builder.setTitle(getString("AppName", R.string.AppName));
-                            builder.setMessage(getString("IncorrectLocalization", R.string.IncorrectLocalization));
-                            builder.setPositiveButton(getString("OK", R.string.OK), null);
+                            builder.setTitle(getString(R.string.AppName));
+                            builder.setMessage(getString(R.string.IncorrectLocalization));
+                            builder.setPositiveButton(getString(R.string.OK), null);
                             showDialog(builder.create());
                         }
                     }
@@ -2202,7 +2202,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(path)));
                 }
                 try {
-                    getParentActivity().startActivityForResult(Intent.createChooser(intent, getString("ShareFile", R.string.ShareFile)), 500);
+                    getParentActivity().startActivityForResult(Intent.createChooser(intent, getString(R.string.ShareFile)), 500);
                 } catch (Exception e) {
 
                 }
@@ -2271,7 +2271,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
             case OPTION_COPY_PHONE: {
                 AndroidUtilities.addToClipboard(selectedObject.messageOwner.media.phone_number);
-                BulletinFactory.of(ChannelAdminLogActivity.this).createCopyBulletin(getString("PhoneCopied", R.string.PhoneCopied)).show();
+                BulletinFactory.of(ChannelAdminLogActivity.this).createCopyBulletin(getString(R.string.PhoneCopied)).show();
                 break;
             }
             case OPTION_CALL: {
@@ -2293,9 +2293,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         if (res instanceof TLRPC.TL_boolTrue) {
                             BulletinFactory.of(this).createSimpleBulletin(R.raw.msg_antispam, getString(R.string.ChannelAntiSpamFalsePositiveReported)).show();
                         } else if (res instanceof TLRPC.TL_boolFalse) {
-                            BulletinFactory.of(this).createSimpleBulletin(R.raw.error, getString("UnknownError", R.string.UnknownError)).show();
+                            BulletinFactory.of(this).createSimpleBulletin(R.raw.error, getString(R.string.UnknownError)).show();
                         } else {
-                            BulletinFactory.of(this).createSimpleBulletin(R.raw.error, getString("UnknownError", R.string.UnknownError)).show();
+                            BulletinFactory.of(this).createSimpleBulletin(R.raw.error, getString(R.string.UnknownError)).show();
                         }
                     });
                 });
@@ -2761,12 +2761,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-        builder.setTitle(getString("AppName", R.string.AppName));
-        builder.setPositiveButton(getString("OK", R.string.OK), null);
+        builder.setTitle(getString(R.string.AppName));
+        builder.setPositiveButton(getString(R.string.OK), null);
         if (message.type == MessageObject.TYPE_VIDEO) {
-            builder.setMessage(getString("NoPlayerInstalled", R.string.NoPlayerInstalled));
+            builder.setMessage(getString(R.string.NoPlayerInstalled));
         } else {
-            builder.setMessage(LocaleController.formatString("NoHandleAppInstalled", R.string.NoHandleAppInstalled, message.getDocument().mime_type));
+            builder.setMessage(LocaleController.formatString(R.string.NoHandleAppInstalled, message.getDocument().mime_type));
         }
         showDialog(builder.create());
     }
@@ -2796,10 +2796,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             Browser.openUrl(getParentActivity(), url, true);
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setTitle(getString("OpenUrlTitle", R.string.OpenUrlTitle));
+            builder.setTitle(getString(R.string.OpenUrlTitle));
             builder.setMessage(LocaleController.formatString("OpenUrlAlert2", R.string.OpenUrlAlert2, url));
-            builder.setPositiveButton(getString("Open", R.string.Open), (dialogInterface, i) -> Browser.openUrl(getParentActivity(), url, true));
-            builder.setNegativeButton(getString("Cancel", R.string.Cancel), null);
+            builder.setPositiveButton(getString(R.string.Open), (dialogInterface, i) -> Browser.openUrl(getParentActivity(), url, true));
+            builder.setNegativeButton(getString(R.string.Cancel), null);
             showDialog(builder.create());
         }
     }
@@ -3034,7 +3034,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         if (url instanceof URLSpanMono) {
                             ((URLSpanMono) url).copyToClipboard();
                             if (AndroidUtilities.shouldShowClipboardToast()) {
-                                Toast.makeText(getParentActivity(), getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getParentActivity(), getString(R.string.TextCopied), Toast.LENGTH_SHORT).show();
                             }
                         } else if (url instanceof URLSpanUserMention) {
                             long peerId = Utilities.parseLong(((URLSpanUserMention) url).getURL());
@@ -3064,7 +3064,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                 BottomBuilder builder = new BottomBuilder(getParentActivity());
                                 builder.addTitle(urlFinal);
                                 builder.addItems(
-                                        new String[]{getString("Open", R.string.Open), getString("Copy", R.string.Copy), getString("ShareQRCode", R.string.ShareQRCode)},
+                                        new String[]{getString(R.string.Open), getString(R.string.Copy), getString(R.string.ShareQRCode)},
                                         new int[]{R.drawable.baseline_open_in_browser_24, R.drawable.baseline_content_copy_24, R.drawable.wallet_qr}, (which, text, __) -> {
                                             if (which == 0 || which == 2) {
                                                 if (which == 0) {
@@ -3352,7 +3352,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                     if (finalInvite != null) {
                                         showInviteLinkBottomSheet(finalInvite, usersMap);
                                     } else {
-                                        BulletinFactory.of(ChannelAdminLogActivity.this).createSimpleBulletin(R.raw.linkbroken, getString("LinkHashExpired", R.string.LinkHashExpired)).show();
+                                        BulletinFactory.of(ChannelAdminLogActivity.this).createSimpleBulletin(R.raw.linkbroken, getString(R.string.LinkHashExpired)).show();
                                     }
                                 });
                             });
@@ -3360,7 +3360,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         } else if (cachedInvite instanceof TLRPC.TL_messages_exportedChatInvite) {
                             showInviteLinkBottomSheet((TLRPC.TL_messages_exportedChatInvite) cachedInvite, usersMap);
                         } else {
-                            BulletinFactory.of(ChannelAdminLogActivity.this).createSimpleBulletin(R.raw.linkbroken, getString("LinkHashExpired", R.string.LinkHashExpired)).show();
+                            BulletinFactory.of(ChannelAdminLogActivity.this).createSimpleBulletin(R.raw.linkbroken, getString(R.string.LinkHashExpired)).show();
                         }
 
                     }

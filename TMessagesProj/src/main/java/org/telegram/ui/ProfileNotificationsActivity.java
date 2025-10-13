@@ -823,7 +823,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                                 textCell.setTextAndValue(LocaleController.getString(R.string.SmartNotifications), LocaleController.getString(R.string.SmartNotificationsDisabled), priorityRow != -1);
                             } else {
                                 String minutes = LocaleController.formatPluralString("Minutes", notifyDelay / 60);
-                                textCell.setTextAndValue(LocaleController.getString(R.string.SmartNotifications), LocaleController.formatString("SmartNotificationsInfo", R.string.SmartNotificationsInfo, notifyMaxCount, minutes), priorityRow != -1);
+                                textCell.setTextAndValue(LocaleController.getString(R.string.SmartNotifications), LocaleController.formatString(R.string.SmartNotificationsInfo, notifyMaxCount, minutes), priorityRow != -1);
                             }
                         } else if (position == callsVibrateRow) {
                             int value = preferences.getInt("calls_vibrate_" + key, 0);

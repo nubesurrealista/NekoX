@@ -12237,13 +12237,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (user == null) {
                 return;
             }
-            message = LocaleController.formatString("CancelForwardPrivate", R.string.CancelForwardPrivate, LocaleController.formatPluralString("MessagesBold", messagePreviewParams.forwardMessages.messages.size()), ContactsController.formatName(user.first_name, user.last_name));
+            message = LocaleController.formatString(R.string.CancelForwardPrivate, LocaleController.formatPluralString("MessagesBold", messagePreviewParams.forwardMessages.messages.size()), ContactsController.formatName(user.first_name, user.last_name));
         } else {
             TLRPC.Chat chat = getMessagesController().getChat(-dialogId);
             if (chat == null) {
                 return;
             }
-            message = LocaleController.formatString("CancelForwardChat", R.string.CancelForwardChat, LocaleController.formatPluralString("MessagesBold", messagePreviewParams.forwardMessages.messages.size()), chat == null ? "" : chat.title);
+            message = LocaleController.formatString(R.string.CancelForwardChat, LocaleController.formatPluralString("MessagesBold", messagePreviewParams.forwardMessages.messages.size()), chat == null ? "" : chat.title);
         }
         builder.setMessage(AndroidUtilities.replaceTags(message));
         builder.setTitle(LocaleController.formatPluralString("messages", messagePreviewParams.forwardMessages.messages.size()));
@@ -13725,7 +13725,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (currentUser.bot) {
                 builder.setMessage(LocaleController.getString(R.string.AreYouSureShareMyContactInfoBot));
             } else {
-                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureShareMyContactInfoUser", R.string.AreYouSureShareMyContactInfoUser, PhoneFormat.getInstance().format("+" + getUserConfig().getCurrentUser().phone), ContactsController.formatName(currentUser.first_name, currentUser.last_name))));
+                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.AreYouSureShareMyContactInfoUser, PhoneFormat.getInstance().format("+" + getUserConfig().getCurrentUser().phone), ContactsController.formatName(currentUser.first_name, currentUser.last_name))));
             }
         } else {
             builder.setMessage(LocaleController.getString(R.string.AreYouSureShareMyContactInfo));
@@ -13885,7 +13885,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (time != null) {
             new AlertDialog.Builder(getContext())
                 .setTitle(LocaleController.getString(R.string.Slowmode))
-                .setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("SlowModeHint", R.string.SlowModeHint, time)))
+                .setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.SlowModeHint, time)))
                 .setPositiveButton(LocaleController.getString(R.string.OK), null)
                 .show();
             return false;
@@ -13951,7 +13951,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (getParentActivity() == null || fragmentView == null || !show && (slowModeHint == null || slowModeHint.getVisibility() != View.VISIBLE)) {
             return;
         }
-        slowModeHint.setText(AndroidUtilities.replaceTags(LocaleController.formatString("SlowModeHint", R.string.SlowModeHint, time)));
+        slowModeHint.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.SlowModeHint, time)));
         if (show) {
             slowModeHint.showForView(view, true);
         }
@@ -13998,7 +13998,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         } else {
             time = LocaleController.formatPluralString("Seconds", chatInfo.ttl_period);
         }
-        timerHintView.setText(LocaleController.formatString("AutoDeleteSetInfo", R.string.AutoDeleteSetInfo, time));
+        timerHintView.setText(LocaleController.formatString(R.string.AutoDeleteSetInfo, time));
         timerHintView.showForView(avatarContainer.getTimeItem(), true);
     }
 
@@ -14068,7 +14068,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (AndroidUtilities.isBannedForever(currentChat.banned_rights)) {
                 mediaBanTooltip.setText(LocaleController.getString(R.string.AttachMediaRestrictedForever));
             } else {
-                mediaBanTooltip.setText(LocaleController.formatString("AttachMediaRestricted", R.string.AttachMediaRestricted, LocaleController.formatDateForBan(currentChat.banned_rights.until_date)));
+                mediaBanTooltip.setText(LocaleController.formatString(R.string.AttachMediaRestricted, LocaleController.formatDateForBan(currentChat.banned_rights.until_date)));
             }
         }
 
@@ -14265,7 +14265,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         emojiHintTextView = new HintView(getParentActivity(), 9, themeDelegate);
         final String emojiPlaceholder = "<<EMOJI>>";
-        String textString = LocaleController.formatString("TapHereEmoji", R.string.TapHereEmoji, emojiPlaceholder);
+        String textString = LocaleController.formatString(R.string.TapHereEmoji, emojiPlaceholder);
         SpannableStringBuilder text = new SpannableStringBuilder(textString);
         int i = textString.indexOf(emojiPlaceholder);
         if (i >= 0) {
@@ -16088,7 +16088,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }
                         replyObjectTextView.setText(mess);
                     } else {
-                        replyObjectTextView.setText(LocaleController.formatString("ForwardingFromNames", R.string.ForwardingFromNames, userNames));
+                        replyObjectTextView.setText(LocaleController.formatString(R.string.ForwardingFromNames, userNames));
                     }
                 }
                 replyObjectHintTextView.setText(LocaleController.getString(R.string.TapForForwardingOptions));
@@ -19661,7 +19661,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else if (AndroidUtilities.isBannedForever(currentChat.banned_rights)) {
                 bottomOverlayText.setText(LocaleController.getString(R.string.SendMessageRestrictedForever));
             } else {
-                bottomOverlayText.setText(LocaleController.formatString("SendMessageRestricted", R.string.SendMessageRestricted, LocaleController.formatDateForBan(currentChat.banned_rights.until_date)));
+                bottomOverlayText.setText(LocaleController.formatString(R.string.SendMessageRestricted, LocaleController.formatDateForBan(currentChat.banned_rights.until_date)));
             }
             boolean dev = NekoXConfig.isDeveloper();
             if (dev) {
@@ -19696,7 +19696,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 chatActivityEnterView.setVisibility(View.INVISIBLE);
                 hideKeyboard = true;
             } else if (currentEncryptedChat instanceof TLRPC.TL_encryptedChatWaiting) {
-                bottomOverlayText.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AwaitingEncryption", R.string.AwaitingEncryption, "<b>" + currentUser.first_name + "</b>")));
+                bottomOverlayText.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.AwaitingEncryption, "<b>" + currentUser.first_name + "</b>")));
                 bottomOverlay.setVisibility(View.VISIBLE);
                 chatActivityEnterView.setVisibility(View.INVISIBLE);
                 hideKeyboard = true;
@@ -20563,7 +20563,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 bottomOverlayChatText.setAlpha(0.5f);
                 bottomOverlayChatText.setEnabled(false);
             } else {
-                bottomOverlayChatText.setText(LocaleController.formatString("ReportMessagesCount", R.string.ReportMessagesCount, LocaleController.formatPluralString("messages", size)).toUpperCase());
+                bottomOverlayChatText.setText(LocaleController.formatString(R.string.ReportMessagesCount, LocaleController.formatPluralString("messages", size)).toUpperCase());
                 bottomOverlayChatText.setAlpha(1.0f);
                 bottomOverlayChatText.setEnabled(true);
             }
@@ -21007,8 +21007,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         if (!file.exists()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), themeDelegate);
-            builder.setTitle(getString("AppName", R.string.AppName));
-            builder.setPositiveButton(getString("OK", R.string.OK), null);
+            builder.setTitle(getString(R.string.AppName));
+            builder.setPositiveButton(getString(R.string.OK), null);
             boolean alreadyDownloading = object != null && object.isVideo() && FileLoader.getInstance(object.currentAccount).isLoadingFile(object.getFileName());
             if (alreadyDownloading) {
                 builder.setMessage(getString(R.string.PleaseStreamDownload));
@@ -27996,7 +27996,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     AtomicBoolean allowWrite = new AtomicBoolean();
                                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity())
                                             .setTopView(introTopView)
-                                            .setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("BotRequestAttachPermission", R.string.BotRequestAttachPermission, UserObject.getUserName(user))))
+                                            .setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.BotRequestAttachPermission, UserObject.getUserName(user))))
                                             .setPositiveButton(LocaleController.getString(R.string.BotAddToMenu), (dialog, which) -> {
                                                 TLRPC.TL_messages_toggleBotInAttachMenu botRequest = new TLRPC.TL_messages_toggleBotInAttachMenu();
                                                 botRequest.bot = MessagesController.getInstance(currentAccount).getInputUser(user.id);
@@ -30061,9 +30061,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             String str;
             if (chatWithAdminChannel) {
-                str = LocaleController.formatString("ChatWithGroupAdmin", R.string.ChatWithGroupAdmin, user.first_name, chatWithAdmin);
+                str = LocaleController.formatString(R.string.ChatWithGroupAdmin, user.first_name, chatWithAdmin);
             } else {
-                str = LocaleController.formatString("ChatWithChannelAdmin", R.string.ChatWithChannelAdmin, user.first_name, chatWithAdmin);
+                str = LocaleController.formatString(R.string.ChatWithChannelAdmin, user.first_name, chatWithAdmin);
             }
             reportSpamButton.setVisibility(View.GONE);
             addToContactsButton.setVisibility(View.GONE);
@@ -34408,7 +34408,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         FrameLayout frameLayout = new FrameLayout(getParentActivity());
                         CheckBoxCell cell = new CheckBoxCell(getParentActivity(), 1, themeDelegate);
                         cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                        cell.setText(LocaleController.formatString("PinAlsoFor", R.string.PinAlsoFor, UserObject.getFirstName(currentUser)), "", false, false);
+                        cell.setText(LocaleController.formatString(R.string.PinAlsoFor, UserObject.getFirstName(currentUser)), "", false, false);
                         cell.setPadding(AndroidUtilities.dp(LocaleController.isRTL ? 16 : 8), 0, AndroidUtilities.dp(LocaleController.isRTL ? 8 : 16), 0);
                         frameLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.TOP | Gravity.LEFT));
                         cell.setOnClickListener(v -> {
@@ -35572,12 +35572,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         int dt = messageObject.canEditMessageAnytime(currentChat) ? 6 * 60 : getMessagesController().maxEditTime + 5 * 60 - Math.abs(getConnectionsManager().getCurrentTime() - messageObject.messageOwner.date);
         if (dt > 0) {
             if (dt <= 5 * 60) {
-                replyObjectTextView.setText(LocaleController.formatString("TimeToEdit", R.string.TimeToEdit, AndroidUtilities.formatShortDuration(dt)));
+                replyObjectTextView.setText(LocaleController.formatString(R.string.TimeToEdit, AndroidUtilities.formatShortDuration(dt)));
             }
             AndroidUtilities.runOnUIThread(this::checkEditTimer, 1000);
         } else {
             chatActivityEnterView.onEditTimeExpired();
-            replyObjectTextView.setText(LocaleController.formatString("TimeToEditExpired", R.string.TimeToEditExpired));
+            replyObjectTextView.setText(LocaleController.formatString(R.string.TimeToEditExpired));
         }
     }
 
@@ -35611,7 +35611,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (message.type == MessageObject.TYPE_VIDEO) {
             builder.setMessage(LocaleController.getString(R.string.NoPlayerInstalled));
         } else {
-            builder.setMessage(LocaleController.formatString("NoHandleAppInstalled", R.string.NoHandleAppInstalled, message.getDocument().mime_type));
+            builder.setMessage(LocaleController.formatString(R.string.NoHandleAppInstalled, message.getDocument().mime_type));
         }
         showDialog(builder.create());
     }
@@ -36223,7 +36223,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else {
                 name = "";
             }
-            builder.setMessage(LocaleController.formatString("BotPermissionGameAlert", R.string.BotPermissionGameAlert, name));
+            builder.setMessage(LocaleController.formatString(R.string.BotPermissionGameAlert, name));
             builder.setPositiveButton(LocaleController.getString(R.string.OK), (dialogInterface, i) -> {
                 showOpenGameAlert(game, messageObject, urlStr, false, uid);
                 MessagesController.getNotificationsSettings(currentAccount).edit().putBoolean("askgame_" + uid, false).apply();
@@ -43109,7 +43109,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (action == 1 && (channelParticipant instanceof TLRPC.TL_channelParticipantAdmin || participant instanceof TLRPC.TL_chatParticipantAdmin)) {
             AlertDialog.Builder builder2 = new AlertDialog.Builder(getParentActivity());
             builder2.setTitle(getAppName());
-            builder2.setMessage(LocaleController.formatString("AdminWillBeRemoved", R.string.AdminWillBeRemoved, ContactsController.formatName(user.first_name, user.last_name)));
+            builder2.setMessage(LocaleController.formatString(R.string.AdminWillBeRemoved, ContactsController.formatName(user.first_name, user.last_name)));
             builder2.setPositiveButton(LocaleController.getString(R.string.OK), (dialog, which) -> {
                 if (channelParticipant != null) {
                     openRightsEdit(action, user, participant, channelParticipant.admin_rights, channelParticipant.banned_rights, channelParticipant.rank, editingAdmin);

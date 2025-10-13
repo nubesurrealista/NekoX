@@ -823,7 +823,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                     }
                     if (username.length() > 0) {
                         String url = "https://" + MessagesController.getInstance(currentAccount).linkPrefix + "/" + username;
-                        String text = LocaleController.formatString("UsernameHelpLink", R.string.UsernameHelpLink, url);
+                        String text = LocaleController.formatString(R.string.UsernameHelpLink, url);
                         int index = text.indexOf(url);
                         SpannableStringBuilder textSpan = new SpannableStringBuilder(text);
                         if (index >= 0) {
@@ -1280,7 +1280,7 @@ public class ChangeUsernameActivity extends BaseFragment {
             }
             if (name.equals(currentName)) {
                 if (statusTextView != null) {
-                    statusTextView.setText(LocaleController.formatString("UsernameAvailable", R.string.UsernameAvailable, name));
+                    statusTextView.setText(LocaleController.formatString(R.string.UsernameAvailable, name));
                     statusTextView.setTag(Theme.key_windowBackgroundWhiteGreenText);
                     statusTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText));
                     if (helpCell != null) {
@@ -1308,7 +1308,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                     if (lastCheckName != null && lastCheckName.equals(nameFinal)) {
                         if (error == null && response instanceof TLRPC.TL_boolTrue) {
                             if (statusTextView != null) {
-                                statusTextView.setText(LocaleController.formatString("UsernameAvailable", R.string.UsernameAvailable, nameFinal));
+                                statusTextView.setText(LocaleController.formatString(R.string.UsernameAvailable, nameFinal));
                                 statusTextView.setTag(Theme.key_windowBackgroundWhiteGreenText);
                                 statusTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText));
                                 if (helpCell != null) {

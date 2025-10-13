@@ -456,7 +456,7 @@ public class MessageHelper extends BaseController {
         }
 
         if (before > 0) {
-            messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("DeleteAllFromSelfAlertBefore", R.string.DeleteAllFromSelfAlertBefore, LocaleController.formatDateForBan(before))));
+            messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.DeleteAllFromSelfAlertBefore, LocaleController.formatDateForBan(before))));
         } else {
             messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString(R.string.DeleteAllFromSelfAlert)));
         }

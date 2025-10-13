@@ -331,13 +331,13 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                             if (value == 0) {
                                 return LocaleController.getString(R.string.AutoLockDisabled);
                             } else if (value == 1) {
-                                return LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Minutes", 1));
+                                return LocaleController.formatString(R.string.AutoLockInTime, LocaleController.formatPluralString("Minutes", 1));
                             } else if (value == 2) {
-                                return LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Minutes", 5));
+                                return LocaleController.formatString(R.string.AutoLockInTime, LocaleController.formatPluralString("Minutes", 5));
                             } else if (value == 3) {
-                                return LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Hours", 1));
+                                return LocaleController.formatString(R.string.AutoLockInTime, LocaleController.formatPluralString("Hours", 1));
                             } else if (value == 4) {
-                                return LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Hours", 5));
+                                return LocaleController.formatString(R.string.AutoLockInTime, LocaleController.formatPluralString("Hours", 5));
                             }
                             return "";
                         });
@@ -1056,7 +1056,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         } else if (type == TYPE_ENTER_CODE_TO_MANAGE_SETTINGS) {
             if (SharedConfig.passcodeRetryInMs > 0) {
                 int value = Math.max(1, (int) Math.ceil(SharedConfig.passcodeRetryInMs / 1000.0));
-                Toast.makeText(getParentActivity(), LocaleController.formatString("TooManyTries", R.string.TooManyTries, LocaleController.formatPluralString("Seconds", value)), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getParentActivity(), LocaleController.formatString(R.string.TooManyTries, LocaleController.formatPluralString("Seconds", value)), Toast.LENGTH_SHORT).show();
 
                 for (CodeNumberField f : codeFieldContainer.codeField) {
                     f.setText("");
@@ -1197,15 +1197,15 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                     } else if (position == autoLockRow) {
                         String val;
                         if (SharedConfig.autoLockIn == 0) {
-                            val = LocaleController.formatString("AutoLockDisabled", R.string.AutoLockDisabled);
+                            val = LocaleController.formatString(R.string.AutoLockDisabled);
                         } else if (SharedConfig.autoLockIn == 1) {
-                            val = LocaleController.formatString("AutoLockImmediately", R.string.AutoLockImmediately);
+                            val = LocaleController.formatString(R.string.AutoLockImmediately);
                         } else if (SharedConfig.autoLockIn < 60 * 60) {
-                            val = LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Minutes", SharedConfig.autoLockIn / 60));
+                            val = LocaleController.formatString(R.string.AutoLockInTime, LocaleController.formatPluralString("Minutes", SharedConfig.autoLockIn / 60));
                         } else if (SharedConfig.autoLockIn < 60 * 60 * 24) {
-                            val = LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Hours", (int) Math.ceil(SharedConfig.autoLockIn / 60.0f / 60)));
+                            val = LocaleController.formatString(R.string.AutoLockInTime, LocaleController.formatPluralString("Hours", (int) Math.ceil(SharedConfig.autoLockIn / 60.0f / 60)));
                         } else {
-                            val = LocaleController.formatString("AutoLockInTime", R.string.AutoLockInTime, LocaleController.formatPluralString("Days", (int) Math.ceil(SharedConfig.autoLockIn / 60.0f / 60 / 24)));
+                            val = LocaleController.formatString(R.string.AutoLockInTime, LocaleController.formatPluralString("Days", (int) Math.ceil(SharedConfig.autoLockIn / 60.0f / 60 / 24)));
                         }
                         textCell.setTextAndValue(LocaleController.getString(R.string.AutoLock), val, true);
                         textCell.setTag(Theme.key_windowBackgroundWhiteBlackText);

@@ -138,11 +138,11 @@ public class MemberRequestCell extends FrameLayout {
         if (importer.via_chatlist) {
             statusTextView.setText(LocaleController.getString(R.string.JoinedViaFolder));
         } else if (importer.approved_by == 0) {
-            statusTextView.setText(LocaleController.formatString("RequestedToJoinAt", R.string.RequestedToJoinAt, dateText));
+            statusTextView.setText(LocaleController.formatString(R.string.RequestedToJoinAt, dateText));
         } else {
             TLRPC.User approvedByUser = users.get(importer.approved_by);
             if (approvedByUser != null) {
-                statusTextView.setText(LocaleController.formatString("AddedBy", R.string.AddedBy, UserObject.getFirstName(approvedByUser), dateText));
+                statusTextView.setText(LocaleController.formatString(R.string.AddedBy, UserObject.getFirstName(approvedByUser), dateText));
             } else {
                 statusTextView.setText("");
             }

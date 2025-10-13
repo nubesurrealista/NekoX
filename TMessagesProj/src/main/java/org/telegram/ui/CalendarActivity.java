@@ -1412,9 +1412,9 @@ public class CalendarActivity extends BaseFragment implements NotificationCenter
                 backDrawable.setRotation(0f, true);
             }
             if (daysSelected > 1) {
-                removeDaysButton.setText(LocaleController.formatString("ClearHistoryForTheseDays", R.string.ClearHistoryForTheseDays));
+                removeDaysButton.setText(LocaleController.formatString(R.string.ClearHistoryForTheseDays));
             } else if (daysSelected > 0 || inSelectionMode) {
-                removeDaysButton.setText(LocaleController.formatString("ClearHistoryForThisDay", R.string.ClearHistoryForThisDay));
+                removeDaysButton.setText(LocaleController.formatString(R.string.ClearHistoryForThisDay));
             }
             actionBar.setTitleAnimated(title, fromBottom, 150);
 

@@ -905,17 +905,17 @@ public class DocumentSelectActivity extends BaseFragment {
                 return false;
             }
             if (canSelectOnlyImageFiles && item.thumb == null) {
-                showErrorBox(LocaleController.formatString("PassportUploadNotImage", R.string.PassportUploadNotImage));
+                showErrorBox(LocaleController.formatString(R.string.PassportUploadNotImage));
                 return false;
             }
             if (sizeLimit != 0) {
                 if (item.file.length() > sizeLimit) {
-                    showErrorBox(LocaleController.formatString("FileUploadLimit", R.string.FileUploadLimit, AndroidUtilities.formatFileSize(sizeLimit)));
+                    showErrorBox(LocaleController.formatString(R.string.FileUploadLimit, AndroidUtilities.formatFileSize(sizeLimit)));
                     return false;
                 }
             }
             if (maxSelectedFiles >= 0 && selectedFiles.size() >= maxSelectedFiles) {
-                showErrorBox(LocaleController.formatString("PassportUploadMaxReached", R.string.PassportUploadMaxReached, LocaleController.formatPluralString("Files", maxSelectedFiles)));
+                showErrorBox(LocaleController.formatString(R.string.PassportUploadMaxReached, LocaleController.formatPluralString("Files", maxSelectedFiles)));
                 return false;
             }
             if (item.file.length() == 0) {
@@ -1466,7 +1466,7 @@ public class DocumentSelectActivity extends BaseFragment {
             if (total == 0) {
                 return "";
             }
-            return LocaleController.formatString("FreeOfTotal", R.string.FreeOfTotal, AndroidUtilities.formatFileSize(free), AndroidUtilities.formatFileSize(total));
+            return LocaleController.formatString(R.string.FreeOfTotal, AndroidUtilities.formatFileSize(free), AndroidUtilities.formatFileSize(total));
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -1644,7 +1644,7 @@ public class DocumentSelectActivity extends BaseFragment {
                         listView.setAdapter(searchAdapter);
                         updateEmptyView();
                     }
-                    emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoFilesFoundInfo", R.string.NoFilesFoundInfo, query)));
+                    emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.NoFilesFoundInfo, query)));
                 }
                 searchWas = true;
                 searchResult = result;

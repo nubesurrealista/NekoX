@@ -523,7 +523,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                     builder.setTitle(LocaleController.formatPluralString("DeleteBackground", selectedWallPapers.size()));
-                    builder.setMessage(LocaleController.formatString("DeleteChatBackgroundsAlert", R.string.DeleteChatBackgroundsAlert));
+                    builder.setMessage(LocaleController.formatString(R.string.DeleteChatBackgroundsAlert));
                     builder.setPositiveButton(LocaleController.getString(R.string.Delete), (dialogInterface, i) -> {
                         progressDialog = new AlertDialog(getParentActivity(), AlertDialog.ALERT_TYPE_SPINNER);
                         progressDialog.setCanCancel(false);

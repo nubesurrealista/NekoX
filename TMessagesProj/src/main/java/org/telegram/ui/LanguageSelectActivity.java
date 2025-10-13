@@ -391,7 +391,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 final LocaleController.LocaleInfo finalLocaleInfo = localeInfo;
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                 builder.setTitle(LocaleController.getString(R.string.DeleteLocalizationTitle));
-                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("DeleteLocalizationText", R.string.DeleteLocalizationText, localeInfo.name)));
+                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.DeleteLocalizationText, localeInfo.name)));
                 builder.setPositiveButton(LocaleController.getString(R.string.Delete), (dialogInterface, i) -> {
                     if (LocaleController.getInstance().deleteLanguage(finalLocaleInfo, currentAccount)) {
                         fillLanguages();

@@ -325,7 +325,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         }
 
         if (!selectedIds.isEmpty()) {
-            buttonTextView.setText(LocaleController.formatString("LeaveChats", R.string.LeaveChats, LocaleController.formatPluralString("Chats", selectedIds.size())));
+            buttonTextView.setText(LocaleController.formatString(R.string.LeaveChats, LocaleController.formatPluralString("Chats", selectedIds.size())));
         }
     }
 
@@ -354,12 +354,12 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                     }
                     if (ChatObject.isMegagroup(chat)) {
                         String members = LocaleController.formatPluralString("Members", chat.participants_count);
-                        signatures.add(LocaleController.formatString("InactiveChatSignature", R.string.InactiveChatSignature, members, dateFormat));
+                        signatures.add(LocaleController.formatString(R.string.InactiveChatSignature, members, dateFormat));
                     } else if (ChatObject.isChannel(chat)) {
-                        signatures.add(LocaleController.formatString("InactiveChannelSignature", R.string.InactiveChannelSignature, dateFormat));
+                        signatures.add(LocaleController.formatString(R.string.InactiveChannelSignature, dateFormat));
                     } else {
                         String members = LocaleController.formatPluralString("Members", chat.participants_count);
-                        signatures.add(LocaleController.formatString("InactiveChatSignature", R.string.InactiveChatSignature, members, dateFormat));
+                        signatures.add(LocaleController.formatString(R.string.InactiveChatSignature, members, dateFormat));
                     }
                 }
                 AndroidUtilities.runOnUIThread(() -> {

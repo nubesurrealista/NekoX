@@ -1424,7 +1424,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         searchItem.setShowSearchProgress(searchAdapter.isSearching());
                     }
                     if (emptySubtitleTextView != null) {
-                        emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoPlacesFoundInfo", R.string.NoPlacesFoundInfo, searchAdapter.getLastSearchString())));
+                        emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.NoPlacesFoundInfo, searchAdapter.getLastSearchString())));
                     }
                     super.notifyDataSetChanged();
                 }
@@ -2346,7 +2346,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             preferences.edit().putInt("proximityhint", ++val).commit();
             if (DialogObject.isUserDialog(dialogId)) {
                 TLRPC.User user = getMessagesController().getUser(dialogId);
-                hintView.setText(LocaleController.formatString("ProximityTooltioUser", R.string.ProximityTooltioUser, UserObject.getFirstName(user)));
+                hintView.setText(LocaleController.formatString(R.string.ProximityTooltioUser, UserObject.getFirstName(user)));
             } else {
                 hintView.setText(LocaleController.getString(R.string.ProximityTooltioGroup));
             }

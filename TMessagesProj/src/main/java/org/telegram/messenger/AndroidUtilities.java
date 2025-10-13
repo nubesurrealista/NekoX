@@ -4190,7 +4190,7 @@ public class AndroidUtilities {
                     builder.setTopAnimation(R.raw.not_available, AlertsCreator.NEW_DENY_DIALOG_TOP_ICON_SIZE, false, parentFragment.getThemedColor(Theme.key_dialogTopBackground), colorsReplacement);
                     builder.setTopAnimationIsNew(true);
                     builder.setPositiveButton(getString(R.string.OK), null);
-                    builder.setMessage(LocaleController.formatString("NoHandleAppInstalled", R.string.NoHandleAppInstalled, message.getDocument().mime_type));
+                    builder.setMessage(LocaleController.formatString(R.string.NoHandleAppInstalled, message.getDocument().mime_type));
                     if (parentFragment != null) {
                         parentFragment.showDialog(builder.create());
                     } else {
@@ -4587,19 +4587,19 @@ public class AndroidUtilities {
             String detail = null;
             if (a == 0) {
                 text = address;
-                detail = getString("UseProxyAddress", R.string.UseProxyAddress);
+                detail = getString(R.string.UseProxyAddress);
             } else if (a == 1) {
                 text = "" + port;
-                detail = getString("UseProxyPort", R.string.UseProxyPort);
+                detail = getString(R.string.UseProxyPort);
             } else if (a == 2) {
                 text = secret;
-                detail = getString("UseProxySecret", R.string.UseProxySecret);
+                detail = getString(R.string.UseProxySecret);
             } else if (a == 3) {
                 text = user;
-                detail = getString("UseProxyUsername", R.string.UseProxyUsername);
+                detail = getString(R.string.UseProxyUsername);
             } else if (a == 4) {
                 text = password;
-                detail = getString("UseProxyPassword", R.string.UseProxyPassword);
+                detail = getString(R.string.UseProxyPassword);
             } else if (a == 5) {
                 text = getString(R.string.ProxyBottomSheetChecking);
                 detail = getString(R.string.ProxyStatus);

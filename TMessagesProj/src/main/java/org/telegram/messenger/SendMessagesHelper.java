@@ -3609,7 +3609,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     if (srp == null) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(parentFragment.getParentActivity());
                         builder.setTitle(LocaleController.getString(R.string.BotOwnershipTransfer));
-                        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("BotOwnershipTransferReadyAlertText", R.string.BotOwnershipTransferReadyAlertText)));
+                        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.BotOwnershipTransferReadyAlertText)));
                         builder.setPositiveButton(LocaleController.getString(R.string.BotOwnershipTransferChangeOwner), (dialogInterface, i) -> {
                             TwoStepVerificationActivity fragment = new TwoStepVerificationActivity();
                             fragment.setDelegate(0, password -> sendCallback(cache, messageObject, button, password, fragment, parentFragment));
@@ -3634,7 +3634,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     messageTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                     messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                     messageTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-                    messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("BotOwnershipTransferAlertText", R.string.BotOwnershipTransferAlertText)));
+                    messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.BotOwnershipTransferAlertText)));
                     linearLayout.addView(messageTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
                     LinearLayout linearLayout2 = new LinearLayout(parentFragment.getParentActivity());

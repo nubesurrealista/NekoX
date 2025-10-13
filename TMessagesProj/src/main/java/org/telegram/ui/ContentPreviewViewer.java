@@ -523,7 +523,7 @@ public class ContentPreviewViewer {
                         actions.add(3);
                     }
                     if (currentStickerSet != null && !(currentStickerSet instanceof TLRPC.TL_inputStickerSetEmpty) && delegate.needOpen()) {
-                        items.add(LocaleController.formatString("ViewPackPreview", R.string.ViewPackPreview));
+                        items.add(LocaleController.formatString(R.string.ViewPackPreview));
                         icons.add(R.drawable.msg_media);
                         actions.add(1);
                     }
@@ -845,11 +845,11 @@ public class ContentPreviewViewer {
                 boolean canDelete;
                 if (currentDocument != null) {
                     if (canDelete = MediaDataController.getInstance(currentAccount).hasRecentGif(currentDocument)) {
-                        items.add(LocaleController.formatString("Delete", R.string.Delete));
+                        items.add(LocaleController.formatString(R.string.Delete));
                         icons.add(R.drawable.baseline_delete_24);
                         actions.add(1);
                     } else {
-                        items.add(LocaleController.formatString("SaveToGIFs", R.string.SaveToGIFs));
+                        items.add(LocaleController.formatString(R.string.SaveToGIFs));
                         icons.add(R.drawable.deproko_baseline_gif_24);
                         actions.add(2);
                     }

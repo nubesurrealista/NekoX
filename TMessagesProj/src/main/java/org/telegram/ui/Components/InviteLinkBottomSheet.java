@@ -923,7 +923,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
                         String time;
                         if (timeLeft > 86400000L) {
                             time = LocaleController.formatDateAudio(invite.expire_date, false);
-                            privacyCell.setText(LocaleController.formatString("LinkExpiresIn", R.string.LinkExpiresIn, time));
+                            privacyCell.setText(LocaleController.formatString(R.string.LinkExpiresIn, time));
                         } else {
                             int s = (int) ((timeLeft / 1000) % 60);
                             int m = (int) ((timeLeft / 1000 / 60) % 60);
@@ -931,7 +931,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
                             time = String.format(Locale.ENGLISH, "%02d", h) + String.format(Locale.ENGLISH, ":%02d", m) + String.format(Locale.ENGLISH, ":%02d", s);
                             privacyCell.timer = true;
                             privacyCell.runTimer();
-                            privacyCell.setText(LocaleController.formatString("LinkExpiresInTime", R.string.LinkExpiresInTime, time));
+                            privacyCell.setText(LocaleController.formatString(R.string.LinkExpiresInTime, time));
                         }
                     } else {
                         privacyCell.setFixedSize(-1);

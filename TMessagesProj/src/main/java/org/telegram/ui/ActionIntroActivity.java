@@ -602,7 +602,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                     user = userConfig.getCurrentUser();
                 }
                 if (user != null) {
-                    subtitleTextView.setText(LocaleController.formatString("PhoneNumberKeepButton", R.string.PhoneNumberKeepButton, PhoneFormat.getInstance().format("+" + user.phone)));
+                    subtitleTextView.setText(LocaleController.formatString(R.string.PhoneNumberKeepButton, PhoneFormat.getInstance().format("+" + user.phone)));
                 }
                 subtitleTextView.setOnClickListener(v -> getParentLayout().closeLastFragment(true));
                 titleTextView.setText(LocaleController.getString(R.string.PhoneNumberChange2));

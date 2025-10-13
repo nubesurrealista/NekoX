@@ -191,8 +191,8 @@ public class StorageUsageView extends FrameLayout {
         this.totalDeviceFreeSize = totalDeviceFreeSize;
         this.totalDeviceSize = totalDeviceSize;
 
-        freeSizeTextView.setText(LocaleController.formatString("TotalDeviceFreeSize", R.string.TotalDeviceFreeSize, AndroidUtilities.formatFileSize(totalDeviceFreeSize)));
-        totlaSizeTextView.setText(LocaleController.formatString("TotalDeviceSize", R.string.TotalDeviceSize, AndroidUtilities.formatFileSize(totalDeviceSize - totalDeviceFreeSize)));
+        freeSizeTextView.setText(LocaleController.formatString(R.string.TotalDeviceFreeSize, AndroidUtilities.formatFileSize(totalDeviceFreeSize)));
+        totlaSizeTextView.setText(LocaleController.formatString(R.string.TotalDeviceSize, AndroidUtilities.formatFileSize(totalDeviceSize - totalDeviceFreeSize)));
 
         if (calculating) {
             calculatingTextView.setVisibility(View.VISIBLE);
@@ -218,11 +218,11 @@ public class StorageUsageView extends FrameLayout {
                 telegramCacheTextView.setVisibility(View.VISIBLE);
                 telegramDatabaseTextView.setVisibility(GONE);
                 textSettingsCell.setTextAndValue(LocaleController.getString(R.string.ClearTelegramCache), AndroidUtilities.formatFileSize(totalSize), true);
-                telegramCacheTextView.setText(LocaleController.formatString("TelegramCacheSize", R.string.TelegramCacheSize, AndroidUtilities.formatFileSize(totalSize + database)));
+                telegramCacheTextView.setText(LocaleController.formatString(R.string.TelegramCacheSize, AndroidUtilities.formatFileSize(totalSize + database)));
             } else {
                 telegramCacheTextView.setVisibility(View.GONE);
                 telegramDatabaseTextView.setVisibility(VISIBLE);
-                telegramDatabaseTextView.setText(LocaleController.formatString("LocalDatabaseSize", R.string.LocalDatabaseSize, AndroidUtilities.formatFileSize(database)));
+                telegramDatabaseTextView.setText(LocaleController.formatString(R.string.LocalDatabaseSize, AndroidUtilities.formatFileSize(database)));
                 divider.setVisibility(GONE);
                 textSettingsCell.setVisibility(GONE);
             }

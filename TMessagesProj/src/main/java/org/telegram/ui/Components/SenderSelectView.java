@@ -54,7 +54,7 @@ public class SenderSelectView extends View {
         menuPaint.setStrokeCap(Paint.Cap.ROUND);
         menuPaint.setStyle(Paint.Style.STROKE);
         updateColors();
-        setContentDescription(LocaleController.formatString("AccDescrSendAsPeer", R.string.AccDescrSendAsPeer, ""));
+        setContentDescription(LocaleController.formatString(R.string.AccDescrSendAsPeer, ""));
     }
 
     private void updateColors() {
@@ -136,7 +136,7 @@ public class SenderSelectView extends View {
         } else if (obj instanceof TLRPC.ChatInvite) {
             objName = ((TLRPC.ChatInvite) obj).title;
         }
-        setContentDescription(LocaleController.formatString("AccDescrSendAsPeer", R.string.AccDescrSendAsPeer, objName));
+        setContentDescription(LocaleController.formatString(R.string.AccDescrSendAsPeer, objName));
         avatarDrawable.setInfo(obj);
         avatarImage.setForUserOrChat(obj, avatarDrawable);
     }

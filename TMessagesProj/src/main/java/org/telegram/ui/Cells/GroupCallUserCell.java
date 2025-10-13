@@ -801,7 +801,7 @@ public class GroupCallUserCell extends FrameLayout {
             int volume = vol / 100;
             if (volume != 100) {
                 statusTextView[1].setLeftDrawable(speakingDrawable);
-                statusTextView[1].setText(LocaleController.formatString("SpeakingWithVolume", R.string.SpeakingWithVolume, vol < 100 ? 1 : volume));
+                statusTextView[1].setText(LocaleController.formatString(R.string.SpeakingWithVolume, vol < 100 ? 1 : volume));
             } else {
                 statusTextView[1].setLeftDrawable(null);
                 statusTextView[1].setText(LocaleController.getString(R.string.Speaking));

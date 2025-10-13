@@ -1192,7 +1192,7 @@ public class MessagePreviewView extends FrameLayout {
                 if (!messagePreviewParams.hasSenders) {
                     if (messagePreviewParams.willSeeSenders) {
                         if (currentUser != null) {
-                            subtitle = LocaleController.formatString("ForwardPreviewSendersNameVisible", R.string.ForwardPreviewSendersNameVisible, ContactsController.formatName(currentUser.first_name, currentUser.last_name));
+                            subtitle = LocaleController.formatString(R.string.ForwardPreviewSendersNameVisible, ContactsController.formatName(currentUser.first_name, currentUser.last_name));
                         } else {
                             if (ChatObject.isChannel(currentChat) && !currentChat.megagroup) {
                                 subtitle = LocaleController.getString(R.string.ForwardPreviewSendersNameVisibleChannel);
@@ -1202,7 +1202,7 @@ public class MessagePreviewView extends FrameLayout {
                         }
                     } else {
                         if (currentUser != null) {
-                            subtitle = LocaleController.formatString("ForwardPreviewSendersNameVisible", R.string.ForwardPreviewSendersNameVisible, ContactsController.formatName(currentUser.first_name, currentUser.last_name));
+                            subtitle = LocaleController.formatString(R.string.ForwardPreviewSendersNameVisible, ContactsController.formatName(currentUser.first_name, currentUser.last_name));
                         } else {
                             if (ChatObject.isChannel(currentChat) && !currentChat.megagroup) {
                                 subtitle = LocaleController.getString(R.string.ForwardPreviewSendersNameHiddenChannel);
@@ -1213,7 +1213,7 @@ public class MessagePreviewView extends FrameLayout {
                     }
                 } else if (!messagePreviewParams.hideForwardSendersName) {
                     if (currentUser != null) {
-                        subtitle = LocaleController.formatString("ForwardPreviewSendersNameVisible", R.string.ForwardPreviewSendersNameVisible, ContactsController.formatName(currentUser.first_name, currentUser.last_name));
+                        subtitle = LocaleController.formatString(R.string.ForwardPreviewSendersNameVisible, ContactsController.formatName(currentUser.first_name, currentUser.last_name));
                     } else {
                         if (ChatObject.isChannel(currentChat) && !currentChat.megagroup) {
                             subtitle = LocaleController.getString(R.string.ForwardPreviewSendersNameVisibleChannel);
@@ -1223,7 +1223,7 @@ public class MessagePreviewView extends FrameLayout {
                     }
                 } else {
                     if (currentUser != null) {
-                        subtitle = LocaleController.formatString("ForwardPreviewSendersNameHidden", R.string.ForwardPreviewSendersNameHidden, ContactsController.formatName(currentUser.first_name, currentUser.last_name));
+                        subtitle = LocaleController.formatString(R.string.ForwardPreviewSendersNameHidden, ContactsController.formatName(currentUser.first_name, currentUser.last_name));
                     } else {
                         if (ChatObject.isChannel(currentChat) && !currentChat.megagroup) {
                             subtitle = LocaleController.getString(R.string.ForwardPreviewSendersNameHiddenChannel);

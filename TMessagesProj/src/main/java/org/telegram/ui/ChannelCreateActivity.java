@@ -1223,9 +1223,9 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                         final TLRPC.Chat channel = cell.getCurrentChannel();
                         BottomBuilder builder = new BottomBuilder(getParentActivity());
                         if (channel.megagroup) {
-                            builder.addTitle(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", R.string.RevokeLinkAlert, MessagesController.getInstance(currentAccount).linkPrefix + "/" + ChatObject.getPublicUsername(channel), channel.title)));
+                            builder.addTitle(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.RevokeLinkAlert, MessagesController.getInstance(currentAccount).linkPrefix + "/" + ChatObject.getPublicUsername(channel), channel.title)));
                         } else {
-                            builder.addTitle(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", R.string.RevokeLinkAlertChannel, MessagesController.getInstance(currentAccount).linkPrefix + "/" + ChatObject.getPublicUsername(channel), channel.title)));
+                            builder.addTitle(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.RevokeLinkAlertChannel, MessagesController.getInstance(currentAccount).linkPrefix + "/" + ChatObject.getPublicUsername(channel), channel.title)));
                         }
                         builder.addItem(LocaleController.getString(R.string.RevokeButton), R.drawable.baseline_delete_forever_24, (i) -> {
                             TLRPC.TL_channels_updateUsername req1 = new TLRPC.TL_channels_updateUsername();
@@ -1319,7 +1319,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 checkReqId = 0;
                 if (lastCheckName != null && lastCheckName.equals(name)) {
                     if (error == null && response instanceof TLRPC.TL_boolTrue) {
-                        checkTextView.setText(LocaleController.formatString("LinkAvailable", R.string.LinkAvailable, name));
+                        checkTextView.setText(LocaleController.formatString(R.string.LinkAvailable, name));
                         checkTextView.setTag(Theme.key_windowBackgroundWhiteGreenText);
                         checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText));
                         lastNameAvailable = true;

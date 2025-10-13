@@ -1684,7 +1684,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         } else if (importingStickers != null) {
             titleTextView.setText(LocaleController.formatPluralString("Stickers", importingStickersPaths != null ? importingStickersPaths.size() : importingStickers.size()));
             if (uploadImportStickers == null || uploadImportStickers.isEmpty()) {
-                setButton(v -> showNameEnterAlert(), LocaleController.formatString("ImportStickers", R.string.ImportStickers, LocaleController.formatPluralString("Stickers", importingStickersPaths != null ? importingStickersPaths.size() : importingStickers.size())), Theme.key_dialogTextBlue2);
+                setButton(v -> showNameEnterAlert(), LocaleController.formatString(R.string.ImportStickers, LocaleController.formatPluralString("Stickers", importingStickersPaths != null ? importingStickersPaths.size() : importingStickers.size())), Theme.key_dialogTextBlue2);
                 pickerBottomLayout.setEnabled(true);
             } else {
                 setButton(null, LocaleController.getString(R.string.ImportStickersProcessing), Theme.key_dialogTextGray2);

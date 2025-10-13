@@ -1574,7 +1574,7 @@ public class PollCreateActivity extends BaseFragment implements NotificationCent
                     } else if (todo) {
                         cell.setText(LocaleController.formatPluralStringComma("TodoNewTaskInfo", maxAnswersCount - answersCount));
                     } else {
-                        cell.setText(LocaleController.formatString("AddAnOptionInfo", R.string.AddAnOptionInfo, LocaleController.formatPluralString("Option", maxAnswersCount - answersCount)));
+                        cell.setText(LocaleController.formatString(R.string.AddAnOptionInfo, LocaleController.formatPluralString("Option", maxAnswersCount - answersCount)));
                     }
                     break;
                 }

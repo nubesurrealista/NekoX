@@ -2594,7 +2594,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
             if (viewType == VIEW_TYPE_HINT) {
                 TextView textView = (TextView) holder.itemView;
                 if (hintExpireDate != null) {
-                    textView.setText(LocaleController.formatString("EmojiStatusExpireHint", R.string.EmojiStatusExpireHint, LocaleController.formatStatusExpireDateTime(hintExpireDate)));
+                    textView.setText(LocaleController.formatString(R.string.EmojiStatusExpireHint, LocaleController.formatStatusExpireDateTime(hintExpireDate)));
                 }
             } else if (viewType == VIEW_TYPE_HEADER) {
                 HeaderView header = (HeaderView) holder.itemView;
@@ -3064,7 +3064,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
             if (unlock) {
                 addButtonView.setVisibility(View.GONE);
                 premiumButtonView.setVisibility(View.VISIBLE);
-                premiumButtonView.setButton(LocaleController.formatString("UnlockPremiumEmojiPack", R.string.UnlockPremiumEmojiPack, title), onClickListener);
+                premiumButtonView.setButton(LocaleController.formatString(R.string.UnlockPremiumEmojiPack, title), onClickListener);
             } else {
                 premiumButtonView.setVisibility(View.GONE);
                 addButtonView.setVisibility(View.VISIBLE);
@@ -3086,7 +3086,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
         public void updateInstall(boolean installed, boolean animated) {
             CharSequence text = installed ?
                     LocaleController.getString(R.string.Added) :
-                    LocaleController.formatString("AddStickersCount", R.string.AddStickersCount, lastTitle);
+                    LocaleController.formatString(R.string.AddStickersCount, lastTitle);
             addButtonTextView.setText(text, animated);
             if (installFadeAway != null) {
                 installFadeAway.cancel();

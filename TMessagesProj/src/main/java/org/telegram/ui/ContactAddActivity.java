@@ -369,7 +369,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
             }
         } else {
             TextCell suggestPhoto = new TextCell(context, resourcesProvider);
-            suggestPhoto.setTextAndIcon(LocaleController.formatString("SuggestUserPhoto", R.string.SuggestUserPhoto, user.first_name), R.drawable.msg_addphoto, true);
+            suggestPhoto.setTextAndIcon(LocaleController.formatString(R.string.SuggestUserPhoto, user.first_name), R.drawable.msg_addphoto, true);
             suggestPhoto.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             suggestPhoto.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
             RLottieDrawable suggestDrawable = new RLottieDrawable(R.raw.photo_suggest_icon, "" + R.raw.photo_suggest_icon, AndroidUtilities.dp(50), AndroidUtilities.dp(50), false, null);
@@ -397,7 +397,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
             linearLayout.addView(suggestPhoto, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 0, 18, 0, 0));
 
             TextCell setAvatarCell = new TextCell(context, resourcesProvider);
-            setAvatarCell.setTextAndIcon(LocaleController.formatString("UserSetPhoto", R.string.UserSetPhoto, user.first_name), R.drawable.msg_addphoto, false);
+            setAvatarCell.setTextAndIcon(LocaleController.formatString(R.string.UserSetPhoto, user.first_name), R.drawable.msg_addphoto, false);
             setAvatarCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             setAvatarCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
             RLottieDrawable cameraDrawable = new RLottieDrawable(R.raw.camera_outline, "" + R.raw.camera_outline, AndroidUtilities.dp(50), AndroidUtilities.dp(50), false, null);
@@ -454,7 +454,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
             oldPhotoCell.setOnClickListener(v -> {
                 AlertsCreator.createSimpleAlert(context,
                         LocaleController.getString(R.string.ResetToOriginalPhotoTitle),
-                        LocaleController.formatString("ResetToOriginalPhotoMessage", R.string.ResetToOriginalPhotoMessage, user.first_name),
+                        LocaleController.formatString(R.string.ResetToOriginalPhotoMessage, user.first_name),
                         LocaleController.getString(R.string.Reset), () -> {
                             avatar = null;
                             sendPhotoChangedRequest(null, null,null, null, null, 0, TYPE_SET);
@@ -582,7 +582,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         } else {
             nameTextView.setText(PhoneFormat.getInstance().format("+" + getPhone()));
             if (needAddException) {
-                infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("MobileVisibleInfo", R.string.MobileVisibleInfo, UserObject.getFirstName(user))));
+                infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.MobileVisibleInfo, UserObject.getFirstName(user))));
             }
         }
         onlineTextView.setText(LocaleController.formatUserStatus(currentAccount, user));
@@ -834,9 +834,9 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                     getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, MessagesController.UPDATE_MASK_AVATAR);
                     if (getParentActivity() != null) {
                         if (photoSelectedTypeFinal == TYPE_SET) {
-                            BulletinFactory.of(this).createUsersBulletin(users, AndroidUtilities.replaceTags(LocaleController.formatString("UserCustomPhotoSeted", R.string.UserCustomPhotoSeted, user.first_name))).show();
+                            BulletinFactory.of(this).createUsersBulletin(users, AndroidUtilities.replaceTags(LocaleController.formatString(R.string.UserCustomPhotoSeted, user.first_name))).show();
                         } else {
-                            BulletinFactory.of(this).createUsersBulletin(users, AndroidUtilities.replaceTags(LocaleController.formatString("UserCustomPhotoSeted", R.string.UserCustomPhotoSeted, user.first_name))).show();
+                            BulletinFactory.of(this).createUsersBulletin(users, AndroidUtilities.replaceTags(LocaleController.formatString(R.string.UserCustomPhotoSeted, user.first_name))).show();
                         }
                     }
                 }

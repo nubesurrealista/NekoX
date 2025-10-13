@@ -154,12 +154,12 @@ public class AutoDeleteMessagesActivity extends BaseFragment implements Notifica
                                 getMessagesController().setDialogHistoryTTL(ids.get(i), getSelectedTime() * 60);
                             }
                             if (getSelectedTime() > 0) {
-                                BulletinFactory.of(AutoDeleteMessagesActivity.this).createSimpleBulletin(R.raw.fire_on, AndroidUtilities.replaceTags(LocaleController.formatString("AutodeleteTimerEnabledForChats", R.string.AutodeleteTimerEnabledForChats,
+                                BulletinFactory.of(AutoDeleteMessagesActivity.this).createSimpleBulletin(R.raw.fire_on, AndroidUtilities.replaceTags(LocaleController.formatString(R.string.AutodeleteTimerEnabledForChats,
                                         LocaleController.formatTTLString(getSelectedTime() * 60),
                                         LocaleController.formatPluralString("Chats", ids.size(), ids.size())
                                 ))).show();
                             } else {
-                                BulletinFactory.of(AutoDeleteMessagesActivity.this).createSimpleBulletin(R.raw.fire_off, LocaleController.formatString("AutodeleteTimerDisabledForChats", R.string.AutodeleteTimerDisabledForChats,
+                                BulletinFactory.of(AutoDeleteMessagesActivity.this).createSimpleBulletin(R.raw.fire_off, LocaleController.formatString(R.string.AutodeleteTimerDisabledForChats,
                                         LocaleController.formatPluralString("Chats", ids.size(), ids.size())
                                 )).show();
                             }
@@ -198,7 +198,7 @@ public class AutoDeleteMessagesActivity extends BaseFragment implements Notifica
                     if (selctedTime == 0 && time > 0) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         builder.setTitle(LocaleController.getString(R.string.MessageLifetime));
-                        builder.setMessage(LocaleController.formatString("AutoDeleteConfirmMessage", R.string.AutoDeleteConfirmMessage, LocaleController.formatTTLString(time * 60)));
+                        builder.setMessage(LocaleController.formatString(R.string.AutoDeleteConfirmMessage, LocaleController.formatTTLString(time * 60)));
                         builder.setNegativeButton(LocaleController.getString(R.string.Cancel), (dialog, which) -> {
                             dialog.dismiss();
                         });
@@ -264,7 +264,7 @@ public class AutoDeleteMessagesActivity extends BaseFragment implements Notifica
         customTimeButton.custom = true;
         customTimeButton.time = scheduleDate;
 
-        customTimeButton.setText(LocaleController.formatString("AutoDeleteAfterShort", R.string.AutoDeleteAfterShort, LocaleController.formatTTLString(scheduleDate * 60)), false, true);
+        customTimeButton.setText(LocaleController.formatString(R.string.AutoDeleteAfterShort, LocaleController.formatTTLString(scheduleDate * 60)), false, true);
         arrayList.add(position, customTimeButton);
         checkBoxContainer.addView(customTimeButton, position);
         updateItems();
@@ -282,10 +282,10 @@ public class AutoDeleteMessagesActivity extends BaseFragment implements Notifica
         if (showBulletin) {
             int time = ((RadioCellInternal) v).time;
             if (time > 0) {
-                String text = LocaleController.formatString("AutoDeleteGlobalTimerEnabled", R.string.AutoDeleteGlobalTimerEnabled, LocaleController.formatTTLString(time * 60));
+                String text = LocaleController.formatString(R.string.AutoDeleteGlobalTimerEnabled, LocaleController.formatTTLString(time * 60));
                 BulletinFactory.of(this).createSimpleBulletin(R.raw.fire_on, AndroidUtilities.replaceTags(text)).show();
             } else {
-//                String text = LocaleController.formatString("AutoDeleteGlobalTimerDisabled", R.string.AutoDeleteGlobalTimerDisabled);
+//                String text = LocaleController.formatString(R.string.AutoDeleteGlobalTimerDisabled);
 //                BulletinFactory.of(this).createSimpleBulletin(R.raw.fire_off, text).show();
             }
         }

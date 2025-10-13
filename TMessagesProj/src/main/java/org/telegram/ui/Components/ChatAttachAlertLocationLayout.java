@@ -962,7 +962,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                     searchItem.setShowSearchProgress(searchAdapter.isSearching());
                 }
                 if (emptySubtitleTextView != null) {
-                    emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoPlacesFoundInfo", R.string.NoPlacesFoundInfo, searchAdapter.getLastSearchString())));
+                    emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.NoPlacesFoundInfo, searchAdapter.getLastSearchString())));
                 }
                 super.notifyDataSetChanged();
             }

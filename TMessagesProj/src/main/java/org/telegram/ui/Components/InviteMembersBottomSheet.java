@@ -324,7 +324,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                     }
                     builder.setMessage(spannableStringBuilder);
                 } else {
-                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", R.string.AddMembersAlertNamesText, stringBuilder, chat.title)));
+                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.AddMembersAlertNamesText, stringBuilder, chat.title)));
                 }
                 builder.setPositiveButton(LocaleController.getString(R.string.Add), (dialogInterface, i) -> onAddToGroupDone(0));
                 builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);

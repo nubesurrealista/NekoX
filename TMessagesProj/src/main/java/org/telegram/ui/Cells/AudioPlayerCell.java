@@ -499,7 +499,7 @@ public class AudioPlayerCell extends FrameLayout implements DownloadController.F
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);
         if (currentMessageObject.isMusic()) {
-            info.setText(LocaleController.formatString("AccDescrMusicInfo", R.string.AccDescrMusicInfo, currentMessageObject.getMusicAuthor(), currentMessageObject.getMusicTitle()));
+            info.setText(LocaleController.formatString(R.string.AccDescrMusicInfo, currentMessageObject.getMusicAuthor(), currentMessageObject.getMusicTitle()));
         } else { // voice message
             info.setText(titleLayout.getText() + ", " + descriptionLayout.getText());
         }

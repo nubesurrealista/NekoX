@@ -186,7 +186,7 @@ public class ChannelBoostLayout extends FrameLayout {
                     break;
                 case SHOW_BOOST_BY_GIFTS:
                     TextCell textCell = new TextCell(getContext());
-                    textCell.setTextAndIcon(LocaleController.formatString("BoostingGetBoostsViaGifts", R.string.BoostingGetBoostsViaGifts), R.drawable.msg_gift_premium, false);
+                    textCell.setTextAndIcon(LocaleController.formatString(R.string.BoostingGetBoostsViaGifts), R.drawable.msg_gift_premium, false);
                     textCell.offsetFromImage = 64;
                     textCell.setColors(Theme.key_windowBackgroundWhiteBlueText4, Theme.key_windowBackgroundWhiteBlueText4);
                     view = textCell;
@@ -267,8 +267,8 @@ public class ChannelBoostLayout extends FrameLayout {
                 TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(booster.user_id);
                 GiftedUserCell userCell = (GiftedUserCell) holder.itemView;
                 String str = booster.multiplier > 1
-                        ? LocaleController.formatString("BoostsExpireOn", R.string.BoostsExpireOn, LocaleController.formatDate(booster.expires))
-                        : LocaleController.formatString("BoostExpireOn", R.string.BoostExpireOn, LocaleController.formatDate(booster.expires));
+                        ? LocaleController.formatString(R.string.BoostsExpireOn, LocaleController.formatDate(booster.expires))
+                        : LocaleController.formatString(R.string.BoostExpireOn, LocaleController.formatDate(booster.expires));
                 userCell.setData(user, ContactsController.formatName(user), str, 0, !items.get(position).isLast);
                 userCell.setStatus(booster);
                 userCell.setAvatarPadding(5);

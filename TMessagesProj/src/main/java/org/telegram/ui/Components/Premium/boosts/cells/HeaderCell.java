@@ -156,29 +156,29 @@ public class HeaderCell extends FrameLayout {
         lp.topMargin = -AndroidUtilities.dp(6);
         setLayoutParams(lp);
         setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray, resourcesProvider));
-        titleView.setText(LocaleController.formatString("BoostingBoostsViaGifts", R.string.BoostingBoostsViaGifts));
+        titleView.setText(LocaleController.formatString(R.string.BoostingBoostsViaGifts));
         boolean isChannel = ChatObject.isChannelAndNotMegaGroup(currentChat);
         subtitleView.setText(LocaleController.formatString(isChannel ? R.string.BoostingGetMoreBoost2 : R.string.BoostingGetMoreBoostGroup));
         subtitleView.setTextColor(Theme.getColor(Theme.key_dialogTextGray3, resourcesProvider));
     }
 
     public void setUsedGiftLinkText() {
-        titleView.setText(LocaleController.formatString("BoostingUsedGiftLink", R.string.BoostingUsedGiftLink));
-        subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("BoostingLinkUsed", R.string.BoostingLinkUsed)));
+        titleView.setText(LocaleController.formatString(R.string.BoostingUsedGiftLink));
+        subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.BoostingLinkUsed)));
     }
 
     public void setGiftLinkText() {
-        titleView.setText(LocaleController.formatString("BoostingGiftLink", R.string.BoostingGiftLink));
-        subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("BoostingLinkAllows", R.string.BoostingLinkAllows)));
+        titleView.setText(LocaleController.formatString(R.string.BoostingGiftLink));
+        subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.BoostingLinkAllows)));
     }
 
     public void setUnclaimedText() {
-        titleView.setText(LocaleController.formatString("BoostingGiftLink", R.string.BoostingGiftLink));
-        subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("BoostingLinkAllowsAnyone", R.string.BoostingLinkAllowsAnyone)));
+        titleView.setText(LocaleController.formatString(R.string.BoostingGiftLink));
+        subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.BoostingLinkAllowsAnyone)));
     }
 
     public void setGiftLinkToUserText(long toUserId, Utilities.Callback<TLObject> onObjectClicked) {
-        titleView.setText(LocaleController.formatString("BoostingGiftLink", R.string.BoostingGiftLink));
+        titleView.setText(LocaleController.formatString(R.string.BoostingGiftLink));
 
         CharSequence description = AndroidUtilities.replaceTags(LocaleController.getString(R.string.BoostingLinkAllowsToUser));
         TLRPC.User toUser = MessagesController.getInstance(UserConfig.selectedAccount).getUser(toUserId);

@@ -674,7 +674,7 @@ public class LiteModeSettingsActivity extends BaseFragment {
             sb.append(textView.getText());
             if (containing) {
                 sb.append('\n');
-                sb.append(LocaleController.formatString("Of", R.string.Of, enabled, all));
+                sb.append(LocaleController.formatString(R.string.Of, enabled, all));
             }
             info.setContentDescription(sb);
         }

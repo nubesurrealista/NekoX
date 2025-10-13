@@ -383,7 +383,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 } else {
                     final TLRPC.TL_webAuthorization authorization = (TLRPC.TL_webAuthorization) sessions.get(position - otherSessionsStartRow);
 
-                    builder.setMessage(LocaleController.formatString("TerminateWebSessionText", R.string.TerminateWebSessionText, authorization.domain));
+                    builder.setMessage(LocaleController.formatString(R.string.TerminateWebSessionText, authorization.domain));
                     builder.setTitle(LocaleController.getString(R.string.TerminateWebSessionTitle));
                     buttonText = LocaleController.getString(R.string.Disconnect);
 
@@ -399,7 +399,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
                     CheckBoxCell cell = new CheckBoxCell(getParentActivity(), 1);
                     cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                    cell.setText(LocaleController.formatString("TerminateWebSessionStop", R.string.TerminateWebSessionStop, name), "", false, false);
+                    cell.setText(LocaleController.formatString(R.string.TerminateWebSessionStop, name), "", false, false);
                     cell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16) : AndroidUtilities.dp(8), 0, LocaleController.isRTL ? AndroidUtilities.dp(8) : AndroidUtilities.dp(16), 0);
                     frameLayout1.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.TOP | Gravity.LEFT, 0, 0, 0, 0));
                     cell.setOnClickListener(v -> {

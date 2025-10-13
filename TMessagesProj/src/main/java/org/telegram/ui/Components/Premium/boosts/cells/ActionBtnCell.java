@@ -96,7 +96,7 @@ public class ActionBtnCell extends FrameLayout {
         drawDivider = false;
         button.setShowZero(false);
         button.setEnabled(true);
-        String text = isUsed ? LocaleController.formatString("BoostingUseLink", R.string.BoostingUseLink) : LocaleController.formatString("OK", R.string.OK);
+        String text = isUsed ? LocaleController.formatString(R.string.BoostingUseLink) : LocaleController.formatString(R.string.OK);
         button.setText(text, false);
     }
 
@@ -104,7 +104,7 @@ public class ActionBtnCell extends FrameLayout {
         drawDivider = false;
         button.setShowZero(false);
         button.setEnabled(true);
-        button.setText(LocaleController.formatString("Close", R.string.Close), false);
+        button.setText(LocaleController.formatString(R.string.Close), false);
     }
 
     public void setCloseStyle(boolean needDivider){

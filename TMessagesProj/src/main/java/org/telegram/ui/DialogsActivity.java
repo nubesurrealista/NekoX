@@ -5231,7 +5231,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                 if (index > 0) {
                                     name = name.substring(0, index);
                                 }
-                                BulletinFactory.of(DialogsActivity.this).createUsersBulletin(Arrays.asList(user), AndroidUtilities.replaceTags(LocaleController.formatString("NotificationsStoryMutedHint", R.string.NotificationsStoryMutedHint, name))).show();
+                                BulletinFactory.of(DialogsActivity.this).createUsersBulletin(Arrays.asList(user), AndroidUtilities.replaceTags(LocaleController.formatString(R.string.NotificationsStoryMutedHint, name))).show();
                             }).makeMultiline(false).addIf(muted && dialogId > 0, R.drawable.msg_unmute, LocaleController.getString(R.string.NotificationsStoryUnmute2), () -> {
                                 MessagesController.getNotificationsSettings(currentAccount).edit().putBoolean("stories_" + key, true).apply();
                                 getNotificationsController().updateServerNotificationsSettings(dialogId, 0);
@@ -5240,7 +5240,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                 if (index > 0) {
                                     name = name.substring(0, index);
                                 }
-                                BulletinFactory.of(DialogsActivity.this).createUsersBulletin(Arrays.asList(user), AndroidUtilities.replaceTags(LocaleController.formatString("NotificationsStoryUnmutedHint", R.string.NotificationsStoryUnmutedHint, name))).show();
+                                BulletinFactory.of(DialogsActivity.this).createUsersBulletin(Arrays.asList(user), AndroidUtilities.replaceTags(LocaleController.formatString(R.string.NotificationsStoryUnmutedHint, name))).show();
                             }).makeMultiline(false).addIf(!isPremiumBlocked && dialogId > 0 && isPremium && isUnread, R.drawable.msg_stories_stealth2, LocaleController.getString(R.string.ViewAnonymously), () -> {
                                 TL_stories.TL_storiesStealthMode stealthMode = MessagesController.getInstance(UserConfig.selectedAccount).getStoriesController().getStealthMode();
                                 if (stealthMode != null && ConnectionsManager.getInstance(currentAccount).getCurrentTime() < stealthMode.active_until_date) {
@@ -5672,9 +5672,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
 
             if (isArchive()) {
-                str = AndroidUtilities.replaceTags(LocaleController.formatString("StoriesMovedToDialogs", R.string.StoriesMovedToDialogs, name));
+                str = AndroidUtilities.replaceTags(LocaleController.formatString(R.string.StoriesMovedToDialogs, name));
             } else {
-                str = AndroidUtilities.replaceTags(LocaleController.formatString("StoriesMovedToContacts", R.string.StoriesMovedToContacts, ContactsController.formatName(name, null, 15)));
+                str = AndroidUtilities.replaceTags(LocaleController.formatString(R.string.StoriesMovedToContacts, ContactsController.formatName(name, null, 15)));
             }
             storiesBulletin = BulletinFactory.global().createUsersBulletin(
                 Collections.singletonList(object),
@@ -6286,7 +6286,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     Theme.key_windowBackgroundWhiteValueText,
                     AndroidUtilities.REPLACING_TAG_TYPE_LINKBOLD,
                     null
-            ), null, false), LocaleController.formatString("BoostingPremiumChristmasSubTitle", R.string.BoostingPremiumChristmasSubTitle));
+            ), null, false), LocaleController.formatString(R.string.BoostingPremiumChristmasSubTitle));
             dialogsHintCell.setOnCloseListener(v -> {
                 MessagesController.getInstance(currentAccount).removeSuggestion(0, "PREMIUM_CHRISTMAS");
                 ChangeBounds transition = new ChangeBounds();
@@ -8649,23 +8649,23 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (item instanceof TLRPC.Chat) {
                     TLRPC.Chat chat = (TLRPC.Chat) item;
                     if (chat.monoforum) {
-                        builder.setMessage(LocaleController.formatString("ClearSearchSingleChatAlertText", R.string.ClearSearchSingleChatAlertText, ForumUtilities.getMonoForumTitle(currentAccount, chat)));
+                        builder.setMessage(LocaleController.formatString(R.string.ClearSearchSingleChatAlertText, ForumUtilities.getMonoForumTitle(currentAccount, chat)));
                     } else {
-                        builder.setMessage(LocaleController.formatString("ClearSearchSingleChatAlertText", R.string.ClearSearchSingleChatAlertText, chat.title));
+                        builder.setMessage(LocaleController.formatString(R.string.ClearSearchSingleChatAlertText, chat.title));
                     }
                     did = -chat.id;
                 } else if (item instanceof TLRPC.User) {
                     TLRPC.User user = (TLRPC.User) item;
                     if (user.id == getUserConfig().clientUserId && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
-                        builder.setMessage(LocaleController.formatString("ClearSearchSingleChatAlertText", R.string.ClearSearchSingleChatAlertText, LocaleController.getString(R.string.SavedMessages)));
+                        builder.setMessage(LocaleController.formatString(R.string.ClearSearchSingleChatAlertText, LocaleController.getString(R.string.SavedMessages)));
                     } else {
-                        builder.setMessage(LocaleController.formatString("ClearSearchSingleUserAlertText", R.string.ClearSearchSingleUserAlertText, ContactsController.formatName(user.first_name, user.last_name)));
+                        builder.setMessage(LocaleController.formatString(R.string.ClearSearchSingleUserAlertText, ContactsController.formatName(user.first_name, user.last_name)));
                     }
                     did = user.id;
                 } else if (item instanceof TLRPC.EncryptedChat) {
                     TLRPC.EncryptedChat encryptedChat = (TLRPC.EncryptedChat) item;
                     TLRPC.User user = getMessagesController().getUser(encryptedChat.user_id);
-                    builder.setMessage(LocaleController.formatString("ClearSearchSingleUserAlertText", R.string.ClearSearchSingleUserAlertText, ContactsController.formatName(user.first_name, user.last_name)));
+                    builder.setMessage(LocaleController.formatString(R.string.ClearSearchSingleUserAlertText, ContactsController.formatName(user.first_name, user.last_name)));
                     did = DialogObject.makeEncryptedDialogId(encryptedChat.id);
                 } else {
                     return false;
@@ -9544,7 +9544,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             if (newPinnedSecretCount + pinnedSecretCount > maxPinnedCount || newPinnedCount + pinnedCount - alreadyAdded > maxPinnedCount) {
                 if (folderId != 0 || filter != null) {
-                    AlertsCreator.showSimpleAlert(DialogsActivity.this, LocaleController.formatString("PinFolderLimitReached", R.string.PinFolderLimitReached, LocaleController.formatPluralString("Chats", maxPinnedCount)));
+                    AlertsCreator.showSimpleAlert(DialogsActivity.this, LocaleController.formatString(R.string.PinFolderLimitReached, LocaleController.formatPluralString("Chats", maxPinnedCount)));
                 } else {
                     LimitReachedBottomSheet limitReachedBottomSheet = new LimitReachedBottomSheet(this, getParentActivity(), LimitReachedBottomSheet.TYPE_PIN_DIALOGS, currentAccount, null);
                     showDialog(limitReachedBottomSheet);
@@ -12084,8 +12084,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         .setMessage(TextUtils.concat(
                                 AndroidUtilities.replaceTags(LocaleController.formatString(R.string.AreYouSureSendChatToBotMessage, UserObject.getFirstName(user), UserObject.getFirstName(bot)))
                         ))
-                        .setPositiveButton(LocaleController.formatString("Send", R.string.Send), (di, p) -> ok.run())
-                        .setNegativeButton(LocaleController.formatString("Cancel", R.string.Cancel), (di, p) -> {
+                        .setPositiveButton(LocaleController.formatString(R.string.Send), (di, p) -> ok.run())
+                        .setNegativeButton(LocaleController.formatString(R.string.Cancel), (di, p) -> {
                             if (cancel != null) {
                                 cancel.run();
                             }
@@ -12112,8 +12112,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                                         LocaleController.formatString(R.string.AreYouSureSendChatToBotAddRights, UserObject.getFirstName(bot), chat.title, RequestPeerRequirementsCell.rightsToString(requestPeerType.bot_admin_rights, isChannel))
                                         )) : ""
                         ))
-                        .setPositiveButton(LocaleController.formatString("Send", R.string.Send), (di, p) -> ok.run())
-                        .setNegativeButton(LocaleController.formatString("Cancel", R.string.Cancel), (di, p) -> {
+                        .setPositiveButton(LocaleController.formatString(R.string.Send), (di, p) -> ok.run())
+                        .setNegativeButton(LocaleController.formatString(R.string.Cancel), (di, p) -> {
                             if (cancel != null) {
                                 cancel.run();
                             }
@@ -13422,7 +13422,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                 builder.setTitle(LocaleController.getString(R.string.ChatHintsDeleteAlertTitle));
-                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("ChatHintsDeleteAlert", R.string.ChatHintsDeleteAlert, ContactsController.formatName(user.first_name, user.last_name))));
+                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.ChatHintsDeleteAlert, ContactsController.formatName(user.first_name, user.last_name))));
                 builder.setPositiveButton(LocaleController.getString(R.string.StickersRemove), (dialogInterface, i) -> getMediaDataController().removePeer(did));
                 builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
                 AlertDialog dialog = builder.create();

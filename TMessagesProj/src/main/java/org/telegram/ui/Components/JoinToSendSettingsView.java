@@ -53,7 +53,7 @@ public class JoinToSendSettingsView extends LinearLayout {
 //                if (event.getAction() == MotionEvent.ACTION_UP && !isEnabled()) {
 //                    new AlertDialog.Builder(context)
 //                        .setTitle(LocaleController.getString(R.string.UserRestrictionsCantModify))
-//                        .setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("ChannelSettingsJoinToSendRestricted", R.string.ChannelSettingsJoinToSendRestricted, LocaleController.getString(R.string.EditAdminBanUsers))))
+//                        .setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.ChannelSettingsJoinToSendRestricted, LocaleController.getString(R.string.EditAdminBanUsers))))
 //                        .setPositiveButton(LocaleController.getString(R.string.OK), null)
 //                        .create()
 //                        .show();
@@ -84,7 +84,7 @@ public class JoinToSendSettingsView extends LinearLayout {
 //                if (event.getAction() == MotionEvent.ACTION_DOWN && !isEnabled()) {
 //                    new AlertDialog.Builder(context)
 //                        .setTitle(LocaleController.getString(R.string.UserRestrictionsCantModify))
-//                        .setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("ChannelSettingsJoinToSendRestricted", R.string.ChannelSettingsJoinToSendRestricted, LocaleController.getString(R.string.EditAdminBanUsers))))
+//                        .setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.ChannelSettingsJoinToSendRestricted, LocaleController.getString(R.string.EditAdminBanUsers))))
 //                        .setPositiveButton(LocaleController.getString(R.string.OK), null)
 //                        .create()
 //                        .show();

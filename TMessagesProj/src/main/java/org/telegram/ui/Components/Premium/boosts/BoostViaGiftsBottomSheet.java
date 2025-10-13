@@ -772,7 +772,7 @@ public class BoostViaGiftsBottomSheet extends BottomSheetWithRecyclerListView im
     protected CharSequence getTitle() {
         return selectedBoostSubType == BoostTypeCell.TYPE_SPECIFIC_USERS ?
                 getString(R.string.GiftPremium)
-                : LocaleController.formatString("BoostingStartGiveaway", R.string.BoostingStartGiveaway);
+                : LocaleController.formatString(R.string.BoostingStartGiveaway);
     }
 
     @Override

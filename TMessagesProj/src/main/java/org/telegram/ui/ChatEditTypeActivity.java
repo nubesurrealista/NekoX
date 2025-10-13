@@ -1291,9 +1291,9 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
                         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                         builder.setTitle(LocaleController.getString(R.string.AppName));
                         if (isChannel) {
-                            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", R.string.RevokeLinkAlertChannel, getMessagesController().linkPrefix + "/" + ChatObject.getPublicUsername(channel), channel.title)));
+                            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.RevokeLinkAlertChannel, getMessagesController().linkPrefix + "/" + ChatObject.getPublicUsername(channel), channel.title)));
                         } else {
-                            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", R.string.RevokeLinkAlert, getMessagesController().linkPrefix + "/" + ChatObject.getPublicUsername(channel), channel.title)));
+                            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.RevokeLinkAlert, getMessagesController().linkPrefix + "/" + ChatObject.getPublicUsername(channel), channel.title)));
                         }
                         builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
                         builder.setPositiveButton(LocaleController.getString(R.string.RevokeButton), (dialogInterface, i) -> {
@@ -1487,7 +1487,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
                 checkReqId = 0;
                 if (lastCheckName != null && lastCheckName.equals(name)) {
                     if (error == null && response instanceof TLRPC.TL_boolTrue) {
-                        checkTextView.setText(LocaleController.formatString("LinkAvailable", R.string.LinkAvailable, name));
+                        checkTextView.setText(LocaleController.formatString(R.string.LinkAvailable, name));
                         checkTextView.setTextColorByKey(Theme.key_windowBackgroundWhiteGreenText);
                         lastNameAvailable = true;
                     } else {

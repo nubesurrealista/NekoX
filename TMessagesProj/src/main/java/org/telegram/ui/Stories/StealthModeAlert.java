@@ -244,7 +244,7 @@ public class StealthModeAlert extends BottomSheet {
             int m = (int) ((timeLeft / 60) % 60);
             int h = (int) ((timeLeft / 60 / 60));
             String time = String.format(Locale.ENGLISH, "%02d", h) + String.format(Locale.ENGLISH, ":%02d", m) + String.format(Locale.ENGLISH, ":%02d", s);
-            button.setOverlayText(LocaleController.formatString("AvailableIn", R.string.AvailableIn, time), true, animated);
+            button.setOverlayText(LocaleController.formatString(R.string.AvailableIn, time), true, animated);
             button.overlayTextView.setTextColor(ColorUtils.setAlphaComponent(Theme.getColor(Theme.key_featuredStickers_buttonText), 125));
             AndroidUtilities.cancelRunOnUIThread(updateButtonRunnuble);
             AndroidUtilities.runOnUIThread(updateButtonRunnuble, 1000);

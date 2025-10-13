@@ -264,7 +264,7 @@ public class ChatNotificationsPopupWrapper {
             }
             stringBuilder.append(minutes).append(LocaleController.getString(R.string.SecretChatTimerMinutes));
         }
-        return LocaleController.formatString("MuteForButton", R.string.MuteForButton, stringBuilder.toString());
+        return LocaleController.formatString(R.string.MuteForButton, stringBuilder.toString());
     }
 
     public void showAsOptions(BaseFragment parentFragment, View anchorView, float touchedX, float touchedY, boolean fromProfileActions) {

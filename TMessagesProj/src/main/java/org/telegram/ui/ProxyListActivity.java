@@ -181,7 +181,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 if (currentConnectionState == ConnectionsManager.ConnectionStateConnected || currentConnectionState == ConnectionsManager.ConnectionStateUpdating) {
                     colorKey = Theme.key_windowBackgroundWhiteBlueText6;
                     if (currentInfo.ping != 0) {
-                        valueTextView.setText(LocaleController.getString(R.string.Connected) + ", " + LocaleController.formatString("Ping", R.string.Ping, currentInfo.ping));
+                        valueTextView.setText(LocaleController.getString(R.string.Connected) + ", " + LocaleController.formatString(R.string.Ping, currentInfo.ping));
                     } else {
                         valueTextView.setText(LocaleController.getString(R.string.Connected));
                     }
@@ -198,7 +198,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     colorKey = Theme.key_windowBackgroundWhiteGrayText2;
                 } else if (currentInfo.available) {
                     if (currentInfo.ping != 0) {
-                        valueTextView.setText(LocaleController.getString(R.string.Available) + ", " + LocaleController.formatString("Ping", R.string.Ping, currentInfo.ping));
+                        valueTextView.setText(LocaleController.getString(R.string.Available) + ", " + LocaleController.formatString(R.string.Ping, currentInfo.ping));
                     } else {
                         valueTextView.setText(LocaleController.getString(R.string.Available));
                     }

@@ -217,7 +217,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
             }
             codeTextView.setText(hash.toString());
             hash.clear();
-            hash.append(AndroidUtilities.replaceTags(LocaleController.formatString("EncryptionKeyDescription", R.string.EncryptionKeyDescription, user.first_name, user.first_name)));
+            hash.append(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.EncryptionKeyDescription, user.first_name, user.first_name)));
             final String url = "telegram.org";
             int index = hash.toString().indexOf(url);
             if (index != -1) {

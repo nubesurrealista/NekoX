@@ -300,7 +300,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
                 }
                 if (linkField.length() > 0) {
                     String url = "https://" + getMessagesController().linkPrefix + "/addtheme/" + linkField.getText();
-                    String text = LocaleController.formatString("ThemeHelpLink", R.string.ThemeHelpLink, url);
+                    String text = LocaleController.formatString(R.string.ThemeHelpLink, url);
                     int index = text.indexOf(url);
                     SpannableStringBuilder textSpan = new SpannableStringBuilder(text);
                     if (index >= 0) {
@@ -502,7 +502,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         if (!alert) {
             String currentUrl = info != null && info.slug != null ? info.slug : "";
             if (url.equals(currentUrl)) {
-                setCheckText(LocaleController.formatString("SetUrlAvailable", R.string.SetUrlAvailable, url), Theme.key_windowBackgroundWhiteGreenText);
+                setCheckText(LocaleController.formatString(R.string.SetUrlAvailable, url), Theme.key_windowBackgroundWhiteGreenText);
                 return true;
             }
 
@@ -517,7 +517,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
                     checkReqId = 0;
                     if (lastCheckName != null && lastCheckName.equals(url)) {
                         if (error == null || !"THEME_SLUG_INVALID".equals(error.text) && !"THEME_SLUG_OCCUPIED".equals(error.text)) {
-                            setCheckText(LocaleController.formatString("SetUrlAvailable", R.string.SetUrlAvailable, url), Theme.key_windowBackgroundWhiteGreenText);
+                            setCheckText(LocaleController.formatString(R.string.SetUrlAvailable, url), Theme.key_windowBackgroundWhiteGreenText);
                             lastNameAvailable = true;
                         } else {
                             setCheckText(LocaleController.getString(R.string.SetUrlInUse), Theme.key_text_RedRegular);

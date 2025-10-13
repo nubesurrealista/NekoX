@@ -1786,7 +1786,7 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                                     MessagesController.getNotificationsSettings(currentAccount).edit().putBoolean("stories_" + key, false).apply();
                                     NotificationsController.getInstance(currentAccount).updateServerNotificationsSettings(dialogId, 0);
 
-                                    BulletinFactory.of(storyContainer, resourcesProvider).createUsersBulletin(Arrays.asList(object), AndroidUtilities.replaceTags(LocaleController.formatString("NotificationsStoryMutedHint", R.string.NotificationsStoryMutedHint, finalName))).setTag(2).show();
+                                    BulletinFactory.of(storyContainer, resourcesProvider).createUsersBulletin(Arrays.asList(object), AndroidUtilities.replaceTags(LocaleController.formatString(R.string.NotificationsStoryMutedHint, finalName))).setTag(2).show();
                                     if (popupMenu != null) {
                                         popupMenu.dismiss();
                                     }
@@ -1797,7 +1797,7 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                                 item.setOnClickListener(v -> {
                                     MessagesController.getNotificationsSettings(currentAccount).edit().putBoolean("stories_" + key, true).apply();
                                     NotificationsController.getInstance(currentAccount).updateServerNotificationsSettings(dialogId, 0);
-                                    BulletinFactory.of(storyContainer, resourcesProvider).createUsersBulletin(Arrays.asList(object), AndroidUtilities.replaceTags(LocaleController.formatString("NotificationsStoryUnmutedHint", R.string.NotificationsStoryUnmutedHint, finalName))).setTag(2).show();
+                                    BulletinFactory.of(storyContainer, resourcesProvider).createUsersBulletin(Arrays.asList(object), AndroidUtilities.replaceTags(LocaleController.formatString(R.string.NotificationsStoryUnmutedHint, finalName))).setTag(2).show();
                                     if (popupMenu != null) {
                                         popupMenu.dismiss();
                                     }
@@ -2065,14 +2065,14 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                 boolean twoLines = true;
                 if (storyItem.close_friends) {
                     privacyHint.setInnerPadding(15, 8, 15, 8);
-                    text = AndroidUtilities.replaceTags(LocaleController.formatString("StoryCloseFriendsHint", R.string.StoryCloseFriendsHint, firstName));
+                    text = AndroidUtilities.replaceTags(LocaleController.formatString(R.string.StoryCloseFriendsHint, firstName));
                 } else if (storyItem.contacts) {
                     privacyHint.setInnerPadding(11, 6, 11, 7);
-                    text = AndroidUtilities.replaceTags(LocaleController.formatString("StoryContactsHint", R.string.StoryContactsHint, firstName));
+                    text = AndroidUtilities.replaceTags(LocaleController.formatString(R.string.StoryContactsHint, firstName));
                     twoLines = false;
                 } else if (storyItem.selected_contacts) {
                     privacyHint.setInnerPadding(15, 8, 15, 8);
-                    text = AndroidUtilities.replaceTags(LocaleController.formatString("StorySelectedContactsHint", R.string.StorySelectedContactsHint, firstName));
+                    text = AndroidUtilities.replaceTags(LocaleController.formatString(R.string.StorySelectedContactsHint, firstName));
                 } else {
                     return;
                 }
@@ -2504,9 +2504,9 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
             };
             CharSequence str;
             if (!hide) {
-                str = AndroidUtilities.replaceTags(LocaleController.formatString("StoriesMovedToDialogs", R.string.StoriesMovedToDialogs, ContactsController.formatName(finalName, null, 10)));
+                str = AndroidUtilities.replaceTags(LocaleController.formatString(R.string.StoriesMovedToDialogs, ContactsController.formatName(finalName, null, 10)));
             } else {
-                str = AndroidUtilities.replaceTags(LocaleController.formatString("StoriesMovedToContacts", R.string.StoriesMovedToContacts, ContactsController.formatName(finalName, null, 10)));
+                str = AndroidUtilities.replaceTags(LocaleController.formatString(R.string.StoriesMovedToContacts, ContactsController.formatName(finalName, null, 10)));
             }
             BulletinFactory.of(storyContainer, resourcesProvider).createUsersBulletin(Arrays.asList(finalObject), str, null, undoObject).setTag(2).show();
         }, 200);
@@ -4257,13 +4257,13 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
             int time = stealthMode.active_until_date - ConnectionsManager.getInstance(currentAccount).getCurrentTime();
             int minutes = time / 60;
             int seconds = time % 60;
-            String textToMeasure = LocaleController.formatString("StealthModeActiveHint", R.string.StealthModeActiveHintShort, String.format(Locale.US, "%02d:%02d", 99, 99));
+            String textToMeasure = LocaleController.formatString(R.string.StealthModeActiveHintShort, String.format(Locale.US, "%02d:%02d", 99, 99));
             int w = (int) chatActivityEnterView.getEditField().getPaint().measureText(textToMeasure);
             chatActivityEnterView.setEnabled(true);
             if (w * 1.2f >= chatActivityEnterView.getEditField().getMeasuredWidth()) {
-                chatActivityEnterView.setOverrideHint(LocaleController.formatString("StealthModeActiveHintShort", R.string.StealthModeActiveHintShort, ""), String.format(Locale.US, "%02d:%02d", minutes, seconds), animated);
+                chatActivityEnterView.setOverrideHint(LocaleController.formatString(R.string.StealthModeActiveHintShort, ""), String.format(Locale.US, "%02d:%02d", minutes, seconds), animated);
             } else {
-                chatActivityEnterView.setOverrideHint(LocaleController.formatString("StealthModeActiveHint", R.string.StealthModeActiveHint, String.format(Locale.US, "%02d:%02d", minutes, seconds)), animated);
+                chatActivityEnterView.setOverrideHint(LocaleController.formatString(R.string.StealthModeActiveHint, String.format(Locale.US, "%02d:%02d", minutes, seconds)), animated);
             }
             AndroidUtilities.runOnUIThread(updateStealthModeTimer, 1000);
         } else {

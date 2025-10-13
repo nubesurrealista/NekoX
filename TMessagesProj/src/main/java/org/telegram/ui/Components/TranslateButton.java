@@ -273,9 +273,9 @@ public class TranslateButton extends FrameLayout {
                 translateController.setHideTranslateDialog(dialogId, true);
                 String bulletinTextString;
                 if (accusative[0]) {
-                    bulletinTextString = LocaleController.formatString("AddedToDoNotTranslate", R.string.AddedToDoNotTranslate, detectedLanguageNameAccusative);
+                    bulletinTextString = LocaleController.formatString(R.string.AddedToDoNotTranslate, detectedLanguageNameAccusative);
                 } else {
-                    bulletinTextString = LocaleController.formatString("AddedToDoNotTranslateOther", R.string.AddedToDoNotTranslateOther, detectedLanguageNameAccusative);
+                    bulletinTextString = LocaleController.formatString(R.string.AddedToDoNotTranslateOther, detectedLanguageNameAccusative);
                 }
                 CharSequence bulletinText = AndroidUtilities.replaceTags(bulletinTextString);
                 bulletinText = TranslateAlert2.capitalFirst(bulletinText);

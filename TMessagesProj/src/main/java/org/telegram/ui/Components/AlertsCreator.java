@@ -630,7 +630,7 @@ public class AlertsCreator {
             } else if (error.text.startsWith("FLOOD_WAIT")) {
                 showSimpleAlert(fragment, LocaleController.getString(R.string.FloodWait));
             } else if (error.text.startsWith("PHONE_NUMBER_OCCUPIED")) {
-                showSimpleAlert(fragment, LocaleController.formatString("ChangePhoneNumberOccupied", R.string.ChangePhoneNumberOccupied, args[0]));
+                showSimpleAlert(fragment, LocaleController.formatString(R.string.ChangePhoneNumberOccupied, args[0]));
             } else if (error.text.startsWith("PHONE_NUMBER_BANNED")) {
                 LoginActivity.needShowInvalidAlert(fragment, (String) args[0], true);
             } else {
@@ -771,15 +771,15 @@ public class AlertsCreator {
             });
         } else {
             if (language.strings_count == 0) {
-                String str = LocaleController.formatString("LanguageUnknownCustomAlert", R.string.LanguageUnknownCustomAlert, language.name);
+                String str = LocaleController.formatString(R.string.LanguageUnknownCustomAlert, language.name);
                 builder.addTitle(LocaleController.getString(R.string.LanguageUnknownTitle), mkTransSpan(str, language, builder));
                 builder.addCancelButton();
             } else {
                 String str;
                 if (language.official) {
-                    str = LocaleController.formatString("LanguageAlert", R.string.LanguageAlert, language.name, (int) Math.ceil(language.translated_count / (float) language.strings_count * 100));
+                    str = LocaleController.formatString(R.string.LanguageAlert, language.name, (int) Math.ceil(language.translated_count / (float) language.strings_count * 100));
                 } else {
-                    str = LocaleController.formatString("LanguageCustomAlert", R.string.LanguageCustomAlert, language.name, (int) Math.ceil(language.translated_count / (float) language.strings_count * 100));
+                    str = LocaleController.formatString(R.string.LanguageCustomAlert, language.name, (int) Math.ceil(language.translated_count / (float) language.strings_count * 100));
                 }
                 builder.addTitle(LocaleController.getString(R.string.LanguageTitle), mkTransSpan(str, language, builder));
                 builder.addButton(LocaleController.getString(R.string.Change), (it) -> {
@@ -1099,9 +1099,9 @@ public class AlertsCreator {
 
         builder.setTitle(LocaleController.getString(R.string.BlockUser));
         if (user != null) {
-            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("BlockUserReplyAlert", R.string.BlockUserReplyAlert, UserObject.getFirstName(user))));
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.BlockUserReplyAlert, UserObject.getFirstName(user))));
         } else {
-            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("BlockUserReplyAlert", R.string.BlockUserReplyAlert, chat.title)));
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.BlockUserReplyAlert, chat.title)));
         }
 
         CheckBoxCell[] cells = new CheckBoxCell[1];
@@ -1173,8 +1173,8 @@ public class AlertsCreator {
         SharedPreferences preferences = MessagesController.getNotificationsSettings(fragment.getCurrentAccount());
         boolean showReport = encryptedChat != null || preferences.getBoolean("dialog_bar_report" + dialog_id, false);
         if (currentUser != null) {
-            builder.setTitle(LocaleController.formatString("BlockUserTitle", R.string.BlockUserTitle, UserObject.getFirstName(currentUser)));
-            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("BlockUserAlert", R.string.BlockUserAlert, UserObject.getFirstName(currentUser))));
+            builder.setTitle(LocaleController.formatString(R.string.BlockUserTitle, UserObject.getFirstName(currentUser)));
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.BlockUserAlert, UserObject.getFirstName(currentUser))));
             reportText = LocaleController.getString(R.string.BlockContact);
 
             cells = new CheckBoxCell[2];
@@ -1190,7 +1190,7 @@ public class AlertsCreator {
                 if (a == 0) {
                     cells[a].setText(LocaleController.getString(R.string.DeleteReportSpam), "", true, false);
                 } else {
-                    cells[a].setText(LocaleController.formatString("DeleteThisChat", R.string.DeleteThisChat), "", true, false);
+                    cells[a].setText(LocaleController.formatString(R.string.DeleteThisChat), "", true, false);
                 }
                 cells[a].setPadding(LocaleController.isRTL ? dp(16) : dp(8), 0, LocaleController.isRTL ? dp(8) : dp(16), 0);
                 linearLayout.addView(cells[a], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
@@ -1206,7 +1206,7 @@ public class AlertsCreator {
                 builder.setTitle(LocaleController.getString(R.string.ReportUnrelatedGroup));
                 if (chatInfo != null && chatInfo.location instanceof TLRPC.TL_channelLocation) {
                     TLRPC.TL_channelLocation location = (TLRPC.TL_channelLocation) chatInfo.location;
-                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("ReportUnrelatedGroupText", R.string.ReportUnrelatedGroupText, location.address)));
+                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.ReportUnrelatedGroupText, location.address)));
                 } else {
                     builder.setMessage(LocaleController.getString(R.string.ReportUnrelatedGroupTextNoAddress));
                 }
@@ -1264,8 +1264,8 @@ public class AlertsCreator {
 
         String[] descriptions = new String[]{
                 LocaleController.getString(R.string.NotificationsTurnOn),
-                LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 1)),
-                LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Days", 2)),
+                LocaleController.formatString(R.string.MuteFor, LocaleController.formatPluralString("Hours", 1)),
+                LocaleController.formatString(R.string.MuteFor, LocaleController.formatPluralString("Days", 2)),
                 did == 0 && parentFragment instanceof NotificationsCustomSettingsActivity ? null : LocaleController.getString(R.string.NotificationsCustomize),
                 LocaleController.getString(R.string.NotificationsTurnOff)
         };
@@ -1778,15 +1778,15 @@ public class AlertsCreator {
         messageTextView.setText(AndroidUtilities.replaceTags(message));
         /*if (chat != null) {
             if (TextUtils.isEmpty(title)) {
-                messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ImportToChatNoTitle", R.string.ImportToChatNoTitle, chat.title)));
+                messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.ImportToChatNoTitle, chat.title)));
             } else {
-                messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ImportToChat", R.string.ImportToChat, title, chat.title)));
+                messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.ImportToChat, title, chat.title)));
             }
         } else {
             if (TextUtils.isEmpty(title)) {
-                messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ImportToUserNoTitle", R.string.ImportToUserNoTitle, ContactsController.formatName(user.first_name, user.last_name))));
+                messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.ImportToUserNoTitle, ContactsController.formatName(user.first_name, user.last_name))));
             } else {
-                messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ImportToUser", R.string.ImportToUser, title, ContactsController.formatName(user.first_name, user.last_name))));
+                messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.ImportToUser, title, ContactsController.formatName(user.first_name, user.last_name))));
             }
         }*/
 
@@ -2487,18 +2487,18 @@ public class AlertsCreator {
             if (clear) {
                 if (user != null) {
                     if (secret) {
-                        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithSecretUser", R.string.AreYouSureClearHistoryWithSecretUser, UserObject.getUserName(user))));
+                        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.AreYouSureClearHistoryWithSecretUser, UserObject.getUserName(user))));
                     } else {
                         if (user.id == selfUserId) {
                             messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString(R.string.AreYouSureClearHistorySavedMessages)));
                         } else {
-                            messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithUser", R.string.AreYouSureClearHistoryWithUser, UserObject.getUserName(user))));
+                            messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.AreYouSureClearHistoryWithUser, UserObject.getUserName(user))));
                         }
                     }
                 } else {
                     final String title = mfChat != null ? LocaleController.formatString(R.string.MonoforumTitle, mfChat.title) : chat.title;
                     if (!ChatObject.isChannel(chat) || chat.megagroup && !ChatObject.isPublic(chat)) {
-                        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithChat", R.string.AreYouSureClearHistoryWithChat, title)));
+                        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.AreYouSureClearHistoryWithChat, title)));
                     } else if (chat.megagroup) {
                         messageTextView.setText(LocaleController.getString(R.string.AreYouSureClearHistoryGroup));
                     } else {
@@ -2519,7 +2519,7 @@ public class AlertsCreator {
                 } else {
                     if (user != null) {
                         if (secret) {
-                            messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureDeleteThisChatWithSecretUser", R.string.AreYouSureDeleteThisChatWithSecretUser, UserObject.getUserName(user))));
+                            messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.AreYouSureDeleteThisChatWithSecretUser, UserObject.getUserName(user))));
                         } else {
                             if (user.id == selfUserId) {
                                 messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString(R.string.AreYouSureDeleteThisChatSavedMessages)));
@@ -2527,19 +2527,19 @@ public class AlertsCreator {
                                 if (user.bot && !user.support) {
                                     messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.AreYouSureDeleteThisChatWithBotWithCheckmark, UserObject.getUserName(user))));
                                 } else {
-                                    messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureDeleteThisChatWithUser", R.string.AreYouSureDeleteThisChatWithUser, UserObject.getUserName(user))));
+                                    messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.AreYouSureDeleteThisChatWithUser, UserObject.getUserName(user))));
                                 }
                             }
                         }
                     } else if (ChatObject.isChannel(chat)) {
                         final String title = mfChat != null ? LocaleController.formatString(R.string.MonoforumTitle, mfChat.title) : chat.title;
                         if (chat.megagroup) {
-                            messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("MegaLeaveAlertWithName", R.string.MegaLeaveAlertWithName, title)));
+                            messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.MegaLeaveAlertWithName, title)));
                         } else {
-                            messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ChannelLeaveAlertWithName", R.string.ChannelLeaveAlertWithName, title)));
+                            messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.ChannelLeaveAlertWithName, title)));
                         }
                     } else {
-                        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureDeleteAndExitName", R.string.AreYouSureDeleteAndExitName, chat.title)));
+                        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.AreYouSureDeleteAndExitName, chat.title)));
                     }
                 }
             }
@@ -2659,14 +2659,14 @@ public class AlertsCreator {
                     cell1.setChecked(deleteForAll[0], true);
                 });
             }
-            textView.setText(LocaleController.formatString("DeleteFewChatsTitle", R.string.DeleteFewChatsTitle, LocaleController.formatPluralString("ChatsSelected", count)));
+            textView.setText(LocaleController.formatString(R.string.DeleteFewChatsTitle, LocaleController.formatPluralString("ChatsSelected", count)));
             messageTextView.setText(LocaleController.getString(R.string.AreYouSureDeleteFewChats));
         } else {
             if (canClearCacheCount != 0) {
-                textView.setText(LocaleController.formatString("ClearCacheFewChatsTitle", R.string.ClearCacheFewChatsTitle, LocaleController.formatPluralString("ChatsSelectedClearCache", count)));
+                textView.setText(LocaleController.formatString(R.string.ClearCacheFewChatsTitle, LocaleController.formatPluralString("ChatsSelectedClearCache", count)));
                 messageTextView.setText(LocaleController.getString(R.string.AreYouSureClearHistoryCacheFewChats));
             } else {
-                textView.setText(LocaleController.formatString("ClearFewChatsTitle", R.string.ClearFewChatsTitle, LocaleController.formatPluralString("ChatsSelectedClear", count)));
+                textView.setText(LocaleController.formatString(R.string.ClearFewChatsTitle, LocaleController.formatPluralString("ChatsSelectedClear", count)));
                 messageTextView.setText(LocaleController.getString(R.string.AreYouSureClearHistoryFewChats));
             }
         }
@@ -2741,15 +2741,15 @@ public class AlertsCreator {
 
 
         if (days == -1) {
-            textView.setText(LocaleController.formatString("ClearHistory", R.string.ClearHistory));
+            textView.setText(LocaleController.formatString(R.string.ClearHistory));
             if (user != null) {
-                messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithUser", R.string.AreYouSureClearHistoryWithUser, UserObject.getUserName(user))));
+                messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.AreYouSureClearHistoryWithUser, UserObject.getUserName(user))));
             } else {
                 if (canDeleteHistory) {
                     if (ChatObject.isChannelAndNotMegaGroup(chat)) {
-                        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithChannel", R.string.AreYouSureClearHistoryWithChannel, chat.title)));
+                        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.AreYouSureClearHistoryWithChannel, chat.title)));
                     } else {
-                        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithChat", R.string.AreYouSureClearHistoryWithChat, chat.title)));
+                        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.AreYouSureClearHistoryWithChat, chat.title)));
                     }
                 } else if (chat.megagroup) {
                     messageTextView.setText(LocaleController.getString(R.string.AreYouSureClearHistoryGroup));
@@ -2772,7 +2772,7 @@ public class AlertsCreator {
             if (chat != null) {
                 cell[0].setText(LocaleController.getString(R.string.DeleteMessagesOptionAlsoChat), "", false, false);
             } else {
-                cell[0].setText(LocaleController.formatString("DeleteMessagesOptionAlso", R.string.DeleteMessagesOptionAlso, UserObject.getFirstName(user)), "", false, false);
+                cell[0].setText(LocaleController.formatString(R.string.DeleteMessagesOptionAlso, UserObject.getFirstName(user)), "", false, false);
             }
 
             cell[0].setPadding(LocaleController.isRTL ? dp(16) : dp(8), 0, LocaleController.isRTL ? dp(8) : dp(16), 0);
@@ -2815,10 +2815,10 @@ public class AlertsCreator {
         final String message;
         if (videoCall) {
             title = LocaleController.getString(R.string.VideoCallAlertTitle);
-            message = LocaleController.formatString("VideoCallAlert", R.string.VideoCallAlert, UserObject.getUserName(user));
+            message = LocaleController.formatString(R.string.VideoCallAlert, UserObject.getUserName(user));
         } else {
             title = LocaleController.getString(R.string.CallAlertTitle);
-            message = LocaleController.formatString("CallAlert", R.string.CallAlert, UserObject.getUserName(user));
+            message = LocaleController.formatString(R.string.CallAlert, UserObject.getUserName(user));
         }
 
         TextView messageTextView = new TextView(context) {
@@ -3166,7 +3166,7 @@ public class AlertsCreator {
         messageTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
 
-        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ChatWithAdminMessage", R.string.ChatWithAdminMessage, chatWithAdmin, LocaleController.formatDateAudio(chatWithAdminDate, false))));
+        messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.ChatWithAdminMessage, chatWithAdmin, LocaleController.formatDateAudio(chatWithAdminDate, false))));
 
 
         TextView buttonTextView = new TextView(fragment.getParentActivity());
@@ -3209,7 +3209,7 @@ public class AlertsCreator {
     public static void createContactInviteDialog(BaseFragment parentFragment, String fisrtName, String lastName, String phone) {
         AlertDialog.Builder builder = new AlertDialog.Builder(parentFragment.getParentActivity());
         builder.setTitle(LocaleController.getString(R.string.ContactNotRegisteredTitle));
-        builder.setMessage(LocaleController.formatString("ContactNotRegistered", R.string.ContactNotRegistered, ContactsController.formatName(fisrtName, lastName)));
+        builder.setMessage(LocaleController.formatString(R.string.ContactNotRegistered, ContactsController.formatName(fisrtName, lastName)));
         builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
         builder.setPositiveButton(LocaleController.getString(R.string.Invite), (dialog, which) -> {
             try {
@@ -3317,13 +3317,13 @@ public class AlertsCreator {
         String actionText;
         if (count == 1) {
             String name = ContactsController.formatName(user.first_name, user.last_name);
-            builder.setTitle(LocaleController.formatString("BlockUserTitle", R.string.BlockUserTitle, name));
+            builder.setTitle(LocaleController.formatString(R.string.BlockUserTitle, name));
             actionText = LocaleController.getString(R.string.BlockUser);
-            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("BlockUserMessage", R.string.BlockUserMessage, name)));
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.BlockUserMessage, name)));
         } else {
-            builder.setTitle(LocaleController.formatString("BlockUserTitle", R.string.BlockUserTitle, LocaleController.formatPluralString("UsersCountTitle", count)));
+            builder.setTitle(LocaleController.formatString(R.string.BlockUserTitle, LocaleController.formatPluralString("UsersCountTitle", count)));
             actionText = LocaleController.getString(R.string.BlockUsers);
-            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("BlockUsersMessage", R.string.BlockUsersMessage, LocaleController.formatPluralString("UsersCount", count))));
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.BlockUsersMessage, LocaleController.formatPluralString("UsersCount", count))));
         }
 
         final boolean[] checks = new boolean[]{true, true};
@@ -3819,9 +3819,9 @@ public class AlertsCreator {
                 t = LocaleController.formatPluralString("SecondsSchedule", diff);
             }
             if (infoText.getTag() != null) {
-                infoText.setText(LocaleController.formatString("VoipChannelScheduleInfo", R.string.VoipChannelScheduleInfo, t));
+                infoText.setText(LocaleController.formatString(R.string.VoipChannelScheduleInfo, t));
             } else {
-                infoText.setText(LocaleController.formatString("VoipGroupScheduleInfo", R.string.VoipGroupScheduleInfo, t));
+                infoText.setText(LocaleController.formatString(R.string.VoipGroupScheduleInfo, t));
             }
         }
         return currentTime - systemTime > minDate;
@@ -4005,7 +4005,7 @@ public class AlertsCreator {
                 optionsButton.setIcon(R.drawable.ic_ab_other);
                 optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(datePickerColors.iconSelectorColor, 1));
                 titleLayout.addView(optionsButton, LayoutHelper.createFrame(40, 40, Gravity.TOP | Gravity.RIGHT, 0, 8, 5, 0));
-                optionsButton.addSubItem(1, LocaleController.formatString("ScheduleWhenOnline", R.string.ScheduleWhenOnline, name));
+                optionsButton.addSubItem(1, LocaleController.formatString(R.string.ScheduleWhenOnline, name));
                 optionsButton.setOnClickListener(v -> {
                     optionsButton.toggleSubMenu();
                     optionsButton.setPopupItemsColor(datePickerColors.subMenuTextColor, false);
@@ -5204,7 +5204,7 @@ public class AlertsCreator {
                 }
             }
         } else {
-            buttonTextView.setText(LocaleController.formatString("MuteForButton", R.string.MuteForButton, stringBuilder.toString()));
+            buttonTextView.setText(LocaleController.formatString(R.string.MuteForButton, stringBuilder.toString()));
             if (!buttonTextView.isEnabled()) {
                 buttonTextView.setEnabled(true);
                 if (animated) {
@@ -5407,9 +5407,9 @@ public class AlertsCreator {
         BottomBuilder builder = new BottomBuilder(fragment.getParentActivity());
         builder.addTitle(LocaleController.getString(R.string.Notifications), true);
         String[] items = new String[]{
-                LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 1)),
-                LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 8)),
-                LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Days", 2)),
+                LocaleController.formatString(R.string.MuteFor, LocaleController.formatPluralString("Hours", 1)),
+                LocaleController.formatString(R.string.MuteFor, LocaleController.formatPluralString("Hours", 8)),
+                LocaleController.formatString(R.string.MuteFor, LocaleController.formatPluralString("Days", 2)),
                 LocaleController.getString(R.string.MuteDisable)
         };
         builder.addItems(items, new int[]{
@@ -5445,9 +5445,9 @@ public class AlertsCreator {
         BottomSheet.NekoXBuilder builder = new BottomSheet.NekoXBuilder(fragment.getParentActivity(), false);
         builder.setTitle(LocaleController.getString(R.string.Notifications), true);
         CharSequence[] items = new CharSequence[]{
-                LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 1)),
-                LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 8)),
-                LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Days", 2)),
+                LocaleController.formatString(R.string.MuteFor, LocaleController.formatPluralString("Hours", 1)),
+                LocaleController.formatString(R.string.MuteFor, LocaleController.formatPluralString("Hours", 8)),
+                LocaleController.formatString(R.string.MuteFor, LocaleController.formatPluralString("Days", 2)),
                 LocaleController.getString(R.string.MuteDisable)
         };
         builder.setItems(items, (dialogInterface, i) -> {
@@ -5574,7 +5574,7 @@ public class AlertsCreator {
         } else {
             timeString = LocaleController.formatPluralString("Minutes", time / 60);
         }
-        return LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString);
+        return LocaleController.formatString(R.string.FloodWaitTime, timeString);
     }
 
     public static void showFloodWaitAlert(String error, final BaseFragment fragment) {
@@ -5591,7 +5591,7 @@ public class AlertsCreator {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
         builder.setTitle(LocaleController.getString(R.string.AppName));
-        builder.setMessage(LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+        builder.setMessage(LocaleController.formatString(R.string.FloodWaitTime, timeString));
         builder.setPositiveButton(LocaleController.getString(R.string.OK), null);
         fragment.showDialog(builder.create(), true, null);
     }
@@ -6856,7 +6856,7 @@ public class AlertsCreator {
                 CheckBoxCell cell = new CheckBoxCell(activity, 1, resourcesProvider);
                 cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                 if (canDeleteInbox) {
-                    cell.setText(LocaleController.formatString("DeleteMessagesOptionAlso", R.string.DeleteMessagesOptionAlso, UserObject.getFirstName(user)), "", true, false);
+                    cell.setText(LocaleController.formatString(R.string.DeleteMessagesOptionAlso, UserObject.getFirstName(user)), "", true, false);
                 } else if (chat != null && (hasNotOut || myMessagesCount == count)) {
                     cell.setText(LocaleController.getString(R.string.DeleteForAll), "", true, false);
                 } else {
@@ -6960,9 +6960,9 @@ public class AlertsCreator {
             }
         } else if (hasDeleteForAllCheck && !canDeleteInbox && myMessagesCount != count) {
             if (chat != null) {
-                builder.setMessage(LocaleController.formatString("DeleteMessagesTextGroup", R.string.DeleteMessagesTextGroup, LocaleController.formatPluralString("messages", myMessagesCount)));
+                builder.setMessage(LocaleController.formatString(R.string.DeleteMessagesTextGroup, LocaleController.formatPluralString("messages", myMessagesCount)));
             } else {
-                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("DeleteMessagesText", R.string.DeleteMessagesText, LocaleController.formatPluralString("messages", myMessagesCount), UserObject.getFirstName(user))));
+                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.DeleteMessagesText, LocaleController.formatPluralString("messages", myMessagesCount), UserObject.getFirstName(user))));
             }
         } else {
             if (chat != null && chat.megagroup && !scheduled) {
@@ -7019,7 +7019,7 @@ public class AlertsCreator {
             builder.setPositiveButton(LocaleController.getString(R.string.SuggestionStarsWillBeLostDelete), deleteAction);
         } else if (isActiveGiveawayAndOwner && !isSavedMessages) {
             builder.setTitle(LocaleController.getString(R.string.BoostingGiveawayDeleteMsgTitle));
-            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("BoostingGiveawayDeleteMsgText", R.string.BoostingGiveawayDeleteMsgText, giveawayEndDate)));
+            builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.BoostingGiveawayDeleteMsgText, giveawayEndDate)));
             builder.setNeutralButton(LocaleController.getString(R.string.Delete), deleteAction);
         } else {
             builder.setPositiveButton(LocaleController.getString(isSavedMessages ? R.string.Remove : R.string.Delete), deleteAction);

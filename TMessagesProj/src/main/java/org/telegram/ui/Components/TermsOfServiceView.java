@@ -151,7 +151,7 @@ public class TermsOfServiceView extends FrameLayout {
                 builder.setTitle(LocaleController.getString(R.string.TosAgeTitle));
                 builder.setPositiveButton(LocaleController.getString(R.string.Agree), (dialog, which) -> accept());
                 builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
-                builder.setMessage(LocaleController.formatString("TosAgeText", R.string.TosAgeText, LocaleController.formatPluralString("Years", currentTos.min_age_confirm)));
+                builder.setMessage(LocaleController.formatString(R.string.TosAgeText, LocaleController.formatPluralString("Years", currentTos.min_age_confirm)));
                 builder.show();
             } else {
                 accept();

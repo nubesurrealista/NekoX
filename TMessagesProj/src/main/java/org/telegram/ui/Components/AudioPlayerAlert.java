@@ -663,7 +663,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             public CharSequence getContentDescription() {
                 final String time = LocaleController.formatPluralString("Minutes", lastTime / 60) + ' ' + LocaleController.formatPluralString("Seconds", lastTime % 60);
                 final String totalTime = LocaleController.formatPluralString("Minutes", lastDuration / 60) + ' ' + LocaleController.formatPluralString("Seconds", lastDuration % 60);
-                return LocaleController.formatString("AccDescrPlayerDuration", R.string.AccDescrPlayerDuration, time, totalTime);
+                return LocaleController.formatString(R.string.AccDescrPlayerDuration, time, totalTime);
             }
         });
         seekBarView.setReportChanges(true);
@@ -2480,7 +2480,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                 searchResult = documents;
                 notifyDataSetChanged();
                 layoutManager.scrollToPosition(0);
-                emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoAudioFoundPlayerInfo", R.string.NoAudioFoundPlayerInfo, query)));
+                emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.NoAudioFoundPlayerInfo, query)));
             });
         }
     }

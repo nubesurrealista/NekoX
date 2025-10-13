@@ -5288,7 +5288,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 			customView.setViewVisibility(R.id.subtitle, View.GONE);
 			if (UserConfig.getActivatedAccountsCount() > 1) {
 				TLRPC.User self = UserConfig.getInstance(currentAccount).getCurrentUser();
-				customView.setTextViewText(R.id.title, video ? LocaleController.formatString("VoipInVideoCallBrandingWithName", R.string.VoipInVideoCallBrandingWithName, ContactsController.formatName(self.first_name, self.last_name)) : LocaleController.formatString("VoipInCallBrandingWithName", R.string.VoipInCallBrandingWithName, ContactsController.formatName(self.first_name, self.last_name)));
+				customView.setTextViewText(R.id.title, video ? LocaleController.formatString(R.string.VoipInVideoCallBrandingWithName, ContactsController.formatName(self.first_name, self.last_name)) : LocaleController.formatString(R.string.VoipInCallBrandingWithName, ContactsController.formatName(self.first_name, self.last_name)));
 			} else {
 				customView.setTextViewText(R.id.title, video ? LocaleController.getString(R.string.VoipInVideoCallBranding) : LocaleController.getString(R.string.VoipInCallBranding));
 			}

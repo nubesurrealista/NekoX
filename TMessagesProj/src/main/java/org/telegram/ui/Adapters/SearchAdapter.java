@@ -456,7 +456,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                 String str = (String) getItem(position);
                 TextCell cell = (TextCell) holder.itemView;
                 cell.setColors(-1, Theme.key_windowBackgroundWhiteBlueText2);
-                cell.setText(LocaleController.formatString("AddContactByPhone", R.string.AddContactByPhone, PhoneFormat.getInstance().format("+" + str)), false);
+                cell.setText(LocaleController.formatString(R.string.AddContactByPhone, PhoneFormat.getInstance().format("+" + str)), false);
                 break;
             }
             case 3: {

@@ -2614,7 +2614,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle(LocaleController.getPluralString("DeleteTopics", 1));
                     TLRPC.TL_forumTopic topic = MessagesController.getInstance(currentAccount).getTopicsController().findTopic(chatId, topicId);
-                    builder.setMessage(formatString("DeleteSelectedTopic", R.string.DeleteSelectedTopic, topic == null ? "topic" : topic.title));
+                    builder.setMessage(formatString(R.string.DeleteSelectedTopic, topic == null ? "topic" : topic.title));
                     builder.setPositiveButton(LocaleController.getString(R.string.Delete), (dialog, which) -> {
                         ArrayList<Integer> topicIds = new ArrayList<>();
                         topicIds.add((int) topicId);
@@ -2678,7 +2678,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     args.putInt("dialogsType", DialogsActivity.DIALOGS_TYPE_ADD_USERS_TO);
                     args.putBoolean("resetDelegate", false);
                     args.putBoolean("closeFragment", false);
-//                    args.putString("addToGroupAlertString", LocaleController.formatString("AddToTheGroupAlertText", R.string.AddToTheGroupAlertText, UserObject.getUserName(user), "%1$s"));
+//                    args.putString("addToGroupAlertString", LocaleController.formatString(R.string.AddToTheGroupAlertText, UserObject.getUserName(user), "%1$s"));
                     DialogsActivity fragment = new DialogsActivity(args);
                     fragment.setDelegate((fragment1, dids, message, param, notify, scheduleDate, topicsFragment) -> {
                         long did = dids.get(0).dialogId;
@@ -2706,7 +2706,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity(), resourcesProvider);
                             builder.setTitle(LocaleController.getString(R.string.AddBot));
                             String chatName = chat == null ? "" : chat.title;
-                            builder.setMessage(AndroidUtilities.replaceTags(formatString("AddMembersAlertNamesText", R.string.AddMembersAlertNamesText, UserObject.getUserName(user), chatName)));
+                            builder.setMessage(AndroidUtilities.replaceTags(formatString(R.string.AddMembersAlertNamesText, UserObject.getUserName(user), chatName)));
                             builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
                             builder.setPositiveButton(LocaleController.getString(R.string.AddBot), (di, i) -> {
                                 disableProfileAnimation = true;
@@ -4799,13 +4799,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 getString(R.string.DebugMenuReloadContacts),
                                 getString(R.string.DebugMenuResetContacts),
                                 getString(R.string.DebugMenuResetDialogs),
-                                BuildVars.DEBUG_VERSION ? null : (BuildVars.LOGS_ENABLED ? getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs)), // 4
-                                SharedConfig.inappCamera ? getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera) : getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera),
-                                getString("DebugMenuClearMediaCache", R.string.DebugMenuClearMediaCache),
+                                BuildVars.DEBUG_VERSION ? null : (BuildVars.LOGS_ENABLED ? getString(R.string.DebugMenuDisableLogs) : getString(R.string.DebugMenuEnableLogs)), // 4
+                                SharedConfig.inappCamera ? getString(R.string.DebugMenuDisableCamera) : getString(R.string.DebugMenuEnableCamera),
+                                getString(R.string.DebugMenuClearMediaCache),
                                 getString(R.string.DebugMenuCallSettings),
                                 null,
-                                BuildVars.DEBUG_PRIVATE_VERSION || ApplicationLoader.isStandaloneBuild() ? getString("DebugMenuCheckAppUpdate", R.string.DebugMenuCheckAppUpdate) : null,
-                                getString("DebugMenuReadAllDialogs", R.string.DebugMenuReadAllDialogs), /* No. 10 */
+                                BuildVars.DEBUG_PRIVATE_VERSION || ApplicationLoader.isStandaloneBuild() ? getString(R.string.DebugMenuCheckAppUpdate) : null,
+                                getString(R.string.DebugMenuReadAllDialogs), /* No. 10 */
                                 SharedConfig.pauseMusicOnRecord ? getString(R.string.DebugMenuDisablePauseMusic) : getString(R.string.DebugMenuEnablePauseMusic),
                                 null,
                                 BuildVars.DEBUG_PRIVATE_VERSION ? (SharedConfig.disableVoiceAudioEffects ? "Enable voip audio effects" : "Disable voip audio effects") : null,
@@ -5144,7 +5144,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                         SharedConfig.overrideDevicePerformanceClass(newClass);
                                     }
                                 });
-                                builder2.setNegativeButton(getString("Cancel", R.string.Cancel), null);
+                                builder2.setNegativeButton(getString(R.string.Cancel), null);
                                 builder2.show();
                             } else if (which == 28) {
                                 SharedConfig.toggleRoundCamera();
@@ -5191,11 +5191,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 FileLog.getInstance().dumpMemory(true);
                             }
                         });
-                        builder.setNegativeButton(getString("Cancel", R.string.Cancel), null);
+                        builder.setNegativeButton(getString(R.string.Cancel), null);
                         showDialog(builder.create());
                     } else {
                         try {
-                            Toast.makeText(getParentActivity(), getString("DebugMenuLongPress", R.string.DebugMenuLongPress), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getParentActivity(), getString(R.string.DebugMenuLongPress), Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
                             FileLog.e(e);
                         }
@@ -7431,7 +7431,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             showDialog(
                                     new AlertDialog.Builder(getParentActivity(), resourcesProvider)
                                             .setTitle(LocaleController.getString(R.string.AppName))
-                                            .setMessage(formatString("AdminWillBeRemoved", R.string.AdminWillBeRemoved, ContactsController.formatName(user.first_name, user.last_name)))
+                                            .setMessage(formatString(R.string.AdminWillBeRemoved, ContactsController.formatName(user.first_name, user.last_name)))
                                             .setPositiveButton(LocaleController.getString(R.string.OK), (dialog, which) -> openRightsEdit.run(1))
                                             .setNegativeButton(LocaleController.getString(R.string.Cancel), null)
                                             .create()
@@ -12095,7 +12095,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         if (count > 0) {
                             statusString = LocaleController.formatPluralString("messages", count, count);
                         } else {
-                            statusString = formatString("TopicProfileStatus", R.string.TopicProfileStatus, chat.title);
+                            statusString = formatString(R.string.TopicProfileStatus, chat.title);
                         }
                         SpannableString arrowString = new SpannableString(">");
                         arrowString.setSpan(new ColoredImageSpan(R.drawable.arrow_newchat), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -13805,7 +13805,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 }
                                 break;
                         }
-                        cell.setText(formatString("TelegramVersion", R.string.TelegramVersion, String.format(Locale.US, "v%s (%d) %s", pInfo.versionName, code, abi)));
+                        cell.setText(formatString(R.string.TelegramVersion, String.format(Locale.US, "v%s (%d) %s", pInfo.versionName, code, abi)));
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
@@ -14374,11 +14374,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 }
                                 enabled = true;
                             } else if (delta < 60 * 60) {
-                                val = formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Minutes", delta / 60));
+                                val = formatString(R.string.WillUnmuteIn, LocaleController.formatPluralString("Minutes", delta / 60));
                             } else if (delta < 60 * 60 * 24) {
-                                val = formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Hours", (int) Math.ceil(delta / 60.0f / 60)));
+                                val = formatString(R.string.WillUnmuteIn, LocaleController.formatPluralString("Hours", (int) Math.ceil(delta / 60.0f / 60)));
                             } else if (delta < 60 * 60 * 24 * 365) {
-                                val = formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Days", (int) Math.ceil(delta / 60.0f / 60 / 24)));
+                                val = formatString(R.string.WillUnmuteIn, LocaleController.formatPluralString("Days", (int) Math.ceil(delta / 60.0f / 60 / 24)));
                             } else {
                                 val = null;
                             }

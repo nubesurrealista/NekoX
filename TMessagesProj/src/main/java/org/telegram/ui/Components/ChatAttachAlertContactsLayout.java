@@ -531,7 +531,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
 
     public void addOrRemoveSelectedContact(UserCell cell, Object object) {
         if (selectedContacts.isEmpty() && !multipleSelectionAllowed) {
-            showErrorBox(LocaleController.formatString("AttachContactsSlowMode", R.string.AttachContactsSlowMode));
+            showErrorBox(LocaleController.formatString(R.string.AttachContactsSlowMode));
             return;
         }
 

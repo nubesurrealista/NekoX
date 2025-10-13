@@ -348,11 +348,11 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
                         text = getString(R.string.NotificationsUnmuted);
                     }
                 } else if (delta < 60 * 60) {
-                    text = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Minutes", delta / 60));
+                    text = LocaleController.formatString(R.string.WillUnmuteIn, LocaleController.formatPluralString("Minutes", delta / 60));
                 } else if (delta < 60 * 60 * 24) {
-                    text = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Hours", (int) Math.ceil(delta / 60.0f / 60)));
+                    text = LocaleController.formatString(R.string.WillUnmuteIn, LocaleController.formatPluralString("Hours", (int) Math.ceil(delta / 60.0f / 60)));
                 } else if (delta < 60 * 60 * 24 * 365) {
-                    text = LocaleController.formatString("WillUnmuteIn", R.string.WillUnmuteIn, LocaleController.formatPluralString("Days", (int) Math.ceil(delta / 60.0f / 60 / 24)));
+                    text = LocaleController.formatString(R.string.WillUnmuteIn, LocaleController.formatPluralString("Days", (int) Math.ceil(delta / 60.0f / 60 / 24)));
                 } else {
                     text = null;
                 }

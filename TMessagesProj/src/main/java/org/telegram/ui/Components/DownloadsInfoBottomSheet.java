@@ -71,7 +71,7 @@ public class DownloadsInfoBottomSheet extends BottomSheet {
         description.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         description.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         description.setLineSpacing(description.getLineSpacingExtra(), description.getLineSpacingMultiplier() * 1.1f);
-        description.setText(LocaleController.formatString("DownloadedFilesMessage", R.string.DownloadedFilesMessage));
+        description.setText(LocaleController.formatString(R.string.DownloadedFilesMessage));
         linearLayout.addView(description, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 28, 7, 28, 0));
 
         TextView storageBtn = new TextView(context);

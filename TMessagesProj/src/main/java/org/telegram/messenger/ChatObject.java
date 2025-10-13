@@ -2285,81 +2285,81 @@ public class ChatObject {
             if (chat == null || ChatObject.isActionBannedByDefault(chat, action)) {
                 return LocaleController.getString(R.string.GlobalAttachGifRestricted);
             } else if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
-                return LocaleController.formatString("AttachGifRestrictedForever", R.string.AttachGifRestrictedForever);
+                return LocaleController.formatString(R.string.AttachGifRestrictedForever);
             } else {
-                return LocaleController.formatString("AttachGifRestricted", R.string.AttachGifRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
+                return LocaleController.formatString(R.string.AttachGifRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
             }
         } else if (action == ACTION_SEND_STICKERS) {
             if (chat == null || ChatObject.isActionBannedByDefault(chat, action)) {
                 return LocaleController.getString(R.string.GlobalAttachStickersRestricted);
             } else if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
-                return LocaleController.formatString("AttachStickersRestrictedForever", R.string.AttachStickersRestrictedForever);
+                return LocaleController.formatString(R.string.AttachStickersRestrictedForever);
             } else {
-                return LocaleController.formatString("AttachStickersRestricted", R.string.AttachStickersRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
+                return LocaleController.formatString(R.string.AttachStickersRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
             }
         } else if (action == ACTION_SEND_PHOTO) {
             if (chat == null || ChatObject.isActionBannedByDefault(chat, action)) {
                 return LocaleController.getString(R.string.GlobalAttachPhotoRestricted);
             } else if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
-                return LocaleController.formatString("AttachPhotoRestrictedForever", R.string.AttachPhotoRestrictedForever);
+                return LocaleController.formatString(R.string.AttachPhotoRestrictedForever);
             } else {
-                return LocaleController.formatString("AttachPhotoRestricted", R.string.AttachPhotoRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
+                return LocaleController.formatString(R.string.AttachPhotoRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
             }
         } else if (action == ACTION_SEND_VIDEO) {
             if (chat == null || ChatObject.isActionBannedByDefault(chat, action)) {
                 return LocaleController.getString(R.string.GlobalAttachVideoRestricted);
             } else if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
-                return LocaleController.formatString("AttachVideoRestrictedForever", R.string.AttachVideoRestrictedForever);
+                return LocaleController.formatString(R.string.AttachVideoRestrictedForever);
             } else {
-                return LocaleController.formatString("AttachVideoRestricted", R.string.AttachVideoRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
+                return LocaleController.formatString(R.string.AttachVideoRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
             }
         } else if (action == ACTION_SEND_DOCUMENTS) {
             if (chat == null || ChatObject.isActionBannedByDefault(chat, action)) {
                 return LocaleController.getString(R.string.GlobalAttachDocumentsRestricted);
             } else if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
-                return LocaleController.formatString("AttachDocumentsRestrictedForever", R.string.AttachDocumentsRestrictedForever);
+                return LocaleController.formatString(R.string.AttachDocumentsRestrictedForever);
             } else {
-                return LocaleController.formatString("AttachDocumentsRestricted", R.string.AttachDocumentsRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
+                return LocaleController.formatString(R.string.AttachDocumentsRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
             }
         } else if (action == ACTION_SEND_MEDIA) {
             if (chat == null || ChatObject.isActionBannedByDefault(chat, action)) {
                 return LocaleController.getString(R.string.GlobalAttachMediaRestricted);
             } else if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
-                return LocaleController.formatString("AttachMediaRestrictedForever", R.string.AttachMediaRestrictedForever);
+                return LocaleController.formatString(R.string.AttachMediaRestrictedForever);
             } else {
-                return LocaleController.formatString("AttachMediaRestricted", R.string.AttachMediaRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
+                return LocaleController.formatString(R.string.AttachMediaRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
             }
         } else if (action == ACTION_SEND_MUSIC) {
             if (chat == null || ChatObject.isActionBannedByDefault(chat, action)) {
                 return LocaleController.getString(R.string.GlobalAttachAudioRestricted);
             } else if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
-                return LocaleController.formatString("AttachAudioRestrictedForever", R.string.AttachAudioRestrictedForever);
+                return LocaleController.formatString(R.string.AttachAudioRestrictedForever);
             } else {
-                return LocaleController.formatString("AttachAudioRestricted", R.string.AttachAudioRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
+                return LocaleController.formatString(R.string.AttachAudioRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
             }
         } else if (action == ACTION_SEND_PLAIN) {
             if (chat == null || ChatObject.isActionBannedByDefault(chat, action)) {
                 return LocaleController.getString(R.string.GlobalAttachPlainRestricted);
             } else if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
-                return LocaleController.formatString("AttachPlainRestrictedForever", R.string.AttachPlainRestrictedForever);
+                return LocaleController.formatString(R.string.AttachPlainRestrictedForever);
             } else {
-                return LocaleController.formatString("AttachPlainRestricted", R.string.AttachPlainRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
+                return LocaleController.formatString(R.string.AttachPlainRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
             }
         } else if (action == ACTION_SEND_ROUND) {
             if (chat == null || ChatObject.isActionBannedByDefault(chat, action)) {
                 return LocaleController.getString(R.string.GlobalAttachRoundRestricted);
             } else if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
-                return LocaleController.formatString("AttachRoundRestrictedForever", R.string.AttachRoundRestrictedForever);
+                return LocaleController.formatString(R.string.AttachRoundRestrictedForever);
             } else {
-                return LocaleController.formatString("AttachRoundRestricted", R.string.AttachRoundRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
+                return LocaleController.formatString(R.string.AttachRoundRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
             }
         } else if (action == ACTION_SEND_VOICE) {
             if (chat == null || ChatObject.isActionBannedByDefault(chat, action)) {
                 return LocaleController.getString(R.string.GlobalAttachVoiceRestricted);
             } else if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
-                return LocaleController.formatString("AttachVoiceRestrictedForever", R.string.AttachVoiceRestrictedForever);
+                return LocaleController.formatString(R.string.AttachVoiceRestrictedForever);
             } else {
-                return LocaleController.formatString("AttachVoiceRestricted", R.string.AttachVoiceRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
+                return LocaleController.formatString(R.string.AttachVoiceRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date));
             }
         }
 

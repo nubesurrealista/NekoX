@@ -60,7 +60,7 @@ public class SuggestClearDatabaseBottomSheet extends BottomSheet {
         description.setGravity(Gravity.START);
         description.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         description.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        description.setText(AndroidUtilities.replaceTags(LocaleController.formatString("SuggestClearDatabaseMessage", R.string.SuggestClearDatabaseMessage, AndroidUtilities.formatFileSize(fragment.getMessagesStorage().getDatabaseSize()))));
+        description.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.SuggestClearDatabaseMessage, AndroidUtilities.formatFileSize(fragment.getMessagesStorage().getDatabaseSize()))));
         linearLayout.addView(description, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 21, 15, 21, 16));
 
 

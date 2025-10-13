@@ -10729,9 +10729,9 @@ public class Theme {
                     BulletinFactory.of(fragment).createSimpleBulletin(
                         R.raw.auto_night_off,
                         selectedAutoNightType == AUTO_NIGHT_TYPE_SYSTEM ?
-                                getString("AutoNightSystemModeOff", R.string.AutoNightSystemModeOff) :
-                                getString("AutoNightModeOff", R.string.AutoNightModeOff),
-                        getString("Settings", R.string.Settings),
+                                getString(R.string.AutoNightSystemModeOff) :
+                                getString(R.string.AutoNightModeOff),
+                        getString(R.string.Settings),
                         Bulletin.DURATION_PROLONG,
                         () -> fragment.presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_NIGHT))
                     ).show();
@@ -10752,9 +10752,9 @@ public class Theme {
                     BulletinFactory.of(container, null).createSimpleBulletin(
                         R.raw.auto_night_off,
                         selectedAutoNightType == AUTO_NIGHT_TYPE_SYSTEM ?
-                            getString("AutoNightSystemModeOff", R.string.AutoNightSystemModeOff) :
-                            getString("AutoNightModeOff", R.string.AutoNightModeOff),
-                        getString("Settings", R.string.Settings),
+                            getString(R.string.AutoNightSystemModeOff) :
+                            getString(R.string.AutoNightModeOff),
+                        getString(R.string.Settings),
                         Bulletin.DURATION_PROLONG,
                         openSettings
                     ).show();

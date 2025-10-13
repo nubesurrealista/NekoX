@@ -997,7 +997,7 @@ public class VoIPFragment implements
         emojiRationalTextView.setTextColor(Color.WHITE);
         emojiRationalTextView.setGravity(Gravity.CENTER);
         CharSequence ellipsizeName = TextUtils.ellipsize(UserObject.getFirstName(callingUser), emojiRationalTextView.getPaint(), dp(300), TextUtils.TruncateAt.END);
-        emojiRationalTextView.setText(LocaleController.formatString("CallEmojiKeyTooltip", R.string.CallEmojiKeyTooltip, ellipsizeName));
+        emojiRationalTextView.setText(LocaleController.formatString(R.string.CallEmojiKeyTooltip, ellipsizeName));
 
         emojiRationalLayout.setVisibility(View.GONE);
         emojiRationalLayout.addView(emojiRationalTopTextView);
@@ -1954,12 +1954,12 @@ public class VoIPFragment implements
                 if (!TextUtils.equals(lastError, Instance.ERROR_UNKNOWN)) {
                     if (TextUtils.equals(lastError, Instance.ERROR_INCOMPATIBLE)) {
                         final String name = ContactsController.formatName(callingUser.first_name, callingUser.last_name);
-                        final String message = LocaleController.formatString("VoipPeerIncompatible", R.string.VoipPeerIncompatible, name);
+                        final String message = LocaleController.formatString(R.string.VoipPeerIncompatible, name);
                         showErrorDialog(AndroidUtilities.replaceTags(message));
                     } else if (TextUtils.equals(lastError, Instance.ERROR_PEER_OUTDATED)) {
                         if (isVideoCall) {
                             final String name = UserObject.getFirstName(callingUser);
-                            final String message = LocaleController.formatString("VoipPeerVideoOutdated", R.string.VoipPeerVideoOutdated, name);
+                            final String message = LocaleController.formatString(R.string.VoipPeerVideoOutdated, name);
                             boolean[] callAgain = new boolean[1];
                             AlertDialog dlg = new DarkAlertDialog.Builder(activity)
                                     .setTitle(LocaleController.getString(R.string.VoipFailed))
@@ -1990,7 +1990,7 @@ public class VoIPFragment implements
                             });
                         } else {
                             final String name = UserObject.getFirstName(callingUser);
-                            final String message = LocaleController.formatString("VoipPeerOutdated", R.string.VoipPeerOutdated, name);
+                            final String message = LocaleController.formatString(R.string.VoipPeerOutdated, name);
                             showErrorDialog(AndroidUtilities.replaceTags(message));
                         }
                     } else if (TextUtils.equals(lastError, Instance.ERROR_PRIVACY)) {
@@ -2171,18 +2171,18 @@ public class VoIPFragment implements
             }
             if ((currentUserIsVideo || callingUserIsVideo) && (currentState == VoIPService.STATE_ESTABLISHED || currentState == VoIPService.STATE_RECONNECTING) && service.getCallDuration() > 500) {
                 if (service.getRemoteAudioState() == Instance.AUDIO_STATE_MUTED) {
-                    notificationsLayout.addNotification(R.drawable.calls_mute_mini, LocaleController.formatString("VoipUserMicrophoneIsOff", R.string.VoipUserMicrophoneIsOff, notificationsLayout.ellipsize(UserObject.getFirstName(callingUser))), "muted", animated);
+                    notificationsLayout.addNotification(R.drawable.calls_mute_mini, LocaleController.formatString(R.string.VoipUserMicrophoneIsOff, notificationsLayout.ellipsize(UserObject.getFirstName(callingUser))), "muted", animated);
                 } else {
                     notificationsLayout.removeNotification("muted");
                 }
                 if (service.getRemoteVideoState() == Instance.VIDEO_STATE_INACTIVE) {
-                    notificationsLayout.addNotification(R.drawable.calls_camera_mini, LocaleController.formatString("VoipUserCameraIsOff", R.string.VoipUserCameraIsOff, notificationsLayout.ellipsize(UserObject.getFirstName(callingUser))), "video", animated);
+                    notificationsLayout.addNotification(R.drawable.calls_camera_mini, LocaleController.formatString(R.string.VoipUserCameraIsOff, notificationsLayout.ellipsize(UserObject.getFirstName(callingUser))), "video", animated);
                 } else {
                     notificationsLayout.removeNotification("video");
                 }
             } else {
                 if (service.getRemoteAudioState() == Instance.AUDIO_STATE_MUTED) {
-                    notificationsLayout.addNotification(R.drawable.calls_mute_mini, LocaleController.formatString("VoipUserMicrophoneIsOff", R.string.VoipUserMicrophoneIsOff, notificationsLayout.ellipsize(UserObject.getFirstName(callingUser))), "muted", animated);
+                    notificationsLayout.addNotification(R.drawable.calls_mute_mini, LocaleController.formatString(R.string.VoipUserMicrophoneIsOff, notificationsLayout.ellipsize(UserObject.getFirstName(callingUser))), "muted", animated);
                 } else {
                     notificationsLayout.removeNotification("muted");
                 }

@@ -1464,7 +1464,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             lastSearchString = null;
             emptyView.title.setText(LocaleController.getString(R.string.NoRecentSearches));
         } else {
-            emptyView.title.setText(LocaleController.formatString("NoResultFoundFor", R.string.NoResultFoundFor, lastSearchString));
+            emptyView.title.setText(LocaleController.formatString(R.string.NoResultFoundFor, lastSearchString));
         }
         updateSearchInterface();
     }

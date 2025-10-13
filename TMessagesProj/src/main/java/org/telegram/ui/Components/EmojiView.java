@@ -3534,7 +3534,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             if (unlock) {
                 addButtonView.setVisibility(View.GONE);
                 premiumButtonView.setVisibility(View.VISIBLE);
-                premiumButtonView.setButton(LocaleController.formatString("UnlockPremiumEmojiPack", R.string.UnlockPremiumEmojiPack, title), onClickListener);
+                premiumButtonView.setButton(LocaleController.formatString(R.string.UnlockPremiumEmojiPack, title), onClickListener);
             } else {
                 premiumButtonView.setVisibility(View.GONE);
                 addButtonView.setVisibility(View.VISIBLE);
@@ -3555,7 +3555,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         public void updateInstall(boolean installed, boolean animated) {
             CharSequence text = installed ?
                     LocaleController.getString(R.string.Added) :
-                    LocaleController.formatString("AddStickersCount", R.string.AddStickersCount, lastTitle);
+                    LocaleController.formatString(R.string.AddStickersCount, lastTitle);
             addButtonTextView.setText(text, animated);
             if (installFadeAway != null) {
                 installFadeAway.cancel();
@@ -5957,11 +5957,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     }
                 } else {
                     if (emoji) {
-                        mediaBanTooltip.setText(LocaleController.formatString("AttachPlainRestricted", R.string.AttachPlainRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
+                        mediaBanTooltip.setText(LocaleController.formatString(R.string.AttachPlainRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
                     } if (gif) {
-                        mediaBanTooltip.setText(LocaleController.formatString("AttachGifRestricted", R.string.AttachGifRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
+                        mediaBanTooltip.setText(LocaleController.formatString(R.string.AttachGifRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
                     } else {
-                        mediaBanTooltip.setText(LocaleController.formatString("AttachStickersRestricted", R.string.AttachStickersRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
+                        mediaBanTooltip.setText(LocaleController.formatString(R.string.AttachStickersRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
                     }
                 }
             }
@@ -6595,7 +6595,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             icon = groupStickerSet != null ? R.drawable.msg_mini_customize : R.drawable.msg_close;
                         }
                         TLRPC.Chat chat = info != null ? MessagesController.getInstance(currentAccount).getChat(info.id) : null;
-                        cell.setText(LocaleController.formatString("CurrentGroupStickers", R.string.CurrentGroupStickers, chat != null ? chat.title : "Group Stickers"), icon);
+                        cell.setText(LocaleController.formatString(R.string.CurrentGroupStickers, chat != null ? chat.title : "Group Stickers"), icon);
                     } else {
                         Object object = cache.get(position);
                         if (object instanceof TLRPC.TL_messages_stickerSet) {
@@ -7570,7 +7570,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             linearLayout.addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 11, 0, 0));
 
                             textView = new TextView(getContext());
-                            textView.setText(LocaleController.formatString("EmojiSuggestionsUrl", R.string.EmojiSuggestionsUrl, lastSearchAlias != null ? lastSearchAlias : lastSearchKeyboardLanguage));
+                            textView.setText(LocaleController.formatString(R.string.EmojiSuggestionsUrl, lastSearchAlias != null ? lastSearchAlias : lastSearchKeyboardLanguage));
                             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
                             textView.setTextColor(getThemedColor(Theme.key_dialogTextLink));
                             textView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);

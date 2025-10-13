@@ -3836,9 +3836,9 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 if (ChatObject.isActionBannedByDefault(chat, ChatObject.ACTION_SEND_MEDIA)) {
                     progressView.setText(LocaleController.getString(R.string.GlobalAttachMediaRestricted));
                 } else if (AndroidUtilities.isBannedForever(chat.banned_rights)) {
-                    progressView.setText(LocaleController.formatString("AttachMediaRestrictedForever", R.string.AttachMediaRestrictedForever));
+                    progressView.setText(LocaleController.formatString(R.string.AttachMediaRestrictedForever));
                 } else {
-                    progressView.setText(LocaleController.formatString("AttachMediaRestricted", R.string.AttachMediaRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
+                    progressView.setText(LocaleController.formatString(R.string.AttachMediaRestricted, LocaleController.formatDateForBan(chat.banned_rights.until_date)));
                 }
             }
         } else {

@@ -1458,7 +1458,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
                 general = topic.title;
             }
             topicsEmptyView.subtitle.setText(
-                    AndroidUtilities.replaceTags(LocaleController.formatString("NoTopicsDescriptionUser", R.string.NoTopicsDescriptionUser, general))
+                    AndroidUtilities.replaceTags(LocaleController.formatString(R.string.NoTopicsDescriptionUser, general))
             );
         }
     }

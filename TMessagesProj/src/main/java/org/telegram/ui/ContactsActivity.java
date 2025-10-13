@@ -702,7 +702,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                                     if (index > 0) {
                                         name = name.substring(0, index);
                                     }
-                                    BulletinFactory.of(ContactsActivity.this).createUsersBulletin(Arrays.asList(user), AndroidUtilities.replaceTags(LocaleController.formatString("NotificationsStoryMutedHint", R.string.NotificationsStoryMutedHint, name))).show();
+                                    BulletinFactory.of(ContactsActivity.this).createUsersBulletin(Arrays.asList(user), AndroidUtilities.replaceTags(LocaleController.formatString(R.string.NotificationsStoryMutedHint, name))).show();
                                 })
                                 .addIf(muted, R.drawable.msg_unmute, LocaleController.getString(R.string.NotificationsStoryUnmute), () -> {
                                     MessagesController.getNotificationsSettings(currentAccount).edit().putBoolean("stories_" + key, true).apply();
@@ -712,7 +712,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                                     if (index > 0) {
                                         name = name.substring(0, index);
                                     }
-                                    BulletinFactory.of(ContactsActivity.this).createUsersBulletin(Arrays.asList(user), AndroidUtilities.replaceTags(LocaleController.formatString("NotificationsStoryUnmutedHint", R.string.NotificationsStoryUnmutedHint, name))).show();
+                                    BulletinFactory.of(ContactsActivity.this).createUsersBulletin(Arrays.asList(user), AndroidUtilities.replaceTags(LocaleController.formatString(R.string.NotificationsStoryUnmutedHint, name))).show();
                                 });
                         // if (user.stories_hidden) {
                         filterOptions.add(R.drawable.msg_viewintopic, LocaleController.getString(R.string.ShowInChats), () -> {
@@ -727,7 +727,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                             };
                             BulletinFactory.global().createUsersBulletin(
                                     Arrays.asList(user),
-                                    AndroidUtilities.replaceTags(LocaleController.formatString("StoriesMovedToDialogs", R.string.StoriesMovedToDialogs, ContactsController.formatName(user.first_name, null, 20))),
+                                    AndroidUtilities.replaceTags(LocaleController.formatString(R.string.StoriesMovedToDialogs, ContactsController.formatName(user.first_name, null, 20))),
                                     null,
                                     undoObject
                             ).show();
@@ -736,7 +736,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
 //                    } else {
 //                        filterOptions.add(R.drawable.msg_cancel, LocaleController.getString(R.string.Hide), () -> {
 //                            BulletinFactory.global().createUndoBulletin(
-//                                    AndroidUtilities.replaceTags(LocaleController.formatString("StoriesMovedToContacts", R.string.StoriesMovedToContacts, user.first_name)),
+//                                    AndroidUtilities.replaceTags(LocaleController.formatString(R.string.StoriesMovedToContacts, user.first_name)),
 //                                    () -> {
 //                                        //undo
 //                                        getMessagesController().getStoriesController().toggleHidden(dialogId, false, false, true);

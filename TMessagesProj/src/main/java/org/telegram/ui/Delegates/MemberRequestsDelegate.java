@@ -552,8 +552,8 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
                         layout.imageView.setForUserOrChat(user, new AvatarDrawable(user));
                         String userName = UserObject.getFirstName(user);
                         String message = isChannel
-                                ? LocaleController.formatString("HasBeenAddedToChannel", R.string.HasBeenAddedToChannel, userName)
-                                : LocaleController.formatString("HasBeenAddedToGroup", R.string.HasBeenAddedToGroup, userName);
+                                ? LocaleController.formatString(R.string.HasBeenAddedToChannel, userName)
+                                : LocaleController.formatString(R.string.HasBeenAddedToGroup, userName);
                         SpannableStringBuilder stringBuilder = new SpannableStringBuilder(message);
                         int start = message.indexOf(userName);
                         stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.bold()), start, start + userName.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);

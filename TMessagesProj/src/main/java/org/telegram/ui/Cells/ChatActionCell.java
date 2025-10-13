@@ -526,9 +526,9 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         CharSequence newText;
         if (scheduled) {
             if (date == 0x7ffffffe) {
-                newText = getString("MessageScheduledUntilOnline", R.string.MessageScheduledUntilOnline);
+                newText = getString(R.string.MessageScheduledUntilOnline);
             } else {
-                newText = formatString("MessageScheduledOn", R.string.MessageScheduledOn, LocaleController.formatDateChat(date));
+                newText = formatString(R.string.MessageScheduledOn, LocaleController.formatDateChat(date));
             }
         } else {
             newText = LocaleController.formatDateChat(date);
@@ -2170,9 +2170,9 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
 
                 if (user.self) {
                     TLRPC.User user2 = MessagesController.getInstance(currentAccount).getUser(messageObject.getDialogId());
-                    description = AndroidUtilities.replaceTags(formatString("StoryYouMentionedTitle", R.string.StoryYouMentionedTitle, user2.first_name));
+                    description = AndroidUtilities.replaceTags(formatString(R.string.StoryYouMentionedTitle, user2.first_name));
                 } else {
-                    description = AndroidUtilities.replaceTags(formatString("StoryMentionedTitle", R.string.StoryMentionedTitle, user.first_name));
+                    description = AndroidUtilities.replaceTags(formatString(R.string.StoryMentionedTitle, user.first_name));
                 }
                 action = getString(R.string.StoryMentionedAction);
 
@@ -2199,27 +2199,27 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         String from = chat == null ? null : chat.title;
         boolean isPrize = gifCodeAction.via_giveaway;
         CharSequence title = gifCodeAction.unclaimed ?
-                getString("BoostingUnclaimedPrize", R.string.BoostingUnclaimedPrize)
-                : getString("BoostingCongratulations", R.string.BoostingCongratulations);
+                getString(R.string.BoostingUnclaimedPrize)
+                : getString(R.string.BoostingCongratulations);
         SpannableStringBuilder subtitle;
         CharSequence monthsStr = months == 12 ? LocaleController.formatPluralString("BoldYears", 1) : LocaleController.formatPluralString("BoldMonths", months);
         if (isPrize) {
             if (gifCodeAction.unclaimed) {
-                subtitle = new SpannableStringBuilder(AndroidUtilities.replaceTags(formatString("BoostingYouHaveUnclaimedPrize", R.string.BoostingYouHaveUnclaimedPrize, from)));
+                subtitle = new SpannableStringBuilder(AndroidUtilities.replaceTags(formatString(R.string.BoostingYouHaveUnclaimedPrize, from)));
                 subtitle.append("\n\n");
-                subtitle.append(AndroidUtilities.replaceTags(formatString("BoostingUnclaimedPrizeDuration", R.string.BoostingUnclaimedPrizeDuration, monthsStr)));
+                subtitle.append(AndroidUtilities.replaceTags(formatString(R.string.BoostingUnclaimedPrizeDuration, monthsStr)));
             } else {
-                subtitle = new SpannableStringBuilder(AndroidUtilities.replaceTags(formatString("BoostingReceivedPrizeFrom", R.string.BoostingReceivedPrizeFrom, from)));
+                subtitle = new SpannableStringBuilder(AndroidUtilities.replaceTags(formatString(R.string.BoostingReceivedPrizeFrom, from)));
                 subtitle.append("\n\n");
-                subtitle.append(AndroidUtilities.replaceTags(formatString("BoostingReceivedPrizeDuration", R.string.BoostingReceivedPrizeDuration, monthsStr)));
+                subtitle.append(AndroidUtilities.replaceTags(formatString(R.string.BoostingReceivedPrizeDuration, monthsStr)));
             }
         } else {
-            subtitle = new SpannableStringBuilder(AndroidUtilities.replaceTags(from == null ? getString("BoostingReceivedGiftNoName", R.string.BoostingReceivedGiftNoName) : formatString("BoostingReceivedGiftFrom", R.string.BoostingReceivedGiftFrom, from)));
+            subtitle = new SpannableStringBuilder(AndroidUtilities.replaceTags(from == null ? getString(R.string.BoostingReceivedGiftNoName) : formatString(R.string.BoostingReceivedGiftFrom, from)));
             subtitle.append("\n\n");
-            subtitle.append(AndroidUtilities.replaceTags(formatString("BoostingReceivedGiftDuration", R.string.BoostingReceivedGiftDuration, monthsStr)));
+            subtitle.append(AndroidUtilities.replaceTags(formatString(R.string.BoostingReceivedGiftDuration, monthsStr)));
         }
 
-        String btnText = getString("BoostingReceivedGiftOpenBtn", R.string.BoostingReceivedGiftOpenBtn);
+        String btnText = getString(R.string.BoostingReceivedGiftOpenBtn);
 
         SpannableStringBuilder titleBuilder = SpannableStringBuilder.valueOf(title);
         titleBuilder.setSpan(new TypefaceSpan(AndroidUtilities.bold()), 0, titleBuilder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

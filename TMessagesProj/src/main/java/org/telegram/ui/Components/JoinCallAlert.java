@@ -624,18 +624,18 @@ public class JoinCallAlert extends BottomSheet {
     private void updateDoneButton(boolean animated, TLRPC.Chat chat) {
         if (currentType == TYPE_CREATE) {
             if (ChatObject.isChannelOrGiga(chat)) {
-                doneButton.setText(LocaleController.formatString("VoipChannelStartVoiceChat", R.string.VoipChannelStartVoiceChat), animated);
+                doneButton.setText(LocaleController.formatString(R.string.VoipChannelStartVoiceChat), animated);
             } else {
-                doneButton.setText(LocaleController.formatString("VoipGroupStartVoiceChat", R.string.VoipGroupStartVoiceChat), animated);
+                doneButton.setText(LocaleController.formatString(R.string.VoipGroupStartVoiceChat), animated);
             }
         } else {
             long did = MessageObject.getPeerId(selectedPeer);
             if (DialogObject.isUserDialog(did)) {
                 TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(did);
-                doneButton.setText(LocaleController.formatString("VoipGroupContinueAs", R.string.VoipGroupContinueAs, UserObject.getFirstName(user)), animated);
+                doneButton.setText(LocaleController.formatString(R.string.VoipGroupContinueAs, UserObject.getFirstName(user)), animated);
             } else {
                 TLRPC.Chat peerChat = MessagesController.getInstance(currentAccount).getChat(-did);
-                doneButton.setText(LocaleController.formatString("VoipGroupContinueAs", R.string.VoipGroupContinueAs, peerChat != null ? peerChat.title : ""), animated);
+                doneButton.setText(LocaleController.formatString(R.string.VoipGroupContinueAs, peerChat != null ? peerChat.title : ""), animated);
             }
         }
     }

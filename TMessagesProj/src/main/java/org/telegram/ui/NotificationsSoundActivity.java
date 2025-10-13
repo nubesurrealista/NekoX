@@ -857,7 +857,7 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
             }
         }
         if (TextUtils.isEmpty(title) && document != null) {
-            title = LocaleController.formatString("SoundNameEmpty", R.string.SoundNameEmpty, LocaleController.formatDateChat(document.date, true));
+            title = LocaleController.formatString(R.string.SoundNameEmpty, LocaleController.formatDateChat(document.date, true));
         }
         return title;
     }

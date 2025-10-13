@@ -205,7 +205,7 @@ public class TableCell extends FrameLayout {
         String monthTxt = LocaleController.getInstance().getFormatterYear().format(date);
         String timeTxt = LocaleController.getInstance().getFormatterDay().format(date);
 
-        dateTextView.setText(LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, monthTxt, timeTxt));
+        dateTextView.setText(LocaleController.formatString(R.string.formatDateAtTime, monthTxt, timeTxt));
         reasonTextView.setTextColor(Theme.getColor(giftCode.via_giveaway ? Theme.key_dialogTextBlue : Theme.key_dialogTextBlack, resourcesProvider));
         TLRPC.Chat fromChat = MessagesController.getInstance(UserConfig.selectedAccount).getChat(-DialogObject.getPeerDialogId(giftCode.from_id));
         boolean isChannel = ChatObject.isChannelAndNotMegaGroup(fromChat);
@@ -223,7 +223,7 @@ public class TableCell extends FrameLayout {
         }
 
         String monthsStr = giftCode.months == 12 ? LocaleController.formatPluralString("Years", 1) : LocaleController.formatPluralString("Months", giftCode.months);
-        giftTextView.setText(LocaleController.formatString("BoostingTelegramPremiumFor", R.string.BoostingTelegramPremiumFor, monthsStr));
+        giftTextView.setText(LocaleController.formatString(R.string.BoostingTelegramPremiumFor, monthsStr));
 
         if (fromChat != null) {
             SpannableStringBuilder builder = new SpannableStringBuilder();

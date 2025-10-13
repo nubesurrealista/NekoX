@@ -111,7 +111,7 @@ public class VoIPHelper {
         if (!confirmed && NekoConfig.askBeforeCall.Bool()) {
             new AlertDialog.Builder(activity)
                     .setTitle(LocaleController.getString(R.string.ConfirmCall))
-                    .setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("CallTo", R.string.CallTo,
+                    .setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.CallTo,
                             ContactsController.formatName(user.first_name, user.last_name))))
                     .setPositiveButton(LocaleController.getString(R.string.OK), (dialog, which) -> startCall(user, videoCall, canVideoCall, activity, userFull, accountInstance, true))
                     .setNegativeButton(LocaleController.getString(R.string.Cancel), null)

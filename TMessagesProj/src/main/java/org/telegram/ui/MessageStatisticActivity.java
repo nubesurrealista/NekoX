@@ -1005,11 +1005,11 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                     if (position == overviewHeaderRow) {
                         headerCell.setTopMargin(9);
                         headerCell.setPadding(0, 0, 0, AndroidUtilities.dp(8));
-                        headerCell.setText(LocaleController.formatString("StatisticOverview", R.string.StatisticOverview));
+                        headerCell.setText(LocaleController.formatString(R.string.StatisticOverview));
                     } else {
                         headerCell.setTopMargin(11);
                         headerCell.setPadding(0, 0, 0, 0);
-                        headerCell.setText(LocaleController.formatString("PublicShares", R.string.PublicShares));
+                        headerCell.setText(LocaleController.formatString(R.string.PublicShares));
                     }
                     break;
                 case 4:
@@ -1129,10 +1129,10 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             title[0].setText(LocaleController.getString(R.string.StatisticViews));
 
             primary[1].setText(AndroidUtilities.formatWholeNumber(publicChats, 0));
-            title[1].setText(LocaleController.formatString("PublicShares", R.string.PublicShares));
+            title[1].setText(LocaleController.formatString(R.string.PublicShares));
 
             primary[2].setText(AndroidUtilities.formatWholeNumber(reactions, 0));
-            title[2].setText(LocaleController.formatString("Reactions", R.string.Reactions));
+            title[2].setText(LocaleController.formatString(R.string.Reactions));
 
             boolean isReactionsNotVisible = chat != null && chat.available_reactions instanceof TLRPC.TL_chatReactionsNone && reactions == 0;
             if (isReactionsNotVisible) {
@@ -1141,7 +1141,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
 
             int privateChats = Math.max(0, forwards - publicChats);
             primary[3].setText(AndroidUtilities.formatWholeNumber(privateChats, 0));
-            title[3].setText(LocaleController.formatString("PrivateShares", R.string.PrivateShares));
+            title[3].setText(LocaleController.formatString(R.string.PrivateShares));
 
             updateColors();
         }

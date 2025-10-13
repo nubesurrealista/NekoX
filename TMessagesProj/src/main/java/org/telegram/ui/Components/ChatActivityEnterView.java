@@ -1197,7 +1197,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
             tooltipPaint.setTextSize(dp(14));
             tooltipBackgroundArrow = ContextCompat.getDrawable(context, R.drawable.tooltip_arrow);
-            tooltipMessage = getString("SlideUpToLock", R.string.SlideUpToLock);
+            tooltipMessage = getString(R.string.SlideUpToLock);
 
             radiiLeft[0] = radiiLeft[1] = radiiLeft[6] = radiiLeft[7] = dp(3);
             radiiLeft[2] = radiiLeft[3] = radiiLeft[4] = radiiLeft[5] = 0;
@@ -2455,7 +2455,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             protected void onPopulateNodeForVirtualView(int id, @NonNull AccessibilityNodeInfoCompat info) {
                 if (id == 1) {
                     info.setBoundsInParent(sendRect);
-                    info.setText(getString("Send", R.string.Send));
+                    info.setText(getString(R.string.Send));
                 } else if (id == 2) {
                     rect.set((int) pauseRect.left, (int) pauseRect.top, (int) pauseRect.right, (int) pauseRect.bottom);
                     info.setBoundsInParent(rect);
@@ -2469,7 +2469,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         AndroidUtilities.rectTmp2.offset(-coords[0], -coords[1]);
                         info.setBoundsInParent(AndroidUtilities.rectTmp2);
                     }
-                    info.setText(getString("Cancel", R.string.Cancel));
+                    info.setText(getString(R.string.Cancel));
                 }
             }
 
@@ -2655,7 +2655,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             notifySilentDrawable = new CrossOutDrawable(context, R.drawable.input_notify_on, Theme.key_chat_messagePanelIcons);
             notifyButton.setImageDrawable(notifySilentDrawable);
             notifySilentDrawable.setCrossOut(silent, false);
-            notifyButton.setContentDescription(silent ? getString("AccDescrChanSilentOn", R.string.AccDescrChanSilentOn) : getString("AccDescrChanSilentOff", R.string.AccDescrChanSilentOff));
+            notifyButton.setContentDescription(silent ? getString(R.string.AccDescrChanSilentOn) : getString(R.string.AccDescrChanSilentOff));
             notifyButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.SRC_IN));
             notifyButton.setScaleType(ImageView.ScaleType.CENTER);
             if (Build.VERSION.SDK_INT >= 21) {
@@ -2678,7 +2678,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     if (undoView != null) {
                         undoView.showWithAction(0, !silent ? UndoView.ACTION_NOTIFY_ON : UndoView.ACTION_NOTIFY_OFF, null);
                     }
-                    notifyButton.setContentDescription(silent ? getString("AccDescrChanSilentOn", R.string.AccDescrChanSilentOn) : getString("AccDescrChanSilentOff", R.string.AccDescrChanSilentOff));
+                    notifyButton.setContentDescription(silent ? getString(R.string.AccDescrChanSilentOn) : getString(R.string.AccDescrChanSilentOff));
                     updateFieldHint(true);
                 }
             });
@@ -2697,7 +2697,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 }
                 delegate.didPressAttachButton();
             });
-            attachButton.setContentDescription(getString("AccDescrAttachButton", R.string.AccDescrAttachButton));
+            attachButton.setContentDescription(getString(R.string.AccDescrAttachButton));
             updateFieldRight(1);
         }
 
@@ -3208,7 +3208,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 return Theme.getColor(Theme.key_chat_messagePanelCancelInlineBot);
             }
         });
-        cancelBotButton.setContentDescription(getString("Cancel", R.string.Cancel));
+        cancelBotButton.setContentDescription(getString(R.string.Cancel));
         cancelBotButton.setSoundEffectsEnabled(false);
         cancelBotButton.setScaleX(0.1f);
         cancelBotButton.setScaleY(0.1f);
@@ -3437,7 +3437,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         scheduledButton = new ImageView(getContext());
         scheduledButton.setImageDrawable(combinedDrawable);
         scheduledButton.setVisibility(GONE);
-        scheduledButton.setContentDescription(getString("ScheduledMessages", R.string.ScheduledMessages));
+        scheduledButton.setContentDescription(getString(R.string.ScheduledMessages));
         scheduledButton.setScaleType(ImageView.ScaleType.CENTER);
         if (Build.VERSION.SDK_INT >= 21) {
             scheduledButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector)));
@@ -3527,7 +3527,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             }
             delegate.didPressSuggestionButton();
         });
-        suggestButton.setContentDescription(getString("AccDescrAttachButton", R.string.AccDescrAttachButton));
+        suggestButton.setContentDescription(getString(R.string.AccDescrAttachButton));
     }
 
     public void setSuggestionButtonVisible(boolean visible, boolean animated) {
@@ -3641,7 +3641,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 //        }
 //        doneButtonImage.setScaleType(ImageView.ScaleType.CENTER);
 //        doneButtonImage.setImageDrawable(combinedDrawable);
-//        doneButtonImage.setContentDescription(getString("Done", R.string.Done));
+//        doneButtonImage.setContentDescription(getString(R.string.Done));
 //        doneButtonContainer.addView(doneButtonImage, LayoutHelper.createFrame(48, 48));
 //
 //        doneButtonProgress = new ContextProgressView(getContext(), 0);
@@ -3696,7 +3696,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 setStickersExpanded(!stickersExpanded, true, false);
             }
         });
-        expandStickersButton.setContentDescription(getString("AccDescrExpandPanel", R.string.AccDescrExpandPanel));
+        expandStickersButton.setContentDescription(getString(R.string.AccDescrExpandPanel));
     }
 
     private void createRecordAudioPanel() {
@@ -3722,7 +3722,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         recordDeleteImageView.setAnimation(R.raw.chat_audio_record_delete_2, 28, 28);
         recordDeleteImageView.getAnimatedDrawable().setInvalidateOnProgressSet(true);
         updateRecordedDeleteIconColors();
-        recordDeleteImageView.setContentDescription(getString("Delete", R.string.Delete));
+        recordDeleteImageView.setContentDescription(getString(R.string.Delete));
         if (Build.VERSION.SDK_INT >= 21) {
             recordDeleteImageView.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector)));
         }
@@ -7071,7 +7071,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             return;
         }
         if (!sendPlainEnabled && !isEditingMessage()) {
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(" d " + getString("PlainTextRestrictedHint", R.string.PlainTextRestrictedHint));
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(" d " + getString(R.string.PlainTextRestrictedHint));
             spannableStringBuilder.setSpan(new ColoredImageSpan(R.drawable.msg_mini_lock3), 1, 2, 0);
             messageEditText.setHintText(spannableStringBuilder, animated);
             messageEditText.setText(null);
@@ -7140,19 +7140,19 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 anonymously = !isChannel && ChatObject.getSendAsPeerId(chat, chatFull) == -dialog_id;
             }
             if (anonymously) {
-                messageEditText.setHintText(getString("SendAnonymously", R.string.SendAnonymously));
+                messageEditText.setHintText(getString(R.string.SendAnonymously));
             } else {
                 if (parentFragment != null && parentFragment.isThreadChat() && !parentFragment.isTopic) {
                     if (parentFragment.isReplyChatComment()) {
-                        messageEditText.setHintText(getString("Comment", R.string.Comment));
+                        messageEditText.setHintText(getString(R.string.Comment));
                     } else {
-                        messageEditText.setHintText(getString("Reply", R.string.Reply));
+                        messageEditText.setHintText(getString(R.string.Reply));
                     }
                 } else if (isChannel) {
                     if (silent) {
-                        messageEditText.setHintText(getString("ChannelSilentBroadcast", R.string.ChannelSilentBroadcast), animated);
+                        messageEditText.setHintText(getString(R.string.ChannelSilentBroadcast), animated);
                     } else {
-                        messageEditText.setHintText(getString("ChannelBroadcast", R.string.ChannelBroadcast), animated);
+                        messageEditText.setHintText(getString(R.string.ChannelBroadcast), animated);
                     }
                 } else {
                     messageEditText.setHintText(getString(R.string.TypeMessage));
@@ -7693,10 +7693,10 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 TLRPC.Chat chat = parentFragment.getCurrentChat();
                 if (chat != null && chat.slowmode_enabled && !ChatObject.hasAdminRights(chat)) {
                     if (message.length() > accountInstance.getMessagesController().maxMessageLength) {
-                        AlertsCreator.showSimpleAlert(parentFragment, getString("Slowmode", R.string.Slowmode), getString("SlowmodeSendErrorTooLong", R.string.SlowmodeSendErrorTooLong), resourcesProvider);
+                        AlertsCreator.showSimpleAlert(parentFragment, getString(R.string.Slowmode), getString(R.string.SlowmodeSendErrorTooLong), resourcesProvider);
                         return;
                     } else if (forceShowSendButton && message.length() > 0) {
-                        AlertsCreator.showSimpleAlert(parentFragment, getString("Slowmode", R.string.Slowmode), getString("SlowmodeSendError", R.string.SlowmodeSendError), resourcesProvider);
+                        AlertsCreator.showSimpleAlert(parentFragment, getString(R.string.Slowmode), getString(R.string.SlowmodeSendError), resourcesProvider);
                         return;
                     }
                 }
@@ -7861,8 +7861,8 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                             BulletinFactory.of(parentFragment)
                                 .createEmojiBulletin(
                                     emoji,
-                                    AndroidUtilities.replaceTags(getString("UnlockPremiumEmojiHint", R.string.UnlockPremiumEmojiHint)),
-                                    getString("PremiumMore", R.string.PremiumMore),
+                                    AndroidUtilities.replaceTags(getString(R.string.UnlockPremiumEmojiHint)),
+                                    getString(R.string.PremiumMore),
                                     () -> {
                                         if (parentFragment != null) {
                                             new PremiumFeatureBottomSheet(parentFragment, PremiumPreviewFragment.PREMIUM_FEATURE_ANIMATED_EMOJI, false).show();
@@ -11242,7 +11242,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     }
 
                     botButtonDrawable.setIcon(R.drawable.input_bot2, true);
-                    botButton.setContentDescription(getString("AccDescrBotKeyboard", R.string.AccDescrBotKeyboard));
+                    botButton.setContentDescription(getString(R.string.AccDescrBotKeyboard));
                 }
             } else {
                 if (!canShowBotsMenu && !NekoConfig.alwaysHideBotCommandButton.Bool()) {
@@ -11521,9 +11521,9 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             }
         } else if (button instanceof TLRPC.TL_keyboardButtonRequestGeoLocation) {
             AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
-            builder.setTitle(getString("ShareYouLocationTitle", R.string.ShareYouLocationTitle));
-            builder.setMessage(getString("ShareYouLocationInfo", R.string.ShareYouLocationInfo));
-            builder.setPositiveButton(getString("OK", R.string.OK), (dialogInterface, i) -> {
+            builder.setTitle(getString(R.string.ShareYouLocationTitle));
+            builder.setMessage(getString(R.string.ShareYouLocationInfo));
+            builder.setPositiveButton(getString(R.string.OK), (dialogInterface, i) -> {
                 if (Build.VERSION.SDK_INT >= 23 && parentActivity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     parentActivity.requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 2);
                     pendingMessageObject = messageObject;
@@ -11532,7 +11532,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 }
                 SendMessagesHelper.getInstance(currentAccount).sendCurrentLocation(messageObject, button);
             });
-            builder.setNegativeButton(getString("Cancel", R.string.Cancel), null);
+            builder.setNegativeButton(getString(R.string.Cancel), null);
             parentFragment.showDialog(builder.create());
         } else if (button instanceof TLRPC.TL_keyboardButtonCallback || button instanceof TLRPC.TL_keyboardButtonGame || button instanceof TLRPC.TL_keyboardButtonBuy || button instanceof TLRPC.TL_keyboardButtonUrlAuth) {
             SendMessagesHelper.getInstance(currentAccount).sendCallback(true, messageObject, button, parentFragment);
@@ -13515,9 +13515,9 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         }
         if (expandStickersButton != null) {
             if (stickersExpanded) {
-                expandStickersButton.setContentDescription(getString("AccDescrCollapsePanel", R.string.AccDescrCollapsePanel));
+                expandStickersButton.setContentDescription(getString(R.string.AccDescrCollapsePanel));
             } else {
-                expandStickersButton.setContentDescription(getString("AccDescrExpandPanel", R.string.AccDescrExpandPanel));
+                expandStickersButton.setContentDescription(getString(R.string.AccDescrExpandPanel));
             }
         }
     }

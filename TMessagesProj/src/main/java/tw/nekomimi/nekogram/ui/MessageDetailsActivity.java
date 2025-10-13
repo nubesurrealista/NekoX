@@ -692,7 +692,7 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                         String year = LocaleController.getInstance().getFormatterYear().format(new Date(original_date));
                         String day = LocaleController.getInstance().getFormatterDay().format(new Date(original_date));
                         builder.append("\n")
-                                .append(LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, year, day));
+                                .append(LocaleController.formatString(R.string.formatDateAtTime, year, day));
 
                         textCell.setTextAndValue("Forward from", builder.toString(), divider);
                     } else if (position == fileNameRow) {

@@ -1352,7 +1352,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 }
                 builder.setMessage(spannableStringBuilder);
             } else {
-                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", R.string.AddMembersAlertNamesText, stringBuilder, chat == null ? "" : chat.title)));
+                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.AddMembersAlertNamesText, stringBuilder, chat == null ? "" : chat.title)));
             }
             CheckBoxCell[] cells = new CheckBoxCell[1];
             if (!ChatObject.isChannel(chat)) {

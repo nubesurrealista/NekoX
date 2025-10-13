@@ -451,7 +451,7 @@ public class SaveToGallerySettingsActivity extends BaseFragment {
                                 AndroidUtilities.updateViewVisibilityAnimated(midTextView, false, 0.8f, animated);
                             } else {
                                 midTextView.setText(
-                                        LocaleController.formatString("UpToFileSize", R.string.UpToFileSize,
+                                        LocaleController.formatString(R.string.UpToFileSize,
                                                 AndroidUtilities.formatFileSize(value, true, false)
                                         ), false);
                                 lowerTextView.setSelectedInternal(false, animated);
@@ -519,13 +519,13 @@ public class SaveToGallerySettingsActivity extends BaseFragment {
                         limit = 4L * 1000 * 1024 * 1024;
                     }
                     if (dialogException != null) {
-                        cell.setText(LocaleController.formatString("SaveToGalleryVideoHintCurrent", R.string.SaveToGalleryVideoHintCurrent));
+                        cell.setText(LocaleController.formatString(R.string.SaveToGalleryVideoHintCurrent));
                     } else if (type == SAVE_TO_GALLERY_FLAG_PEER) {
-                        cell.setText(LocaleController.formatString("SaveToGalleryVideoHintUser", R.string.SaveToGalleryVideoHintUser));
+                        cell.setText(LocaleController.formatString(R.string.SaveToGalleryVideoHintUser));
                     } else if (type == SAVE_TO_GALLERY_FLAG_CHANNELS) {
-                        cell.setText(LocaleController.formatString("SaveToGalleryVideoHintChannels", R.string.SaveToGalleryVideoHintChannels));
+                        cell.setText(LocaleController.formatString(R.string.SaveToGalleryVideoHintChannels));
                     } else if (type == SAVE_TO_GALLERY_FLAG_GROUP) {
-                        cell.setText(LocaleController.formatString("SaveToGalleryVideoHintGroup", R.string.SaveToGalleryVideoHintGroup));
+                        cell.setText(LocaleController.formatString(R.string.SaveToGalleryVideoHintGroup));
                     }
                 } else {
                     cell.setText(items.get(position).title);

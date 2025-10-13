@@ -384,7 +384,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                             } else {
                                 timeString = LocaleController.formatPluralString("Minutes", time / 60);
                             }
-                            showAlertWithText(LocaleController.getString(R.string.TwoStepVerificationTitle), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                            showAlertWithText(LocaleController.getString(R.string.TwoStepVerificationTitle), LocaleController.formatString(R.string.FloodWaitTime, timeString));
                         } else {
                             showAlertWithText(LocaleController.getString(R.string.TwoStepVerificationTitle), error.text);
                         }
@@ -1422,7 +1422,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                                     } else {
                                         timeString = LocaleController.formatPluralString("Minutes", time / 60);
                                     }
-                                    showAlertWithText(LocaleController.getString(R.string.AppName), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                                    showAlertWithText(LocaleController.getString(R.string.AppName), LocaleController.formatString(R.string.FloodWaitTime, timeString));
                                 } else {
                                     showAlertWithText(LocaleController.getString(R.string.AppName), error.text);
                                 }
@@ -1533,7 +1533,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                             } else {
                                 timeString = LocaleController.formatPluralString("Minutes", time / 60);
                             }
-                            showAlertWithText(LocaleController.getString(R.string.TwoStepVerificationTitle), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                            showAlertWithText(LocaleController.getString(R.string.TwoStepVerificationTitle), LocaleController.formatString(R.string.FloodWaitTime, timeString));
                         } else {
                             showAlertWithText(LocaleController.getString(R.string.TwoStepVerificationTitle), error.text);
                         }
@@ -1607,7 +1607,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                             } else {
                                 timeString = LocaleController.formatPluralString("Minutes", time / 60);
                             }
-                            showAlertWithText(LocaleController.getString(R.string.AppName), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                            showAlertWithText(LocaleController.getString(R.string.AppName), LocaleController.formatString(R.string.FloodWaitTime, timeString));
                         } else {
                             showAlertWithText(LocaleController.getString(R.string.AppName), error.text);
                         }
@@ -2052,7 +2052,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                             } else {
                                 timeString = LocaleController.formatPluralString("Minutes", time / 60);
                             }
-                            showAlertWithText(LocaleController.getString(R.string.AppName), LocaleController.formatString("FloodWaitTime", R.string.FloodWaitTime, timeString));
+                            showAlertWithText(LocaleController.getString(R.string.AppName), LocaleController.formatString(R.string.FloodWaitTime, timeString));
                         } else {
                             showAlertWithText(LocaleController.getString(R.string.AppName), error.text);
                         }

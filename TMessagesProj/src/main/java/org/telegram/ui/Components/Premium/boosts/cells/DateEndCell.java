@@ -39,7 +39,7 @@ public class DateEndCell extends FrameLayout {
         timeTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader, resourcesProvider));
         timeTextView.setGravity(LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT);
         addView(timeTextView);
-        titleTextView.setText(LocaleController.formatString("BoostingDateAndTime", R.string.BoostingDateAndTime));
+        titleTextView.setText(LocaleController.formatString(R.string.BoostingDateAndTime));
 
         titleTextView.setLayoutParams(LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT), LocaleController.isRTL ? 0 : 21, 0, LocaleController.isRTL ? 21 : 0, 0));
         timeTextView.setLayoutParams(LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL | (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT), LocaleController.isRTL ? 21 : 0, 0, LocaleController.isRTL ? 0 : 21, 0));
@@ -51,7 +51,7 @@ public class DateEndCell extends FrameLayout {
         Date date = new Date(time);
         String monthTxt = LocaleController.getInstance().getFormatterDayMonth().format(date);
         String timeTxt = LocaleController.getInstance().getFormatterDay().format(date);
-        timeTextView.setText(LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, monthTxt, timeTxt));
+        timeTextView.setText(LocaleController.formatString(R.string.formatDateAtTime, monthTxt, timeTxt));
     }
 
     public long getSelectedTime() {
