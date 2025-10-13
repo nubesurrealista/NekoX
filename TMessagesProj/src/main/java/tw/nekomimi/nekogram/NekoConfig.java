@@ -305,6 +305,7 @@ public class NekoConfig {
     public static ConfigItem showChannelMsgFwdCount = addConfig(R.string.ShowChannelMsgFwdCount , "ShowChannelMsgFwdCount", configTypeBool, CHAT, true);
     public static ConfigItem enhancedVideoBitrate = addConfig(R.string.EnhancedVideoBitrate , "EnhancedVideoBitrate", configTypeBool, CHAT, false);
     public static ConfigItem keepSamePositionOnNewMsg = addConfig(R.string.KeepSamePositionOnNewMsg , "KeepSamePositionOnNewMsg", configTypeBool, CHAT, false);
+    public static ConfigItem useEmojiForEdited = addConfig(R.string.UseEmojiForEdited , "UseEmojiForEdited", configTypeBool, CHAT, false);
 
     public static ConfigItem transcribeProvider = addConfig("TranscribeProvider", configTypeInt, CHAT, TRANSCRIBE_AUTO);
     public static ConfigItem cfAccountID = addConfig("cfAccountID", configTypeString, CHAT, "");

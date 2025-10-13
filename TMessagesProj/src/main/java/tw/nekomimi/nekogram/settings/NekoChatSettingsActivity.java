@@ -120,6 +120,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final AbstractConfigCell keepSamePositionOnNewMsgRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.keepSamePositionOnNewMsg));
     private final AbstractConfigCell disableSaveDraftToCloudRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableSaveDraftToCloud));
     private final AbstractConfigCell ignoreTopicTabViewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.ignoreTopicTabView));
+    private final AbstractConfigCell useEmojiForEditedRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useEmojiForEdited));
     private final AbstractConfigCell hideMessageRegexRow = cellGroup.appendCell(new ConfigCellTextInput(null, NekoConfig.hideMessageRegex, null));
     private final AbstractConfigCell dividerChat = cellGroup.appendCell(new ConfigCellDivider());
 
