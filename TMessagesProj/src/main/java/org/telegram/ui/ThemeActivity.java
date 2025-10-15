@@ -2683,7 +2683,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     } else if (position == stickersRow) {
                         cell.setColors(Theme.key_dialogIcon, Theme.key_windowBackgroundWhiteBlackText);
                         cell.setTextAndIcon(getString(R.string.StickersName), R.drawable.msg2_sticker, false);
-                        cell.setSubtitle(getString("StickersNameInfo2", R.string.StickersNameInfo2));
+                        cell.setSubtitle(getString(R.string.StickersNameInfo2));
                         cell.offsetFromImage = 64;
                         cell.heightDp = 60;
                         cell.imageLeft = 20;
