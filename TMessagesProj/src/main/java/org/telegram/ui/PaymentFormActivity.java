@@ -3201,6 +3201,21 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     @Override
     public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen && !backward) {
+            new AlertDialog.Builder(parentFragment.getContext())
+                    .setTitle(getString(R.string.Warning))
+                    .setMessage(getString(R.string.MomoPaymentWarning))
+                    .setPositiveButton(getString(R.string.OK), (__, ___) -> {
+                        BuildVars.LOGS_ENABLED = BuildVars.DEBUG_VERSION = !BuildVars.LOGS_ENABLED;
+                        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
+                        sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.LOGS_ENABLED).apply();
+                    })
+                    .setOnDismissListener((__) -> {
+                        removeSelfFromStack();
+                    })
+                    .setNegativeButton(getString(R.string.Cancel), (__, ___) -> {
+                        removeSelfFromStack();
+                    });
+
             if (webView != null) {
                 if (currentStep != STEP_CHECKOUT) {
                     if (paymentFormMethod != null) {
