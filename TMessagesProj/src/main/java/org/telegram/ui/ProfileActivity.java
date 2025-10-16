@@ -9019,6 +9019,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (actionsView != null) {
                 if (chatId != 0) {
                     boolean discuss = ChatObject.isChannel(currentChat) && !currentChat.megagroup && chatInfo != null && chatInfo.linked_chat_id != 0 && (infoHeaderRow != -1 || infoHeaderRowEmpty != -1);
+                    if (!discuss) {
+                        TLRPC.Chat chat = getMessagesController().getChat(chatId);
+                        discuss = chat != null && (chat.has_link || (chatInfo != null && chatInfo.linked_chat_id != 0)); // ?
+                    }
                     actionsView.set(ProfileActionsView.KEY_DISCUSS, discuss);
                 }
             }
