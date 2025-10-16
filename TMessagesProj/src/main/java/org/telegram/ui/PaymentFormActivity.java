@@ -8,6 +8,7 @@
 
 package org.telegram.ui;
 
+import static org.telegram.messenger.LocaleController.getCountryName;
 import static org.telegram.messenger.LocaleController.getString;
 
 import android.Manifest;
@@ -165,6 +166,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Scanner;
+
+import moe.hx030.momogram.payment.Card;
 
 public class PaymentFormActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     private final static List<String> WEBVIEW_PROTOCOLS = Arrays.asList(
@@ -3247,7 +3250,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     public void onActivityResultFragment(int requestCode, int resultCode, Intent data) {
         if (requestCode == LOAD_PAYMENT_DATA_REQUEST_CODE) {
             AndroidUtilities.runOnUIThread(() -> {
-                Toast.makeText(parentFragment.getContext(), "ERR_UNSUPPORTED", Toast.LENGTH_LONG).show();
+                AlertsCreator.showSimpleToast(PaymentFormActivity.this, "ERR_UNSUPPORTED");
             });
         }
     }
@@ -3680,159 +3683,159 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
 
     private boolean sendCardData() {
         // TODO: impl local card check stuff
-        return false;
-//        Integer month;
-//        Integer year;
-//        String date = inputFields[FIELD_EXPIRE_DATE].getText().toString();
-//        String[] args = date.split("/");
-//        if (args.length == 2) {
-//            month = Utilities.parseInt(args[0]);
-//            year = Utilities.parseInt(args[1]);
-//        } else {
-//            month = null;
-//            year = null;
-//        }
-//        Card card = new Card(
-//                inputFields[FIELD_CARD].getText().toString(),
-//                month,
-//                year,
-//                inputFields[FIELD_CVV].getText().toString(),
-//                inputFields[FIELD_CARDNAME].getText().toString(),
-//                null, null, null, null,
-//                inputFields[FIELD_CARD_POSTCODE].getText().toString(),
-//                inputFields[FIELD_CARD_COUNTRY].getText().toString(),
-//                null);
-//        cardName = card.getBrand() + " *" + card.getLast4();
-//
-//        boolean skipDateCheck = false;
-//        if (month != null && year != null) {
-//            if (UserConfig.getInstance(currentAccount).getClientPhone().startsWith("7")) {
-//                if ("smartglocal".equals(paymentForm.native_provider)) {
-//                    if (year > 22 || year == 22 && month > 1) {
-//                        skipDateCheck = true;
-//                    }
-//                }
-//            }
-//        }
-//
-//        if (!card.validateNumber()) {
-//            shakeField(FIELD_CARD);
-//            return false;
-//        } else if (!skipDateCheck && (!card.validateExpMonth() || !card.validateExpYear() || !card.validateExpiryDate())) {
-//            shakeField(FIELD_EXPIRE_DATE);
-//            return false;
-//        } else if (need_card_name && inputFields[FIELD_CARDNAME].length() == 0) {
-//            shakeField(FIELD_CARDNAME);
-//            return false;
-//        } else if (!card.validateCVC()) {
-//            shakeField(FIELD_CVV);
-//            return false;
-//        } else if (need_card_country && inputFields[FIELD_CARD_COUNTRY].length() == 0) {
-//            shakeField(FIELD_CARD_COUNTRY);
-//            return false;
-//        } else if (need_card_postcode && inputFields[FIELD_CARD_POSTCODE].length() == 0) {
-//            shakeField(FIELD_CARD_POSTCODE);
-//            return false;
-//        }
-//        showEditDoneProgress(true, true);
-//        try {
-//            if ("stripe".equals(paymentForm.native_provider)) {
-//                // no blob, straight to error
-//                showEditDoneProgress(true, false);
-//                setDonePressed(false);
-//                AlertsCreator.showSimpleToast(PaymentFormActivity.this, "ERR_UNSUPPORTED");
-//            } else if ("smartglocal".equals(paymentForm.native_provider)) {
-//                AsyncTask<Object, Object, String> task = new AsyncTask<Object, Object, String>() {
-//                    @Override
-//                    protected String doInBackground(Object... objects) {
-//                        HttpURLConnection conn = null;
-//                        try {
-//                            JSONObject jsonObject = new JSONObject();
-//                            JSONObject cardObject = new JSONObject();
-//                            cardObject.put("number", card.getNumber());
-//                            cardObject.put("expiration_month", String.format(Locale.US, "%02d", card.getExpMonth()));
-//                            cardObject.put("expiration_year", "" + card.getExpYear());
-//                            cardObject.put("security_code", "" + card.getCVC());
-//                            jsonObject.put("card", cardObject);
-//
-//                            String overrideSmartGlocalConnectionUrl = null;
-//                            if (paymentForm.native_params != null) {
-//                                try {
-//                                    JSONObject jsonObject2 = new JSONObject(paymentForm.native_params.data);
-//                                    overrideSmartGlocalConnectionUrl = jsonObject2.getString("tokenize_url");
-//                                    if (overrideSmartGlocalConnectionUrl != null && !(
-//                                        overrideSmartGlocalConnectionUrl.startsWith("https://") &&
-//                                        overrideSmartGlocalConnectionUrl.endsWith(".smart-glocal.com/cds/v1/tokenize/card")
-//                                    )) {
-//                                        overrideSmartGlocalConnectionUrl = null;
-//                                    }
-//                                } catch (Exception e) {}
-//                            }
-//                            URL connectionUrl;
-//                            if (overrideSmartGlocalConnectionUrl != null) {
-//                                connectionUrl = new URL(overrideSmartGlocalConnectionUrl);
-//                            } else if (paymentForm.invoice.test) {
-//                                connectionUrl = new URL("https://tgb-playground.smart-glocal.com/cds/v1/tokenize/card");
-//                            } else {
-//                                connectionUrl = new URL("https://tgb.smart-glocal.com/cds/v1/tokenize/card");
-//                            }
-//                            conn = (HttpURLConnection) connectionUrl.openConnection();
-//                            conn.setConnectTimeout(30 * 1000);
-//                            conn.setReadTimeout(80 * 1000);
-//                            conn.setUseCaches(false);
-//                            conn.setDoOutput(true);
-//                            conn.setRequestMethod("POST");
-//                            conn.setRequestProperty("Content-Type", "application/json");
-//                            conn.setRequestProperty("X-PUBLIC-TOKEN", providerApiKey);
-//
-//                            try (OutputStream output = conn.getOutputStream()) {
-//                                output.write(jsonObject.toString().getBytes("UTF-8"));
-//                            }
-//
-//                            int code = conn.getResponseCode();
-//                            if (code >= 200 && code < 300) {
-//                                JSONObject result = new JSONObject();
-//                                JSONObject jsonObject1 = new JSONObject(getResponseBody(conn.getInputStream()));
-//                                String token = jsonObject1.getJSONObject("data").getString("token");
-//                                result.put("token", token);
-//                                result.put("type", "card");
-//                                return result.toString();
-//                            } else {
-//                                if (BuildVars.DEBUG_VERSION) {
-//                                    FileLog.e("" + getResponseBody(conn.getErrorStream()));
-//                                }
-//                            }
-//                        } catch (Exception e) {
-//                            FileLog.e(e);
-//                        } finally {
-//                            if (conn != null) {
-//                                conn.disconnect();
-//                            }
-//                        }
-//                        return null;
-//                    }
-//
-//                    @Override
-//                    protected void onPostExecute(String result) {
-//                        if (canceled) {
-//                            return;
-//                        }
-//                        if (result == null) {
-//                            AlertsCreator.showSimpleToast(PaymentFormActivity.this, LocaleController.getString(R.string.PaymentConnectionFailed));
-//                        } else {
-//                            paymentJson = result;
-//                            goToNextStep();
-//                        }
-//                        showEditDoneProgress(true, false);
-//                        setDonePressed(false);
-//                    }
-//                };
-//                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null, null, null);
-//            }
-//        } catch (Exception e) {
-//            FileLog.e(e);
-//        }
-//        return true;
+//        return false;
+        Integer month;
+        Integer year;
+        String date = inputFields[FIELD_EXPIRE_DATE].getText().toString();
+        String[] args = date.split("/");
+        if (args.length == 2) {
+            month = Utilities.parseInt(args[0]);
+            year = Utilities.parseInt(args[1]);
+        } else {
+            month = null;
+            year = null;
+        }
+        Card card = new Card(
+                inputFields[FIELD_CARD].getText().toString(),
+                month,
+                year,
+                inputFields[FIELD_CVV].getText().toString(),
+                inputFields[FIELD_CARDNAME].getText().toString(),
+                null, null, null, null,
+                inputFields[FIELD_CARD_POSTCODE].getText().toString(),
+                inputFields[FIELD_CARD_COUNTRY].getText().toString(),
+                null);
+        cardName = card.getBrand() + " *" + card.getLast4();
+
+        boolean skipDateCheck = false;
+        if (month != null && year != null) {
+            if (UserConfig.getInstance(currentAccount).getClientPhone().startsWith("7")) {
+                if ("smartglocal".equals(paymentForm.native_provider)) {
+                    if (year > 22 || year == 22 && month > 1) {
+                        skipDateCheck = true;
+                    }
+                }
+            }
+        }
+
+        if (!card.validateNumber()) {
+            shakeField(FIELD_CARD);
+            return false;
+        } else if (!skipDateCheck && (!card.validateExpMonth() || !card.validateExpYear() || !card.validateExpiryDate())) {
+            shakeField(FIELD_EXPIRE_DATE);
+            return false;
+        } else if (need_card_name && inputFields[FIELD_CARDNAME].length() == 0) {
+            shakeField(FIELD_CARDNAME);
+            return false;
+        } else if (!card.validateCVC()) {
+            shakeField(FIELD_CVV);
+            return false;
+        } else if (need_card_country && inputFields[FIELD_CARD_COUNTRY].length() == 0) {
+            shakeField(FIELD_CARD_COUNTRY);
+            return false;
+        } else if (need_card_postcode && inputFields[FIELD_CARD_POSTCODE].length() == 0) {
+            shakeField(FIELD_CARD_POSTCODE);
+            return false;
+        }
+        showEditDoneProgress(true, true);
+        try {
+            if ("stripe".equals(paymentForm.native_provider)) {
+                // no blob, straight to error
+                showEditDoneProgress(true, false);
+                setDonePressed(false);
+                AlertsCreator.showSimpleToast(PaymentFormActivity.this, "ERR_UNSUPPORTED");
+            } else if ("smartglocal".equals(paymentForm.native_provider)) {
+                AsyncTask<Object, Object, String> task = new AsyncTask<Object, Object, String>() {
+                    @Override
+                    protected String doInBackground(Object... objects) {
+                        HttpURLConnection conn = null;
+                        try {
+                            JSONObject jsonObject = new JSONObject();
+                            JSONObject cardObject = new JSONObject();
+                            cardObject.put("number", card.getNumber());
+                            cardObject.put("expiration_month", String.format(Locale.US, "%02d", card.getExpMonth()));
+                            cardObject.put("expiration_year", "" + card.getExpYear());
+                            cardObject.put("security_code", "" + card.getCVC());
+                            jsonObject.put("card", cardObject);
+
+                            String overrideSmartGlocalConnectionUrl = null;
+                            if (paymentForm.native_params != null) {
+                                try {
+                                    JSONObject jsonObject2 = new JSONObject(paymentForm.native_params.data);
+                                    overrideSmartGlocalConnectionUrl = jsonObject2.getString("tokenize_url");
+                                    if (overrideSmartGlocalConnectionUrl != null && !(
+                                        overrideSmartGlocalConnectionUrl.startsWith("https://") &&
+                                        overrideSmartGlocalConnectionUrl.endsWith(".smart-glocal.com/cds/v1/tokenize/card")
+                                    )) {
+                                        overrideSmartGlocalConnectionUrl = null;
+                                    }
+                                } catch (Exception e) {}
+                            }
+                            URL connectionUrl;
+                            if (overrideSmartGlocalConnectionUrl != null) {
+                                connectionUrl = new URL(overrideSmartGlocalConnectionUrl);
+                            } else if (paymentForm.invoice.test) {
+                                connectionUrl = new URL("https://tgb-playground.smart-glocal.com/cds/v1/tokenize/card");
+                            } else {
+                                connectionUrl = new URL("https://tgb.smart-glocal.com/cds/v1/tokenize/card");
+                            }
+                            conn = (HttpURLConnection) connectionUrl.openConnection();
+                            conn.setConnectTimeout(30 * 1000);
+                            conn.setReadTimeout(80 * 1000);
+                            conn.setUseCaches(false);
+                            conn.setDoOutput(true);
+                            conn.setRequestMethod("POST");
+                            conn.setRequestProperty("Content-Type", "application/json");
+                            conn.setRequestProperty("X-PUBLIC-TOKEN", providerApiKey);
+
+                            try (OutputStream output = conn.getOutputStream()) {
+                                output.write(jsonObject.toString().getBytes("UTF-8"));
+                            }
+
+                            int code = conn.getResponseCode();
+                            if (code >= 200 && code < 300) {
+                                JSONObject result = new JSONObject();
+                                JSONObject jsonObject1 = new JSONObject(getResponseBody(conn.getInputStream()));
+                                String token = jsonObject1.getJSONObject("data").getString("token");
+                                result.put("token", token);
+                                result.put("type", "card");
+                                return result.toString();
+                            } else {
+                                if (BuildVars.DEBUG_VERSION) {
+                                    FileLog.e("" + getResponseBody(conn.getErrorStream()));
+                                }
+                            }
+                        } catch (Exception e) {
+                            FileLog.e(e);
+                        } finally {
+                            if (conn != null) {
+                                conn.disconnect();
+                            }
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(String result) {
+                        if (canceled) {
+                            return;
+                        }
+                        if (result == null) {
+                            AlertsCreator.showSimpleToast(PaymentFormActivity.this, LocaleController.getString(R.string.PaymentConnectionFailed));
+                        } else {
+                            paymentJson = result;
+                            goToNextStep();
+                        }
+                        showEditDoneProgress(true, false);
+                        setDonePressed(false);
+                    }
+                };
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null, null, null);
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return true;
     }
 
     private static String getResponseBody(InputStream responseStream) throws IOException {
