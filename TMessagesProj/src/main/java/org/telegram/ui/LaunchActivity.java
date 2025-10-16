@@ -9166,7 +9166,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     }
 
     public static void dismissAllWeb() {
-        if (NekoConfig.openChatOnWebView.Bool()) return;
         BaseFragment lastFragment = getSafeLastFragment();
         if (lastFragment == null) return;
 
@@ -9188,6 +9187,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             }
         }
 
+        if (NekoConfig.openChatOnWebView.Bool()) return;
         final ArrayList<BotWebViewSheet> botSheets = new ArrayList<>();
         for (BotWebViewSheet sheet : BotWebViewSheet.activeSheets)
             botSheets.add(sheet);
