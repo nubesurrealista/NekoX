@@ -428,7 +428,6 @@ android {
             excludes += ['/fabric/**', '/META-INF/*.version', '/META-INF/*.kotlin_module', '/META-INF/native-image/**', '/builddef.lst', '/*.txt', '/DebugProbesKt.bin', '/okhttp3/internal/publicsuffix/NOTICE', '/META-INF/INDEX.LIST']
         }
     }
-    namespace "org.telegram.messenger"
     lint {
         disable 'MissingTranslation', 'ExtraTranslation', 'BlockedPrivateApi'
     }
