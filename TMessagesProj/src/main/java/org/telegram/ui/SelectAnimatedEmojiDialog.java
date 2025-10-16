@@ -705,7 +705,8 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                     }
                 }
             };
-            emojiTabs.setPackIndexOffset((!(baseFragment instanceof ChatActivity) || emojiTabs.isGiftsVisible()) ? 0 : 1);
+            // 030: emoji pack index fix is now obsolete (?)
+            emojiTabs.setPackIndexOffset((!(baseFragment instanceof ChatActivity) || emojiTabs.isGiftsVisible()) ? -1 : 0);
             if (emojiTabs.recentTab != null) {
                 emojiTabs.recentTab.setOnLongClickListener(e -> {
                     onRecentLongClick();
