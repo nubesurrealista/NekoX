@@ -4078,10 +4078,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                             case 9:
                                                 if (ApplicationLoader.isStandaloneBuild()) {
                                                     versionType = "direct";
-                                                } else if (ApplicationLoader.isBetaBuild()) {
-                                                    versionType = "beta";
-                                                } else if (ApplicationLoader.isHuaweiStoreBuild()) {
-                                                    versionType = "huawei";
                                                 } else {
                                                     versionType = "universal";
                                                 }
@@ -10128,10 +10124,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                 case 9:
                                     if (ApplicationLoader.isStandaloneBuild()) {
                                         versionType = "direct";
-                                    } else if (ApplicationLoader.isBetaBuild()) {
-                                        versionType = "beta";
-                                    } else if (ApplicationLoader.isHuaweiStoreBuild()) {
-                                        versionType = "huawei";
                                     } else {
                                         versionType = "universal";
                                     }

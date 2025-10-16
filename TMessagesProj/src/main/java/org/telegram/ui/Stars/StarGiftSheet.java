@@ -5402,7 +5402,9 @@ public class StarGiftSheet extends BottomSheetWithRecyclerListView implements No
             final int remaining = next.date - now;
             final String remainingStr;
             if (remaining < 24 * 60 * 60) {
-                remainingStr = AndroidUtilities.formatDuration(remaining, false, true);
+                // 030: idk, screw it
+//                remainingStr = AndroidUtilities.formatDuration(remaining, false, true);
+                remainingStr = AndroidUtilities.formatDuration(remaining, false);
             } else {
                 remainingStr = LocaleController.formatPluralString("Days", Math.round(remaining / (24 * 60 * 60.0f)));
             }
