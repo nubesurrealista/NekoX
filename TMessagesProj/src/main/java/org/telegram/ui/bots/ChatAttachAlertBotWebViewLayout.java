@@ -61,9 +61,11 @@ import org.telegram.ui.Components.ChatAttachAlert;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SimpleFloatPropertyCompat;
+import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.web.BotWebViewContainer;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.ui.CustomChatListBottomSheet;
 
 public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlertLayout implements NotificationCenter.NotificationCenterDelegate {
     private final static int POLL_PERIOD = 60000;
@@ -195,6 +197,20 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
                 AndroidUtilities.runOnUIThread(() -> BulletinFactory.of(parentAlert.baseFragment)
                         .createSimpleBulletin(R.raw.error, LocaleController.getString(R.string.ErrorOccurred)).show(), 250);
             }
+        } else if (id == R.id.menu_recent_chats) {
+            BaseFragment _fragment = parentAlert.baseFragment;
+            if (_fragment == null) {
+                _fragment = LaunchActivity.getLastFragment();
+                if (_fragment == null) return;
+            }
+            final BaseFragment fragment = _fragment;
+            CustomChatListBottomSheet sheet = new CustomChatListBottomSheet(fragment);
+            sheet.setDelegate((dialogId, isUser) -> {
+                Bundle args = new Bundle();
+                args.putLong(isUser ? "user_id" : "chat_id", dialogId);
+                fragment.presentFragment(new ChatActivity(args));
+            });
+            sheet.show();
         }
     }
 
@@ -213,6 +229,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
         otherItem.addSubItem(R.id.menu_delete_bot, R.drawable.msg_delete, LocaleController.getString(R.string.BotWebViewDeleteBot));
 
         otherItem.addSubItem(R.id.menu_copy_url, R.drawable.msg_copy, LocaleController.getString(R.string.CopyLink));
+        otherItem.addSubItem(R.id.menu_recent_chats, R.drawable.msg_recent, LocaleController.getString(R.string.RecentChats));
 
         webViewContainer = new BotWebViewContainer(context, resourcesProvider, getThemedColor(Theme.key_dialogBackground), true) {
             @Override

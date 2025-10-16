@@ -115,6 +115,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.ui.CustomChatListBottomSheet;
 
 public class BotWebViewSheet extends Dialog implements NotificationCenter.NotificationCenterDelegate, BottomSheetTabsOverlay.Sheet {
     public final static int TYPE_WEB_VIEW_BUTTON = 0, TYPE_SIMPLE_WEB_VIEW_BUTTON = 1, TYPE_BOT_MENU_BUTTON = 2, TYPE_WEB_VIEW_BOT_APP = 3, TYPE_WEB_VIEW_BOT_MAIN = 4;
@@ -1700,6 +1701,17 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
                         Toast.makeText(getContext(), LocaleController.getString(R.string.ErrorOccurred), Toast.LENGTH_LONG).show();
                     }
                 }
+            })
+            .add(R.drawable.msg_recent, LocaleController.getString(R.string.RecentChats), () -> {
+                CustomChatListBottomSheet sheet = new CustomChatListBottomSheet(fragment);
+                sheet.setDelegate((dialogId, isUser) -> {
+                    Bundle args = new Bundle();
+                    args.putLong(isUser ? "user_id" : "chat_id", dialogId);
+                    INavigationLayout.NavigationParams params = new INavigationLayout.NavigationParams(new ChatActivity(args));
+                    params.customOverlay = true;
+                    fragment.presentFragment(params);
+                });
+                sheet.show();
             })
             .setGravity(Gravity.RIGHT)
             .translate(-insets.right, 0)

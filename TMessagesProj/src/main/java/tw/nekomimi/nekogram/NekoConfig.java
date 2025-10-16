@@ -143,6 +143,7 @@ public class NekoConfig {
     public static ConfigItem useBotWebviewForGames = addConfig(R.string.UseBotWebviewForGames, "UseBotWebviewForGames", ConfigItem.configTypeBool, GENERAL, false);
     public static ConfigItem confirmOpenLinkInWebView = addConfig(R.string.ConfirmOpenLinkInWebView, "ConfirmOpenLinkInWebView", ConfigItem.configTypeBool, GENERAL, false);
     public static ConfigItem forceExternalBrowserForBots = addConfig(R.string.ForceExternalBrowserForBots, "ForceExternalBrowserForBots", ConfigItem.configTypeBool, GENERAL, false);
+    public static ConfigItem openChatOnWebView = addConfig(R.string.PreventPauseWebViewByOpenChat, "PreventPauseWebViewByOpenChat", ConfigItem.configTypeBool, GENERAL, false);
     public static ConfigItem alwaysShowDownloads = addConfig(R.string.AlwaysShowDownloads, "AlwaysShowDownloads", ConfigItem.configTypeBool, GENERAL, false);
     public static ConfigItem openAvatarInsteadOfExpand = addConfig(R.string.OpenAvatarInsteadOfExpand, "OpenAvatarInsteadOfExpand", ConfigItem.configTypeBool, GENERAL, false);
     public static ConfigItem customTitleText = addConfig(R.string.CustomTitleText, "CustomTitleText", configTypeString, GENERAL, "Momogram");

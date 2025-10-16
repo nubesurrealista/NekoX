@@ -289,4 +289,6 @@
     <string name="HideProfileRating">Hide profile rating</string>
     <string name="UseEmojiForEdited">Use pen emoji as edited indicator</string>
     <string name="ShowVoteCountBeforeVote">Show vote count before voting</string>
+    <string name="RecentChats">Recent chats</string>
+    <string name="PreventPauseWebViewByOpenChat">Don\'t pause webview when opening chat from notification</string>
 </resources>

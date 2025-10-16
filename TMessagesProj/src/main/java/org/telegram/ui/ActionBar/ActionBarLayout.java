@@ -24,16 +24,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.RenderEffect;
-import android.graphics.RuntimeShader;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
@@ -64,9 +59,7 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.Components.BackButtonMenu;
-import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.EmptyBaseFragment;
-import org.telegram.ui.Stars.SuperRipple;
 import org.telegram.ui.bots.BotWebViewSheet;
 import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.ChatAttachAlert;
@@ -79,8 +72,6 @@ import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.Stories.StoryViewer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Collections;
 import java.util.List;
 
@@ -1524,7 +1515,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         if (dialog == null && LaunchActivity.instance != null && LaunchActivity.instance.getVisibleDialog() != null) {
             dialog = LaunchActivity.instance.getVisibleDialog();
         }
-        if (lastFragment != null && shouldOpenFragmentOverlay(dialog)) {
+        if (lastFragment != null && (params.customOverlay || shouldOpenFragmentOverlay(dialog))) {
             BaseFragment.BottomSheetParams bottomSheetParams = new BaseFragment.BottomSheetParams();
             bottomSheetParams.transitionFromLeft = true;
             bottomSheetParams.allowNestedScroll = false;

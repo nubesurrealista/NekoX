@@ -75,6 +75,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.ui.CustomChatListBottomSheet;
 
 public class BotWebViewMenuContainer extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, BottomSheetTabsOverlay.Sheet, BottomSheetTabsOverlay.SheetView {
     private final static int POLL_PERIOD = 60000;
@@ -272,6 +273,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
             botMenuItem.addSubItem(R.id.menu_tos_bot, R.drawable.menu_intro, LocaleController.getString(R.string.BotWebViewToS));
 
             botMenuItem.addSubItem(R.id.menu_copy_url, R.drawable.msg_copy, LocaleController.getString(R.string.CopyLink));
+            botMenuItem.addSubItem(R.id.menu_recent_chats, R.drawable.msg_recent, LocaleController.getString(R.string.RecentChats));
         }
     }
 
@@ -708,6 +710,14 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
                                     AndroidUtilities.runOnUIThread(() -> BulletinFactory.of(parentEnterView.getParentFragment())
                                             .createSimpleBulletin(R.raw.error, LocaleController.getString(R.string.ErrorOccurred)).show(), 250);
                                 }
+                            } else if (id == R.id.menu_recent_chats) {
+                                CustomChatListBottomSheet sheet = new CustomChatListBottomSheet(parentEnterView.getParentFragment());
+                                sheet.setDelegate((dialogId, isUser) -> {
+                                    Bundle args = new Bundle();
+                                    args.putLong(isUser ? "user_id" : "chat_id", dialogId);
+                                    parentEnterView.getParentFragment().presentFragment(new ChatActivity(args));
+                                });
+                                sheet.show();
                             }
                         }
                     });

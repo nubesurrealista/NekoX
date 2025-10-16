@@ -100,6 +100,7 @@ import java.util.List;
 import java.util.Locale;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.ui.CustomChatListBottomSheet;
 
 public class BotWebViewAttachedSheet implements NotificationCenter.NotificationCenterDelegate, BaseFragment.AttachedSheet, BottomSheetTabsOverlay.Sheet {
     public final static int TYPE_WEB_VIEW_BUTTON = 0, TYPE_SIMPLE_WEB_VIEW_BUTTON = 1, TYPE_BOT_MENU_BUTTON = 2, TYPE_WEB_VIEW_BOT_APP = 3, TYPE_WEB_VIEW_BOT_MAIN = 4;
@@ -1002,6 +1003,7 @@ public class BotWebViewAttachedSheet implements NotificationCenter.NotificationC
         });
 
         otherItem.addSubItem(R.id.menu_copy_url, R.drawable.msg_copy, LocaleController.getString(R.string.CopyLink));
+        otherItem.addSubItem(R.id.menu_recent_chats, R.drawable.msg_recent, LocaleController.getString(R.string.RecentChats));
 
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
@@ -1066,6 +1068,14 @@ public class BotWebViewAttachedSheet implements NotificationCenter.NotificationC
                         AndroidUtilities.runOnUIThread(() -> BulletinFactory.of(fragment)
                                 .createSimpleBulletin(R.raw.error, LocaleController.getString(R.string.ErrorOccurred)).show(), 250);
                     }
+                } else if (id == R.id.menu_recent_chats) {
+                    CustomChatListBottomSheet sheet = new CustomChatListBottomSheet(fragment);
+                    sheet.setDelegate((dialogId, isUser) -> {
+                        Bundle args = new Bundle();
+                        args.putLong(isUser ? "user_id" : "chat_id", dialogId);
+                        fragment.presentFragment(new ChatActivity(args));
+                    });
+                    sheet.show();
                 }
             }
         });

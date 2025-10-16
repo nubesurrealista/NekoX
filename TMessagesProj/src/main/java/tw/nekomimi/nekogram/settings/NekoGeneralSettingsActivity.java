@@ -283,6 +283,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell useBotWebviewForGamesRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useBotWebviewForGames));
     private final AbstractConfigCell confirmOpenLinkInWebViewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.confirmOpenLinkInWebView));
     private final AbstractConfigCell forceExternalBrowserForBotsRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.forceExternalBrowserForBots, LocaleController.getString(R.string.ForceExternalBrowserForBotsDesc)));
+    private final AbstractConfigCell openNotificationOnWebViewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.openChatOnWebView));
     private final AbstractConfigCell articleViewerBottomActionBar = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.articleViewerBottomActionBar));
     private final AbstractConfigCell divider8 = cellGroup.appendCell(new ConfigCellDivider());
 
