@@ -1515,7 +1515,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         if (dialog == null && LaunchActivity.instance != null && LaunchActivity.instance.getVisibleDialog() != null) {
             dialog = LaunchActivity.instance.getVisibleDialog();
         }
-        if (lastFragment != null && (params.customOverlay || shouldOpenFragmentOverlay(dialog))) {
+        if (lastFragment != null && ((params.customOverlay && !BotWebViewSheet.activeSheets.isEmpty()) || shouldOpenFragmentOverlay(dialog))) {
             BaseFragment.BottomSheetParams bottomSheetParams = new BaseFragment.BottomSheetParams();
             bottomSheetParams.transitionFromLeft = true;
             bottomSheetParams.allowNestedScroll = false;
