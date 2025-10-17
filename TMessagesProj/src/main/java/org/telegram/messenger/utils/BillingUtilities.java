@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
+import android.util.Log;
 
 import androidx.core.util.Pair;
 
+//import com.android.billingclient.api.AccountIdentifiers;
+//import com.android.billingclient.api.Purchase;
 import com.google.android.exoplayer2.util.Util;
 import com.google.common.base.Charsets;
 
@@ -216,5 +219,13 @@ public class BillingUtilities {
             }
         }
         return result;
+    }
+
+    public static Pair<AccountInstance, TLRPC.InputStorePaymentPurpose> extractDeveloperPayload(/* Purchase */ Object purchase) {
+        Log.w("030-bill", "stub! return null from extractDeveloperPayload");
+        return null;
+    }
+
+    public static void cleanupPurchase(/* Purchase */ Object purchase) {
     }
 }

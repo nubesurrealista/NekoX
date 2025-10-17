@@ -43,6 +43,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
@@ -273,7 +274,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     private boolean need_card_postcode;
     private boolean need_card_name;
     private String providerApiKey;
-    private boolean initGooglePay;
+    private boolean initGooglePay = false;
 
     private TLRPC.User botUser;
 
@@ -314,6 +315,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     private String invoiceSlug;
     private boolean donePressed;
     private boolean canceled;
+    private boolean acceptedWarning = false;
+    private boolean logEnabledByUs = false;
 
     private String[] totalPrice;
 
@@ -1339,15 +1342,15 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                 providerApiKey = "";
                             }
                         }
-                        initGooglePay = !jsonObject.optBoolean("google_pay_hidden", false);
+//                        initGooglePay = !jsonObject.optBoolean("google_pay_hidden", false);
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
                 }
 
-                if (initGooglePay && (!TextUtils.isEmpty(providerApiKey) && "stripe".equals(paymentForm.native_provider) || googlePayParameters != null)) {
-                    initGooglePay(context);
-                }
+//                if (initGooglePay && (!TextUtils.isEmpty(providerApiKey) && "stripe".equals(paymentForm.native_provider) || googlePayParameters != null)) {
+//                    initGooglePay(context);
+//                }
 
                 inputFields = new EditTextBoldCursor[FIELDS_COUNT_CARD];
                 for (int a = 0; a < FIELDS_COUNT_CARD; a++) {
@@ -3201,20 +3204,22 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     @Override
     public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen && !backward) {
-            new AlertDialog.Builder(parentFragment.getContext())
+            Context ctx = (parentFragment != null && parentFragment.getContext() != null) ? parentFragment.getContext() : getParentActivity();
+            new AlertDialog.Builder(ctx)
                     .setTitle(getString(R.string.Warning))
                     .setMessage(getString(R.string.MomoPaymentWarning))
                     .setPositiveButton(getString(R.string.OK), (__, ___) -> {
-                        BuildVars.LOGS_ENABLED = BuildVars.DEBUG_VERSION = !BuildVars.LOGS_ENABLED;
-                        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
-                        sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.LOGS_ENABLED).apply();
+                        logEnabledByUs = !BuildVars.LOGS_ENABLED;
+                        BuildVars.LOGS_ENABLED = BuildVars.DEBUG_VERSION = true;
+                        acceptedWarning = true;
                     })
                     .setOnDismissListener((__) -> {
-                        removeSelfFromStack();
+                        if (!acceptedWarning) removeSelfFromStack();
                     })
                     .setNegativeButton(getString(R.string.Cancel), (__, ___) -> {
                         removeSelfFromStack();
-                    });
+                    })
+                    .show();
 
             if (webView != null) {
                 if (currentStep != STEP_CHECKOUT) {
@@ -3243,6 +3248,13 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 }
             }
         }
+    }
+
+    @Override
+    public void removeSelfFromStack() {
+        if (logEnabledByUs)
+            BuildVars.LOGS_ENABLED = BuildVars.DEBUG_VERSION = false;
+        super.removeSelfFromStack();
     }
 
     @Override
@@ -3710,6 +3722,10 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             month = null;
             year = null;
         }
+        if (month == null || year == null) {
+            shakeField(FIELD_EXPIRE_DATE);
+            return false;
+        }
         Card card = new Card(
                 inputFields[FIELD_CARD].getText().toString(),
                 month,
@@ -3802,6 +3818,8 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                             conn.setRequestMethod("POST");
                             conn.setRequestProperty("Content-Type", "application/json");
                             conn.setRequestProperty("X-PUBLIC-TOKEN", providerApiKey);
+                            Log.d("030-glocal", providerApiKey);
+//                            Log.d("030-glocal", cardObject.toString());
 
                             try (OutputStream output = conn.getOutputStream()) {
                                 output.write(jsonObject.toString().getBytes("UTF-8"));

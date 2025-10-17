@@ -68,7 +68,7 @@ import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SharedMediaLayout;
 import org.telegram.ui.LaunchActivity;
-// import org.telegram.ui.PaymentFormActivity;
+import org.telegram.ui.PaymentFormActivity;
 import org.telegram.ui.PrivacyControlActivity;
 import org.telegram.ui.ProfileActivity;
 import org.telegram.ui.TON.TONIntroActivity;
@@ -285,8 +285,31 @@ public class StarsController {
     }
 
     public ArrayList<TL_stars.TL_starsTopupOption> getOptions() {
-        // 030: fuck this shit
-        if (options == null) options = new ArrayList<>();
+        if (optionsLoading || optionsLoaded) {
+            return options;
+        }
+        optionsLoading = true;
+        ConnectionsManager.getInstance(currentAccount).sendRequest(new TL_stars.TL_payments_getStarsTopupOptions(), (res, err) -> AndroidUtilities.runOnUIThread(() -> {
+            ArrayList<TL_stars.TL_starsTopupOption> loadedOptions = new ArrayList<>();
+//            ArrayList<TL_stars.TL_starsTopupOption> toLoadStorePrice = new ArrayList<>();
+            if (res instanceof Vector) {
+                for (Object object : ((Vector) res).objects) {
+                    if (object instanceof TL_stars.TL_starsTopupOption) {
+                        TL_stars.TL_starsTopupOption option = (TL_stars.TL_starsTopupOption) object;
+                        loadedOptions.add(option);
+//                        if (option.store_product != null && !BuildVars.useInvoiceBilling()) {
+//                            toLoadStorePrice.add(option);
+//                            option.loadingStorePrice = true;
+//                        }
+                    }
+                }
+                optionsLoaded = true;
+            }
+            options = loadedOptions;
+            optionsLoading = false;
+            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.starOptionsLoaded);
+            // 030: code for load with billing client is removed
+        }));
         return options;
     }
 
@@ -296,7 +319,32 @@ public class StarsController {
         return giftOptions;
     }
     public ArrayList<TL_stars.TL_starsGiftOption> getGiftOptions() {
-        if (giftOptions == null) giftOptions = new ArrayList<>();
+        if (giftOptionsLoading || giftOptionsLoaded) {
+            return giftOptions;
+        }
+        giftOptionsLoading = true;
+        TL_stars.TL_payments_getStarsGiftOptions req = new TL_stars.TL_payments_getStarsGiftOptions();
+        ConnectionsManager.getInstance(currentAccount).sendRequest(req, (res, err) -> AndroidUtilities.runOnUIThread(() -> {
+            ArrayList<TL_stars.TL_starsGiftOption> loadedOptions = new ArrayList<>();
+//            ArrayList<TL_stars.TL_starsGiftOption> toLoadStorePrice = new ArrayList<>();
+            if (res instanceof Vector) {
+                for (Object object : ((Vector) res).objects) {
+                    if (object instanceof TL_stars.TL_starsGiftOption) {
+                        TL_stars.TL_starsGiftOption option = (TL_stars.TL_starsGiftOption) object;
+                        loadedOptions.add(option);
+//                        if (option.store_product != null && !BuildVars.useInvoiceBilling()) {
+//                            toLoadStorePrice.add(option);
+//                            option.loadingStorePrice = true;
+//                        }
+                    }
+                }
+                giftOptionsLoaded = true;
+            }
+            giftOptions = loadedOptions;
+            giftOptionsLoading = false;
+            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.starGiftOptionsLoaded);
+            // 030: code for load with billing client is removed
+        }));
         return giftOptions;
     }
 
@@ -305,11 +353,33 @@ public class StarsController {
     public ArrayList<TL_stars.TL_starsGiveawayOption> getGiveawayOptionsCached() {
         return giveawayOptions;
     }
-
     public ArrayList<TL_stars.TL_starsGiveawayOption> getGiveawayOptions() {
-        if (giveawayOptions == null) {
-            giveawayOptions = new ArrayList<>();
+        if (giveawayOptionsLoading || giveawayOptionsLoaded) {
+            return giveawayOptions;
         }
+        giveawayOptionsLoading = true;
+        TL_stars.TL_payments_getStarsGiveawayOptions req = new TL_stars.TL_payments_getStarsGiveawayOptions();
+        ConnectionsManager.getInstance(currentAccount).sendRequest(req, (res, err) -> AndroidUtilities.runOnUIThread(() -> {
+            ArrayList<TL_stars.TL_starsGiveawayOption> loadedOptions = new ArrayList<>();
+//            ArrayList<TL_stars.TL_starsGiveawayOption> toLoadStorePrice = new ArrayList<>();
+            if (res instanceof Vector) {
+                for (Object object : ((Vector) res).objects) {
+                    if (object instanceof TL_stars.TL_starsGiveawayOption) {
+                        TL_stars.TL_starsGiveawayOption option = (TL_stars.TL_starsGiveawayOption) object;
+                        loadedOptions.add(option);
+//                        if (option.store_product != null && !BuildVars.useInvoiceBilling()) {
+//                            toLoadStorePrice.add(option);
+//                            option.loadingStorePrice = true;
+//                        }
+                    }
+                }
+                giveawayOptionsLoaded = true;
+            }
+            giveawayOptions = loadedOptions;
+            giveawayOptionsLoading = false;
+            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.starGiveawayOptionsLoaded);
+            // 030: code for load with billing client is removed
+        }));
         return giveawayOptions;
     }
 
@@ -525,13 +595,165 @@ public class StarsController {
         Utilities.Callback2<Boolean, String> whenDone,
         TLRPC.InputPeer purposePeer
     ) {
-        if (activity != null) showNoSupportDialog(activity, getResourceProvider());
+        if (activity == null) {
+            return;
+        }
+
+        if (!MessagesController.getInstance(currentAccount).starsPurchaseAvailable()) {
+            BaseFragment lastFragment = LaunchActivity.getLastFragment();
+            if (lastFragment != null && lastFragment.getContext() != null) {
+                showNoSupportDialog(lastFragment.getContext(), lastFragment.getResourceProvider());
+            } else {
+                showNoSupportDialog(activity, null);
+            }
+            return;
+        }
+
+        // 030: always use invoice billing
+
+        final TLRPC.TL_inputStorePaymentStarsTopup purpose = new TLRPC.TL_inputStorePaymentStarsTopup();
+        purpose.stars = option.stars;
+        purpose.amount = option.amount;
+        purpose.currency = option.currency;
+        purpose.spend_purpose_peer = purposePeer;
+
+        TLRPC.TL_inputInvoiceStars invoice = new TLRPC.TL_inputInvoiceStars();
+        invoice.purpose = purpose;
+
+        TLRPC.TL_payments_getPaymentForm req = new TLRPC.TL_payments_getPaymentForm();
+        final JSONObject themeParams = BotWebViewSheet.makeThemeParams(getResourceProvider());
+        if (themeParams != null) {
+            req.theme_params = new TLRPC.TL_dataJSON();
+            req.theme_params.data = themeParams.toString();
+            req.flags |= 1;
+        }
+        req.invoice = invoice;
+
+        ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+            if (error != null) {
+                if (whenDone != null) {
+                    whenDone.run(false, error.text);
+                }
+                return;
+            }
+            PaymentFormActivity paymentFormActivity = null;
+            if (response instanceof TLRPC.PaymentForm) {
+                TLRPC.PaymentForm form = (TLRPC.PaymentForm) response;
+                form.invoice.recurring = true;
+                MessagesController.getInstance(currentAccount).putUsers(form.users, false);
+                paymentFormActivity = new PaymentFormActivity(form, invoice, null);
+            } else if (response instanceof TLRPC.PaymentReceipt) {
+                paymentFormActivity = new PaymentFormActivity((TLRPC.PaymentReceipt) response);
+            }
+            if (paymentFormActivity != null) {
+                paymentFormActivity.setPaymentFormCallback(status -> {
+                    if (status == PaymentFormActivity.InvoiceStatus.PAID) {
+                        if (whenDone != null) {
+                            whenDone.run(true, null);
+                        }
+                    } else if (status != PaymentFormActivity.InvoiceStatus.PENDING) {
+                        if (whenDone != null) {
+                            whenDone.run(false, null);
+                        }
+                    }
+                });
+                BaseFragment lastFragment = LaunchActivity.getLastFragment();
+                if (lastFragment == null) return;
+                if (AndroidUtilities.hasDialogOnTop(lastFragment)) {
+                    BaseFragment.BottomSheetParams bottomSheetParams = new BaseFragment.BottomSheetParams();
+                    bottomSheetParams.transitionFromLeft = true;
+                    bottomSheetParams.allowNestedScroll = false;
+                    lastFragment.showAsSheet(paymentFormActivity, bottomSheetParams);
+                } else {
+                    lastFragment.presentFragment(paymentFormActivity);
+                }
+            } else {
+                if (whenDone != null) {
+                    whenDone.run(false, "UNKNOWN_RESPONSE");
+                }
+            }
+        }));
     }
 
     public void buyGift(Activity activity, TL_stars.TL_starsGiftOption option, long user_id, Utilities.Callback2<Boolean, String> whenDone) {
-        // 030: fuck this shit
-        if (activity == null) return;
-        showNoSupportDialog(activity, getResourceProvider());
+        if (activity == null) {
+            return;
+        }
+
+        if (!MessagesController.getInstance(currentAccount).starsPurchaseAvailable()) {
+            BaseFragment lastFragment = LaunchActivity.getLastFragment();
+            if (lastFragment != null && lastFragment.getContext() != null) {
+                showNoSupportDialog(lastFragment.getContext(), lastFragment.getResourceProvider());
+            } else {
+                showNoSupportDialog(activity, null);
+            }
+            return;
+        }
+
+        // 030: always use invoice billing
+
+        TLRPC.TL_inputStorePaymentStarsGift purpose = new TLRPC.TL_inputStorePaymentStarsGift();
+        purpose.stars = option.stars;
+        purpose.amount = option.amount;
+        purpose.currency = option.currency;
+        purpose.user_id = MessagesController.getInstance(currentAccount).getInputUser(user_id);
+
+        TLRPC.TL_inputInvoiceStars invoice = new TLRPC.TL_inputInvoiceStars();
+        invoice.purpose = purpose;
+
+        TLRPC.TL_payments_getPaymentForm req = new TLRPC.TL_payments_getPaymentForm();
+        final JSONObject themeParams = BotWebViewSheet.makeThemeParams(getResourceProvider());
+        if (themeParams != null) {
+            req.theme_params = new TLRPC.TL_dataJSON();
+            req.theme_params.data = themeParams.toString();
+            req.flags |= 1;
+        }
+        req.invoice = invoice;
+
+        ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+            if (error != null) {
+                if (whenDone != null) {
+                    whenDone.run(false, error.text);
+                }
+                return;
+            }
+            PaymentFormActivity paymentFormActivity = null;
+            if (response instanceof TLRPC.PaymentForm) {
+                TLRPC.PaymentForm form = (TLRPC.PaymentForm) response;
+                form.invoice.recurring = true;
+                MessagesController.getInstance(currentAccount).putUsers(form.users, false);
+                paymentFormActivity = new PaymentFormActivity(form, invoice, null);
+            } else if (response instanceof TLRPC.PaymentReceipt) {
+                paymentFormActivity = new PaymentFormActivity((TLRPC.PaymentReceipt) response);
+            }
+            if (paymentFormActivity != null) {
+                paymentFormActivity.setPaymentFormCallback(status -> {
+                    if (status == PaymentFormActivity.InvoiceStatus.PAID) {
+                        if (whenDone != null) {
+                            whenDone.run(true, null);
+                        }
+                    } else if (status != PaymentFormActivity.InvoiceStatus.PENDING) {
+                        if (whenDone != null) {
+                            whenDone.run(false, null);
+                        }
+                    }
+                });
+                BaseFragment lastFragment = LaunchActivity.getLastFragment();
+                if (lastFragment == null) return;
+                if (AndroidUtilities.hasDialogOnTop(lastFragment)) {
+                    BaseFragment.BottomSheetParams bottomSheetParams = new BaseFragment.BottomSheetParams();
+                    bottomSheetParams.transitionFromLeft = true;
+                    bottomSheetParams.allowNestedScroll = false;
+                    lastFragment.showAsSheet(paymentFormActivity, bottomSheetParams);
+                } else {
+                    lastFragment.presentFragment(paymentFormActivity);
+                }
+            } else {
+                if (whenDone != null) {
+                    whenDone.run(false, "UNKNOWN_RESPONSE");
+                }
+            }
+        }));
     }
 
     public void buyGiveaway(
@@ -545,16 +767,271 @@ public class StarsController {
             boolean withAdditionPrize, String prizeDescription,
             Utilities.Callback2<Boolean, String> whenDone
     ) {
+        if (activity == null) {
+            return;
+        }
+
+        if (!MessagesController.getInstance(currentAccount).starsPurchaseAvailable()) {
+            BaseFragment lastFragment = LaunchActivity.getLastFragment();
+            if (lastFragment != null && lastFragment.getContext() != null) {
+                showNoSupportDialog(lastFragment.getContext(), lastFragment.getResourceProvider());
+            } else {
+                showNoSupportDialog(activity, null);
+            }
+            return;
+        }
+
+        TLRPC.TL_inputStorePaymentStarsGiveaway payload = new TLRPC.TL_inputStorePaymentStarsGiveaway();
+        payload.only_new_subscribers = onlyNewSubscribers;
+        payload.winners_are_visible = winnersVisible;
+        payload.stars = option.stars;
+        payload.boost_peer = MessagesController.getInstance(currentAccount).getInputPeer(chat);
+        if (chats != null && !chats.isEmpty()) {
+            payload.flags |= 2;
+            for (TLObject obj : chats) {
+                payload.additional_peers.add(MessagesController.getInstance(currentAccount).getInputPeer(obj));
+            }
+        }
+        for (TLObject object : countries) {
+            TLRPC.TL_help_country country = (TLRPC.TL_help_country) object;
+            payload.countries_iso2.add(country.iso2);
+        }
+        if (!payload.countries_iso2.isEmpty()) {
+            payload.flags |= 4;
+        }
+        if (withAdditionPrize) {
+            payload.flags |= 16;
+            payload.prize_description = prizeDescription;
+        }
+        payload.random_id = SendMessagesHelper.getInstance(currentAccount).getNextRandomId();
+        payload.until_date = date;
+        payload.currency = option.currency;
+        payload.amount = option.amount;
+        payload.users = users;
+
+        // 030: always use invoice billing
+
+        TLRPC.TL_inputInvoiceStars invoice = new TLRPC.TL_inputInvoiceStars();
+        invoice.purpose = payload;
+
+        TLRPC.TL_payments_getPaymentForm req = new TLRPC.TL_payments_getPaymentForm();
+        final JSONObject themeParams = BotWebViewSheet.makeThemeParams(getResourceProvider());
+        if (themeParams != null) {
+            req.theme_params = new TLRPC.TL_dataJSON();
+            req.theme_params.data = themeParams.toString();
+            req.flags |= 1;
+        }
+        req.invoice = invoice;
+
+        ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+            if (error != null) {
+                if (whenDone != null) {
+                    whenDone.run(false, error.text);
+                }
+                return;
+            }
+            PaymentFormActivity paymentFormActivity = null;
+            if (response instanceof TLRPC.PaymentForm) {
+                TLRPC.PaymentForm form = (TLRPC.PaymentForm) response;
+                form.invoice.recurring = true;
+                MessagesController.getInstance(currentAccount).putUsers(form.users, false);
+                paymentFormActivity = new PaymentFormActivity(form, invoice, null);
+            } else if (response instanceof TLRPC.PaymentReceipt) {
+                paymentFormActivity = new PaymentFormActivity((TLRPC.PaymentReceipt) response);
+            }
+            if (paymentFormActivity != null) {
+                paymentFormActivity.setPaymentFormCallback(status -> {
+                    if (status == PaymentFormActivity.InvoiceStatus.PAID) {
+                        if (whenDone != null) {
+                            whenDone.run(true, null);
+                        }
+                    } else if (status != PaymentFormActivity.InvoiceStatus.PENDING) {
+                        if (whenDone != null) {
+                            whenDone.run(false, null);
+                        }
+                    }
+                });
+                BaseFragment lastFragment = LaunchActivity.getLastFragment();
+                if (lastFragment == null) return;
+                if (AndroidUtilities.hasDialogOnTop(lastFragment)) {
+                    BaseFragment.BottomSheetParams bottomSheetParams = new BaseFragment.BottomSheetParams();
+                    bottomSheetParams.transitionFromLeft = true;
+                    bottomSheetParams.allowNestedScroll = false;
+                    lastFragment.showAsSheet(paymentFormActivity, bottomSheetParams);
+                } else {
+                    lastFragment.presentFragment(paymentFormActivity);
+                }
+            } else {
+                if (whenDone != null) {
+                    whenDone.run(false, "UNKNOWN_RESPONSE");
+                }
+            }
+        }));
     }
 
     public Runnable pay(MessageObject messageObject, Runnable whenShown) {
-        // 030: fuck this shit
-        return null;
+        final Context context = LaunchActivity.instance != null ? LaunchActivity.instance : ApplicationLoader.applicationContext;
+        final Theme.ResourcesProvider resourcesProvider = getResourceProvider();
+
+        if (messageObject == null || context == null) {
+            return null;
+        }
+
+//        if (!(MessageObject.getMedia(messageObject) instanceof TLRPC.TL_messageMediaInvoice)) {
+//            return;
+//        }
+
+        long did = messageObject.getDialogId();
+        int msg_id = messageObject.getId();
+//        if (messageObject.messageOwner != null && messageObject.messageOwner.fwd_from != null && messageObject.messageOwner.fwd_from.from_id != null) {
+//            did = DialogObject.getPeerDialogId(messageObject.messageOwner.fwd_from.from_id);
+//        }
+
+        TLRPC.TL_inputInvoiceMessage inputInvoice = new TLRPC.TL_inputInvoiceMessage();
+        inputInvoice.peer = MessagesController.getInstance(currentAccount).getInputPeer(did);
+        inputInvoice.msg_id = msg_id;
+
+        TLRPC.TL_payments_getPaymentForm req = new TLRPC.TL_payments_getPaymentForm();
+        final JSONObject themeParams = BotWebViewSheet.makeThemeParams(resourcesProvider);
+        if (themeParams != null) {
+            req.theme_params = new TLRPC.TL_dataJSON();
+            req.theme_params.data = themeParams.toString();
+            req.flags |= 1;
+        }
+        req.invoice = inputInvoice;
+
+        final int reqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (res, err) -> AndroidUtilities.runOnUIThread(() -> {
+            if (res instanceof TLRPC.TL_payments_paymentFormStars) {
+                openPaymentForm(messageObject, inputInvoice, (TLRPC.TL_payments_paymentFormStars) res, whenShown, null);
+            } else {
+                bulletinError(err, "NO_PAYMENT_FORM");
+            }
+            if (whenShown != null) {
+                whenShown.run();
+            }
+        }));
+
+        return () -> ConnectionsManager.getInstance(currentAccount).cancelRequest(reqId, true);
     }
 
     private boolean paymentFormOpened;
 
     public void openPaymentForm(MessageObject messageObject, TLRPC.InputInvoice inputInvoice, TLRPC.TL_payments_paymentFormStars form, Runnable whenShown, Utilities.Callback<String> whenAllDone) {
+        if (form == null || form.invoice == null || paymentFormOpened) return;
+        MessagesController.getInstance(currentAccount).putUsers(form.users, false);
+
+        final Context context = LaunchActivity.instance != null ? LaunchActivity.instance : ApplicationLoader.applicationContext;
+        final Theme.ResourcesProvider resourcesProvider = getResourceProvider();
+
+        if (context == null) return;
+
+        if (!balanceAvailable()) {
+            getBalance(() -> {
+                if (!balanceAvailable()) {
+                    bulletinError("NO_BALANCE");
+                    if (whenShown != null) {
+                        whenShown.run();
+                    }
+                    return;
+                }
+                openPaymentForm(messageObject, inputInvoice, form, whenShown, whenAllDone);
+            });
+            return;
+        }
+
+        long _stars = 0;
+        for (TLRPC.TL_labeledPrice price : form.invoice.prices) {
+            _stars += price.amount;
+        }
+        final long stars = _stars;
+        final long dialogId = messageObject != null && messageObject.type == MessageObject.TYPE_PAID_MEDIA ? (
+            (messageObject.messageOwner.fwd_from != null && messageObject.messageOwner.fwd_from.from_id != null) ?
+                DialogObject.getPeerDialogId(messageObject.messageOwner.fwd_from.from_id) :
+                messageObject.getDialogId()
+        ) : form.bot_id;
+        final String bot;
+        final boolean isBot, isBiz;
+        if (dialogId >= 0) {
+            TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(dialogId);
+            bot = UserObject.getUserName(user);
+            isBot = UserObject.isBot(user);
+            isBiz = !UserObject.isBot(user);
+        } else {
+            TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-dialogId);
+            bot = chat == null ? "" : chat.title;
+            isBot = false;
+            isBiz = false;
+        }
+        final String product = form.title;
+
+        if (whenShown != null) {
+            whenShown.run();
+        }
+
+        final int subscription_period = form.invoice.subscription_period;
+        final boolean[] allDone = new boolean[] { false };
+        StarsIntroActivity.openConfirmPurchaseSheet(context, resourcesProvider, currentAccount, messageObject, dialogId, product, stars, form.photo, subscription_period, whenDone -> {
+            if (balance.amount < stars) {
+                if (!MessagesController.getInstance(currentAccount).starsPurchaseAvailable()) {
+                    paymentFormOpened = false;
+                    if (whenDone != null) {
+                        whenDone.run(false);
+                    }
+                    if (!allDone[0] && whenAllDone != null) {
+                        whenAllDone.run("cancelled");
+                        allDone[0] = true;
+                    }
+                    showNoSupportDialog(context, resourcesProvider);
+                    return;
+                }
+                final boolean[] purchased = new boolean[] { false };
+                StarsIntroActivity.StarsNeededSheet sheet = new StarsIntroActivity.StarsNeededSheet(context, resourcesProvider, stars, isBiz ? StarsIntroActivity.StarsNeededSheet.TYPE_BIZ : StarsIntroActivity.StarsNeededSheet.TYPE_BOT, bot, () -> {
+                    purchased[0] = true;
+                    payAfterConfirmed(messageObject, inputInvoice, form, success -> {
+                        allDone[0] = true;
+                        if (subscription_period > 0) {
+                            invalidateSubscriptions(true);
+                        }
+                        if (whenAllDone != null) {
+                            whenAllDone.run(success ? "paid" : "failed");
+                        }
+                        if (whenDone != null) {
+                            whenDone.run(true);
+                        }
+                    });
+                }, dialogId);
+                sheet.setOnDismissListener(d -> {
+                    if (whenDone != null && !purchased[0]) {
+                        whenDone.run(false);
+                        paymentFormOpened = false;
+                        if (!allDone[0] && whenAllDone != null) {
+                            whenAllDone.run("cancelled");
+                            allDone[0] = true;
+                        }
+                    }
+                });
+                sheet.show();
+            } else {
+                payAfterConfirmed(messageObject, inputInvoice, form, success -> {
+                    if (subscription_period > 0) {
+                        invalidateSubscriptions(true);
+                    }
+                    if (whenDone != null) {
+                        whenDone.run(true);
+                    }
+                    allDone[0] = true;
+                    if (whenAllDone != null) {
+                        whenAllDone.run(success ? "paid" : "failed");
+                    }
+                });
+            }
+        }, () -> {
+            paymentFormOpened = false;
+            if (!allDone[0] && whenAllDone != null) {
+                whenAllDone.run("cancelled");
+                allDone[0] = true;
+            }
+        });
     }
 
     public void subscribeTo(String hash, TLRPC.ChatInvite chatInvite, Utilities.Callback2<String, Long> whenAllDone) {
@@ -874,6 +1351,84 @@ public class StarsController {
     }
 
     private void updateMediaPrice(MessageObject msg, long price, Runnable done, boolean afterFileRef) {
+        if (msg == null) {
+            done.run();
+            return;
+        }
+
+        final long dialog_id = msg.getDialogId();
+        final int msg_id = msg.getId();
+
+        TLRPC.TL_messageMediaPaidMedia paidMedia = (TLRPC.TL_messageMediaPaidMedia) msg.messageOwner.media;
+
+        TLRPC.TL_messages_editMessage req = new TLRPC.TL_messages_editMessage();
+        req.peer = MessagesController.getInstance(currentAccount).getInputPeer(dialog_id);
+        req.flags |= 32768;
+        req.schedule_date = msg.messageOwner.date;
+        req.id = msg_id;
+        req.flags |= 16384;
+
+        TLRPC.TL_inputMediaPaidMedia media = new TLRPC.TL_inputMediaPaidMedia();
+        media.stars_amount = price;
+        for (int i = 0; i < paidMedia.extended_media.size(); ++i) {
+            TLRPC.MessageExtendedMedia emedia = paidMedia.extended_media.get(i);
+            if (!(emedia instanceof TLRPC.TL_messageExtendedMedia)) {
+                done.run();
+                return;
+            }
+            TLRPC.MessageMedia imedia = ((TLRPC.TL_messageExtendedMedia) emedia).media;
+            if (imedia instanceof TLRPC.TL_messageMediaPhoto) {
+                TLRPC.TL_messageMediaPhoto mediaPhoto = (TLRPC.TL_messageMediaPhoto) imedia;
+                TLRPC.TL_inputMediaPhoto inputMedia = new TLRPC.TL_inputMediaPhoto();
+                TLRPC.TL_inputPhoto photo = new TLRPC.TL_inputPhoto();
+                photo.id = mediaPhoto.photo.id;
+                photo.access_hash = mediaPhoto.photo.access_hash;
+                photo.file_reference = mediaPhoto.photo.file_reference;
+                inputMedia.id = photo;
+                media.extended_media.add(inputMedia);
+            } else if (imedia instanceof TLRPC.TL_messageMediaDocument) {
+                TLRPC.TL_messageMediaDocument mediaDocument = (TLRPC.TL_messageMediaDocument) imedia;
+                TLRPC.TL_inputMediaDocument inputMedia = new TLRPC.TL_inputMediaDocument();
+                TLRPC.TL_inputDocument doc = new TLRPC.TL_inputDocument();
+                doc.id = mediaDocument.document.id;
+                doc.access_hash = mediaDocument.document.access_hash;
+                doc.file_reference = mediaDocument.document.file_reference;
+                inputMedia.id = doc;
+                media.extended_media.add(inputMedia);
+            }
+        }
+        req.media = media;
+
+        ConnectionsManager.getInstance(currentAccount).sendRequest(req, (res, err) -> AndroidUtilities.runOnUIThread(() -> {
+            if (res instanceof TLRPC.Updates) {
+                Utilities.stageQueue.postRunnable(() -> {
+                    MessagesController.getInstance(currentAccount).processUpdates((TLRPC.Updates) res, false);
+                });
+                done.run();
+            } else if (err != null && FileRefController.isFileRefError(err.text) && !afterFileRef) {
+                TLRPC.TL_messages_getScheduledMessages req2 = new TLRPC.TL_messages_getScheduledMessages();
+                req2.peer = MessagesController.getInstance(currentAccount).getInputPeer(dialog_id);
+                req2.id.add(msg_id);
+                ConnectionsManager.getInstance(currentAccount).sendRequest(req2, (res2, err2) -> AndroidUtilities.runOnUIThread(() -> {
+                    if (res2 instanceof TLRPC.TL_messages_messages) {
+                        TLRPC.TL_messages_messages m = (TLRPC.TL_messages_messages) res2;
+                        MessagesController.getInstance(currentAccount).putUsers(m.users, false);
+                        MessagesController.getInstance(currentAccount).putChats(m.chats, false);
+
+                        if (m.messages.size() == 1 && m.messages.get(0) instanceof TLRPC.TL_message && m.messages.get(0).media instanceof TLRPC.TL_messageMediaPaidMedia) {
+                            msg.messageOwner = m.messages.get(0);
+                            updateMediaPrice(msg, price, done, true);
+                        } else {
+                            done.run();
+                        }
+                    } else {
+                        done.run();
+                    }
+                }));
+            } else {
+                done.run();
+            }
+        }));
     }
 
 
@@ -1180,7 +1735,7 @@ public class StarsController {
             req.count = (int) amount;
             req.flags |= 1;
             final long privacyDialogId = getPeerId();
-            if (privacyDialogId == 0) {
+            if (privacyDialogId == 0 || privacyDialogId == UserConfig.getInstance(currentAccount).getClientUserId()) {
                 req.privacy = new TL_stars.paidReactionPrivacyDefault();
             } else if (privacyDialogId == UserObject.ANONYMOUS) {
                 req.privacy = new TL_stars.paidReactionPrivacyAnonymous();
@@ -1611,7 +2166,7 @@ public class StarsController {
         inputInvoice.user_id = MessagesController.getInstance(currentAccount).getInputUser(dialogId);
         inputInvoice.months = months;
         if (text != null && !TextUtils.isEmpty(text.text)) {
-            inputInvoice.flags |= 2;
+            inputInvoice.flags |= 1;
             inputInvoice.message = text;
         }
 
@@ -3185,7 +3740,7 @@ public class StarsController {
                     bulletinButton.animate().alpha(0.0f).scaleX(0.3f).scaleY(0.3f).start();
                 } else {
                     bulletinButton.setAlpha(0.0f);
-                    bulletinButton.setVisibility(View.INVISIBLE);
+                    bulletinButton.setVisibility(View.GONE);
                 }
             }
 
