@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,8 +50,13 @@ import java.util.ArrayList;
 
 import kotlin.Unit;
 
+import kotlin.coroutines.Continuation;
+import kotlin.coroutines.CoroutineContext;
+import kotlin.coroutines.EmptyCoroutineContext;
 import moe.hx030.momogram.util.ReflectUtil;
 import tw.nekomimi.nekogram.database.NitritesKt;
+import tw.nekomimi.nekogram.transtale.Translator;
+import tw.nekomimi.nekogram.transtale.source.FirefoxLocalTranslator;
 import tw.nekomimi.nekogram.ui.PopupBuilder;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.StrUtil;
@@ -98,6 +104,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private final AbstractConfigCell autoRestartOnLeakRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.autoRestartOnLeak, LocaleController.getString(R.string.AutoRestartOnLeakInfo)));
     private final AbstractConfigCell resumeAudioPlaybackOnLaunchRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.resumeAudioPlaybackOnLaunch));
     private final AbstractConfigCell debugAntiSpamRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.debugAntiSpam));
+    private final AbstractConfigCell aidlOnLaunchRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.aidlOnLaunch));
     private final AbstractConfigCell divider0 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header2 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.OverrideSettings)));
@@ -178,6 +185,19 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
                                 .show();
                         return;
                     }
+                } else if (position == cellGroup.rows.indexOf(aidlOnLaunchRow)) {
+                    ConfigCellTextCheck check = ((ConfigCellTextCheck) a);
+                    if (check.cell.isChecked() && NekoConfig.translationProvider.Int() == Translator.providerFirefox)
+                        FirefoxLocalTranslator.INSTANCE.bind(false, new Continuation<>() {
+                            @NonNull
+                            @Override
+                            public CoroutineContext getContext() {
+                                return EmptyCoroutineContext.INSTANCE;
+                            }
+
+                            @Override
+                            public void resumeWith(@NonNull Object o) {}
+                        });
                 }
                 ((ConfigCellTextCheck) a).onClick((TextCheckCell) view);
             } else if (a instanceof ConfigCellSelectBox) {

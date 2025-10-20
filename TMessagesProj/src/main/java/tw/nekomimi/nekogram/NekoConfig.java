@@ -44,14 +44,22 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import kotlin.Unit;
+import kotlin.coroutines.Continuation;
+import kotlin.coroutines.CoroutineContext;
+import kotlin.coroutines.EmptyCoroutineContext;
 import tw.nekomimi.nekogram.config.ConfigItem;
 import tw.nekomimi.nekogram.helpers.EvilLeakerKiller;
+import tw.nekomimi.nekogram.transtale.Translator;
+import tw.nekomimi.nekogram.transtale.source.FirefoxLocalTranslator;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
 
 import static tw.nekomimi.nekogram.config.ConfigItem.*;
 import static tw.nekomimi.nekogram.utils.StrUtil.getAppName;
 import static tw.nekomimi.nekogram.utils.StrUtil.isAppName;
+
+import androidx.annotation.NonNull;
 
 @SuppressLint("ApplySharedPref")
 public class NekoConfig {
@@ -365,6 +373,7 @@ public class NekoConfig {
     public static ConfigItem autoRestartOnLeak = addConfig(R.string.AutoRestartOnLeak , "AutoRestartOnLeak", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem resumeAudioPlaybackOnLaunch = addConfig(R.string.ResumeAudioPlaybackOnLaunch, "ResumeAudioPlaybackOnLaunch", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem ignoreTranslatorCache = addConfig(R.string.IgnoreTranslatorCache, "IgnoreTranslatorCache", configTypeBool, EXPERIMENTAL, false);
+    public static ConfigItem aidlOnLaunch = addConfig(R.string.AIDLOnLaunch, "AIDLOnLaunch", configTypeBool, EXPERIMENTAL, true);
     public static ConfigItem debugAntiSpam = addConfig(R.string.DebugAntiSpam, "DebugAntiSpam", configTypeBool, EXPERIMENTAL, false);
 
     // internal
@@ -978,6 +987,18 @@ public class NekoConfig {
             applySearchBlacklist();
             applyPerformanceClassOverride(null);
             loadCustomAllChatsText();
+            if (aidlOnLaunch.Bool() && translationProvider.Int() == Translator.providerFirefox) {
+                FirefoxLocalTranslator.INSTANCE.bind(false, new Continuation<>() {
+                    @NonNull
+                    @Override
+                    public CoroutineContext getContext() {
+                        return EmptyCoroutineContext.INSTANCE;
+                    }
+
+                    @Override
+                    public void resumeWith(@NonNull Object o) {}
+                });
+            }
             EvilLeakerKiller.threshold = memLeakThreshold.Int();
 
             if (!NekoConfig.enableUnifiedPush.Bool() || UnifiedPush.getSavedDistributor(ApplicationLoader.applicationContext) != null)
