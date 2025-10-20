@@ -1507,11 +1507,13 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
 
                             @Override
                             public void onFailed(boolean unsupported, @NonNull String message) {
-                                new AlertDialog.Builder(textSelectionOverlay.getContext())
-                                        .setTitle(LocaleController.getString(R.string.TranslateFailed))
-                                        .setMessage(message)
-                                        .setPositiveButton(LocaleController.getString(R.string.Close), null)
-                                        .show();
+                                AndroidUtilities.runOnUIThread(() -> {
+                                    new AlertDialog.Builder(textSelectionOverlay.getContext())
+                                            .setTitle(LocaleController.getString(R.string.TranslateFailed))
+                                            .setMessage(message)
+                                            .setPositiveButton(LocaleController.getString(R.string.Close), null)
+                                            .show();
+                                });
                             }
                         });
                     }
