@@ -14,37 +14,42 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 import dev.davidv.translator.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.sync.Mutex
+import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
+import java.util.concurrent.atomic.AtomicBoolean
 
 object FirefoxLocalTranslator : Translator {
 
     @OptIn(InternalCoroutinesApi::class)
     override suspend fun doTranslate(from: String, to: String, query: String): String {
 
-        if (!isBound) {
+        if (!isBound.get()) {
             bind(true)
         }
-        if (isBound) {
-            return suspendCoroutine {
-                translationService?.translate(query, from, to, object : ITranslationCallback.Stub() {
-                    override fun onTranslationResult(translatedText: String) {
-                        it.resume(translatedText)
-                    }
+        val svc = translationService ?: throw RuntimeException(LocaleController.getString(R.string.FirefoxAidlSvcFailed))
 
-                    override fun onTranslationError(errorMessage: TranslationError) {
-                        Log.e("030-tx", "ff err: ${errorMessage.type} ${errorMessage.message}")
-                        val msg =
-                            if (errorMessage != null && !"null".equals(errorMessage.message))
-                                "${ErrorEnum.from(errorMessage.type.toInt())!!.name} - ${errorMessage.message}"
-                            else ErrorEnum.from(errorMessage.type.toInt())!!.name
-                        it.resumeWithException(RuntimeException(msg))
-                    }
-                })
-            }
+        return suspendCoroutine {
+            svc.translate(query, from, to, object : ITranslationCallback.Stub() {
+                override fun onTranslationResult(translatedText: String) {
+                    it.resume(translatedText)
+                }
+
+                override fun onTranslationError(errorMessage: TranslationError) {
+                    Log.e("030-tx", "ff err: ${errorMessage.type} ${errorMessage.message}")
+                    val msg =
+                        if (errorMessage != null && !"null".equals(errorMessage.message))
+                            "${ErrorEnum.from(errorMessage.type.toInt())!!.name} - ${errorMessage.message}"
+                        else ErrorEnum.from(errorMessage.type.toInt())!!.name
+                    it.resumeWithException(RuntimeException(msg))
+                }
+            })
         }
-        throw RuntimeException(LocaleController.getString(R.string.FirefoxAidlSvcFailed))
     }
      private val TAG = "TranslatorClient"
 
@@ -52,31 +57,37 @@ object FirefoxLocalTranslator : Translator {
      private const val SERVICE_APP_PACKAGE = "dev.davidv.translator"
 
      private var translationService: ITranslationService? = null
-     private var isBound = false
+     private val isBound = AtomicBoolean(false)
+     private val sync = Mutex()
 
      private val connection = object : ServiceConnection {
          override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
              Log.d(TAG, "Service connected")
              translationService = ITranslationService.Stub.asInterface(service)
-             isBound = true
+             isBound.set(true)
          }
 
          override fun onServiceDisconnected(name: ComponentName?) {
              Log.d(TAG, "Service disconnected, attempting to rebind.")
              translationService = null
-             isBound = false
+             isBound.set(false)
+             AndroidUtilities.runOnUIThread( {
+                 CoroutineScope(Dispatchers.IO).launch {
+                     bind(false)
+                 }
+             }, 500)
          }
      }
 
      suspend fun bind(block: Boolean) {
-         if (isBound) return
+         if (isBound.get()) return
+         sync.lock()
          val intent = Intent("dev.davidv.translator.ITranslationService")
          intent.setPackage(SERVICE_APP_PACKAGE)
          try {
              if (block) {
                  LaunchActivity.instance.applicationContext.awaitBindService(
                      intent,
-                     connection,
                      Context.BIND_AUTO_CREATE
                  )
              } else {
@@ -88,33 +99,21 @@ object FirefoxLocalTranslator : Translator {
              }
          } catch (e: SecurityException) {
              Log.e(TAG, "Failed to bind to service. Is the other app installed and does it have the correct service declaration?", e)
+         } finally {
+             sync.unlock()
          }
      }
 
      fun unbind() {
-         if (isBound) {
+         if (isBound.get()) {
              LaunchActivity.instance.unbindService(connection)
-             isBound = false
+             isBound.set(false)
              translationService = null
          }
      }
 
-    suspend fun Context.awaitBindService(intent: Intent, connection: ServiceConnection? = null, flags: Int = Context.BIND_AUTO_CREATE): IBinder =
+    suspend fun Context.awaitBindService(intent: Intent, flags: Int = Context.BIND_AUTO_CREATE): IBinder =
         suspendCancellableCoroutine { cont ->
-            val connection = connection ?: object : ServiceConnection {
-                override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-                    if (service != null && cont.isActive) {
-                        cont.resume(service)
-                    } else {
-                        cont.resumeWithException(IllegalStateException("Service is null"))
-                    }
-                }
-
-                override fun onServiceDisconnected(name: ComponentName?) {
-                    // Optional: handle disconnection if needed
-                }
-            }
-
             if (!bindService(intent, connection, flags)) {
                 cont.resumeWithException(IllegalStateException("bindService returned false"))
             }
