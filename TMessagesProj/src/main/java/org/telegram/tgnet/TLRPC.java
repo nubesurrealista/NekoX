@@ -8,18 +8,26 @@
 
 package org.telegram.tgnet;
 
+import static org.telegram.messenger.LocaleController.getString;
+
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Path;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 import com.google.gson.annotations.SerializedName;
+
+import org.openintents.openpgp.OpenPgpError;
+import org.openintents.openpgp.util.OpenPgpApi;
 import org.osmdroid.util.TileSystemWebMercator;
 
+import org.sufficientlysecure.keychain.pgp.PgpHelper;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLoader;
@@ -28,6 +36,7 @@ import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.TranslateController;
 import org.telegram.messenger.Utilities;
@@ -40,9 +49,13 @@ import org.telegram.tgnet.tl.TL_phone;
 import org.telegram.tgnet.tl.TL_stars;
 import org.telegram.tgnet.tl.TL_stats;
 import org.telegram.tgnet.tl.TL_stories;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.Stories.MessageMediaStoryFull;
 import org.telegram.ui.Stories.MessageMediaStoryFull_old;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import me.vkryl.core.BitwiseUtils;
@@ -50,6 +63,8 @@ import me.vkryl.core.BitwiseUtils;
 import moe.hx030.momogram.util.ArrayUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.ui.MessageHelper;
+import tw.nekomimi.nekogram.utils.PGPUtil;
 
 @SuppressWarnings("unchecked")
 public class TLRPC {

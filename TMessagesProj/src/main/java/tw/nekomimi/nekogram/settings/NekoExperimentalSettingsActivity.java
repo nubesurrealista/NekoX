@@ -103,8 +103,9 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private final AbstractConfigCell alwaysDestroyPhotoViewerRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.alwaysDestroyPhotoViewer));
     private final AbstractConfigCell autoRestartOnLeakRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.autoRestartOnLeak, LocaleController.getString(R.string.AutoRestartOnLeakInfo)));
     private final AbstractConfigCell resumeAudioPlaybackOnLaunchRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.resumeAudioPlaybackOnLaunch));
-    private final AbstractConfigCell debugAntiSpamRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.debugAntiSpam));
     private final AbstractConfigCell aidlOnLaunchRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.aidlOnLaunch));
+    private final AbstractConfigCell autoDecryptPGPMessagesRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.autoDecryptPGPMessages));
+    private final AbstractConfigCell debugAntiSpamRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.debugAntiSpam));
     private final AbstractConfigCell divider0 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header2 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.OverrideSettings)));

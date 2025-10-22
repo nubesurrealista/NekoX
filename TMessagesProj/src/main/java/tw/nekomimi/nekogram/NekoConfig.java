@@ -374,6 +374,7 @@ public class NekoConfig {
     public static ConfigItem resumeAudioPlaybackOnLaunch = addConfig(R.string.ResumeAudioPlaybackOnLaunch, "ResumeAudioPlaybackOnLaunch", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem ignoreTranslatorCache = addConfig(R.string.IgnoreTranslatorCache, "IgnoreTranslatorCache", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem aidlOnLaunch = addConfig(R.string.AIDLOnLaunch, "AIDLOnLaunch", configTypeBool, EXPERIMENTAL, true);
+    public static ConfigItem autoDecryptPGPMessages = addConfig(R.string.AutoDecryptPGPMsg, "AutoDecryptPGPMsg", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem debugAntiSpam = addConfig(R.string.DebugAntiSpam, "DebugAntiSpam", configTypeBool, EXPERIMENTAL, false);
 
     // internal

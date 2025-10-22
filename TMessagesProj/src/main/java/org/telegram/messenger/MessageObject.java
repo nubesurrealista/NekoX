@@ -16,6 +16,7 @@ import static org.telegram.messenger.LocaleController.formatSpannable;
 import static org.telegram.messenger.LocaleController.formatString;
 import static org.telegram.messenger.LocaleController.getString;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -40,11 +41,15 @@ import android.text.style.RelativeSizeSpan;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.Base64;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.collection.LongSparseArray;
 import androidx.core.graphics.ColorUtils;
 
+import org.openintents.openpgp.OpenPgpError;
+import org.openintents.openpgp.util.OpenPgpApi;
+import org.sufficientlysecure.keychain.pgp.PgpHelper;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.ringtone.RingtoneDataStore;
@@ -93,9 +98,12 @@ import org.telegram.ui.Stories.StoriesController;
 import org.telegram.ui.web.BotWebViewContainer;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.StringReader;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -115,6 +123,7 @@ import java.util.regex.Pattern;
 import me.vkryl.core.BitwiseUtils;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.utils.PGPUtil;
 
 public class MessageObject {
 
@@ -283,6 +292,7 @@ public class MessageObject {
 
     public boolean notime;
     public boolean edited;
+    public boolean checkedPgpMsg = false;
 
     public int getChatMode() {
         if (scheduled) {
@@ -6848,6 +6858,38 @@ public class MessageObject {
         } else if (hasExtendedMedia()) {
             text = messageOwner.message = messageOwner.media.description;
         }
+
+        if (!checkedPgpMsg && !messageOwner.decrypted &&
+                NekoConfig.autoDecryptPGPMessages.Bool() && text != null &&
+                text.startsWith("--") && PgpHelper.PGP_MESSAGE.matcher(text).matches()) {
+            checkedPgpMsg = true;
+            ByteArrayInputStream is = new ByteArrayInputStream(text.getBytes());
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            PGPUtil.post(() -> PGPUtil.api.executeApiAsync(new Intent(OpenPgpApi.ACTION_DECRYPT_VERIFY), is, os, new OpenPgpApi.IOpenPgpCallback() {
+
+                @Override
+                public void onReturn(Intent result) {
+                    int code = result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR);
+
+                    if (code != OpenPgpApi.RESULT_CODE_SUCCESS) {
+                        OpenPgpError err = (OpenPgpError) result.getExtras().get(OpenPgpApi.RESULT_ERROR);
+                        Log.e("030-pgp", String.format("failed to decrypt msg, code=%d msg=%s", code,
+                                err == null ? "null" : err.getMessage()));
+
+                        generateCaption();
+                        return;
+                    }
+
+                    String decrypted = new String(os.toByteArray(), StandardCharsets.UTF_8);
+                    messageOwner.decrypted = true;
+                    messageOwner.decryptedMessage = decrypted;
+                    applyNewText(decrypted);
+                    generateCaption();
+                }
+            }));
+            return;
+        }
+
         if (messageOwner.translatedText != null && (captionTranslated = translated)) {
             // Official Translate
             text = messageOwner.translatedText.text;
