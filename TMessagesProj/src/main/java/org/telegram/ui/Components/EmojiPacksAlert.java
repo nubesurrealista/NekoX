@@ -14,6 +14,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.Selection;
@@ -111,6 +112,8 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
     private float loadT;
     private float lastY;
     private Float fromY;
+
+    private long ownerId = -1L;
 
     int highlightStartPosition = -1, highlightEndPosition = -1;
     private AnimatedFloat highlightAlpha;
@@ -1513,6 +1516,36 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
             } catch (Exception e) {
                 FileLog.e(e);
             }
+        } else if (id == 69) {
+            BaseFragment frag = (fragment == null ? LaunchActivity.getLastFragment() : fragment);
+            if (ownerId == -1L) {
+                ownerId = StickersAlert.getOwnerId(stickerSet.set.id);
+                if (ownerId == -1L && fragment != null) {
+                    AndroidUtilities.runOnUIThread(() -> BulletinFactory.of(frag)
+                            .createSimpleBulletin(R.raw.error, LocaleController.getString(R.string.DialogNotAvailable)).show(), 250);
+                    dismiss();
+                    return;
+                }
+            }
+            TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(ownerId);
+            if (user != null) {
+                Bundle args = new Bundle();
+                args.putLong("user_id", ownerId);
+                if (ownerId == UserConfig.getInstance(currentAccount).getClientUserId()) {
+                    args.putBoolean("my_profile", true);
+                }
+                frag.presentFragment(new ProfileActivity(args));
+                dismiss();
+            } else {
+                FileLog.w(String.format("%d is not a known user, copy id instead", ownerId));
+                if (AndroidUtilities.addToClipboard(String.valueOf(ownerId)) && AndroidUtilities.shouldShowClipboardToast()) {
+                    AndroidUtilities.runOnUIThread(() ->
+                                    BulletinFactory.of(frag).createSimpleBulletin(R.raw.copy,
+                                            LocaleController.formatString(R.string.ExactTextCopied, ownerId)).show(),
+                            250);
+                    dismiss();
+                }
+            }
         }
     }
 
@@ -1728,6 +1761,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 addView(optionsButton, LayoutHelper.createFrame(40, 40, Gravity.TOP | Gravity.RIGHT, 0, 5, 5 - backgroundPaddingLeft / AndroidUtilities.density, 0));
                 optionsButton.addSubItem(1, R.drawable.msg_share, LocaleController.getString(R.string.StickersShare));
                 optionsButton.addSubItem(2, R.drawable.msg_link, LocaleController.getString(R.string.CopyLink));
+                optionsButton.addSubItem(69, R.drawable.msg_openprofile, LocaleController.getString(R.string.ChannelCreator));
                 optionsButton.setOnClickListener(v -> optionsButton.toggleSubMenu());
                 optionsButton.setDelegate(EmojiPacksAlert.this::onSubItemClick);
                 optionsButton.setContentDescription(LocaleController.getString(R.string.AccDescrMoreOptions));

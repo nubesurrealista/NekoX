@@ -446,7 +446,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 } else if (vector.objects.size() == 1) {
                     TLRPC.StickerSetCovered set = vector.objects.get(0);
                     inputStickerSet = new TLRPC.TL_inputStickerSetID();
-                    getOwnerId(inputStickerSet.id = set.set.id);
+                    ownerId = getOwnerId(inputStickerSet.id = set.set.id);
                     inputStickerSet.access_hash = set.set.access_hash;
                     loadStickerSet(false);
                 } else {
@@ -482,7 +482,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         } else if (vector.objects.size() == 1) {
             final TLRPC.StickerSetCovered set = vector.objects.get(0);
             inputStickerSet = new TLRPC.TL_inputStickerSetID();
-            getOwnerId(inputStickerSet.id = set.set.id);
+            ownerId = getOwnerId(inputStickerSet.id = set.set.id);
             inputStickerSet.access_hash = set.set.access_hash;
             loadStickerSet(false);
             init(context);
@@ -1035,7 +1035,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                     dismiss();
                     TLRPC.TL_inputStickerSetID inputStickerSetID = new TLRPC.TL_inputStickerSetID();
                     inputStickerSetID.access_hash = pack.set.access_hash;
-                    getOwnerId(inputStickerSetID.id = pack.set.id);
+                    ownerId = getOwnerId(inputStickerSetID.id = pack.set.id);
                     StickersAlert alert = new StickersAlert(parentActivity, parentFragment, inputStickerSetID, null, null, resourcesProvider, false);
                     if (masterDismissListener != null) {
                         alert.setOnDismissListener(di -> masterDismissListener.run());
@@ -1451,7 +1451,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             ProxyUtil.showQrDialog(getContext(), stickersUrl);
         } else if (id == menu_owner) {
             if (ownerId == -1L) {
-                getOwnerId(stickerSet.set.id);
+                ownerId = getOwnerId(stickerSet.set.id);
                 if (ownerId == -1L) {
                     AndroidUtilities.runOnUIThread(() -> BulletinFactory.of(parentFragment)
                             .createSimpleBulletin(R.raw.error, LocaleController.getString(R.string.DialogNotAvailable)).show(), 250);
@@ -2507,14 +2507,15 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         super.onBackPressed();
     }
 
-    private void getOwnerId(long setId) {
-        ownerId = setId >> 32;
+    public static long getOwnerId(long setId) {
+        long ownerId = setId >> 32;
         if ((setId >> 16 & 0xff) == 0x3f) {
             ownerId |= 0x80000000L;
         }
         if (((setId >> 24) & 0xff) != 0) {
             ownerId += 0x100000000L;
         }
+        return ownerId;
     }
 
     private boolean ignoreMasterDismiss;
