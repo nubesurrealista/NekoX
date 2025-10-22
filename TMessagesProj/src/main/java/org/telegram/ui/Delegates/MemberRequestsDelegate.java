@@ -81,6 +81,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import moe.hx030.momogram.util.ModUtil;
+
 public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener {
 
     public final boolean isChannel;
@@ -373,6 +375,9 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             TLRPC.User user = importers.users.get(i);
             users.put(user.id, user);
         }
+
+        importers = ModUtil.filterJoinRequests(currentAccount, chatId, importers);
+
         if (isEmptyOffset) {
             adapter.setItems(importers.importers);
         } else {

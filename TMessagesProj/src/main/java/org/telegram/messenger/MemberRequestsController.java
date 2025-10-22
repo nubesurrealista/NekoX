@@ -1,14 +1,21 @@
 package org.telegram.messenger;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 
 import androidx.annotation.Nullable;
 
+import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLRPC;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import moe.hx030.momogram.util.ModUtil;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class MemberRequestsController extends BaseController {
 
@@ -36,7 +43,7 @@ public class MemberRequestsController extends BaseController {
 
     @Nullable
     public TLRPC.TL_messages_chatInviteImporters getCachedImporters(long chatId) {
-        return firstImportersCache.get(chatId);
+        return ModUtil.filterJoinRequests(currentAccount, chatId, firstImportersCache.get(chatId));
     }
 
     public int getImporters(final long chatId, final String query, TLRPC.TL_chatInviteImporter lastImporter, LongSparseArray<TLRPC.User> users, RequestDelegate onComplete) {
@@ -58,9 +65,14 @@ public class MemberRequestsController extends BaseController {
         return getConnectionsManager().sendRequest(req, (response, error) -> {
             AndroidUtilities.runOnUIThread(() -> {
                 if (error == null) {
-                    TLRPC.TL_messages_chatInviteImporters importers = (TLRPC.TL_messages_chatInviteImporters) response;
+                    TLRPC.TL_messages_chatInviteImporters importers =
+                            ModUtil.filterJoinRequests(currentAccount, chatId, (TLRPC.TL_messages_chatInviteImporters) response);
+
                     if (lastImporter == null && isEmptyQuery)
                         firstImportersCache.put(chatId, importers);
+
+                    onComplete.run(importers, error);
+                    return;
                 }
                 onComplete.run(response, error);
             });

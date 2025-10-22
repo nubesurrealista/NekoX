@@ -50,6 +50,8 @@ import org.telegram.ui.Cells.DialogCell;
 
 import java.util.ArrayList;
 
+import moe.hx030.momogram.util.ModUtil;
+
 public class LinkActionView extends LinearLayout {
 
     TextView linkView;

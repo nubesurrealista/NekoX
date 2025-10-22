@@ -44,7 +44,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import kotlin.Unit;
 import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
@@ -376,6 +375,10 @@ public class NekoConfig {
     public static ConfigItem aidlOnLaunch = addConfig(R.string.AIDLOnLaunch, "AIDLOnLaunch", configTypeBool, EXPERIMENTAL, true);
     public static ConfigItem autoDecryptPGPMessages = addConfig(R.string.AutoDecryptPGPMsg, "AutoDecryptPGPMsg", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem debugAntiSpam = addConfig(R.string.DebugAntiSpam, "DebugAntiSpam", configTypeBool, EXPERIMENTAL, false);
+    public static ConfigItem autoDismissJoinReq = addConfig(R.string.AutoDismissJoinReq, "AutoDismissJoinReq", configTypeBool, EXPERIMENTAL, false);
+    public static ConfigItem autoDismissNameRegex = addConfig(R.string.AutoDismissReqRegex, "AutoDismissReqRegex", configTypeString, EXPERIMENTAL, "群发|纸飞机|跑U|棋牌|招商|变现|群發|稳赚|全网").setOnConfigChanged(NekoConfig::applyAutoBanByRegex);
+    public static String autoDismissNameRegexString;
+    public static Pattern autoDismissNameRegexPattern;
 
     // internal
     public static ConfigItem nextPromptUpdateTime = addConfig("nextPromptUpdateTime", configTypeLong, 0L);
@@ -756,6 +759,7 @@ public class NekoConfig {
                 getString(R.string.PositionRight)
         };
         applyHideMsgRegex();
+        applyAutoBanByRegex();
     }
 
     public static void setTranscribeProvider(int provider) {
@@ -893,6 +897,11 @@ public class NekoConfig {
         hideMessageRegexString = hideMessageRegex.String();
         hideMessageRegexPattern = Pattern.compile(hideMessageRegexString);
         Log.d("030-hide", "new regex: " + hideMessageRegexString);
+    }
+    public static void applyAutoBanByRegex() {
+        autoDismissNameRegexString = autoDismissNameRegex.String();
+        autoDismissNameRegexPattern = Pattern.compile(autoDismissNameRegexString);
+        Log.d("030-autoban", "new regex: " + autoDismissNameRegexString);
     }
 
 

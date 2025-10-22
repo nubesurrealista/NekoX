@@ -46,6 +46,7 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
+import org.telegram.messenger.Utilities;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -76,6 +77,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+
+import moe.hx030.momogram.util.ModUtil;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class InviteLinkBottomSheet extends BottomSheet {
 
@@ -1082,11 +1086,13 @@ public class InviteLinkBottomSheet extends BottomSheet {
             AndroidUtilities.runOnUIThread(() -> {
                 if (error == null) {
                     TLRPC.TL_messages_chatInviteImporters inviteImporters = (TLRPC.TL_messages_chatInviteImporters) response;
-                    importersList.addAll(inviteImporters.importers);
                     for (int i = 0; i < inviteImporters.users.size(); i++) {
                         TLRPC.User user = inviteImporters.users.get(i);
                         users.put(user.id, user);
                     }
+
+                    ModUtil.filterJoinRequests(currentAccount, chatId, inviteImporters);
+
                     hasMore = loadRequestedUsers
                             ? importersList.size() < inviteImporters.count
                             : loadExpiredUsers
