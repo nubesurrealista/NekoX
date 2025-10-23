@@ -376,6 +376,7 @@ public class NekoConfig {
     public static ConfigItem autoDecryptPGPMessages = addConfig(R.string.AutoDecryptPGPMsg, "AutoDecryptPGPMsg", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem debugAntiSpam = addConfig(R.string.DebugAntiSpam, "DebugAntiSpam", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem autoDismissJoinReq = addConfig(R.string.AutoDismissJoinReq, "AutoDismissJoinReq", configTypeBool, EXPERIMENTAL, false);
+    public static ConfigItem autoDismissNameUseOpenCC = addConfig(R.string.AutoDismissNameUseOpenCC, "AutoDismissNameUseOpenCC", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem autoDismissNameRegex = addConfig(R.string.AutoDismissReqRegex, "AutoDismissReqRegex", configTypeString, EXPERIMENTAL, "群发|纸飞机|跑U|棋牌|招商|变现|群發|稳赚|全网").setOnConfigChanged(NekoConfig::applyAutoBanByRegex);
     public static String autoDismissNameRegexString;
     public static Pattern autoDismissNameRegexPattern;

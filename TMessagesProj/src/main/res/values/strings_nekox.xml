@@ -294,7 +294,8 @@
     <string name="MomoPaymentWarning">Payment is untested and provided as is without any sort of warranty, you may be throwing money for nothing, use official app to pay if you\'re not sure about this.</string>
     <string name="AIDLOnLaunch">Bind AIDL service on launch</string>
     <string name="AutoDecryptPGPMsg">Auto decrypt PGP-encrypted messages</string>
-    <string name="AutoDismissJoinReq">Auto dismiss join requests</string>
-    <string name="AutoDismissJoinReqDesc">Deleted accounts and those with matching bio/name will be dismissed on sight</string>
-    <string name="AutoDismissReqRegex">Regex rule for auto dismiss</string>
+    <string name="AutoDismissJoinReq">Auto ban from join requests</string>
+    <string name="AutoDismissJoinReqDesc">Deleted accounts and those with matching bio/name will be banned on sight</string>
+    <string name="AutoDismissReqRegex">Regex rule for auto ban</string>
+    <string name="AutoDismissNameUseOpenCC">Use OpenCC to check Simplified and Traditional Chinese names</string>
 </resources>
