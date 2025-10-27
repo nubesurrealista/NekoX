@@ -48,6 +48,7 @@ import android.os.SystemClock;
 import android.provider.Settings;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
@@ -1103,26 +1104,39 @@ public class NotificationsController extends BaseController {
                     continue;
                 }
 
-                long senderId = messageObject.getSenderId();
+                long chatId = messageObject.getChatId(), senderId = messageObject.getSenderId();
                 if (NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockedPeers.indexOfKey(senderId) >= 0) {
                     continue;
                 }
 
-                if (NekoConfig.debugAntiSpam.Bool() && senderId > 0) {
-                    FileLog.d(String.format("PM?, id=%d, isSvc=%s, isContact=%s",
-                            senderId, UserObject.isService(senderId),
+                if (NekoConfig.autoArchiveAndMute.Bool() && senderId > 0 && chatId == 0) {
+                    if (NekoConfig.debugAntiSpam.Bool())
+                        Log.d("030-debugspam", String.format("PM?, id=%d, chat=%d, isSvc=%s, isContact=%s",
+                            senderId, messageObject.getChatId(), UserObject.isService(senderId),
                             getContactsController().isContact(senderId)));
-                    if (!getContactsController().isContact(senderId)) {
-                        getMessagesStorage().getStorageQueue().postRunnable(() -> {
-                            TLRPC.User currentUser = getMessagesStorage().getUserSync(senderId);
-                            if (currentUser.bot) return; // bots can't send first msg
-                            final ArrayList<Long> list = new ArrayList<>(1);
-                            list.add(senderId);
+                    if (!UserObject.isService(chatId) && !getContactsController().isContact(chatId)) {
+                        if (MessagesStorage.getInstance(currentAccount).isExistingChat(chatId)) return;
+
+                        TLRPC.User currentUser = getMessagesStorage().getUserSync(chatId);
+                        if (currentUser.bot) return; // bots can't send first msg
+                        final ArrayList<Long> list = new ArrayList<>(1);
+                        list.add(senderId);
+                        if (NekoConfig.autoArchiveAndMuteNoCommonGroupOnly.Bool()) {
+                            getMessagesController().loadFullUser(currentUser, classGuid, true, userFull -> {
+                                if (userFull != null && userFull.common_chats_count > 0) return;
+                                Log.d("030-spam", "no common group => archive & mute " + senderId);
+                                AndroidUtilities.runOnUIThread(() -> {
+                                    getMessagesController().addDialogToFolder(list, 1, -1, null, 0);
+                                    getNotificationsController().setDialogNotificationsSettings(senderId, 0, NotificationsController.SETTING_MUTE_FOREVER);
+                                });
+                            });
+                        } else {
+                            Log.d("030-spam", "archive & mute " + senderId);
                             AndroidUtilities.runOnUIThread(() -> {
                                 getMessagesController().addDialogToFolder(list, 1, -1, null, 0);
                                 getNotificationsController().setDialogNotificationsSettings(senderId, 0, NotificationsController.SETTING_MUTE_FOREVER);
                             });
-                        });
+                        }
                     }
                 }
 

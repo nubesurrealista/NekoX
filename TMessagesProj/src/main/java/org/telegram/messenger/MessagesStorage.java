@@ -22,6 +22,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -16305,15 +16306,11 @@ public class MessagesStorage extends BaseController {
                     }
 
                     // 030 note: most fields are not initialized here
-                    boolean debugAntiSpam = NekoConfig.debugAntiSpam.Bool();
-                    if (autoArchiveAndMute && (!exists || debugAntiSpam) && dialog.id > 0
+                    if (autoArchiveAndMute && !exists && dialog.id > 0
                             && !UserObject.isService(dialog.id)
                             && !contactsController.isContact(dialog.id)) {
                         // TODO: check if self msg?
                         toArchiveAndMute.add(dialog.id);
-                    } else if (autoArchiveAndMute && debugAntiSpam && dialog.id > 0) {
-                        FileLog.d(String.format("PM exists=%s, dialog.id=%d, isSvc=%s, isContact=%s",
-                                exists, dialog.id, UserObject.isService(dialog.id), contactsController.isContact(dialog.id)));
                     }
 
                     int messageDate = 0;
@@ -16539,13 +16536,14 @@ public class MessagesStorage extends BaseController {
         }
 
         if (autoArchiveAndMute) {
+            boolean checkCommonGroup = NekoConfig.autoArchiveAndMuteNoCommonGroupOnly.Bool();
             for (long did : toArchiveAndMute) {
                 getStorageQueue().postRunnable(() -> {
                     TLRPC.User currentUser = getUserSync(did);
                     if (currentUser.bot) return; // bots can't send first msg
                     final ArrayList<Long> list = new ArrayList<>(1);
                     list.add(did);
-                    if (NekoConfig.autoArchiveAndMuteNoCommonGroupOnly.Bool()) {
+                    if (checkCommonGroup) {
                         getMessagesController().loadFullUser(currentUser, classGuid, true, userFull -> {
                             if (userFull != null && userFull.common_chats_count > 0) return;
                             AndroidUtilities.runOnUIThread(() -> {
@@ -17961,6 +17959,19 @@ public class MessagesStorage extends BaseController {
 
     private void isForumCacheInvalidate(long dialogId) {
         dialogIsForumTyped.delete(dialogId);
+    }
+
+    public boolean isExistingChat(long id) {
+        try {
+            SQLiteCursor cursor = database.queryFinalized("SELECT did FROM dialogs WHERE did = " + id);
+            boolean exists = cursor.next();
+            cursor.dispose();
+            cursor = null;
+            return exists;
+        } catch (Exception e) {
+            Log.e("030-ext", "error checking existing chat", e);
+        }
+        return false;
     }
 
     public interface IntCallback {
