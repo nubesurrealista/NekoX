@@ -247,12 +247,11 @@ public class FilterCreateActivity extends BaseFragment {
             while (getMessagesController().dialogFiltersById.get(filter.id) != null) {
                 filter.id++;
             }
-            String title = NekoConfig.customAllChatsName.String();
-            String[] spl = null;
+            String title = NekoConfig.customAllChatsText;
             boolean isDefault = title.isBlank();
             if (isDefault) title = LocaleController.getString(R.string.FilterAllChats);
             else filter.entities = NekoConfig.customAllChatsTextEntities;
-            filter.name = isDefault ? title : title.split("\n")[0];
+            filter.name = title;
             isAllChats = true;
         } else if (filter == null) {
             filter = new MessagesController.DialogFilter();

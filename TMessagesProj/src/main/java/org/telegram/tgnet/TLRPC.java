@@ -63242,7 +63242,7 @@ public class TLRPC {
                         s.length = result.message.length();
                         result.entities.add(s);
                     }
-                    if (NekoConfig.hideMessageRegexString != null && !NekoConfig.hideMessageRegexString.isBlank()) {
+                    if (NekoConfig.hideMessageRegexPattern != null) {
                         result.hide = (result.message != null && NekoConfig.hideMessageRegexPattern.matcher(result.message).find());
                     }
                 } catch (Throwable e) {

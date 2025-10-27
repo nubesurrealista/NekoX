@@ -31,7 +31,7 @@ public class ModUtil {
             return importers;
         }
         if (bannedUserIds == null) bannedUserIds = new ArrayDeque<>(60);
-        boolean regex = !TextUtils.isEmpty(NekoConfig.autoDismissNameRegexString);
+        boolean regex = NekoConfig.autoDismissNameRegexPattern != null;
         int oldSize = importers.importers.size();
         Log.d("030-filterJoinRequests", String.format("b4 | count=%d size=%d", importers.count, importers.importers.size()));
 
@@ -79,6 +79,7 @@ public class ModUtil {
 
     private static Set<CCTarget> CCTargets;
     public static boolean checkName(Pattern regex, String firstname, String lastname, boolean useOpenCC) {
+        if (regex == null) return false;
         if (regex.matcher(firstname).find()) return true;
         if (!TextUtils.isEmpty(lastname) && regex.matcher(lastname).find()) return true;
         if (useOpenCC) {

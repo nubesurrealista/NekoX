@@ -127,6 +127,7 @@ public class FilterTabsView extends FrameLayout {
         public boolean isLocked;
         public int localTitleType;
         public boolean noanimate;
+        public boolean isCustom = false;
 
         public Tab(int i, CharSequence t, String emo, ArrayList<TLRPC.MessageEntity> e, boolean noanimate) {
             localTitleType = NekoConfig.tabsTitleType.Int();
@@ -188,6 +189,18 @@ public class FilterTabsView extends FrameLayout {
 //            MessageObject.addEntitiesToText(title, newEntities, false, false, false, true);
             title = MessageObject.replaceAnimatedEmoji(title, newEntities, textPaint.getFontMetricsInt());
             this.noanimate = noanimate;
+            isCustom = false;
+            return true;
+        }
+
+        public boolean applyCustomAllTab() {
+            boolean defaultName = NekoConfig.customAllChatsText.isBlank();
+            String title = (defaultName) ?
+                    LocaleController.getString(R.string.FilterAllChats) :
+                    NekoConfig.customAllChatsText;
+            if (isCustom && title.contentEquals(this.title)) return true;
+            setTitle(title, NekoConfig.customAllChatsTextEntities, false);
+            isCustom = true;
             return true;
         }
     }
@@ -1609,16 +1622,9 @@ public class FilterTabsView extends FrameLayout {
             int width = MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp(7) - AndroidUtilities.dp(7);
             Tab firstTab = findDefaultTab();
             if (firstTab != null) {
-                String[] spl = NekoConfig.customAllChatsName.String().split("\n");
-                String title = spl[0];
-                boolean defaultName = title.isBlank();
-                ArrayList<TLRPC.MessageEntity> entities = null;
-                if (defaultName) title = LocaleController.getString(R.string.FilterAllChats);
-                else entities = NekoConfig.customAllChatsTextEntities;
-
-                firstTab.setTitle(title, entities, false);
+                boolean custom = firstTab.applyCustomAllTab();
                 int tabWidth = firstTab.getWidth(false);
-                if (defaultName)
+                if (!custom)
                     firstTab.setTitle(allTabsWidth > width ? LocaleController.getString(R.string.FilterAllChatsShort) : LocaleController.getString(R.string.FilterAllChats), null, false);
                 int trueTabsWidth = allTabsWidth - tabWidth;
                 trueTabsWidth += firstTab.getWidth(false);

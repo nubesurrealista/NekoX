@@ -125,26 +125,31 @@ public class ConfigItem {
     }
 
     public void setConfigBool(boolean v) {
+        if (value != null && v == ((boolean) value)) return;
         value = v;
         saveConfig();
     }
 
     public void setConfigInt(int v) {
+        if (value != null && v == ((int) value)) return;
         value = v;
         saveConfig();
     }
 
     public void setConfigLong(Long v) {
+        if (value != null && v == ((long) value)) return;
         value = v;
         saveConfig();
     }
 
     public void setConfigFloat(Float v) {
+        if (value != null && v == ((float) value)) return;
         value = v;
         saveConfig();
     }
 
     public void setConfigString(String v) {
+        if (value != null && value.equals(v)) return;
         if (v == null) {
             value = "";
         } else {
@@ -182,27 +187,21 @@ public class ConfigItem {
 
                 if (this.type == configTypeBool) {
                     editor.putBoolean(this.key, (boolean) this.value);
-                }
-                if (this.type == configTypeInt) {
+                } else if (this.type == configTypeInt) {
                     editor.putInt(this.key, (int) this.value);
-                }
-                if (this.type == configTypeLong) {
+                } else if (this.type == configTypeLong) {
                     editor.putLong(this.key, (Long) this.value);
-                }
-                if (this.type == configTypeFloat) {
+                } else if (this.type == configTypeFloat) {
                     editor.putFloat(this.key, (Float) this.value);
-                }
-                if (this.type == configTypeString) {
+                } else if (this.type == configTypeString) {
                     editor.putString(this.key, this.value.toString());
-                }
-                if (this.type == configTypeSetInt) {
+                } else if (this.type == configTypeSetInt) {
                     HashSet<String> ss = new HashSet<>();
                     for (Integer n : (Set<Integer>) this.value) {
                         ss.add(Integer.toString(n));
                     }
                     editor.putStringSet(this.key, ss);
-                }
-                if (this.type == configTypeMapIntInt) {
+                } else if (this.type == configTypeMapIntInt) {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     ObjectOutputStream oos = new ObjectOutputStream(baos);
                     oos.writeObject(this.value);

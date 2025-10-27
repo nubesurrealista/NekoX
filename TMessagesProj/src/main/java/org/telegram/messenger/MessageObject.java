@@ -12156,7 +12156,7 @@ public class MessageObject {
     private Boolean hiddenByRegex = null;
     public boolean shouldBeHidden() {
         if (messageOwner.hide) return true;
-        boolean hasHideRegex = NekoConfig.hideMessageRegexString != null && !NekoConfig.hideMessageRegexString.isBlank();
+        boolean hasHideRegex = NekoConfig.hideMessageRegexPattern != null;
         if (!hasHideRegex) return false;
         if (hiddenByRegex != null) return hiddenByRegex;
         return hiddenByRegex = (messageOwner.message != null && NekoConfig.hideMessageRegexPattern.matcher(messageOwner.message).find());
