@@ -83,7 +83,6 @@ import android.transition.TransitionManager;
 import android.transition.TransitionSet;
 import android.transition.TransitionValues;
 import android.util.FloatProperty;
-import android.util.Log;
 import android.util.Pair;
 import android.util.Property;
 import android.util.Range;
@@ -157,7 +156,6 @@ import org.telegram.messenger.BotWebViewVibrationEffect;
 import org.telegram.messenger.BringAppForegroundService;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
-import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.Emoji;
@@ -187,7 +185,6 @@ import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.WebFile;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.camera.Size;
-import org.telegram.messenger.chromecast.ChromecastController;
 //import org.telegram.messenger.chromecast.ChromecastMedia;
 import org.telegram.messenger.chromecast.ChromecastMediaVariations;
 import org.telegram.messenger.pip.source.IPipSourceDelegate;
@@ -327,7 +324,6 @@ import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.StrUtil;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
 
 @SuppressLint("WrongConstant")
 @SuppressWarnings("unchecked")
@@ -369,7 +365,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private TextSelectionHelper.SimpleTextSelectionHelper textSelectionHelper;
     private boolean firstFrameRendered;
     private Paint surfaceBlackoutPaint;
-    private boolean bestVideoQualityChosenByNekoConfig = !NekoConfig.chooseBestVideoQualityByDefault.Bool();
     public static boolean tempDisableGifAsVideo = false;
     public static Boolean updatedSpoilerValue = null;
 
@@ -8761,14 +8756,19 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     private void chooseQuality(int qualityIndex) {
+        chooseQuality(qualityIndex, false);
+    }
+
+    private void chooseQuality(int qualityIndex, boolean auto) {
         if (videoPlayer != null) {
             videoPlayer.setSelectedQuality(qualityIndex);
         }
-        if (qualityIndex == VideoPlayer.QUALITY_AUTO) {
+        if (qualityIndex == VideoPlayer.QUALITY_AUTO || auto) {
             VideoPlayer.saveQuality(null, currentMessageObject);
         } else if (videoPlayer != null) {
             VideoPlayer.saveQuality(videoPlayer.getQuality(qualityIndex), currentMessageObject);
         }
+        if (auto) return;
         updateQualityItems();
         if (videoItem.isSubMenuShowing()) videoItem.toggleSubMenu();
 //        try {
@@ -8783,6 +8783,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     private int lastQualityIndexSelected;
+    private boolean firstQualityItemUpdate = NekoConfig.chooseBestVideoQualityByDefault.Bool();
     private void updateQualityItems() {
         if (videoPlayer == null || videoPlayer.getQualitiesCount() <= 1) {
             videoQualityLayout.setVisibility(View.GONE);
@@ -8793,11 +8794,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             lastQualityIndexSelected = -1;
             return;
         }
-        if (!bestVideoQualityChosenByNekoConfig) {
-            bestVideoQualityChosenByNekoConfig = true;
-            chooseQuality(videoPlayer.getHighestQualityIndex(null));
-            return;
-        }
+        ActionBarMenuSubItem bestItem = null, currentChecked = null;
+        VideoPlayer.Quality bestQ = null, currentQ = null;
         galleryButton.setRightIcon(R.drawable.msg_arrowright);
 //        videoItem.setVisibility(View.VISIBLE);
         chooseSpeedLayout.setVisibility(View.GONE);
@@ -8836,6 +8834,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 } else {
                     q = videoPlayer.getQuality(i);
                     if (q.original) {
+                        bestQ = q;
                         title.append(LocaleController.getString(R.string.QualityOriginal));
 //                        if (i != videoPlayer.getSelectedQuality() && videoPlayer.getQualitiesCount() >= 2 && (q.uris.isEmpty() || !q.uris.get(0).isCached())) {
 //                            visible = false;
@@ -8889,11 +8888,25 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 });
                 item.setSelectorColor(0x0fffffff);
                 videoQualityItems.add(item);
+                if (item.getCheckView().isChecked()) {
+                    currentChecked = item;
+                    currentQ = q;
+                }
+                if (firstQualityItemUpdate && q != null && (bestQ == null || q.original || bestQ.height < q.height)) {
+                    bestItem = item;
+                    bestQ = q;
+                }
             }
             ActionBarPopupWindow.GapView gap = new ActionBarPopupWindow.GapView(activityContext, resourcesProvider, Theme.key_actionBarDefaultSubmenuSeparator);
             gap.setTag(R.id.fit_width_tag, 1);
             gap.setColor(0xff181818);
             videoQualityLayout.addView(gap, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 8));
+            if (firstQualityItemUpdate && bestItem != null && (bestQ != null && currentQ != null && bestQ.height > currentQ.height)) {
+                firstQualityItemUpdate = false;
+                currentChecked.setChecked(false);
+                bestItem.setChecked(true);
+                chooseQuality(videoPlayer.getQualities().indexOf(bestQ), true);
+            }
         } else {
             for (int i = -1; i < videoPlayer.getQualitiesCount(); ++i) {
                 ActionBarMenuSubItem item = videoQualityItems.get(i + 1);
@@ -10610,7 +10623,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         if (parentActivity == null) {
             return;
         }
-        bestVideoQualityChosenByNekoConfig = !NekoConfig.chooseBestVideoQualityByDefault.Bool();
+        firstQualityItemUpdate = NekoConfig.chooseBestVideoQualityByDefault.Bool();
         streamingAlertShown = false;
         startedPlayTime = SystemClock.elapsedRealtime();
         currentVideoFinishedLoading = false;

@@ -536,6 +536,11 @@ public class VideoPlayer implements Player.Listener, VideoListener, AnalyticsLis
         return videoQualities.size();
     }
 
+    public ArrayList<VideoPlayer.Quality> getQualities() {
+        if (videoQualities == null) return null;
+        return new ArrayList<>(videoQualities);
+    }
+
     public File getFile() {
         if (videoQualities != null) {
             for (Quality q : videoQualities) {
