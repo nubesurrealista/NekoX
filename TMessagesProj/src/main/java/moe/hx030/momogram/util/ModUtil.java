@@ -3,9 +3,6 @@ package moe.hx030.momogram.util;
 import android.text.TextUtils;
 import android.util.Log;
 
-import androidx.collection.LruCache;
-import androidx.core.util.LruCacheKt;
-
 import org.telegram.messenger.MessagesController;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -31,7 +28,9 @@ public class ModUtil {
             return importers;
         }
         if (bannedUserIds == null) bannedUserIds = new ArrayDeque<>(60);
-        boolean regex = NekoConfig.autoDismissNameRegexPattern != null;
+        final boolean bio = NekoConfig.autoDismissJoinReqBio.Bool();
+        final boolean regex = NekoConfig.autoDismissRegexPattern != null;
+        final boolean useOpenCC = NekoConfig.autoDismissNameUseOpenCC.Bool();
         int oldSize = importers.importers.size();
         Log.d("030-filterJoinRequests", String.format("b4 | count=%d size=%d", importers.count, importers.importers.size()));
 
@@ -45,7 +44,8 @@ public class ModUtil {
             TLRPC.User u = currentUsers.get(i.user_id);
             if (u == null) continue;
             if (u.deleted || (regex &&
-                    checkName(NekoConfig.autoDismissNameRegexPattern, u.first_name, u.last_name, NekoConfig.autoDismissNameUseOpenCC.Bool()))) {
+                    checkName(NekoConfig.autoDismissRegexPattern, u.first_name, u.last_name, useOpenCC)) ||
+                    (bio && checkString(NekoConfig.autoDismissRegexPattern, i.about, useOpenCC))) {
 
                 if (bannedUserIds.contains(u.id)) continue;
                 bannedUserIds.add(u.id);
@@ -66,7 +66,7 @@ public class ModUtil {
                 });
                 Log.d("030-filterJoinRequests", String.format("send dismiss req for %s %d (DA=%s)", u.first_name, i.user_id, u.deleted));
             } else {
-                boolean match = NekoConfig.autoDismissNameRegexPattern.matcher(u.first_name).find();
+                boolean match = NekoConfig.autoDismissRegexPattern.matcher(u.first_name).find();
                 Log.d("030-filterJoinRequests", String.format("passed, DA=%s regex=%s match=%s first_name=%s", u.deleted, regex, match, u.first_name));
                 finalImporters.add(i);
             }
@@ -89,6 +89,20 @@ public class ModUtil {
                 CCConverter conv = CCConverter.get(target);
                 if (regex.matcher(conv.convert(firstname)).find()) return true;
                 if (!TextUtils.isEmpty(lastname) && regex.matcher(conv.convert(firstname)).find()) return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkString(Pattern regex, String str, boolean useOpenCC) {
+        if (regex == null || TextUtils.isEmpty(str)) return false;
+        if (regex.matcher(str).find()) return true;
+        if (useOpenCC) {
+            if (CCTargets == null) CCTargets = Set.of(CCTarget.TC, CCTarget.SC);
+
+            for (CCTarget target : CCTargets) {
+                CCConverter conv = CCConverter.get(target);
+                if (regex.matcher(conv.convert(str)).find()) return true;
             }
         }
         return false;

@@ -297,5 +297,6 @@
     <string name="AutoDismissJoinReq">Auto ban from join requests</string>
     <string name="AutoDismissJoinReqDesc">Deleted accounts and those with matching bio/name will be banned on sight</string>
     <string name="AutoDismissReqRegex">Regex rule for auto ban</string>
-    <string name="AutoDismissNameUseOpenCC">Use OpenCC to check Simplified and Traditional Chinese names</string>
+    <string name="AutoDismissUseOpenCC">Use OpenCC to check Simplified and Traditional Chinese</string>
+    <string name="AutoDismissJoinReqBio">Apply regex rule to bio for join requests</string>
 </resources>
