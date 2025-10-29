@@ -7,6 +7,8 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
+import android.util.LongSparseArray;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -18,7 +20,10 @@ import androidx.annotation.Nullable;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MemberRequestsController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.Utilities;
+import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -30,14 +35,17 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.MemberRequestsBottomSheet;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 
+import java.util.HashMap;
 import java.util.List;
+
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class ChatActivityMemberRequestsDelegate {
 
     private final BaseFragment fragment;
     private final SizeNotifierFrameLayout sizeNotifierFrameLayout;
     private final Callback callback;
-    private final TLRPC.Chat currentChat;
+    private TLRPC.Chat currentChat = null;
     private final int currentAccount;
 
     public FrameLayout root;
@@ -62,6 +70,40 @@ public class ChatActivityMemberRequestsDelegate {
         this.currentChat = currentChat;
         this.currentAccount = fragment.getCurrentAccount();
         this.callback = callback;
+
+        if (NekoConfig.autoDismissJoinReq.Bool()) {
+            checkJoinRequests(null, null);
+        }
+    }
+    private final static HashMap<Long, LongSparseArray<TLRPC.User>> usersMap = new HashMap<>();
+
+    private final RequestDelegate onCheckedJoinRequests = (res, err) -> {
+        if (err != null) {
+            Log.e("030-joinreq", String.format("%d - %s", err.code, err.text));
+        } else {
+            if (res instanceof TLRPC.TL_messages_chatInviteImporters importers) {
+                TLRPC.TL_chatInviteImporter lastInvitedUser = !importers.importers.isEmpty()
+                        ? importers.importers.get(importers.importers.size() - 1)
+                        : null;
+                LongSparseArray<TLRPC.User> users = null;
+                if (currentChat != null) {
+                    users = usersMap.computeIfAbsent(currentChat.id, (x) -> new LongSparseArray<>());
+                    for (int i = 0; i < importers.users.size(); ++i) {
+                        TLRPC.User user = importers.users.get(i);
+                        users.put(user.id, user);
+                    }
+
+                    checkJoinRequests(lastInvitedUser, users);
+                }
+            } else {
+                Log.e("030-joinreq", String.format("unexpected response, type: %s", res.getClass().getName()));
+            }
+        }
+    };
+    private void checkJoinRequests(TLRPC.TL_chatInviteImporter lastImporter, LongSparseArray<TLRPC.User> users) {
+        Utilities.stageQueue.postRunnable(() ->
+                MemberRequestsController.getInstance(currentAccount)
+                        .getImporters(currentChat.id, null, lastImporter, users, onCheckedJoinRequests));
     }
 
     public View getView() {
