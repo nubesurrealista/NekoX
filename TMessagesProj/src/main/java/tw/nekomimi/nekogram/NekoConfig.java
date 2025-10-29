@@ -381,6 +381,7 @@ public class NekoConfig {
     public static ConfigItem autoDismissJoinReqBio = addConfig(R.string.AutoDismissJoinReqBio, "AutoDismissJoinReqBio", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem autoDismissNameUseOpenCC = addConfig(R.string.AutoDismissUseOpenCC, "AutoDismissNameUseOpenCC", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem autoDismissRegex = addConfig(R.string.AutoDismissReqRegex, "AutoDismissReqRegex", configTypeString, EXPERIMENTAL, "群发|纸飞机|跑U|棋牌|招商|变现|群發|稳赚|全网").setOnConfigChanged(NekoConfig::applyAutoBanByRegex);
+    public static ConfigItem autoDismissDummy = addConfig(R.string.AutoDismissReqDummy, "AutoDismissReqDummy", configTypeBool, EXPERIMENTAL, false);
     public static String autoDismissRegexString;
     public static Pattern autoDismissRegexPattern;
 
