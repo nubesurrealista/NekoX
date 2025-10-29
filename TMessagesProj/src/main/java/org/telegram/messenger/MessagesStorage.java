@@ -99,7 +99,7 @@ public class MessagesStorage extends BaseController {
     private int lastSavedDate = 0;
     private int lastSavedQts = 0;
 
-    private int classGuid;
+    public int classGuid;
 
     private final ArrayList<MessagesController.DialogFilter> dialogFilters = new ArrayList<>();
     private final SparseArray<MessagesController.DialogFilter> dialogFiltersMap = new SparseArray<>();

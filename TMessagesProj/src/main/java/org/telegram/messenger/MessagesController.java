@@ -16196,7 +16196,7 @@ public class MessagesController extends BaseController implements NotificationCe
 
                                 getMessagesStorage().getStorageQueue().postRunnable(() -> {
                                     if (!pushMessages.isEmpty()) {
-                                        AndroidUtilities.runOnUIThread(() -> getNotificationsController().processNewMessages(pushMessages, !(res instanceof TLRPC.TL_updates_differenceSlice), false, null));
+                                        AndroidUtilities.runOnUIThread(() -> getNotificationsController().processNewMessages(pushMessages, !(res instanceof TLRPC.TL_updates_differenceSlice), false, null, res));
                                     }
                                     getMessagesStorage().putMessages(res.new_messages, true, false, false, getDownloadController().getAutodownloadMask(), 0, 0);
 
@@ -19115,7 +19115,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         toDbUser.id = update.user_id;
                         toDbUser.phone = update.phone;
                         dbUsers.add(toDbUser);
-                        } else if (baseUpdate instanceof TLRPC.TL_updateNotifySettings) {
+                    } else if (baseUpdate instanceof TLRPC.TL_updateNotifySettings) {
                         TLRPC.TL_updateNotifySettings update = (TLRPC.TL_updateNotifySettings) baseUpdate;
                         if (update.notify_settings instanceof TLRPC.TL_peerNotifySettings) {
                             updateDialogFiltersFlags |= DIALOG_FILTER_FLAG_EXCLUDE_MUTED;

@@ -70,6 +70,7 @@ import org.telegram.messenger.support.LongSparseIntArray;
 import org.telegram.messenger.utils.tlutils.TlUtils;
 import org.telegram.messenger.voip.VoIPGroupNotification;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.tl.TL_account;
 import org.telegram.ui.ActionBar.Theme;
@@ -97,6 +98,7 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
 
+import moe.hx030.momogram.util.FilterUtils;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.StrUtil;
@@ -1043,6 +1045,9 @@ public class NotificationsController extends BaseController {
     }
 
     public void processNewMessages(ArrayList<MessageObject> messageObjects, boolean isLast, boolean isFcm, CountDownLatch countDownLatch) {
+        processNewMessages(messageObjects, isLast, isFcm, countDownLatch, null);
+    }
+    public void processNewMessages(ArrayList<MessageObject> messageObjects, boolean isLast, boolean isFcm, CountDownLatch countDownLatch, TLRPC.updates_Difference diff) {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("NotificationsController: processNewMessages msgs.size()=" + (messageObjects == null ? "null" : messageObjects.size()) + " isLast=" + isLast + " isFcm=" + isFcm + ")");
         }
@@ -1104,41 +1109,7 @@ public class NotificationsController extends BaseController {
                     continue;
                 }
 
-                long chatId = messageObject.getChatId(), senderId = messageObject.getSenderId();
-                if (NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockedPeers.indexOfKey(senderId) >= 0) {
-                    continue;
-                }
-
-                if (NekoConfig.autoArchiveAndMute.Bool() && senderId > 0 && chatId == 0) {
-                    if (NekoConfig.debugAntiSpam.Bool())
-                        Log.d("030-debugspam", String.format("PM?, id=%d, chat=%d, isSvc=%s, isContact=%s",
-                            senderId, messageObject.getChatId(), UserObject.isService(senderId),
-                            getContactsController().isContact(senderId)));
-                    if (!UserObject.isService(chatId) && !getContactsController().isContact(chatId)) {
-                        if (MessagesStorage.getInstance(currentAccount).isExistingChat(chatId)) return;
-
-                        TLRPC.User currentUser = getMessagesStorage().getUserSync(chatId);
-                        if (currentUser.bot) return; // bots can't send first msg
-                        final ArrayList<Long> list = new ArrayList<>(1);
-                        list.add(senderId);
-                        if (NekoConfig.autoArchiveAndMuteNoCommonGroupOnly.Bool()) {
-                            getMessagesController().loadFullUser(currentUser, classGuid, true, userFull -> {
-                                if (userFull != null && userFull.common_chats_count > 0) return;
-                                Log.d("030-spam", "no common group => archive & mute " + senderId);
-                                AndroidUtilities.runOnUIThread(() -> {
-                                    getMessagesController().addDialogToFolder(list, 1, -1, null, 0);
-                                    getNotificationsController().setDialogNotificationsSettings(senderId, 0, NotificationsController.SETTING_MUTE_FOREVER);
-                                });
-                            });
-                        } else {
-                            Log.d("030-spam", "archive & mute " + senderId);
-                            AndroidUtilities.runOnUIThread(() -> {
-                                getMessagesController().addDialogToFolder(list, 1, -1, null, 0);
-                                getNotificationsController().setDialogNotificationsSettings(senderId, 0, NotificationsController.SETTING_MUTE_FOREVER);
-                            });
-                        }
-                    }
-                }
+                if (FilterUtils.filterPM(currentAccount, messageObject, diff)) continue;
 
                 if (messageObject.isStoryPush) {
                     long date = messageObject.messageOwner == null ? System.currentTimeMillis() : messageObject.messageOwner.date * 1000L;
