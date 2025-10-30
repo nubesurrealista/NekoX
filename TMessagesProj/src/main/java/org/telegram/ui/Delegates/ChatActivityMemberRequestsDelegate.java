@@ -82,9 +82,8 @@ public class ChatActivityMemberRequestsDelegate {
             Log.e("030-joinreq", String.format("%d - %s", err.code, err.text));
         } else {
             if (res instanceof TLRPC.TL_messages_chatInviteImporters importers) {
-                TLRPC.TL_chatInviteImporter lastInvitedUser = !importers.importers.isEmpty()
-                        ? importers.importers.get(importers.importers.size() - 1)
-                        : null;
+                if (importers.importers.size() < 30) return;
+                TLRPC.TL_chatInviteImporter lastInvitedUser = importers.importers.get(importers.importers.size() - 1);
                 LongSparseArray<TLRPC.User> users = null;
                 if (currentChat != null) {
                     users = usersMap.computeIfAbsent(currentChat.id, (x) -> new LongSparseArray<>());

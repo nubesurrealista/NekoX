@@ -25,7 +25,7 @@ public class ModUtil {
 
     public static TLRPC.TL_messages_chatInviteImporters filterJoinRequests(int currentAccount, long chatId, TLRPC.TL_messages_chatInviteImporters importers) {
         if (importers == null || !NekoConfig.autoDismissJoinReq.Bool()) {
-            Log.d("030-filterJoinRequests", String.format("importers=%s autoDismiss=%s", importers != null , NekoConfig.autoDismissJoinReq.Bool()));
+            Log.d("030-filterJoinReq", String.format("importers=%s autoDismiss=%s", importers != null , NekoConfig.autoDismissJoinReq.Bool()));
             return importers;
         }
         if (bannedUserIds == null) bannedUserIds = new ArrayDeque<>(60);
@@ -34,7 +34,7 @@ public class ModUtil {
         final boolean regex = NekoConfig.autoDismissRegexPattern != null;
         final boolean useOpenCC = NekoConfig.autoDismissNameUseOpenCC.Bool();
         int oldSize = importers.importers.size();
-        Log.d("030-filterJoinRequests", String.format("b4 | count=%d size=%d", importers.count, importers.importers.size()));
+        Log.d("030-filterJoinReq", String.format("b4 | count=%d size=%d", importers.count, importers.importers.size()));
 
         Map<Long, TLRPC.User> currentUsers = new HashMap<>(importers.users.size());
         for (TLRPC.User u : importers.users) {
