@@ -48,7 +48,6 @@ import android.os.SystemClock;
 import android.provider.Settings;
 import android.text.TextPaint;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
@@ -70,7 +69,6 @@ import org.telegram.messenger.support.LongSparseIntArray;
 import org.telegram.messenger.utils.tlutils.TlUtils;
 import org.telegram.messenger.voip.VoIPGroupNotification;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.tl.TL_account;
 import org.telegram.ui.ActionBar.Theme;
@@ -1109,7 +1107,7 @@ public class NotificationsController extends BaseController {
                     continue;
                 }
 
-                if (FilterUtils.filterPM(currentAccount, messageObject, diff)) continue;
+                if (FilterUtils.filterPM(currentAccount, messageObject, diff) == FilterUtils.Result.Blocked) continue;
 
                 if (messageObject.isStoryPush) {
                     long date = messageObject.messageOwner == null ? System.currentTimeMillis() : messageObject.messageOwner.date * 1000L;

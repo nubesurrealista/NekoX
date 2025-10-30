@@ -72,6 +72,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
+import moe.hx030.momogram.util.FilterUtils;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.utils.StrUtil;
@@ -10341,6 +10342,9 @@ public class MessagesStorage extends BaseController {
             isForumCacheInvalidate(user.id);
         }
         state.dispose();
+
+        // 030
+        FilterUtils.checkPendingIds(currentAccount);
     }
 
     public void updateChatDefaultBannedRights(long chatId, TLRPC.TL_chatBannedRights rights, int version) {

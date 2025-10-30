@@ -48,8 +48,8 @@ public class ModUtil {
             if (dummy && TextUtils.isEmpty(u.username) && !ImageLocation.isUserHasPhoto(u)) {
                 dismissJoinRequest(currentAccount, chatId, i, u);
             } else if (u.deleted || (regex &&
-                    checkName(NekoConfig.autoDismissRegexPattern, u.first_name, u.last_name, useOpenCC)) ||
-                    (bio && checkString(NekoConfig.autoDismissRegexPattern, i.about, useOpenCC))) {
+                    FilterUtils.checkName(NekoConfig.autoDismissRegexPattern, u.first_name, u.last_name, useOpenCC)) ||
+                    (bio && FilterUtils.checkString(NekoConfig.autoDismissRegexPattern, i.about, useOpenCC))) {
 
                 if (bannedUserIds.contains(u.id)) continue;
                 bannedUserIds.add(u.id);
@@ -85,37 +85,6 @@ public class ModUtil {
             }
         });
         Log.d("030-filterJoinReq", String.format("send dismiss req for %s %d (DA=%s)", u.first_name, i.user_id, u.deleted));
-    }
-
-    private static Set<CCTarget> CCTargets;
-    public static boolean checkName(Pattern regex, String firstname, String lastname, boolean useOpenCC) {
-        if (regex == null) return false;
-        if (regex.matcher(firstname).find()) return true;
-        if (!TextUtils.isEmpty(lastname) && regex.matcher(lastname).find()) return true;
-        if (useOpenCC) {
-            if (CCTargets == null) CCTargets = Set.of(CCTarget.TC, CCTarget.SC);
-
-            for (CCTarget target : CCTargets) {
-                CCConverter conv = CCConverter.get(target);
-                if (regex.matcher(conv.convert(firstname)).find()) return true;
-                if (!TextUtils.isEmpty(lastname) && regex.matcher(conv.convert(firstname)).find()) return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean checkString(Pattern regex, String str, boolean useOpenCC) {
-        if (regex == null || TextUtils.isEmpty(str)) return false;
-        if (regex.matcher(str).find()) return true;
-        if (useOpenCC) {
-            if (CCTargets == null) CCTargets = Set.of(CCTarget.TC, CCTarget.SC);
-
-            for (CCTarget target : CCTargets) {
-                CCConverter conv = CCConverter.get(target);
-                if (regex.matcher(conv.convert(str)).find()) return true;
-            }
-        }
-        return false;
     }
 
 }
