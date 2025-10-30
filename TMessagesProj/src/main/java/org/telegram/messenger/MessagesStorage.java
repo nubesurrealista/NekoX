@@ -16242,14 +16242,6 @@ public class MessagesStorage extends BaseController {
         SQLitePreparedStatement state_tasks = null;
         SQLiteCursor cursor = null;
 
-        // 030
-        boolean autoArchiveAndMute = NekoConfig.autoArchiveAndMute.Bool();
-        ContactsController contactsController = ContactsController.getInstance(currentAccount);
-        List<Long> toArchiveAndMute = null;
-        if (autoArchiveAndMute) {
-            toArchiveAndMute = new ArrayList<>();
-        }
-
         try {
             database.beginTransaction();
             LongSparseArray<TLRPC.Message> new_dialogMessage = new LongSparseArray<>(dialogs.messages.size());
@@ -16307,14 +16299,6 @@ public class MessagesStorage extends BaseController {
                         if (mid < 0) {
                             continue;
                         }
-                    }
-
-                    // 030 note: most fields are not initialized here
-                    if (autoArchiveAndMute && !exists && dialog.id > 0
-                            && !UserObject.isService(dialog.id)
-                            && !contactsController.isContact(dialog.id)) {
-                        // TODO: check if self msg?
-                        toArchiveAndMute.add(dialog.id);
                     }
 
                     int messageDate = 0;
@@ -16536,32 +16520,6 @@ public class MessagesStorage extends BaseController {
             }
             if (state_tasks != null) {
                 state_tasks.dispose();
-            }
-        }
-
-        if (autoArchiveAndMute) {
-            boolean checkCommonGroup = NekoConfig.autoArchiveAndMuteNoCommonGroupOnly.Bool();
-            for (long did : toArchiveAndMute) {
-                getStorageQueue().postRunnable(() -> {
-                    TLRPC.User currentUser = getUserSync(did);
-                    if (currentUser.bot) return; // bots can't send first msg
-                    final ArrayList<Long> list = new ArrayList<>(1);
-                    list.add(did);
-                    if (checkCommonGroup) {
-                        getMessagesController().loadFullUser(currentUser, classGuid, true, userFull -> {
-                            if (userFull != null && userFull.common_chats_count > 0) return;
-                            AndroidUtilities.runOnUIThread(() -> {
-                                getMessagesController().addDialogToFolder(list, 1, -1, null, 0);
-                                getNotificationsController().setDialogNotificationsSettings(did, 0, NotificationsController.SETTING_MUTE_FOREVER);
-                            });
-                        });
-                    } else {
-                        AndroidUtilities.runOnUIThread(() -> {
-                            getMessagesController().addDialogToFolder(list, 1, -1, null, 0);
-                            getNotificationsController().setDialogNotificationsSettings(did, 0, NotificationsController.SETTING_MUTE_FOREVER);
-                        });
-                    }
-                });
             }
         }
     }
