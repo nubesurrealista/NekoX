@@ -10,6 +10,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.UserObject;
+import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 
@@ -118,11 +119,13 @@ public class FilterUtils {
         Log.d("030-filter", String.format("checkPendingIds: count=%d", pendingIds.size()));
         List<Long> pending = List.of(pendingIds.toArray(new Long[0]));
         pendingIds.clear();
-        for (Long id : pending) {
-            if (filterPM(currentAccount, null, id, null, null) == Result.Pending) {
-                pendingIds.add(id);
+        Utilities.stageQueue.postRunnable(() -> {
+            for (Long id : pending) {
+                if (filterPM(currentAccount, null, id, null, null) == Result.Pending) {
+                    pendingIds.add(id);
+                }
             }
-        }
+        });
     }
 
     public static void archiveAndMute(MessagesController messagesController, NotificationsController notificationsController, ArrayList<Long> list, long id) {
