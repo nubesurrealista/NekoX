@@ -413,7 +413,7 @@ public class NekoXConfig {
     public static void restoreMusicPlaybackState(int currentAccount) {
         if (!NekoConfig.resumeAudioPlaybackOnLaunch.Bool()) return;
         ArrayList<MessageObject> plist = MediaController.getInstance().getPlaylist();
-        if (plist != null) return; // prevent dup
+        if (plist != null && !plist.isEmpty()) return; // prevent dup
 
         long dialogId = preferences.getLong(LAST_PLAYING_MSG_DIALOG_ID, -1L);
         if (dialogId == -1L) {
