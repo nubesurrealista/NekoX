@@ -5339,7 +5339,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
     }
 
     public void updateMessageThumbs() {
-        if (message == null) {
+        if (message == null || !NekoConfig.mediaPreview.Bool()) {
             return;
         }
         String restrictionReason = MessagesController.getInstance(message.currentAccount).getRestrictionReason(message.messageOwner.restriction_reason);
@@ -5356,7 +5356,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                     setThumb(index++, ((TLRPC.TL_messageExtendedMedia) emedia).media);
                 }
             }
-        } else if (NekoConfig.mediaPreview.Bool() && groupMessages != null && groupMessages.size() > 1 && TextUtils.isEmpty(restrictionReason) && currentDialogFolderId == 0 && encryptedChat == null) {
+        } else if (groupMessages != null && groupMessages.size() > 1 && TextUtils.isEmpty(restrictionReason) && currentDialogFolderId == 0 && encryptedChat == null) {
             thumbsCount = 0;
             hasVideoThumb = false;
             Collections.sort(groupMessages, Comparator.comparingInt(MessageObject::getId));
