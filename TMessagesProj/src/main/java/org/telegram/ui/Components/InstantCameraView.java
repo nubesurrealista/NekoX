@@ -752,9 +752,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         cameraReady = false;
         selectedCamera = null;
         if (!fromPaused) {
-            if (!useCamera2) {
-                isFrontface = !NekoConfig.rearVideoMessages.Bool();
-            }
+            isFrontface = !NekoConfig.rearVideoMessages.Bool();
             updateFlash();
             recordedTime = 0;
             progress = 0;
