@@ -15343,7 +15343,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     if (str == null) continue;
                     inclNekoSettings.add(new SearchResult(++g, str, pageNames[e.getKey()],
                             R.drawable.notification, () -> {
-                        // TODO: scroll to the section where target toggle is located
                         switch (e.getKey()) {
                             case ConfigItem.GENERAL:
                                 presentFragment(new NekoGeneralSettingsActivity().setScrollTo(str));

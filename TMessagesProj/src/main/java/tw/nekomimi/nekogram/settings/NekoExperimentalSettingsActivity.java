@@ -3,15 +3,22 @@ package tw.nekomimi.nekogram.settings;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -46,6 +53,8 @@ import org.telegram.ui.Components.UndoView;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import kotlin.Unit;
@@ -73,6 +82,8 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private RecyclerListView listView;
     private ListAdapter listAdapter;
     private AnimatorSet animatorSet;
+    private ObjectAnimator highlightAnimator = null;
+    private View highlightView = null;
 
     private boolean sensitiveCanChange = false;
     private boolean sensitiveEnabled = false;
@@ -541,6 +552,30 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
 //                        holder.itemView.setVisibility(View.GONE);
 //                    }
                 }
+                if (position == scrollToIndex) {
+                    Field textViewField = ReflectUtil.getField(holder.itemView.getClass(), "textView");
+                    TextView textView = null;
+                    if (textViewField != null) {
+                        textViewField.setAccessible(true);
+                        try {
+                            textView = (TextView) textViewField.get(holder.itemView);
+                            if (textView != null) highlightView = holder.itemView;
+                        } catch (IllegalAccessException e) {
+                            Log.e("030-?", "", e);
+                        }
+                    } else {
+                        Log.w("030-?", String.format("%s does not contain textView field?", holder.itemView.getClass().getName()));
+                    }
+                    if (textView != null) {
+                        highlightAnimator = ObjectAnimator.ofInt(textView, "textColor", textView.getCurrentTextColor(), Color.CYAN);
+                        highlightAnimator.setEvaluator(new ArgbEvaluator());
+                        highlightAnimator.setDuration(2000);
+                        highlightAnimator.setRepeatMode(ValueAnimator.REVERSE);
+                        highlightAnimator.setRepeatCount(3);
+                        highlightAnimator.setInterpolator(new DecelerateInterpolator());
+                        highlightAnimator.start();
+                    }
+                }
             }
         }
 
@@ -576,6 +611,14 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
             //noinspection ConstantConditions
             view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             return new RecyclerListView.Holder(view);
+        }
+
+        @Override
+        public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+            super.onViewRecycled(holder);
+            if (highlightView == holder.itemView) {
+                highlightAnimator.end();
+            }
         }
     }
 }

@@ -1,16 +1,24 @@
 package tw.nekomimi.nekogram.settings;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.TextPaint;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,6 +53,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.Components.UndoView;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -70,6 +79,8 @@ import tw.nekomimi.nekogram.helpers.WhisperHelper;
 public class NekoChatSettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private final CellGroup cellGroup = new CellGroup(this);
+    private ObjectAnimator highlightAnimator = null;
+    private View highlightView = null;
 
     // Sticker Size
     private final AbstractConfigCell header0 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.StickerSize)));
@@ -803,6 +814,28 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                     // Default binds
                     a.onBindViewHolder(holder);
                 }
+                if (position == scrollToIndex) {
+                    Field textViewField = ReflectUtil.getField(holder.itemView.getClass(), "textView");
+                    TextView textView = null;
+                    if (textViewField != null) {
+                        textViewField.setAccessible(true);
+                        try {
+                            textView = (TextView) textViewField.get(holder.itemView);
+                            if (textView != null) highlightView = holder.itemView;
+                        } catch (IllegalAccessException e) {
+                            Log.e("030-?", "", e);
+                        }
+                    }
+                    if (textView != null) {
+                        highlightAnimator = ObjectAnimator.ofInt(textView, "textColor", textView.getCurrentTextColor(), Color.CYAN);
+                        highlightAnimator.setEvaluator(new ArgbEvaluator());
+                        highlightAnimator.setDuration(2000);
+                        highlightAnimator.setRepeatMode(ValueAnimator.REVERSE);
+                        highlightAnimator.setRepeatCount(3);
+                        highlightAnimator.setInterpolator(new DecelerateInterpolator());
+                        highlightAnimator.start();
+                    }
+                }
             }
         }
 
@@ -841,6 +874,14 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
             //noinspection ConstantConditions
             view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             return new RecyclerListView.Holder(view);
+        }
+
+        @Override
+        public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+            super.onViewRecycled(holder);
+            if (highlightView == holder.itemView) {
+                highlightAnimator.end();
+            }
         }
     }
 }

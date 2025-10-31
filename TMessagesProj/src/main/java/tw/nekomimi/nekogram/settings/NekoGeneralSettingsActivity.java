@@ -1,5 +1,7 @@
 package tw.nekomimi.nekogram.settings;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -10,6 +12,7 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 import android.text.TextPaint;
@@ -18,10 +21,13 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -63,6 +69,7 @@ import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.LauncherIconController;
 import org.telegram.ui.web.SearchEngine;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -94,6 +101,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private ListAdapter listAdapter;
     private ValueAnimator statusBarColorAnimator;
     private DrawerProfilePreviewCell profilePreviewCell;
+    private ObjectAnimator highlightAnimator = null;
+    private View highlightView = null;
 
     private final CellGroup cellGroup = new CellGroup(this);
 
@@ -907,6 +916,28 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     a.onBindViewHolder(holder);
                 }
                 // Other things
+                if (position == scrollToIndex) {
+                    Field textViewField = ReflectUtil.getField(holder.itemView.getClass(), "textView");
+                    TextView textView = null;
+                    if (textViewField != null) {
+                        textViewField.setAccessible(true);
+                        try {
+                            textView = (TextView) textViewField.get(holder.itemView);
+                            if (textView != null) highlightView = holder.itemView;
+                        } catch (IllegalAccessException e) {
+                            Log.e("030-?", "", e);
+                        }
+                    }
+                    if (textView != null) {
+                        highlightAnimator = ObjectAnimator.ofInt(textView, "textColor", textView.getCurrentTextColor(), Color.CYAN);
+                        highlightAnimator.setEvaluator(new ArgbEvaluator());
+                        highlightAnimator.setDuration(2000);
+                        highlightAnimator.setRepeatMode(ValueAnimator.REVERSE);
+                        highlightAnimator.setRepeatCount(3);
+                        highlightAnimator.setInterpolator(new DecelerateInterpolator());
+                        highlightAnimator.start();
+                    }
+                }
             }
         }
 
@@ -950,6 +981,14 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             //noinspection ConstantConditions
             view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             return new RecyclerListView.Holder(view);
+        }
+
+        @Override
+        public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+            super.onViewRecycled(holder);
+            if (highlightView == holder.itemView) {
+                highlightAnimator.end();
+            }
         }
     }
 
