@@ -10,10 +10,17 @@ public class ConfigCellCustom extends AbstractConfigCell {
 
     public final int type;
     public boolean enabled;
+    public final int stringId;
 
     public ConfigCellCustom(int type, boolean enabled) {
         this.type = type;
         this.enabled = enabled;
+        this.stringId = -1;
+    }
+    public ConfigCellCustom(int type, boolean enabled, int stringId) {
+        this.type = type;
+        this.enabled = enabled;
+        this.stringId = stringId;
     }
 
     public int getType() {

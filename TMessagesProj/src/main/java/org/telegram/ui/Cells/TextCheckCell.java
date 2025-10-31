@@ -491,4 +491,8 @@ public class TextCheckCell extends FrameLayout {
         imageView.setColorFilter(new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN));
         imageView.setBackground(Theme.createRoundRectDrawable(dp(9), color));
     }
+
+    public TextView getTextView() {
+        return textView;
+    }
 }

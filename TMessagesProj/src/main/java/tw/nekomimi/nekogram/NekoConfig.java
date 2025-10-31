@@ -42,6 +42,7 @@ import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
@@ -363,7 +364,7 @@ public class NekoConfig {
     public static ConfigItem channelAlias = addConfig(R.string.channelAlias, "channelAlias", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem enableStickerPin = addConfig(R.string.EnableStickerPin, "EnableStickerPin", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem useMediaStreamInVoip = addConfig(R.string.UseMediaStreamInVoip, "UseMediaStreamInVoip", configTypeBool, EXPERIMENTAL, false);
-    public static ConfigItem customAudioBitrate = addConfig("customAudioBitrate", configTypeInt, EXPERIMENTAL, 32);
+    public static ConfigItem customAudioBitrate = addConfig(R.string.customGroupVoipAudioBitrate, "customAudioBitrate", configTypeInt, EXPERIMENTAL, 32);
     public static ConfigItem enhancedFileLoader = addConfig(R.string.enhancedFileLoader, "enhancedFileLoader", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem fasterReconnectHack = addConfig(R.string.FasterReconnectHack, "FasterReconnectHack", ConfigItem.configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem autoArchiveAndMute = addConfig(R.string.AutoArchiveAndMute, "AutoArchiveAndMute", ConfigItem.configTypeBool, EXPERIMENTAL, false);
@@ -1060,10 +1061,10 @@ public class NekoConfig {
         }
     }
 
-    public static HashMap<Integer, ArrayList<String>> nekoConfigStrings;
-    public static HashMap<Integer, ArrayList<String>> getStringsForSearch() {
+    public static HashMap<Integer, ArrayList<Pair<Integer, String>>> nekoConfigStrings;
+    public static HashMap<Integer, ArrayList<Pair<Integer, String>>> getStringsForSearch() {
         if (nekoConfigStrings != null) return nekoConfigStrings;
-        HashMap<Integer, ArrayList<String>> ret = new HashMap<>();
+        HashMap<Integer, ArrayList<Pair<Integer, String>>> ret = new HashMap<>();
         for (Field f : NekoConfig.class.getDeclaredFields()) {
             if (f.getType() == ConfigItem.class && Modifier.isStatic(f.getModifiers())) {
                 try {
@@ -1073,9 +1074,9 @@ public class NekoConfig {
                     ret.putIfAbsent(item.page, new ArrayList<>());
                     int id = item.id;
                     if (id == 0) {
-                        ret.get(item.page).add(LocaleController.getString(item.key));
+                        ret.get(item.page).add(Pair.create(-1, LocaleController.getString(item.key)));
                     } else {
-                        ret.get(item.page).add(LocaleController.getString(id));
+                        ret.get(item.page).add(Pair.create(id, LocaleController.getString(id)));
                     }
                 } catch (IllegalAccessException e) {
                     Log.e("030-nekocfg", "error getting field " + f.getName(), e);

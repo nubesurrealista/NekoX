@@ -84,6 +84,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.Log;
+import android.util.Pair;
 import android.util.Property;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -15330,7 +15331,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             int g = 9999;
             ArrayList<SearchResult> inclNekoSettings = new ArrayList<>();
             for (SearchResult sr : defaults) if (sr != null) inclNekoSettings.add(sr);
-            HashMap<Integer, ArrayList<String>> strMap = NekoConfig.getStringsForSearch();
+            HashMap<Integer, ArrayList<Pair<Integer, String>>> strMap = NekoConfig.getStringsForSearch();
             String modSettings = LocaleController.getString(NekoConfig.useOldName.Bool() ? R.string.NekoSettings : R.string.MomoSettings);
             String[] pageNames = {
                     null,
@@ -15338,20 +15339,20 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     String.format("%s - %s", modSettings, LocaleController.getString(R.string.Chat)),
                     String.format("%s - %s", modSettings, LocaleController.getString(R.string.Experiment)),
             };
-            for (Map.Entry<Integer, ArrayList<String>> e : strMap.entrySet()) {
-                for (String str : e.getValue()) {
-                    if (str == null) continue;
-                    inclNekoSettings.add(new SearchResult(++g, str, pageNames[e.getKey()],
+            for (Map.Entry<Integer, ArrayList<Pair<Integer, String>>> e : strMap.entrySet()) {
+                for (Pair<Integer, String> v : e.getValue()) {
+                    if (v == null || (v.first == -1 && TextUtils.isEmpty(v.second))) continue;
+                    inclNekoSettings.add(new SearchResult(++g, v.second, pageNames[e.getKey()],
                             R.drawable.notification, () -> {
                         switch (e.getKey()) {
                             case ConfigItem.GENERAL:
-                                presentFragment(new NekoGeneralSettingsActivity().setScrollTo(str));
+                                presentFragment(new NekoGeneralSettingsActivity().setScrollTo(v.second, v.first));
                                 break;
                             case ConfigItem.CHAT:
-                                presentFragment(new NekoChatSettingsActivity().setScrollTo(str));
+                                presentFragment(new NekoChatSettingsActivity().setScrollTo(v.second, v.first));
                                 break;
                             case ConfigItem.EXPERIMENTAL:
-                                presentFragment(new NekoExperimentalSettingsActivity().setScrollTo(str));
+                                presentFragment(new NekoExperimentalSettingsActivity().setScrollTo(v.second, v.first));
                                 break;
                             default:
                                 break;

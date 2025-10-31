@@ -1,19 +1,14 @@
 package tw.nekomimi.nekogram.settings;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.TextPaint;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,12 +26,10 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
-import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.EmptyCell;
@@ -53,7 +46,6 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.Components.UndoView;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -76,11 +68,7 @@ import tw.nekomimi.nekogram.config.cell.ConfigCellTextInput;
 import tw.nekomimi.nekogram.helpers.WhisperHelper;
 
 @SuppressLint("RtlHardcoded")
-public class NekoChatSettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
-
-    private final CellGroup cellGroup = new CellGroup(this);
-    private ObjectAnimator highlightAnimator = null;
-    private View highlightView = null;
+public class NekoChatSettingsActivity extends MomoSettingsBaseActivity implements NotificationCenter.NotificationCenterDelegate {
 
     // Sticker Size
     private final AbstractConfigCell header0 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.StickerSize)));
@@ -166,8 +154,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final AbstractConfigCell hideTimeForStickerRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideTimeForSticker));
     private final AbstractConfigCell hideGroupStickerRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideGroupSticker));
     private final AbstractConfigCell disablePremiumStickerAnimationRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disablePremiumStickerAnimation));
-    private final AbstractConfigCell maxRecentStickerCountRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
-    private final AbstractConfigCell maxRecentEmojiCountRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final AbstractConfigCell maxRecentStickerCountRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true, R.string.maxRecentStickerCount));
+    private final AbstractConfigCell maxRecentEmojiCountRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true, R.string.maxRecentEmojiCount));
     private final AbstractConfigCell dividerSticker = cellGroup.appendCell(new ConfigCellDivider());
 
     // Reaction
@@ -215,9 +203,6 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final AbstractConfigCell dividerEnd = cellGroup.appendCell(new ConfigCellDivider());
 
 
-
-    private RecyclerListView listView;
-    private ListAdapter listAdapter;
     private ActionBarMenuItem menuItem;
     private StickerSizeCell stickerSizeCell;
     private UndoView tooltip;
@@ -370,11 +355,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         tooltip = new UndoView(context);
         frameLayout.addView(tooltip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
 
-        if (scrollToIndex > -1) {
-            AndroidUtilities.runOnUIThread(() -> listView.post(() -> {
-                listView.smoothScrollToPosition(scrollToIndex);
-            }));
-        }
+        scheduleScrollToIndex();
 
         return fragmentView;
     }
@@ -382,12 +363,6 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     @Override
     public void onResume() {
         super.onResume();
-        if (listAdapter != null) {
-            listAdapter.notifyDataSetChanged();
-        }
-    }
-
-    private void updateRows() {
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
@@ -432,21 +407,6 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
 
         return themeDescriptions;
-    }
-
-    private int scrollToIndex = -1;
-    public NekoChatSettingsActivity setScrollTo(String str) {
-        if (str == null) return this;
-        for (int i = 0; i < cellGroup.rows.size(); ++i) {
-            AbstractConfigCell c = cellGroup.rows.get(i);
-            if (!ReflectUtil.hasField(c.getClass(), "title")) continue;
-            String cmp = (String) ReflectUtil.getFieldValue(c, "title");
-            if (str.equals(cmp)) {
-                scrollToIndex = i;
-                return this;
-            }
-        }
-        return this;
     }
 
     private void showMessageMenuAlert() {
@@ -760,41 +720,19 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     }
 
     //impl ListAdapter
-    private class ListAdapter extends RecyclerListView.SelectionAdapter {
-
-        private final Context mContext;
+    private class ListAdapter extends BaseListAdapter {
 
         public ListAdapter(Context context) {
-            mContext = context;
+            super(context);
+            Log.d("030-?", "maxRecentStickerCountRow index=" + cellGroup.rows.indexOf(maxRecentStickerCountRow));
+            Log.d("030-?", "maxRecentEmojiCountRow index=" + cellGroup.rows.indexOf(maxRecentEmojiCountRow));
         }
 
         @Override
-        public int getItemCount() {
-            return cellGroup.rows.size();
-        }
-
-        @Override
-        public boolean isEnabled(RecyclerView.ViewHolder holder) {
-            int position = holder.getAdapterPosition();
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             AbstractConfigCell a = cellGroup.rows.get(position);
-            if (a != null) {
-                return a.isEnabled();
-            }
-            return true;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            AbstractConfigCell a = cellGroup.rows.get(position);
-            if (a != null) {
-                return a.getType();
-            }
-            return CellGroup.ITEM_TYPE_TEXT_DETAIL;
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            AbstractConfigCell a = cellGroup.rows.get(position);
+            TextView textView = null;
+            String currentText = null;
             if (a != null) {
                 if (a instanceof ConfigCellCustom) {
                     // Custom binds
@@ -809,38 +747,26 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         } else if (position == cellGroup.rows.indexOf(deleteUnusedModelRow)) {
                             textCell.setTextAndValue(LocaleController.getString(R.string.DeleteUnusedWhisperModel), "", true);
                         }
+                        textView = textCell.getTextView();
+                        currentText = textView.getText().toString();
+                    }
+                    if (currentText != null && currentText.equals(scrollToString)) {
+                        int index = holder.getAdapterPosition();
+                        if (index != scrollToIndex) {
+                            setScrollToIndex(index, true);
+                        }
                     }
                 } else {
                     // Default binds
                     a.onBindViewHolder(holder);
                 }
-                if (position == scrollToIndex) {
-                    Field textViewField = ReflectUtil.getField(holder.itemView.getClass(), "textView");
-                    TextView textView = null;
-                    if (textViewField != null) {
-                        textViewField.setAccessible(true);
-                        try {
-                            textView = (TextView) textViewField.get(holder.itemView);
-                            if (textView != null) highlightView = holder.itemView;
-                        } catch (IllegalAccessException e) {
-                            Log.e("030-?", "", e);
-                        }
-                    }
-                    if (textView != null) {
-                        highlightAnimator = ObjectAnimator.ofInt(textView, "textColor", textView.getCurrentTextColor(), Color.CYAN);
-                        highlightAnimator.setEvaluator(new ArgbEvaluator());
-                        highlightAnimator.setDuration(2000);
-                        highlightAnimator.setRepeatMode(ValueAnimator.REVERSE);
-                        highlightAnimator.setRepeatCount(3);
-                        highlightAnimator.setInterpolator(new DecelerateInterpolator());
-                        highlightAnimator.start();
-                    }
-                }
+                checkScrollTo(position, holder, textView, currentText);
             }
         }
 
+        @NonNull
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = null;
             switch (viewType) {
                 case CellGroup.ITEM_TYPE_DIVIDER:
@@ -874,14 +800,6 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
             //noinspection ConstantConditions
             view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             return new RecyclerListView.Holder(view);
-        }
-
-        @Override
-        public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-            super.onViewRecycled(holder);
-            if (highlightView == holder.itemView) {
-                highlightAnimator.end();
-            }
         }
     }
 }

@@ -3,20 +3,14 @@ package tw.nekomimi.nekogram.settings;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +29,6 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.tl.TL_account;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.EmptyCell;
@@ -53,8 +46,6 @@ import org.telegram.ui.Components.UndoView;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import kotlin.Unit;
@@ -62,7 +53,6 @@ import kotlin.Unit;
 import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
-import moe.hx030.momogram.util.ReflectUtil;
 import tw.nekomimi.nekogram.database.NitritesKt;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.source.FirefoxLocalTranslator;
@@ -77,18 +67,11 @@ import tw.nekomimi.nekogram.config.cell.AbstractConfigCell;
 import tw.nekomimi.nekogram.config.cell.*;
 
 @SuppressLint("RtlHardcoded")
-public class NekoExperimentalSettingsActivity extends BaseFragment {
-
-    private RecyclerListView listView;
-    private ListAdapter listAdapter;
+public class NekoExperimentalSettingsActivity extends MomoSettingsBaseActivity {
     private AnimatorSet animatorSet;
-    private ObjectAnimator highlightAnimator = null;
-    private View highlightView = null;
 
     private boolean sensitiveCanChange = false;
     private boolean sensitiveEnabled = false;
-
-    private final CellGroup cellGroup = new CellGroup(this);
 
     private final AbstractConfigCell header1 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.Experiment)));
     private final AbstractConfigCell useSystemEmojiRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useSystemEmoji));
@@ -327,11 +310,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         tooltip = new UndoView(context);
         frameLayout.addView(tooltip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
 
-        if (scrollToIndex > -1) {
-            AndroidUtilities.runOnUIThread(() -> listView.post(() -> {
-                listView.smoothScrollToPosition(scrollToIndex);
-            }));
-        }
+        scheduleScrollToIndex();
 
         return fragmentView;
     }
@@ -379,12 +358,6 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         super.onResume();
         if (listAdapter != null) {
             checkSensitive();
-            listAdapter.notifyDataSetChanged();
-        }
-    }
-
-    private void updateRows() {
-        if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
     }
@@ -474,114 +447,15 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         }));
     }
 
-    private int scrollToIndex = -1;
-    public NekoExperimentalSettingsActivity setScrollTo(String str) {
-        if (str == null) return this;
-        for (int i = 0; i < cellGroup.rows.size(); ++i) {
-            AbstractConfigCell c = cellGroup.rows.get(i);
-            if (!ReflectUtil.hasField(c.getClass(), "title")) continue;
-            String cmp = (String) ReflectUtil.getFieldValue(c, "title");
-            if (str.equals(cmp)) {
-                scrollToIndex = i;
-                return this;
-            }
-        }
-        return this;
-    }
-
-    //impl ListAdapter
-    private class ListAdapter extends RecyclerListView.SelectionAdapter {
-
-        private Context mContext;
+    private class ListAdapter extends BaseListAdapter {
 
         public ListAdapter(Context context) {
-            mContext = context;
+            super(context);
         }
 
+        @NonNull
         @Override
-        public int getItemCount() {
-            return cellGroup.rows.size();
-        }
-
-        @Override
-        public boolean isEnabled(RecyclerView.ViewHolder holder) {
-            int position = holder.getAdapterPosition();
-            AbstractConfigCell a = cellGroup.rows.get(position);
-            if (a != null) {
-                return a.isEnabled();
-            }
-            return true;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            AbstractConfigCell a = cellGroup.rows.get(position);
-            if (a != null) {
-                return a.getType();
-            }
-            return CellGroup.ITEM_TYPE_TEXT_DETAIL;
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            AbstractConfigCell a = cellGroup.rows.get(position);
-            if (a != null) {
-                if (a instanceof ConfigCellCustom) {
-                    // Custom binds
-                    if (holder.itemView instanceof TextCheckCell) {
-                        TextCheckCell textCell = (TextCheckCell) holder.itemView;
-                        textCell.setEnabled(true, null);
-                        if (position == cellGroup.rows.indexOf(disableFilteringRow)) {
-                            textCell.setTextAndValueAndCheck(LocaleController.getString(R.string.SensitiveDisableFiltering), LocaleController.getString(R.string.SensitiveAbout), sensitiveEnabled, true, true);
-                            textCell.setEnabled(sensitiveCanChange, null);
-                        }
-                    } else if (holder.itemView instanceof TextSettingsCell) {
-                        TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
-                        textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-                        if (position == cellGroup.rows.indexOf(customAudioBitrateRow)) {
-                            String value = String.valueOf(NekoConfig.customAudioBitrate.Int()) + "kbps";
-                            if (NekoConfig.customAudioBitrate.Int() == 32)
-                                value += " (" + LocaleController.getString(R.string.Default) + ")";
-                            textCell.setTextAndValue(LocaleController.getString(R.string.customGroupVoipAudioBitrate), value, false);
-                        }
-                    }
-                } else {
-                    // Default binds
-                    a.onBindViewHolder(holder);
-//                    if (position == cellGroup.rows.indexOf(smoothKeyboardRow) && AndroidUtilities.isTablet()) {
-//                        holder.itemView.setVisibility(View.GONE);
-//                    }
-                }
-                if (position == scrollToIndex) {
-                    Field textViewField = ReflectUtil.getField(holder.itemView.getClass(), "textView");
-                    TextView textView = null;
-                    if (textViewField != null) {
-                        textViewField.setAccessible(true);
-                        try {
-                            textView = (TextView) textViewField.get(holder.itemView);
-                            if (textView != null) highlightView = holder.itemView;
-                        } catch (IllegalAccessException e) {
-                            Log.e("030-?", "", e);
-                        }
-                    } else {
-                        Log.w("030-?", String.format("%s does not contain textView field?", holder.itemView.getClass().getName()));
-                    }
-                    if (textView != null) {
-                        highlightAnimator = ObjectAnimator.ofInt(textView, "textColor", textView.getCurrentTextColor(), Color.CYAN);
-                        highlightAnimator.setEvaluator(new ArgbEvaluator());
-                        highlightAnimator.setDuration(2000);
-                        highlightAnimator.setRepeatMode(ValueAnimator.REVERSE);
-                        highlightAnimator.setRepeatCount(3);
-                        highlightAnimator.setInterpolator(new DecelerateInterpolator());
-                        highlightAnimator.start();
-                    }
-                }
-            }
-        }
-
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = null;
             switch (viewType) {
                 case CellGroup.ITEM_TYPE_DIVIDER:
@@ -614,11 +488,49 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
         }
 
         @Override
-        public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-            super.onViewRecycled(holder);
-            if (highlightView == holder.itemView) {
-                highlightAnimator.end();
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            AbstractConfigCell a = cellGroup.rows.get(position);
+            TextView textView = null;
+            String currentText = null;
+            if (a != null) {
+                if (a instanceof ConfigCellCustom) {
+                    // Custom binds
+                    if (holder.itemView instanceof TextCheckCell) {
+                        TextCheckCell textCell = (TextCheckCell) holder.itemView;
+                        textCell.setEnabled(true, null);
+                        if (position == cellGroup.rows.indexOf(disableFilteringRow)) {
+                            textCell.setTextAndValueAndCheck(currentText = LocaleController.getString(R.string.SensitiveDisableFiltering), LocaleController.getString(R.string.SensitiveAbout), sensitiveEnabled, true, true);
+                            textCell.setEnabled(sensitiveCanChange, null);
+                        }
+                        textView = textCell.getTextView();
+                    } else if (holder.itemView instanceof TextSettingsCell) {
+                        TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
+                        textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                        if (position == cellGroup.rows.indexOf(customAudioBitrateRow)) {
+                            String value = String.valueOf(NekoConfig.customAudioBitrate.Int()) + "kbps";
+                            if (NekoConfig.customAudioBitrate.Int() == 32)
+                                value += " (" + LocaleController.getString(R.string.Default) + ")";
+                            textCell.setTextAndValue(currentText = LocaleController.getString(R.string.customGroupVoipAudioBitrate), value, false);
+                        }
+                        textView = textCell.getTextView();
+                    }
+                    if (textView != null && currentText == null) currentText = textView.getText().toString();
+                    if (currentText != null && currentText.equals(scrollToString)) {
+                        int index = holder.getAdapterPosition();
+                        if (index != scrollToIndex) {
+                            setScrollToIndex(index, true);
+                        }
+                    }
+                } else {
+                    // Default binds
+                    a.onBindViewHolder(holder);
+//                    if (position == cellGroup.rows.indexOf(smoothKeyboardRow) && AndroidUtilities.isTablet()) {
+//                        holder.itemView.setVisibility(View.GONE);
+//                    }
+                }
+                checkScrollTo(position, holder, textView, currentText);
             }
         }
+
     }
 }

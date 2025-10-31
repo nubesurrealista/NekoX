@@ -95,16 +95,10 @@ import tw.nekomimi.nekogram.config.cell.AbstractConfigCell;
 import tw.nekomimi.nekogram.config.cell.*;
 
 @SuppressLint("RtlHardcoded")
-public class NekoGeneralSettingsActivity extends BaseFragment {
+public class NekoGeneralSettingsActivity extends MomoSettingsBaseActivity {
 
-    private RecyclerListView listView;
-    private ListAdapter listAdapter;
     private ValueAnimator statusBarColorAnimator;
     private DrawerProfilePreviewCell profilePreviewCell;
-    private ObjectAnimator highlightAnimator = null;
-    private View highlightView = null;
-
-    private final CellGroup cellGroup = new CellGroup(this);
 
     private final AbstractConfigCell profilePreviewRow = cellGroup.appendCell(new ConfigCellDrawerProfilePreview());
     private final AbstractConfigCell largeAvatarInDrawerRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.largeAvatarInDrawer, LocaleController.getString(R.string.valuesLargeAvatarInDrawer), null));
@@ -585,11 +579,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
         if (Build.VERSION.SDK_INT < 31) cellGroup.rows.remove(generateMonetThemeRow);
 
-        if (scrollToIndex > -1) {
-            AndroidUtilities.runOnUIThread(() -> listView.post(() -> {
-                listView.smoothScrollToPosition(scrollToIndex);
-            }));
-        }
+        scheduleScrollToIndex();
 
         return fragmentView;
     }
@@ -813,41 +803,18 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     }
 
     //impl ListAdapter
-    private class ListAdapter extends RecyclerListView.SelectionAdapter {
+    private class ListAdapter extends BaseListAdapter {
 
-        private Context mContext;
 
         public ListAdapter(Context context) {
-            mContext = context;
+            super(context);
         }
 
         @Override
-        public int getItemCount() {
-            return cellGroup.rows.size();
-        }
-
-        @Override
-        public boolean isEnabled(RecyclerView.ViewHolder holder) {
-            int position = holder.getAdapterPosition();
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             AbstractConfigCell a = cellGroup.rows.get(position);
-            if (a != null) {
-                return a.isEnabled();
-            }
-            return true;
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            AbstractConfigCell a = cellGroup.rows.get(position);
-            if (a != null) {
-                return a.getType();
-            }
-            return CellGroup.ITEM_TYPE_TEXT_DETAIL;
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            AbstractConfigCell a = cellGroup.rows.get(position);
+            TextView textView = null;
+            String currentText = null;
             if (a != null) {
                 if (a instanceof ConfigCellCustom) {
                     // Custom binds
@@ -904,11 +871,21 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                             textCell.setTextAndValue(LocaleController.getString(R.string.MemLeakThreshold),
                                     String.format(Locale.US, "%.1fGB", ((float) NekoConfig.memLeakThreshold.Int() / 1024576)), true);
                         }
+                        textView = textCell.getTextView();
+                        currentText = textView.getText().toString();
                     } else if (holder.itemView instanceof TextCheckCell) {
                         TextCheckCell checkCell = (TextCheckCell) holder.itemView;
                         if (position == cellGroup.rows.indexOf(useCamera2Row)) {
                             checkCell.setTextAndCheck(LocaleController.getString(R.string.UseCamera2API),
                                     SharedConfig.isUsingCamera2(currentAccount), true);
+                        }
+                        textView = checkCell.getTextView();
+                        currentText = textView.getText().toString();
+                    }
+                    if (currentText != null && currentText.equals(scrollToString)) {
+                        int index = holder.getAdapterPosition();
+                        if (index != scrollToIndex) {
+                            setScrollToIndex(index, true);
                         }
                     }
                 } else {
@@ -916,28 +893,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     a.onBindViewHolder(holder);
                 }
                 // Other things
-                if (position == scrollToIndex) {
-                    Field textViewField = ReflectUtil.getField(holder.itemView.getClass(), "textView");
-                    TextView textView = null;
-                    if (textViewField != null) {
-                        textViewField.setAccessible(true);
-                        try {
-                            textView = (TextView) textViewField.get(holder.itemView);
-                            if (textView != null) highlightView = holder.itemView;
-                        } catch (IllegalAccessException e) {
-                            Log.e("030-?", "", e);
-                        }
-                    }
-                    if (textView != null) {
-                        highlightAnimator = ObjectAnimator.ofInt(textView, "textColor", textView.getCurrentTextColor(), Color.CYAN);
-                        highlightAnimator.setEvaluator(new ArgbEvaluator());
-                        highlightAnimator.setDuration(2000);
-                        highlightAnimator.setRepeatMode(ValueAnimator.REVERSE);
-                        highlightAnimator.setRepeatCount(3);
-                        highlightAnimator.setInterpolator(new DecelerateInterpolator());
-                        highlightAnimator.start();
-                    }
-                }
+                checkScrollTo(position, holder, textView, currentText);
             }
         }
 
@@ -982,14 +938,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             return new RecyclerListView.Holder(view);
         }
-
-        @Override
-        public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-            super.onViewRecycled(holder);
-            if (highlightView == holder.itemView) {
-                highlightAnimator.end();
-            }
-        }
     }
 
     private void setCanNotChange() {
@@ -1019,21 +967,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             ((ConfigCellTextCheck) mapMobileDataSaverToRoamingRow).setEnabled(false);
         }
-    }
-
-    private int scrollToIndex = -1;
-    public NekoGeneralSettingsActivity setScrollTo(String str) {
-        if (str == null) return this;
-        for (int i = 0; i < cellGroup.rows.size(); ++i) {
-            AbstractConfigCell c = cellGroup.rows.get(i);
-            if (!ReflectUtil.hasField(c.getClass(), "title")) continue;
-            String cmp = (String) ReflectUtil.getFieldValue(c, "title");
-            if (str.equals(cmp)) {
-                scrollToIndex = i;
-                return this;
-            }
-        }
-        return this;
     }
 
     //Custom dialogs
