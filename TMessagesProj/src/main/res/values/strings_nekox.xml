@@ -300,4 +300,7 @@
     <string name="AutoDismissUseOpenCC">Use OpenCC to check Simplified and Traditional Chinese</string>
     <string name="AutoDismissJoinReqBio">Apply regex rule to bio for join requests</string>
     <string name="AutoDismissReqDummy">Dismiss accounts without username and profile photo</string>
+    <string name="AutoReqStats">Auto banned %1$d and dismissed %2$d accounts</string>
+    <string name="AutoReqStatsBanned">Auto banned %1$d accounts</string>
+    <string name="AutoReqStatsDismissed">Auto dismissed %1$d accounts</string>
 </resources>

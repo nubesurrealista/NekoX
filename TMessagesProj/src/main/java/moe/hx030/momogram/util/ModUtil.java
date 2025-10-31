@@ -3,16 +3,23 @@ package moe.hx030.momogram.util;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.Components.BulletinFactory;
+import org.telegram.ui.LaunchActivity;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
 import tw.nekomimi.nekogram.NekoConfig;
@@ -22,6 +29,7 @@ import tw.nekomimi.nekogram.cc.CCTarget;
 public class ModUtil {
 
     private static ArrayDeque<Long> bannedUserIds;
+    private static final AtomicInteger banned = new AtomicInteger(0), dismissed = new AtomicInteger(0);
 
     public static TLRPC.TL_messages_chatInviteImporters filterJoinRequests(int currentAccount, long chatId, TLRPC.TL_messages_chatInviteImporters importers) {
         if (importers == null || !NekoConfig.autoDismissJoinReq.Bool()) {
@@ -47,6 +55,7 @@ public class ModUtil {
             if (u == null) continue;
             if (dummy && TextUtils.isEmpty(u.username) && !ImageLocation.isUserHasPhoto(u)) {
                 dismissJoinRequest(currentAccount, chatId, i, u);
+                dismissed.addAndGet(1);
             } else if (u.deleted || (regex &&
                     FilterUtils.checkName(NekoConfig.autoDismissRegexPattern, u.first_name, u.last_name, useOpenCC)) ||
                     (bio && FilterUtils.checkString(NekoConfig.autoDismissRegexPattern, i.about, useOpenCC))) {
@@ -62,6 +71,7 @@ public class ModUtil {
                         Log.d("030-filterJoinReq", String.format("banned %d %s", u.id, u.first_name));
                     }
                 });
+                banned.addAndGet(1);
             } else {
                 boolean match = NekoConfig.autoDismissRegexPattern.matcher(u.first_name).find();
                 Log.d("030-filterJoinReq", String.format("passed, DA=%s regex=%s match=%s first_name=%s", u.deleted, regex, match, u.first_name));
@@ -71,6 +81,9 @@ public class ModUtil {
         importers.importers = finalImporters;
         importers.count -= (oldSize - finalImporters.size());
         Log.d("030-filterJoinReq", String.format("after | count=%d size=%d", importers.count, importers.importers.size()));
+        if (banned.get() > 0 || dismissed.get() > 0) {
+            scheduleShowStats();
+        }
         return importers;
     }
 
@@ -87,4 +100,26 @@ public class ModUtil {
         Log.d("030-filterJoinReq", String.format("send dismiss req for %s %d (DA=%s)", u.first_name, i.user_id, u.deleted));
     }
 
+    private static final Runnable showStats = () -> {
+        int ban = banned.get(), dismiss = dismissed.get();
+        banned.set(0);
+        dismissed.set(0);
+        BaseFragment frag = LaunchActivity.getLastFragment();
+        if (frag == null) return;
+        String msg;
+        if (ban > 0 && dismiss > 0) {
+            msg = LocaleController.formatString(R.string.AutoReqStats, ban, dismiss);
+        } else if (ban > 0) {
+            msg = LocaleController.formatString(R.string.AutoReqStatsBanned, ban);
+        } else {
+            msg = LocaleController.formatString(R.string.AutoReqStatsDismissed, dismiss);
+        }
+        BulletinFactory.of(frag).createSimpleBulletin(
+                frag.getContext().getResources().getDrawable(R.drawable.profile_info), msg)
+                .show(true);
+    };
+    private static void scheduleShowStats() {
+        ApplicationLoader.applicationHandler.removeCallbacks(showStats);
+        ApplicationLoader.applicationHandler.postDelayed(showStats, 1000);
+    }
 }
