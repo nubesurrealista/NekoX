@@ -14,18 +14,19 @@ import kotlin.collections.HashMap
 
 class TranslateDb(val code: String) {
 
-    var conn: ObjectRepository<TransItem> = db.getRepository(TransItem::class.java, code)
+    var conn: ObjectRepository<TransItem?>? = db?.getRepository(TransItem::class.java, code)
 
     companion object {
 
         val db = mkDatabase("translate_caches")
 
         val repo = HashMap<Locale, TranslateDb>()
-        val chat = db.getRepository(ChatLanguage::class.java, "chat")
-        val ccTarget = db.getRepository(ChatCCTarget::class.java, "opencc")
+        val chat = db?.getRepository(ChatLanguage::class.java, "chat")
+        val ccTarget = db?.getRepository(ChatCCTarget::class.java, "opencc")
 
         @JvmStatic fun getChatLanguage(chatId: Long, default: Locale): Locale? {
             if (Build.VERSION.SDK_INT < 26) return null
+            if (chat == null) return null
             val cursor = chat.find(FluentFilter.where("chatId").eq(chatId))
             cursor.forEach { return it.language.code2Locale }
             return default
@@ -36,6 +37,7 @@ class TranslateDb(val code: String) {
         @JvmStatic
         fun getChatLanguage(chatId: Long): ChatLanguage? {
             if (Build.VERSION.SDK_INT < 26) return null
+            if (chat == null) return null
             val cursor = chat.find(FluentFilter.where("chatId").eq(chatId))
             cursor.forEach { return it }
             return null
@@ -43,6 +45,7 @@ class TranslateDb(val code: String) {
 
         @JvmStatic
         fun saveChatLanguage(chatId: Long, locale: Locale) = UIUtil.runOnIoDispatcher {
+            if (chat == null) return@runOnIoDispatcher
             Log.d(StrUtil.get030Tag(TranslateDb), "saveLang: ${locale.locale2code}")
             val lang = getChatLanguage(chatId)
             val alwaysTranslateBeforeSend = lang?.alwaysTranslateBeforeSend
@@ -54,6 +57,7 @@ class TranslateDb(val code: String) {
         @JvmStatic
         fun getTranslateBeforeSend(chatId: Long): Boolean {
             if (Build.VERSION.SDK_INT < 26) return false
+            if (chat == null) return false
             val cursor = chat.find(FluentFilter.where("chatId").eq(chatId))
             cursor.forEach {
                 return it.alwaysTranslateBeforeSend
@@ -64,6 +68,7 @@ class TranslateDb(val code: String) {
         @JvmStatic
         fun setTranslateBeforeSend(chatId: Long, value: Boolean) = UIUtil.runOnIoDispatcher {
             if (Build.VERSION.SDK_INT < 26) return@runOnIoDispatcher
+            if (chat == null) return@runOnIoDispatcher
             val cursor = chat.find(FluentFilter.where("chatId").eq(chatId))
             cursor.forEach {
                 it.alwaysTranslateBeforeSend = value
@@ -76,6 +81,7 @@ class TranslateDb(val code: String) {
         @JvmStatic
         fun getChatCCTarget(chatId: Long, default: String?): String? {
             if (Build.VERSION.SDK_INT < 26) return null
+            if (ccTarget == null) return null
             val cursor = ccTarget.find(FluentFilter.where("chatId").eq(chatId))
             cursor.forEach { return it as String? }
             return default
@@ -87,6 +93,7 @@ class TranslateDb(val code: String) {
         @JvmStatic
         fun saveChatCCTarget(chatId: Long, target: String) = UIUtil.runOnIoDispatcher {
             if (Build.VERSION.SDK_INT < 26) return@runOnIoDispatcher
+            if (ccTarget == null) return@runOnIoDispatcher
             ccTarget.update(ChatCCTarget(chatId, target), true)
 
         }
@@ -116,6 +123,7 @@ class TranslateDb(val code: String) {
         @JvmStatic
         fun clearAll() {
             if (Build.VERSION.SDK_INT < 26) return
+            if (db == null) return
             db.listRepositories()
                     .filter { it  != "chat" }
                     .map { db.getCollection(it) }
@@ -128,24 +136,24 @@ class TranslateDb(val code: String) {
     }
 
     fun clear() = synchronized(this) {
-        if (Build.VERSION.SDK_INT < 26) return
-        conn.drop()
+        if (Build.VERSION.SDK_INT < 26) return@synchronized
+        conn?.drop()
     }
 
     fun contains(text: String): Boolean = synchronized(this) {
         if (Build.VERSION.SDK_INT < 26) return false
-        return conn.find(FluentFilter.where("text").eq(text)).count() > 0
+        return (conn?.find(FluentFilter.where("text").eq(text))?.count() ?: 0) > 0
     }
 
     fun save(text: String, trans: String) = synchronized<Unit>(this) {
         if (Build.VERSION.SDK_INT < 26) return
-        conn.update(TransItem(text, trans), true)
+        conn?.update(TransItem(text, trans), true)
     }
 
     fun query(text: String): String? = synchronized(this) {
         if (NekoConfig.ignoreTranslatorCache.Bool() || Build.VERSION.SDK_INT < 26) return null
-        val cursor = conn.find(FluentFilter.where("text").eq(text))
-        cursor.forEach { return it.trans }
+        val cursor = conn?.find(FluentFilter.where("text").eq(text))
+        cursor?.forEach { return it?.trans }
         return null // conn.find(FluentFilter.where("text").eq(text)).firstOrDefault()?.trans
     }
 

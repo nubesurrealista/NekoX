@@ -1,5 +1,6 @@
 package tw.nekomimi.nekogram.database
 
+import android.os.Build
 import android.util.Log
 import org.dizitart.no2.Nitrite
 import org.dizitart.no2.mvstore.MVStoreModule
@@ -12,7 +13,8 @@ import tw.nekomimi.nekogram.utils.FileUtil
 import java.io.File
 
 @JvmOverloads
-fun mkDatabase(name: String, delete: Boolean = false): Nitrite {
+fun mkDatabase(name: String, delete: Boolean = false): Nitrite? {
+    if (Build.VERSION.SDK_INT < 26) return null
 
     val file = File("${ApplicationLoader.getDataDirFixed()}/databases/$name.db")
     FileUtil.initDir(file.parentFile!!)
@@ -53,22 +55,22 @@ fun mkDatabase(name: String, delete: Boolean = false): Nitrite {
 
 fun Nitrite.openSharedPreference(name: String) = DbPref(getCollection(name))
 
-private lateinit var mainSharedPreferencesDatabase: Nitrite
+private var mainSharedPreferencesDatabase: Nitrite? = null
 
 @JvmOverloads
 fun openMainSharedPreference(name: String, delete: Boolean = false): DbPref {
 
-    if (!::mainSharedPreferencesDatabase.isInitialized || delete) {
+    if (mainSharedPreferencesDatabase == null || delete) {
 
-        mainSharedPreferencesDatabase = mkDatabase("shared_preferences", delete)
+        mainSharedPreferencesDatabase = mkDatabase("shared_preferences", delete) ?: null
 
     }
 
     return try {
-        mainSharedPreferencesDatabase.openSharedPreference(name)
+        mainSharedPreferencesDatabase?.openSharedPreference(name)
     } catch (e: IllegalStateException) {
         Log.e("030-db", "failed to open", e)
         openMainSharedPreference(name, true)
-    }
+    }!!
 
 }
