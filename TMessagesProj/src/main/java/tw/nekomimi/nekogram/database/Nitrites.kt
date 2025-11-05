@@ -54,23 +54,3 @@ fun mkDatabase(name: String, delete: Boolean = false): Nitrite? {
 }
 
 fun Nitrite.openSharedPreference(name: String) = DbPref(getCollection(name))
-
-private var mainSharedPreferencesDatabase: Nitrite? = null
-
-@JvmOverloads
-fun openMainSharedPreference(name: String, delete: Boolean = false): DbPref {
-
-    if (mainSharedPreferencesDatabase == null || delete) {
-
-        mainSharedPreferencesDatabase = mkDatabase("shared_preferences", delete) ?: null
-
-    }
-
-    return try {
-        mainSharedPreferencesDatabase?.openSharedPreference(name)
-    } catch (e: IllegalStateException) {
-        Log.e("030-db", "failed to open", e)
-        openMainSharedPreference(name, true)
-    }!!
-
-}

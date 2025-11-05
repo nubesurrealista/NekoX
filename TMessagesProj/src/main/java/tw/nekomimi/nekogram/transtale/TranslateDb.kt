@@ -1,16 +1,20 @@
 package tw.nekomimi.nekogram.transtale
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import android.util.Log
 import org.dizitart.no2.filters.FluentFilter
 import org.dizitart.no2.repository.ObjectRepository
 import org.telegram.messenger.LocaleController
+import org.telegram.ui.LaunchActivity
 import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.database.mkDatabase
 import tw.nekomimi.nekogram.utils.StrUtil
 import tw.nekomimi.nekogram.utils.UIUtil
 import java.util.*
 import kotlin.collections.HashMap
+import androidx.core.content.edit
 
 class TranslateDb(val code: String) {
 
@@ -24,28 +28,42 @@ class TranslateDb(val code: String) {
         val chat = db?.getRepository(ChatLanguage::class.java, "chat")
         val ccTarget = db?.getRepository(ChatCCTarget::class.java, "opencc")
 
-        @JvmStatic fun getChatLanguage(chatId: Long, default: Locale): Locale? {
-            if (Build.VERSION.SDK_INT < 26) return null
-            if (chat == null) return null
+        lateinit var fallbackPrefs: SharedPreferences
+
+        @JvmStatic
+        fun getChatLanguage(chatId: Long, default: Locale): Locale? {
+            if (Build.VERSION.SDK_INT < 26) return getChatLanguageFallback(chatId, default)
+            if (chat == null) return default
             val cursor = chat.find(FluentFilter.where("chatId").eq(chatId))
             cursor.forEach { return it.language.code2Locale }
             return default
 //            return if (cursor.isEmpty) default else cursor.first().language.code2Locale
-
         }
 
         @JvmStatic
         fun getChatLanguage(chatId: Long): ChatLanguage? {
-            if (Build.VERSION.SDK_INT < 26) return null
             if (chat == null) return null
+            if (Build.VERSION.SDK_INT < 26) {
+                val loc = getChatLanguageFallback(chatId, null)
+                return ChatLanguage(chatId, loc?.locale2code, false)
+            }
             val cursor = chat.find(FluentFilter.where("chatId").eq(chatId))
             cursor.forEach { return it }
             return null
         }
 
         @JvmStatic
+        private fun getChatLanguageFallback(chatId: Long, default: Locale?): Locale? {
+            initFallbackPrefs()
+            return fallbackPrefs.getString("chat_lang_$chatId", default?.locale2code)?.code2Locale
+        }
+
+        @JvmStatic
         fun saveChatLanguage(chatId: Long, locale: Locale) = UIUtil.runOnIoDispatcher {
             if (chat == null) return@runOnIoDispatcher
+            if (Build.VERSION.SDK_INT < 26) {
+                return@runOnIoDispatcher saveChatLanguageFallback(chatId, locale)
+            }
             Log.d(StrUtil.get030Tag(TranslateDb), "saveLang: ${locale.locale2code}")
             val lang = getChatLanguage(chatId)
             val alwaysTranslateBeforeSend = lang?.alwaysTranslateBeforeSend
@@ -55,8 +73,17 @@ class TranslateDb(val code: String) {
         }
 
         @JvmStatic
+        fun saveChatLanguageFallback(chatId: Long, locale: Locale) = UIUtil.runOnIoDispatcher {
+            Log.d(StrUtil.get030Tag(TranslateDb), "saveLang: ${locale.locale2code}")
+            val lang = getChatLanguage(chatId)
+
+            // chat.update(ChatLanguage(chatId, locale.locale2code, alwaysTranslateBeforeSend == true), true)
+            fallbackPrefs.edit { putString("chat_lang_$chatId", locale.locale2code) }
+
+        }
+
+        @JvmStatic
         fun getTranslateBeforeSend(chatId: Long): Boolean {
-            if (Build.VERSION.SDK_INT < 26) return false
             if (chat == null) return false
             val cursor = chat.find(FluentFilter.where("chatId").eq(chatId))
             cursor.forEach {
@@ -67,8 +94,7 @@ class TranslateDb(val code: String) {
 
         @JvmStatic
         fun setTranslateBeforeSend(chatId: Long, value: Boolean) = UIUtil.runOnIoDispatcher {
-            if (Build.VERSION.SDK_INT < 26) return@runOnIoDispatcher
-            if (chat == null) return@runOnIoDispatcher
+            if ((Build.VERSION.SDK_INT < 26) || (chat == null)) return@runOnIoDispatcher
             val cursor = chat.find(FluentFilter.where("chatId").eq(chatId))
             cursor.forEach {
                 it.alwaysTranslateBeforeSend = value
@@ -80,8 +106,7 @@ class TranslateDb(val code: String) {
 
         @JvmStatic
         fun getChatCCTarget(chatId: Long, default: String?): String? {
-            if (Build.VERSION.SDK_INT < 26) return null
-            if (ccTarget == null) return null
+            if ((Build.VERSION.SDK_INT < 26) || (ccTarget == null)) return null
             val cursor = ccTarget.find(FluentFilter.where("chatId").eq(chatId))
             cursor.forEach { return it as String? }
             return default
@@ -92,8 +117,7 @@ class TranslateDb(val code: String) {
 
         @JvmStatic
         fun saveChatCCTarget(chatId: Long, target: String) = UIUtil.runOnIoDispatcher {
-            if (Build.VERSION.SDK_INT < 26) return@runOnIoDispatcher
-            if (ccTarget == null) return@runOnIoDispatcher
+            if ((Build.VERSION.SDK_INT < 26) || (ccTarget == null)) return@runOnIoDispatcher
             ccTarget.update(ChatCCTarget(chatId, target), true)
 
         }
@@ -122,7 +146,11 @@ class TranslateDb(val code: String) {
 
         @JvmStatic
         fun clearAll() {
-            if (Build.VERSION.SDK_INT < 26) return
+            if (Build.VERSION.SDK_INT < 26 && TranslateDb::fallbackPrefs.isInitialized) {
+                initFallbackPrefs()
+                fallbackPrefs.edit { clear() }
+            }
+
             if (db == null) return
             db.listRepositories()
                     .filter { it  != "chat" }
@@ -131,6 +159,12 @@ class TranslateDb(val code: String) {
 
             repo.clear()
 
+        }
+
+        @JvmStatic
+        private fun initFallbackPrefs() {
+            if (Build.VERSION.SDK_INT >= 26 || TranslateDb::fallbackPrefs.isInitialized) return
+            fallbackPrefs = LaunchActivity.instance.getSharedPreferences("nitrites_fallback", Context.MODE_PRIVATE)
         }
 
     }
