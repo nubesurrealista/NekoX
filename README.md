@@ -7,12 +7,16 @@ Momogram is a feature-rich 3rd-party Telegram client, aiming to be the spiritual
 Built with unique customization and features, get ready and let Momogram take your Telegram chatting experience to the next level.
 
 
+![Downloads](https://img.shields.io/github/downloads/dic1911/Momogram/total?style=flat&logo=cat&link=https%3A%2F%2Fgithub.com%2Fdic1911%2FMomogram%2Freleases%2Flatest)
+
+
 ## New Features
 
 ### General
-- Additional translation provider (Lingva)
+- Additional translation provider (Firefox local translate, custom DeepLX instances and Lingva)
 - Allow bots to be shown in direct share
 - Allow chat preview for tablet mode if in portrait mode
+- Auto dismiss/ban deleted and regex-matching accounts from join requests
 - Disable auto login with Telegram account when opening certain links
 - Filter languages shown in translate target
 - Hide birthday reminders
@@ -28,6 +32,7 @@ Built with unique customization and features, get ready and let Momogram take yo
 - Uncheck "share my number" when adding contact by default
 
 ### Chat
+- Auto decrypt PGP-encrypted messages
 - Auto select best video quality if available
 - Ban button in join request list
 - Block specified chat/channel from search results
@@ -35,6 +40,7 @@ Built with unique customization and features, get ready and let Momogram take yo
 - Copy image/sticker button in menu
 - Detect data saver and use roaming auto download preset when enabled
 - Enable spoiler for all media in specified chats
+- Hide star reaction placeholder
 - Local only custom chat name
 - Mute group chat notifications from blocked users/bots
 - New double tap actions
@@ -42,6 +48,7 @@ Built with unique customization and features, get ready and let Momogram take yo
 - Remove single emoji from recently used list
 - Schedule send message after slow mode timer ends without having to wait in the same chat
 - Search message by type
+- Show vote counts before vote
 - Speech to text via Cloudflare/local Whisper inference
 - Translate text messages before send
 - Translate forwarding text message before send (without quote)
@@ -53,6 +60,7 @@ Built with unique customization and features, get ready and let Momogram take yo
 - Custom title text
 - Disable remote chat wallpaper
 - Hide unread counter on folder tabs
+- Hide rating in profile page
 - Use account name as chat list title
 
 ### Mini-app / Webview
@@ -64,6 +72,7 @@ Built with unique customization and features, get ready and let Momogram take yo
 - Don't send "/start" when restarting bot
 - Hide bottom overlay when in chat or sharing
 - Open webpages (ex. games) with mini-app mode
+- Prevent WebView being paused by opening chat from notification/menu
 - Skip confirmation on closing tab
 - Toggle to disable geolocation
 - Toggle to disable safe browsing
