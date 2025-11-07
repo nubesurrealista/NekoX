@@ -654,7 +654,6 @@ public class UndoView extends FrameLayout {
                 icon = R.raw.voip_invite;
                 timeLeft = 3000;
             } else if (action == ACTION_PAYMENT_SUCCESS) {
-                Toast.makeText(getContext(), LocaleController.getString(R.string.nekoXPaymentRemovedToast), Toast.LENGTH_LONG).show();
                 infoText = (CharSequence) infoObject;
                 subInfoText = null;
                 icon = R.raw.payment_success;
