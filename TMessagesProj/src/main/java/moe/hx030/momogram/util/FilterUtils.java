@@ -15,9 +15,11 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Pattern;
 
@@ -27,7 +29,7 @@ import tw.nekomimi.nekogram.cc.CCTarget;
 
 public class FilterUtils {
 
-    private final static HashSet<Long> pendingIds = new HashSet<>();
+    private final static ConcurrentHashMap<Long, Integer> pendingIds = new ConcurrentHashMap<>();
 
     public enum Result {
         Blocked,
@@ -87,7 +89,10 @@ public class FilterUtils {
                 }
                 // pending if not in the same slice of update diff
                 if (currentUser == null) {
-                    pendingIds.add(senderId);
+                    pendingIds.compute(senderId, (id, val) -> {
+                        if (val == null) return 1;
+                        return ++val;
+                    });
                     return Result.Pending;
                 }
             }
@@ -107,7 +112,11 @@ public class FilterUtils {
             }
         } else if (currentUser == null) {
             Log.e("030-filter", String.format("cannot fetch currentUser for %d %d, skipping...", senderId, chatId));
-            pendingIds.add(senderId);
+            int attempts = pendingIds.compute(senderId, (id, val) -> {
+                if (val == null) return 1;
+                return ++val;
+            });
+            if (attempts > 3) pendingIds.remove(senderId);
             return Result.Pending;
         }
 
@@ -117,12 +126,15 @@ public class FilterUtils {
     public static void checkPendingIds(int currentAccount) {
         if (pendingIds.isEmpty()) return;
         Log.d("030-filter", String.format("checkPendingIds: count=%d", pendingIds.size()));
-        List<Long> pending = List.of(pendingIds.toArray(new Long[0]));
+        List<Long> pending = List.of(pendingIds.keySet().toArray(new Long[0]));
         pendingIds.clear();
         Utilities.stageQueue.postRunnable(() -> {
             for (Long id : pending) {
                 if (filterPM(currentAccount, null, id, null, null) == Result.Pending) {
-                    pendingIds.add(id);
+                    pendingIds.compute(id, (__, val) -> {
+                        if (val == null) return 1;
+                        return ++val;
+                    });
                 }
             }
         });
