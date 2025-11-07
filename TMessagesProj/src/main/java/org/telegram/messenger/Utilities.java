@@ -15,9 +15,12 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.SystemClock;
+import android.util.Log;
 
 import com.carrotsearch.randomizedtesting.Xoroshiro128PlusRandom;
 
+import org.apache.commons.lang3.time.StopWatch;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 
@@ -27,6 +30,7 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+import java.time.Duration;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -34,15 +38,81 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import tw.nekomimi.nekogram.utils.TelegramUtil;
+
 public class Utilities {
     public static Pattern pattern = Pattern.compile("[\\-0-9]+");
     public static SecureRandom random = new SecureRandom();
     public static Random fastRandom = new Xoroshiro128PlusRandom(random.nextLong());
 
-    public static volatile DispatchQueue stageQueue = new DispatchQueue("stageQueue");
-    public static volatile DispatchQueue globalQueue = new DispatchQueue("globalQueue");
+    public static class DebugDispatchQueue extends DispatchQueue {
+        public DebugDispatchQueue(String threadName) {
+            super(threadName);
+        }
+
+        @Override
+        public boolean postRunnable(Runnable runnable) {
+            if (!BuildVars.DEBUG_VERSION) return super.postRunnable(runnable);
+
+            final String stack = TelegramUtil.getStackTraceAsString(null);
+            final long enqueueTime = SystemClock.elapsedRealtime();
+            Runnable r = () -> {
+                long startExec = SystemClock.elapsedRealtime();
+                long enqueueDelay = startExec - enqueueTime;
+                long duration = -1;
+                runnable.run();
+                duration = SystemClock.elapsedRealtime() - startExec;
+                if (duration >= 1000 || enqueueDelay >= 1000) {
+                    Log.w("030-q", String.format("⚠ %s Enqueue delay: %d ms, Execution: %d ms | %s\n",
+                            getName(), enqueueDelay, duration, stack));
+                }
+            };
+            return super.postRunnable(r);
+        }
+
+        public boolean postRunnable(Runnable runnable, String stack) {
+            if (!BuildVars.DEBUG_VERSION) return super.postRunnable(runnable);
+
+            final long enqueueTime = SystemClock.elapsedRealtime();
+            Runnable r = () -> {
+                long startExec = SystemClock.elapsedRealtime();
+                long enqueueDelay = startExec - enqueueTime;
+                long duration = -1;
+                runnable.run();
+                duration = SystemClock.elapsedRealtime() - startExec;
+                if (duration >= 1000 || enqueueDelay >= 1000) {
+                    Log.w("030-q", String.format("⚠ %s Enqueue delay: %d ms, Execution: %d ms | %s\n",
+                            getName(), enqueueDelay, duration, stack));
+                }
+            };
+            return super.postRunnable(r);
+        }
+
+        public boolean postRunnable(Runnable runnable, Runnable onError) {
+            if (!BuildVars.DEBUG_VERSION) return super.postRunnable(runnable);
+
+            final long enqueueTime = SystemClock.elapsedRealtime();
+            Runnable r = () -> {
+                long startExec = SystemClock.elapsedRealtime();
+                long enqueueDelay = startExec - enqueueTime;
+                long duration = -1;
+                runnable.run();
+                duration = SystemClock.elapsedRealtime() - startExec;
+                if (duration >= 1000 || (enqueueDelay >= 3000 && duration > 0)) {
+                    Log.w("030-q", String.format("⚠ %s Enqueue delay: %d ms, Execution: %d ms | FAKE ERR =========\n",
+                            getName(), enqueueDelay, duration));
+                    onError.run();
+                    Log.w("030-q", "====================== FAKE ERR END");
+                }
+            };
+            return super.postRunnable(r);
+        }
+    }
+
+    public static volatile DebugDispatchQueue stageQueue = new DebugDispatchQueue("stageQueue");
+    public static volatile DebugDispatchQueue globalQueue = new DebugDispatchQueue("globalQueue");
     public static volatile DispatchQueue cacheClearQueue = new DispatchQueue("cacheClearQueue");
-    public static volatile DispatchQueue searchQueue = new DispatchQueue("searchQueue");
+    public static volatile DebugDispatchQueue searchQueue = new DebugDispatchQueue("searchQueue");
     public static volatile DispatchQueue phoneBookQueue = new DispatchQueue("phoneBookQueue");
     public static volatile DispatchQueue themeQueue = new DispatchQueue("themeQueue");
     public static volatile DispatchQueue externalNetworkQueue = new DispatchQueue("externalNetworkQueue");

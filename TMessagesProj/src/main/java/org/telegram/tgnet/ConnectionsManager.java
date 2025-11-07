@@ -406,7 +406,7 @@ public class ConnectionsManager extends BaseController {
             sendRequestInternal(object, onComplete, onCompleteTimestamp, onQuickAck, onWriteToSocket, flags, datacenterId, connectionType, immediate, requestToken, (!BuildVars.LOGS_ENABLED ? null : () -> {
                 Log.e("030-tgnet", String.format("%s error - %s", object.getClass().getName(), Arrays.toString(st)));
             }));
-        });
+        }, Arrays.toString(st));
         return requestToken;
     }
 
@@ -417,6 +417,7 @@ public class ConnectionsManager extends BaseController {
             FileLog.d("send request " + object + " with token = " + requestToken);
         }
         try {
+            final String stack = BuildVars.DEBUG_VERSION ? TelegramUtil.getStackTraceAsString(null) : null;
             NativeByteBuffer buffer = new NativeByteBuffer(object.getObjectSize());
             object.serializeToStream(buffer);
             object.freeResources();
@@ -489,7 +490,7 @@ public class ConnectionsManager extends BaseController {
                         if (finalResponse != null) {
                             finalResponse.freeResources();
                         }
-                    });
+                    }, onError);
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
