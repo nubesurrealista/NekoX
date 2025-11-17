@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.icu.text.Collator;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.LongSparseArray;
 import android.util.Pair;
 import android.view.inputmethod.InputMethodInfo;
@@ -26,6 +25,7 @@ import androidx.annotation.Nullable;
 import org.telegram.tgnet.InputSerializedData;
 import org.telegram.tgnet.OutputSerializedData;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLParseException;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.Vector;
 import org.telegram.tgnet.tl.TL_stories;
@@ -1817,16 +1817,8 @@ public class TranslateController extends BaseController {
         public TLRPC.TL_textWithEntities solution;
 
         public static PollText TLdeserialize(InputSerializedData stream, int constructor, boolean exception) {
-            if (PollText.constructor != constructor) {
-                if (exception) {
-                    throw new RuntimeException(String.format("can't parse magic %x in TranslatedPoll", constructor));
-                } else {
-                    return null;
-                }
-            }
-            PollText result = new PollText();
-            result.readParams(stream, exception);
-            return result;
+            final PollText result = PollText.constructor != constructor ? null : new PollText();
+            return TLdeserialize(PollText.class, result, stream, constructor, exception);
         }
 
         @Override

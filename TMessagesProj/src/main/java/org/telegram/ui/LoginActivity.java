@@ -9,7 +9,6 @@
 package org.telegram.ui;
 
 import static org.telegram.messenger.AndroidUtilities.dp;
-import static org.telegram.messenger.AndroidUtilities.getTypeface;
 import static org.telegram.messenger.AndroidUtilities.replaceArrows;
 import static org.telegram.messenger.AndroidUtilities.replaceSingleTag;
 import static org.telegram.messenger.LocaleController.formatString;
@@ -50,7 +49,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -75,7 +73,6 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.ReplacementSpan;
 import android.util.Base64;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
@@ -107,12 +104,12 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 
 import com.google.zxing.common.detector.MathUtils;
+import com.jakewharton.processphoenix.ProcessPhoenix;
 //import com.android.billingclient.api.BillingClient;
 //import com.android.billingclient.api.BillingFlowParams;
 //import com.android.billingclient.api.ProductDetails;
 //import com.android.billingclient.api.Purchase;
 //import com.android.billingclient.api.QueryProductDetailsParams;
-import com.jakewharton.processphoenix.ProcessPhoenix;
 //import com.google.android.gms.auth.api.signin.GoogleSignIn;
 //import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 //import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -124,7 +121,6 @@ import com.jakewharton.processphoenix.ProcessPhoenix;
 //import com.google.android.play.core.integrity.IntegrityManagerFactory;
 //import com.google.android.play.core.integrity.IntegrityTokenRequest;
 //import com.google.android.play.core.integrity.IntegrityTokenResponse;
-//import com.googlecode.mp4parser.boxes.apple.AppleNameBox;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
@@ -159,7 +155,6 @@ import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.tl.TL_account;
-import org.telegram.tgnet.tl.TL_stars;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -183,14 +178,12 @@ import org.telegram.ui.Components.ImageUpdater;
 import org.telegram.ui.Components.ItemOptions;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkPath;
-import org.telegram.ui.Components.LinkSpanDrawable;
 import org.telegram.ui.Components.LoadingDrawable;
 import org.telegram.ui.Components.LoginOrView;
 import org.telegram.ui.Components.OutlineTextContainerView;
 import org.telegram.ui.Components.Premium.GLIcon.GLIconRenderer;
 import org.telegram.ui.Components.Premium.GLIcon.GLIconTextureView;
 import org.telegram.ui.Components.Premium.GLIcon.Icon3D;
-import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
 import org.telegram.ui.Components.Premium.StarParticlesView;
 import org.telegram.ui.Components.ProxyDrawable;
 import org.telegram.ui.Components.RLottieDrawable;
@@ -208,7 +201,6 @@ import org.telegram.ui.Components.VerticalPositionAutoAnimator;
 import org.telegram.ui.Components.spoilers.SpoilersTextView;
 import org.telegram.ui.Stars.ExplainStarsSheet;
 import org.telegram.ui.Stories.recorder.ButtonWithCounterView;
-import org.telegram.ui.Stories.recorder.GallerySheet;
 import org.telegram.ui.bots.BotWebViewSheet;
 
 import java.io.BufferedReader;
@@ -407,6 +399,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     private boolean needRequestPermissions;
 
     private Runnable emailChangeFinishCallback;
+    private @Nullable Runnable emailChangeSkipCallback;
+    private @Nullable TextView emailChangeSkipButton;
+    private boolean emailChangeNonSkippable;
+    private boolean emailChangeIsSuggestion;
+
 
     private boolean[] doneProgressVisible = new boolean[2];
     private Runnable[] editDoneCallback = new Runnable[2];
@@ -515,6 +512,16 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         return this;
     }
 
+    public LoginActivity changeEmail(Runnable onFinishCallback, Runnable onSkipCallback, boolean isNonSkippable) {
+        activityMode = MODE_CHANGE_LOGIN_EMAIL;
+        currentViewNum = VIEW_ADD_EMAIL;
+        emailChangeFinishCallback = onFinishCallback;
+        emailChangeSkipCallback = onSkipCallback;
+        emailChangeNonSkippable = isNonSkippable;
+        emailChangeIsSuggestion = true;
+        return this;
+    }
+
     public LoginActivity cancelAccountDeletion(String phone, Bundle params, TLRPC.TL_auth_sentCode sentCode) {
         cancelDeletionPhone = phone;
         cancelDeletionParams = params;
@@ -552,11 +559,13 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
         SharedConfig.loginingAccount = -1;
         getNotificationCenter().removeObserver(this, NotificationCenter.didUpdateConnectionState);
+        getNotificationCenter().removeObserver(this, NotificationCenter.newSuggestionsAvailable);
     }
 
     @Override
     public boolean onFragmentCreate() {
         getNotificationCenter().addObserver(this, NotificationCenter.didUpdateConnectionState);
+        getNotificationCenter().addObserver(this, NotificationCenter.newSuggestionsAvailable);
         SharedConfig.loginingAccount = currentAccount;
         ApplicationLoader.loadAccount(currentAccount);
         return super.onFragmentCreate();
@@ -614,9 +623,10 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 marginLayoutParams = (MarginLayoutParams) radialProgressView.getLayoutParams();
                 marginLayoutParams.topMargin = AndroidUtilities.dp(16) + statusBarHeight;
 
-                marginLayoutParams = (MarginLayoutParams) menu.getLayoutParams();
-                marginLayoutParams.topMargin = AndroidUtilities.dp(16) + statusBarHeight;
-
+                if (emailChangeSkipButton != null) {
+                    marginLayoutParams = (MarginLayoutParams) emailChangeSkipButton.getLayoutParams();
+                    marginLayoutParams.topMargin = AndroidUtilities.dp(16) + statusBarHeight;
+                }
                 if (measureKeyboardHeight() > AndroidUtilities.dp(20) && keyboardView.getVisibility() != GONE && !isCustomKeyboardForceDisabled() && !customKeyboardWasVisible) {
                     if (keyboardAnimator != null) {
                         keyboardAnimator.cancel();
@@ -828,6 +838,24 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         padding = AndroidUtilities.dp(4);
         menu.setPadding(padding, padding, padding, padding);
         sizeNotifierFrameLayout.addView(menu, LayoutHelper.createFrame(32, 32, Gravity.RIGHT | Gravity.TOP, 0, 16, 16, 0));
+
+        if (emailChangeSkipCallback != null && !emailChangeNonSkippable && emailChangeIsSuggestion) {
+            emailChangeSkipButton = new TextView(context);
+            emailChangeSkipButton.setGravity(Gravity.CENTER | Gravity.LEFT);
+            emailChangeSkipButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+            emailChangeSkipButton.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
+            emailChangeSkipButton.setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16), 0);
+            emailChangeSkipButton.setText(getString(R.string.YourEmailSkip));
+            emailChangeSkipButton.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
+            sizeNotifierFrameLayout.addView(emailChangeSkipButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 30, Gravity.TOP | Gravity.RIGHT, 0, 16, 16, 0));
+            emailChangeSkipButton.setOnClickListener(v -> {
+                if (emailChangeSkipCallback != null) {
+                    emailChangeSkipCallback.run();
+                }
+                finishFragment();
+            });
+        }
+
         proxyButtonView = new ImageView(context);
         proxyButtonView.setImageDrawable(proxyDrawable = new ProxyDrawable(context));
         proxyButtonView.setOnClickListener(v -> presentFragment(new ProxyListActivity()));
@@ -1155,7 +1183,16 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     }
 
     @Override
+    public boolean isSwipeBackEnabled(MotionEvent event) {
+        return !emailChangeIsSuggestion;
+    }
+
+    @Override
     public boolean onBackPressed() {
+        if (emailChangeIsSuggestion && currentViewNum == VIEW_ADD_EMAIL) {
+            return false;
+        }
+
         if (currentViewNum == VIEW_PHONE_INPUT || activityMode == MODE_CHANGE_LOGIN_EMAIL && currentViewNum == VIEW_ADD_EMAIL) {
             for (int a = 0; a < views.length; a++) {
                 if (views[a] != null) {
@@ -5983,7 +6020,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
         @Override
         public boolean needBackButton() {
-            return true;
+            return !emailChangeIsSuggestion;
         }
 
         @Override
@@ -8982,6 +9019,10 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.didUpdateConnectionState) {
             updateProxyButton(true, false);
+        } else if (id == NotificationCenter.newSuggestionsAvailable) {
+            if (emailChangeIsSuggestion && !getMessagesController().hasSetupEmailSuggestion()) {
+                finishFragment();
+            }
         } else if (id == NotificationCenter.updateLoginToken) {
             regenerateLoginToken(false);
         }

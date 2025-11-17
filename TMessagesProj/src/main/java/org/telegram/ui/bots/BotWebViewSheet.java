@@ -50,8 +50,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
 
-//import com.google.android.gms.vision.Frame;
-
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimationNotificationsLocker;
@@ -846,7 +844,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
 
             @Override
             public boolean isClipboardAvailable() {
-                return MediaDataController.getInstance(currentAccount).botInAttachMenu(botId);
+                return MediaDataController.getInstance(currentAccount).botInAttachMenu(botId) || MessagesController.getInstance(currentAccount).whitelistedBots.contains(botId);
             }
 
             @Override
@@ -877,7 +875,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
         dimPaint.setColor(0x40000000);
         actionBarColor = getColor(Theme.key_windowBackgroundWhite);
         navBarColor = getColor(Theme.key_windowBackgroundGray);
-        AndroidUtilities.setNavigationBarColor(getWindow(), navBarColor, false);
+        AndroidUtilities.setNavigationBarColor(this, navBarColor, false);
         windowView = new WindowView(context);
         windowView.setDelegate((keyboardHeight, isWidthGreater) -> {
             if (keyboardHeight > AndroidUtilities.dp(20)) {
@@ -1173,7 +1171,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            AndroidUtilities.setLightNavigationBar(window, ColorUtils.calculateLuminance(navBarColor) >= 0.721f);
+            AndroidUtilities.setLightNavigationBar(this, ColorUtils.calculateLuminance(navBarColor) >= 0.721f);
         }
 
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetNewTheme);
@@ -2369,7 +2367,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
             navBarColor = to;
             checkNavBarColor();
         }
-        AndroidUtilities.setNavigationBarColor(getWindow(), navBarColor, false);
+        AndroidUtilities.setNavigationBarColor(this, navBarColor, false);
     }
 
     public void setActionBarColor(int color, boolean isOverride, boolean animated) {
@@ -2435,7 +2433,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
 
     public void checkNavBarColor() {
         if (!superDismissed && LaunchActivity.instance != null) {
-            LaunchActivity.instance.checkSystemBarColors(true, true, true, false);
+            LaunchActivity.instance.checkSystemBarColors(true, true, true);
 //            AndroidUtilities.setNavigationBarColor(getWindow(), navBarColor, false);
         }
         if (windowView != null) {
@@ -2642,8 +2640,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
                 invalidate();
                 updateWindowFlags();
                 if (LaunchActivity.instance != null && fullscreen) {
-                    LaunchActivity.instance.requestCustomNavigationBar();
-                    LaunchActivity.instance.setNavigationBarColor(navBarColor, false);
+                    LaunchActivity.instance.setNavigationBarColor(navBarColor);
                 }
             }
         }
