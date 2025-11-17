@@ -5947,6 +5947,9 @@ public class ChatActivityEnterView extends FrameLayout implements
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             messageEditText.setFallbackLineSpacing(false);
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            messageEditText.setLocalePreferredLineHeightForMinimumUsed(false);
+        }
 
         // 030: is this Delegate thingy correct?
         messageEditText.setDelegate(new EditTextCaption.EditTextCaptionDelegate() {
@@ -5972,6 +5975,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                 return chatId;
             }
         });
+
         if (parentFragment != null && parentFragment.getParentLayout() != null && parentFragment.getParentLayout().isSheet()) {
             messageEditText.setWindowView(parentFragment.getParentLayout().getWindow().getDecorView());
         } else {
