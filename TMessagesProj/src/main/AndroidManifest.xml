@@ -29,6 +29,8 @@
         <package android:name="dev.davidv.translator" />
     </queries>
 
+    <uses-sdk tools:overrideLibrary="org.tensorflow.lite" />
+
     <supports-screens android:anyDensity="true"
                       android:largeScreens="true"
                       android:normalScreens="true"
