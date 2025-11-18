@@ -10587,6 +10587,12 @@ public class ChatActivity extends BaseFragment implements
     }
 
     private void createSearchContainer() {
+        createSearchContainer(true);
+    }
+    private void createSearchContainer(boolean show) {
+        if (searchContainer != null && show && searchContainer.getVisibility() != View.VISIBLE) {
+            searchContainer.setVisibility(View.VISIBLE);
+        }
         if (searchContainer != null || getContext() == null) {
             return;
         }
@@ -10753,6 +10759,7 @@ public class ChatActivity extends BaseFragment implements
             });
             searchGoToBeginningButton.setContentDescription(LocaleController.getString(R.string.GoToBeginning));
         }
+        if (!show) searchContainer.setVisibility(View.GONE);
     }
 
     private void showSearchShowOther(boolean show) {
@@ -27704,6 +27711,9 @@ public class ChatActivity extends BaseFragment implements
                     bottomOverlayChatText.setText(LocaleController.getString(R.string.ChannelUnmuteNoCaps), true);
                 }
                 showBottomOverlayProgress(false, true);
+                if (NekoConfig.hideChannelBottomMuteUnmute.Bool()) {
+                    chatInputViewsContainer.setVisibility(View.GONE);
+                }
             } else if (botUser != null && currentUser.bot && !UserObject.isDeleted(currentUser) && !UserObject.isBotForum(currentUser)) {
 //                bottomOverlayStartButton.setText(LocaleController.getString(R.string.BotStart));
                 if (bottomOverlayStartButton != null) {
@@ -27734,7 +27744,8 @@ public class ChatActivity extends BaseFragment implements
             chatActivityEnterView.setFieldFocused(false);
             chatActivityEnterView.setVisibility(View.INVISIBLE);
         } else if (bottomOverlayLinks || forceVisible) {
-            bottomChannelButtonsLayout.setVisibility(View.VISIBLE);
+            boolean hide = NekoConfig.hideChannelBottomMuteUnmute.Bool();
+            if (hide) chatInputViewsContainer.setVisibility(View.GONE);
             chatActivityEnterView.setVisibility(View.INVISIBLE);
         } else if (searchItem != null && searchItemVisible) {
             createSearchContainer();
@@ -27881,9 +27892,6 @@ public class ChatActivity extends BaseFragment implements
             chatActivityEnterView.setBotInfo(botInfo);
         }
 
-        if (shouldHideBottomOverlay())
-            bottomChannelButtonsLayout.setVisibility(View.INVISIBLE);
-
         bottomOverlayChatText.setTextColorKey(accentTextButton ? Theme.key_featuredStickers_buttonText : Theme.key_glass_defaultText);
 
         bottomChannelButtonsLayout.setCenterAccentBackground(accentTextButton, animated);
@@ -27894,6 +27902,11 @@ public class ChatActivity extends BaseFragment implements
 
         checkRaiseSensors();
         if (force) chatActivityEnterView.setVisibility(View.VISIBLE);
+
+        if (shouldHideBottomOverlay()) {
+            bottomChannelButtonsLayout.setTotalVisibilityFactor(0f);
+            bottomChannelButtonsLayout.setVisibility(View.INVISIBLE);
+        }
     }
 
     private boolean shouldDisplaySwipeToLeftToReplyInForum() {
@@ -43972,7 +43985,8 @@ public class ChatActivity extends BaseFragment implements
             }
             case nkbtn_view_history: {
                 // same as "search_from_user_id"
-                TLRPC.User user = getMessagesController().getUser(selectedObject.messageOwner.from_id.user_id);
+                boolean out = selectedObject.messageOwner.out;
+                TLRPC.User user = getMessagesController().getUser(out ? 0L : selectedObject.messageOwner.from_id.user_id);
                 if (user != null && searchUserButton != null) {
                     openSearchWithText("");
                     searchUserButton.callOnClick();
@@ -44995,10 +45009,11 @@ public class ChatActivity extends BaseFragment implements
     }
 
     private boolean shouldHideBottomOverlay() {
+        if (bottomOverlayChatText == null) return hideJoin;
         CharSequence text = bottomOverlayChatText.getText();
         return ((text != null) && NekoConfig.hideChannelBottomMuteUnmute.Bool() &&
-                (LocaleController.getString(R.string.ChannelMute).contentEquals(text)
-                || LocaleController.getString(R.string.ChannelUnmute).contentEquals(text)))
+                (LocaleController.getString(R.string.ChannelMuteNoCaps).contentEquals(text)
+                || LocaleController.getString(R.string.ChannelUnmuteNoCaps).contentEquals(text)))
                 || hideJoin;
     }
 
@@ -46318,12 +46333,12 @@ public class ChatActivity extends BaseFragment implements
         if (currentEncryptedChat == null) {
             FileLog.d("030-menu: fillMessageMenu, type=" + type);
 
-            boolean allowViewHistory = currentUser == null
+            boolean allowViewHistory = message.messageOwner.out || (currentUser == null
                     && (currentChat != null && !currentChat.broadcast && message.isFromUser())
-                    && selectedObject.messageOwner.from_id != null;
+                    && selectedObject.messageOwner.from_id != null);
             boolean showViewHistory = allowViewHistory && chatMode != MODE_PINNED;
             if (showViewHistory && NekoConfig.showViewHistory.Bool()) {
-                if (searchContainer == null || searchUserButton == null) createSearchContainer();
+                if (searchContainer == null || searchUserButton == null) createSearchContainer(false);
                 if (searchContainer == null || searchUserButton == null) return;
                 items.add(LocaleController.getString(R.string.ViewHistory));
                 options.add(nkbtn_view_history);
@@ -46471,6 +46486,13 @@ public class ChatActivity extends BaseFragment implements
         if (view != null) {
             final float alpha = bottomViewsVisibilityController.getVisibility(containerId) *
                 (1f - animatorPullingDownContainerVisibility.getFloatValue());
+
+            if (containerId == BOTTOM_OVERLAY_CHAT_CONTAINER && NekoConfig.hideChannelBottomMuteUnmute.Bool()
+                && (isBottomOverlaysInvisible() || shouldHideBottomOverlay())) {
+                view.setVisibility(View.GONE);
+                chatInputViewsContainer.setVisibility(View.GONE);
+                return;
+            }
 
             view.setAlpha(alpha);
             if (allowVisibilityChange) {

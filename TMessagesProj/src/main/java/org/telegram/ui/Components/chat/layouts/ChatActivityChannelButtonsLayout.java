@@ -28,6 +28,7 @@ import org.telegram.ui.Components.chat.buttons.ChatActivityBlurredRoundButton;
 
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
+import tw.nekomimi.nekogram.NekoConfig;
 
 @SuppressLint("ViewConstructor")
 public class ChatActivityChannelButtonsLayout extends FrameLayout implements FactorAnimator.Target {
@@ -98,6 +99,8 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
         if (buttonId < 0 || buttonId >= buttonHolders.length) {
             return;
         }
+
+        if (NekoConfig.hideChannelBottomMuteUnmute.Bool()) show = false;
 
         if (buttonHolders[buttonId] == null && !show) {
             return;
