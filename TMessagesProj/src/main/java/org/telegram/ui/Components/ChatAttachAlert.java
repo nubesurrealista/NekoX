@@ -5924,9 +5924,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         if (translated != null) commentTextView.setText(translated);
         if (!dontSend) {
             if (currentAttachLayout == photoLayout || currentAttachLayout == photoPreviewLayout) {
-                sendPressed(true, 0, 0, isCaptionAbove());
+                sendPressed(true, 0, 0, 0, isCaptionAbove());
             } else {
-                currentAttachLayout.sendSelectedItems(true, 0, 0, isCaptionAbove());
+                currentAttachLayout.sendSelectedItems(true, 0, 0, 0, isCaptionAbove());
                 allowPassConfirmationAlert = true;
             }
         } else {

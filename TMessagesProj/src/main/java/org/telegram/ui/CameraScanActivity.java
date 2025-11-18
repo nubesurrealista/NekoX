@@ -239,10 +239,8 @@ public class CameraScanActivity extends BaseFragment {
             }
         };
         bottomSheet.setUseLightStatusBar(false);
-        AndroidUtilities.setLightNavigationBar(bottomSheet.getWindow(), false);
-        AndroidUtilities.setNavigationBarColor(bottomSheet.getWindow(), 0xff000000, false);
         bottomSheet.setUseLightStatusBar(false);
-        bottomSheet.getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        if (bottomSheet.getWindow() != null) bottomSheet.getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         bottomSheet.show();
         return actionBarLayout;
     }

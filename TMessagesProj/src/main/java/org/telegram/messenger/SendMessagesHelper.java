@@ -8631,7 +8631,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             sendingMedia.geo.lat = location.getLatitude();
             sendingMedia.geo._long = location.getLongitude();
             // 030: fix build, ref: https://github.com/Telegram-FOSS-Team/Telegram-FOSS/commit/0676f797e59a4f72381c0ed1769051494ff06f50
-            accountInstance.getSendMessagesHelper().sendMessage(SendMessageParams.of(sendingMedia, dialog_id, null, null, null, null, true, 0));
+            accountInstance.getSendMessagesHelper().sendMessage(SendMessageParams.of(sendingMedia, dialog_id, null, null, null, null, true, 0, 0));
         })));
     }
 

@@ -76,7 +76,6 @@ public class StickerSetNameCell extends FrameLayout {
         LinearLayout layout = new LinearLayout(context);
         layout.setOrientation(LinearLayout.HORIZONTAL);
         layout.setGravity(Gravity.CENTER);
-        textView = new TextView(context);
         textView.setTextColor(isGlassDesign ? getGlassIconColor(0.6f) : getThemedColor(Theme.key_chat_emojiPanelStickerSetName));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         textView.setTypeface(AndroidUtilities.bold());

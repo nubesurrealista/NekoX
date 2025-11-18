@@ -1570,7 +1570,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             @Override
             protected void extendActionMode(ActionMode actionMode, Menu menu) {
                 if (fragment != null) {
-                    ChatActivity.fillActionModeMenu(menu, fragment.getCurrentEncryptedChat(), true);
+                    ChatActivity.fillActionModeMenu(menu, fragment.getCurrentEncryptedChat(), true, true);
                 }
                 super.extendActionMode(actionMode, menu);
             }

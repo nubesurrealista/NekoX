@@ -15253,7 +15253,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     set.setExpanded(LiteMode.FLAGS_CHAT, true);
                     set.scrollToFlags(LiteMode.FLAG_CHAT_SPOILER);
                 }),
-                SharedConfig.getDevicePerformanceClass() >= SharedConfig.PERFORMANCE_CLASS_AVERAGE ? new SearchResult(326 /* for compatibility */, getString(R.string.LiteOptionsBlur), null, getString(R.string.PowerUsage), getString(R.string.LiteOptionsChat), R.drawable.msg2_battery, () -> {
+                SharedConfig.getDevicePerformanceClass() >= SharedConfig.PERFORMANCE_CLASS_AVERAGE ? new SearchResult(326 /* for compatibility */, getString(R.string.LiteOptionsBlur2), null, getString(R.string.PowerUsage), getString(R.string.LiteOptionsChat), R.drawable.msg2_battery, () -> {
                     LiteModeSettingsActivity set = new LiteModeSettingsActivity();
                     presentFragment(set);
                     set.setExpanded(LiteMode.FLAGS_CHAT, true);

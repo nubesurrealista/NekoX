@@ -3081,10 +3081,10 @@ public class ChatActivityEnterView extends FrameLayout implements
                     if (!hasRecordVideo || calledRecordRunnable) {
                         startedDraggingX = -1;
                         if (hasRecordVideo && isInVideoMode) {
-                            delegate.needStartRecordVideo(needConfirm ? 3 : 1, true, 0, voiceOnce ? 0x7FFFFFFF : 0, messageSendPreview != null ? messageSendPreview.getSelectedEffect() : 0, 0);
+                            delegate.needStartRecordVideo(needConfirm ? 3 : 1, true, 0, 0, voiceOnce ? 0x7FFFFFFF : 0, messageSendPreview != null ? messageSendPreview.getSelectedEffect() : 0, 0);
                         } else {
                             if (recordingAudioVideo && isInScheduleMode()) {
-                                AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), (notify, scheduleDate) -> MediaController.getInstance().stopRecording(1, notify, scheduleDate, voiceOnce, 0), () -> MediaController.getInstance().stopRecording(0, false, 0, voiceOnce, 0), null);
+                                AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), (notify, scheduleDate, scheduleRepeatPeriod) -> MediaController.getInstance().stopRecording(1, notify, scheduleDate, voiceOnce, 0), () -> MediaController.getInstance().stopRecording(0, false, 0, voiceOnce, 0), null);
                             }
                             MediaController.getInstance().stopRecording(isInScheduleMode() ? 3 : (needConfirm ? 2 : 1), true, 0, voiceOnce, 0);
                             delegate.needStartRecordAudio(0);
@@ -3409,7 +3409,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                         AndroidUtilities.runOnUIThread(() -> {
                             SendMessagesHelper.SendMessageParams params = SendMessagesHelper.SendMessageParams.of(
                                     msgText, dialogId, replyTo, replyTop, null,
-                                    true, null, null, null, true, 0,
+                                    true, null, null, null, true, 0, 0,
                                     new MessageObject.SendAnimationData(), false);
                             SendMessagesHelper.getInstance(currentAccount).sendMessage(params);
                             if (SendMessagesHelper.hasPendingSlowModeMessage.containsKey(currentAccount))
@@ -10260,9 +10260,9 @@ public class ChatActivityEnterView extends FrameLayout implements
         TLRPC.User user = messageObject != null && DialogObject.isChatDialog(dialog_id) ? accountInstance.getMessagesController().getUser(messageObject.messageOwner.from_id.user_id) : null;
         SendMessagesHelper.SendMessageParams sendMessageParams;
         if ((botCount != 1 || username) && user != null && user.bot && !command.contains("@")) {
-            sendMessageParams = SendMessagesHelper.SendMessageParams.of(String.format(Locale.US, "%s@%s", command, UserObject.getPublicUsername(user)), dialog_id, replyingMessageObject, getThreadMessage(), null, false, null, null, null, true, 0, null, false);
+            sendMessageParams = SendMessagesHelper.SendMessageParams.of(String.format(Locale.US, "%s@%s", command, UserObject.getPublicUsername(user)), dialog_id, replyingMessageObject, getThreadMessage(), null, false, null, null, null, true, 0, 0, null, false);
         } else {
-            sendMessageParams = SendMessagesHelper.SendMessageParams.of(command, dialog_id, replyingMessageObject, getThreadMessage(), null, false, null, null, null, true, 0, null, false);
+            sendMessageParams = SendMessagesHelper.SendMessageParams.of(command, dialog_id, replyingMessageObject, getThreadMessage(), null, false, null, null, null, true, 0, 0, null, false);
         }
         applyStoryToSendMessageParams(sendMessageParams);
         SendMessagesHelper.getInstance(currentAccount).sendMessage(sendMessageParams);
@@ -13389,7 +13389,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             }
 
             if (!dontSend && args.length > 1 && args[1] != null) {
-                if (args[1].equals(translateUUID)) sendMessageInternal(true, 0, 0, false);
+                if (args[1].equals(translateUUID)) sendMessageInternal(true, 0, 0, 0, false);
                 else Log.d("030-txx", String.format("UUID mismatch, expect: %s, got: %s", translateUUID, args[1]));
             }
         } else if (id == NotificationCenter.forwardingMessageTranslated) {
@@ -13427,7 +13427,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                     SendMessagesHelper.SendMessageParams params =
                             SendMessagesHelper.SendMessageParams.of(text.toString(), dialog_id,
                                     null, null, null, true, null,
-                                    null, null, true, 0, null, false);
+                                    null, null, true, 0, 0, null, false);
                     if (obj.isDocument()) {
                         TLRPC.Document doc = obj.getDocument();
                         TLRPC.TL_document document = new TLRPC.TL_document();
@@ -13466,7 +13466,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                 messageSendPreview.dismiss(true);
                 messageSendPreview = null;
             }
-            sendMessageInternal(true, 0, 0, false);
+            sendMessageInternal(true, 0, 0, 0, false);
             parentFragment.messagePreviewParamsForTranslate = null;
             isTranslatedBeforeSend = false;
         }, 30);
