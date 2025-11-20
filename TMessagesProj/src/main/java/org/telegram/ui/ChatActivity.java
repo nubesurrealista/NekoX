@@ -12286,16 +12286,15 @@ public class ChatActivity extends BaseFragment implements
             return;
         }
 
+        Integer overrideInputIslandHeight = shouldHideBottomOverlay() ? dp(16) : null;
 
-        final int paddingBottomTarget = (int) (
-            blurredViewBottomOffset + dp(9 + 7)
-            + inputIslandHeightTarget
-            + windowInsetsStateHolder.getInsets(WindowInsetsCompat.Type.ime() | WindowInsetsCompat.Type.systemBars()).bottom
-        );
+        final int paddingBottomTarget = (int) (blurredViewBottomOffset + dp(9 + 7)
+                + (overrideInputIslandHeight != null ? overrideInputIslandHeight : inputIslandHeightTarget)
+                + windowInsetsStateHolder.getInsets(WindowInsetsCompat.Type.ime() | WindowInsetsCompat.Type.systemBars()).bottom);
 
         final float paddingBottomAnimated = blurredViewBottomOffset + dp(9 + 7)
-            + inputIslandHeightCurrent
-            + windowInsetsStateHolder.getAnimatedMaxBottomInset();
+                + (overrideInputIslandHeight != null ? overrideInputIslandHeight : inputIslandHeightCurrent)
+                + windowInsetsStateHolder.getAnimatedMaxBottomInset();
 
 
         final int paddingTop = (int) chatListViewPaddingTop;
@@ -45002,7 +45001,7 @@ public class ChatActivity extends BaseFragment implements
 
     private boolean isBottomOverlaysInvisible() {
         return chatActivityEnterView.getVisibility() == View.INVISIBLE
-                && (bottomChannelButtonsLayout == null || bottomChannelButtonsLayout.getVisibility() == View.INVISIBLE || shouldHideBottomOverlay())
+                && (chatInputViewsContainer == null || chatInputViewsContainer.getVisibility() == View.INVISIBLE || shouldHideBottomOverlay())
                 && (searchContainer == null || searchContainer.getVisibility() == View.INVISIBLE)
                 && !isInPreviewMode()
                 && !isInBubbleMode();
@@ -45010,10 +45009,8 @@ public class ChatActivity extends BaseFragment implements
 
     private boolean shouldHideBottomOverlay() {
         if (bottomOverlayChatText == null) return hideJoin;
-        CharSequence text = bottomOverlayChatText.getText();
-        return ((text != null) && NekoConfig.hideChannelBottomMuteUnmute.Bool() &&
-                (LocaleController.getString(R.string.ChannelMuteNoCaps).contentEquals(text)
-                || LocaleController.getString(R.string.ChannelUnmuteNoCaps).contentEquals(text)))
+        return (NekoConfig.hideChannelBottomMuteUnmute.Bool() &&
+                (currentChat != null && ChatObject.isChannelAndNotMegaGroup(currentChat) && !ChatObject.hasAdminRights(currentChat)))
                 || hideJoin;
     }
 
@@ -46385,6 +46382,8 @@ public class ChatActivity extends BaseFragment implements
     /* */
 
     private float calculateInputIslandHeight(boolean target) {
+        if (shouldHideBottomOverlay()) return 0f;
+
         final float enterViewIslandHeight = Math.max(
             chatActivityEnterView != null ? chatActivityEnterView.getIslandTotalHeight(target): 0, dp(44));
 
@@ -46486,14 +46485,6 @@ public class ChatActivity extends BaseFragment implements
         if (view != null) {
             final float alpha = bottomViewsVisibilityController.getVisibility(containerId) *
                 (1f - animatorPullingDownContainerVisibility.getFloatValue());
-
-            if (containerId == BOTTOM_OVERLAY_CHAT_CONTAINER && NekoConfig.hideChannelBottomMuteUnmute.Bool()
-                && (isBottomOverlaysInvisible() || shouldHideBottomOverlay())) {
-                view.setVisibility(View.GONE);
-                chatInputViewsContainer.setVisibility(View.GONE);
-                return;
-            }
-
             view.setAlpha(alpha);
             if (allowVisibilityChange) {
                 final int visibility = alpha > 0 ? View.VISIBLE : View.GONE;
@@ -46547,6 +46538,10 @@ public class ChatActivity extends BaseFragment implements
                 pullingDownDrawable.progressToBottomPanel = factor;
                 fragmentView.invalidate();
             }
+        }
+
+        if (chatInputViewsContainer != null && shouldHideBottomOverlay()) {
+            chatInputViewsContainer.setVisibility(View.GONE);
         }
 
         checkUi_inputIslandHeight();
