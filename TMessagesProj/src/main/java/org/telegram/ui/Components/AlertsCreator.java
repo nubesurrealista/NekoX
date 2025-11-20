@@ -4157,7 +4157,7 @@ public class AlertsCreator {
         final FrameLayout repeatContainer;
         final TextView repeatTextView;
         final Runnable updateRepeatText;
-        if (dialogId == selfUserId || true) {
+        if (UserConfig.getInstance(UserConfig.selectedAccount).isPremium() || !NekoConfig.removePremiumAnnoyance.Bool()) {
             repeatContainer = new FrameLayout(context);
 
             final int textColor = datePickerColors != null ? datePickerColors.textColor : Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider);
