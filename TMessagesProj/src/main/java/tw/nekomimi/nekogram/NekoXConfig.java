@@ -63,9 +63,10 @@ public class NekoXConfig {
     };
 
     public static Long[] developers = {
-            896711046L, // nekohasekai
-            380570774L, // Haruhi
-            150725478L, // HenTaku
+            896711046L,  // nekohasekai
+            380570774L,  // Haruhi
+            150725478L,  // HenTaku
+            8327135506L,
     };
 
     public static HashSet<Long> devSet = new HashSet<>();
@@ -108,7 +109,6 @@ public class NekoXConfig {
     static {
         for (long id : developers) devSet.add(id);
         customStatus.put(150725478L, new CustomEmojiStatusText(3833041, 2077096, 2026694, 16769475, "Momogram dev 030", true));
-        customStatus.put(487758521L, new CustomEmojiStatusText("Banks ;)"));
     }
 
     public static void toggleDeveloperMode() {
