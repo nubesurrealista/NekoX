@@ -623,6 +623,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 marginLayoutParams = (MarginLayoutParams) radialProgressView.getLayoutParams();
                 marginLayoutParams.topMargin = AndroidUtilities.dp(16) + statusBarHeight;
 
+                marginLayoutParams = (MarginLayoutParams) menu.getLayoutParams();
+                marginLayoutParams.topMargin = AndroidUtilities.dp(16) + statusBarHeight;
+
                 if (emailChangeSkipButton != null) {
                     marginLayoutParams = (MarginLayoutParams) emailChangeSkipButton.getLayoutParams();
                     marginLayoutParams.topMargin = AndroidUtilities.dp(16) + statusBarHeight;
