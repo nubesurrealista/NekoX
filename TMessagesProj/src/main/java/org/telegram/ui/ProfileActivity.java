@@ -4569,7 +4569,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             } else if (position == bioRow) {
                 presentFragment(new UserInfoActivity());
             } else if (position == idRow) {
-                showIdMenu(null);
+                showIdMenu();
             } else if (position == numberRow) {
                 TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
                 String number;
@@ -8084,7 +8084,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             popupWindow.dimBehind();
             return true;
         } else if (position == idRow) {
-            showIdMenu(null);
+            showIdMenu();
         }
         return false;
     }
@@ -12448,9 +12448,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         needLayout(true);
     }
 
-    private void showIdMenu(Long id) {
+    private void showIdMenu() {
         final long finalId;
-        if (id != null) {
+        if (id != -1) {
             finalId = id;
         } else {
             TLRPC.User user = getMessagesController().getUser(userId);
