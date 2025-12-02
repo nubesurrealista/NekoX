@@ -303,4 +303,6 @@
     <string name="AutoReqStats">Auto banned %1$d and dismissed %2$d accounts</string>
     <string name="AutoReqStatsBanned">Auto banned %1$d accounts</string>
     <string name="AutoReqStatsDismissed">Auto dismissed %1$d accounts</string>
+    <string name="UseSlowWhisperModel">Use bigger Whisper model</string>
+    <string name="UseSlowWhisperModelDesc">Requires large amount of RAM, disable this option if the app crashes on transcribe</string>
 </resources>

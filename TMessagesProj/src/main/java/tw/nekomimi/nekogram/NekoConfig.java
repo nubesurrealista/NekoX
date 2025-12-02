@@ -331,6 +331,7 @@ public class NekoConfig {
     public static ConfigItem cfAccountID = addConfig("cfAccountID", configTypeString, CHAT, "");
     public static ConfigItem cfApiToken = addConfig("cfApiToken", configTypeString, CHAT, "");
     public static String[] transcribeOptions;
+    public static ConfigItem useSlowWhisperModel = addConfig(R.string.UseSlowWhisperModel, "UseSlowWhisperModel", configTypeBool, CHAT, false);
 
     public static ConfigItem showAddedToFoldersAtTitle = addConfig(R.string.ShowAddedToFoldersAtTitle, "ShowAddedToFoldersAtTitle", configTypeBool, false);
     public static String[] titleFolderIconOptions = null;

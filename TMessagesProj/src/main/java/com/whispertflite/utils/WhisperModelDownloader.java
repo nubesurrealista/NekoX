@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import android.util.Log;
 
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.SharedConfig;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -21,6 +22,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+
+import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.helpers.WhisperHelper;
 
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -50,16 +54,31 @@ public class WhisperModelDownloader {
         }
     }
 
-    public static void deleteModels() {
-        File modelMultiLingualBaseFile = new File(extDir + "/" + modelMultiLingualBase);
-        File modelMultiLingualSmallFile = new File(extDir + "/" + modelMultiLingualSmall);
-        if (modelMultiLingualBaseFile.exists()) {
-            modelMultiLingualBaseFile.delete();
+    public static boolean deleteModels() {
+        boolean ok = false, useSlow = NekoConfig.useSlowWhisperModel.Bool(), modelInUse = false;
+        File base = new File(extDir + "/" + modelMultiLingualBase);
+        File small = new File(extDir + "/" + modelMultiLingualSmall);
+        for (int acc : SharedConfig.activeAccounts) {
+            if (WhisperHelper.useLocalModel(acc)) {
+                modelInUse = true;
+                break;
+            }
         }
-        if (modelMultiLingualSmallFile.exists()) {
-            modelMultiLingualSmallFile.delete();
+        if (useSlow || !modelInUse) {
+            if (base.exists()) {
+                base.delete();
+                ok = true;
+            }
         }
+        if (!useSlow || !modelInUse) {
+            if (small.exists()) {
+                small.delete();
+                ok = true;
+            }
+        }
+        return ok;
     }
+
     public static boolean checkModels() {
         copyAssetsToSdcard();
         File modelMultiLingualBaseFile = new File(extDir + "/" + modelMultiLingualBase);
@@ -84,7 +103,8 @@ public class WhisperModelDownloader {
         if (modelMultiLingualBaseFile.exists() && !(calcModelMultiLingualBaseMD5.equals(modelMultiLingualBaseMD5))) { modelMultiLingualBaseFile.delete(); modelMultiLingualBaseFinished = false;}
         if (modelMultiLingualSmallFile.exists() && !(calcModelMultiLingualSmallMD5.equals(modelMultiLingualSmallMD5))) { modelMultiLingualSmallFile.delete(); modelMultiLingualSmallFinished = false;}
 
-        return calcModelMultiLingualSmallMD5.equals(modelMultiLingualSmallMD5) && calcModelMultiLingualBaseMD5.equals(modelMultiLingualBaseMD5);
+        boolean useSlowModel = NekoConfig.useSlowWhisperModel.Bool();
+        return (!useSlowModel || calcModelMultiLingualSmallMD5.equals(modelMultiLingualSmallMD5)) && (useSlowModel || calcModelMultiLingualBaseMD5.equals(modelMultiLingualBaseMD5));
     }
 
     public static void downloadModels(BiConsumer<Boolean, Float> progressCallback) {
@@ -95,32 +115,41 @@ public class WhisperModelDownloader {
 
         Thread baseThread, smallThread;
         File modelMultiLingualBaseFile = new File(ApplicationLoader.applicationContext.getExternalFilesDir(null)+ "/" + modelMultiLingualBase);
-        if (!modelMultiLingualBaseFile.exists()) {
-            modelMultiLingualBaseFinished = false;
-            Log.d("WhisperASR", "multi-lingual base model file does not exist");
-            baseThread = new Thread(() -> {
-                modelMultiLingualBaseFinished = downloadModel(modelMultiLingualBaseURL, modelMultiLingualBaseFile, 1, progressCallback);
-            });
-            baseThread.start();
+        if (!NekoConfig.useSlowWhisperModel.Bool()) {
+            if (!modelMultiLingualBaseFile.exists()) {
+                modelMultiLingualBaseFinished = false;
+                Log.d("WhisperASR", "multi-lingual base model file does not exist");
+                baseThread = new Thread(() -> {
+                    modelMultiLingualBaseFinished = downloadModel(modelMultiLingualBaseURL, modelMultiLingualBaseFile, 1, progressCallback);
+                });
+                baseThread.start();
+            } else {
+                baseThread = null;
+                downloadModelMultiLingualBaseSize = modelMultiLingualBaseSize;
+                modelMultiLingualBaseFinished = true;
+            }
         } else {
             baseThread = null;
-            downloadModelMultiLingualBaseSize = modelMultiLingualBaseSize;
-            modelMultiLingualBaseFinished = true;
         }
 
         File modelMultiLingualSmallFile = new File(ApplicationLoader.applicationContext.getExternalFilesDir(null)+ "/" + modelMultiLingualSmall);
-        if (!modelMultiLingualSmallFile.exists()) {
-            modelMultiLingualSmallFinished = false;
-            Log.d("WhisperASR", "multi-lingual small model file does not exist");
-            smallThread = new Thread(() -> {
-                modelMultiLingualSmallFinished = downloadModel(modelMultiLingualSmallURL, modelMultiLingualSmallFile, 2, progressCallback);
-            });
-            smallThread.start();
+        if (NekoConfig.useSlowWhisperModel.Bool()) {
+            if (!modelMultiLingualSmallFile.exists()) {
+                modelMultiLingualSmallFinished = false;
+                Log.d("WhisperASR", "multi-lingual small model file does not exist");
+                smallThread = new Thread(() -> {
+                    modelMultiLingualSmallFinished = downloadModel(modelMultiLingualSmallURL, modelMultiLingualSmallFile, 2, progressCallback);
+                });
+                smallThread.start();
+            } else {
+                smallThread = null;
+                downloadModelMultiLingualSmallSize = modelMultiLingualSmallSize;
+                modelMultiLingualSmallFinished = true;
+            }
         } else {
             smallThread = null;
-            downloadModelMultiLingualSmallSize = modelMultiLingualSmallSize;
-            modelMultiLingualSmallFinished = true;
         }
+
         if (!modelMultiLingualSmallFinished || !modelMultiLingualBaseFinished) {
             new Thread(() -> {
                 try {
@@ -128,7 +157,7 @@ public class WhisperModelDownloader {
                     if (smallThread != null) smallThread.join();
                 } catch (InterruptedException ignore) {}
 
-                progressCallback.accept(modelMultiLingualSmallFinished && modelMultiLingualBaseFinished, 1f);
+                progressCallback.accept(modelMultiLingualSmallFinished || modelMultiLingualBaseFinished, 1f);
             }).start();
         }
         // skip english only model

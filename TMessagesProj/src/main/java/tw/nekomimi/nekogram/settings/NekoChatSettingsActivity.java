@@ -83,6 +83,7 @@ public class NekoChatSettingsActivity extends MomoSettingsBaseActivity implement
     private final AbstractConfigCell transcribeProviderRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.TranscribeProvider),
             NekoConfig.transcribeProvider, NekoConfig.transcribeOptions, null));
     private final AbstractConfigCell cfCredentialsRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final AbstractConfigCell useSlowWhisperModelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useSlowWhisperModel, LocaleController.getString(R.string.UseSlowWhisperModelDesc)));
     private final AbstractConfigCell deleteUnusedModelRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractConfigCell unreadBadgeOnBackButton = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.unreadBadgeOnBackButton));
     private final AbstractConfigCell sendCommentAfterForwardRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.sendCommentAfterForward));
@@ -324,13 +325,12 @@ public class NekoChatSettingsActivity extends MomoSettingsBaseActivity implement
                             break;
                         }
                     }
-                    if (modelInUse) {
+                    if (modelInUse && !WhisperModelDownloader.deleteModels()) {
                         BulletinFactory.of(NekoChatSettingsActivity.this)
                                 .createSimpleBulletin(R.raw.error, LocaleController.getString(R.string.WhisperModelInUse))
                                 .show(true);
                         return;
                     }
-                    WhisperModelDownloader.deleteModels();
                     BulletinFactory.of(NekoChatSettingsActivity.this)
                             .createSimpleBulletin(R.raw.info, LocaleController.getString(R.string.WhisperModelRemoved))
                             .show(true);
