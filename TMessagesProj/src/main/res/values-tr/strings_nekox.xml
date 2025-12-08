@@ -217,4 +217,6 @@
     <string name="CustomMaxCacheSizeHint">MB cinsinden boyut (ör. 512)</string>
     <string name="CustomMaxCacheSizeBulletin">En fazla önbellek miktarı %1$s MB\'a ayarlandı</string>
     <string name="UseCamera2API">Camera 2 altyapısına geç</string>
+    <string name="UnblockDeleted">Silinenleri Kısıtlamayı Bırak</string>
+    <string name="PGPEncrypt">Şifrele</string>
 </resources>
