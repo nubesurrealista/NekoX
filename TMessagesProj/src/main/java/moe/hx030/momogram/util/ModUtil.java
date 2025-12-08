@@ -2,11 +2,14 @@ package moe.hx030.momogram.util;
 
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.LongSparseArray;
 
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MemberRequestsController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -20,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
 import tw.nekomimi.nekogram.NekoConfig;
@@ -98,6 +102,50 @@ public class ModUtil {
             }
         });
         Log.d("030-filterJoinReq", String.format("send dismiss req for %s %d (DA=%s)", u.first_name, i.user_id, u.deleted));
+    }
+
+    public static void dismissAllJoinRequests(int currentAccount, long chatId) {
+        TLRPC.TL_messages_hideAllChatJoinRequests req = new TLRPC.TL_messages_hideAllChatJoinRequests();
+        req.approved = false;
+        req.peer = MessagesController.getInstance(currentAccount).getInputPeer(-chatId);
+        ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
+            if (error != null) {
+                Log.e("030-filterJoinReq", String.format("dismiss err %d: %s", error.code, error.text));
+            }
+        });
+        Log.d("030-filterJoinReq", String.format("send all dismiss reqs for %d", chatId));
+    }
+
+    public static void banAllJoinRequests(int currentAccount, long chatId, Runnable onDone) {
+        AtomicInteger last = new AtomicInteger(0);
+        MemberRequestsController.getInstance(currentAccount)
+                .getImporters(chatId, null, null, null, (obj, err) -> {
+                    TLRPC.TL_messages_chatInviteImporters importers = ((TLRPC.TL_messages_chatInviteImporters) obj);
+                    Map<Long, TLRPC.User> currentUsers = new HashMap<>(importers.users.size());
+                    for (TLRPC.User u : importers.users) {
+                        currentUsers.put(u.id, u);
+                    }
+
+                    for (TLRPC.TL_chatInviteImporter i : importers.importers) {
+                        TLRPC.User u = currentUsers.get(i.user_id);
+                        if (u == null) continue;
+                        if (bannedUserIds.contains(u.id)) continue;
+                        bannedUserIds.add(u.id);
+
+                        dismissJoinRequest(currentAccount, chatId, i, u);
+                        MessagesController.getInstance(currentAccount).banUserFromChat(chatId, u, (response, error) -> {
+                            if (error != null) {
+                                Log.e("030-filterJoinReq", String.format("ban err %d: %s", error.code, error.text));
+                            } else {
+                                Log.d("030-filterJoinReq", String.format("banned %d %s", u.id, u.first_name));
+                            }
+                        });
+                        last.addAndGet(1);
+                    }
+
+                    if (last.get() > 0) banAllJoinRequests(currentAccount, chatId, onDone);
+                    else if (onDone != null) onDone.run();
+                });
     }
 
     private static final Runnable showStats = () -> {

@@ -305,4 +305,6 @@
     <string name="AutoReqStatsDismissed">Auto dismissed %1$d accounts</string>
     <string name="UseSlowWhisperModel">Use bigger Whisper model</string>
     <string name="UseSlowWhisperModelDesc">Requires large amount of RAM, disable this option if the app crashes on transcribe</string>
+    <string name="ConfirmDismissAllJoinRequests">Dismiss all join requests?</string>
+    <string name="ConfirmBanAllJoinRequests">Ban all join requests?</string>
 </resources>
