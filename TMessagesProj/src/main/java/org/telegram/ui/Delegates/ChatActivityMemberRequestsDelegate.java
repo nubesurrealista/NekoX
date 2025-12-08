@@ -35,6 +35,7 @@ import org.telegram.ui.Components.BlurredFrameLayout;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.MemberRequestsBottomSheet;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
+import org.telegram.ui.MemberRequestsActivity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -117,6 +118,12 @@ public class ChatActivityMemberRequestsDelegate {
             pendingRequestsSelector.setBackground(Theme.getSelectorDrawable(false));
             pendingRequestsSelector.setOnClickListener((v) -> {
                 showBottomSheet();
+            });
+            pendingRequestsSelector.setLongClickable(true);
+            pendingRequestsSelector.setOnLongClickListener((__) -> {
+                MemberRequestsActivity activity = new MemberRequestsActivity(currentChat.id);
+                fragment.presentFragment(activity);
+                return true;
             });
             root.addView(pendingRequestsSelector, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, 2));
 
