@@ -74,12 +74,14 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
 
         container = new FrameLayout(context);
         container.setClipToOutline(true);
-        container.setOutlineProvider(new ViewOutlineProvider() {
-            @Override
-            public void getOutline(View view, Outline outline) {
-                outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), dp(22));
-            }
-        });
+        if (!NekoConfig.unroundedChatBottomView.Bool()) {
+            container.setOutlineProvider(new ViewOutlineProvider() {
+                @Override
+                public void getOutline(View view, Outline outline) {
+                    outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), dp(22));
+                }
+            });
+        }
         addView(container, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 44, Gravity.CENTER_VERTICAL));
     }
 

@@ -29,6 +29,7 @@ import org.telegram.ui.Components.blur3.drawable.color.BlurredBackgroundColorPro
 
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class ChatActivityBlurredRoundButton extends FrameLayout implements FactorAnimator.Target {
     public static final int CLICK_ZONE_MARGIN = 6;
@@ -119,7 +120,8 @@ public class ChatActivityBlurredRoundButton extends FrameLayout implements Facto
     public void setBlurredBackgroundDrawable(BlurredBackgroundDrawable drawable) {
         backgroundDrawable = drawable;
         backgroundDrawable.setPadding(dp(CLICK_ZONE_MARGIN));
-        backgroundDrawable.setRadius(dp(BUTTON_SIZE / 2f));
+        if (!NekoConfig.unroundedChatBottomView.Bool())
+            backgroundDrawable.setRadius(dp(BUTTON_SIZE / 2f));
     }
 
     public void showLoading(boolean loading, boolean animated) {

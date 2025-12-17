@@ -99,6 +99,7 @@ public class NekoChatSettingsActivity extends MomoSettingsBaseActivity implement
     private final AbstractConfigCell alwaysLabelAnonAdminRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.alwaysLabelAnonAdmin));
     private final AbstractConfigCell hideSendAsChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideSendAsChannel));
     private final AbstractConfigCell hideChannelBottomMuteUnmuteRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideChannelBottomMuteUnmute));
+    private final AbstractConfigCell unroundedChatBottomViewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.unroundedChatBottomView));
     private final AbstractConfigCell showSpoilersDirectlyRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showSpoilersDirectly));
     private final AbstractConfigCell showEditTimeInPopupMenuRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showEditTimeInPopupMenu));
     private final AbstractConfigCell showForwardTimeInPopupMenuRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showForwardTimeInPopupMenu));
