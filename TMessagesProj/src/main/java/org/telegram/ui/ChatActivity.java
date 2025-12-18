@@ -927,6 +927,8 @@ public class ChatActivity extends BaseFragment implements
     private int cantSaveMessagesCount;
     private int canSaveMusicCount;
     private int canSaveDocumentsCount;
+    private int selectedVideoCount;
+    private boolean shareMultiple = false;
     private boolean onlyAlbum = true;
     private HashSet<Long> selectedAlbums = new HashSet<>();
     private ArrayList<Integer> waitingForLoad = new ArrayList<>();
@@ -3610,6 +3612,10 @@ public class ChatActivity extends BaseFragment implements
     }
 
     private ArrayList<MessageObject> getSelectedMessages() {
+        return getSelectedMessages(true);
+    }
+
+    private ArrayList<MessageObject> getSelectedMessages(boolean clear) {
         ArrayList<MessageObject> fmessages = new ArrayList<>();
         for (int a = 1; a >= 0; a--) {
             ArrayList<Integer> ids = new ArrayList<>();
@@ -3624,9 +3630,11 @@ public class ChatActivity extends BaseFragment implements
                     fmessages.add(messageObject);
                 }
             }
-            selectedMessagesCanCopyIds[a].clear();
-            selectedMessagesCanStarIds[a].clear();
-            selectedMessagesIds[a].clear();
+            if (clear) {
+                selectedMessagesCanCopyIds[a].clear();
+                selectedMessagesCanStarIds[a].clear();
+                selectedMessagesIds[a].clear();
+            }
         }
         hideActionMode();
         updatePinnedMessageView(true);
@@ -3840,6 +3848,7 @@ public class ChatActivity extends BaseFragment implements
         cantSaveMessagesCount = 0;
         canSaveMusicCount = 0;
         canSaveDocumentsCount = 0;
+        selectedVideoCount = 0;
         onlyAlbum = true;
         selectedAlbums.clear();
 
@@ -3936,7 +3945,8 @@ public class ChatActivity extends BaseFragment implements
                 } else if (id == forward) {
                     openForward(true);
                 } else if (id == share) {
-                    share();
+                    if (shareMultiple) checkAndShareMultiple();
+                    else share();
                 } else if (id == open_direct) {
                     if (currentChat == null) return;
                     presentFragment(ChatActivity.of(-currentChat.linked_monoforum_id));
@@ -12512,6 +12522,72 @@ public class ChatActivity extends BaseFragment implements
         updateSelectedMessageReactions();
     }
 
+    private boolean canShareMultiple(boolean noforwards) {
+        if (noforwards) return false;
+        for (int a = 0; a < 2; ++a) {
+            for (int i = 0; i < selectedMessagesIds[a].size(); ++i) {
+                MessageObject msg = selectedMessagesIds[a].valueAt(i);
+                File f = FileLoader.getInstance(currentAccount).getPathToMessage(msg.messageOwner);
+                if (f == null || !f.exists()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean checkAndShareMultiple() {
+        ArrayList<MessageObject> msgs = getSelectedMessages(false);
+        if (msgs.isEmpty()) return false;
+
+        boolean isVideo = selectedVideoCount > 0;
+        ArrayList<File> files = new ArrayList<>();
+        for (int i = 0; i < msgs.size(); ++i) {
+            MessageObject msg = msgs.get(i);
+            if (msg == null) {
+                continue;
+            }
+
+            File f = FileLoader.getInstance(currentAccount).getPathToMessage(msg.messageOwner);
+            if (f == null || !f.exists()) {
+                return false;
+            }
+            files.add(f);
+        }
+
+        Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        if (isVideo) {
+            intent.setType("video/mp4");
+        } else {
+            if (msgs.get(0) != null) {
+                intent.setType(msgs.get(0).getMimeType());
+            } else {
+                intent.setType("image/jpeg");
+            }
+        }
+
+        ArrayList<Uri> sharingUris = new ArrayList<>();
+        if (Build.VERSION.SDK_INT >= 24) {
+            try {
+                for (var f : files) {
+                    sharingUris.add(FileProvider.getUriForFile(getParentActivity(), ApplicationLoader.getApplicationId() + ".provider", f));
+                }
+                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, sharingUris);
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            } catch (Exception ignore) {
+                sharingUris.clear();
+                for (var f : files) sharingUris.add(Uri.fromFile(f));
+                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, sharingUris);
+            }
+        } else {
+            for (var f : files) sharingUris.add(Uri.fromFile(f));
+            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, sharingUris);
+        }
+
+        getParentActivity().startActivityForResult(Intent.createChooser(intent, getString(R.string.ShareFile)), 500);
+        return true;
+    }
+
     private void openForward(boolean fromActionBar) {
         if (getMessagesController().isChatNoForwards(currentChat) && hasSelectedNoforwardsMessage()) {
             // We should update text if user changed locale without re-opening chat activity
@@ -19456,6 +19532,7 @@ public class ChatActivity extends BaseFragment implements
                     if (!messageObject.canDeleteMessage(chatMode == MODE_SCHEDULED, currentChat)) {
                         cantDeleteMessagesCount--;
                     }
+                    if (messageObject.isVideo()) --selectedVideoCount;
                     boolean noforwards = getMessagesController().isChatNoForwards(currentChat);
                     if (chatMode == MODE_SCHEDULED || !messageObject.canForwardMessage() || noforwards) {
                         cantForwardMessagesCount--;
@@ -19497,6 +19574,7 @@ public class ChatActivity extends BaseFragment implements
                     if (!messageObject.canDeleteMessage(chatMode == MODE_SCHEDULED, currentChat)) {
                         cantDeleteMessagesCount++;
                     }
+                    if (messageObject.isVideo()) ++selectedVideoCount;
                     boolean noforwards = getMessagesController().isChatNoForwardsWithOverride(currentChat);
                     if (chatMode == MODE_SCHEDULED || (!messageObject.canForwardMessage() && noforwards)) {
                         cantForwardMessagesCount++;
@@ -19800,17 +19878,22 @@ public class ChatActivity extends BaseFragment implements
                 }
 
                 if (shareItem != null) {
-                    boolean show = selectedCount == 1 && !noforwards;
+                    // TODO: add multi media share (checkAndShareMultiple)
+                    boolean canShareMultiple = canShareMultiple(noforwards);
+                    boolean show = (selectedCount == 1 || canShareMultiple) && !noforwards;
+                    shareMultiple = selectedCount >= 1 && canShareMultiple(noforwards);
                     if (show) {
                         show = false;
-                        for (int a = 0; a < 2; ++a) {
+                        for (int a = 0; a < 2 && !show; ++a) {
                             for (int i = 0; i < selectedMessagesIds[a].size(); ++i) {
                                 MessageObject msg = selectedMessagesIds[a].valueAt(i);
                                 if (msg == null) continue;
                                 if (msg.isVoiceOnce() || msg.isRoundOnce()) continue;
                                 if (msg.messageOwner.noforwards && !NekoXConfig.disableFlagSecure) continue;
-                                if (msg.isVoice() || msg.isRoundVideo())
+                                if (msg.isVoice() || msg.isRoundVideo() || msg.isVideo() || msg.isPhoto()) {
                                     show = true;
+                                    break;
+                                }
                             }
                         }
                     }
