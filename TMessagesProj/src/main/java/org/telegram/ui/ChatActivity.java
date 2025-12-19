@@ -3655,6 +3655,18 @@ public class ChatActivity extends BaseFragment implements
         return fmessages;
     }
 
+    private String getSelectedMessagesText(boolean clear) {
+        ArrayList<MessageObject> selected = getSelectedMessages(clear);
+        if (selected.isEmpty()) return null;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < selected.size(); i++) {
+            builder.append(selected.get(i).messageOwner.message);
+            if (i != selected.size() - 1)
+                builder.append("\n\n");
+        }
+        return builder.toString();
+    }
+
     private static class ChatActivityTextSelectionHelper extends TextSelectionHelper.ChatListTextSelectionHelper {
         ChatActivity chatActivity;
         public void setChatActivity(ChatActivity chatActivity) {
@@ -12583,6 +12595,9 @@ public class ChatActivity extends BaseFragment implements
             for (var f : files) sharingUris.add(Uri.fromFile(f));
             intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, sharingUris);
         }
+
+        String msgsText = getSelectedMessagesText(false);
+        if (msgsText != null && !msgsText.isBlank()) intent.putExtra(Intent.EXTRA_TEXT, msgsText);
 
         getParentActivity().startActivityForResult(Intent.createChooser(intent, getString(R.string.ShareFile)), 500);
         return true;
@@ -43930,17 +43945,11 @@ public class ChatActivity extends BaseFragment implements
             repeatMessage(false);
             clearSelectionMode();
         } else if (id == nkbtn_sharemessage) {
-            ArrayList<MessageObject> selected = getSelectedMessages();
-            if (selected.isEmpty()) return;
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < selected.size(); i++) {
-                builder.append(selected.get(i).messageOwner.message);
-                if (i != selected.size() - 1)
-                    builder.append("\n\n");
-            }
+            String msgsText = getSelectedMessagesText(true);
+            if (msgsText == null || msgsText.isBlank()) return;
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_TEXT,builder.toString());
+            intent.putExtra(Intent.EXTRA_TEXT, msgsText);
             try {
                 getParentActivity().startActivity(intent);
             } catch (Exception e) {
