@@ -32,6 +32,8 @@ import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.blur3.drawable.BlurredBackgroundDrawable;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class BotCommandsMenuContainer extends FrameLayout implements NestedScrollingParent {
 
     private ObjectAnimator currentAnimation = null;
@@ -288,7 +290,7 @@ public class BotCommandsMenuContainer extends FrameLayout implements NestedScrol
 
     public void setBackgroundDrawable(@NonNull BlurredBackgroundDrawable backgroundDrawable) {
         this.backgroundDrawable = backgroundDrawable;
-        this.backgroundDrawable.setRadius(dp(22));
+        if (!NekoConfig.unroundedChatBottomView.Bool()) this.backgroundDrawable.setRadius(dp(22));
         this.backgroundDrawable.setPadding(dp(5));
 
         listView.setOutlineProvider(backgroundDrawable.getViewOutlineProvider());
