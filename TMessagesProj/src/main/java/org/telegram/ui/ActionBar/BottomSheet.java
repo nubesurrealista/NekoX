@@ -80,6 +80,7 @@ import org.telegram.ui.LaunchActivity;
 import java.util.ArrayList;
 
 import kotlin.Unit;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 
 public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
@@ -1127,11 +1128,18 @@ public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
         touchSlop = vc.getScaledTouchSlop();
 
         Rect padding = new Rect();
-        shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
-        shadowDrawable.setColorFilter(new PorterDuffColorFilter(internalBackgroundColor = getThemedColor(Theme.key_dialogBackground), PorterDuff.Mode.SRC_IN));
+        internalBackgroundColor = getThemedColor(Theme.key_dialogBackground);
+        if (NekoConfig.unroundedChatBottomView.Bool()) {
+            shadowDrawable = new ColorDrawable(internalBackgroundColor);
+            backgroundPaddingLeft = 0;
+            backgroundPaddingTop = 0;
+        } else {
+            shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(internalBackgroundColor, PorterDuff.Mode.SRC_IN));
+            backgroundPaddingLeft = padding.left;
+            backgroundPaddingTop = padding.top;
+        }
         shadowDrawable.getPadding(padding);
-        backgroundPaddingLeft = padding.left;
-        backgroundPaddingTop = padding.top;
 
         container = new ContainerView(getContext()) {
             @Override

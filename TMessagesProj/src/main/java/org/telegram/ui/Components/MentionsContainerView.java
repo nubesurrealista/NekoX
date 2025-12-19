@@ -950,7 +950,8 @@ public class MentionsContainerView extends FrameLayout implements NotificationCe
 
     public void setBackgroundDrawable(@NonNull BlurredBackgroundDrawable backgroundDrawable) {
         this.backgroundDrawable = backgroundDrawable;
-        this.backgroundDrawable.setRadius(dp(22));
+        if (!NekoConfig.unroundedChatBottomView.Bool())
+            this.backgroundDrawable.setRadius(dp(22));
         this.backgroundDrawable.setPadding(dp(5));
 
         checkListViewPadding();

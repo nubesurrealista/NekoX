@@ -1781,7 +1781,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     if (currentSheetAnimationType == 1 || viewChangeAnimator != null) {
                         top += child.getTranslationY();
                     }
-                    int y = top + dp(20);
+                    int y = top + dp(backgroundPaddingTop == 0 ? 10 : 20);
 
                     int height = getMeasuredHeight() + dp(45) + backgroundPaddingTop;
                     float rad = 1.0f;
