@@ -4800,10 +4800,11 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 if (isOnline || onlineProgress != 0) {
                     int top = (int) (storyParams.originalAvatarRect.bottom - dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 6 : 8));
                     int left;
+                    int extraX = NekoConfig.squareAvatar.Bool() ? dp(4) : 0;
                     if (LocaleController.isRTL) {
-                        left = (int) (storyParams.originalAvatarRect.left + dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 10 : 6));
+                        left = (int) (storyParams.originalAvatarRect.left + dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 10 : 6)) - extraX;
                     } else {
-                        left = (int) (storyParams.originalAvatarRect.right - dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 10 : 6));
+                        left = (int) (storyParams.originalAvatarRect.right - dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 10 : 6)) + extraX;
                     }
 
                     Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhite, resourcesProvider));
