@@ -65,11 +65,14 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ChatActivity;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PhotoViewer;
 
 import java.util.HashMap;
 import java.util.Locale;
+
+import tw.nekomimi.nekogram.NekoConfig;
 
 @SuppressLint("WrongConstant")
 public class EmbedBottomSheet extends BottomSheet {
@@ -232,6 +235,12 @@ public class EmbedBottomSheet extends BottomSheet {
         if (instance != null) {
             instance.destroy();
         }
+
+        if (NekoConfig.disableEmbeddedPlayer.Bool()) {
+            AlertsCreator.showOpenUrlAlert(fragment, url, true, false, true);
+            return;
+        }
+
         String youtubeId = message != null && message.messageOwner.media != null && message.messageOwner.media.webpage != null ? WebPlayerView.getYouTubeVideoId(url) : null;
         if (youtubeId != null) {
             PhotoViewer.getInstance().setParentActivity(fragment);

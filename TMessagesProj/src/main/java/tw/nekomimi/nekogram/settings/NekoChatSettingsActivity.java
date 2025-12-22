@@ -182,6 +182,7 @@ public class NekoChatSettingsActivity extends MomoSettingsBaseActivity implement
     private final AbstractConfigCell useExtBrowserOnIVAttemptFailRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useExtBrowserOnIVAttemptFail));
     private final AbstractConfigCell saveIVFailDomainsRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.saveIVFailDomains));
     private final AbstractConfigCell resetIVFailDomainsRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.ResetIVFailDomains), null, null, this::resetIVFailDomains));
+    private final AbstractConfigCell disableEmbeddedPlayerRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableEmbeddedPlayer));
     private final AbstractConfigCell dividerInstantView = cellGroup.appendCell(new ConfigCellDivider());
 
     // Story

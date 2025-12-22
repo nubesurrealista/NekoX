@@ -349,7 +349,8 @@ public class NekoConfig {
     public static ConfigItem disableSaveDraftToCloud = addConfig(R.string.DisableSaveDraftToCloud, "DisableSaveDraftToCloud", configTypeBool, CHAT, false);
     public static ConfigItem ignoreTopicTabView = addConfig(R.string.IgnoreTopicTabView, "IgnoreTopicTabView", configTypeBool, CHAT, false);
     public static ConfigItem noStarReactionPlaceholder = addConfig(R.string.NoStarReactionPlaceholder, "NoStarReactionPlaceholder", configTypeBool, CHAT, true);
-    public static ConfigItem unroundedChatBottomView = addConfig(R.string.UnroundedChatButtomView, "UnroundedChatButtomView", configTypeBool, CHAT, false);
+    public static ConfigItem unroundedChatBottomView = addConfig(R.string.UnroundedChatBottomView, "UnroundedChatButtomView", configTypeBool, CHAT, false);
+    public static ConfigItem disableEmbeddedPlayer = addConfig(R.string.DisableEmbeddedPlayer, "DisableEmbeddedPlayer", configTypeBool, CHAT, false);
 
 
     public static ConfigItem unlimitedFavedStickers = addConfig(R.string.UnlimitedFavoredStickers, "UnlimitedFavoredStickers", configTypeBool, EXPERIMENTAL, false);

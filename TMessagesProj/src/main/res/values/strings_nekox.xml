@@ -309,5 +309,6 @@
     <string name="ConfirmBanAllJoinRequests">Ban all join requests?</string>
     <string name="PasskeyWarning">Note. Unofficial Implementation</string>
     <string name="PasskeyWarningDesc">The passkey implementation is different from official Telegram, which is less secure, by continuing, you agree that you understand and accept the risks.</string>
-    <string name="UnroundedChatButtomView">Unrounded chat bottom view</string>
+    <string name="UnroundedChatBottomView">Unrounded chat bottom view</string>
+    <string name="DisableEmbeddedPlayer">Disable embedded web player</string>
 </resources>
