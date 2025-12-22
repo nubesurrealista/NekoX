@@ -53,6 +53,7 @@ import kotlin.Unit;
 import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
+import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.database.NitritesKt;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.source.FirefoxLocalTranslator;
@@ -105,6 +106,7 @@ public class NekoExperimentalSettingsActivity extends MomoSettingsBaseActivity {
     private final AbstractConfigCell autoBanNameUseOpenCCRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.autoDismissNameUseOpenCC));
     private final AbstractConfigCell autoDismissDummyRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.autoDismissDummy));
     private final AbstractConfigCell debugAntiSpamRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.debugAntiSpam));
+    private final AbstractConfigCell tempDebugRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.tempDebug));
     private final AbstractConfigCell divider0 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header2 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.OverrideSettings)));
@@ -161,6 +163,10 @@ public class NekoExperimentalSettingsActivity extends MomoSettingsBaseActivity {
         fragmentView = new FrameLayout(context);
         fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = (FrameLayout) fragmentView;
+
+        if (!NekoXConfig.isDeveloper()) {
+            cellGroup.rows.remove(tempDebugRow);
+        }
 
         listView = new RecyclerListView(context);
         listView.setVerticalScrollBarEnabled(false);

@@ -387,6 +387,7 @@ public class NekoConfig {
     public static ConfigItem autoDismissDummy = addConfig(R.string.AutoDismissReqDummy, "AutoDismissReqDummy", configTypeBool, EXPERIMENTAL, false);
     public static String autoDismissRegexString;
     public static Pattern autoDismissRegexPattern;
+    public static ConfigItem tempDebug = addConfig(R.string.SettingsDebug, "TempDebug", configTypeBool, EXPERIMENTAL, false);
 
     // internal
     public static ConfigItem nextPromptUpdateTime = addConfig("nextPromptUpdateTime", configTypeLong, 0L);
