@@ -311,4 +311,5 @@
     <string name="PasskeyWarningDesc">The passkey implementation is different from official Telegram, which is less secure, by continuing, you agree that you understand and accept the risks.</string>
     <string name="UnroundedChatBottomView">Unrounded chat bottom view</string>
     <string name="DisableEmbeddedPlayer">Disable embedded web player</string>
+    <string name="RemoveChatBottomViewPadding">Remove padding from chat bottom view</string>
 </resources>

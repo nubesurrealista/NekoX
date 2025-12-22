@@ -37,6 +37,8 @@ public class ChatInputViewsContainer extends FrameLayout {
     private final FrameLayout inputIslandBubbleContainer;
     private final FrameLayout inAppKeyboardBubbleContainer;
 
+    private final boolean removePadding = NekoConfig.removeChatBottomViewPadding.Bool();
+
     public ChatInputViewsContainer(@NonNull Context context) {
         super(context);
 
@@ -82,7 +84,7 @@ public class ChatInputViewsContainer extends FrameLayout {
     private BlurredBackgroundDrawable underKeyboardBackgroundDrawable;
     public void setInputIslandBubbleDrawable(BlurredBackgroundDrawable drawable) {
         blurredBackgroundDrawable = drawable;
-        blurredBackgroundDrawable.setPadding(dp(7));
+        if (!removePadding) blurredBackgroundDrawable.setPadding(dp(7));
         if (!NekoConfig.unroundedChatBottomView.Bool()) blurredBackgroundDrawable.setRadius(dp(INPUT_BUBBLE_RADIUS));
     }
 
@@ -138,7 +140,7 @@ public class ChatInputViewsContainer extends FrameLayout {
     private void checkBlurredHeight(boolean force) {
         checkViewsPositions();
 
-        final int blurredHeight = inputBubbleHeightRound + dp(INPUT_BUBBLE_BOTTOM) + Math.round(maxBottomInset);
+        final int blurredHeight = inputBubbleHeightRound + getInputBubbleBottomPadding() + Math.round(maxBottomInset);
         if (currentBlurredHeight != blurredHeight || force) {
             currentBlurredHeight = blurredHeight;
 
@@ -186,7 +188,7 @@ public class ChatInputViewsContainer extends FrameLayout {
     }
 
     private void checkViewsPositions() {
-        inputIslandBubbleContainer.setTranslationY(-maxBottomInset - dp(INPUT_BUBBLE_BOTTOM));
+        inputIslandBubbleContainer.setTranslationY(-maxBottomInset - getInputBubbleBottomPadding());
         inAppKeyboardBubbleContainer.setTranslationY(inAppKeyboardBubbleContainer.getMeasuredHeight() - imeBottomInset);
     }
 
@@ -235,7 +237,11 @@ public class ChatInputViewsContainer extends FrameLayout {
     }
 
     public float getInputBubbleBottom() {
-        return getMeasuredHeight() - maxBottomInset - dp(INPUT_BUBBLE_BOTTOM);
+        return getMeasuredHeight() - maxBottomInset - getInputBubbleBottomPadding();
+    }
+
+    public int getInputBubbleBottomPadding() {
+        return removePadding ? 0 : dp(INPUT_BUBBLE_BOTTOM);
     }
 
     @Override
@@ -266,7 +272,7 @@ public class ChatInputViewsContainer extends FrameLayout {
         tmpRect.set(
             Math.round(inputBubbleOffsetLeft), 0,
             getMeasuredWidth() - Math.round(inputBubbleOffsetRight), inputBubbleHeightRound);
-        tmpRect.inset(0, -dp(7));
+        tmpRect.inset(0, removePadding ? 0 : -dp(7));
         tmpRect.offset(0, blurTop + (int) bubbleInputTranlationY);
 
         blurredBackgroundDrawable.setBounds(tmpRect);

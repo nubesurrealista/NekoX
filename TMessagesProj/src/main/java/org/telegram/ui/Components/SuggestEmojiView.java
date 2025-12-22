@@ -49,6 +49,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class SuggestEmojiView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
     public final static int DIRECTION_TO_BOTTOM = 0;
@@ -65,7 +67,7 @@ public class SuggestEmojiView extends FrameLayout implements NotificationCenter.
     @Nullable
     private Adapter adapter;
     private int direction = DIRECTION_TO_BOTTOM;
-    private int horizontalPadding = AndroidUtilities.dp(10);
+    private int horizontalPadding = NekoConfig.removeChatBottomViewPadding.Bool() ? 0 : AndroidUtilities.dp(10);
 
     public interface AnchorViewDelegate {
         BaseFragment getParentFragment();
@@ -789,19 +791,19 @@ public class SuggestEmojiView extends FrameLayout implements NotificationCenter.
                 containerView.setTranslationY(-getMeasuredHeight() - enterView.getEditField().getScrollY() + lastSpanY + AndroidUtilities.dp(20) + containerView.getHeight());
             }
         }
-        int listViewPaddingLeft = (int) Math.max(this.arrowX - Math.max(width / 4f, Math.min(width / 2f, AndroidUtilities.dp(66))) - listView.getLeft(), 0);
+        int listViewPaddingLeft = NekoConfig.removeChatBottomViewPadding.Bool() ? 0 : (int) Math.max(this.arrowX - Math.max(width / 4f, Math.min(width / 2f, AndroidUtilities.dp(66))) - listView.getLeft(), 0);
         if (listView.getPaddingLeft() != listViewPaddingLeft) {
             int dx = listView.getPaddingLeft() - listViewPaddingLeft;
             listView.setPadding(listViewPaddingLeft, 0, 0, 0);
             listView.scrollBy(dx, 0);
         }
-        int listViewPaddingLeftI = (int) Math.max(arrowX - Math.max(width / 4f, Math.min(width / 2f, AndroidUtilities.dp(66))) - listView.getLeft(), 0);
+        int listViewPaddingLeftI = NekoConfig.removeChatBottomViewPadding.Bool() ? 0 : (int) Math.max(arrowX - Math.max(width / 4f, Math.min(width / 2f, AndroidUtilities.dp(66))) - listView.getLeft(), 0);
         listView.setTranslationX(listViewPaddingLeftI - listViewPaddingLeft);
 
         float left = center - width / 2f + listView.getPaddingLeft() + listView.getTranslationX();
         float top = listView.getTop() + listView.getTranslationY() + listView.getPaddingTop() + (direction == DIRECTION_TO_BOTTOM ? 0: AndroidUtilities.dp(6.66f));
         float right = Math.min(center + width / 2f + listView.getPaddingLeft() + listView.getTranslationX(), getWidth() - containerView.getPaddingRight());
-        float bottom = listView.getBottom() + listView.getTranslationY() - (direction == DIRECTION_TO_BOTTOM ? AndroidUtilities.dp(6.66f) : 0);
+        float bottom = listView.getBottom() + listView.getTranslationY() - ((direction == DIRECTION_TO_BOTTOM && !NekoConfig.removeChatBottomViewPadding.Bool()) ? AndroidUtilities.dp(6.66f) : 0);
 
         float R = Math.min(AndroidUtilities.dp(9), width / 2f), D = R * 2;
 
