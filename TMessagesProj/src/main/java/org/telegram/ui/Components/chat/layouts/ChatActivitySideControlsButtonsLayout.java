@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.ChatActivityEnterView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.blur3.BlurredBackgroundDrawableViewFactory;
 import org.telegram.ui.Components.blur3.drawable.color.BlurredBackgroundColorProvider;
@@ -156,7 +157,7 @@ public class ChatActivitySideControlsButtonsLayout extends FrameLayout implement
             holder.button.setScaleY(lerp(0.7f, 1f, visibility));
             holder.button.setTranslationY(dp(100) * (1f - visibility) - totalHeight);
 
-            final int height = dp(44);
+            final int height = dp(ChatActivityEnterView.DEFAULT_HEIGHT);
             final int gap = dp(buttonId == BUTTON_SEARCH_UP || buttonId == BUTTON_SEARCH_DOWN ? 10 : 16);
 
             totalHeight += (height + gap) * visibility;

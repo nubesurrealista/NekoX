@@ -2637,7 +2637,8 @@ public class ChatActivityEnterView extends FrameLayout implements
             @Override
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-                final int height = Math.max(dp(44), getMeasuredHeight());
+                final int min = NekoConfig.removeChatBottomViewPadding.Bool() ? 50 : 44;
+                final int height = Math.max(dp(min), getMeasuredHeight());
                 if (animatorInputFieldHeight.getFactor() > 0) {
                     animatorInputFieldHeight.animateTo(height);
                 } else {
@@ -3446,6 +3447,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         checkSendButton(false);
         checkChannelRights();
 
+        DEFAULT_HEIGHT = NekoConfig.removeChatBottomViewPadding.Bool() ? 50 : 44;
         createMessageEditText();
         if (attachLayout != null && NekoConfig.alwaysShowBotCommandButton.Bool()) {
             createBotButton();
@@ -4279,7 +4281,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             }
         });
         senderSelectView.setVisibility(GONE);
-        messageEditTextContainer.addView(senderSelectView, LayoutHelper.createFrame(32, 32, Gravity.BOTTOM | Gravity.LEFT, 8, 6, 8, 6));
+        messageEditTextContainer.addView(senderSelectView, LayoutHelper.createFrame(32, 32, Gravity.CENTER_VERTICAL | Gravity.LEFT, 8, 6, 8, 6));
     }
 
     private void createBotCommandsMenuButton() {
@@ -6006,7 +6008,11 @@ public class ChatActivityEnterView extends FrameLayout implements
         messageEditText.setMaxLines(6);
         messageEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         messageEditText.setGravity(Gravity.BOTTOM);
-        messageEditText.setPadding(0, dp(9), 0, dp(10));
+        final int baseHeightDp = 44;
+        final int extraHeightDp = Math.max(0, DEFAULT_HEIGHT - baseHeightDp);
+        final int extraTopPaddingDp = extraHeightDp / 2;
+        final int extraBottomPaddingDp = extraHeightDp - extraTopPaddingDp;
+        messageEditText.setPadding(0, dp(9 + extraTopPaddingDp), 0, dp(10 + extraBottomPaddingDp));
         messageEditText.setBackgroundDrawable(null);
         messageEditText.setTextColor(getThemedColor(Theme.key_chat_messagePanelText));
         messageEditText.setLinkTextColor(getThemedColor(Theme.key_chat_messageLinkOut));
@@ -6836,7 +6842,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         }
     }
 
-    public static final int DEFAULT_HEIGHT = 44;
+    public static int DEFAULT_HEIGHT = NekoConfig.removeChatBottomViewPadding.Bool() ? 50 : 44;
 
     private boolean resizeForTopViewLastShow;
     private void resizeForTopView(boolean show) {
@@ -6850,7 +6856,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         textFieldContainer.setLayoutParams(layoutParams);
 
         resizeForTopViewLastShow = show;
-        setMinimumHeight(dp(44) + (show ? topView.getLayoutParams().height : 0));
+        setMinimumHeight(dp(DEFAULT_HEIGHT) + (show ? topView.getLayoutParams().height : 0));
         if (stickersExpanded) {
             if (searchingType == 0) {
                 setStickersExpanded(false, true, false);

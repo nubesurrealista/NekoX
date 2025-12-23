@@ -82,7 +82,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
                 }
             });
         }
-        addView(container, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 44, Gravity.CENTER_VERTICAL));
+        addView(container, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, NekoConfig.removeChatBottomViewPadding.Bool() ? 50 : 44, Gravity.CENTER_VERTICAL));
     }
 
     public void updateColors() {

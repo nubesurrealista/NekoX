@@ -1234,6 +1234,7 @@ public class ChatActivity extends BaseFragment implements
     private float switchingFromTopicsProgress;
     private boolean forwarding = false;
     public String cantSendMessage = null;
+    private boolean removeBottomPadding = NekoConfig.removeChatBottomViewPadding.Bool();
 
     public final static int OPTION_RETRY = 0;
     public final static int OPTION_DELETE = 1;
@@ -2663,7 +2664,7 @@ public class ChatActivity extends BaseFragment implements
         navbarContentSourceWallpaper = new BlurredBackgroundSourceWrapped();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && (SharedConfig.chatBlurEnabled() || NekoConfig.forceBlurInChat.Bool())) {
             scrollableViewNoiseSuppressor = new DownscaleScrollableNoiseSuppressor();
-            recommendedAdditionalSizeY = dp(48);
+            recommendedAdditionalSizeY = dp(NekoConfig.removeChatBottomViewPadding.Bool() ? 16 : 48);
 
             glassBackgroundSourceFrostedRenderNode = new BlurredBackgroundSourceRenderNode(navbarContentSourceWallpaper);
             glassBackgroundSourceFrostedRenderNode.setOnDrawablesRelativePositionChangeListener(this::invalidateMergedVisibleBlurredPositionsAndSourcesPositions);
@@ -3222,6 +3223,7 @@ public class ChatActivity extends BaseFragment implements
         }
 
         getMessagesController().openedChat(dialog_id);
+        removeBottomPadding = NekoConfig.removeChatBottomViewPadding.Bool();
         return true;
     }
 
@@ -8432,7 +8434,7 @@ public class ChatActivity extends BaseFragment implements
         replyImageView.setRoundRadius(AndroidUtilities.dp(2));
         replyLayout.addView(replyImageView, LayoutHelper.createFrame(34, 34, Gravity.TOP | Gravity.LEFT, 52, 6, 0, 0));
 
-        int suggestPanelMargin = NekoConfig.removeChatBottomViewPadding.Bool() ? 0 : 7;
+        int suggestPanelMargin = removeBottomPadding ? 0 : 7;
         contentView.addView(
             suggestEmojiPanel = new SuggestEmojiView(context, currentAccount, chatActivityEnterView, themeDelegate),
             LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 160, Gravity.LEFT | Gravity.BOTTOM, suggestPanelMargin, 0, suggestPanelMargin, 0)
@@ -11063,13 +11065,13 @@ public class ChatActivity extends BaseFragment implements
         if (sideControlsButtonsLayout != null) {
             float baseTranslationY2 = -windowInsetsStateHolder.getAnimatedMaxBottomInset()
                 - chatInputViewsContainer.getInputBubbleHeight()
-                - dp(ChatInputViewsContainer.INPUT_BUBBLE_BOTTOM + (NekoConfig.removeChatBottomViewPadding.Bool() ? -5 : 4));
+                - dp(ChatInputViewsContainer.INPUT_BUBBLE_BOTTOM + (removeBottomPadding ? -5 : 4));
             sideControlsButtonsLayout.setTranslationY(baseTranslationY2);
         }
 
         if (suggestEmojiPanel != null) {
             float baseTranslationY2 = -windowInsetsStateHolder.getAnimatedMaxBottomInset()
-                - dp(ChatInputViewsContainer.INPUT_BUBBLE_BOTTOM + (NekoConfig.removeChatBottomViewPadding.Bool() ? -2 : 7));
+                - dp(ChatInputViewsContainer.INPUT_BUBBLE_BOTTOM + (removeBottomPadding ? -2 : 7));
             suggestEmojiPanel.setTranslationY(baseTranslationY2);
         }
     }
@@ -12316,11 +12318,12 @@ public class ChatActivity extends BaseFragment implements
 
         Integer overrideInputIslandHeight = shouldHideBottomOverlay() ? dp(16) : null;
 
-        final int paddingBottomTarget = (int) (blurredViewBottomOffset + dp(9 + 7)
+        final float inputPadding = getInputAdditionalPadding();
+        final int paddingBottomTarget = (int) (blurredViewBottomOffset + inputPadding
                 + (overrideInputIslandHeight != null ? overrideInputIslandHeight : inputIslandHeightTarget)
                 + windowInsetsStateHolder.getInsets(WindowInsetsCompat.Type.ime() | WindowInsetsCompat.Type.systemBars()).bottom);
 
-        final float paddingBottomAnimated = blurredViewBottomOffset + dp(9 + 7)
+        final float paddingBottomAnimated = blurredViewBottomOffset + inputPadding
                 + (overrideInputIslandHeight != null ? overrideInputIslandHeight : inputIslandHeightCurrent)
                 + windowInsetsStateHolder.getAnimatedMaxBottomInset();
 
@@ -12395,7 +12398,7 @@ public class ChatActivity extends BaseFragment implements
         }
         if (undoView != null) {
             undoView.setAdditionalTranslationY(
-                windowInsetsStateHolder.getAnimatedMaxBottomInset() + dp(9 + 7)
+                windowInsetsStateHolder.getAnimatedMaxBottomInset() + getInputAdditionalPadding()
                     + chatInputViewsContainer.getInputBubbleHeight());
         }
         if (messagesSearchListContainer != null) {
@@ -30207,7 +30210,7 @@ public class ChatActivity extends BaseFragment implements
                 }
 
                 return Math.round(windowInsetsStateHolder.getAnimatedMaxBottomInset() +
-                    (chatInputViewsContainer.getInputBubbleHeight() + dp(9 + 7)));
+                    chatInputViewsContainer.getInputBubbleHeight() + getInputAdditionalPadding());
             }
 
             @Override
@@ -46515,7 +46518,7 @@ public class ChatActivity extends BaseFragment implements
 
     private void checkUi_botMenuPosition() {
         final float margin = windowInsetsStateHolder.getAnimatedMaxBottomInset() +
-            (chatInputViewsContainer.getInputBubbleHeight() + dp(9 + 6));
+            (chatInputViewsContainer.getInputBubbleHeight() + (removeBottomPadding ? 0 : dp(9 + 6)));
 
         if (chatActivityEnterView != null && chatActivityEnterView.botCommandsMenuContainer != null) {
             chatActivityEnterView.botCommandsMenuContainer.setTranslationY(-margin);
@@ -46535,11 +46538,12 @@ public class ChatActivity extends BaseFragment implements
 
     private float calculateInputIslandHeight(boolean target) {
         if (shouldHideBottomOverlay()) return 0f;
+        final int base = removeBottomPadding ? 50 : 44;
 
         final float enterViewIslandHeight = Math.max(
-            chatActivityEnterView != null ? chatActivityEnterView.getIslandTotalHeight(target): 0, dp(44));
+            chatActivityEnterView != null ? chatActivityEnterView.getIslandTotalHeight(target): 0, dp(base));
 
-        final float defaultIslandHeight = dp(44);
+        final float defaultIslandHeight = dp(base);
         final float enterViewFactor;
         float visibility;
 
@@ -46578,11 +46582,15 @@ public class ChatActivity extends BaseFragment implements
         checkUi_chatListViewPaddings();
     }
 
+    private float getInputAdditionalPadding() {
+        return dp(9 + (removeBottomPadding ? 0 : 7));
+    }
+
     private static final Rect clipBoundsRect = new Rect();
     private void checkUi_BlurHeight() {
         final float inputHeight = windowInsetsStateHolder.getAnimatedMaxBottomInset() +
-                dp(9) + chatInputViewsContainer.getInputBubbleHeight() + dp(7);
-        final float fullHeight = chatInputViewsContainer.getMeasuredHeight() + dp(36);
+                dp(9) + chatInputViewsContainer.getInputBubbleHeight() + dp(removeBottomPadding ? 0 : 7);
+        final float fullHeight = chatInputViewsContainer.getMeasuredHeight() + dp(removeBottomPadding ? 0 : 36);
 
         final float result = lerp(inputHeight, fullHeight, animatorRoundMessageCameraVisibility.getFloatValue());
         chatInputViewsContainer.setBlurredBottomHeight(result);

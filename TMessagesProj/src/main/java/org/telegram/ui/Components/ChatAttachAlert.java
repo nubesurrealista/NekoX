@@ -2103,7 +2103,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                             if (currentAttachLayout == null || currentAttachLayout.shouldHideBottomButtons()) {
                                 buttonsRecyclerView.setAlpha(1.0f - alpha);
                                 shadow.setAlpha(1.0f - alpha);
-                                buttonsRecyclerView.setTranslationY(dp(44) * alpha);
+                                buttonsRecyclerView.setTranslationY(dp(ChatActivityEnterView.DEFAULT_HEIGHT) * alpha);
                             }
                             frameLayout2.setTranslationY(dp(48) * alpha);
                             shadow.setTranslationY(dp(84) * alpha + botMainButtonOffsetY);
