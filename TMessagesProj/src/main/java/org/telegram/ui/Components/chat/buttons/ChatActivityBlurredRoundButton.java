@@ -33,7 +33,7 @@ import tw.nekomimi.nekogram.NekoConfig;
 
 public class ChatActivityBlurredRoundButton extends FrameLayout implements FactorAnimator.Target {
     public static final int CLICK_ZONE_MARGIN = 6;
-    public static final int BUTTON_SIZE = 44;
+    public static int BUTTON_SIZE = NekoConfig.removeChatBottomViewPadding.Bool() ? 50 : 44;
 
     public ChatActivityBlurredRoundButton(Context context) {
         super(context);
@@ -119,7 +119,8 @@ public class ChatActivityBlurredRoundButton extends FrameLayout implements Facto
     private BlurredBackgroundDrawable backgroundDrawable;
     public void setBlurredBackgroundDrawable(BlurredBackgroundDrawable drawable) {
         backgroundDrawable = drawable;
-        backgroundDrawable.setPadding(dp(CLICK_ZONE_MARGIN));
+        if (!NekoConfig.removeChatBottomViewPadding.Bool())
+            backgroundDrawable.setPadding(dp(CLICK_ZONE_MARGIN));
         if (!NekoConfig.unroundedChatBottomView.Bool())
             backgroundDrawable.setRadius(dp(BUTTON_SIZE / 2f));
     }
@@ -165,6 +166,7 @@ public class ChatActivityBlurredRoundButton extends FrameLayout implements Facto
             @DrawableRes int res
     ) {
         ChatActivityBlurredRoundButton button;
+        BUTTON_SIZE = NekoConfig.removeChatBottomViewPadding.Bool() ? 50 : 44;
 
         final int color = Theme.getColor(Theme.key_glass_defaultIcon, resourcesProvider);
         button = new ChatActivityBlurredRoundButton(context);
@@ -172,7 +174,7 @@ public class ChatActivityBlurredRoundButton extends FrameLayout implements Facto
         button.setBlurredBackgroundDrawable(factory.create(button, colorProvider));
         button.setIcon(res);
         button.setIconColor(color);
-        button.setBackground(Theme.createSimpleSelectorRoundRectDrawableWithInset(dp(22), 0, Theme.multAlpha(color, .15f), dp(6)));
+        button.setBackground(Theme.createSimpleSelectorRoundRectDrawableWithInset(dp(BUTTON_SIZE / 2), 0, Theme.multAlpha(color, .15f), dp(6)));
 
         return button;
     }
@@ -185,7 +187,7 @@ public class ChatActivityBlurredRoundButton extends FrameLayout implements Facto
 
         final int color = Theme.getColor(Theme.key_glass_defaultIcon, resourcesProvider);
         setIconColor(Theme.getColor(Theme.key_glass_defaultIcon, resourcesProvider));
-        setBackground(Theme.createSimpleSelectorRoundRectDrawableWithInset(dp(22), 0, Theme.multAlpha(color, .15f), dp(6)));
+        setBackground(Theme.createSimpleSelectorRoundRectDrawableWithInset(dp(BUTTON_SIZE / 2), 0, Theme.multAlpha(color, .15f), dp(6)));
     }
 
     private void checkUi_IconViewVisibility() {

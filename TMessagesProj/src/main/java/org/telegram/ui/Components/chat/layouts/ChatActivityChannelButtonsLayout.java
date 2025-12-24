@@ -78,11 +78,11 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
             container.setOutlineProvider(new ViewOutlineProvider() {
                 @Override
                 public void getOutline(View view, Outline outline) {
-                    outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), dp(22));
+                    outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), dp((float) ChatActivityBlurredRoundButton.BUTTON_SIZE / 2));
                 }
             });
         }
-        addView(container, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, NekoConfig.removeChatBottomViewPadding.Bool() ? 50 : 44, Gravity.CENTER_VERTICAL));
+        addView(container, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.CENTER_VERTICAL));
     }
 
     public void updateColors() {
@@ -123,7 +123,8 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
                     onClickListeners[buttonId].onClick(v);
                 }
             });
-            addView(button, LayoutHelper.createFrame(56, 56));
+            int edge = NekoConfig.removeChatBottomViewPadding.Bool() ? ChatActivityBlurredRoundButton.BUTTON_SIZE : 56;
+            addView(button, LayoutHelper.createFrame(edge, edge));
 
             buttonHolders[buttonId] = new ButtonHolder(button, visibilityAnimator);
             checkButtonsPositionsAndVisibility();
@@ -227,13 +228,16 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
     private float totalWidthLeft, totalWidthRight;
 
     private void checkContainerPaddings(boolean canRequestLayout) {
-        int paddingLeft = dp(7), paddingRight = dp(7);
+        int buttonSize = ChatActivityBlurredRoundButton.BUTTON_SIZE;
+        int extra = NekoConfig.removeChatBottomViewPadding.Bool() ? 0 : 10;
+        int padding = NekoConfig.removeChatBottomViewPadding.Bool() ? 0 : 7;
+        int paddingLeft = dp(padding), paddingRight = dp(padding);
         for (final int buttonId : buttonsOrderLeft) {
             final ButtonHolder holder = buttonHolders[buttonId];
             if (holder == null) {
                 continue;
             }
-            paddingLeft += holder.visibilityAnimator.getValue() ? dp(44 + 10) : 0;
+            paddingLeft += holder.visibilityAnimator.getValue() ? dp(buttonSize + extra) : 0;
         }
 
         for (final int buttonId : buttonsOrderRight) {
@@ -241,7 +245,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
             if (holder == null) {
                 continue;
             }
-            paddingRight += holder.visibilityAnimator.getValue() ? dp(44 + 10) : 0;
+            paddingRight += holder.visibilityAnimator.getValue() ? dp(buttonSize + extra) : 0;
         }
 
         final MarginLayoutParams lp = (MarginLayoutParams) container.getLayoutParams();
@@ -256,6 +260,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
     }
 
     private void checkButtonsPositionsAndVisibility() {
+        int buttonSize = ChatActivityBlurredRoundButton.BUTTON_SIZE;
         totalWidthLeft = 0;
         totalWidthRight = 0;
 
@@ -277,7 +282,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
                 continue;
             }
 
-            final float width = holder.visibilityAnimator.getFloatValue() * dp(44 + 10);    // width + margin
+            final float width = holder.visibilityAnimator.getFloatValue() * dp(buttonSize + 10);    // width + margin
             holder.button.setTranslationX(dp(1) + totalWidthLeft);
             totalWidthLeft += width;
         }
@@ -288,7 +293,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
                 continue;
             }
 
-            final float width = holder.visibilityAnimator.getFloatValue() * dp(44 + 10);    // width + margin
+            final float width = holder.visibilityAnimator.getFloatValue() * dp(buttonSize + 10);    // width + margin
             holder.button.setTranslationX(getMeasuredWidth() - holder.button.getMeasuredWidth() - dp(1) - totalWidthRight);
             totalWidthRight += width;
         }
@@ -335,12 +340,14 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
     @Override
     protected void dispatchDraw(@NonNull Canvas canvas) {
         final int accentAlpha = (int) (255 * totalVisibilityFactor * animatorCenterAccentBackground.getFloatValue());
+        final boolean removePadding = NekoConfig.removeChatBottomViewPadding.Bool();
+        final int offset = (removePadding ? 0 : dp(9));
         if (accentAlpha > 0) {
             tmpRect.set(
                 totalWidthLeft + dp(10),
-                dp(9),
+                offset,
                 getMeasuredWidth() - dp(10) - totalWidthRight,
-                getMeasuredHeight() - dp(9)
+                getMeasuredHeight() - offset
             );
             backgroundAccentPaint.setColor(accentColor);
             backgroundAccentPaint.setAlpha(accentAlpha);
