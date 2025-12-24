@@ -1759,7 +1759,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         replyImageReceiver.setRoundRadius(dp(4));
         locationImageReceiver = new ImageReceiver(this);
         locationImageReceiver.setAllowLoadingOnAttachedOnly(true);
-        locationImageReceiver.setRoundRadius(dp(26.1f));
+        locationImageReceiver.setRoundRadius(dp(NekoConfig.squareAvatar.Bool() ? 0 : 26.1f));
         TAG = DownloadController.getInstance(currentAccount).generateObserverTag();
 
         contactAvatarDrawable = new AvatarDrawable();
@@ -23536,7 +23536,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         msgAvatarLiveLocation.setAlpha((int) (255 * Math.min(1, progress * 5)));
                         msgAvatarLiveLocation.draw(canvas);
 
-                        locationImageReceiver.setImageCoords(cx + dp(5.0f), cy + dp(5.0f), dp(52), dp(52));
+                        boolean squareAvatar = NekoConfig.squareAvatar.Bool();
+                        int size = dp(squareAvatar ? 36 : 52);
+                        int shift = dp(squareAvatar ? 8 : 0);
+                        locationImageReceiver.setImageCoords(cx + dp(5.0f) + shift, cy + dp(5.0f) + shift, size, size);
                         locationImageReceiver.setAlpha(Math.min(1, progress * 5));
                         locationImageReceiver.draw(canvas);
                     }

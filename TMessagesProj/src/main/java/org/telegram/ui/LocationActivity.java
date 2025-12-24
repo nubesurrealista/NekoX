@@ -1651,8 +1651,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             } else if (liveLocation.chat != null) {
                 avatarDrawable.setInfo(currentAccount, liveLocation.chat);
             }
-            canvas.translate(dp(6), dp(6));
-            avatarDrawable.setBounds(0, 0, dp(50), dp(50));
+            boolean squareAvatar = NekoConfig.squareAvatar.Bool();
+            int w = squareAvatar ? 38 : 50;
+            int edge = dp(w);
+            int start = dp((float) (62 - w) / 2);
+            canvas.translate(start, start);
+            avatarDrawable.setBounds(0, 0, edge, edge);
             avatarDrawable.draw(canvas);
             canvas.restore();
 
@@ -1662,13 +1666,16 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 if (bitmap != null) {
                     BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
                     Matrix matrix = new Matrix();
-                    float scale = dp(50) / (float) bitmap.getWidth();
-                    matrix.postTranslate(dp(6), dp(6));
+                    float scale = edge / (float) bitmap.getWidth();
                     matrix.postScale(scale, scale);
+                    matrix.postTranslate(start, start);
                     roundPaint.setShader(shader);
                     shader.setLocalMatrix(matrix);
-                    bitmapRect.set(dp(6), dp(6), dp(50 + 6), dp(50 + 6));
-                    canvas.drawRoundRect(bitmapRect, dp(25), dp(25), roundPaint);
+                    bitmapRect.set(start, start, edge + start, edge + start);
+                    if (squareAvatar)
+                        canvas.drawRect(bitmapRect, roundPaint);
+                    else
+                        canvas.drawRoundRect(bitmapRect, dp(25), dp(25), roundPaint);
                 }
             }
 
