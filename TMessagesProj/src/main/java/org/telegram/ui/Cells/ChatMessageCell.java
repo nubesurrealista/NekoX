@@ -17355,7 +17355,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
 
         if (messageObject.messageOwner.forwards > 0 && NekoConfig.showChannelMsgFwdCount.Bool()) {
-            currentTimeString = "\uD83D\uDD4A" + LocaleController.formatShortNumber(messageObject.messageOwner.forwards, null) + " " + currentTimeString;
+            currentTimeString = " \uD83D\uDD4A " + LocaleController.formatShortNumber(messageObject.messageOwner.forwards, null) + " " + currentTimeString;
         }
 
         final long starsPrice = currentMessageObject.getDialogId() < 0 ? getStarsPrice() : 0;
@@ -17383,7 +17383,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 currentTimeString = TextUtils.concat(formatString(R.string.MessageScheduledRepeatSeconds, period), ", ", currentTimeString);
             }
         }
-        timeTextWidth = timeWidth = (int) Math.ceil(Theme.chat_timePaint.measureText(currentTimeString, 0, currentTimeString == null ? 0 : currentTimeString.length()));
+        currentTimeString = replaceIndicators(currentTimeString, messageObject);
+        timeTextWidth = timeWidth = (int) Math.ceil(currentTimeString == null ? 0 : Layout.getDesiredWidth(currentTimeString, Theme.chat_timePaint));
         if (currentMessageObject.scheduled && currentMessageObject.messageOwner.date == 0x7FFFFFFE || currentMessageObject.notime) {
             timeWidth -= dp(8);
         }
@@ -18479,6 +18480,40 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     private Boolean isAnonAdmin = null;
+    private CharSequence replaceIndicators(CharSequence cs, MessageObject messageObject) {
+        if (cs == null) return null;
+        SpannableStringBuilder ssb = null;
+        String str = cs.toString();
+        if (edited && NekoConfig.useEmojiForEdited.Bool()) {
+            int index = str.indexOf("✏\uFE0F");
+            int len = 2;
+            if (index == -1) {
+                index = str.indexOf("✏");
+                len = 1;
+            }
+            if (index != -1) {
+                if (ssb == null) ssb = new SpannableStringBuilder(cs);
+                ColoredImageSpan span = new ColoredImageSpan(R.drawable.baseline_edit_12);
+                span.setSize((int) Theme.chat_timePaint.getTextSize());
+                ssb.setSpan(span, index, index + len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+        if (messageObject != null && messageObject.messageOwner != null && messageObject.messageOwner.forwards > 0 && NekoConfig.showChannelMsgFwdCount.Bool()) {
+            int index = str.indexOf("\uD83D\uDD4A");
+            int len = 2;
+            if (index != -1) {
+                if (index + 2 < str.length() && str.charAt(index + 2) == '\uFE0F') {
+                    len = 3;
+                }
+                if (ssb == null) ssb = (cs instanceof SpannableStringBuilder) ? (SpannableStringBuilder) cs : new SpannableStringBuilder(cs);
+                ColoredImageSpan span = new ColoredImageSpan(R.drawable.share);
+                span.setSize((int) Theme.chat_timePaint.getTextSize());
+                ssb.setSpan(span, index, index + len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+        return ssb != null ? ssb : cs;
+    }
+
     protected boolean isAnonAdminMessage() {
         if (isAnonAdmin != null) return isAnonAdmin;
         return (isAnonAdmin = NekoConfig.alwaysLabelAnonAdmin.Bool() &&
@@ -26414,9 +26449,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
             }
             if (edited && !lastDrawingEdited && timeLayout != null) {
-                String editedStr = NekoConfig.useEmojiForEdited.Bool() ? " ✏\uFE0F" : getString(R.string.EditedMessage);
+                CharSequence editedStr = NekoConfig.useEmojiForEdited.Bool() ? replaceIndicators(" ✏\uFE0F", currentMessageObject) : getString(R.string.EditedMessage);
                 CharSequence text = timeLayout.getText();
-                int i = text.toString().indexOf(editedStr);
+                int i = text.toString().indexOf(editedStr.toString());
                 if (i >= 0) {
                     if (i == 0) {
                         animateEditedLayout = new StaticLayout(editedStr, Theme.chat_timePaint, timeTextWidth + dp(100), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
