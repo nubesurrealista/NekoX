@@ -21,6 +21,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
@@ -63,6 +64,7 @@ import java.util.function.Function;
 
 import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.GsonUtil;
@@ -349,6 +351,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
     @SuppressLint("ApplySharedPref")
     public static void importSettings(JsonObject configJson) throws JSONException {
+        boolean hasCustomTitle = false;
 
         for (Map.Entry<String, JsonElement> element : configJson.entrySet()) {
             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences(element.getKey(), Activity.MODE_PRIVATE);
@@ -376,7 +379,15 @@ public class NekoSettingsActivity extends BaseFragment {
                         editor.putInt(key, value.getAsInt());
                     }
                 } else {
-                    editor.putString(key, value.getAsString());
+                    String val = value.getAsString();
+                    if (!hasCustomTitle) {
+                        if (key.equals("CustomTitleText")) {
+                            hasCustomTitle = true;
+                            if (StringUtils.isBlank(val))
+                                val = StrUtil.getAppName();
+                        }
+                    }
+                    editor.putString(key, val);
                 }
             }
             editor.commit();

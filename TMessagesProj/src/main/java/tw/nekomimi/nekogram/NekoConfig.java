@@ -738,7 +738,7 @@ public class NekoConfig {
 
     public static void initStrings() {
         String title = customTitleText.String();
-        if (isAppName(title) && !title.equals(getAppName())) {
+        if ((isAppName(title) && !title.equals(getAppName())) || StringUtils.isBlank(title)) {
             customTitleText.setConfigString(getAppName());
         }
 
