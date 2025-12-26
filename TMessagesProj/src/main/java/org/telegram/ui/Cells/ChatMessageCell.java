@@ -17647,7 +17647,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 //        } else {
 //            drawTopic = false;
 //        }
-        if (!hasPsaHint && (needAuthorName || viaBot)) {
+        if (!hasPsaHint && (needAuthorName || viaBot) && (currentPosition == null || currentPosition.minY == 0)) {
             drawNameLayout = true;
             drawNameAvatar = !messageObject.isOutOwner() && (isForum || isMonoForum) && isSideMenuEnabled && (currentPosition == null || (currentPosition.flags & MessageObject.POSITION_FLAG_TOP) != 0) && !(messageObject.type == MessageObject.TYPE_ROUND_VIDEO || messageObject.type == MessageObject.TYPE_STICKER || messageObject.type == MessageObject.TYPE_ANIMATED_STICKER);
             nameWidth = getMaxNameWidth();
