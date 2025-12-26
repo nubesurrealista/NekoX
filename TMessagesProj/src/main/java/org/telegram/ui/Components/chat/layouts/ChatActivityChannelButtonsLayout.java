@@ -260,6 +260,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
     }
 
     private void checkButtonsPositionsAndVisibility() {
+        boolean removePadding = NekoConfig.removeChatBottomViewPadding.Bool();
         int buttonSize = ChatActivityBlurredRoundButton.BUTTON_SIZE;
         totalWidthLeft = 0;
         totalWidthRight = 0;
@@ -282,7 +283,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
                 continue;
             }
 
-            final float width = holder.visibilityAnimator.getFloatValue() * dp(buttonSize + 10);    // width + margin
+            final float width = holder.visibilityAnimator.getFloatValue() * dp(buttonSize + (removePadding ? 0 : 10));    // width + margin
             holder.button.setTranslationX(dp(1) + totalWidthLeft);
             totalWidthLeft += width;
         }
@@ -293,7 +294,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
                 continue;
             }
 
-            final float width = holder.visibilityAnimator.getFloatValue() * dp(buttonSize + 10);    // width + margin
+            final float width = holder.visibilityAnimator.getFloatValue() * dp(buttonSize + (removePadding ? 0 : 10));    // width + margin
             holder.button.setTranslationX(getMeasuredWidth() - holder.button.getMeasuredWidth() - dp(1) - totalWidthRight);
             totalWidthRight += width;
         }
@@ -344,14 +345,18 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
         final int offset = (removePadding ? 0 : dp(9));
         if (accentAlpha > 0) {
             tmpRect.set(
-                totalWidthLeft + dp(10),
+                totalWidthLeft + (removePadding ? 0 : dp(10)),
                 offset,
-                getMeasuredWidth() - dp(10) - totalWidthRight,
+                getMeasuredWidth() - (removePadding ? 0 : dp(10)) - totalWidthRight,
                 getMeasuredHeight() - offset
             );
             backgroundAccentPaint.setColor(accentColor);
             backgroundAccentPaint.setAlpha(accentAlpha);
-            canvas.drawRoundRect(tmpRect, dp(19), dp(19), backgroundAccentPaint);
+            if (!NekoConfig.unroundedChatBottomView.Bool()) {
+                canvas.drawRoundRect(tmpRect, dp(19), dp(19), backgroundAccentPaint);
+            } else {
+                canvas.drawRect(tmpRect, backgroundAccentPaint);
+            }
         }
 
         super.dispatchDraw(canvas);
