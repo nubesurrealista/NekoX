@@ -30,14 +30,14 @@ class BottomBuilder(val ctx: Context, val needFocus: Boolean = true, val bgColor
     private val rtl = (if (LocaleController.isRTL) Gravity.RIGHT else Gravity.LEFT)
 
     private val _root = LinearLayout(ctx).apply {
-
+        orientation = LinearLayout.VERTICAL
         addView(ScrollView(ctx).apply {
 
             addView(this@BottomBuilder.rootView)
             isFillViewport = true
             isVerticalScrollBarEnabled = false
 
-        }, LinearLayout.LayoutParams(-1, -1))
+        }, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
 
         builder.setCustomView(this)
 
