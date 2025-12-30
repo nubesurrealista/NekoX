@@ -100,8 +100,12 @@ public class WindowInsetsStateHolder implements WindowInsetsProvider, WindowInse
                 insetsMaxRect.setTo(maxInsets.left, maxInsets.top, maxInsets.right, maxInsets.bottom);
                 insetsImeRect.setTo(inputInsets.left, inputInsets.top, inputInsets.right, inputInsets.bottom);
 
-                insetsAnimator.forceFactor(0);
-                insetsAnimator.animateTo(1);
+                if (inputInsets.bottom == 0 && animated && lastInsets != null && lastInsets.getInsets(WindowInsetsCompat.Type.ime()).bottom > 0) {
+                    insetsAnimator.forceFactor(1);
+                } else {
+                    insetsAnimator.forceFactor(0);
+                    insetsAnimator.animateTo(1);
+                }
             } else {
                 if (oldKeyboardState != newKeyboardState) {
                     onUpdateListener.run();

@@ -13019,7 +13019,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                                 panelAnimation.playTogether(ObjectAnimator.ofFloat(currentView, View.TRANSLATION_Y, emojiPadding - oldHeight, 0));
                             }
                             panelAnimation.setInterpolator(AdjustPanLayoutHelper.keyboardInterpolator);
-                            panelAnimation.setDuration(AdjustPanLayoutHelper.keyboardDuration);
+                            panelAnimation.setDuration(!keyboardVisible ? 0 : AdjustPanLayoutHelper.keyboardDuration);
                             panelAnimation.addListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
@@ -13031,7 +13031,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                                     notificationsLocker.unlock();
                                 }
                             });
-                            AndroidUtilities.runOnUIThread(runEmojiPanelAnimation, 50);
+                            AndroidUtilities.runOnUIThread(runEmojiPanelAnimation);
                             notificationsLocker.lock();
                             requestLayout();
                         }
