@@ -34,7 +34,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
-import org.telegram.ui.ActionBar.Theme;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -43,6 +42,8 @@ import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLContext;
+
+import tw.nekomimi.nekogram.utils.BufferUtil;
 
 public class BlurringShader {
 
@@ -138,9 +139,8 @@ public class BlurringShader {
             1.f,  -1.f
         };
 
-        ByteBuffer bb = ByteBuffer.allocateDirect(posCoords.length * 4);
-        bb.order(ByteOrder.nativeOrder());
-        posBuffer = bb.asFloatBuffer();
+        BufferUtil.clear(posBuffer);
+        posBuffer = ByteBuffer.allocateDirect(posCoords.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         posBuffer.put(posCoords);
         posBuffer.position(0);
 
@@ -149,9 +149,8 @@ public class BlurringShader {
             posCoords[2 * i + 1] *= (height - padding) / (float) height;
         }
 
-        bb = ByteBuffer.allocateDirect(posCoords.length * 4);
-        bb.order(ByteOrder.nativeOrder());
-        padPosBuffer = bb.asFloatBuffer();
+        BufferUtil.clear(padPosBuffer);
+        padPosBuffer = ByteBuffer.allocateDirect(posCoords.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         padPosBuffer.put(posCoords);
         padPosBuffer.position(0);
 
@@ -162,9 +161,8 @@ public class BlurringShader {
             1.f, 0.f
         };
 
-        bb = ByteBuffer.allocateDirect(texCoords.length * 4);
-        bb.order(ByteOrder.nativeOrder());
-        uvBuffer = bb.asFloatBuffer();
+        BufferUtil.clear(uvBuffer);
+        uvBuffer = ByteBuffer.allocateDirect(texCoords.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         uvBuffer.put(texCoords);
         uvBuffer.position(0);
 
@@ -224,6 +222,7 @@ public class BlurringShader {
 
         if (needsUiBitmap) {
             bitmap = Bitmap.createBitmap(2 * padding + width, 2 * padding + height, Bitmap.Config.ARGB_8888);
+            BufferUtil.clear(buffer);
             buffer = ByteBuffer.allocateDirect((2 * padding + width) * (2 * padding + height) * 4);
         }
 
@@ -336,6 +335,7 @@ public class BlurringShader {
             GLES20.glReadPixels(0, 0, width + 2 * padding, height + 2 * padding, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, buffer);
             synchronized (bitmapLock) {
                 bitmap.copyPixelsFromBuffer(buffer);
+                BufferUtil.clear(buffer);
                 bitmapAvailable = true;
             }
             GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);

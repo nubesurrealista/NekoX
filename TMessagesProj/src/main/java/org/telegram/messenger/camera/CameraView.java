@@ -57,6 +57,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.graphics.ColorUtils;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -96,6 +97,8 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
+
+import tw.nekomimi.nekogram.utils.BufferUtil;
 
 @SuppressLint("NewApi")
 public class CameraView extends FrameLayout implements TextureView.SurfaceTextureListener, CameraController.ICameraView, CameraController.ErrorCallback  {
@@ -1447,9 +1450,11 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 0.5f + tX, 0.5f + tY
             };
 
+            BufferUtil.clear(vertexBuffer);
             vertexBuffer = ByteBuffer.allocateDirect(verticesData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
             vertexBuffer.put(verticesData).position(0);
 
+            BufferUtil.clear(textureBuffer);
             textureBuffer = ByteBuffer.allocateDirect(texData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
             textureBuffer.put(texData).position(0);
 
@@ -1974,6 +1979,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                         0.5f + tX, 0.5f + tY
                     };
 
+                    BufferUtil.clear(textureBuffer);
                     textureBuffer = ByteBuffer.allocateDirect(texData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
                     textureBuffer.put(texData).position(0);
 
@@ -2377,7 +2383,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         private MediaCodec.BufferInfo videoBufferInfo;
         private MediaCodec.BufferInfo audioBufferInfo;
         private MP4Builder mediaMuxer;
-        private ArrayList<InstantCameraView.AudioBufferInfo> buffersToWrite = new ArrayList<>();
+        private InstantCameraView.AudioBufferInfoArray buffersToWrite = new InstantCameraView.AudioBufferInfoArray();
         private int videoTrackIndex = -5;
         private int audioTrackIndex = -5;
 
@@ -3136,6 +3142,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 0.5f - tX, 0.5f + tY,
                 0.5f + tX, 0.5f + tY
             };
+            BufferUtil.clear(textureBuffer);
             textureBuffer = ByteBuffer.allocateDirect(texData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
             textureBuffer.put(texData).position(0);
 

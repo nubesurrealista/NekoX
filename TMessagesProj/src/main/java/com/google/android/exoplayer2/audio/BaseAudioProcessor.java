@@ -20,6 +20,8 @@ import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 /**
  * Base class for audio processors that keep an output buffer and an internal buffer that is reused
  * whenever input is queued. Subclasses should override {@link #onConfigure(AudioFormat)} to return
@@ -109,6 +111,7 @@ public abstract class BaseAudioProcessor implements AudioProcessor {
    */
   protected final ByteBuffer replaceOutputBuffer(int size) {
     if (buffer.capacity() < size) {
+      BufferUtil.clear(buffer);
       buffer = ByteBuffer.allocateDirect(size).order(ByteOrder.nativeOrder());
     } else {
       buffer.clear();
@@ -137,10 +140,14 @@ public abstract class BaseAudioProcessor implements AudioProcessor {
   /** Called when the processor is flushed, directly or as part of resetting. */
   protected void onFlush() {
     // Do nothing.
+    BufferUtil.clear(buffer);
+    BufferUtil.clear(outputBuffer);
   }
 
   /** Called when the processor is reset. */
   protected void onReset() {
     // Do nothing.
+    BufferUtil.clear(buffer);
+    BufferUtil.clear(outputBuffer);
   }
 }

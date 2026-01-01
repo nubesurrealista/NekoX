@@ -29,6 +29,8 @@ import java.util.Iterator;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 /**
  * Implements VideoSink by displaying the video stream on an EGL Surface. This class is intended to
  * be used as a helper class for rendering on SurfaceViews and TextureViews.
@@ -791,6 +793,7 @@ public class EglRenderer implements VideoSink {
 
       final Bitmap bitmap = Bitmap.createBitmap(scaledWidth, scaledHeight, Bitmap.Config.ARGB_8888);
       bitmap.copyPixelsFromBuffer(bitmapBuffer);
+      BufferUtil.clear(bitmapBuffer);
       listenerAndParams.listener.onFrame(bitmap);
     }
   }

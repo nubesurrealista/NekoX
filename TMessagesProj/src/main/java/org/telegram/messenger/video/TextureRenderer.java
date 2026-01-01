@@ -49,7 +49,6 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
-import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
@@ -76,6 +75,8 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.microedition.khronos.opengles.GL10;
+
+import tw.nekomimi.nekogram.utils.BufferUtil;
 
 public class TextureRenderer {
 
@@ -328,9 +329,11 @@ public class TextureRenderer {
             }
         }
 
+        BufferUtil.clear(textureBuffer);
         textureBuffer = ByteBuffer.allocateDirect(texData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         textureBuffer.put(texData).position(0);
 
+        BufferUtil.clear(bitmapVerticesBuffer);
         bitmapVerticesBuffer = ByteBuffer.allocateDirect(bitmapData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         bitmapVerticesBuffer.put(bitmapData).position(0);
 
@@ -369,6 +372,7 @@ public class TextureRenderer {
                 -1.0f, 1.0f,
                 1.0f, 1.0f
             };
+            BufferUtil.clear(gradientVerticesBuffer);
             gradientVerticesBuffer = ByteBuffer.allocateDirect(verticesData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
             gradientVerticesBuffer.put(verticesData).position(0);
             final float[] textureData = {
@@ -377,6 +381,7 @@ public class TextureRenderer {
                 0, isPhoto ? 0 : 1,
                 1, isPhoto ? 0 : 1
             };
+            BufferUtil.clear(gradientTextureBuffer);
             gradientTextureBuffer = ByteBuffer.allocateDirect(textureData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
             gradientTextureBuffer.put(textureData).position(0);
             this.gradientTopColor = gradientTopColor;
@@ -413,6 +418,7 @@ public class TextureRenderer {
                     verticesData[a * 2] = verticesData[a * 2] / w * 2f - 1f;
                     verticesData[a * 2 + 1] = 1f - verticesData[a * 2 + 1] / h * 2f;
                 }
+                BufferUtil.clear(verticesBuffer);
                 verticesBuffer = ByteBuffer.allocateDirect(verticesData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
                 verticesBuffer.put(verticesData).position(0);
 
@@ -443,6 +449,7 @@ public class TextureRenderer {
                     uv[5] = 1f - uv[5];
                     uv[7] = 1f - uv[7];
                 }
+                BufferUtil.clear(croppedTextureBuffer);
                 croppedTextureBuffer = ByteBuffer.allocateDirect(uv.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
                 croppedTextureBuffer.put(uv).position(0);
             } else {
@@ -466,6 +473,7 @@ public class TextureRenderer {
                     verticesData[a * 2] = x2 / transformedWidth * 2;
                     verticesData[a * 2 + 1] = y2 / transformedHeight * 2;
                 }
+                BufferUtil.clear(verticesBuffer);
                 verticesBuffer = ByteBuffer.allocateDirect(verticesData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
                 verticesBuffer.put(verticesData).position(0);
             }
@@ -476,6 +484,7 @@ public class TextureRenderer {
                     -1.0f, 1.0f,
                     1.0f, 1.0f,
             };
+            BufferUtil.clear(verticesBuffer);
             verticesBuffer = ByteBuffer.allocateDirect(verticesData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
             verticesBuffer.put(verticesData).position(0);
         }
@@ -550,6 +559,7 @@ public class TextureRenderer {
                 }
             }
         }
+        BufferUtil.clear(renderTextureBuffer);
         renderTextureBuffer = ByteBuffer.allocateDirect(textureData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         renderTextureBuffer.put(textureData).position(0);
 
@@ -559,6 +569,7 @@ public class TextureRenderer {
             0.f, 1.f,
             1.f, 1.f
         };
+        BufferUtil.clear(maskTextureBuffer);
         maskTextureBuffer = ByteBuffer.allocateDirect(textureData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         maskTextureBuffer.put(textureData).position(0);
     }
@@ -1124,6 +1135,7 @@ public class TextureRenderer {
                                 -1.0f, -1.0f,
                                 1.0f, -1.0f,
                         };
+                        BufferUtil.clear(blurVerticesBuffer);
                         blurVerticesBuffer = ByteBuffer.allocateDirect(verticesData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
                         blurVerticesBuffer.put(verticesData).position(0);
                     }
@@ -1895,6 +1907,15 @@ public class TextureRenderer {
                 }
             }
         }
+
+        BufferUtil.clear(verticesBuffer);
+        BufferUtil.clear(croppedTextureBuffer);
+        BufferUtil.clear(gradientVerticesBuffer);
+        BufferUtil.clear(gradientTextureBuffer);
+        BufferUtil.clear(textureBuffer);
+        BufferUtil.clear(renderTextureBuffer);
+        BufferUtil.clear(maskTextureBuffer);
+        BufferUtil.clear(bitmapVerticesBuffer);
     }
 
     public void changeFragmentShader(String fragmentExternalShader, String fragmentShader, boolean is300) {

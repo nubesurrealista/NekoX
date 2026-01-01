@@ -61,7 +61,6 @@ import android.provider.OpenableColumns;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.view.HapticFeedbackConstants;
@@ -122,7 +121,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
@@ -131,7 +129,7 @@ import java.util.concurrent.CountDownLatch;
 import tw.nekomimi.nekogram.SaveToDownloadReceiver;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
+import tw.nekomimi.nekogram.utils.BufferUtil;
 
 public class MediaController implements AudioManager.OnAudioFocusChangeListener, NotificationCenter.NotificationCenterDelegate, SensorEventListener {
 
@@ -1428,6 +1426,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             }
         });
 
+        BufferUtil.clear(fileBuffer);
         fileBuffer = ByteBuffer.allocateDirect(1920);
 
         AndroidUtilities.runOnUIThread(() -> {
@@ -4844,6 +4843,12 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         manualRecording = false;
         raiseToEarRecord = false;
         ignoreOnPause = false;
+
+        for (ByteBuffer buffer : recordBuffers) {
+            BufferUtil.clear(buffer);
+        }
+
+        recordBuffers.clear();
     }
 
     public void stopRecording(final int send, boolean notify, int scheduleDate, boolean once, long payStars) {

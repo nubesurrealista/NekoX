@@ -30,6 +30,8 @@ import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.webrtc.Logging;
 import org.webrtc.ThreadUtils;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 public class WebRtcAudioRecord {
 
   private static final String TAG = "WebRtcAudioRecord";
@@ -286,6 +288,7 @@ public class WebRtcAudioRecord {
     }
     final int bytesPerFrame = channels * (BITS_PER_SAMPLE / 8);
     final int framesPerBuffer = sampleRate / BUFFERS_PER_SECOND;
+    BufferUtil.clear(byteBuffer);
     byteBuffer = ByteBuffer.allocateDirect(bytesPerFrame * framesPerBuffer);
     byteBuffer.order(ByteOrder.nativeOrder());
     Logging.d(TAG, "byteBuffer.capacity: " + byteBuffer.capacity());
@@ -366,6 +369,7 @@ public class WebRtcAudioRecord {
     }
     final int bytesPerFrame = requestedChannels * (BITS_PER_SAMPLE / 8);
     final int framesPerBuffer = requestedSampleRate / BUFFERS_PER_SECOND;
+    BufferUtil.clear(deviceByteBuffer);
     deviceByteBuffer = ByteBuffer.allocateDirect(bytesPerFrame * framesPerBuffer);
     deviceByteBuffer.order(ByteOrder.nativeOrder());
 
@@ -523,6 +527,9 @@ public class WebRtcAudioRecord {
         audioRecord = null;
       }
     }
+
+    BufferUtil.clear(byteBuffer);
+    BufferUtil.clear(deviceByteBuffer);
   }
 
   private void reportWebRtcAudioRecordInitError(String errorMessage) {

@@ -44,6 +44,8 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL10;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 public class StoryWaveEffectView extends TextureView implements TextureView.SurfaceTextureListener  {
 
     public static StoryWaveEffectView launch(Context context, float cx, float cy, float r) {
@@ -452,6 +454,9 @@ public class StoryWaveEffectView extends TextureView implements TextureView.Surf
             egl.eglTerminate(eglDisplay);
 
             GLES20.glDeleteProgram(program);
+
+            BufferUtil.clear(vertexBuffer);
+            BufferUtil.clear(uvBuffer);
 
             AndroidUtilities.runOnUIThread(() -> {
                 WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);

@@ -29,6 +29,8 @@ import org.webrtc.ThreadUtils;
 
 import java.nio.ByteBuffer;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 public class WebRtcAudioTrack {
   private static final boolean DEBUG = false;
 
@@ -263,6 +265,7 @@ public class WebRtcAudioTrack {
         "initPlayout(sampleRate=" + sampleRate + ", channels=" + channels
             + ", bufferSizeFactor=" + bufferSizeFactor + ")");
     final int bytesPerFrame = channels * (BITS_PER_SAMPLE / 8);
+    BufferUtil.clear(byteBuffer);
     byteBuffer = ByteBuffer.allocateDirect(bytesPerFrame * (sampleRate / BUFFERS_PER_SECOND));
     Logging.d(TAG, "byteBuffer.capacity: " + byteBuffer.capacity());
     emptyBytes = new byte[byteBuffer.capacity()];

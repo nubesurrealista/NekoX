@@ -41,6 +41,8 @@ import java.util.Arrays;
 import java.util.List;
 import javax.microedition.khronos.egl.EGL10;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 /** OpenGL ES utilities. */
 @SuppressWarnings("InlinedApi") // GLES constants are used safely based on the API version.
 public final class GlUtil {
@@ -544,6 +546,7 @@ public final class GlUtil {
         GLES20.GL_RGBA,
         type,
         byteBuffer);
+    BufferUtil.clear(byteBuffer);
     checkGlError();
     return texId;
   }

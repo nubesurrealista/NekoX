@@ -9,6 +9,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 public class Render {
 
     public static RectF RenderPath(Path path, RenderState state) {
@@ -205,6 +207,9 @@ public class Render {
         GLES20.glEnableVertexAttribArray(2);
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, n);
+
+        BufferUtil.clear(bb);
+        BufferUtil.clear(vertexData);
 
         return dataBounds;
     }

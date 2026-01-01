@@ -18,10 +18,10 @@ import android.media.audiofx.NoiseSuppressor;
 import android.os.Build;
 import android.text.TextUtils;
 
-import org.telegram.messenger.FileLog;
-
 import java.nio.ByteBuffer;
 import java.util.regex.Pattern;
+
+import tw.nekomimi.nekogram.utils.BufferUtil;
 
 public class AudioRecordJNI {
 
@@ -98,6 +98,7 @@ public class AudioRecordJNI {
 			}
 		}
 
+        BufferUtil.clear(buffer);
 		buffer = ByteBuffer.allocateDirect(bufferSize);
 	}
 
@@ -189,6 +190,7 @@ public class AudioRecordJNI {
 					} else {
 						audioRecord.read(tmpBuf, 882 * 2);
 						Resampler.convert44to48(tmpBuf, buffer);
+						BufferUtil.clear(tmpBuf);
 					}
 					if (!running) {
 						audioRecord.stop();

@@ -23,6 +23,8 @@ import java.util.Locale;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 public class FilterShaders {
 
     private static final String YUCIHighPassSkinSmoothingMaskBoostFilterFragmentShaderCode =
@@ -787,6 +789,7 @@ public class FilterShaders {
         private float[] greenCurve;
         private float[] blueCurve;
         private int[] curveTexture = new int[1];
+        private ByteBuffer curveBuffer = null;
 
         public ToneCurve() {
             ArrayList<PointF> defaultCurve = new ArrayList<>();
@@ -926,8 +929,12 @@ public class FilterShaders {
             GLES20.glTexParameteri(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
             GLES20.glTexParameteri(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
 
-            ByteBuffer curveBuffer = ByteBuffer.allocateDirect(256 * 4);
-            curveBuffer.order(ByteOrder.LITTLE_ENDIAN);
+            if (curveBuffer != null) {
+                BufferUtil.clear(curveBuffer);
+            } else {
+                curveBuffer = ByteBuffer.allocateDirect(256 * 4);
+                curveBuffer.order(ByteOrder.LITTLE_ENDIAN);
+            }
 
             if (redCurve.length >= 256 && greenCurve.length >= 256 && blueCurve.length >= 256 && rgbCompositeCurve.length >= 256) {
                 for (int currentCurveIndex = 0; currentCurveIndex < 256; currentCurveIndex++) {
@@ -1100,6 +1107,7 @@ public class FilterShaders {
 
         ByteBuffer bb = ByteBuffer.allocateDirect(squareCoordinates.length * 4);
         bb.order(ByteOrder.nativeOrder());
+        BufferUtil.clear(vertexBuffer);
         vertexBuffer = bb.asFloatBuffer();
         vertexBuffer.put(squareCoordinates);
         vertexBuffer.position(0);
@@ -1113,6 +1121,7 @@ public class FilterShaders {
 
         bb = ByteBuffer.allocateDirect(squareCoordinates2.length * 4);
         bb.order(ByteOrder.nativeOrder());
+        BufferUtil.clear(vertexInvertBuffer);
         vertexInvertBuffer = bb.asFloatBuffer();
         vertexInvertBuffer.put(squareCoordinates2);
         vertexInvertBuffer.position(0);
@@ -1126,6 +1135,7 @@ public class FilterShaders {
 
         bb = ByteBuffer.allocateDirect(textureCoordinates.length * 4);
         bb.order(ByteOrder.nativeOrder());
+        BufferUtil.clear(textureBuffer);
         textureBuffer = bb.asFloatBuffer();
         textureBuffer.put(textureCoordinates);
         textureBuffer.position(0);
@@ -1590,6 +1600,7 @@ public class FilterShaders {
         if (!hsvGenerated) {
             int newCapacity = renderBufferWidth * renderBufferHeight * 4;
             if (hsvBuffer == null || newCapacity > hsvBuffer.capacity()) {
+                BufferUtil.clear(hsvBuffer);
                 hsvBuffer = ByteBuffer.allocateDirect(newCapacity);
             }
             if (cdtBuffer == null) {
@@ -1633,6 +1644,10 @@ public class FilterShaders {
         GLES20.glEnableVertexAttribArray(enhancePositionHandle);
         GLES20.glVertexAttribPointer(enhancePositionHandle, 2, GLES20.GL_FLOAT, false, 8, vertexBuffer);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+
+        BufferUtil.clear(hsvBuffer);
+        BufferUtil.clear(cdtBuffer);
+        BufferUtil.clear(calcBuffer);
     }
 
     public void drawSharpenPass() {

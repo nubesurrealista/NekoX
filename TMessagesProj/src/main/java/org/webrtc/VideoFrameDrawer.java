@@ -16,6 +16,8 @@ import android.opengl.GLES20;
 import androidx.annotation.Nullable;
 import java.nio.ByteBuffer;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 /**
  * Helper class to draw VideoFrames. Calls either drawer.drawOes, drawer.drawRgb, or
  * drawer.drawYuv depending on the type of the buffer. The frame will be rendered with rotation
@@ -85,6 +87,7 @@ public class VideoFrameDrawer {
       // Allocate copy buffer if necessary.
       if (copyCapacityNeeded > 0
           && (copyBuffer == null || copyBuffer.capacity() < copyCapacityNeeded)) {
+        BufferUtil.clear(copyBuffer);
         copyBuffer = ByteBuffer.allocateDirect(copyCapacityNeeded);
       }
       // Make sure YUV textures are allocated.
@@ -110,7 +113,11 @@ public class VideoFrameDrawer {
         }
         GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_LUMINANCE, planeWidths[i],
             planeHeights[i], 0, GLES20.GL_LUMINANCE, GLES20.GL_UNSIGNED_BYTE, packedByteBuffer);
+        BufferUtil.clear(packedByteBuffer);
       }
+
+      BufferUtil.clear(copyBuffer);
+
       return yuvTextures;
     }
 

@@ -1,6 +1,5 @@
 package com.whispertflite.engine;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.whispertflite.asr.Whisper;
@@ -25,12 +24,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 public class WhisperEngineJava implements WhisperEngine {
     private final String TAG = "WhisperEngineJava";
     private final WhisperUtil mWhisperUtil = new WhisperUtil();
 
     private boolean mIsInitialized = false;
     private Interpreter mInterpreter = null;
+    private ByteBuffer mInputBuffer = null;
 
     public WhisperEngineJava() {}
 
@@ -116,10 +118,11 @@ public class WhisperEngineJava implements WhisperEngine {
 
         // Load input data
         int inputSize = inputTensor.shape()[0] * inputTensor.shape()[1] * inputTensor.shape()[2] * Float.BYTES;
-        ByteBuffer inputBuffer = ByteBuffer.allocateDirect(inputSize);
-        inputBuffer.order(ByteOrder.nativeOrder());
+        BufferUtil.clear(mInputBuffer);
+        mInputBuffer = ByteBuffer.allocateDirect(inputSize);
+        mInputBuffer.order(ByteOrder.nativeOrder());
         for (float input : inputData) {
-            inputBuffer.putFloat(input);
+            mInputBuffer.putFloat(input);
         }
 
         String signature_key = "serving_default";
@@ -132,7 +135,7 @@ public class WhisperEngineJava implements WhisperEngine {
 
         Map<String, Object> inputsMap = new HashMap<>();
         String[] inputs = mInterpreter.getSignatureInputs(signature_key);
-        inputsMap.put(inputs[0], inputBuffer);
+        inputsMap.put(inputs[0], mInputBuffer);
         if (signature_key.equals("serving_transcribe_lang")) {
             Log.d(TAG,"Serving_transcribe_lang " + mLangToken);
             IntBuffer langTokenBuffer = IntBuffer.allocate(1);
@@ -200,6 +203,8 @@ public class WhisperEngineJava implements WhisperEngine {
             System.arraycopy(byteArray, 0, combinedBytes, offset, byteArray.length);
             offset += byteArray.length;
         }
+
+        BufferUtil.clear(mInputBuffer);
 
         return new WhisperResult(new String(combinedBytes, StandardCharsets.UTF_8), language, task);
     }

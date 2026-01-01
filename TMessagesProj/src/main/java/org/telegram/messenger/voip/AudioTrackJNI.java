@@ -6,6 +6,8 @@ import android.media.AudioTrack;
 
 import java.nio.ByteBuffer;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 /**
  * Created by grishka on 20.12.16.
  */
@@ -104,6 +106,8 @@ public class AudioTrackJNI {
 						tmp44.rewind();
 						tmp44.get(buffer, 0, 882 * 2);
 						audioTrack.write(buffer, 0, 882 * 2);
+                        BufferUtil.clear(tmp48);
+                        BufferUtil.clear(tmp44);
 					} else {
 						nativeCallback(buffer);
 						audioTrack.write(buffer, 0, 960 * 2);

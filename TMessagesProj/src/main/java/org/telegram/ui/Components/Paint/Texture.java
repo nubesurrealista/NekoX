@@ -12,6 +12,8 @@ import org.telegram.ui.Components.Size;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 public class Texture {
 
     private Bitmap bitmap;
@@ -89,6 +91,7 @@ public class Texture {
             ByteBuffer buffer = ByteBuffer.allocateDirect(4); //fix for android 9.0
             buffer.putInt(px).position(0);
             GLES20.glTexSubImage2D(GLES20.GL_TEXTURE_2D, 0, 0, 0, 1, 1, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, buffer);
+            BufferUtil.clear(buffer);
         }
         Utils.HasGLError();
 

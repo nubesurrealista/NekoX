@@ -5,6 +5,8 @@ import android.graphics.PointF;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 public class RenderState {
     private static final int DEFAULT_STATE_SIZE = 256;
 
@@ -61,6 +63,7 @@ public class RenderState {
 
     public void resizeBuffer() {
         if (buffer != null) {
+            BufferUtil.clear(buffer);
             buffer = null;
         }
 
@@ -93,7 +96,7 @@ public class RenderState {
         count = 0;
         remainder = 0;
         if (buffer != null) {
-            buffer.position(0);
+            BufferUtil.clear(buffer);
         }
     }
 }

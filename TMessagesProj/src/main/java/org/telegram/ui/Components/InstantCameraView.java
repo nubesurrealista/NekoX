@@ -126,6 +126,7 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.BufferUtil;
 
 @SuppressLint("ViewConstructor")
 public class InstantCameraView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
@@ -1639,9 +1640,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 videoEncoder = new VideoRecorder();
             }
 
+            BufferUtil.clear(vertexBuffer);
             vertexBuffer = ByteBuffer.allocateDirect(verticesData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
             vertexBuffer.put(verticesData).position(0);
 
+            BufferUtil.clear(textureBuffer);
             textureBuffer = ByteBuffer.allocateDirect(texData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
             textureBuffer.put(texData).position(0);
 
@@ -1930,6 +1933,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             0.5f + tX, 0.5f + tY
                     };
 
+                    BufferUtil.clear(textureBuffer);
                     textureBuffer = ByteBuffer.allocateDirect(texData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
                     textureBuffer.put(texData).position(0);
                     break;
@@ -1972,6 +1976,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             0.5f + tX, 0.5f + tY
                     };
 
+                    BufferUtil.clear(textureBuffer);
                     textureBuffer = ByteBuffer.allocateDirect(texData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
                     textureBuffer.put(texData).position(0);
                     break;
@@ -2138,7 +2143,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         private MediaCodec.BufferInfo videoBufferInfo;
         private MediaCodec.BufferInfo audioBufferInfo;
         private MP4Builder mediaMuxer;
-        private ArrayList<AudioBufferInfo> buffersToWrite = new ArrayList<>();
+        private AudioBufferInfoArray buffersToWrite = new AudioBufferInfoArray();
         private int videoTrackIndex = -5;
         private int audioTrackIndex = -5;
 
@@ -2247,7 +2252,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             }
                             double amplitude = Math.sqrt(s / readResult / 2);
                             AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.recordProgressChanged, recordingGuid, amplitude));
-                            byteBuffer.position(0);
+                            BufferUtil.clear(byteBuffer);
                         }
                         if (readResult <= 0) {
                             buffer.results = a;
@@ -3832,6 +3837,30 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
         default boolean isInScheduleMode() {
             return false;
+        }
+    }
+
+    public static class AudioBufferInfoArray extends ArrayList<InstantCameraView.AudioBufferInfo> {
+        @Override
+        public void clear() {
+            for (InstantCameraView.AudioBufferInfo info : this) {
+                for (ByteBuffer byteBuffer : info.buffer) {
+                    BufferUtil.clear(byteBuffer);
+                }
+            }
+
+            super.clear();
+        }
+
+        @Override
+        public boolean remove(@Nullable Object o) {
+            if (o != null) {
+                for (ByteBuffer byteBuffer : ((InstantCameraView.AudioBufferInfo) o).buffer) {
+                    BufferUtil.clear(byteBuffer);
+                }
+            }
+
+            return super.remove(o);
         }
     }
 }

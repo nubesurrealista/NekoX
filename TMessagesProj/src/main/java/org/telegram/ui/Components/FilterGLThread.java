@@ -29,6 +29,8 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL10;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 public class FilterGLThread extends DispatchQueue {
 
     private static final int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
@@ -121,9 +123,8 @@ public class FilterGLThread extends DispatchQueue {
             textureCoordinates[4] = temp;
         }
 
-        ByteBuffer bb = ByteBuffer.allocateDirect(textureCoordinates.length * 4);
-        bb.order(ByteOrder.nativeOrder());
-        textureBuffer = bb.asFloatBuffer();
+        BufferUtil.clear(textureBuffer);
+        textureBuffer = ByteBuffer.allocateDirect(textureCoordinates.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         textureBuffer.put(textureCoordinates);
         textureBuffer.position(0);
 
@@ -495,6 +496,8 @@ public class FilterGLThread extends DispatchQueue {
                 uiBlur.draw(videoTextureMatrix, videoTexture[0], videoWidth, videoHeight);
             }
 
+            BufferUtil.clear(textureBuffer);
+
             return;
         }
 
@@ -542,6 +545,7 @@ public class FilterGLThread extends DispatchQueue {
         GLES20.glReadPixels(0, 0, renderBufferWidth, renderBufferHeight, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, buffer);
         Bitmap bitmap = Bitmap.createBitmap(renderBufferWidth, renderBufferHeight, Bitmap.Config.ARGB_8888);
         bitmap.copyPixelsFromBuffer(buffer);
+        BufferUtil.clear(buffer);
         return bitmap;
     }
 

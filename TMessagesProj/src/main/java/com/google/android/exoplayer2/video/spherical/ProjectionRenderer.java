@@ -27,6 +27,8 @@ import com.google.android.exoplayer2.util.GlUtil;
 import java.nio.FloatBuffer;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 /**
  * Utility class to render spherical meshes for video or images. Call {@link #init()} on the GL
  * thread when ready.
@@ -111,6 +113,17 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
       return;
     }
     stereoMode = projection.stereoMode;
+
+    if (leftMeshData != null) {
+        BufferUtil.clear(leftMeshData.textureBuffer);
+        BufferUtil.clear(leftMeshData.vertexBuffer);
+    }
+
+    if (rightMeshData != null) {
+        BufferUtil.clear(rightMeshData.textureBuffer);
+        BufferUtil.clear(rightMeshData.vertexBuffer);
+    }
+
     leftMeshData = new MeshData(projection.leftMesh.getSubMesh(0));
     rightMeshData =
         projection.singleMesh ? leftMeshData : new MeshData(projection.rightMesh.getSubMesh(0));

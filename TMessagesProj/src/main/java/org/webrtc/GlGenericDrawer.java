@@ -23,6 +23,8 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 /**
  * Helper class to implement an instance of RendererCommon.GlDrawer that can accept multiple input
  * sources (OES, RGB, or YUV) using a generic fragment shader as input. The generic fragment shader
@@ -245,6 +247,7 @@ public class GlGenericDrawer implements RendererCommon.GlDrawer {
     GLES20.glReadPixels(0, 0, viewportW, viewportH, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, buffer);
     Bitmap bitmap = Bitmap.createBitmap(viewportW, viewportH, Bitmap.Config.ARGB_8888);
     bitmap.copyPixelsFromBuffer(buffer);
+    BufferUtil.clear(buffer);
     GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
     callback.run(bitmap, rotation);
   }

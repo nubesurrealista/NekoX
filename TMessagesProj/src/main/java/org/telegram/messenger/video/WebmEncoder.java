@@ -43,6 +43,8 @@ import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 public class WebmEncoder {
 
     private static native long createEncoder(
@@ -71,10 +73,11 @@ public class WebmEncoder {
 
         boolean error = false;
         Bitmap bitmap = null;
+        ByteBuffer buffer = null;
         try {
 
             bitmap = Bitmap.createBitmap(W, H, Bitmap.Config.ARGB_8888);
-            ByteBuffer buffer = ByteBuffer.allocateDirect(bitmap.getByteCount());
+            buffer = ByteBuffer.allocateDirect(bitmap.getByteCount());
 
             Canvas canvas = new Canvas(bitmap);
             FrameDrawer frameDrawer = new FrameDrawer(params);
@@ -107,6 +110,7 @@ public class WebmEncoder {
             if (bitmap != null) {
                 bitmap.recycle();
             }
+            BufferUtil.clear(buffer);
         }
 
         long fileSize = params.cacheFile.length();

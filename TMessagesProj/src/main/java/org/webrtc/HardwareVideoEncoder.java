@@ -19,7 +19,6 @@ import android.media.MediaCodecInfo;
 import android.media.MediaCodecInfo.CodecCapabilities;
 import android.media.MediaFormat;
 import android.opengl.GLES20;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Surface;
 import androidx.annotation.Nullable;
@@ -32,6 +31,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.telegram.messenger.FileLog;
 import org.webrtc.ThreadUtils.ThreadChecker;
+
+import tw.nekomimi.nekogram.utils.BufferUtil;
 
 /**
  * Android hardware video encoder.
@@ -608,6 +609,7 @@ class HardwareVideoEncoder implements VideoEncoder {
           // In case of H264 and H265 config buffer contains SPS and PPS headers. Presence of these
           // headers makes IDR frame a truly keyframe. Some encoders issue IDR frames without SPS
           // and PPS. We save config buffer here to prepend it to all IDR frames encoder delivers.
+          BufferUtil.clear(configBuffer);
           configBuffer = ByteBuffer.allocateDirect(info.size);
           configBuffer.put(outputBuffer);
         }
@@ -675,6 +677,8 @@ class HardwareVideoEncoder implements VideoEncoder {
       callback.onEncodedFrame(encodedImage, new CodecSpecificInfo());
       // Note that the callback may have retained the image.
       encodedImage.release();
+
+      BufferUtil.clear(frameBuffer);
     } catch (IllegalStateException e) {
       Logging.e(TAG, "deliverOutput failed", e);
     }
@@ -696,6 +700,7 @@ class HardwareVideoEncoder implements VideoEncoder {
       // Propagate exceptions caught during release back to the main thread.
       shutdownException = e;
     }
+    BufferUtil.clear(configBuffer);
     configBuffer = null;
     Logging.d(TAG, "Release on output thread done");
   }

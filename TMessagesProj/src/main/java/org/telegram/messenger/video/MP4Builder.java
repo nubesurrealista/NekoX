@@ -56,6 +56,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 public class MP4Builder {
 
     private InterleaveChunkMdat mdat = null;
@@ -85,6 +87,7 @@ public class MP4Builder {
 
         mdat = new InterleaveChunkMdat();
 
+        BufferUtil.clear(sizeBuffer);
         sizeBuffer = ByteBuffer.allocateDirect(4);
 
         return this;

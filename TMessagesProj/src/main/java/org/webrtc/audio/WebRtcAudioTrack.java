@@ -30,6 +30,8 @@ import org.webrtc.audio.JavaAudioDeviceModule.AudioTrackStartErrorCode;
 import org.webrtc.audio.JavaAudioDeviceModule.AudioTrackStateCallback;
 import org.webrtc.audio.LowLatencyAudioBufferManager;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 class WebRtcAudioTrack {
   private static final String TAG = "WebRtcAudioTrackExternal";
 
@@ -235,6 +237,7 @@ class WebRtcAudioTrack {
         "initPlayout(sampleRate=" + sampleRate + ", channels=" + channels
             + ", bufferSizeFactor=" + bufferSizeFactor + ")");
     final int bytesPerFrame = channels * (BITS_PER_SAMPLE / 8);
+    BufferUtil.clear(byteBuffer);
     byteBuffer = ByteBuffer.allocateDirect(bytesPerFrame * (sampleRate / BUFFERS_PER_SECOND));
     Logging.d(TAG, "byteBuffer.capacity: " + byteBuffer.capacity());
     emptyBytes = new byte[byteBuffer.capacity()];

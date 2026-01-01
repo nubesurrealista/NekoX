@@ -15,6 +15,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 public class InstantCameraVideoEncoderOverlayHelper {
     private final static int DOWNSCALED_WIDTH = 48, DOWNSCALED_HEIGHT = 48;
 
@@ -286,6 +288,9 @@ public class InstantCameraVideoEncoderOverlayHelper {
 
         GLES20.glDeleteTextures(5, glTextures, 0);
         GLES20.glDeleteFramebuffers(1, glFrameBuffers, 0);
+
+        BufferUtil.clear(attributeTextureBuffer);
+        BufferUtil.clear(attributeVertexBuffer);
     }
 
     private static class MixProgram extends Program {

@@ -20,6 +20,8 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Format;
 import java.nio.ByteBuffer;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 /** Video decoder output buffer containing video frame data. */
 public class VideoDecoderOutputBuffer extends DecoderOutputBuffer {
 
@@ -67,6 +69,8 @@ public class VideoDecoderOutputBuffer extends DecoderOutputBuffer {
   @Override
   public void release() {
     owner.releaseOutputBuffer(this);
+    BufferUtil.clear(data);
+    BufferUtil.clear(supplementalData);
   }
 
   /**
@@ -94,6 +98,7 @@ public class VideoDecoderOutputBuffer extends DecoderOutputBuffer {
       this.supplementalData.flip();
       supplementalData.position(0);
     } else {
+      BufferUtil.clear(supplementalData);
       this.supplementalData = null;
     }
   }
@@ -120,6 +125,7 @@ public class VideoDecoderOutputBuffer extends DecoderOutputBuffer {
 
     // Initialize data.
     if (data == null || data.capacity() < minimumYuvSize) {
+      BufferUtil.clear(data);
       data = ByteBuffer.allocateDirect(minimumYuvSize);
     } else {
       data.position(0);

@@ -44,6 +44,8 @@ import org.webrtc.audio.JavaAudioDeviceModule.AudioRecordStartErrorCode;
 import org.webrtc.audio.JavaAudioDeviceModule.AudioRecordStateCallback;
 import org.webrtc.audio.JavaAudioDeviceModule.SamplesReadyCallback;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 public class WebRtcAudioRecord {
   private static final String TAG = "WebRtcAudioRecordExternal";
 
@@ -282,6 +284,7 @@ public class WebRtcAudioRecord {
     }
     final int bytesPerFrame = channels * getBytesPerSample(audioFormat);
     final int framesPerBuffer = sampleRate / BUFFERS_PER_SECOND;
+    BufferUtil.clear(byteBuffer);
     byteBuffer = ByteBuffer.allocateDirect(bytesPerFrame * framesPerBuffer);
     if (!(byteBuffer.hasArray())) {
       reportWebRtcAudioRecordInitError("ByteBuffer does not have backing array.");
@@ -531,6 +534,7 @@ public class WebRtcAudioRecord {
       audioRecord = null;
     }
     audioSourceMatchesRecordingSessionRef.set(null);
+    BufferUtil.clear(byteBuffer);
   }
 
   private void reportWebRtcAudioRecordInitError(String errorMessage) {

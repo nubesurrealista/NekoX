@@ -30,6 +30,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 public class MediaCodecVideoConvertor {
 
     private Muxer muxer;
@@ -573,6 +575,7 @@ public class MediaCodecVideoConvertor {
                                         if (maxBufferSize <= 0) {
                                             maxBufferSize = 64 * 1024;
                                         }
+                                        BufferUtil.clear(audioBuffer);
                                         audioBuffer = ByteBuffer.allocateDirect(maxBufferSize);
 
                                         if (startTime > 0) {
@@ -647,6 +650,7 @@ public class MediaCodecVideoConvertor {
                                             long size = extractor.getSampleSize();
                                             if (size > maxBufferSize) {
                                                 maxBufferSize = (int) (size + 1024);
+                                                BufferUtil.clear(audioBuffer);
                                                 audioBuffer = ByteBuffer.allocateDirect(maxBufferSize);
                                             }
                                         }
@@ -904,6 +908,7 @@ public class MediaCodecVideoConvertor {
                         audioRecoder.release();
                     }
                     checkConversionCanceled();
+                    BufferUtil.clear(audioBuffer);
                 } else {
                     Mp4Movie movie = new Mp4Movie();
                     movie.setCacheFile(cacheFile);
@@ -1189,8 +1194,9 @@ public class MediaCodecVideoConvertor {
         if (maxBufferSize <= 0) {
             maxBufferSize = 64 * 1024;
         }
-        ByteBuffer buffer = ByteBuffer.allocateDirect(maxBufferSize);
+
         if (audioTrackIndex >= 0 || videoTrackIndex >= 0) {
+            ByteBuffer buffer = null;
             long startTime = -1;
             checkConversionCanceled();
             while (!inputDone) {
@@ -1201,9 +1207,11 @@ public class MediaCodecVideoConvertor {
                     long size = extractor.getSampleSize();
                     if (size > maxBufferSize) {
                         maxBufferSize = (int) (size + 1024);
+                        BufferUtil.clear(buffer);
                         buffer = ByteBuffer.allocateDirect(maxBufferSize);
                     }
                 }
+                if (buffer == null) buffer = ByteBuffer.allocateDirect(maxBufferSize);
                 info.size = extractor.readSampleData(buffer, 0);
                 int index = extractor.getSampleTrackIndex();
                 if (index == videoTrackIndex) {
@@ -1285,6 +1293,7 @@ public class MediaCodecVideoConvertor {
             if (audioTrackIndex >= 0) {
                 extractor.unselectTrack(audioTrackIndex);
             }
+            BufferUtil.clear(buffer);
             return startTime;
         }
         return -1;

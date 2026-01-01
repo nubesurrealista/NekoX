@@ -29,6 +29,8 @@ import java.util.UUID;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import tw.nekomimi.nekogram.utils.BufferUtil;
+
 public class Painting {
 
     public interface PaintingDelegate {
@@ -99,6 +101,7 @@ public class Painting {
         if (reuse) {
             dataBuffer.clear();
         } else {
+            BufferUtil.clear(dataBuffer);
             dataBuffer = ByteBuffer.allocateDirect(capacity);
         }
 
@@ -108,7 +111,7 @@ public class Painting {
             vertexBuffer = ByteBuffer.allocateDirect(8 * 4);
             vertexBuffer.order(ByteOrder.nativeOrder());
         } else {
-            vertexBuffer.clear();
+            BufferUtil.clear(vertexBuffer);
         }
         vertexBuffer.putFloat(0.0f);
         vertexBuffer.putFloat(0.0f);
