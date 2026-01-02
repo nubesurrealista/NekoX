@@ -4320,7 +4320,8 @@ public class ChatActivityEnterView extends FrameLayout implements
                 botCommandsMenuContainer.dismiss();
             }
         });
-        messageEditTextContainer.addView(botCommandsMenuButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 32, Gravity.BOTTOM | Gravity.LEFT, 8, 6, 8, 6));
+        int vg = NekoConfig.removeChatBottomViewPadding.Bool() ? Gravity.CENTER_VERTICAL : Gravity.BOTTOM;
+        messageEditTextContainer.addView(botCommandsMenuButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 32, vg | Gravity.LEFT, 8, 6, 8, 6));
         AndroidUtilities.updateViewVisibilityAnimated(botCommandsMenuButton, false, 1f, false);
         botCommandsMenuButton.setExpanded(true, false);
     }
