@@ -76,7 +76,7 @@
     <string name="SortByUnmuted">Səslə səssizdir</string>
     <string name="SortByUser">İstifadəçiyə görə sırala</string>
     <string name="SortByContacts">Kontaktlara görə sırala</string>
-    <string name="NekoXPushService">NekoX Push Service</string>
+    <string name="NekoXPushService">Push Service</string>
     <string name="DisableUndo">Geri Almağı deaktiv edin</string>
     <string name="DisableSystemAccount">Sistem Hesabını deaktiv edin</string>
     <string name="UseProxyItem">Düymə yerinə yan panel proksi elementindən istifadə edin</string>

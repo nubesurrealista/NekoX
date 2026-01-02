@@ -37,7 +37,7 @@
     <string name="BrokenLink">Ukjent/feilaktig lenke</string>
     <string name="DisableSystemAccount">Skru av systemkonto</string>
     <string name="DisableUndo">Skru av angring</string>
-    <string name="NekoXPushService">NekoX-dyttingstjeneste</string>
+    <string name="NekoXPushService">dyttingstjeneste</string>
     <string name="SortByContacts">Sorter etter kontakter</string>
     <string name="SortByUser">Sorter etter bruker</string>
     <string name="SortByUnread">Sorter etter ulest</string>

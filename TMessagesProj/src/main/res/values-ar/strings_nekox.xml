@@ -76,7 +76,7 @@
     <string name="SortByUnmuted">فرز حسب الغير مكتوم</string>
     <string name="SortByUser">فرز حسب المستخدم</string>
     <string name="SortByContacts">فرز حسب جهات الاتصال</string>
-    <string name="NekoXPushService">خدمة دفع NekoX</string>
+    <string name="NekoXPushService">خدمة دفع</string>
     <string name="DisableUndo">تعطيل التراجع</string>
     <string name="DisableSystemAccount">تعطيل الحساب الخاص بالنظام</string>
     <string name="UseProxyItem">استخدام عنصر وكيل الشريط الجانبي بدلاً من الزر</string>

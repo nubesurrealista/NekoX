@@ -76,7 +76,7 @@
     <string name="SortByUnmuted">Sắp xếp theo Bật thông báo</string>
     <string name="SortByUser">Sắp xếp theo Người dùng</string>
     <string name="SortByContacts">Sắp xếp theo Danh bạ</string>
-    <string name="NekoXPushService">Dịch vụ NekoX Push</string>
+    <string name="NekoXPushService">Dịch vụ Push</string>
     <string name="DisableUndo">Tắt hoàn tác</string>
     <string name="DisableSystemAccount">Tắt tài khoản hệ thống</string>
     <string name="UseProxyItem">Sử dụng mục proxy ở thanh bên thay vì nút</string>

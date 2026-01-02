@@ -76,7 +76,7 @@
     <string name="SortByUnmuted">Urutkan sesuai pesan yang bersuara</string>
     <string name="SortByUser">Urutkan sesuai pengguna</string>
     <string name="SortByContacts">Urutkan sesuai kontak</string>
-    <string name="NekoXPushService">Layanan Push NekoX</string>
+    <string name="NekoXPushService">Layanan Push</string>
     <string name="DisableUndo">Matikan konfirmasi</string>
     <string name="DisableSystemAccount">Matikan Akun Sistem</string>
     <string name="UseProxyItem">Tampilkan Proxy pada menu bilah samping</string>

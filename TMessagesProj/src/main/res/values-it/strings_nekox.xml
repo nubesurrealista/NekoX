@@ -76,7 +76,7 @@
     <string name="SortByUnmuted">Ordina per Non Silenziata</string>
     <string name="SortByUser">Ordina per Utente</string>
     <string name="SortByContacts">Ordina per Contatti</string>
-    <string name="NekoXPushService">Servizio Push NekoX</string>
+    <string name="NekoXPushService">Servizio Push</string>
     <string name="DisableUndo">Disabilita Annulla</string>
     <string name="DisableSystemAccount">Disabilita Account di Sistema</string>
     <string name="UseProxyItem">Usa l\'elemento proxy della barra laterale invece del pulsante</string>

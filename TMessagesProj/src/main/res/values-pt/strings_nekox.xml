@@ -65,7 +65,7 @@
     <string name="UseProxyItem">Use o proxy pela barra lateral em vez do botão</string>
     <string name="DisableSystemAccount">Desativar Conta do Sistema</string>
     <string name="DisableUndo">Desativar Desfazer</string>
-    <string name="NekoXPushService">Serviço de Notificação NekoX</string>
+    <string name="NekoXPushService">Serviço de Notificação</string>
     <string name="SortByContacts">Ordenar por Contatos</string>
     <string name="SortByUser">Ordenar por Utilizador</string>
     <string name="SortByUnmuted">Ordenar por Não silenciadas</string>

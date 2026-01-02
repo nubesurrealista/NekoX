@@ -67,7 +67,7 @@
     <string name="SortByUnmuted">可通知優先排序</string>
     <string name="SortByUser">用戶優先排序</string>
     <string name="SortByContacts">聯絡人優先排序</string>
-    <string name="NekoXPushService">NekoX 通知服務</string>
+    <string name="NekoXPushService">通知服務</string>
     <string name="DisableUndo">禁用五秒內後悔</string>
     <string name="DisableSystemAccount">禁用系統賬戶</string>
     <string name="UseProxyItem">使用側邊欄代理項而不是按鈕</string>

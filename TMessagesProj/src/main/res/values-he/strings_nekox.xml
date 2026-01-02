@@ -76,7 +76,7 @@
     <string name="SortByUnmuted">מיין לפי Unmute</string>
     <string name="SortByUser">מיין לפי משתמש</string>
     <string name="SortByContacts">מיין לפי אנשי קשר</string>
-    <string name="NekoXPushService">שירות דחיפה של NekoX</string>
+    <string name="NekoXPushService">שירות דחיפה של</string>
     <string name="DisableUndo">השבת בטל</string>
     <string name="DisableSystemAccount">השבת חשבון מערכת</string>
     <string name="UseProxyItem">השתמש בפריט proxy של סרגל הצד במקום בלחצן</string>

@@ -81,7 +81,7 @@
     <string name="IgnoreMutedCount">Ignorera tystat oläst antal i mappfliken</string>
     <string name="FilterNameUnmutedAndUnreadDescription">Endast olästa meddelanden från otystade chattar</string>
     <string name="BlockedListEmpty">Du har inte blockerat någon :)</string>
-    <string name="NekoXPushService">NekoX Push Service</string>
+    <string name="NekoXPushService">Push Service</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
     <string name="ProviderYandexTranslate">Yandex.Translate</string>

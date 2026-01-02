@@ -76,7 +76,7 @@
     <string name="SortByUnmuted">Դասավորել ըստ անջատվածի</string>
     <string name="SortByUser">Դասավորել ըստ Օգտագործողի</string>
     <string name="SortByContacts">Դասավորել ըստ կոնտակտների</string>
-    <string name="NekoXPushService">NekoX հրում ծառայություն</string>
+    <string name="NekoXPushService">հրում ծառայություն</string>
     <string name="DisableUndo">Անջատել հետարկումը</string>
     <string name="DisableSystemAccount">Անջատել համակարգի հաշիվը</string>
     <string name="UseProxyItem">Կոճակի փոխարեն օգտագործեք կողմնակի սանդղակի վստահված անձը</string>

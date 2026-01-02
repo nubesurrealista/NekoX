@@ -73,7 +73,7 @@
     <string name="SortByUnmuted">Nach nicht Stummgeschalten sortieren</string>
     <string name="SortByUser">Nach Nutzern sortieren</string>
     <string name="SortByContacts">Nach Kontakten sortieren</string>
-    <string name="NekoXPushService">NekoX Push-Service</string>
+    <string name="NekoXPushService">Push-Service</string>
     <string name="DisableUndo">Rückgängig machen deaktivieren</string>
     <string name="DisableSystemAccount">Systemkonto deaktivieren</string>
     <string name="UseProxyItem">Seitenleisten-Proxyelement anstelle der Taste verwenden</string>

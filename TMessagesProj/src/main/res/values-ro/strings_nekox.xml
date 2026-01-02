@@ -65,7 +65,7 @@
     <string name="SortByUnmuted">Sortare după mutare</string>
     <string name="SortByUser">Sortare după utilizator</string>
     <string name="SortByContacts">Sortare după contacte</string>
-    <string name="NekoXPushService">Serviciu de push NekoX</string>
+    <string name="NekoXPushService">Serviciu de push</string>
     <string name="DisableUndo">Dezactiveați anulare</string>
     <string name="DisableSystemAccount">Dezactivați contul de sistem</string>
     <string name="HideProxyByDefault">Ascundeți setările proxy în mod implicit</string>

@@ -76,7 +76,7 @@
     <string name="SortByUnmuted">Seslilere Göre Sırala</string>
     <string name="SortByUser">Kullanıcıya Göre Sırala</string>
     <string name="SortByContacts">Kişilere Göre Sırala</string>
-    <string name="NekoXPushService">NekoX Bildirim Hizmeti</string>
+    <string name="NekoXPushService">Bildirim Hizmeti</string>
     <string name="DisableUndo">Geri Almayı Devre Dışı Bırak</string>
     <string name="DisableSystemAccount">Sistem Hesabını Devre Dışı Bırak</string>
     <string name="UseProxyItem">Vekil sunucu ayarını başlık yerine çekmecede göster</string>

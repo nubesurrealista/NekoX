@@ -89,7 +89,7 @@
     <string name="DisableSystemAccount">Απεν/ποίηση Λογ/σμού Συστήματος</string>
     <string name="PGPImportPrivate">Εισαγωγή ιδιωτικού κλειδιού</string>
     <string name="SortByContacts">Ταξινόμηση κατά επαφές</string>
-    <string name="NekoXPushService">Υπηρεσία NekoX Push</string>
+    <string name="NekoXPushService">Υπηρεσία Push</string>
     <string name="TransSite">Πλατφόρμα Μετάφρασης</string>
     <string name="OpenKayChain">Πελάτης OpenPGP</string>
     <string name="HideProxyByDefault">Απόκρυψη ρυθμίσεων proxy από προεπιλογή</string>

@@ -76,7 +76,7 @@
     <string name="SortByUnmuted">ترتیب بر اساس صدا دار</string>
     <string name="SortByUser">ترتیب بر اساس کاربر</string>
     <string name="SortByContacts">ترتیب بر اساس مخاطبین</string>
-    <string name="NekoXPushService">خدمات ارسال اعلان NekoX</string>
+    <string name="NekoXPushService">خدمات ارسال اعلان</string>
     <string name="DisableUndo">غیرفعال کردن واگرد</string>
     <string name="DisableSystemAccount">غیرفعال کردن حساب سیستم</string>
     <string name="UseProxyItem">نمایش دکمه پروکسی در منوی‌کناری بجای بالای‌صفحه</string>

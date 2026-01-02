@@ -76,7 +76,7 @@
     <string name="SortByUnmuted">ミュートなしで並べ替え</string>
     <string name="SortByUser">ユーザーで並べ替え</string>
     <string name="SortByContacts">連絡先で並べ替え</string>
-    <string name="NekoXPushService">NekoX プッシュサービス</string>
+    <string name="NekoXPushService">プッシュサービス</string>
     <string name="DisableUndo">取り消しを無効にする</string>
     <string name="DisableSystemAccount">システムアカウントを無効にする</string>
     <string name="UseProxyItem">ボタンの代わりにサイドバーのプロキシアイテムを使用する</string>
