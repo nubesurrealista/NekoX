@@ -26,6 +26,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.BufferUtil;
 
 /**
@@ -200,8 +201,13 @@ public final class SonicAudioProcessor implements AudioProcessor {
           buffer = ByteBuffer.allocateDirect(outputSize).order(ByteOrder.nativeOrder());
           shortBuffer = buffer.asShortBuffer();
         } else {
-          BufferUtil.clear(buffer);
-          BufferUtil.clear(shortBuffer);
+          if (NekoConfig.bufferCleaner.Bool()) {
+            BufferUtil.clear(buffer);
+            BufferUtil.clear(shortBuffer);
+          } else {
+            buffer.clear();
+            shortBuffer.clear();
+          }
         }
         sonic.getOutput(shortBuffer);
         outputBytes += outputSize;

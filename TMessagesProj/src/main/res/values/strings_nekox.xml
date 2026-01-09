@@ -312,4 +312,6 @@
     <string name="UnroundedChatBottomView">Unrounded chat bottom view</string>
     <string name="DisableEmbeddedPlayer">Disable embedded web player</string>
     <string name="RemoveChatBottomViewPadding">Remove padding from chat bottom view</string>
+    <string name="BufferCleaner">Use buffer cleaner to free memory after use</string>
+    <string name="BufferCleanerDesc">Greatly mitigate memory leaks, but may cause performance issues and bugs.</string>
 </resources>

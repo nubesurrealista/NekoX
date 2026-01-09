@@ -29,6 +29,7 @@ import java.lang.annotation.Target;
 import java.nio.ByteBuffer;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.BufferUtil;
 
 /** Holds input for a decoder. */
@@ -222,10 +223,12 @@ public class DecoderInputBuffer extends Buffer {
   public void clear() {
     super.clear();
     if (data != null) {
-      BufferUtil.clear(data);
+      if (NekoConfig.bufferCleaner.Bool()) BufferUtil.clear(data);
+      else data.clear();
     }
     if (supplementalData != null) {
-      BufferUtil.clear(supplementalData);
+      if (NekoConfig.bufferCleaner.Bool()) BufferUtil.clear(supplementalData);
+      else supplementalData.clear();
     }
     waitingForKeys = false;
   }

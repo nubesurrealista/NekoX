@@ -23,6 +23,7 @@ import java.util.Locale;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.BufferUtil;
 
 public class FilterShaders {
@@ -929,7 +930,7 @@ public class FilterShaders {
             GLES20.glTexParameteri(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
             GLES20.glTexParameteri(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
 
-            if (curveBuffer != null) {
+            if (curveBuffer != null && NekoConfig.bufferCleaner.Bool()) {
                 BufferUtil.clear(curveBuffer);
             } else {
                 curveBuffer = ByteBuffer.allocateDirect(256 * 4);

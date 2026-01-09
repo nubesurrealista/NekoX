@@ -389,6 +389,7 @@ public class NekoConfig {
     public static ConfigItem autoDismissDummy = addConfig(R.string.AutoDismissReqDummy, "AutoDismissReqDummy", configTypeBool, EXPERIMENTAL, false);
     public static String autoDismissRegexString;
     public static Pattern autoDismissRegexPattern;
+    public static ConfigItem bufferCleaner = addConfig(R.string.BufferCleaner, "BufferCleaner", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem tempDebug = addConfig(R.string.SettingsDebug, "TempDebug", configTypeBool, EXPERIMENTAL, false);
 
     // internal

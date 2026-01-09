@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.BufferUtil;
 
 /** Buffer for {@link SimpleDecoder} output. */
@@ -54,7 +55,8 @@ public class SimpleDecoderOutputBuffer extends DecoderOutputBuffer {
   public void clear() {
     super.clear();
     if (data != null) {
-      BufferUtil.clear(data);
+      if (NekoConfig.bufferCleaner.Bool()) BufferUtil.clear(data);
+      else data.clear();
     }
   }
 

@@ -75,6 +75,7 @@ public class NekoExperimentalSettingsActivity extends MomoSettingsBaseActivity {
     private boolean sensitiveEnabled = false;
 
     private final AbstractConfigCell header1 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.Experiment)));
+    private final AbstractConfigCell bufferCleanerRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.bufferCleaner, LocaleController.getString(R.string.BufferCleanerDesc)));
     private final AbstractConfigCell useSystemEmojiRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useSystemEmoji));
 //    private final AbstractConfigCell useCustomEmojiRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useCustomEmoji));
     private final AbstractConfigCell channelAliasRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.channelAlias));

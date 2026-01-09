@@ -5,6 +5,7 @@ import android.graphics.PointF;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.BufferUtil;
 
 public class RenderState {
@@ -96,7 +97,11 @@ public class RenderState {
         count = 0;
         remainder = 0;
         if (buffer != null) {
-            BufferUtil.clear(buffer);
+            if (NekoConfig.bufferCleaner.Bool()) {
+                BufferUtil.clear(buffer);
+            } else {
+                buffer.position(0);
+            }
         }
     }
 }

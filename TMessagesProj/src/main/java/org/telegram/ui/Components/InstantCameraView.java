@@ -2252,7 +2252,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             }
                             double amplitude = Math.sqrt(s / readResult / 2);
                             AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.recordProgressChanged, recordingGuid, amplitude));
-                            BufferUtil.clear(byteBuffer);
+                            if (NekoConfig.bufferCleaner.Bool()) {
+                                BufferUtil.clear(byteBuffer);
+                            } else {
+                                byteBuffer.position(0);
+                            }
                         }
                         if (readResult <= 0) {
                             buffer.results = a;
@@ -3843,9 +3847,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     public static class AudioBufferInfoArray extends ArrayList<InstantCameraView.AudioBufferInfo> {
         @Override
         public void clear() {
-            for (InstantCameraView.AudioBufferInfo info : this) {
-                for (ByteBuffer byteBuffer : info.buffer) {
-                    BufferUtil.clear(byteBuffer);
+            if (NekoConfig.bufferCleaner.Bool()) {
+                for (InstantCameraView.AudioBufferInfo info : this) {
+                    for (ByteBuffer byteBuffer : info.buffer) {
+                        BufferUtil.clear(byteBuffer);
+                    }
                 }
             }
 
@@ -3854,7 +3860,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
         @Override
         public boolean remove(@Nullable Object o) {
-            if (o != null) {
+            if (o != null && NekoConfig.bufferCleaner.Bool()) {
                 for (ByteBuffer byteBuffer : ((InstantCameraView.AudioBufferInfo) o).buffer) {
                     BufferUtil.clear(byteBuffer);
                 }

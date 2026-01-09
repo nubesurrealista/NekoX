@@ -5,11 +5,12 @@ import java.nio.ByteBuffer
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
 import java.util.Arrays
+import tw.nekomimi.nekogram.NekoConfig
 
 object BufferUtil {
     @JvmStatic
     fun clear(buffer: Buffer?) {
-        if (buffer == null || !buffer.hasArray() || buffer.isReadOnly) return
+        if (buffer == null || !buffer.hasArray() || buffer.isReadOnly || !NekoConfig.bufferCleaner.Bool()) return
 
         buffer.clear()
 

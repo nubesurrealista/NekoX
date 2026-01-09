@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.BufferUtil;
 
 public class WhisperEngineJava implements WhisperEngine {
@@ -204,7 +205,12 @@ public class WhisperEngineJava implements WhisperEngine {
             offset += byteArray.length;
         }
 
-        BufferUtil.clear(mInputBuffer);
+        if (NekoConfig.bufferCleaner.Bool()) {
+            BufferUtil.clear(mInputBuffer);
+        } else {
+            mInputBuffer.clear();
+            mInputBuffer = null;
+        }
 
         return new WhisperResult(new String(combinedBytes, StandardCharsets.UTF_8), language, task);
     }
