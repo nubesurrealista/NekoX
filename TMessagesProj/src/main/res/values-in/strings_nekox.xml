@@ -303,4 +303,9 @@
     <string name="UseSlowWhisperModelDesc">Membutuhkan RAM dalam jumlah besar, nonaktifkan pilihan ini jika aplikasi crash saat menulis transkrip</string>
     <string name="ConfirmDismissAllJoinRequests">Abaikan semua permintaan bergabung?</string>
     <string name="ConfirmBanAllJoinRequests">Larang semua permintaan bergabung?</string>
+    <string name="PasskeyWarning">Catatan. Penerapan Tidak resmi</string>
+    <string name="PasskeyWarningDesc">Penerapan kunci akses ini berbeda dengan Telegram resmi, yang kurang aman. Dengan melanjutkan, Anda setuju bahwa Anda memahami dan menerima risiko yang ada.</string>
+    <string name="UnroundedChatBottomView">Tampilan bawah obrolan yang tidak bulat</string>
+    <string name="DisableEmbeddedPlayer">Nonaktifkan pemutar web tertanam</string>
+    <string name="RemoveChatBottomViewPadding">Hapus pembatas dari tampilan bagian bawah obrolan</string>
 </resources>
