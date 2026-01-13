@@ -4624,7 +4624,7 @@ public class AndroidUtilities {
                 text = password;
                 detail = getString(R.string.UseProxyPassword);
             } else if (a == 5) {
-                text = getString(R.string.TestPing);
+                text = getString(NekoConfig.autoTestProxy.Bool() ? R.string.ProxyBottomSheetChecking : R.string.TestPing);
                 detail = getString(R.string.ProxyStatus);
             }
             if (TextUtils.isEmpty(text)) {
@@ -4668,24 +4668,30 @@ public class AndroidUtilities {
             linearLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
             if (a == 5) {
+                Runnable testProxy = () -> {
+                    ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(address, Integer.parseInt(port), user, password, secret, time -> AndroidUtilities.runOnUIThread(() -> {
+                        if (time == -1) {
+                            cell.getTextView().setText(getString(R.string.Unavailable));
+                            cell.getTextView().setTextColor(Theme.getColor(Theme.key_text_RedRegular));
+                        } else {
+                            cell.getTextView().setText(getString(R.string.Available) + ", " + LocaleController.formatString(R.string.Ping, time));
+                            cell.getTextView().setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText));
+                        }
+                    }));
+                };
                 cell.setOnClickListener(view -> {
                     cell.getTextView().setText(spannableStringBuilder);
                     cell.getTextView().setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
                     try {
-                        ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(address, Integer.parseInt(port), user, password, secret, time -> AndroidUtilities.runOnUIThread(() -> {
-                            if (time == -1) {
-                                cell.getTextView().setText(getString(R.string.Unavailable));
-                                cell.getTextView().setTextColor(Theme.getColor(Theme.key_text_RedRegular));
-                            } else {
-                                cell.getTextView().setText(getString(R.string.Available) + ", " + LocaleController.formatString(R.string.Ping, time));
-                                cell.getTextView().setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGreenText));
-                            }
-                        }));
+                        testProxy.run();
                     } catch (NumberFormatException ignored) {
                         cell.getTextView().setText(getString(R.string.Unavailable));
                         cell.getTextView().setTextColor(Theme.getColor(Theme.key_text_RedRegular));
                     }
                 });
+                if (NekoConfig.autoTestProxy.Bool()) {
+                    testProxy.run();
+                }
             }
         }
 

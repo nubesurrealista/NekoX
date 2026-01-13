@@ -352,6 +352,7 @@ public class NekoConfig {
     public static ConfigItem unroundedChatBottomView = addConfig(R.string.UnroundedChatBottomView, "UnroundedChatButtomView", configTypeBool, CHAT, false);
     public static ConfigItem removeChatBottomViewPadding = addConfig(R.string.RemoveChatBottomViewPadding, "RemoveChatBottomViewPadding", configTypeBool, CHAT, false);
     public static ConfigItem disableEmbeddedPlayer = addConfig(R.string.DisableEmbeddedPlayer, "DisableEmbeddedPlayer", configTypeBool, CHAT, false);
+    public static ConfigItem autoTestProxy = addConfig(R.string.AutoTestProxy, "AutoTestProxy", configTypeBool, CHAT, false);
 
 
     public static ConfigItem unlimitedFavedStickers = addConfig(R.string.UnlimitedFavoredStickers, "UnlimitedFavoredStickers", configTypeBool, EXPERIMENTAL, false);

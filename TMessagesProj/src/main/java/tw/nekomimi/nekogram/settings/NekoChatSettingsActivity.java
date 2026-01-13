@@ -149,6 +149,7 @@ public class NekoChatSettingsActivity extends MomoSettingsBaseActivity implement
     private final AbstractConfigCell increasedMaxPhotoResolutionRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.increasedMaxPhotoResolution));
     private final AbstractConfigCell enhancedVideoBitrateRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.enhancedVideoBitrate, LocaleController.getString(R.string.EnhancedVideoBitrateInfo)));
     private final AbstractConfigCell noStarReactionPlaceholderRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.noStarReactionPlaceholder));
+    private final AbstractConfigCell autoTestProxyRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.autoTestProxy));
     private final AbstractConfigCell dividerInteractions = cellGroup.appendCell(new ConfigCellDivider());
 
     // Sticker

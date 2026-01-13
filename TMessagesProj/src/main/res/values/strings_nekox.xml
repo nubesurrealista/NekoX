@@ -314,5 +314,6 @@
     <string name="RemoveChatBottomViewPadding">Remove padding from chat bottom view</string>
     <string name="BufferCleaner">Use buffer cleaner to free memory after use</string>
     <string name="BufferCleanerDesc">Greatly mitigate memory leaks, but may cause performance issues and bugs.</string>
+    <string name="AutoTestProxy">Auto test proxy for availability</string>
     <string name="TestPing">(Tap to test)</string>
 </resources>
