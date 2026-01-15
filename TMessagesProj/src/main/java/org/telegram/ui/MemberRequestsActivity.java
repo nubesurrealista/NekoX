@@ -127,7 +127,7 @@ public class MemberRequestsActivity extends BaseFragment {
     }
 
     @Override
-    public boolean onBackPressed() {
-        return delegate.onBackPressed();
+    public boolean onBackPressed(boolean invoked) {
+        return delegate.onBackPressed(invoked);
     }
 }

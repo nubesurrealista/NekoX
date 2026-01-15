@@ -2946,13 +2946,13 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     @Override
-    public boolean onBackPressed() {
+    public boolean onBackPressed(boolean invoked) {
         if (proximitySheet != null) {
-            proximitySheet.dismiss();
+            if (invoked) proximitySheet.dismiss();
             return false;
         }
 
-        return super.onBackPressed();
+        return super.onBackPressed(invoked);
     }
 
     @Override

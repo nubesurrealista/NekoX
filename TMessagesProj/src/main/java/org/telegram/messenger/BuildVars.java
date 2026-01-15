@@ -26,9 +26,6 @@ public class BuildVars {
     public static int BUILD_VERSION;
     public static String BUILD_VERSION_STRING = "10.13.0";
 
-    // works only on official app ids, disable on your forks
-    public static boolean SUPPORTS_PASSKEYS = Build.VERSION.SDK_INT > 33;
-
     public static int APP_ID = 4;
     public static String APP_HASH = "014b35b6184100b085b0d0572f9b5103";
 
@@ -50,6 +47,9 @@ public class BuildVars {
     public static boolean isMini = true;
     public static boolean isGServicesCompiled = false; // BuildConfig.BUILD_TYPE.equals("debug") || BuildConfig.BUILD_TYPE.equals("release");
     public static final boolean hasTintSupport = Build.VERSION.SDK_INT > 21;
+
+    // works only on official app ids, disable on your forks
+    public static boolean SUPPORTS_PASSKEYS = Build.VERSION.SDK_INT > 33;
 
     static {
 

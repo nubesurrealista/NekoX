@@ -711,4 +711,8 @@ public class Utilities {
         }
     }
 
+    public static int divCeil(int a, int b) {
+        return (a + b - 1) / b;
+    }
+
 }

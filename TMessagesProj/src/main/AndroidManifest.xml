@@ -162,6 +162,7 @@
         android:preserveLegacyExternalStorage="true"
         android:allowAudioPlaybackCapture="true"
         android:usesCleartextTraffic="true"
+        android:enableOnBackInvokedCallback="true"
         tools:node="merge" >
         <!-- usesCleartextTraffic for browser supporting opening http:// links -->
 

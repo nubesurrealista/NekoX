@@ -2571,8 +2571,9 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
                     imageSize -= dp(20);
                 }
                 imageReceiver.setImageCoords(x, y, Math.max(0, imageSize), Math.max(0, imageSize));
-                imageSize += dp(20);
-
+                if (messageObject.type == MessageObject.TYPE_GIFT_THEME_UPDATE || messageObject.type == MessageObject.TYPE_GIFT_OFFER || messageObject.type == MessageObject.TYPE_GIFT_OFFER_REJECTED) {
+                    imageSize += dp(20);
+                }
             } else if (messageObject.type == MessageObject.TYPE_ACTION_PHOTO) {
                 imageReceiver.setImageCoords((previousWidth - stickerSize) / 2f, textY + textHeight + giftRectSize * 0.075f, stickerSize, stickerSize);
             } else if (messageObject.type == MessageObject.TYPE_GIFT_PREMIUM_CHANNEL) {
