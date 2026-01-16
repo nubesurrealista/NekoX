@@ -8496,7 +8496,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         args.putInt("dialogsType", 3);
         DialogsActivity fragment = new DialogsActivity(args);
         final ChatActivity parentChatActivityFinal = parentChatActivity;
-        fragment.setDelegate((fragment1, dids, message, param, notify, scheduleDate, topicsFragment) -> {
+        fragment.setDelegate((fragment1, dids, message, param, notify, scheduleDate, scheduleRepeatPeriod, topicsFragment) -> {
             if (dids.size() > 1 || dids.get(0).dialogId == UserConfig.getInstance(currentAccount).getClientUserId() || message != null) {
                 for (int a = 0; a < dids.size(); a++) {
                     long did = dids.get(a).dialogId;

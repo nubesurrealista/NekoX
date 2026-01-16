@@ -14915,7 +14915,7 @@ public class ChatActivity extends BaseFragment implements
         if ((scheduleDate != 0) == (chatMode == MODE_SCHEDULED)) {
             waitingForSendingMessageLoad = true;
         }
-        AlertsCreator.showSendMediaAlert(getSendMessagesHelper().sendMessage(arrayList, did == 0 ? dialog_id : did, fromMyName, false, notify, scheduleDate, null, -1, 0, monoForumPeerId, getSendMessageSuggestionParams()), this);
+        AlertsCreator.showSendMediaAlert(getSendMessagesHelper().sendMessage(arrayList, did == 0 ? dialog_id : did, fromMyName, false, notify, scheduleDate, 0, null, -1, 0, monoForumPeerId, getSendMessageSuggestionParams()), this);
     }
 
     public boolean shouldShowImport() {
