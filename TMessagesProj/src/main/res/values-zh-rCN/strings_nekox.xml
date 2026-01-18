@@ -269,4 +269,6 @@
     <string name="IgnoreTranslatorCache">忽略翻译缓存</string>
     <string name="TranslationUnavailable">官方翻译不可用，正在使用替代的 Google API</string>
     <string name="GrantMediaPermission">授予媒体权限</string>
+    <string name="IgnoreTopicTabView">强制传统话题视图</string>
+    <string name="NoPreloadTrackIfRepeatOne">单曲循环时不预加载下一首</string>
 </resources>
