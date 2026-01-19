@@ -61,6 +61,7 @@ import android.text.style.DynamicDrawableSpan;
 import android.text.style.MetricAffectingSpan;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.util.Property;
 import android.util.SparseArray;
 import android.util.TypedValue;
@@ -6826,7 +6827,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (position == localBlocks.size()) {
                 return currentPage != null && currentPage.cached_page != null && currentPage.cached_page.web ? 91 : 90;
             }
-            return getTypeForBlock(localBlocks.get(position));
+            int ret = getTypeForBlock(localBlocks.get(position));
+            Log.d("030-article", String.format("getItemViewType class: %s position: %d type: %d", localBlocks.get(position).getClass().getName(), position, ret));
+            return ret;
         }
 
         public TLRPC.PageBlock getItem(int position) {
@@ -10988,6 +10991,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         private int textX;
         private int textY = dp(8);
 
+        private boolean isCocoon = false;
+
         private TLRPC.TL_pageBlockBlockquote currentBlock;
 
         private WebpageAdapter parentAdapter;
@@ -10999,7 +11004,31 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         public void setBlock(TLRPC.TL_pageBlockBlockquote block) {
             currentBlock = block;
+
+            if (NekoConfig.hideCocoonAISummary.Bool())
+                isCocoon = (checkIsCocoonSummary(block.text) || checkIsCocoonSummary(block.caption));
+
+            if (isCocoon) setVisibility(View.GONE);
+
             requestLayout();
+        }
+
+        private static boolean checkIsCocoonSummary(TLRPC.RichText text) {
+            if (text == null) return false;
+            if (text instanceof TLRPC.TL_textPlain) {
+                if (((TLRPC.TL_textPlain) text).text.endsWith("Cocoon AI Summary"))
+                    return true;
+            }
+            if (text.text != null && text.text instanceof TLRPC.RichText) {
+                checkIsCocoonSummary(text.text);
+            }
+            if (text.texts != null) {
+                for (TLRPC.RichText t : text.texts) {
+                    if (checkIsCocoonSummary(t))
+                        return true;
+                }
+            }
+            return false;
         }
 
         @Override
@@ -11012,7 +11041,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int width = MeasureSpec.getSize(widthMeasureSpec);
             int height = 0;
 
-            if (currentBlock != null) {
+            if (currentBlock != null && !isCocoon) {
                 int textWidth = width - dp(36 + 14);
                 if (currentBlock.level > 0) {
                     textWidth -= dp(14 * currentBlock.level);

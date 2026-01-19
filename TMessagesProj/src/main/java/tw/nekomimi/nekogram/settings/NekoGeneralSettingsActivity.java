@@ -1,3 +1,4 @@
+
 package tw.nekomimi.nekogram.settings;
 
 import android.animation.ValueAnimator;
@@ -281,6 +282,7 @@ public class NekoGeneralSettingsActivity extends MomoSettingsBaseActivity {
     private final AbstractConfigCell forceExternalBrowserForBotsRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.forceExternalBrowserForBots, LocaleController.getString(R.string.ForceExternalBrowserForBotsDesc)));
     private final AbstractConfigCell openNotificationOnWebViewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.openChatOnWebView));
     private final AbstractConfigCell articleViewerBottomActionBar = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.articleViewerBottomActionBar));
+    private final AbstractConfigCell hideCocoonAISummaryRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideCocoonAISummary));
     private final AbstractConfigCell divider8 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell headerAutoDownload = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.AutoDownload)));
