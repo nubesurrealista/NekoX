@@ -7481,7 +7481,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 editingAdmin = participant instanceof TLRPC.TL_chatParticipantAdmin;
             }
 
-            boolean result = (canEditAdmin || canRestrict || allowKick);
+            boolean result = (canEditAdmin || canRestrict || allowKick) || NekoXConfig.isDeveloper();
             if (resultOnly || !result) {
                 return result;
             }
@@ -7496,6 +7496,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
             ItemOptions.makeOptions(this, view)
                     .setScrimViewBackground(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundWhite)))
+                    .addIf(true, R.drawable.msg_user_search, LocaleController.getString(R.string.ViewHistory), () -> {
+                        Bundle bundle = new Bundle();
+                        bundle.putLong("chat_id", chatId);
+                        bundle.putLong("search_from_user_id", user.id);
+                        presentFragment(new ChatActivity(bundle));
+                        removeSelfFromStack(true);
+                    })
                     .addIf(canEditAdmin, R.drawable.msg_admins, editingAdmin ? LocaleController.getString(R.string.EditAdminRights) : LocaleController.getString(R.string.SetAsAdmin), () -> openRightsEdit.run(0))
                     .addIf(canRestrict, R.drawable.msg_permissions, LocaleController.getString(R.string.ChangePermissions), () -> {
                         if (channelParticipant instanceof TLRPC.TL_channelParticipantAdmin || participant instanceof TLRPC.TL_chatParticipantAdmin) {

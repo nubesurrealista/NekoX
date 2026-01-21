@@ -9724,10 +9724,11 @@ public class ChatActivity extends BaseFragment implements
     }
 
     private void checkInstantSearch() {
-        final long searchFromUserId = getArguments().getInt("search_from_user_id", 0);
+        final long searchFromUserId = getArguments().getLong("search_from_user_id", 0);
         if (searchFromUserId != 0) {
             TLRPC.User user = getMessagesController().getUser(searchFromUserId);
             if (user != null) {
+                createSearchContainer();
                 openSearchWithText("");
                 if (searchUserButton != null) {
                     searchUserButton.callOnClick();
@@ -9735,10 +9736,11 @@ public class ChatActivity extends BaseFragment implements
                 searchUserMessages(user, null);
             }
         } else {
-            final long searchFromChatId = getArguments().getInt("search_from_chat_id", 0);
+            final long searchFromChatId = getArguments().getLong("search_from_chat_id", 0);
             if (searchFromChatId != 0) {
                 TLRPC.Chat chat = getMessagesController().getChat(searchFromChatId);
                 if (chat != null) {
+                    createSearchContainer();
                     openSearchWithText("");
                     if (searchUserButton != null) {
                         searchUserButton.callOnClick();
