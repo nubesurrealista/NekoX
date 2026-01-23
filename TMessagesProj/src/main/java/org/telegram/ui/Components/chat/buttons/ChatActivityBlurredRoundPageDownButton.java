@@ -34,6 +34,7 @@ public class ChatActivityBlurredRoundPageDownButton extends FrameLayout {
     public void addButtonView(ChatActivityBlurredRoundButton button, int size) {
         this.buttonView = button;
         addView(button, LayoutHelper.createFrame(size, size, Gravity.BOTTOM));
+        button.setForcePadding(true);
         button.setIconPadding(dp(2));
     }
 

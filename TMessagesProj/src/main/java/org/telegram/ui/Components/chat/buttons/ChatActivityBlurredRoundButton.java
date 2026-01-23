@@ -119,13 +119,25 @@ public class ChatActivityBlurredRoundButton extends FrameLayout implements Facto
         animatorIsEnabled.setValue(enabled, animated);
     }
 
+    private boolean forcePadding = false;
     private BlurredBackgroundDrawable backgroundDrawable;
     public void setBlurredBackgroundDrawable(BlurredBackgroundDrawable drawable) {
         backgroundDrawable = drawable;
-        if (!NekoConfig.removeChatBottomViewPadding.Bool())
+        if (!NekoConfig.removeChatBottomViewPadding.Bool() || forcePadding)
             backgroundDrawable.setPadding(dp(CLICK_ZONE_MARGIN));
-        if (!NekoConfig.unroundedChatBottomView.Bool())
+        if (!NekoConfig.unroundedChatBottomView.Bool()) {
             backgroundDrawable.setRadius(dp(BUTTON_SIZE / 2f));
+        }
+    }
+
+    public void setForcePadding(boolean forcePadding) {
+        if (this.forcePadding == forcePadding) {
+            return;
+        }
+        this.forcePadding = forcePadding;
+        if (backgroundDrawable != null) {
+            backgroundDrawable.setPadding(dp(CLICK_ZONE_MARGIN));
+        }
     }
 
     public void showLoading(boolean loading, boolean animated) {
