@@ -147,6 +147,7 @@ public class TranslateController extends BaseController {
     }
 
     public static boolean isSummarizable(MessageObject messageObject) {
+        if (NekoConfig.hideCocoonAISummary.Bool()) return false;
         return (
             messageObject != null &&
             messageObject.messageOwner != null &&
