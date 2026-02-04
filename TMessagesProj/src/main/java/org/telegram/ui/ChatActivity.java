@@ -36322,7 +36322,8 @@ public class ChatActivity extends BaseFragment implements
                             }
                             AndroidUtilities.addToClipboard(link);
                         } else {
-                            AndroidUtilities.addToClipboard(str);
+                            String finalStr = (NekoConfig.patchAndCleanupLinks.Bool() ? UrlUtil.cleanUrl(str) : str);
+                            AndroidUtilities.addToClipboard(finalStr);
                         }
                         createUndoView();
                         if (undoView == null) {
