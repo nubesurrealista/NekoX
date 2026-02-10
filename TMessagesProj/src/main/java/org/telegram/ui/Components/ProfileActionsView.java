@@ -34,6 +34,7 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ProfileActivity;
+import tw.nekomimi.nekogram.NekoConfig;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -171,7 +172,7 @@ public class ProfileActionsView extends View {
         if (w <= 0) return;
 
         float betweenPadding = xpadding / 2f;
-        float width = (w - betweenPadding * (activeCount - 1) - xpadding * 2f) / activeCount;
+        float width = getItemWidth();
 
         this.radialGradient = new RadialGradient(
                 width / 2f,
@@ -199,6 +200,9 @@ public class ProfileActionsView extends View {
     }
 
     private float getItemWidth() {
+        if (NekoConfig.profileActionCircleBtn.Bool()) {
+            return targetHeight;
+        }
         int w = getMeasuredWidth();
         float betweenPadding = xpadding / 2f;
         return (w - betweenPadding * (activeCount - 1) - xpadding * 2f) / activeCount;
@@ -220,9 +224,20 @@ public class ProfileActionsView extends View {
             return;
         }
 
-        final float betweenPadding = xpadding / 2f;
+        float betweenPadding = xpadding / 2f;
         final float width = getItemWidth();
         float left = xpadding;
+        if (NekoConfig.profileActionCircleBtn.Bool()) {
+            float totalWidth = activeCount * width;
+            float availableSpace = getMeasuredWidth() - totalWidth;
+            float space = availableSpace / (activeCount + 1);
+            if (activeCount > 0 && space > 0) {
+                left = space;
+                betweenPadding = space;
+            } else {
+                left = (getMeasuredWidth() - totalWidth) / 2f;
+            }
+        }
         float r = getRoundRadius();
 
         if (renderNode != null) {
@@ -448,7 +463,7 @@ public class ProfileActionsView extends View {
     }
 
     public float getRoundRadius() {
-        return dp(10);
+        return NekoConfig.profileActionCircleBtn.Bool() ? getItemWidth() : dp(10);
     }
 
     private Action hit = null;

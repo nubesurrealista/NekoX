@@ -189,6 +189,7 @@ public class NekoConfig {
     public static ConfigItem hideProfileRating = addConfig(R.string.HideProfileRating, "HideProfileRating", configTypeBool, GENERAL, false);
     public static ConfigItem noForwardToStories = addConfig(R.string.HideForwardToStories, "HideForwardToStories", configTypeBool, GENERAL, false);
     public static ConfigItem squareAvatar = addConfig(R.string.SquareAvatar, "SquareAvatar", configTypeBool, GENERAL, false);
+    public static ConfigItem profileActionCircleBtn = addConfig(R.string.ProfileActionCircleBtn, "ProfileActionCircleBtn", configTypeBool, GENERAL, false);
 
     public static ConfigItem preferredTranslateTargetLang = addConfig(R.string.PreferredTranslateTargetLangTitle, "PreferredTranslateTargetLangTitle", configTypeString, GENERAL, "");
     public static ArrayList<String> preferredTranslateTargetLangList = new ArrayList<>();

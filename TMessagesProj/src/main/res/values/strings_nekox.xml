@@ -317,4 +317,5 @@
     <string name="AutoTestProxy">Auto test proxy for availability</string>
     <string name="TestPing">(Tap to test)</string>
     <string name="HideCocoonAISummary">Hide Cocoon AI summary</string>
+    <string name="ProfileActionCircleBtn">Use circle buttons for profile actions</string>
 </resources>

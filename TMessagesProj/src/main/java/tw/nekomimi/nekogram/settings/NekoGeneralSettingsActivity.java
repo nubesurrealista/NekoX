@@ -197,6 +197,7 @@ public class NekoGeneralSettingsActivity extends MomoSettingsBaseActivity {
     private final AbstractConfigCell squareAvatarRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.squareAvatar));
     private final AbstractConfigCell boostedContactRatingInProfileRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.boostedContactRatingInProfile));
     private final AbstractConfigCell hideProfileRatingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideProfileRating));
+    private final AbstractConfigCell profileActionCircleBtnRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.profileActionCircleBtn));
     private final AbstractConfigCell actionBarDecorationRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.actionBarDecoration, new String[]{
             LocaleController.getString(R.string.DependsOnDate),
             LocaleController.getString(R.string.Snowflakes),
