@@ -600,7 +600,7 @@ public class ProfileActionsView extends View {
         action.drawable = drawable;
         action.key = KEY_SET_PHOTO;
         action.setText(getString(R.string.ProfileActionsEditPhoto));
-        action.iconScale = 1.5f;
+        action.iconScale = NekoConfig.profileActionCircleBtn.Bool() ? (1.3f * 1.5f) : 1.5f;
         actions.add(action);
         activeCount = actions.size();
     }
@@ -1012,7 +1012,7 @@ public class ProfileActionsView extends View {
         boolean isDeleted = false;
 
         int iconTranslationY = 0;
-        float iconScale = 1f;
+        float iconScale = NekoConfig.profileActionCircleBtn.Bool() ? 1.3f : 1f;
 
         Drawable rippleDrawable = Theme.AdaptiveRipple.createRect(0, Theme.multAlpha(Theme.getColor(Theme.key_windowBackgroundWhite), 0.45f), 8);
         LoadingDrawable loadingDrawable;

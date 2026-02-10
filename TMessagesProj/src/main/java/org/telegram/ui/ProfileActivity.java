@@ -6293,13 +6293,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     private int getActionsExtraHeight() {
+        float multiplier = NekoConfig.profileActionCircleBtn.Bool() ? 1.3f : 1;
         if (userId != 0 && imageUpdater != null || myProfile) {
             if (passkeySuggestion) {
-                return dp(88);
+                return dp((int) (88 * multiplier));
             }
             return 0;
         }
-        return dp(74);
+        return dp((int) (74 * multiplier));
     }
 
     private int getHeaderExtraHeight() {
