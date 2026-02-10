@@ -1571,7 +1571,7 @@ public class FilterCreateActivity extends BaseFragment {
                     break;
                 }
                 case VIEW_TYPE_EDIT: {
-                    EditEmojiTextCell cell = nameEditTextCell = new EditEmojiTextCell(mContext, (SizeNotifierFrameLayout) fragmentView, LocaleController.getString(R.string.FilterNameHint), false, MAX_NAME_LENGTH, EditTextEmoji.STYLE_GIFT, resourceProvider) {
+                    EditEmojiTextCell cell = nameEditTextCell = new EditEmojiTextCell(mContext, (SizeNotifierFrameLayout) fragmentView, LocaleController.getString(R.string.FilterNameHint), false, MAX_NAME_LENGTH, EditTextEmoji.STYLE_GIFT, resourceProvider, true) {
                         @Override
                         public int emojiCacheType() {
                             return AnimatedEmojiDrawable.CACHE_TYPE_TOGGLEABLE_EDIT;

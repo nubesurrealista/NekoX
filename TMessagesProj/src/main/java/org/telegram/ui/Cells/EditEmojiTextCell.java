@@ -132,6 +132,19 @@ public class EditEmojiTextCell extends FrameLayout {
         int style,
         Theme.ResourcesProvider resourceProvider
     ) {
+        this(context, parent, hint, multiline, maxLength, style, resourceProvider, false);
+    }
+
+    public EditEmojiTextCell(
+        Context context,
+        SizeNotifierFrameLayout parent,
+        String hint,
+        boolean multiline,
+        int maxLength,
+        int style,
+        Theme.ResourcesProvider resourceProvider,
+        boolean forceAllowCustomEmojis
+    ) {
         super(context);
         this.maxLength = maxLength;
 
@@ -203,6 +216,9 @@ public class EditEmojiTextCell extends FrameLayout {
                 return 0; // TODO: should I obtain the chat id anyhow?
             }
         });
+        if (forceAllowCustomEmojis) {
+            editTextEmoji.allowEmojisForNonPremium(true);
+        }
         editTextEmoji.setWillNotDraw(false);
         limitColor = new AnimatedColor(editTextEmoji);
         limit.setCallback(editTextEmoji);

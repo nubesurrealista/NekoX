@@ -3252,14 +3252,16 @@ public class MessagesStorage extends BaseController {
                     if (filter != null) {
                         filtersToDelete.remove(newFilter.id);
                         boolean changed = false;
+                        boolean changedNonTitle = false;
                         boolean unreadChanged = false;
-                        if (!TextUtils.equals(filter.name, newFilter.title.text) || !MediaDataController.entitiesEqual(filter.entities, newFilter.title.entities)) {
+                        if (!NekoConfig.ignoreFilterEmoticonUpdate.Bool() && !TextUtils.equals(filter.name, newFilter.title.text) || !MediaDataController.entitiesEqual(filter.entities, newFilter.title.entities)) {
                             changed = true;
                             filter.name = newFilter.title.text;
                             filter.entities = newFilter.title.entities;
                         }
                         if (filter.title_noanimate != newFilter.title_noanimate) {
                             changed = true;
+                            changedNonTitle = true;
                             filter.title_noanimate= newFilter.title_noanimate;
                         }
                         if (!NekoConfig.ignoreFilterEmoticonUpdate.Bool() && !TextUtils.equals(filter.emoticon, newFilter.emoticon)) {
@@ -3269,10 +3271,12 @@ public class MessagesStorage extends BaseController {
                         final int color = (newFilter.flags & 134217728) != 0 ? newFilter.color : -1;
                         if (filter.color != color) {
                             filter.color = color;
+                            changedNonTitle = true;
                             changed = true;
                         }
                         if (filter.flags != newFlags) {
                             filter.flags = newFlags;
+                            changedNonTitle = true;
                             changed = true;
                             unreadChanged = true;
                         }
@@ -3394,7 +3398,7 @@ public class MessagesStorage extends BaseController {
                             filterDialogRemovals.put(filter.id, existingDialogsIds);
                             changed = true;
                         }
-                        if (changed) {
+                        if (changed && (changedNonTitle || !NekoConfig.ignoreFilterEmoticonUpdate.Bool())) {
                             filtersToSave.add(filter);
                         }
                         if (unreadChanged) {
