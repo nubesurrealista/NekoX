@@ -7,6 +7,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
+import org.telegram.ui.Components.FilterTabsView;
 
 
 import java.util.LinkedHashMap;
@@ -128,9 +129,9 @@ public class FolderIconHelper {
 
     public static int getPaddingTab() {
         if (NekoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON) {
-            return AndroidUtilities.dp(32);
+            return AndroidUtilities.dp(FilterTabsView.TAB_PADDING_WIDTH + 16); // was 16 + 16 => 32
         }
-        return AndroidUtilities.dp(16);
+        return AndroidUtilities.dp(FilterTabsView.TAB_PADDING_WIDTH);
     }
 
     public static int getTabIcon(String emoji) {

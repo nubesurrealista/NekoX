@@ -1935,7 +1935,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         setOnDismissListener(dialog -> {
             List<BaseFragment> stack = parentActivity.getActionBarLayout().getFragmentStack();
             if (stack == null || stack.isEmpty()) return; // prevent NPE & OOB
-            BaseFragment fragment = stack.get(stack.size() - 1);
+            final BaseFragment fragment = LaunchActivity.getSafeLastFragment();
             if (anyEnterEventSent) {
                 if (fragment instanceof ChatActivity) {
                     ((ChatActivity) fragment).onEditTextDialogClose(true, true);

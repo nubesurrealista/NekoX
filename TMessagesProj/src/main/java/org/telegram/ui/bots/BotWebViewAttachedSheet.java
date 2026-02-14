@@ -1928,4 +1928,8 @@ public class BotWebViewAttachedSheet implements NotificationCenter.NotificationC
         return true;
     }
 
+    @Override
+    public BulletinFactory getBulletinFactory() {
+        return BulletinFactory.of(windowView, resourcesProvider);
+    }
 }
