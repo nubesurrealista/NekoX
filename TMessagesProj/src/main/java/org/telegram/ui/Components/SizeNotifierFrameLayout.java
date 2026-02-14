@@ -58,7 +58,7 @@ import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.NekoConfig;
 
-public class SizeNotifierFrameLayout extends FrameLayout {
+public class SizeNotifierFrameLayout extends FrameLayout implements Theme.Colorable {
 
     public boolean DRAW_USING_RENDERNODE() {
         return Build.VERSION.SDK_INT >= 31 && SharedConfig.useNewBlur;
@@ -1257,4 +1257,8 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         }
     }
 
+    @Override
+    public void updateColors() {
+
+    }
 }
