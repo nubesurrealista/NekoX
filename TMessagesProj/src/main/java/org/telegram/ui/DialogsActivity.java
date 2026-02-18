@@ -3593,11 +3593,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     if (self != null && self.first_name != null) title = self.first_name;
                 }
 
-                logoDrawable = context.getResources().getDrawable(R.drawable.telegram_logo_2).mutate();
-                logoDrawable.setBounds(0, dp(2), logoDrawable.getIntrinsicWidth(), dp(2) + logoDrawable.getIntrinsicHeight());
-                logoDrawable.setColorFilter(getThemedColor(Theme.key_telegram_color_dialogsLogo), PorterDuff.Mode.MULTIPLY);
+//                logoDrawable = context.getResources().getDrawable(R.drawable.telegram_logo_2).mutate();
+//                logoDrawable.setBounds(0, dp(2), logoDrawable.getIntrinsicWidth(), dp(2) + logoDrawable.getIntrinsicHeight());
+//                logoDrawable.setColorFilter(getThemedColor(Theme.key_telegram_color_dialogsLogo), PorterDuff.Mode.MULTIPLY);
                 SpannableStringBuilder ssb = new SpannableStringBuilder(title);
-                ssb.setSpan(new ImageSpan(logoDrawable), 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                ssb.setSpan(new ImageSpan(logoDrawable), 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 actionBar.setTitle(ssb, statusDrawable);
                 updateStatus(UserConfig.getInstance(currentAccount).getCurrentUser(), false);
             }
@@ -3898,7 +3898,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             .addIf(hasShare, R.drawable.msg_share, FilterCreateActivity.withNew(filter != null && filter.isMyChatlist() ? -1 : 0, LocaleController.getString(R.string.LinkActionShare), true), () -> {
                                 if (shareEmpty[0]) {
                                     presentFragment(new FilterChatlistActivity(finalFilter, null));
-                                } else {
+                                } else if (finalFilter != null) {
                                     FilterCreateActivity.FilterInvitesBottomSheet.show(DialogsActivity.this, finalFilter, null);
                                 }
                             })
@@ -10315,15 +10315,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 break;
             }
         }
-        boolean showDownloads = (hasDownloads || NekoConfig.alwaysShowDownloads.Bool());
+        boolean alwaysShowDownloads = NekoConfig.alwaysShowDownloads.Bool();
+        boolean showDownloads = (hasDownloads || alwaysShowDownloads);
         if ((getDownloadController().hasUnviewedDownloads() || showDownloads || (downloadsItem.getVisibility() == View.VISIBLE && downloadsItem.getAlpha() == 1 && !force))) {
             downloadsItemVisible = true;
         } else {
             downloadsItemVisible = false;
         }
 
-        if (downloadsItemVisible && downloadIcon != null && !hasDownloads) {
-            downloadIcon.forceCompleted();
+        if (downloadsItemVisible && alwaysShowDownloads) {
+            if (downloadIcon != null) downloadIcon.forceCompleted();
         }
 
         final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
@@ -10332,14 +10333,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         proxyMenuSubItem.setSubtext(getString(connected ? R.string.MenuProxyConnected : R.string.MenuProxyConnecting));
         proxyDrawable.setConnected(proxyEnabled, connected, animated);
         String proxyAddress = preferences.getString("proxy_ip", "");
-        if (NekoConfig.showQuickReconnect.Bool() && currentConnectionState != ConnectionsManager.ConnectionStateConnected &&
+        if (proxyItem != null && NekoConfig.showQuickReconnect.Bool() && currentConnectionState != ConnectionsManager.ConnectionStateConnected &&
                 currentConnectionState != ConnectionsManager.ConnectionStateWaitingForNetwork && currentConnectionState != ConnectionsManager.ConnectionStateConnectingToProxy) {
             proxyItem.setIcon(R.drawable.msg_retry);
             if (!actionBar.isSearchFieldVisible() && (doneItem == null || doneItem.getVisibility() != View.VISIBLE)) {
                 proxyItem.setVisibility(View.VISIBLE);
             }
             proxyItemVisibleForWorkaround = proxyItemVisible = true;
-        } else if (!downloadsItemVisible && !NekoConfig.useProxyItem.Bool() &&
+        } else if (!downloadsItemVisible && proxyItem != null &&
                 (!NekoConfig.hideProxyByDefault.Bool() || (proxyEnabled && !TextUtils.isEmpty(proxyAddress)) ||
                         getMessagesController().blockedCountry && !SharedConfig.proxyList.isEmpty())) {
             if (!actionBar.isSearchFieldVisible() && (doneItem == null || doneItem.getVisibility() != View.VISIBLE)) {
@@ -10349,7 +10350,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             proxyItemVisibleForWorkaround = false;
             proxyItemVisible = true;
             proxyDrawable.setConnected(true, currentConnectionState == ConnectionsManager.ConnectionStateConnected || currentConnectionState == ConnectionsManager.ConnectionStateUpdating, animated);
-        } else {
+        } else if (proxyItem != null) {
             proxyItemVisible = false;
             proxyItem.setVisibility(View.GONE);
         }
@@ -12637,7 +12638,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     public void updateStoriesVisibility(boolean animated) {
-        if (dialogStoriesCell == null || storiesVisibilityAnimator != null || rightSlidingDialogContainer != null && rightSlidingDialogContainer.hasFragment() || searchIsShowed || actionBar == null || actionBar.isActionModeShowed() || onlySelect) {
+        if (dialogStoriesCell == null || storiesVisibilityAnimator != null || rightSlidingDialogContainer != null && rightSlidingDialogContainer.hasFragment() || searchIsShowed || actionBar == null || actionBar.isActionModeShowed() || onlySelect || NekoConfig.disableStories.Bool()) {
             return;
         }
         if (StoryRecorder.isVisible() || (getLastStoryViewer() != null && getLastStoryViewer().isFullyVisible())) {

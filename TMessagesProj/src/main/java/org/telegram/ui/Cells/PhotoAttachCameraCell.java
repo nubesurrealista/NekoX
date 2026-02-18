@@ -32,44 +32,5 @@ public class PhotoAttachCameraCell extends View {
 
     public void setItemSize(int size) {
         itemSize = size;
-
-        LayoutParams layoutParams = (LayoutParams) imageView.getLayoutParams();
-        layoutParams.width = layoutParams.height = itemSize;
-
-        layoutParams = (LayoutParams) backgroundView.getLayoutParams();
-        layoutParams.width = layoutParams.height = itemSize;
-    }
-
-    public ImageView getImageView() {
-        return imageView;
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        imageView.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_dialogCameraIcon), PorterDuff.Mode.SRC_IN));
-    }
-
-    public void updateBitmap() {
-        Bitmap bitmap = null;
-        try {
-            File file = new File(ApplicationLoader.getFilesDirFixed(), "cthumb.jpg");
-            bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-        } catch (Throwable ignore) {
-
-        }
-        if (bitmap != null) {
-            backgroundView.setImageBitmap(bitmap);
-        } else {
-            backgroundView.setImageResource(R.drawable.icplaceholder);
-        }
-    }
-
-    public Drawable getDrawable() {
-        return backgroundView.getDrawable();
-    }
-
-    protected int getThemedColor(int key) {
-        return Theme.getColor(key, resourcesProvider);
     }
 }

@@ -54,6 +54,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.util.Base64;
+import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.ActionMode;
 import android.view.Gravity;
@@ -160,9 +161,6 @@ import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Cells.DrawerActionCheckCell;
-import org.telegram.ui.Cells.DrawerAddCell;
-import org.telegram.ui.Cells.DrawerProfileCell;
-import org.telegram.ui.Cells.DrawerUserCell;
 import org.telegram.ui.Cells.LanguageCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AppIconBulletinLayout;
@@ -1897,19 +1895,19 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 } else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
                     Uri data = intent.getData();
 
-                    final LinkManager linkManager = new LinkManager(this, intentAccount[0], progress, openedTelegram);
-                    if (linkManager.handle(data)) {
-                        if (intent.hasExtra(EXTRA_ACTION_TOKEN)) {
-                            final boolean success = true;
-                            final Action assistAction = new AssistActionBuilder()
-                                .setActionToken(intent.getStringExtra(EXTRA_ACTION_TOKEN))
-                                .setActionStatus(success ? Action.Builder.STATUS_TYPE_COMPLETED : Action.Builder.STATUS_TYPE_FAILED)
-                                .build();
-                            FirebaseUserActions.getInstance(this).end(assistAction);
-                            intent.removeExtra(EXTRA_ACTION_TOKEN);
-                        }
-                        return true;
-                    }
+//                    final LinkManager linkManager = new LinkManager(this, intentAccount[0], progress, openedTelegram);
+//                    if (linkManager.handle(data)) {
+//                        if (intent.hasExtra(EXTRA_ACTION_TOKEN)) {
+//                            final boolean success = true;
+//                            final Action assistAction = new AssistActionBuilder()
+//                                .setActionToken(intent.getStringExtra(EXTRA_ACTION_TOKEN))
+//                                .setActionStatus(success ? Action.Builder.STATUS_TYPE_COMPLETED : Action.Builder.STATUS_TYPE_FAILED)
+//                                .build();
+//                            FirebaseUserActions.getInstance(this).end(assistAction);
+//                            intent.removeExtra(EXTRA_ACTION_TOKEN);
+//                        }
+//                        return true;
+//                    }
 
                     if (data != null) {
                         String username = null;
@@ -4015,9 +4013,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                         if (AndroidUtilities.isTablet()) {
                             actionBarLayout.showLastFragment();
                             rightActionBarLayout.showLastFragment();
-                            drawerLayoutContainer.setAllowOpenDrawer(false, false);
-                        } else {
-                            drawerLayoutContainer.setAllowOpenDrawer(true, false);
                         }
                     } else {
                         AndroidUtilities.runOnUIThread(() -> {
@@ -8214,6 +8209,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         } else {
             actionBarLayout.onBackPressed();
         }
+        super.onBackPressed();
     }
 
     public boolean onBackPressed(boolean invoked) {

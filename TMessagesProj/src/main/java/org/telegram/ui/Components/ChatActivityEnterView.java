@@ -2642,7 +2642,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             @Override
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-                final int min = NekoConfig.removeChatBottomViewPadding.Bool() ? 50 : 44;
+                final int min = DEFAULT_HEIGHT = NekoConfig.removeChatBottomViewPadding.Bool() ? 50 : 44;
                 final int height = Math.max(dp(min), getMeasuredHeight());
                 if (animatorInputFieldHeight.getFactor() > 0) {
                     animatorInputFieldHeight.animateTo(height);
@@ -3101,7 +3101,7 @@ public class ChatActivityEnterView extends FrameLayout implements
 
             @Override
             protected void dispatchDraw(@NonNull Canvas canvas) {
-                if (!audioVideoButtonContainerForbidden) {
+                if (!audioVideoButtonContainerForbidden && !NekoConfig.removeChatBottomViewPadding.Bool()) {
                     float s = 1;
                     if (expandStickersButton != null) {
                         if (expandStickersButton.getVisibility() == View.VISIBLE) {
@@ -3155,7 +3155,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             });
         }
         audioVideoButtonContainer.setSoundEffectsEnabled(false);
-        sendButtonContainer.addView(audioVideoButtonContainer, LayoutHelper.createFrame(DEFAULT_HEIGHT, DEFAULT_HEIGHT, Gravity.RIGHT | Gravity.BOTTOM));
+        sendButtonContainer.addView(audioVideoButtonContainer, LayoutHelper.createFrame(DEFAULT_HEIGHT, DEFAULT_HEIGHT, Gravity.RIGHT | (NekoConfig.useChatAttachMediaMenu.Bool() ? Gravity.CENTER_VERTICAL : Gravity.BOTTOM)));
         audioVideoButtonContainer.setFocusable(true);
         audioVideoButtonContainer.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
 
@@ -4445,7 +4445,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                 botCommandsMenuContainer.dismiss();
             }
         });
-        int vg = NekoConfig.removeChatBottomViewPadding.Bool() ? Gravity.CENTER_VERTICAL : Gravity.BOTTOM;
+        int vg = Gravity.BOTTOM; // NekoConfig.removeChatBottomViewPadding.Bool() ? Gravity.CENTER_VERTICAL : Gravity.BOTTOM;
         messageEditTextContainer.addView(botCommandsMenuButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 32, vg | Gravity.LEFT, 8, 6, 8, 6));
         AndroidUtilities.updateViewVisibilityAnimated(botCommandsMenuButton, false, 1f, false);
         botCommandsMenuButton.setExpanded(true, false);

@@ -929,6 +929,7 @@ public class ActionBarMenuItem extends FrameLayout {
         }
         if (searchContainer.getVisibility() == VISIBLE) {
             searchContainer.setVisibility(GONE);
+            searchContainer.setTag(null);
 
             searchField.clearFocus();
             setVisibility(VISIBLE);

@@ -16,6 +16,7 @@ import static org.telegram.messenger.MediaDataController.TYPE_IMAGE;
 import static org.telegram.messenger.MediaDataController.TYPE_MASK;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,6 +41,11 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.internal.Streams;
+import com.google.gson.stream.JsonWriter;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -96,14 +102,27 @@ import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.Components.UniversalAdapter;
 import org.telegram.ui.Components.UniversalRecyclerView;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
+import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.ui.PinnedStickerHelper;
+import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.FileUtil;
+import tw.nekomimi.nekogram.utils.ShareUtil;
+import tw.nekomimi.nekogram.utils.StickersUtil;
+import tw.nekomimi.nekogram.utils.UIUtil;
 
 public class StickersActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -112,6 +131,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     private static final int MENU_SHARE = 2;
     private static final int MENU_COPY = 3;
     private static final int MENU_REORDER = 4;
+    private static final int MENU_EXPORT = 100;
+    private static final int MENU_TOGGLE_PIN = 101;
 
     private UniversalRecyclerView listView;
     @SuppressWarnings("FieldCanBeLocal")
@@ -126,6 +147,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     private ActionBarMenuItem archiveMenuItem;
     private ActionBarMenuItem deleteMenuItem;
     private ActionBarMenuItem shareMenuItem;
+    private ActionBarMenuItem exportMenuItem;
+    private ActionBarMenuItem pinMenuItem;
 
     private int activeReorderingRequests;
     private boolean needReorder;
@@ -173,6 +196,12 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             featuredStickerSets = mediaDataController.getFeaturedStickerSets();
         }
         return featuredStickerSets;
+    }
+
+    private File stickersFile;
+    public StickersActivity(File stickersFile) {
+        this(MediaDataController.TYPE_IMAGE, null);
+        this.stickersFile = stickersFile;
     }
 
     public StickersActivity(int type, ArrayList<TLRPC.TL_messages_stickerSet> frozenEmojiPacks) {
@@ -248,8 +277,10 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         selectedCountTextView.setOnTouchListener((v, event) -> true);
 
         shareMenuItem = actionMode.addItemWithWidth(MENU_SHARE, R.drawable.msg_share, dp(54));
+        exportMenuItem = actionMode.addItemWithWidth(MENU_EXPORT, R.drawable.baseline_file_download_24, dp(54));
         archiveMenuItem = actionMode.addItemWithWidth(MENU_ARCHIVE, R.drawable.msg_archive, dp(54));
         deleteMenuItem = actionMode.addItemWithWidth(MENU_DELETE, R.drawable.msg_delete, dp(54));
+        // if (NekoConfig.enableStickerPin.Bool()) pinMenuItem = actionMode.addItemWithWidth(MENU_TOGGLE_PIN, R.drawable.msg_pin, dp(54));
 
         if (currentType == TYPE_EMOJIPACKS && frozenEmojiPacks != null) {
             sets = frozenEmojiPacks;
@@ -284,6 +315,12 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         listView.setLayoutManager(layoutManager);
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+
+        if (stickersFile != null) {
+            processStickersFile(stickersFile, true);
+            stickersFile = null;
+        }
+
         return fragmentView;
     }
 
@@ -644,6 +681,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         if (view == null || !(view.getParent() instanceof StickerSetCell)) return;
         final StickerSetCell cell = (StickerSetCell) view.getParent();
         final TLRPC.TL_messages_stickerSet set = cell.getStickersSet();
+        boolean pinned = NekoConfig.enableStickerPin.Bool() && PinnedStickerHelper.getInstance(UserConfig.selectedAccount).isPinned(cell.getStickersSet().set.id);
+        String pinText = pinned ? LocaleController.getString(R.string.UnpinSticker) : LocaleController.getString(R.string.PinSticker);
         ItemOptions.makeOptions(StickersActivity.this, cell)
             .add(R.drawable.msg_archive, LocaleController.getString(R.string.StickersHide), () -> {
                 MediaDataController.getInstance(currentAccount).toggleStickerSet(getParentActivity(), set, !set.set.archived ? 1 : 2, StickersActivity.this, true, true);
@@ -674,6 +713,27 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             .addIf(!set.set.official, R.drawable.msg_delete, LocaleController.getString(R.string.StickersRemove), true, () -> {
                 MediaDataController.getInstance(currentAccount).toggleStickerSet(getParentActivity(), set, 0, StickersActivity.this, true, true);
             })
+            // TODO: broken at 12.4 update, fix or drop
+//            .addIf(NekoConfig.enableStickerPin.Bool(), R.drawable.msg_pin, pinText, () -> {
+//                final PinnedStickerHelper ins = PinnedStickerHelper.getInstance(currentAccount);
+//                final MediaDataController mediaDataController = MediaDataController.getInstance(currentAccount);
+//                if (ins.isPinned(set.set.id)) {
+//                    // unpin
+//                    ins.removePinnedStickerLocal(set.set.id);
+//                    pinnedStickersCount--;
+//                    setStickerSetCellPinnedMarkVisibility(set.set.id, false);
+//                    moveElements(/* stickersStartRow + */ this.stickerSets.indexOf(stickerSet), /* stickersStartRow + */ pinnedStickersCount);
+//                    // use swapElements and native notifier and observer to make pin/unpin work like a simple move, sync works perfectly
+//                } else {
+//                    // pin
+//                    ins.pinNewSticker(stickerSet.set.id);
+//                    pinnedStickersCount++;
+//                    setStickerSetCellPinnedMarkVisibility(set.set.id, true);
+//                    moveElements(stickersStartRow + this.stickerSets.indexOf(stickerSet), stickersStartRow);
+//                }
+//                needReorder = true;
+//                sendReorder();
+//            })
             .setMinWidth(190)
             .show();
     }
@@ -943,13 +1003,21 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 }
             });
             shareAlert.show();
-        } else if (which == MENU_ARCHIVE || which == MENU_DELETE) {
+        } else if (which == MENU_ARCHIVE || which == MENU_DELETE || which == MENU_EXPORT) {
             ArrayList<TLRPC.StickerSet> stickerSetList = new ArrayList<>(selectedSets.size());
             for (int i = 0, size = sets.size(); i < size; i++) {
                 final TLRPC.TL_messages_stickerSet stickerSet = sets.get(i);
                 if (selectedSets.contains(stickerSet.set.id)) {
                     stickerSetList.add(stickerSet.set);
                 }
+            }
+
+            if (which == MENU_EXPORT) {
+                AlertDialog pro = new AlertDialog(getParentActivity(), 3);
+                pro.setCanCancel(false);
+                pro.show();
+
+                UIUtil.runOnIoDispatcher(this::exportStickers);
             }
 
             final int count = stickerSetList.size();
@@ -996,7 +1064,9 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     }
                     break;
             }
+        } else if (which == MENU_TOGGLE_PIN && NekoConfig.enableStickerPin.Bool() && currentType == MediaDataController.TYPE_IMAGE) {
         }
+
     }
 
     private void processSelectionOption(int which, TLRPC.TL_messages_stickerSet stickerSet) {
@@ -1084,6 +1154,126 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     public void onInsets(int left, int top, int right, int bottom) {
         listView.setPadding(0, 0, 0, bottom);
         listView.setClipToPadding(false);
+    }
+    
+    public void processStickersFile(File file, boolean exitOnFail) {
+
+        if (!file.isFile() || !file.getName().endsWith("nekox-stickers.json")) {
+
+            showError("not a stickers file", exitOnFail);
+
+            return;
+
+        } else if (file.length() > 3 * 1024 * 1024L) {
+
+            showError("file too large", exitOnFail);
+
+            return;
+
+        }
+
+        AlertDialog pro = new AlertDialog(getParentActivity(), AlertDialog.ALERT_TYPE_SPINNER);
+        pro.show();
+
+        UIUtil.runOnIoDispatcher(() -> {
+
+            JsonObject stickerObj = new Gson().fromJson(FileUtil.readUtf8String(file), JsonObject.class);
+
+            StickersUtil.importStickers(stickerObj, this, pro);
+
+            UIUtil.runOnUIThread(() -> {
+
+                pro.dismiss();
+
+                MediaDataController.getInstance(currentAccount).checkStickers(currentType);
+                listView.adapter.update(false);
+
+            });
+
+        });
+
+
+    }
+
+    private void showError(String msg, boolean exitOnFail) {
+
+        AlertUtil.showSimpleAlert(getParentActivity(), LocaleController.getString(R.string.InvalidStickersFile) + msg, (__) -> {
+
+            if (exitOnFail) finishFragment();
+
+            return Unit.INSTANCE;
+
+        });
+
+    }
+
+    public void exportStickers() {
+
+        BottomBuilder builder = new BottomBuilder(getParentActivity());
+
+        builder.addTitle(LocaleController.getString(R.string.ExportStickers), true);
+
+        AtomicBoolean exportSets = new AtomicBoolean(true);
+        AtomicBoolean exportArchived = new AtomicBoolean(true);
+
+        final AtomicReference<TextView> exportButton = new AtomicReference<>();
+
+        builder.addCheckItems(new String[]{
+                LocaleController.getString(R.string.StickerSets),
+                LocaleController.getString(R.string.ArchivedStickers)
+        }, (__) -> true, false, (index, text, cell, isChecked) -> {
+
+            if (index == 0) {
+                exportSets.set(isChecked);
+            } else {
+                exportArchived.set(isChecked);
+            }
+
+            exportButton.get().setEnabled(exportSets.get() || exportArchived.get());
+
+            return Unit.INSTANCE;
+
+        });
+
+        builder.addCancelButton();
+
+        exportButton.set(builder.addButton(LocaleController.getString(R.string.ExportStickers), (it) -> {
+
+            exportStickersFinal(exportSets.get(), exportArchived.get());
+
+            return Unit.INSTANCE;
+
+        }));
+
+        builder.show();
+
+    }
+
+    public void exportStickersFinal(boolean exportSets, boolean exportArchived) {
+
+        AlertDialog pro = new AlertDialog(getParentActivity(), 3);
+
+        pro.setCanCancel(false);
+
+        pro.show();
+
+        UIUtil.runOnIoDispatcher(() -> {
+
+            Activity ctx = getParentActivity();
+
+            JsonObject exportObj = StickersUtil.exportStickers(currentAccount, exportSets, exportArchived);
+
+            File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), new Date().toLocaleString() + ".nekox-stickers.json");
+
+            StringWriter stringWriter = new StringWriter();
+            JsonWriter jsonWriter = new JsonWriter(stringWriter);
+            jsonWriter.setLenient(true);
+            jsonWriter.setIndent("    ");
+            try {
+                Streams.write(exportObj, jsonWriter);
+            } catch (IOException e) {
+            }
+        });
     }
 
     public class TouchHelperCallback extends ItemTouchHelper.Callback {

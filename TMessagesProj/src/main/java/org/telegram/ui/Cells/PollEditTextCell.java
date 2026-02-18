@@ -240,7 +240,7 @@ public class PollEditTextCell extends FrameLayout implements SuggestEmojiView.An
         }
 
         if (type == TYPE_EMOJI) {
-            emojiButton = new ChatActivityEnterViewAnimatedIconView(context, null); // 030: is null okay for this?
+            emojiButton = new ChatActivityEnterViewAnimatedIconView(context);
             emojiButton.setAlpha(0.80f);
             emojiButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon, resourcesProvider), PorterDuff.Mode.SRC_IN));
             emojiButton.setState(ChatActivityEnterViewAnimatedIconView.State.SMILE, false);

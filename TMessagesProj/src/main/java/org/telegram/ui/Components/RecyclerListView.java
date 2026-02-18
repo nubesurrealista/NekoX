@@ -64,6 +64,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildConfig;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.GenericProvider;
 import org.telegram.messenger.LocaleController;
@@ -3174,7 +3175,7 @@ public class RecyclerListView extends RecyclerView implements IBlur3Capture {
             }
             canvas.restore();
 
-            if (BuildConfig.DEBUG_PRIVATE_VERSION) {
+            if (BuildVars.DEBUG_PRIVATE_VERSION) {
             //     canvas.drawColor(0x80FF00FF);
             }
         } else {

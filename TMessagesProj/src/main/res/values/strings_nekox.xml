@@ -318,4 +318,5 @@
     <string name="TestPing">(Tap to test)</string>
     <string name="HideCocoonAISummary">Hide Cocoon AI summary</string>
     <string name="ProfileActionCircleBtn">Use circle buttons for profile actions</string>
+    <string name="AppVersion" translatable="false">%1$s %2$s</string>
 </resources>

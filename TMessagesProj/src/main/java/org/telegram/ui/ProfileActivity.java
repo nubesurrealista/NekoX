@@ -259,6 +259,7 @@ import org.telegram.ui.Components.ProfileActionsView;
 import org.telegram.ui.Components.ProfileGalleryBlurView;
 import org.telegram.ui.Components.Paint.PersistColorPalette;
 import org.telegram.ui.Components.Premium.LimitPreviewView;
+import org.telegram.ui.Components.Premium.LimitReachedBottomSheet;
 import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
 import org.telegram.ui.Components.Premium.PremiumGradient;
 import org.telegram.ui.Components.Premium.PremiumPreviewBottomSheet;
@@ -6306,8 +6307,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int getActionsExtraHeight(boolean withMusic) {
         if (userId != 0 && imageUpdater != null && !myProfile)
             return 0;
-        float multiplier = NekoConfig.profileActionCircleBtn.Bool() ? 1.3f : 1;
-        return dp(74 * multiplier + (withMusic && hasMusic ? 25 : 0));
+//        float multiplier = NekoConfig.profileActionCircleBtn.Bool() ? 1.3f : 1;
+//        return dp(74 * multiplier + (withMusic && hasMusic ? 25 : 0));
+        return dp(74 + (withMusic && hasMusic ? 25 : 0));
     }
 
     private int getHeaderExtraHeight() {

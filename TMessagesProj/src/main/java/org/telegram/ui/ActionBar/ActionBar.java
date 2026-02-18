@@ -40,6 +40,7 @@ import android.transition.Fade;
 import android.transition.TransitionManager;
 import android.transition.TransitionSet;
 import android.transition.TransitionValues;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -58,6 +59,8 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Adapters.FiltersView;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
@@ -219,14 +222,6 @@ public class ActionBar extends FrameLayout implements Theme.Colorable {
                     if (fragment instanceof DialogsActivity) {
                         dialogsActivity = (DialogsActivity) fragment;
                         break;
-                    }
-                }
-                if (dialogsActivity != null) {
-                    ActionBarMenuItem searchItem = dialogsActivity.getSearchItem();
-                    if (searchItem.isSearchFieldVisible()) {
-                        dialogsActivity.actionBar.onSearchFieldVisibilityChanged(searchItem.toggleSearch(true));
-                        dialogsActivity.scanItem.setVisibility(View.GONE);
-                        return;
                     }
                 }
             }
@@ -1571,6 +1566,12 @@ public class ActionBar extends FrameLayout implements Theme.Colorable {
         }
         if (lastOverlayTitle == null && title == null || (lastOverlayTitle != null && lastOverlayTitle.equals(title))) {
             return;
+        }
+        if (title == null || R.string.AppName == titleId) {
+            if (NekoConfig.nameAsTitleText.Bool()) {
+                TLRPC.User self = UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser();
+                if (self != null && self.first_name != null) lastTitle = self.first_name;
+            } else lastTitle = NekoConfig.customTitleText.String();
         }
         lastOverlayTitle = title;
 

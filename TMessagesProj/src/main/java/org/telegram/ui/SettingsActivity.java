@@ -139,10 +139,15 @@ import java.util.Set;
 
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
+import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
+import tw.nekomimi.nekogram.utils.StrUtil;
 
 public class SettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ImageUpdater.ImageUpdaterDelegate, MainTabsActivity.TabFragmentDelegate, FactorAnimator.Target {
 
     private static final int ANIMATOR_ID_SEARCH_PAGE_VISIBLE = 0;
+    private static final int MOMO_SETTINGS = 6969;
 
     private final BoolAnimator animatorSearchPageVisible = new BoolAnimator(ANIMATOR_ID_SEARCH_PAGE_VISIBLE,
             this, CubicBezierInterpolator.EASE_OUT_QUINT, 350);
@@ -273,9 +278,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 blurScrimPaint.setAlpha(oldScrimAlpha);
             }
 
-            @Override
+            // @Override
             public void updateColors() {
-                super.updateColors();
+                // super.updateColors();
                 SettingsActivity.this.updateColors();
             }
         };
@@ -291,6 +296,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     finishFragment();
                 } else if (id == 2) {
                     presentFragment(new LogoutActivity());
+                } else if (id == 69) {
+                    NekoXConfig.toggleMuteCurrentAccount();
                 }
             }
         });
@@ -326,6 +333,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
         otherItem = menu.addItem(1, R.drawable.ic_ab_other);
         otherItem.addSubItem(2, R.drawable.msg_leave, getString(R.string.LogOut));
+
+        boolean accMuted = NekoXConfig.isAccountMuted(currentAccount);
+        otherItem.addSubItem(69, accMuted ? R.drawable.msg_mute : R.drawable.msg_unmute, getString(accMuted ? R.string.UnMuteAccountNoti : R.string.MuteAccountNoti));
 
         search = new ProfileActivity.SearchAdapter(this, context) {
             @Override
@@ -688,27 +698,28 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
         items.add(UItem.asShadow(null));
 
-        if (!getMessagesController().premiumFeaturesBlocked()) {
+        if (!NekoConfig.removePremiumAnnoyance.Bool() && !getMessagesController().premiumFeaturesBlocked()) {
             items.add(SettingCell.Factory.of(11, 0xFFB659FF, 0xFF617CFF, R.drawable.settings_premium, getString(R.string.TelegramPremium)));
         }
-        if (getMessagesController().starsPurchaseAvailable()) {
+        if (!NekoConfig.removePremiumAnnoyance.Bool() && getMessagesController().starsPurchaseAvailable()) {
             StarsController c = StarsController.getInstance(currentAccount);
             long balance = c.getBalance().amount;
             items.add(SettingCell.Factory.of(12, 0xFFEFA612, 0xFFE77512, R.drawable.settings_stars, getString(R.string.TelegramStars), null, c.balanceAvailable() && balance > 0 ? StarsIntroActivity.formatStarsAmount(c.getBalance(), 0.85f, ' ') : ""));
         }
         StarsController.getInstance(currentAccount, true).getBalance();
-        if (ApplicationLoader.isBetaBuild() || ApplicationLoader.isStandaloneBuild() || ApplicationLoader.isHuaweiStoreBuild() || (StarsController.getInstance(currentAccount, true).balanceAvailable() && (StarsController.getInstance(currentAccount, true).hasTransactions() || StarsController.getInstance(currentAccount, true).getBalance().positive()))) {
+        if (ApplicationLoader.isStandaloneBuild() || (StarsController.getInstance(currentAccount, true).balanceAvailable() && (StarsController.getInstance(currentAccount, true).hasTransactions() || StarsController.getInstance(currentAccount, true).getBalance().positive()))) {
             StarsController c = StarsController.getTonInstance(currentAccount);
             long balance = c.getBalance().amount;
             items.add(SettingCell.Factory.of(13, 0xFF1BA4ED, 0xFF1488E1, R.drawable.settings_ton, getString(R.string.MyTON), null, c.balanceAvailable() && balance > 0 ? StarsIntroActivity.formatStarsAmount(c.getBalance(), 0.85f, ' ') : ""));
         }
 //        items.add(SettingCell.Factory.of(14, 0, "Wallet"));
-        if (!getMessagesController().premiumFeaturesBlocked()) {
+        if (!NekoConfig.removePremiumAnnoyance.Bool() && !getMessagesController().premiumFeaturesBlocked()) {
             items.add(SettingCell.Factory.of(15, 0xFFF45255, 0xFFDF3955, R.drawable.settings_business, getString(R.string.TelegramBusiness)));
         }
-        if (!getMessagesController().premiumPurchaseBlocked()) {
+        if (!NekoConfig.removePremiumAnnoyance.Bool() && !getMessagesController().premiumPurchaseBlocked()) {
             items.add(SettingCell.Factory.of(16, 0xFFF38B31, 0xFFE26314, R.drawable.settings_gift, getString(R.string.SendAGift)));
         }
+        items.add(SettingCell.Factory.of(MOMO_SETTINGS, 0xFFB659FF, 0xFF617CFF, R.drawable.notification, getString(NekoConfig.useOldName.Bool() ? R.string.NekoSettings : R.string.MomoSettings)));
         if (items.get(items.size() - 1).viewType != UniversalAdapter.VIEW_TYPE_SHADOW)
             items.add(UItem.asShadow(null));
 
@@ -821,6 +832,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 }
                 break;
             }
+            case MOMO_SETTINGS: {
+                presentFragment(new NekoSettingsActivity());
+                break;
+            }
         }
     }
 
@@ -868,7 +883,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     }
                     break;
             }
-            return formatString(R.string.TelegramVersion, String.format(Locale.US, "v%s (%d)\n%s", pInfo.versionName, code, abi));
+            return formatString(R.string.AppVersion, StrUtil.getAppName(), String.format(Locale.US, "v%s (%d)\n%s", pInfo.versionName, code, abi));
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -1055,6 +1070,13 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     public boolean onBackPressed(boolean invoked) {
         if (actionBar.isSearchFieldVisible()) {
             if (invoked) actionBar.closeSearchField();
+            return false;
+        } else if (searchItem.isSearchFieldVisible() || searchItem.isSearchFieldVisible2()) {
+            searchItem.toggleSearch(false);
+            actionBar.closeSearchField();
+            animatorSearchPageVisible.setValue(false, true);
+            // updateActionBarVisible();
+            listView.adapter.update(false);
             return false;
         }
         return super.onBackPressed(invoked);
@@ -1337,7 +1359,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 getString("DebugMenuClearMediaCache", R.string.DebugMenuClearMediaCache),
                 getString(R.string.DebugMenuCallSettings),
                 null,
-                BuildVars.DEBUG_PRIVATE_VERSION || ApplicationLoader.isStandaloneBuild() || ApplicationLoader.isBetaBuild() ? getString("DebugMenuCheckAppUpdate", R.string.DebugMenuCheckAppUpdate) : null,
+                BuildVars.DEBUG_PRIVATE_VERSION || ApplicationLoader.isStandaloneBuild() ? getString("DebugMenuCheckAppUpdate", R.string.DebugMenuCheckAppUpdate) : null,
                 getString("DebugMenuReadAllDialogs", R.string.DebugMenuReadAllDialogs),
                 BuildVars.DEBUG_PRIVATE_VERSION ? SharedConfig.disableVoiceAudioEffects ? "Enable voip audio effects" : "Disable voip audio effects" : null,
                 BuildVars.DEBUG_PRIVATE_VERSION ? "Clean app update" : null,

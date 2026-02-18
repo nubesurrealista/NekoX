@@ -3312,7 +3312,7 @@ public class StoriesController {
             this.albumId = albumId;
             this.destroyRunnable = () -> destroy.run(this);
 
-            /*if (BuildConfig.DEBUG_PRIVATE_VERSION && type != TYPE_ALBUMS && albumId > 0 || type == TYPE_ALBUMS && albumId <= 0) {
+            /*if (BuildVars.DEBUG_PRIVATE_VERSION && type != TYPE_ALBUMS && albumId > 0 || type == TYPE_ALBUMS && albumId <= 0) {
                 throw new IllegalArgumentException();
             }*/
 

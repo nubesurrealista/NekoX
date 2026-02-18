@@ -129,7 +129,6 @@ public class NekoConfig {
     public static ConfigItem useAdGuardDNS = addConfig(R.string.UseAdGuardDNS, "UseAdGuardDNS", configTypeBool, GENERAL, false);
     public static ConfigItem customDoH = addConfig(R.string.customDoH, "customDoH", configTypeString, GENERAL, "");
     public static ConfigItem hideProxyByDefault = addConfig(R.string.HideProxyByDefault, "HideProxyByDefault", configTypeBool, GENERAL, false);
-    public static ConfigItem useProxyItem = addConfig(R.string.UseProxyItem, "UseProxyItem", configTypeBool, GENERAL, true);
     public static ConfigItem disableAppBarShadow = addConfig(R.string.DisableAppBarShadow, "DisableAppBarShadow", configTypeBool, GENERAL, false);
     public static ConfigItem usePersianCalendar = addConfig(R.string.UsePersiancalendar, "UsePersiancalendar", configTypeBool, GENERAL, false);
     public static ConfigItem displayPersianCalendarByLatin = addConfig(R.string.DisplayPersianCalendarByLatin, "DisplayPersianCalendarByLatin", configTypeBool, GENERAL, false);
@@ -676,8 +675,6 @@ public class NekoConfig {
             customDoH.setConfigString(preferences.getString("customDoH", ""));
         if (preferences.contains("hide_proxy_by_default"))
             hideProxyByDefault.setConfigBool(preferences.getBoolean("hide_proxy_by_default", false));
-        if (preferences.contains("use_proxy_item"))
-            useProxyItem.setConfigBool(preferences.getBoolean("use_proxy_item", true));
 
         if (preferences.contains("disableAppBarShadow"))
             disableAppBarShadow.setConfigBool(preferences.getBoolean("disableAppBarShadow", false));

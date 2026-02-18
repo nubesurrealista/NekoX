@@ -1,6 +1,7 @@
 package org.telegram.ui.Components;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -24,7 +25,11 @@ public class ChatActivityEnterViewAnimatedIconView extends RLottieImageView {
             RLottieDrawable obj = super.get(key);
             if (obj == null) {
                 TransitState state = (TransitState) key;
-                int res = state.resource;
+                int res;
+                if (state == null) {
+                    res = R.drawable.ic_ab_other;
+                }
+                else res = state.resource;
                 return new RLottieDrawable(res, String.valueOf(res), AndroidUtilities.dp(sizeDp), AndroidUtilities.dp(sizeDp));
             }
             return obj;
@@ -96,6 +101,7 @@ public class ChatActivityEnterViewAnimatedIconView extends RLottieImageView {
                 return transitState;
             }
         }
+        Log.w("030-ic", String.format("returning null state for %s %d", from.name(), from.resource));
         return null;
     }
 
@@ -120,7 +126,8 @@ public class ChatActivityEnterViewAnimatedIconView extends RLottieImageView {
         GIF_TO_SMILE(State.GIF, State.SMILE, R.raw.gif_to_smile),
         SMILE_TO_GIF(State.SMILE, State.GIF, R.raw.smile_to_gif),
         SMILE_TO_STICKER(State.SMILE, State.STICKER, R.raw.smile_to_sticker),
-        STICKER_TO_SMILE(State.STICKER, State.SMILE, R.raw.sticker_to_smile);
+        STICKER_TO_SMILE(State.STICKER, State.SMILE, R.raw.sticker_to_smile),
+        MENU(State.MENU, State.MENU, R.raw.tab_settings);
         final State firstState, secondState;
         final int resource;
 

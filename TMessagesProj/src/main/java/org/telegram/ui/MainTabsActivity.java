@@ -214,6 +214,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
 
         Bulletin.addDelegate(this, delegate);
         Bulletin.addDelegate(contentView, delegate);
+        tabs[INDEX_PROFILE].updateUserAvatar(currentAccount);
     }
 
     @Override
@@ -306,6 +307,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
 
         //AndroidUtilities.cancelRunOnUIThread(justForTestR);
         //AndroidUtilities.runOnUIThread(justForTestR, 2000);
+        AndroidUtilities.runOnUIThread(() -> tabs[INDEX_PROFILE].updateUserAvatar(currentAccount), 100);
 
         checkUnreadCount(false);
         return contentView;
@@ -374,7 +376,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
                 final int account = acc;
                 final View btn = accountView(acc, currentAccount == acc);
                 btn.setOnClickListener(v -> {
-                    if (currentAccount == account) return;
+                    // if (currentAccount == account) return;
                     o.dismiss();
                     if (LaunchActivity.instance != null) {
                         LaunchActivity.instance.switchToAccount(account, true);
@@ -656,11 +658,6 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.notificationsCountUpdated || id == NotificationCenter.updateInterfaces) {
             checkUnreadCount(fragmentView != null && fragmentView.isAttachedToWindow());
-        } else if (id == NotificationCenter.appUpdateLoading) {
-            if (updateLayout != null) {
-                updateLayout.updateFileProgress(null);
-                updateLayout.updateAppUpdateViews(currentAccount, true);
-            }
         } else if (id == NotificationCenter.fileLoaded) {
             String path = (String) args[0];
             if (SharedConfig.isAppUpdateAvailable()) {
@@ -727,7 +724,6 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.callTabsVisibleToggled);
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.mainUserInfoChanged);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.appUpdateAvailable);
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.appUpdateLoading);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.needSetDayNightTheme);
 
         return super.onFragmentCreate();
@@ -743,7 +739,6 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.callTabsVisibleToggled);
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.mainUserInfoChanged);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.appUpdateAvailable);
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.appUpdateLoading);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.needSetDayNightTheme);
 
         super.onFragmentDestroy();

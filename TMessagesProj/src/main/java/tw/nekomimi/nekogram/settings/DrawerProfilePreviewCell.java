@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.Cells.DrawerProfileCell;
 
+// TODO: remove or update to drop usage of DrawerProfileCell
 public class DrawerProfilePreviewCell extends DrawerProfileCell {
     public DrawerProfilePreviewCell(Context context) {
         super(context, null);

@@ -47,6 +47,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BotWebViewVibrationEffect;
 import org.telegram.messenger.BuildConfig;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.ImageReceiver;
@@ -212,7 +213,7 @@ public class DialogStoriesCell extends FrameLayout implements NotificationCenter
         recyclerListView.setClipChildren(false);
         miniItemsClickArea.setDelegate(this::onMiniListClicked);
         miniItemsClickArea.setLongPress(() -> {
-            if (!BuildConfig.DEBUG_PRIVATE_VERSION) {
+            if (!BuildVars.DEBUG_PRIVATE_VERSION) {
                 return;
             }
 
@@ -325,10 +326,10 @@ public class DialogStoriesCell extends FrameLayout implements NotificationCenter
         addView(titleView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         telegramLogoView = new ImageView(context);
-        telegramLogoView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        telegramLogoView.setImageResource(R.drawable.telegram_logo_2);
-        telegramLogoView.setColorFilter(getTextLogoColor(), PorterDuff.Mode.MULTIPLY);
-        addView(telegramLogoView, LayoutHelper.createFrame(90, 22));
+//        telegramLogoView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+//        telegramLogoView.setImageResource(R.drawable.telegram_logo_2);
+//        telegramLogoView.setColorFilter(getTextLogoColor(), PorterDuff.Mode.MULTIPLY);
+//        addView(telegramLogoView, LayoutHelper.createFrame(90, 22));
 
         statusDrawable = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(null, dp(26));
         statusDrawable.center = true;
@@ -919,10 +920,10 @@ public class DialogStoriesCell extends FrameLayout implements NotificationCenter
             titleView.setTranslationX(lastViewRight);
             titleView.getDrawable().setRightPadding(lastViewRight - dp(12) + actionBar.menu.getVisibleItemsMeasuredWidthWithAlpha() * progress);
 
-            telegramLogoView.setTranslationX(titleView.getTranslationX() + dp(1));
-            telegramLogoView.setTranslationY(bottomY + dp(14 + FAKE_TOP_PADDING + 4.333f) + translationOffset /*titleView.getTranslationY() + dpf2(37.33f)*/);
+//            telegramLogoView.setTranslationX(titleView.getTranslationX() + dp(1));
+//            telegramLogoView.setTranslationY(bottomY + dp(14 + FAKE_TOP_PADDING + 4.333f) + translationOffset /*titleView.getTranslationY() + dpf2(37.33f)*/);
 
-            emojiStatusView.setTranslationX(titleView.getTranslationX() - dpf2(3.33f) + telegramLogoView.getMeasuredWidth());
+            emojiStatusView.setTranslationX(titleView.getTranslationX() - dpf2(3.33f) /*+ telegramLogoView.getMeasuredWidth()*/);
             emojiStatusView.setTranslationY(bottomY + dp(14 - 11 + FAKE_TOP_PADDING + 4.333f) + translationOffset);
 
             subtitleOverlayContainer.setTranslationX(titleView.getTranslationX());
@@ -1112,7 +1113,7 @@ public class DialogStoriesCell extends FrameLayout implements NotificationCenter
         if (subtitleOverlayContainer != null) {
             subtitleOverlayContainer.updateColors();
         }
-        telegramLogoView.setColorFilter(getTextLogoColor(), PorterDuff.Mode.MULTIPLY);
+        // telegramLogoView.setColorFilter(getTextLogoColor(), PorterDuff.Mode.MULTIPLY);
         AndroidUtilities.forEachViews(recyclerListView, view -> {
             StoryCell cell = (StoryCell) view;
             cell.invalidate();
@@ -2169,8 +2170,9 @@ public class DialogStoriesCell extends FrameLayout implements NotificationCenter
             titleView.setVisibility(titleAlpha > 0 ? VISIBLE : GONE);
         }
         if (telegramLogoView != null) {
-            telegramLogoView.setAlpha(logoAlpha);
-            telegramLogoView.setVisibility(logoAlpha > 0 ? VISIBLE : GONE);
+//            telegramLogoView.setAlpha(logoAlpha);
+//            telegramLogoView.setVisibility(logoAlpha > 0 ? VISIBLE : GONE);
+            telegramLogoView.setVisibility(GONE);
         }
         if (emojiStatusView != null) {
             emojiStatusView.setAlpha(logoAlpha);

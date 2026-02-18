@@ -126,8 +126,8 @@ public class ProfileActionsView extends View {
         paint.setAlpha(40);
 
         xpadding = dpf2(14);
-        ypadding = dpf2(12);
-        top = dpf2(8);
+        ypadding = dpf2(NekoConfig.profileActionCircleBtn.Bool() ? 6 : 12);
+        top = dpf2(NekoConfig.profileActionCircleBtn.Bool() ? 4 : 8);
         textPadding = dpf2(4);
 
         this.targetHeight = (int) (targetHeight - ypadding - top);
@@ -655,7 +655,7 @@ public class ProfileActionsView extends View {
         Action action = new Action(ActionButton.SET_PHOTO);
         action.key = KEY_SET_PHOTO;
         action.setText(getString(R.string.ProfileActionsEditPhoto));
-        action.iconScale = NekoConfig.profileActionCircleBtn.Bool() ? (1.3f * 1.5f) : 1.5f;
+        action.iconScale = NekoConfig.profileActionCircleBtn.Bool() ? (1.3f) : 1f;
         actions.add(action);
         activeCount = actions.size();
     }

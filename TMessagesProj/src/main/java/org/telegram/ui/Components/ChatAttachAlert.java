@@ -2889,8 +2889,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         currentLimit = MessagesController.getInstance(UserConfig.selectedAccount).getCaptionMaxLengthLimit();
 
         commentTextView = createCommentTextView(context); // style and init stuff all moved inside the method
-        captionContainer.addView(commentTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 0, 0, 84, 0));
-        captionContainer.setClipChildren(false);
         frameLayout2.setClipChildren(false);
         commentTextView.setClipChildren(false);
 
@@ -5860,7 +5858,13 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     }
 
     public EditTextEmoji getCommentView() {
-        return captionAbove && (currentAttachLayout == photoLayout || currentAttachLayout == photoPreviewLayout) ? topCommentTextView : commentTextView;
+        if (captionAbove && (currentAttachLayout == photoLayout || currentAttachLayout == photoPreviewLayout)) {
+            createTopCommentTextView(baseFragment.getContext());
+            return topCommentTextView;
+        } else {
+            createTopCommentTextView(baseFragment.getContext());
+            return commentTextView;
+        }
     }
 
     @Override
