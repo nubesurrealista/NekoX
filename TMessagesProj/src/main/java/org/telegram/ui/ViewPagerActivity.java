@@ -143,6 +143,10 @@ public abstract class ViewPagerActivity extends BaseFragment {
                     container.addView(fragment.getActionBar());
                 }
 
+                if (fragment instanceof DialogsActivity && fragment.getActionBar() != null) {
+                    fragment.getActionBar().checkBackButtonVisibility();
+                }
+
                 ViewCompat.requestApplyInsets(container);
                 checkSystemBarColors();
                 checkFragmentsVisibility();

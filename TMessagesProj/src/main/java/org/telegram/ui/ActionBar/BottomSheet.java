@@ -176,8 +176,8 @@ public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
     protected int backgroundPaddingTop;
     protected int backgroundPaddingLeft;
 
-    private boolean applyTopPadding = false;
-    private boolean applyBottomPadding = false;
+    private boolean applyTopPadding = true;
+    private boolean applyBottomPadding = true;
 
     private ArrayList<BottomSheetCell> itemViews = new ArrayList<>();
 

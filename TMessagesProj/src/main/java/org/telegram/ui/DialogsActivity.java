@@ -674,7 +674,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     public static SparseArray<Boolean> dialogsLoaded = new SparseArray<>();
     private boolean searching;
     private boolean searchWas;
-    private boolean onlySelect;
+    public boolean onlySelect;
     private boolean canSelectTopics;
     private String searchString;
     private String initialSearchString;
@@ -3576,6 +3576,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         } else {
             if (searchString != null || folderId != 0) {
                 actionBar.setBackButtonDrawable(backDrawable = new BackDrawable(false));
+            } else {
+                actionBar.setBackButtonDrawable(backDrawable = null);
             }
             if (folderId != 0) {
                 actionBar.setTitle(LocaleController.getString(R.string.ArchivedChats));

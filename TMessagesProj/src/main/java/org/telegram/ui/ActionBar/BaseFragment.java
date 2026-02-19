@@ -61,6 +61,7 @@ import org.telegram.ui.ArticleViewer;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Premium.PremiumPreviewBottomSheet;
+import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.Stories.StoryViewer;
 import org.telegram.ui.bots.BotWebViewAttachedSheet;
@@ -388,7 +389,7 @@ public abstract class BaseFragment {
             if (parentLayout != null && actionBar == null) {
                 actionBar = createActionBar(parentLayout.getView().getContext());
                 if (actionBar != null) {
-                    actionBar.parentFragment = this;
+                    actionBar.setParentFragment(this);
                 }
             }
         }

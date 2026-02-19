@@ -176,7 +176,7 @@ public class BotKeyboardView extends LinearLayout implements InAppKeyboardInsetV
         }
     }
 
-    private class Button extends EmojiTextView {
+    private class Button extends FrameLayout {
         private final SpoilersTextView textView;
         private final ImageView icon;
         private final TLRPC.KeyboardButton button;

@@ -215,22 +215,28 @@ public class ActionBar extends FrameLayout implements Theme.Colorable {
                 closeSearchField();
                 return;
             }
-
-            if (AndroidUtilities.isTablet()) {
-                DialogsActivity dialogsActivity = null;
-                for (BaseFragment fragment : LaunchActivity.instance.getActionBarLayout().getFragmentStack()) {
-                    if (fragment instanceof DialogsActivity) {
-                        dialogsActivity = (DialogsActivity) fragment;
-                        break;
-                    }
-                }
-            }
-
             if (actionBarMenuOnItemClick != null) {
                 actionBarMenuOnItemClick.onItemClick(-1);
             }
         });
         backButtonImageView.setContentDescription(LocaleController.getString(R.string.AccDescrGoBack));
+        if (hideBackButton) backButtonImageView.setVisibility(GONE);
+    }
+
+    private boolean hideBackButton = false;
+    public void setParentFragment(BaseFragment fragment) {
+        parentFragment = fragment;
+        checkBackButtonVisibility();
+    }
+    public void checkBackButtonVisibility() {
+        if ((parentFragment instanceof DialogsActivity dialogsActivity) && !dialogsActivity.onlySelect) {
+            if (backButtonImageView == null) {
+                hideBackButton = true;
+            }
+        } else {
+            hideBackButton = false;
+        }
+        if (hideBackButton && backButtonImageView != null) backButtonImageView.setVisibility(GONE);
     }
 
     public Drawable getBackButtonDrawable() {
@@ -241,7 +247,8 @@ public class ActionBar extends FrameLayout implements Theme.Colorable {
         if (backButtonImageView == null) {
             createBackButtonImage();
         }
-        backButtonImageView.setVisibility(drawable == null ? GONE : VISIBLE);
+        backButtonImageView.setVisibility((drawable == null || hideBackButton) ? GONE : VISIBLE);
+        if ((parentFragment instanceof DialogsActivity dialogsActivity) && !dialogsActivity.onlySelect) backButtonImageView.setVisibility(GONE);
         backButtonImageView.setImageDrawable(backButtonDrawable = drawable);
         if (drawable instanceof BackDrawable) {
             BackDrawable backDrawable = (BackDrawable) drawable;

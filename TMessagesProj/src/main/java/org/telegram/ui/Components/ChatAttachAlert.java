@@ -5862,7 +5862,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             createTopCommentTextView(baseFragment.getContext());
             return topCommentTextView;
         } else {
-            createTopCommentTextView(baseFragment.getContext());
+            createCommentTextView(baseFragment.getContext());
             return commentTextView;
         }
     }

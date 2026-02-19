@@ -1438,7 +1438,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                 if (tooltipLayout != null) {
                     canvas.save();
                     rectF.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
-                    canvas.translate(getMeasuredWidth() - tooltipWidth - dp(44), multilinTooltipOffset + dpf2(16));
+                    canvas.translate(getMeasuredWidth() - tooltipWidth - dp(DEFAULT_HEIGHT), multilinTooltipOffset + dpf2(16));
                     tooltipBackground.setBounds(
                             -dp(8), -dp(2),
                             (int) (tooltipWidth + dp(36)), (int) (tooltipLayout.getHeight() + dpf2(4))

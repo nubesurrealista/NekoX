@@ -533,12 +533,14 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         avatarView.setForUserOrChat(user, avatarDrawable);
         titleView.setText(UserObject.getUserName(user));
         final StringBuilder sb = new StringBuilder();
-        if (user != null) {
+        boolean showPhoneNum = !NekoConfig.hidePhone.Bool();
+        if (showPhoneNum && user != null) {
             sb.append(PhoneFormat.getInstance().format("+" + user.phone));
         }
         final String username = UserObject.getPublicUsername(user);
         if (username != null) {
-            sb.append(" • @").append(username);
+            if (showPhoneNum) sb.append(" • ");
+            sb.append("@").append(username);
         }
         subtitleView.setText(sb);
 
