@@ -1041,7 +1041,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             int top = (int) holder.itemView.getY() - nonClipSize;
             newOffset = Math.max(top, 0);
         }
-        return newOffset + AndroidUtilities.dp(56);
+        return newOffset + AndroidUtilities.dp(13);
     }
 
     @Override

@@ -3719,8 +3719,8 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         View child = gridView.getChildAt(0);
         RecyclerListView.Holder holder = (RecyclerListView.Holder) gridView.findContainingViewHolder(child);
         int top = child.getTop() - listAdditionalH;
-        int newOffset = dp(7);
-        if (top >= dp(7) && holder != null && holder.getAdapterPosition() == 0) {
+        int newOffset = dp(15);
+        if (top >= dp(15) && holder != null && holder.getAdapterPosition() == 0) {
             newOffset = top;
         }
         progressView.setTranslationY(newOffset + (getMeasuredHeight() - newOffset - dp(50) - progressView.getMeasuredHeight()) / 2f);

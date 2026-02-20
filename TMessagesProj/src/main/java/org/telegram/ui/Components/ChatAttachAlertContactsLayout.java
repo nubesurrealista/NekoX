@@ -738,7 +738,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             runShadowAnimation(true);
         }
         frameLayout.setTranslationY(newOffset);
-        return newOffset + AndroidUtilities.dp(12);
+        return newOffset + AndroidUtilities.dp(13);
     }
 
     @Override
