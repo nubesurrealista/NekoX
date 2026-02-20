@@ -137,12 +137,18 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Set;
 
+import kotlin.Unit;
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
+import tw.nekomimi.nekogram.MomoUpdater;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
+import tw.nekomimi.nekogram.settings.NekoXSettingActivity;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
+import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.StrUtil;
+import tw.nekomimi.nekogram.utils.TelegramUtil;
 
 public class SettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ImageUpdater.ImageUpdaterDelegate, MainTabsActivity.TabFragmentDelegate, FactorAnimator.Target {
 
@@ -471,6 +477,80 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         versionView.setGravity(Gravity.CENTER);
         versionView.setBackground(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector), Theme.RIPPLE_MASK_ALL));
         versionView.setOnClickListener(v -> {
+            BottomBuilder builder = new BottomBuilder(getParentActivity());
+            String message = versionView.getText().toString();
+            builder.addTitle(message);
+            String finalMessage = message;
+            builder.addItem(LocaleController.getString(R.string.Copy), R.drawable.baseline_content_copy_24, (it) -> {
+                AndroidUtilities.addToClipboard(finalMessage);
+                AlertUtil.showToast(LocaleController.getString(R.string.TextCopied));
+                return Unit.INSTANCE;
+            });
+            builder.addItem(BuildVars.LOGS_ENABLED ? LocaleController.getString(R.string.DebugMenuDisableLogs) : LocaleController.getString(R.string.DebugMenuEnableLogs), R.drawable.baseline_bug_report_24, (it) -> {
+                BuildVars.LOGS_ENABLED = BuildVars.DEBUG_VERSION = !BuildVars.LOGS_ENABLED;
+                SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
+                sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.LOGS_ENABLED).apply();
+
+                listView.adapter.update(false);
+                return Unit.INSTANCE;
+            });
+
+            if (!BuildVars.isFdroid && !BuildVars.isPlay) {
+                builder.addItem(LocaleController.getString(R.string.CheckUpdate), R.drawable.baseline_search_24, (it) -> {
+                    // Browser.openUrl(context, "tg://update");
+                    MomoUpdater.checkUpdate((resp, error) -> {
+                        AndroidUtilities.runOnUIThread(() -> {
+                            if (error) {
+                                new AlertDialog.Builder(getParentActivity())
+                                        .setTitle(LocaleController.getString(R.string.ErrorOccurred))
+                                        .setMessage(LocaleController.getString(R.string.NoUpdate))
+                                        .setPositiveButton(LocaleController.getString(R.string.OK), null)
+                                        .show();
+                            } else if (resp == null) {
+                                new AlertDialog.Builder(getParentActivity())
+                                        .setTitle(LocaleController.getString(R.string.CheckUpdate))
+                                        .setMessage(LocaleController.getString(R.string.NoUpdate))
+                                        .setPositiveButton(LocaleController.getString(R.string.OK), null)
+                                        .show();
+                            } else {
+                                LaunchActivity.instance.showUpdateActivity(currentAccount, resp, false);
+                            }
+                        });
+                    });
+                    return Unit.INSTANCE;
+                });
+            }
+
+            if (NekoXConfig.isDeveloper()) {
+                builder.addItem(LocaleController.getString(R.string.DeveloperSettings), R.drawable.baseline_developer_mode_24, (it) -> {
+                    BottomBuilder devBuilder = new BottomBuilder(SettingsActivity.this.getParentActivity());
+                    devBuilder.addTitle(LocaleController.getString(R.string.DevModeTitle), LocaleController.getString(R.string.DevModeNotice));
+                    devBuilder.addItem(LocaleController.getString(R.string.Continue), R.drawable.baseline_warning_24, true, (__) -> {
+                        SettingsActivity.this.presentFragment(new NekoXSettingActivity());
+                        return Unit.INSTANCE;
+                    });
+                    devBuilder.addCancelItem();
+                    devBuilder.show();
+                    return Unit.INSTANCE;
+                });
+                builder.addItem(String.format("Set DEBUG_PRIVATE to %s", !BuildVars.DEBUG_PRIVATE_VERSION),
+                        R.drawable.baseline_bug_report_24, (__) -> {
+                            BuildVars.DEBUG_PRIVATE_VERSION = !BuildVars.DEBUG_PRIVATE_VERSION;
+                            Toast.makeText(context,
+                                    String.format("BuildVars.DEBUG_PRIVATE_VERSION is now %s", BuildVars.DEBUG_PRIVATE_VERSION),
+                                    Toast.LENGTH_SHORT).show();
+                            return Unit.INSTANCE;
+                        });
+            }
+
+            builder.addItem(LocaleController.getString(R.string.RestartApp), R.drawable.msg_retry,
+                    (__) -> {
+                        TelegramUtil.restartApp(false);
+                        return Unit.INSTANCE;
+                    });
+            builder.show();
+        });
+        versionView.setOnLongClickListener(v -> {
             versionViewPressCount++;
             if (versionViewPressCount < 2 && !BuildVars.DEBUG_PRIVATE_VERSION) {
                 try {
@@ -478,9 +558,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
-                return;
+                return true;
             }
             openDebugMenu();
+            return true;
         });
 
         navigationBar = new View(context);
