@@ -3334,9 +3334,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             updateProxyButton(false, false);
         }
 
-        scanItem = menu.addItem(nekox_scanqr, R.drawable.wallet_qr);
-        scanItem.setContentDescription(LocaleController.getString(R.string.ScanQRCode));
-        scanItem.setVisibility(View.GONE);
+        if (NekoConfig.scanQrCodeFromChatList.Bool()) {
+            scanItem = menu.addItem(nekox_scanqr, R.drawable.wallet_qr);
+            scanItem.setContentDescription(LocaleController.getString(R.string.ScanQRCode));
+            scanItem.setVisibility(View.VISIBLE);
+        }
 
         fragmentSearchField = new FragmentSearchField(context, resourceProvider) {
             @Override
@@ -3391,8 +3393,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (recentItem != null) {
                     recentItem.setVisibility(View.GONE);
                 }
-                if (scanItem != null && !slidingTopicListOpened()) {
-                    scanItem.setVisibility(View.VISIBLE);
+                if (scanItem != null) {
+                    scanItem.setVisibility(View.GONE);
                 }
                 if (viewPages[0] != null) {
                     if (searchString != null) {
@@ -3448,8 +3450,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (recentItem != null) {
                     recentItem.setVisibility(!getMessagesController().recentChats.isEmpty());
                 }
-                if (scanItem != null) {
-                    scanItem.setVisibility(View.GONE);
+                if (scanItem != null && NekoConfig.scanQrCodeFromChatList.Bool()) {
+                    scanItem.setVisibility(View.VISIBLE);
                 }
                 if (searchString != null) {
                     finishFragment();
@@ -3462,6 +3464,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             public void onSearchCollapse() {
                 if (fragmentSearchField != null) {
                     fragmentSearchField.clearSearchFiltersWithCallback();
+                }
+                if (scanItem != null && NekoConfig.scanQrCodeFromChatList.Bool()) {
+                    scanItem.setVisibility(View.VISIBLE);
                 }
 
                 searching = false;
