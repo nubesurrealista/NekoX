@@ -8206,7 +8206,19 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     actionBarLayout.onBackPressed();
                 }
             }
+            super.onBackPressed();
+            return;
         } else {
+            BaseFragment fragment = LaunchActivity.getSafeLastFragment();
+            if (fragment != null && fragment.onBackPressed(true)) {
+                fragment.finishFragment();
+                return;
+            }
+            fragment = LaunchActivity.getLastFragment();
+            if (fragment != null && fragment.onBackPressed(true)) {
+                fragment.finishFragment();
+                return;
+            }
             actionBarLayout.onBackPressed();
         }
         super.onBackPressed();
