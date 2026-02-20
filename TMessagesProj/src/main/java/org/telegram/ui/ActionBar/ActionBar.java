@@ -231,7 +231,7 @@ public class ActionBar extends FrameLayout implements Theme.Colorable {
         if (hideBackButton) backButtonImageView.setVisibility(GONE);
     }
 
-    private boolean hideBackButton = false;
+    protected boolean hideBackButton = false;
     public void setParentFragment(BaseFragment fragment) {
         if (fragment != null) Log.d("030-act", String.format("ActionBar(%d).setParentFragment(%s - %d)",
                 hashCode(), fragment.getClass().getName(), fragment.hashCode()));
@@ -241,14 +241,14 @@ public class ActionBar extends FrameLayout implements Theme.Colorable {
     }
     public void checkBackButtonVisibility() {
         if ((parentFragment instanceof DialogsActivity dialogsActivity) && !dialogsActivity.onlySelect) {
-            if (backButtonImageView == null) {
-                hideBackButton = true;
-            }
+            hideBackButton = true;
         } else {
             hideBackButton = false;
         }
         if (hideBackButton && backButtonImageView != null) backButtonImageView.setVisibility(GONE);
     }
+
+    public boolean isBackButtonHidden() { return hideBackButton; }
 
     public Drawable getBackButtonDrawable() {
         return backButtonDrawable;

@@ -13923,7 +13923,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         final float factor1 = 1f - animatorSearchVisible.getFloatValue();
         final float factor2 = 1f - getRightSlidingProgress();
         final float factor3 = 1f - animatorDoneButtonVisible.getFloatValue();
-        final float factor = Math.max(progressToActionMode, factor1 * factor2 * factor3);
+        float factor = Math.max(progressToActionMode, factor1 * factor2 * factor3);
+        if (!onlySelect && folderId == 0 && searchString == null) {
+            factor = progressToActionMode;
+        }
         FragmentFloatingButton.setAnimatedVisibility(actionBar.getBackButton(), factor);
     }
 
