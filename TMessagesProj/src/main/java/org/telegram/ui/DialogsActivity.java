@@ -3349,7 +3349,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         };
         fragmentSearchField.setPivotX(0);
         fragmentSearchField.setPivotY(0);
-        if (initialDialogsType == DIALOGS_TYPE_DEFAULT) {
+        if (initialDialogsType == DIALOGS_TYPE_DEFAULT && !NekoConfig.removePremiumAnnoyance.Bool()) {
             speedItem = menu.addItem(-47, R.drawable.avd_speed);
             AndroidUtilities.removeFromParent(speedItem);
             speedItem.setOnClickListener(v -> showDialog(new PremiumFeatureBottomSheet(DialogsActivity.this, PremiumPreviewFragment.PREMIUM_FEATURE_DOWNLOAD_SPEED, true)));
