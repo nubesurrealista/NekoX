@@ -3587,8 +3587,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         } else if (currentAttachLayout == todoLayout && todoLayout.emojiView != null) {
             return todoLayout.getEmojiPadding();
         } else if (captionAbove) {
+            createTopCommentTextView(currentAttachLayout.getContext());
             return topCommentTextView.getEmojiPadding();
         } else {
+            createCommentTextView(currentAttachLayout.getContext());
             return commentTextView.getEmojiPadding();
         }
     }
