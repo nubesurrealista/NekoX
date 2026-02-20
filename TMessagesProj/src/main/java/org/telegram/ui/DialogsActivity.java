@@ -7519,6 +7519,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         super.onBecomeFullyHidden();
         checkUi_mainTabsVisible();
         canShowStoryHint = true;
+        if (onlySelect) {
+            onlySelect = false;
+            actionBar.checkBackButtonVisibility();
+        }
     }
 
     @Override
