@@ -74,6 +74,7 @@ import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.SnowflakesEffect;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.LaunchActivity;
+import org.telegram.ui.MainTabsActivity;
 import org.telegram.ui.TopicsFragment;
 
 import java.util.ArrayList;
@@ -188,6 +189,13 @@ public class ActionBar extends FrameLayout implements Theme.Colorable {
             if (titleActionRunnable != null) {
                 titleActionRunnable.run();
             }
+        });
+        setOnLongClickListener(v -> {
+            if (UserConfig.getActivatedAccountsCount() > 1) {
+                MainTabsActivity fragment = LaunchActivity.findFragment(MainTabsActivity.class);
+                if (fragment != null) fragment.openAccountSelector(v);
+            }
+            return true;
         });
     }
 
