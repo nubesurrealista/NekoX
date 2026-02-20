@@ -2926,11 +2926,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     boolean lastIsDarkTheme;
 
     public void checkCurrentDayNight() {
-        if (currentType != THEME_TYPE_THEMES_BROWSER) {
-            return;
-        }
         boolean toDark = !Theme.isCurrentThemeDay();
-        if (lastIsDarkTheme != toDark) {
+        if (currentType == THEME_TYPE_THEMES_BROWSER && lastIsDarkTheme != toDark) {
             lastIsDarkTheme = toDark;
             sunDrawable.setCustomEndFrame(toDark ? sunDrawable.getFramesCount() - 1 : 0);
             menuItem.getIconView().playAnimation();
@@ -2940,6 +2937,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 if (listView.getChildAt(i) instanceof DefaultThemesPreviewCell) {
                     DefaultThemesPreviewCell cell = (DefaultThemesPreviewCell) listView.getChildAt(i);
                     cell.updateDayNightMode();
+                    cell.updateColors();
                 }
             }
         }

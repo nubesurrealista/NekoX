@@ -136,6 +136,7 @@ public class DefaultThemesPreviewCell extends LinearLayout {
                 editor.commit();
             }
 
+            updateColors();
             Theme.turnOffAutoNight(parentFragment);
         });
 
@@ -378,6 +379,7 @@ public class DefaultThemesPreviewCell extends LinearLayout {
             adapter.notifyItemRangeChanged(0, adapter.items.size());
         }
         updateSelectedPosition();
+        updateColors();
     }
 
     private void updateSelectedPosition() {
@@ -449,12 +451,14 @@ public class DefaultThemesPreviewCell extends LinearLayout {
 
     public void updateColors() {
         if (currentType == ThemeActivity.THEME_TYPE_BASIC || currentType == TYPE_CUSTOM_LIST) {
+            int color = Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4);
             if (darkThemeDrawable != null) {
-                darkThemeDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4), PorterDuff.Mode.SRC_IN));
+                darkThemeDrawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
             }
             if (dayNightCell != null) {
                 Theme.setSelectorDrawableColor(dayNightCell.getBackground(), Theme.getColor(Theme.key_listSelector), true);
                 dayNightCell.setColors(-1, Theme.key_windowBackgroundWhiteBlueText4);
+                dayNightCell.getImageView().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
             }
             if (browseThemesCell != null) {
                 browseThemesCell.setBackground(Theme.createSelectorWithBackgroundDrawable(Theme.getColor(Theme.key_windowBackgroundWhite), Theme.getColor(Theme.key_listSelector)));
