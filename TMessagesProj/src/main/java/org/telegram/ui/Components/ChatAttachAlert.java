@@ -1683,7 +1683,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     if (currentSheetAnimationType == 1 || viewChangeAnimator != null) {
                         top += child.getTranslationY();
                     }
-                    int y = top + backgroundPaddingTop + dp(7);
+                    int y = top + backgroundPaddingTop + dp(13);
                     int h = (actionBarType != 0 ? ActionBar.getCurrentActionBarHeight() : backgroundPaddingTop);
                     if (actionBarType != 2 && top + backgroundPaddingTop < h) {
                         float toMove = offset;
@@ -1720,7 +1720,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     if (currentSheetAnimationType == 1 || viewChangeAnimator != null) {
                         top += child.getTranslationY();
                     }
-                    int y = top + backgroundPaddingTop + dp(7);
+                    int y = top + backgroundPaddingTop + dp(13);
 
                     int height = getMeasuredHeight() + dp(45) + backgroundPaddingTop;
                     float rad = 1.0f;
@@ -1834,7 +1834,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     if (currentSheetAnimationType == 1 || viewChangeAnimator != null) {
                         top += child.getTranslationY();
                     }
-                    int y = top + backgroundPaddingTop + dp(7);
+                    int y = top + backgroundPaddingTop + dp(13);
 
                     int height = getMeasuredHeight() + dp(45) + backgroundPaddingTop;
                     float rad = 1.0f;
@@ -1856,7 +1856,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                             toMove += backgroundPaddingTop - dp(9);
                         }
                         float moveProgress = Math.min(1.0f, (h - top - backgroundPaddingTop) / toMove);
-                        float availableToMove = h - toMove;
+                        float availableToMove = h - toMove + AndroidUtilities.statusBarHeight;
 
                         int diff = (int) (availableToMove * moveProgress);
                         top -= diff;
@@ -1965,7 +1965,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             }
 
             private int getCurrentTop() {
-                int y = scrollOffsetY[0] - backgroundPaddingTop * 2 - (dp(13) + (headerView != null ? dp(headerView.getAlpha() * 26) : 0)) - (int) (topCommentContainer != null ? topCommentContainer.getAlpha() * topCommentContainer.getMeasuredHeight() : 0) + backgroundPaddingTop + dp(7);
+                int y = scrollOffsetY[0] - backgroundPaddingTop * 2 - (dp(13) + (headerView != null ? dp(headerView.getAlpha() * 26) : 0)) - (int) (topCommentContainer != null ? topCommentContainer.getAlpha() * topCommentContainer.getMeasuredHeight() : 0) + backgroundPaddingTop + dp(13);
                 if (!inBubbleMode) {
                     y += AndroidUtilities.statusBarHeight;
                 }
@@ -4016,7 +4016,15 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         nextAttachLayout.setVisibility(View.VISIBLE);
         updateLayout(nextAttachLayout, false, 0);
         if (scrollOffsetY[1] == Integer.MAX_VALUE) {
-            scrollOffsetY[1] = dp(nextAttachLayout == photoLayout ? 15 : 13);
+            if (nextAttachLayout == pollLayout || nextAttachLayout == todoLayout) {
+                scrollOffsetY[1] = dp(25);
+            } else if (nextAttachLayout == locationLayout) {
+                scrollOffsetY[1] = dp(56);
+            } else if (nextAttachLayout == photoLayout) {
+                scrollOffsetY[1] = dp(7);
+            } else {
+                scrollOffsetY[1] = dp(13);
+            }
         }
 
         if (layout.getParent() != null) {

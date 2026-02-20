@@ -670,12 +670,12 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
             return Integer.MAX_VALUE;
         }
         RecyclerListView.Holder holder = (RecyclerListView.Holder) listView.findContainingViewHolder(child);
-        int top = (int) child.getY() - AndroidUtilities.dp(8);
+        int top = (int) child.getY() - AndroidUtilities.dp(8 + 12);
         int newOffset = top > 0 && holder != null && holder.getAdapterPosition() == 1 ? top : 0;
         if (top >= 0 && holder != null && holder.getAdapterPosition() == 1) {
             newOffset = top;
         }
-        return newOffset + AndroidUtilities.dp(13);
+        return newOffset + AndroidUtilities.dp(25);
     }
 
     @Override
