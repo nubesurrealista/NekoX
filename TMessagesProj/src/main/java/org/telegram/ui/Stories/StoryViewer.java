@@ -1792,9 +1792,10 @@ public class StoryViewer implements NotificationCenter.NotificationCenterDelegat
                     dispatcher.registerOnBackInvokedCallback(
                         OnBackInvokedDispatcher.PRIORITY_DEFAULT,
                         () -> {
-                            if (LaunchActivity.instance != null) {
-                                LaunchActivity.instance.onBackPressed();
-                            } else {
+//                            if (LaunchActivity.instance != null) {
+//                                LaunchActivity.instance.onBackPressed();
+//                            } else
+                            {
                                 onAttachedBackPressed();
                             }
                         }
