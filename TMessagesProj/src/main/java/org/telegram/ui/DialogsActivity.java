@@ -4903,10 +4903,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         });
         searchTabsAndFiltersLayout.addView(filtersView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP));
 
-        floatingButtonStories = new FragmentFloatingButton(context, resourceProvider, true);
-        floatingButtonStories.setImageResource(R.drawable.outline_fab_story_24);
-        floatingButtonStories.setOnClickListener(v -> openStoriesRecorder());
-        contentView.addView(floatingButtonStories, FragmentFloatingButton.createSubButtonLayoutParams());
+        if (!NekoConfig.disableStories.Bool()) {
+            floatingButtonStories = new FragmentFloatingButton(context, resourceProvider, true);
+            floatingButtonStories.setImageResource(R.drawable.outline_fab_story_24);
+            floatingButtonStories.setOnClickListener(v -> openStoriesRecorder());
+            contentView.addView(floatingButtonStories, FragmentFloatingButton.createSubButtonLayoutParams());
+        }
 
         floatingButton3 = new FragmentFloatingButton(context, resourceProvider);
         contentView.addView(floatingButton3, FragmentFloatingButton.createDefaultLayoutParams());
