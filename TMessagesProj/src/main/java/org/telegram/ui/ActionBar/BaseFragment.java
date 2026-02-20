@@ -22,6 +22,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -69,6 +70,7 @@ import org.telegram.ui.bots.BotWebViewAttachedSheet;
 import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.TelegramUtil;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 import tw.nekomimi.nekogram.ui.MessageHelper;
 
@@ -565,6 +567,8 @@ public abstract class BaseFragment {
     }
 
     public boolean onBackPressed(boolean invoked) {
+        Log.d("030-back", String.format("%s.onBackPressed(%s)\n%s", this.getClass().getName(),
+                invoked, TelegramUtil.getStackTraceAsString(null)));
         if (hasShownSheet()) {
             if (invoked) closeSheet();
             return false;

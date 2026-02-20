@@ -233,6 +233,9 @@ public class ActionBar extends FrameLayout implements Theme.Colorable {
 
     private boolean hideBackButton = false;
     public void setParentFragment(BaseFragment fragment) {
+        if (fragment != null) Log.d("030-act", String.format("ActionBar(%d).setParentFragment(%s - %d)",
+                hashCode(), fragment.getClass().getName(), fragment.hashCode()));
+        else Log.d("030-act", "ActionBar.setParentFragment(null)");
         parentFragment = fragment;
         checkBackButtonVisibility();
     }
