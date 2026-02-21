@@ -695,7 +695,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         if (top >= 0 && holder != null && holder.getAdapterPosition() == 0) {
             newOffset = top;
         }
-        return newOffset + AndroidUtilities.dp(13);
+        return newOffset + AndroidUtilities.dp(18);
     }
 
     @Override
