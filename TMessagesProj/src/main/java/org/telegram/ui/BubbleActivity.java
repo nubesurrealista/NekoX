@@ -348,8 +348,11 @@ public class BubbleActivity extends BasePermissionsActivity implements INavigati
         if (PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().closePhoto(true, false);
         } else {
-            actionBarLayout.onBackPressed();
+            if (!actionBarLayout.onBackPressed()) {
+                return;
+            }
         }
+        super.onBackPressed();
     }
 
     @Override

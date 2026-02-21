@@ -66,7 +66,7 @@ public interface INavigationLayout {
 
     void onPause();
     void onResume();
-    void onBackPressed();
+    boolean onBackPressed();
     void onUserLeaveHint();
     void onLowMemory();
     boolean extendActionMode(Menu menu);

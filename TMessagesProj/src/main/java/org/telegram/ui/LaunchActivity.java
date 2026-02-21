@@ -8195,31 +8195,22 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         }
         if (AndroidUtilities.isTablet()) {
             if (layersActionBarLayout != null && layersActionBarLayout.getView().getVisibility() == View.VISIBLE) {
-                layersActionBarLayout.onBackPressed();
+                if (!layersActionBarLayout.onBackPressed()) {
+                    return;
+                }
+            } else if (rightActionBarLayout != null && rightActionBarLayout.getView().getVisibility() == View.VISIBLE && !rightActionBarLayout.getFragmentStack().isEmpty()) {
+                if (!rightActionBarLayout.onBackPressed()) {
+                    return;
+                }
             } else {
-                if (rightActionBarLayout != null && rightActionBarLayout.getView().getVisibility() == View.VISIBLE && !rightActionBarLayout.getFragmentStack().isEmpty()) {
-                    BaseFragment lastFragment = rightActionBarLayout.getFragmentStack().get(rightActionBarLayout.getFragmentStack().size() - 1);
-                    if (lastFragment.onBackPressed(true)) {
-                        lastFragment.finishFragment();
-                    }
-                } else {
-                    actionBarLayout.onBackPressed();
+                if (!actionBarLayout.onBackPressed()) {
+                    return;
                 }
             }
-            super.onBackPressed();
-            return;
         } else {
-            BaseFragment fragment = LaunchActivity.getSafeLastFragment();
-            if (fragment != null && fragment.onBackPressed(true)) {
-                fragment.finishFragment();
+            if (!actionBarLayout.onBackPressed()) {
                 return;
             }
-            fragment = LaunchActivity.getLastFragment();
-            if (fragment != null && fragment.onBackPressed(true)) {
-                fragment.finishFragment();
-                return;
-            }
-            actionBarLayout.onBackPressed();
         }
         super.onBackPressed();
     }

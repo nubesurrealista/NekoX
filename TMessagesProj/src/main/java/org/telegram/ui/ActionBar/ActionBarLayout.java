@@ -1614,26 +1614,32 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
     }
 
     @Override
-    public void onBackPressed() {
-        if (transitionAnimationPreviewMode || startedTracking || checkTransitionAnimation() || fragmentsStack.isEmpty()) {
-            return;
+    public boolean onBackPressed() {
+        if (transitionAnimationPreviewMode || startedTracking || checkTransitionAnimation()) {
+            return false;
+        }
+        if (fragmentsStack.isEmpty()) {
+            return true;
         }
         if (GroupCallPip.onBackPressed()) {
-            return;
+            return false;
         }
         if (!storyViewerAttached() && currentActionBar != null && !currentActionBar.isActionModeShowed() && currentActionBar.isSearchFieldVisible) {
             currentActionBar.closeSearchField();
-            return;
+            return false;
         }
         if (sheetFragment != null && !sheetFragment.onBackPressed(true)) {
-            return;
+            return false;
         }
         BaseFragment lastFragment = fragmentsStack.get(fragmentsStack.size() - 1);
         if (lastFragment.onBackPressed(true)) {
-            if (!fragmentsStack.isEmpty()) {
+            if (fragmentsStack.size() > 1) {
                 closeLastFragment(true);
+                return false;
             }
+            return true;
         }
+        return false;
     }
 
     @Override

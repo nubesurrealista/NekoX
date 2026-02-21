@@ -617,13 +617,20 @@ public class ExternalActionActivity extends Activity implements INavigationLayou
             PhotoViewer.getInstance().closePhoto(true, false);
         } else if (AndroidUtilities.isTablet()) {
             if (layersActionBarLayout.getView().getVisibility() == View.VISIBLE) {
-                layersActionBarLayout.onBackPressed();
+                if (!layersActionBarLayout.onBackPressed()) {
+                    return;
+                }
             } else {
-                actionBarLayout.onBackPressed();
+                if (!actionBarLayout.onBackPressed()) {
+                    return;
+                }
             }
         } else {
-            actionBarLayout.onBackPressed();
+            if (!actionBarLayout.onBackPressed()) {
+                return;
+            }
         }
+        super.onBackPressed();
     }
 
     @Override
