@@ -56,6 +56,7 @@ import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.source.FirefoxLocalTranslator;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
+import tw.nekomimi.nekogram.utils.TelegramUtil;
 
 import static tw.nekomimi.nekogram.config.ConfigItem.*;
 import static tw.nekomimi.nekogram.utils.StrUtil.getAppName;
@@ -529,6 +530,13 @@ public class NekoConfig {
             migrate030.setConfigInt(4);
             showAddedToFoldersAtTitleType.setConfigInt(showAddedToFoldersAtTitle.Bool() ? 1 : 0);
         }
+
+//        if ((migrate030.Int() < 5 || !SharedConfig.forceDisableTabletMode) && !NekoXConfig.isDeveloper()) {
+//            if (migrate030.Int() < 5) migrate030.setConfigInt(5);
+//            SharedConfig.toggleForceDisableTabletMode();
+//            NekoConfig.tabletMode.setConfigInt(2);
+//            TelegramUtil.restartApp(false);
+//        }
 
         // TODO remove this after some versions.
         if (migrate.Bool() || force)
