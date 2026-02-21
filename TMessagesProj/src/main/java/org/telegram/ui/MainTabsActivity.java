@@ -13,6 +13,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -502,6 +503,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
                 return false;
             }
         }
+        Log.d("030-back", "MainTabsActivity: already at startPosition");
         return result;
     }
 
