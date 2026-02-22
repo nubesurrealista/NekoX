@@ -567,8 +567,6 @@ public abstract class BaseFragment {
     }
 
     public boolean onBackPressed(boolean invoked) {
-        Log.d("030-back", String.format("%s.onBackPressed(%s)\n%s", this.getClass().getName(),
-                invoked, TelegramUtil.getStackTraceAsString(null)));
         if (hasShownSheet()) {
             if (invoked) closeSheet();
             return false;

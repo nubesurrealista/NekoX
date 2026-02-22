@@ -744,10 +744,8 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                         }
                         if (!onBackPressed(true))
                             return;
-                        if (actionBarLayout != null) {
-                            actionBarLayout.onBackInvoked();
-                        } else {
-                            onBackPressed();
+                        if (actionBarLayout == null || actionBarLayout.onBackInvoked()) {
+                            LaunchActivity.super.onBackPressed();
                         }
                     }
 

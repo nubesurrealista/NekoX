@@ -1524,13 +1524,13 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         animateBackEndAnimation(true);
     }
 
-    public void onBackInvoked() {
+    public boolean onBackInvoked() {
         if (!predictiveInput) {
-            onBackPressed();
-            return;
+            return onBackPressed();
         }
         predictiveInput = false;
         animateBackEndAnimation(false);
+        return false;
     }
 
     private boolean newBackTransitions() {

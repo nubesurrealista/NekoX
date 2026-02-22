@@ -503,7 +503,6 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
                 return false;
             }
         }
-        Log.d("030-back", "MainTabsActivity: already at startPosition");
         return result;
     }
 
