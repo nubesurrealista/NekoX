@@ -1165,6 +1165,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         return super.onBackPressed(invoked);
     }
 
+    public boolean isSearching() {
+        return searchItem.isSearchFieldVisible() || searchItem.isSearchFieldVisible2();
+    }
+
     public static class SettingCell extends LinearLayout implements Theme.Colorable {
 
         private final Theme.ResourcesProvider resourcesProvider;

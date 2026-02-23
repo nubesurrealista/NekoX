@@ -115,6 +115,12 @@ public abstract class ViewPagerActivity extends BaseFragment {
                 final BaseFragment fragment;
                 if (state != null) {
                     fragment = state.fragment;
+
+                    if (fragment instanceof SettingsActivity settings) {
+                        if (settings.isSearching()) {
+                            settings.onBackPressed(true);
+                        }
+                    }
                 } else {
                     fragment = createBaseFragmentAt(position);
 

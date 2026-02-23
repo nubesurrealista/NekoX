@@ -259,6 +259,11 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
                     if (fragment instanceof MainTabsActivity.TabFragmentDelegate) {
                         ((MainTabsActivity.TabFragmentDelegate) fragment).onParentScrollToTop();
                     }
+
+                    if (position == POSITION_CALLS_OR_SETTINGS && settingsActivity != null) {
+                        settingsActivity.onBackPressed(true);
+                    }
+
                     return;
                 }
 
@@ -491,6 +496,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
     }
 
     private DialogsActivity dialogsActivity;
+    private SettingsActivity settingsActivity;
 
     @Override
     public boolean onBackPressed(boolean invoked) {
@@ -536,7 +542,8 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
             }
             Bundle args = new Bundle();
             args.putBoolean("hasMainTabs", true);
-            return new SettingsActivity(args);
+            settingsActivity = new SettingsActivity(args);
+            return settingsActivity;
         } else if (position == POSITION_CHATS) {
             Bundle args = new Bundle();
             args.putBoolean("hasMainTabs", true);
