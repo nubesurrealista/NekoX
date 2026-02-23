@@ -10361,7 +10361,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (proxyItem != null && NekoConfig.showQuickReconnect.Bool() && currentConnectionState != ConnectionsManager.ConnectionStateConnected &&
                 currentConnectionState != ConnectionsManager.ConnectionStateWaitingForNetwork && currentConnectionState != ConnectionsManager.ConnectionStateConnectingToProxy) {
             // proxyItem.setIcon(R.drawable.msg_retry);
-            if (!actionBar.isSearchFieldVisible() && (doneItem == null || doneItem.getVisibility() != View.VISIBLE)) {
+            if ((actionBar == null || !actionBar.isSearchFieldVisible()) && (doneItem == null || doneItem.getVisibility() != View.VISIBLE)) {
                 proxyItem.setVisibility(View.VISIBLE);
             }
             proxyItemVisibleForWorkaround = proxyItemVisible = true;
