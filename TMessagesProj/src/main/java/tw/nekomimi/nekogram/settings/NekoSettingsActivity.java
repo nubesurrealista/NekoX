@@ -81,8 +81,9 @@ public class NekoSettingsActivity extends BaseFragment {
 
     private int categoriesRow;
     private int generalRow;
-    private int accountRow;
+    private int appearanceRow;
     private int chatRow;
+    private int accountRow;
     private int experimentRow;
     private int categories2Row;
 
@@ -191,6 +192,8 @@ public class NekoSettingsActivity extends BaseFragment {
                 presentFragment(new NekoAccountSettingsActivity());
             } else if (position == experimentRow) {
                 presentFragment(new NekoExperimentalSettingsActivity());
+            } else if (position == appearanceRow) {
+                presentFragment(new MomoAppearanceSettingsActivity());
             } else if (position == channelRow) {
                 MessagesController.getInstance(currentAccount).openByUserName("momogram_update", this, 1);
             } else if (position == translationRow) {
@@ -407,8 +410,9 @@ public class NekoSettingsActivity extends BaseFragment {
         rowCount = 0;
         categoriesRow = rowCount++;
         generalRow = rowCount++;
-        accountRow = rowCount++;
+        appearanceRow = rowCount++;
         chatRow = rowCount++;
+        accountRow = rowCount++;
         experimentRow = rowCount++;
         categories2Row = rowCount++;
 
@@ -504,6 +508,8 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.Experiment), R.drawable.baseline_star_24, true);
                     } else if (position == accountRow) {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.Account), R.drawable.baseline_person_24, true);
+                    } else if (position == appearanceRow) {
+                        textCell.setTextAndIcon(LocaleController.getString(R.string.AppearanceSettings), R.drawable.baseline_format_color_fill_24, true);
                     }
                     break;
                 }
@@ -581,7 +587,7 @@ public class NekoSettingsActivity extends BaseFragment {
         public int getItemViewType(int position) {
             if (position == categories2Row || position == about2Row) {
                 return 1;
-            } else if (position == chatRow || position == accountRow || position == generalRow || position == experimentRow) {
+            } else if (position == appearanceRow || position == chatRow || position == accountRow || position == generalRow || position == experimentRow) {
                 return 2;
             } else if (position == categoriesRow || position == aboutRow) {
                 return 4;

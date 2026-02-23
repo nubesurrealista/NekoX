@@ -85,44 +85,23 @@ public class NekoChatSettingsActivity extends MomoSettingsBaseActivity implement
     private final AbstractConfigCell cfCredentialsRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractConfigCell useSlowWhisperModelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useSlowWhisperModel, LocaleController.getString(R.string.UseSlowWhisperModelDesc)));
     private final AbstractConfigCell deleteUnusedModelRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
-    private final AbstractConfigCell unreadBadgeOnBackButton = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.unreadBadgeOnBackButton));
     private final AbstractConfigCell sendCommentAfterForwardRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.sendCommentAfterForward));
-    private final AbstractConfigCell smallerEmojiInChooserRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.smallerEmojiInChooser));
     private final AbstractConfigCell useChatAttachMediaMenuRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useChatAttachMediaMenu, LocaleController.getString(R.string.UseChatAttachEnterMenuNotice)));
     private final AbstractConfigCell disableLinkPreviewByDefaultRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableLinkPreviewByDefault, LocaleController.getString(R.string.DisableLinkPreviewByDefaultNotice)));
     private final AbstractConfigCell takeGIFasVideoRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.takeGIFasVideo));
     private final AbstractConfigCell chooseBestVideoQualityByDefaultRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.chooseBestVideoQualityByDefault));
-    private final AbstractConfigCell mediaPreviewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.mediaPreview));
-    private final AbstractConfigCell showSeconds = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showSeconds));
     private final AbstractConfigCell showBottomActionsWhenSelectingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showBottomActionsWhenSelecting));
-    private final AbstractConfigCell labelChannelUserRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.labelChannelUser, LocaleController.getString(R.string.labelChannelUserDetails)));
-    private final AbstractConfigCell alwaysLabelAnonAdminRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.alwaysLabelAnonAdmin));
-    private final AbstractConfigCell hideSendAsChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideSendAsChannel));
-    private final AbstractConfigCell hideChannelBottomMuteUnmuteRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideChannelBottomMuteUnmute));
-    private final AbstractConfigCell unroundedChatBottomViewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.unroundedChatBottomView));
-    private final AbstractConfigCell removeChatBottomViewPaddingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.removeChatBottomViewPadding));
     private final AbstractConfigCell showSpoilersDirectlyRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showSpoilersDirectly));
-    private final AbstractConfigCell showEditTimeInPopupMenuRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showEditTimeInPopupMenu));
-    private final AbstractConfigCell showForwardTimeInPopupMenuRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showForwardTimeInPopupMenu));
-    private final AbstractConfigCell marqueeForLongChatTitlesRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.marqueeForLongChatTitles));
     private final AbstractConfigCell messageMenuRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.MessageMenu), null, null, this::showMessageMenuAlert));
     private final AbstractConfigCell profileMenuRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.ProfileMenu), null, null, this::showProfileMenuAlert));
-    private final AbstractConfigCell disableCustomWallpaperUserRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableCustomWallpaperUser));
-    private final AbstractConfigCell disableCustomWallpaperChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableCustomWallpaperChannel));
-    private final AbstractConfigCell appendOriginalTimestampRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.appendOriginalTimestamp));
     private final AbstractConfigCell alwaysShowBotCommandButtonRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.alwaysShowBotCommandButton));
     private final AbstractConfigCell alwaysHideBotCommandButtonRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.alwaysHideBotCommandButton));
     private final AbstractConfigCell alwaysUseSpoilerForMediaRow = cellGroup.appendCell(new ConfigCellTextInput(null, NekoConfig.alwaysUseSpoilerForMedia, LocaleController.getString(R.string.AlwaysUseSpoilerForMediaDesc), null, NekoConfig::updateUseSpoilerMediaChatList));
-    private final AbstractConfigCell forceHideShowAsListRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.forceHideShowAsList));
-    private final AbstractConfigCell largerImageMessageRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.imageMessageSizeTweak));
     private final AbstractConfigCell keepBlockedBotChatHistoryRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.keepBlockedBotChatHistory));
     private final AbstractConfigCell dontSendStartCmdOnUnblockBotRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.dontSendStartCmdOnUnblockBot));
     private final AbstractConfigCell alwaysLoadStickerSetFromServerRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.alwaysLoadStickerSetFromServer));
-    private final AbstractConfigCell showChannelMsgFwdCountRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showChannelMsgFwdCount));
     private final AbstractConfigCell keepSamePositionOnNewMsgRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.keepSamePositionOnNewMsg));
     private final AbstractConfigCell disableSaveDraftToCloudRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableSaveDraftToCloud));
-    private final AbstractConfigCell ignoreTopicTabViewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.ignoreTopicTabView));
-    private final AbstractConfigCell useEmojiForEditedRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useEmojiForEdited));
     private final AbstractConfigCell showVoteCountBeforeVoteRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showVoteCountBeforeVote));
     private final AbstractConfigCell hideMessageRegexRow = cellGroup.appendCell(new ConfigCellTextInput(null, NekoConfig.hideMessageRegex, null));
     private final AbstractConfigCell dividerChat = cellGroup.appendCell(new ConfigCellDivider());
@@ -344,11 +323,9 @@ public class NekoChatSettingsActivity extends MomoSettingsBaseActivity implement
 
         // Cells: Set OnSettingChanged Callbacks
         cellGroup.callBackSettingsChanged = (key, newValue) -> {
-            if (key.equals(NekoConfig.tabsTitleType.getKey())) {
-                getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
-            } else if (key.equals(NekoConfig.disableProximityEvents.getKey())) {
+            if (key.equals(NekoConfig.disableProximityEvents.getKey())) {
                 MediaController.getInstance().recreateProximityWakeLock();
-            } else if (key.equals(NekoConfig.showSeconds.getKey()) || key.equals(NekoConfig.disableStories.getKey())) {
+            } else if (key.equals(NekoConfig.disableStories.getKey())) {
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             }
         };

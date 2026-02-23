@@ -92,18 +92,6 @@ import tw.nekomimi.nekogram.config.cell.*;
 public class NekoGeneralSettingsActivity extends MomoSettingsBaseActivity {
 
     private ValueAnimator statusBarColorAnimator;
-    private DrawerProfilePreviewCell profilePreviewCell;
-
-    private final AbstractConfigCell profilePreviewRow = cellGroup.appendCell(new ConfigCellDrawerProfilePreview());
-    private final AbstractConfigCell largeAvatarInDrawerRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.largeAvatarInDrawer, LocaleController.getString(R.string.valuesLargeAvatarInDrawer), null));
-    private final AbstractConfigCell avatarBackgroundBlurRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.avatarBackgroundBlur));
-    private final AbstractConfigCell avatarBackgroundDarkenRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.avatarBackgroundDarken));
-    private final AbstractConfigCell hidePhoneRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hidePhone));
-    private final AbstractConfigCell generateMonetThemeRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.GenerateMonetTheme), null, null, () -> {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            AlertsCreator.createMonetThemeDialog(getParentActivity()).show();
-        }
-    }));
     private final AbstractConfigCell checkUpdateRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.checkUpdate));
     private final AbstractConfigCell allowTestingUpdateRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.allowTestingUpdate));
     private final AbstractConfigCell divider0 = cellGroup.appendCell(new ConfigCellDivider());
@@ -151,20 +139,10 @@ public class NekoGeneralSettingsActivity extends MomoSettingsBaseActivity {
     private final AbstractConfigCell dividerConnection = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell headerFolder = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.Folder)));
-    private final AbstractConfigCell showTabsOnForwardRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showTabsOnForward));
     private final AbstractConfigCell openArchiveOnPullRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.openArchiveOnPull));
     private final AbstractConfigCell unarchiveOnSwipeRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.unarchiveOnSwipe));
     private final AbstractConfigCell swipeActionInTopicListRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.swipeActionInTopicList));
-    private final AbstractConfigCell ignoreMutedCountRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.ignoreMutedCount));
     private final AbstractConfigCell ignoreFilterEmoticonUpdateRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.ignoreFilterEmoticonUpdate));
-    private final AbstractConfigCell hideUnreadCounterOnFolderTabsRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideUnreadCounterOnFolderTabs));
-    private final AbstractConfigCell pauseInactiveTabAnimationRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.pauseInactiveTabAnimation));
-    private final AbstractConfigCell tabsTitleTypeRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.tabsTitleType,
-            new String[]{
-                    LocaleController.getString(R.string.TabTitleTypeText),
-                    LocaleController.getString(R.string.TabTitleTypeIcon),
-                    LocaleController.getString(R.string.TabTitleTypeMix)
-            }, null));
     private final AbstractConfigCell dividerFolder = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header_notification = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.NekoGeneralNotification)));
@@ -186,38 +164,6 @@ public class NekoGeneralSettingsActivity extends MomoSettingsBaseActivity {
     private final AbstractConfigCell recentChatFolderSizeRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractConfigCell divider4 = cellGroup.appendCell(new ConfigCellDivider());
 
-    private final AbstractConfigCell header5 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Appearance")));
-    private final AbstractConfigCell typefaceRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.typeface));
-    private final AbstractConfigCell customTitleTextRow = cellGroup.appendCell(new ConfigCellTextInput(null, NekoConfig.customTitleText, "Momogram", null));
-    private final AbstractConfigCell nameTitleTextRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.nameAsTitleText));
-    private final AbstractConfigCell transparentStatusBarRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.transparentStatusBar));
-    private final AbstractConfigCell appBarShadowRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAppBarShadow));
-    private final AbstractConfigCell newYearRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.newYear));
-    private final AbstractConfigCell squareAvatarRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.squareAvatar));
-    private final AbstractConfigCell boostedContactRatingInProfileRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.boostedContactRatingInProfile));
-    private final AbstractConfigCell hideProfileRatingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideProfileRating));
-    private final AbstractConfigCell profileActionCircleBtnRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.profileActionCircleBtn));
-    private final AbstractConfigCell actionBarDecorationRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.actionBarDecoration, new String[]{
-            LocaleController.getString(R.string.DependsOnDate),
-            LocaleController.getString(R.string.Snowflakes),
-            LocaleController.getString(R.string.Fireworks)
-    }, null));
-    private final AbstractConfigCell tabletModeRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.tabletMode, new String[]{
-            LocaleController.getString(R.string.TabletModeDefault),
-            LocaleController.getString(R.string.Enable),
-            LocaleController.getString(R.string.Disable)
-    }, null));
-
-//    private final AbstractConfigCell showAddedToFoldersAtTitleRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showAddedToFoldersAtTitle));
-    private final AbstractConfigCell showAddedToFoldersAtTitleTypeRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.ShowAddedToFoldersAtTitle),
-            NekoConfig.showAddedToFoldersAtTitleType, NekoConfig.titleFolderIconOptions, null));
-    private final AbstractConfigCell enableAvatarBlurRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.enableAvatarBlur));
-    private final AbstractConfigCell forceBlurInChatRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.forceBlurInChat));
-    private final AbstractConfigCell header_chatblur = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.ChatBlurAlphaValue)));
-    private final AbstractConfigCell chatBlurAlphaValueRow = cellGroup.appendCell(new ConfigCellCustom(ConfigCellCustom.CUSTOM_ITEM_CharBlurAlpha, NekoConfig.forceBlurInChat.Bool()));
-
-    private final AbstractConfigCell divider5 = cellGroup.appendCell(new ConfigCellDivider());
-
     private final AbstractConfigCell header6 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.PrivacyTitle)));
     private final AbstractConfigCell disableSystemAccountRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableSystemAccount));
     private final AbstractConfigCell disableAutoWebLoginRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAutoWebLogin));
@@ -228,22 +174,13 @@ public class NekoGeneralSettingsActivity extends MomoSettingsBaseActivity {
             LocaleController.getString(R.string.customSavePathHint), null, null,
             (input) -> input.matches("^[A-za-z0-9.]{1,255}$") || input.isEmpty() ? input : (String) NekoConfig.customSavePath.defaultValue));
     private final AbstractConfigCell disableUndoRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableUndo));
-    private final AbstractConfigCell showIdAndDcRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showIdAndDc));
     private final AbstractConfigCell inappCameraRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.inappCamera));
     private final AbstractConfigCell useCamera2Row = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_CHECK, true));
     private final AbstractConfigCell hideProxySponsorChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideProxySponsorChannel));
     private final AbstractConfigCell hideSponsoredMessageRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideSponsoredMessage));
     private final AbstractConfigCell autoPauseVideoRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.autoPauseVideo, LocaleController.getString(R.string.AutoPauseVideoAbout)));
     private final AbstractConfigCell dontAutoPlayNextMessageRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.dontAutoPlayNextMessage));
-    private final AbstractConfigCell disableNumberRoundingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableNumberRounding, "4.8K -> 4777"));
     private final AbstractConfigCell openAvatarInsteadOfExpandRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.openAvatarInsteadOfExpand, LocaleController.getString(R.string.OpenAvatarInsteadOfExpandDesc)));
-    private final AbstractConfigCell nameOrderRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.nameOrder, new String[]{
-            LocaleController.getString(R.string.LastFirst),
-            LocaleController.getString(R.string.FirstLast)
-    }, null));
-    private final AbstractConfigCell usePersianCalendarRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.usePersianCalendar, LocaleController.getString(R.string.UsePersiancalendarInfo)));
-    private final AbstractConfigCell displayPersianCalendarByLatinRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.displayPersianCalendarByLatin));
-    private final AbstractConfigCell showSelfInsteadOfSavedMessagesRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showSelfInsteadOfSavedMessages));
     private final AbstractConfigCell alwaysShowDownloadsRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.alwaysShowDownloads));
     private final AbstractConfigCell showSharedMediaOnOpeningProfileRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showSharedMediaOnOpeningProfile));
     private final AbstractConfigCell disableSetBirthdayReminderRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAddBirthdayReminder));
@@ -430,8 +367,6 @@ public class NekoGeneralSettingsActivity extends MomoSettingsBaseActivity {
                         listAdapter.notifyItemChanged(position);
                         return Unit.INSTANCE;
                     });
-                } else if (position == cellGroup.rows.indexOf(nameOrderRow)) {
-                    LocaleController.getInstance().recreateFormatters();
                 } else if (position == cellGroup.rows.indexOf(useCamera2Row)) {
                     SharedConfig.toggleUseCamera2(currentAccount);
                     if (view instanceof TextCheckCell)
@@ -483,10 +418,6 @@ public class NekoGeneralSettingsActivity extends MomoSettingsBaseActivity {
             } else if (key.equals(NekoConfig.inappCamera.getKey())) {
                 SharedConfig.setInappCamera((boolean) newValue);
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
-            } else if (key.equals(NekoConfig.hidePhone.getKey())) {
-                parentLayout.rebuildAllFragmentViews(false, false);
-                getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
-                listAdapter.notifyItemChanged(cellGroup.rows.indexOf(profilePreviewRow));
             } else if (key.equals(NekoConfig.transparentStatusBar.getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (key.equals(NekoConfig.hideProxySponsorChannel.getKey())) {
@@ -506,33 +437,8 @@ public class NekoGeneralSettingsActivity extends MomoSettingsBaseActivity {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (key.equals(NekoConfig.newYear.getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
-            } else if (key.equals(NekoConfig.usePersianCalendar.getKey())) {
-                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
-            } else if (key.equals(NekoConfig.displayPersianCalendarByLatin.getKey())) {
-                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
-            } else if (key.equals(NekoConfig.hideUnreadCounterOnFolderTabs.getKey())) {
-                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (key.equals(NekoConfig.disableSystemAccount.getKey())) {
                 NekoXConfig.ensureSystemAccountState(currentAccount, (boolean) newValue);
-            } else if (key.equals(NekoConfig.largeAvatarInDrawer.getKey())) {
-                getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
-                TransitionManager.beginDelayedTransition(profilePreviewCell);
-                setCanNotChange();
-                listAdapter.notifyDataSetChanged();
-            } else if (key.equals(NekoConfig.avatarBackgroundBlur.getKey())) {
-                getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
-                listAdapter.notifyItemChanged(cellGroup.rows.indexOf(profilePreviewRow));
-            } else if (key.equals(NekoConfig.avatarBackgroundDarken.getKey())) {
-                getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
-                listAdapter.notifyItemChanged(cellGroup.rows.indexOf(profilePreviewRow));
-            } else if (key.equals(NekoConfig.disableAppBarShadow.getKey())) {
-                ActionBarLayout.headerShadowDrawable = (boolean) newValue ? null : parentLayout.getParentActivity().getResources().getDrawable(R.drawable.header_shadow).mutate();
-                parentLayout.rebuildFragments(INavigationLayout.REBUILD_FLAG_REBUILD_LAST | INavigationLayout.REBUILD_FLAG_REBUILD_ONLY_LAST);
-            } else if (NekoConfig.forceBlurInChat.getKey().equals(key)) {
-                boolean enabled = (Boolean) newValue;
-                if (chatBlurAlphaSeekbar != null)
-                    chatBlurAlphaSeekbar.setEnabled(enabled);
-                ((ConfigCellCustom) chatBlurAlphaValueRow).enabled = enabled;
             } else if (NekoConfig.useOSMDroidMap.getKey().equals(key)) {
                 boolean enabled = (Boolean) newValue;
                 ((ConfigCellTextCheck) mapDriftingFixForGoogleMapsRow).setEnabled(!enabled);
@@ -573,26 +479,9 @@ public class NekoGeneralSettingsActivity extends MomoSettingsBaseActivity {
         restartTooltip = new UndoView(context);
         frameLayout.addView(restartTooltip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
 
-        if (Build.VERSION.SDK_INT < 31) cellGroup.rows.remove(generateMonetThemeRow);
-
         scheduleScrollToIndex();
 
         return fragmentView;
-    }
-
-    private class ConfigCellDrawerProfilePreview extends AbstractConfigCell {
-        public int getType() {
-            return ConfigCellCustom.CUSTOM_ITEM_ProfilePreview;
-        }
-
-        public boolean isEnabled() {
-            return false;
-        }
-
-        public void onBindViewHolder(RecyclerView.ViewHolder holder) {
-            DrawerProfilePreviewCell cell = (DrawerProfilePreviewCell) holder.itemView;
-            cell.setUser(getUserConfig().getCurrentUser(), false);
-        }
     }
 
 
@@ -920,10 +809,6 @@ public class NekoGeneralSettingsActivity extends MomoSettingsBaseActivity {
                     view = new TextInfoPrivacyCell(mContext);
                     // view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
-                case ConfigCellCustom.CUSTOM_ITEM_ProfilePreview:
-                    view = profilePreviewCell = new DrawerProfilePreviewCell(mContext);
-                    view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
-                    break;
                 case ConfigCellCustom.CUSTOM_ITEM_CharBlurAlpha:
                     view = chatBlurAlphaSeekbar = new ChatBlurAlphaSeekBar(mContext);
                     chatBlurAlphaSeekbar.setEnabled(NekoConfig.forceBlurInChat.Bool());
@@ -953,12 +838,6 @@ public class NekoGeneralSettingsActivity extends MomoSettingsBaseActivity {
 
         if (NekoConfig.useTelegramTranslateInChat.Bool())
             ((ConfigCellCustom) translationProviderRow).setEnabled(false);
-
-        boolean enabled;
-
-        enabled = NekoConfig.largeAvatarInDrawer.Int() > 0;
-        ((ConfigCellTextCheck) avatarBackgroundBlurRow).setEnabled(enabled);
-        ((ConfigCellTextCheck) avatarBackgroundDarkenRow).setEnabled(enabled);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             ((ConfigCellTextCheck) mapMobileDataSaverToRoamingRow).setEnabled(false);

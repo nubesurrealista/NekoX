@@ -320,4 +320,5 @@
     <string name="ProfileActionCircleBtn">Use circle buttons for profile actions</string>
     <string name="AppVersion" translatable="false">%1$s %2$s</string>
     <string name="ScanQrCodeFromChatList">Show scan QR code button in chat list title</string>
+    <string name="AppearanceSettings">Appearance</string>
 </resources>
