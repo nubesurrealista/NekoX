@@ -220,6 +220,7 @@ public class NekoConfig {
     public static ConfigItem ignoreTopicTabView = addConfig(R.string.IgnoreTopicTabView, "IgnoreTopicTabView", configTypeBool, APPEARANCE, false);
     public static ConfigItem unroundedChatBottomView = addConfig(R.string.UnroundedChatBottomView, "UnroundedChatButtomView", configTypeBool, APPEARANCE, false);
     public static ConfigItem removeChatBottomViewPadding = addConfig(R.string.RemoveChatBottomViewPadding, "RemoveChatBottomViewPadding", configTypeBool, APPEARANCE, false);
+    public static ConfigItem hideBottomNavTabs = addConfig(R.string.HideBottomNavTabs, "HideBottomNavTabs", configTypeBool, APPEARANCE, false);
 
     public static ConfigItem ignoreBlocked = addConfig(R.string.IgnoreBlocked, "IgnoreBlocked", configTypeBool, CHAT, false);
     public static ConfigItem muteBlockedFromGroup = addConfig(R.string.MuteBlockedFromGroup, "MuteBlockedFromGroup", configTypeBool, CHAT, false);

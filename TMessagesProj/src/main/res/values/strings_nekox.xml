@@ -321,4 +321,5 @@
     <string name="AppVersion" translatable="false">%1$s %2$s</string>
     <string name="ScanQrCodeFromChatList">Show scan QR code button in chat list title</string>
     <string name="AppearanceSettings">Appearance</string>
+    <string name="HideBottomNavTabs">Hide bottom navigation tabs</string>
 </resources>

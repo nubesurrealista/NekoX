@@ -727,6 +727,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private final static int nekox_scanqr = 1003;
     private final static int nekox_recent = 1004;
     private final static int nekox_select_all = 1005;
+    private final static int nekox_quick_recon = 1006;
 
     private final static int ARCHIVE_ITEM_STATE_PINNED = 0;
     private final static int ARCHIVE_ITEM_STATE_SHOWED = 1;
@@ -2882,7 +2883,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             allowBots = arguments.getBoolean("allowBots", true);
             closeFragment = arguments.getBoolean("closeFragment", true);
             allowGlobalSearch = arguments.getBoolean("allowGlobalSearch", true);
-            hasMainTabs = arguments.getBoolean("hasMainTabs", false);
+            hasMainTabs = arguments.getBoolean("hasMainTabs", false) && NekoConfig.hideBottomNavTabs.Bool();
 
             byte[] requestPeerTypeBytes = arguments.getByteArray("requestPeerType");
             if (requestPeerTypeBytes != null) {
@@ -3334,6 +3335,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     !getMessagesController().recentChats.isEmpty() ? View.VISIBLE : View.GONE);
 
             updateProxyButton(false, false);
+        }
+
+        if (NekoConfig.showQuickReconnect.Bool()) {
+            proxyItem = menu.addItem(nekox_quick_recon, R.drawable.msg_retry);
+            proxyItem.setVisibility(View.GONE);
         }
 
         if (NekoConfig.scanQrCodeFromChatList.Bool()) {
@@ -4049,6 +4055,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         presentFragment(new ChatActivity(args));
                     });
                     sheet.show();
+                } else if (id == nekox_quick_recon) {
+                    if (proxyItemVisibleForWorkaround) {
+                        TelegramUtil.toggleProxyOnOff(false, true);
+                    }
                 } else if (id >= 10 && id < 10 + UserConfig.MAX_ACCOUNT_COUNT) {
                     if (getParentActivity() == null) {
                         return;
@@ -10345,12 +10355,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
         boolean proxyEnabled = preferences.getBoolean("proxy_enabled", false);
         final boolean connected = currentConnectionState == ConnectionsManager.ConnectionStateConnected || currentConnectionState == ConnectionsManager.ConnectionStateUpdating;
-        proxyMenuSubItem.setSubtext(getString(connected ? R.string.MenuProxyConnected : R.string.MenuProxyConnecting));
+        proxyMenuSubItem.setSubtext(proxyEnabled ? getString(connected ? R.string.MenuProxyConnected : R.string.MenuProxyConnecting) : null);
         proxyDrawable.setConnected(proxyEnabled, connected, animated);
         String proxyAddress = preferences.getString("proxy_ip", "");
         if (proxyItem != null && NekoConfig.showQuickReconnect.Bool() && currentConnectionState != ConnectionsManager.ConnectionStateConnected &&
                 currentConnectionState != ConnectionsManager.ConnectionStateWaitingForNetwork && currentConnectionState != ConnectionsManager.ConnectionStateConnectingToProxy) {
-            proxyItem.setIcon(R.drawable.msg_retry);
+            // proxyItem.setIcon(R.drawable.msg_retry);
             if (!actionBar.isSearchFieldVisible() && (doneItem == null || doneItem.getVisibility() != View.VISIBLE)) {
                 proxyItem.setVisibility(View.VISIBLE);
             }
@@ -10358,13 +10368,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         } else if (!downloadsItemVisible && proxyItem != null &&
                 (!NekoConfig.hideProxyByDefault.Bool() || (proxyEnabled && !TextUtils.isEmpty(proxyAddress)) ||
                         getMessagesController().blockedCountry && !SharedConfig.proxyList.isEmpty())) {
-            if (!actionBar.isSearchFieldVisible() && (doneItem == null || doneItem.getVisibility() != View.VISIBLE)) {
-                proxyItem.setVisibility(View.VISIBLE);
-            }
-            proxyItem.setIcon(proxyDrawable);
+            // if (!actionBar.isSearchFieldVisible() && (doneItem == null || doneItem.getVisibility() != View.VISIBLE)) {
+            //     proxyItem.setVisibility(View.VISIBLE);
+            // }
             proxyItemVisibleForWorkaround = false;
-            proxyItemVisible = true;
-            proxyDrawable.setConnected(true, currentConnectionState == ConnectionsManager.ConnectionStateConnected || currentConnectionState == ConnectionsManager.ConnectionStateUpdating, animated);
+            // proxyItem.setIcon(proxyDrawable);
+            // proxyItemVisible = true;
+            // proxyDrawable.setConnected(true, currentConnectionState == ConnectionsManager.ConnectionStateConnected || currentConnectionState == ConnectionsManager.ConnectionStateUpdating, animated);
+            proxyItem.setVisibility(View.GONE);
         } else if (proxyItem != null) {
             proxyItemVisible = false;
             proxyItem.setVisibility(View.GONE);
@@ -13607,11 +13618,33 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 Bundle args = new Bundle();
                 presentFragment(new GroupCreateActivity(args));
             });
+            if (NekoConfig.hideBottomNavTabs.Bool()) {
+                io.addGap();
+                io.add(R.drawable.left_status_profile, getString(R.string.MyProfile), () -> {
+                    Bundle args = new Bundle();
+                    args.putLong("user_id", getUserConfig().getClientUserId());
+                    args.putBoolean("my_profile", true);
+                    presentFragment(new ProfileActivity(args));
+                });
+            }
             io.add(R.drawable.outline_saved_24, getString(R.string.SavedMessages), () -> {
                 Bundle args = new Bundle();
                 args.putLong("user_id", UserConfig.getInstance(currentAccount).getClientUserId());
                 presentFragment(new ChatActivity(args));
             });
+            if (NekoConfig.hideBottomNavTabs.Bool()) {
+                io.addGap();
+                io.add(R.drawable.msg_contacts, getString(R.string.Contacts), () -> {
+                    Bundle args = new Bundle();
+                    args.putBoolean("needPhonebook", true);
+                    args.putBoolean("needFinishFragment", false);
+                    presentFragment(new ContactsActivity(args));
+                });
+                io.add(R.drawable.msg_calls, getString(R.string.Calls), () -> {
+                    presentFragment(new CallLogActivity());
+                });
+                io.addGap();
+            }
             if (ApplicationLoader.applicationLoaderInstance != null) {
                 ApplicationLoader.applicationLoaderInstance.addItemOptions(io);
             }
@@ -13639,7 +13672,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     }
                 }
             }
-            if (getUserConfig().showCallsTab) {
+            if (NekoConfig.hideBottomNavTabs.Bool() || getUserConfig().showCallsTab) {
                 io.add(R.drawable.msg_settings_old, getString(R.string.Settings), () -> {
                     presentFragment(new SettingsActivity());
                 });
@@ -13656,8 +13689,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
                 final String proxyAddress = preferences.getString("proxy_ip", "");
                 final boolean proxyEnabled = preferences.getBoolean("proxy_enabled", false);
-                final boolean proxyVisible = proxyEnabled && !TextUtils.isEmpty(proxyAddress)
-                        || getMessagesController().blockedCountry && !SharedConfig.proxyList.isEmpty();
+                final boolean proxyVisible = !NekoConfig.hideProxyByDefault.Bool() || (proxyEnabled && !TextUtils.isEmpty(proxyAddress)
+                        || getMessagesController().blockedCountry && !SharedConfig.proxyList.isEmpty());
 
                 if (proxyVisible) {
                     io.addGap();

@@ -116,6 +116,7 @@ public class MomoAppearanceSettingsActivity extends MomoSettingsBaseActivity {
     // private final AbstractConfigCell appBarShadowRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAppBarShadow));
     // private final AbstractConfigCell avatarBackgroundBlurRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAppBarShadow));
     private final AbstractConfigCell squareAvatarRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.squareAvatar));
+    private final AbstractConfigCell hideBottomNavTabsRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideBottomNavTabs));
     private final AbstractConfigCell disableNumberRoundingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableNumberRounding, "4.8K -> 4777"));
     private final AbstractConfigCell nameOrderRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.nameOrder, new String[]{
             LocaleController.getString(R.string.LastFirst),
@@ -266,6 +267,8 @@ public class MomoAppearanceSettingsActivity extends MomoSettingsBaseActivity {
             if (key.equals(NekoConfig.transparentStatusBar.getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (key.equals(NekoConfig.actionBarDecoration.getKey())) {
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
+            } else if (key.equals(NekoConfig.hideBottomNavTabs.getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESTART, null, null);
             } else if (key.equals(NekoConfig.tabletMode.getKey())) {
                 // default or enable = set force disable to false, otherwise true
