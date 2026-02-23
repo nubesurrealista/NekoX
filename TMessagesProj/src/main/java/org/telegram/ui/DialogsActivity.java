@@ -5270,10 +5270,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     info.setClickable(true);
                 }
             };
-            writeButton.setCircleSize(dp(52), dp(38));
-            writeButton.setCirclePadding(dp(7), dp(8));
+            boolean flag = NekoConfig.removeChatBottomViewPadding.Bool() && NekoConfig.unroundedChatBottomView.Bool();
+            writeButton.setCircleSize(dp(52), dp(flag ? 42 : 38));
+            writeButton.setCirclePadding(dp(7), dp(flag ? 0 : 8));
             writeButton.newCounterPos = true;
-            contentView.addView(writeButton, LayoutHelper.createFrame(110, 50, Gravity.RIGHT | Gravity.BOTTOM));
+            contentView.addView(writeButton, LayoutHelper.createFrame(110, flag ? 56 : 50, Gravity.RIGHT | Gravity.BOTTOM));
 
             writeButton.setOnClickListener(v -> {
                 if (delegate == null || selectedDialogs.isEmpty()) {
