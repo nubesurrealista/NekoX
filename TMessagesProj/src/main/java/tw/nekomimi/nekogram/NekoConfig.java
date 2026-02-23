@@ -89,24 +89,11 @@ public class NekoConfig {
     public static ConfigItem checkUpdate = addConfig(R.string.AutoCheckUpdate, "AutoCheckUpdate", configTypeBool, GENERAL, true);
     public static ConfigItem allowTestingUpdate = addConfig(R.string.AllowTestingUpdate, "AllowTestingUpdate", configTypeBool, GENERAL, false);
     public static ConfigItem useIPv6 = addConfig(R.string.IPv6, "IPv6", configTypeBool, GENERAL, false);
-    public static ConfigItem hidePhone = addConfig(R.string.HidePhone, "HidePhone", configTypeBool, GENERAL, true);
-
-    public static ConfigItem tabletMode = addConfig(R.string.TabletMode, "TabletMode", configTypeInt, GENERAL, 0);
     public static ConfigItem inappCamera = addConfig(R.string.DebugMenuEnableCamera, "DebugMenuEnableCamera", configTypeBool, GENERAL, true); // fake
-
-    public static ConfigItem typeface = addConfig(R.string.TypefaceUseDefault, "TypefaceUseDefault", configTypeBool, GENERAL, false);
-    public static ConfigItem nameOrder = addConfig(R.string.NameOrder, "NameOrder", configTypeInt, GENERAL, 1);
     public static ConfigItem mapPreviewProvider = addConfig(R.string.MapPreviewProvider, "MapPreviewProvider", configTypeInt, GENERAL, 0);
-    public static ConfigItem transparentStatusBar = addConfig(R.string.TransparentStatusBar, "TransparentStatusBar", configTypeBool, GENERAL, true);
-    public static ConfigItem enableAvatarBlur = addConfig(R.string.EnableAvatarBlur, "EnableAvatarBlur", configTypeBool, GENERAL, true);
-    public static ConfigItem forceBlurInChat = addConfig(R.string.forceBlurInChat, "forceBlurInChat", configTypeBool, GENERAL, false);
-    public static ConfigItem chatBlurAlphaValue = addConfig("forceBlurInChatAlphaValue", configTypeInt, GENERAL, 127);
-    public static ConfigItem actionBarDecoration = addConfig(R.string.ActionBarDecoration, "ActionBarDecoration", configTypeInt, GENERAL, 0);
-    public static ConfigItem newYear = addConfig(R.string.ChristmasHat, "ChristmasHat", configTypeBool, GENERAL, false);
     public static ConfigItem openArchiveOnPull = addConfig(R.string.OpenArchiveOnPull, "OpenArchiveOnPull", configTypeBool, GENERAL, false);
-    public static ConfigItem avatarBackgroundBlur = addConfig(R.string.BlurAvatarBackground, "BlurAvatarBackground", configTypeBool, GENERAL, false);
-    public static ConfigItem avatarBackgroundDarken = addConfig(R.string.DarkenAvatarBackground, "DarkenAvatarBackground", configTypeBool, GENERAL, false);
-    public static ConfigItem showTabsOnForward = addConfig(R.string.ShowTabsOnForward, "ShowTabsOnForward", configTypeBool, GENERAL, false);
+    public static ConfigItem avatarBackgroundBlur = addConfig(R.string.BlurAvatarBackground, "BlurAvatarBackground", configTypeBool, false);
+    public static ConfigItem avatarBackgroundDarken = addConfig(R.string.DarkenAvatarBackground, "DarkenAvatarBackground", configTypeBool, false);
 
     public static ConfigItem sortByUnread = addConfig("sort_by_unread", configTypeBool, GENERAL, false);
     public static ConfigItem sortByUnmuted = addConfig("sort_by_unmuted", configTypeBool, GENERAL, true);
@@ -115,8 +102,6 @@ public class NekoConfig {
 
     public static ConfigItem disableUndo = addConfig(R.string.DisableUndo, "DisableUndo", configTypeBool, GENERAL, false);
     public static ConfigItem disableSystemAccount = addConfig(R.string.DisableSystemAccount, "DisableSystemAccount", configTypeBool, GENERAL, false);
-    public static ConfigItem ignoreMutedCount = addConfig(R.string.IgnoreMutedCount, "IgnoreMutedCount", configTypeBool, GENERAL, true);
-    public static ConfigItem showIdAndDc = addConfig(R.string.ShowIdAndDc, "ShowIdAndDc", configTypeBool, GENERAL, false);
     public static ConfigItem customSavePath = addConfig(R.string.customSavePath, "customSavePath", configTypeString, GENERAL, "NekoX");
     public static ConfigItem translationProvider = addConfig(R.string.TranslationProvider, "translationProvider", configTypeInt, GENERAL, 1);
     public static ConfigItem translateToLang = addConfig(R.string.TransToLang, "TransToLang", configTypeString, GENERAL, ""); // "" -> translate to current language (MessageTrans.kt & Translator.kt)
@@ -124,15 +109,11 @@ public class NekoConfig {
     public static ConfigItem useTelegramTranslateInChat = addConfig(R.string.useTelegramTranslateInChat, "useTelegramTranslateInChat", configTypeBool, GENERAL, false);
     public static ConfigItem googleCloudTranslateKey = addConfig(R.string.GoogleCloudTransKey, "GoogleCloudTransKey", configTypeString, GENERAL, "");
     public static ConfigItem disableNotificationBubbles = addConfig(R.string.disableNotificationBubbles, "disableNotificationBubbles", configTypeBool, GENERAL, false);
-    public static ConfigItem tabsTitleType = addConfig(R.string.TabTitleType, "TabTitleType", configTypeInt, GENERAL, NekoXConfig.TITLE_TYPE_TEXT);
-    public static ConfigItem disableNumberRounding = addConfig(R.string.DisableNumberRounding, "DisableNumberRounding", configTypeBool, GENERAL, false);
     public static ConfigItem useSystemDNS = addConfig(R.string.useSystemDNS, "useSystemDNS", configTypeBool, GENERAL, false);
     public static ConfigItem useAdGuardDNS = addConfig(R.string.UseAdGuardDNS, "UseAdGuardDNS", configTypeBool, GENERAL, false);
     public static ConfigItem customDoH = addConfig(R.string.customDoH, "customDoH", configTypeString, GENERAL, "");
     public static ConfigItem hideProxyByDefault = addConfig(R.string.HideProxyByDefault, "HideProxyByDefault", configTypeBool, GENERAL, false);
     public static ConfigItem disableAppBarShadow = addConfig(R.string.DisableAppBarShadow, "DisableAppBarShadow", configTypeBool, GENERAL, false);
-    public static ConfigItem usePersianCalendar = addConfig(R.string.UsePersiancalendar, "UsePersiancalendar", configTypeBool, GENERAL, false);
-    public static ConfigItem displayPersianCalendarByLatin = addConfig(R.string.DisplayPersianCalendarByLatin, "DisplayPersianCalendarByLatin", configTypeBool, GENERAL, false);
 
     public static ConfigItem openPGPApp = addConfig(R.string.OpenPGPApp, "OpenPGPApp", configTypeString, GENERAL, "");
     public static ConfigItem openPGPKeyId = addConfig(R.string.OpenPGPKey, "OpenPGPKey", configTypeLong, GENERAL, 0L);
@@ -142,7 +123,6 @@ public class NekoConfig {
     public static ConfigItem disableAutoDownloadingArchive = addConfig(R.string.ArchiveFiles, "ArchiveFiles", configTypeBool, GENERAL, true);
     public static ConfigItem useOSMDroidMap = addConfig(R.string.useOSMDroidMap, "useOSMDroidMap", configTypeBool, GENERAL, !BuildVars.isGServicesCompiled);
     public static ConfigItem mapDriftingFixForGoogleMaps = addConfig(R.string.mapDriftingFixForGoogleMaps, "mapDriftingFixForGoogleMaps", configTypeBool, GENERAL, true);
-    public static ConfigItem showSelfInsteadOfSavedMessages = addConfig(R.string.ShowSelfInsteadOfSavedMessages, "ShowSelfInsteadOfSavedMessages", ConfigItem.configTypeBool, GENERAL, false);
     public static ConfigItem closeWebViewWithoutConfirmation = addConfig(R.string.CloseWebViewWithoutConfirmation, "CloseWebViewWithoutConfirmation", ConfigItem.configTypeBool, false);
     public static ConfigItem openWebViewTabWithoutBot = addConfig(R.string.OpenWebViewTabWithoutBot, "OpenWebViewTabWithoutBot", ConfigItem.configTypeBool, GENERAL, false);
     public static ConfigItem showBotWebViewSettings = addConfig(R.string.ShowBotWebViewSettings, "ShowBotWebViewSettings", ConfigItem.configTypeBool, GENERAL, false);
@@ -156,7 +136,6 @@ public class NekoConfig {
     public static ConfigItem openChatOnWebView = addConfig(R.string.PreventPauseWebViewByOpenChat, "PreventPauseWebViewByOpenChat", ConfigItem.configTypeBool, GENERAL, false);
     public static ConfigItem alwaysShowDownloads = addConfig(R.string.AlwaysShowDownloads, "AlwaysShowDownloads", ConfigItem.configTypeBool, GENERAL, false);
     public static ConfigItem openAvatarInsteadOfExpand = addConfig(R.string.OpenAvatarInsteadOfExpand, "OpenAvatarInsteadOfExpand", ConfigItem.configTypeBool, GENERAL, false);
-    public static ConfigItem customTitleText = addConfig(R.string.CustomTitleText, "CustomTitleText", configTypeString, GENERAL, "Momogram");
     public static ConfigItem showSharedMediaOnOpeningProfile = addConfig(R.string.ShowSharedMediaOnOpeningProfile, "ShowSharedMediaOnOpeningProfile", configTypeBool, GENERAL, false);
     public static ConfigItem disableAddBirthdayReminder = addConfig(R.string.DisableAddBirthdayReminder, "DisableAddBirthdayReminder", configTypeBool, GENERAL, false);
     public static ConfigItem disableBirthdayReminder = addConfig(R.string.DisableBirthdayReminder, "DisableBirthdayReminder", configTypeBool, GENERAL, false);
@@ -171,26 +150,17 @@ public class NekoConfig {
     public static ConfigItem ignoreFilterEmoticonUpdate = addConfig(R.string.IgnoreFilterEmoticonUpdate, "IgnoreFilterEmoticonUpdate", configTypeBool, GENERAL, false);
     public static ConfigItem articleViewerBottomActionBar = addConfig(R.string.ArticleViewerBottomActionBar, "ArticleViewerBottomActionBar", configTypeBool, GENERAL, false);
     public static ConfigItem hideCocoonAISummary = addConfig(R.string.HideCocoonAISummary, "HideCocoonAISummary", configTypeBool, GENERAL, false);
-    public static ConfigItem hideUnreadCounterOnFolderTabs = addConfig(R.string.HideUnreadCounterOnFolderTabs, "HideUnreadCounterOnFolderTabs", configTypeBool, GENERAL, false);
-
-    public static ConfigItem nameAsTitleText = addConfig(R.string.NameAsTitleText, "NameAsTitleText", configTypeBool, GENERAL, false);
     public static ConfigItem enableUnifiedPush = addConfig(R.string.EnableUnifiedPush, "EnableUnifiedPush", configTypeBool, GENERAL, false);
     public static ConfigItem customApiId = addConfig(R.string.CustomApiId, "CustomApiId", configTypeString, GENERAL, "");
     public static ConfigItem customApiHash = addConfig(R.string.CustomApiHash, "CustomApiHash", configTypeString, GENERAL, "");
     public static ConfigItem unarchiveOnSwipe = addConfig(R.string.UnarchiveOnSwipe, "UnarchiveOnSwipe", configTypeBool, GENERAL, true);
     public static ConfigItem swipeActionInTopicList = addConfig(R.string.SwipeActionInTopicList, "SwipeActionInTopicList", configTypeBool, GENERAL, true);
-    public static ConfigItem pauseInactiveTabAnimation = addConfig(R.string.PauseInactiveTabAnimation, "PauseInactiveTabAnimation", configTypeBool, GENERAL, false);
     public static ConfigItem allowBotInDirectShare = addConfig(R.string.AllowBotInDirectShare, "AllowBotInDirectShare", configTypeBool, GENERAL, false);
-    public static ConfigItem showAddedToFoldersAtTitleType = addConfig(R.string.ShowAddedToFoldersAtTitle, "ShowAddedToFoldersAtTitleType", configTypeInt, GENERAL, 0); // 1: left, 2: right
     public static ConfigItem recentChatFolderSize = addConfig(R.string.RecentChatFolderSize, "RecentChatFolderSize", configTypeInt, GENERAL, 0); // 0: disabled
     public static ConfigItem checkMemLeak = addConfig(R.string.CheckMemLeak, "CheckMemLeak", configTypeBool, GENERAL, true);
     public static ConfigItem memLeakThreshold = addConfig(R.string.MemLeakThreshold, "MemLeakThreshold", configTypeInt, GENERAL, EvilLeakerKiller.setThreshold(1.2F));
     public static ConfigItem noPreloadTrackIfRepeatOne = addConfig(R.string.NoPreloadTrackIfRepeatOne, "NoPreloadTrackIfRepeatOne", configTypeBool, GENERAL, false);
-    public static ConfigItem boostedContactRatingInProfile = addConfig(R.string.BoostedContactRatingInProfile, "BoostedContactRatingInProfile", configTypeBool, GENERAL, true);
-    public static ConfigItem hideProfileRating = addConfig(R.string.HideProfileRating, "HideProfileRating", configTypeBool, GENERAL, false);
     public static ConfigItem noForwardToStories = addConfig(R.string.HideForwardToStories, "HideForwardToStories", configTypeBool, GENERAL, false);
-    public static ConfigItem squareAvatar = addConfig(R.string.SquareAvatar, "SquareAvatar", configTypeBool, GENERAL, false);
-    public static ConfigItem profileActionCircleBtn = addConfig(R.string.ProfileActionCircleBtn, "ProfileActionCircleBtn", configTypeBool, GENERAL, false);
 
     public static ConfigItem preferredTranslateTargetLang = addConfig(R.string.PreferredTranslateTargetLangTitle, "PreferredTranslateTargetLangTitle", configTypeString, GENERAL, "");
     public static ArrayList<String> preferredTranslateTargetLangList = new ArrayList<>();
@@ -199,11 +169,58 @@ public class NekoConfig {
     public static String[] perfClassOverrideOptions = null;
 
 
-    public static ConfigItem unreadBadgeOnBackButton = addConfig(R.string.unreadBadgeOnBackButton, "unreadBadgeOnBackButton", configTypeBool, CHAT, false);
     public static ConfigItem repeatConfirm = addConfig(R.string.repeatConfirm, "repeatConfirm", configTypeBool, CHAT, false);
     public static ConfigItem disableInstantCamera = addConfig(R.string.DisableInstantCamera, "DisableInstantCamera", configTypeBool, CHAT, false);
     public static ConfigItem hideCameraInAttachMenu = addConfig(R.string.HideCameraInAttachMenu, "HideCameraInAttachMenu", configTypeBool, CHAT, false);
-    public static ConfigItem showSeconds = addConfig(R.string.showSeconds, "showSeconds", configTypeBool, CHAT, false);
+
+    public static ConfigItem hidePhone = addConfig(R.string.HidePhone, "HidePhone", configTypeBool, APPEARANCE, true);
+    public static ConfigItem tabletMode = addConfig(R.string.TabletMode, "TabletMode", configTypeInt, APPEARANCE, 0);
+    public static ConfigItem typeface = addConfig(R.string.TypefaceUseDefault, "TypefaceUseDefault", configTypeBool, APPEARANCE, false);
+    public static ConfigItem nameOrder = addConfig(R.string.NameOrder, "NameOrder", configTypeInt, APPEARANCE, 1);
+    public static ConfigItem transparentStatusBar = addConfig(R.string.TransparentStatusBar, "TransparentStatusBar", configTypeBool, APPEARANCE, true);
+    public static ConfigItem enableAvatarBlur = addConfig(R.string.EnableAvatarBlur, "EnableAvatarBlur", configTypeBool, APPEARANCE, true);
+    public static ConfigItem forceBlurInChat = addConfig(R.string.forceBlurInChat, "forceBlurInChat", configTypeBool, APPEARANCE, false);
+    public static ConfigItem chatBlurAlphaValue = addConfig("forceBlurInChatAlphaValue", configTypeInt, APPEARANCE, 127);
+    public static ConfigItem actionBarDecoration = addConfig(R.string.ActionBarDecoration, "ActionBarDecoration", configTypeInt, APPEARANCE, 0);
+    public static ConfigItem newYear = addConfig(R.string.ChristmasHat, "ChristmasHat", configTypeBool, APPEARANCE, false);
+    public static ConfigItem showTabsOnForward = addConfig(R.string.ShowTabsOnForward, "ShowTabsOnForward", configTypeBool, APPEARANCE, false);
+    public static ConfigItem ignoreMutedCount = addConfig(R.string.IgnoreMutedCount, "IgnoreMutedCount", configTypeBool, APPEARANCE, true);
+    public static ConfigItem showIdAndDc = addConfig(R.string.ShowIdAndDc, "ShowIdAndDc", configTypeBool, APPEARANCE, false);
+    public static ConfigItem tabsTitleType = addConfig(R.string.TabTitleType, "TabTitleType", configTypeInt, APPEARANCE, NekoXConfig.TITLE_TYPE_TEXT);
+    public static ConfigItem disableNumberRounding = addConfig(R.string.DisableNumberRounding, "DisableNumberRounding", configTypeBool, APPEARANCE, false);
+    public static ConfigItem usePersianCalendar = addConfig(R.string.UsePersiancalendar, "UsePersiancalendar", configTypeBool, APPEARANCE, false);
+    public static ConfigItem displayPersianCalendarByLatin = addConfig(R.string.DisplayPersianCalendarByLatin, "DisplayPersianCalendarByLatin", configTypeBool, APPEARANCE, false);
+    public static ConfigItem showSelfInsteadOfSavedMessages = addConfig(R.string.ShowSelfInsteadOfSavedMessages, "ShowSelfInsteadOfSavedMessages", ConfigItem.configTypeBool, APPEARANCE, false);
+    public static ConfigItem customTitleText = addConfig(R.string.CustomTitleText, "CustomTitleText", configTypeString, APPEARANCE, "Momogram");
+    public static ConfigItem hideUnreadCounterOnFolderTabs = addConfig(R.string.HideUnreadCounterOnFolderTabs, "HideUnreadCounterOnFolderTabs", configTypeBool, APPEARANCE, false);
+    public static ConfigItem nameAsTitleText = addConfig(R.string.NameAsTitleText, "NameAsTitleText", configTypeBool, APPEARANCE, false);
+    public static ConfigItem unreadBadgeOnBackButton = addConfig(R.string.unreadBadgeOnBackButton, "unreadBadgeOnBackButton", configTypeBool, APPEARANCE, false);
+    public static ConfigItem showSeconds = addConfig(R.string.showSeconds, "showSeconds", configTypeBool, APPEARANCE, false);
+    public static ConfigItem pauseInactiveTabAnimation = addConfig(R.string.PauseInactiveTabAnimation, "PauseInactiveTabAnimation", configTypeBool, APPEARANCE, false);
+    public static ConfigItem showAddedToFoldersAtTitleType = addConfig(R.string.ShowAddedToFoldersAtTitle, "ShowAddedToFoldersAtTitleType", configTypeInt, APPEARANCE, 0); // 1: left, 2: right
+    public static ConfigItem boostedContactRatingInProfile = addConfig(R.string.BoostedContactRatingInProfile, "BoostedContactRatingInProfile", configTypeBool, APPEARANCE, true);
+    public static ConfigItem hideProfileRating = addConfig(R.string.HideProfileRating, "HideProfileRating", configTypeBool, APPEARANCE, false);
+    public static ConfigItem squareAvatar = addConfig(R.string.SquareAvatar, "SquareAvatar", configTypeBool, APPEARANCE, false);
+    public static ConfigItem profileActionCircleBtn = addConfig(R.string.ProfileActionCircleBtn, "ProfileActionCircleBtn", configTypeBool, APPEARANCE, false);
+    public static ConfigItem mediaPreview = addConfig(R.string.MediaPreview, "MediaPreview", configTypeBool, APPEARANCE, true);
+    public static ConfigItem labelChannelUser = addConfig(R.string.labelChannelUser, "labelChannelUser", configTypeBool, APPEARANCE, false);
+    public static ConfigItem alwaysLabelAnonAdmin = addConfig(R.string.AlwaysLabelAnonAdmin, "AlwaysLabelAnonAdmin", configTypeBool, APPEARANCE, false);
+    public static ConfigItem hideChannelBottomMuteUnmute = addConfig(R.string.HideChannelBottomNotiToggle, "HideChannelBottomNotiToggle", configTypeBool, APPEARANCE, false);
+    public static ConfigItem disableCustomWallpaperUser = addConfig(R.string.DisableCustomWallpaperUser, "DisableCustomWallpaperUser", ConfigItem.configTypeBool, APPEARANCE, false);
+    public static ConfigItem disableCustomWallpaperChannel = addConfig(R.string.DisableCustomWallpaperChannel, "DisableCustomWallpaperChannel", ConfigItem.configTypeBool, APPEARANCE, false);
+    public static ConfigItem appendOriginalTimestamp = addConfig(R.string.AppendOriginalTimestamp, "AppendOriginalTimestamp", ConfigItem.configTypeBool, APPEARANCE, false);
+    public static ConfigItem showEditTimeInPopupMenu = addConfig(R.string.ShowEditTimestampInPopupMenu, "ShowEditTimestampInPopupMenu", configTypeBool, APPEARANCE, false);
+    public static ConfigItem showForwardTimeInPopupMenu = addConfig(R.string.ShowForwardTimestampInPopupMenu, "ShowForwardTimestampInPopupMenu", configTypeBool, APPEARANCE, false);
+    public static ConfigItem marqueeForLongChatTitles = addConfig(R.string.MarqueeForLongChatTitles, "MarqueeForLongChatTitles", configTypeBool, APPEARANCE, true);
+    public static ConfigItem forceHideShowAsList = addConfig(R.string.ForceHideShowAsList, "ForceHideShowAsList", configTypeBool, APPEARANCE, false);
+    public static ConfigItem imageMessageSizeTweak = addConfig(R.string.ImageMessageSizeTweak, "ImageMessageSizeTweak", configTypeBool, APPEARANCE, false);
+    public static ConfigItem smallerEmojiInChooser = addConfig(R.string.SmallerEmojisInChooser, "SmallerEmojisInChooser", configTypeBool, APPEARANCE, false);
+    public static ConfigItem showChannelMsgFwdCount = addConfig(R.string.ShowChannelMsgFwdCount, "ShowChannelMsgFwdCount", configTypeBool, APPEARANCE, true);
+    public static ConfigItem useEmojiForEdited = addConfig(R.string.UseEmojiForEdited, "UseEmojiForEdited", configTypeBool, APPEARANCE, false);
+    public static ConfigItem ignoreTopicTabView = addConfig(R.string.IgnoreTopicTabView, "IgnoreTopicTabView", configTypeBool, APPEARANCE, false);
+    public static ConfigItem unroundedChatBottomView = addConfig(R.string.UnroundedChatBottomView, "UnroundedChatButtomView", configTypeBool, APPEARANCE, false);
+    public static ConfigItem removeChatBottomViewPadding = addConfig(R.string.RemoveChatBottomViewPadding, "RemoveChatBottomViewPadding", configTypeBool, APPEARANCE, false);
+
     public static ConfigItem ignoreBlocked = addConfig(R.string.IgnoreBlocked, "IgnoreBlocked", configTypeBool, CHAT, false);
     public static ConfigItem muteBlockedFromGroup = addConfig(R.string.MuteBlockedFromGroup, "MuteBlockedFromGroup", configTypeBool, CHAT, false);
     public static ConfigItem muteBotsFromGroup = addConfig(R.string.MuteBotsFromGroup, "MuteBotsFromGroup", configTypeBool, CHAT, false);
@@ -242,7 +259,6 @@ public class NekoConfig {
     public static ConfigItem skipOpenLinkConfirm = addConfig(R.string.SkipOpenLinkConfirm, "SkipOpenLinkConfirm", configTypeBool, CHAT, false);
     public static ConfigItem confirmAVMessage = addConfig(R.string.ConfirmAVMessage, "ConfirmAVMessage", configTypeBool, CHAT, false);
     public static ConfigItem askBeforeCall = addConfig(R.string.AskBeforeCalling, "AskBeforeCalling", configTypeBool, CHAT, false);
-    public static ConfigItem mediaPreview = addConfig(R.string.MediaPreview, "MediaPreview", configTypeBool, CHAT, true);
 
 
     public static ConfigItem disableVibration = addConfig(R.string.DisableVibration, "DisableVibration", configTypeBool, CHAT, false);
@@ -267,7 +283,6 @@ public class NekoConfig {
     public static ConfigItem hideSponsoredMessage = addConfig(R.string.hideSponsoredMessage, "hideSponsoredMessage", configTypeBool, false);
     public static ConfigItem rememberAllBackMessages = addConfig(R.string.rememberAllBackMessages, "rememberAllBackMessages", configTypeBool, CHAT, false);
     public static ConfigItem hideSendAsChannel = addConfig(R.string.hideSendAsChannel, "hideSendAsChannel", configTypeBool, CHAT, false);
-    public static ConfigItem hideChannelBottomMuteUnmute = addConfig(R.string.HideChannelBottomNotiToggle, "HideChannelBottomNotiToggle", configTypeBool, CHAT, false);
     public static ConfigItem showSpoilersDirectly = addConfig(R.string.showSpoilersDirectly, "showSpoilersDirectly", configTypeBool, CHAT,false);
 
     public static ConfigItem alwaysUseSpoilerForMedia = addConfig(R.string.AlwaysUseSpoilerForMedia, "AlwaysUseSpoilerForMedia", configTypeString, CHAT, "");
@@ -275,9 +290,6 @@ public class NekoConfig {
 
     public static ConfigItem disableReactionsWhenSelecting = addConfig(R.string.disableReactionsWhenSelecting, "disableReactionsWhenSelecting", configTypeBool, CHAT, true);
     public static ConfigItem showBottomActionsWhenSelecting = addConfig(R.string.showBottomActionsWhenSelecting, "showBottomActionsWhenSelecting", configTypeBool, CHAT, false);
-
-    public static ConfigItem labelChannelUser = addConfig(R.string.labelChannelUser, "labelChannelUser", configTypeBool, CHAT, false);
-    public static ConfigItem alwaysLabelAnonAdmin = addConfig(R.string.AlwaysLabelAnonAdmin, "AlwaysLabelAnonAdmin", configTypeBool, CHAT, false);
 
     public static ConfigItem reactions = addConfig(R.string.reactions, "reactions", configTypeInt, CHAT, 0);
     public static String[] reactionsOptions = null;
@@ -289,37 +301,26 @@ public class NekoConfig {
     public static ConfigItem confirmToSendCommandByClick = addConfig(R.string.ConfirmToSendCommandToggle, "ConfirmToSendCommandToggle", ConfigItem.configTypeBool, CHAT, false);
     public static ConfigItem showCopyPhoto = addConfig(R.string.CopyPhoto, "CopyPhoto", ConfigItem.configTypeBool, CHAT, false);
     public static ConfigItem increasedMaxPhotoResolution = addConfig(R.string.IncreasedMaxPhotoResolution, "IncreasedMaxPhotoResolution", ConfigItem.configTypeBool, CHAT, false);
-    public static ConfigItem disableCustomWallpaperUser = addConfig(R.string.DisableCustomWallpaperUser, "DisableCustomWallpaperUser", ConfigItem.configTypeBool, CHAT, false);
-    public static ConfigItem disableCustomWallpaperChannel = addConfig(R.string.DisableCustomWallpaperChannel, "DisableCustomWallpaperChannel", ConfigItem.configTypeBool, CHAT, false);
-    public static ConfigItem appendOriginalTimestamp = addConfig(R.string.AppendOriginalTimestamp, "AppendOriginalTimestamp", ConfigItem.configTypeBool, CHAT, false);
     public static ConfigItem forceAllowChooseBrowser = addConfig(R.string.ForceAllowChooseBrowser, "ForceAllowChooseBrowser", configTypeBool, CHAT, false);
     public static ConfigItem patchAndCleanupLinks = addConfig(R.string.PatchAndCleanupLinks, "PatchAndCleanupLinks", configTypeBool, CHAT, false);
     public static ConfigItem alwaysHideBotCommandButton = addConfig(R.string.AlwaysHideBotCommandButton, "AlwaysHideBotCommandButton", configTypeBool, CHAT, false);
     public static ConfigItem alwaysShowBotCommandButton = addConfig(R.string.AlwaysShowBotCommandButton, "AlwaysShowBotCommandButton", configTypeBool, CHAT, false);
-    public static ConfigItem showEditTimeInPopupMenu = addConfig(R.string.ShowEditTimestampInPopupMenu, "ShowEditTimestampInPopupMenu", configTypeBool, CHAT, false);
-    public static ConfigItem showForwardTimeInPopupMenu = addConfig(R.string.ShowForwardTimestampInPopupMenu, "ShowForwardTimestampInPopupMenu", configTypeBool, CHAT, false);
-    public static ConfigItem marqueeForLongChatTitles = addConfig(R.string.MarqueeForLongChatTitles, "MarqueeForLongChatTitles", configTypeBool, CHAT, true);
     public static ConfigItem dontSendRightAfterTranslated = addConfig(R.string.DontSendRightAfterTranslated, "DontSendRightAfterTranslated", configTypeBool, CHAT, true);
     public static ConfigItem hideOriginalTextAfterTranslate = addConfig(R.string.HideOriginalTextAfterTranslate, "HideOriginalTextAfterTranslate", configTypeBool, CHAT, false);
     public static ConfigItem autoTranslate = addConfig(R.string.AutomaticTranslation, "AutomaticTranslation", configTypeBool, CHAT, false);
     public static ConfigItem useCustomProviderForAutoTranslate = addConfig(R.string.UseCustomProviderForAutoTranslate, "UseCustomProviderForAutoTranslate", configTypeBool, CHAT, true);
     public static ConfigItem autoSendMessageIfBlockedBySlowMode = addConfig(R.string.AutoSendMessageIfBlockedBySlowMode, "AutoSendMessageIfBlockedBySlowMode", configTypeBool, CHAT, false);
     public static ConfigItem replyAsQuoteByDefault = addConfig(R.string.ReplyAsQuoteByDefault, "ReplyAsQuoteByDefault", configTypeBool, CHAT, false);
-    public static ConfigItem forceHideShowAsList = addConfig(R.string.ForceHideShowAsList, "ForceHideShowAsList", configTypeBool, CHAT, false);
-    public static ConfigItem imageMessageSizeTweak = addConfig(R.string.ImageMessageSizeTweak, "ImageMessageSizeTweak", configTypeBool, CHAT, false);
     public static ConfigItem chooseBestVideoQualityByDefault = addConfig(R.string.ChooseBestVideoQualityByDefault, "ChooseBestVideoQualityByDefault", configTypeBool, CHAT, false);
     public static ConfigItem mapMobileDataSaverToRoaming = addConfig(R.string.MapMobileDataSaverToRoaming, "MapMobileDataSaverToRoaming", configTypeBool, false);
     public static ConfigItem keepBlockedBotChatHistory = addConfig(R.string.KeepBlockedBotChatHistory, "KeepBlockedBotChatHistory", configTypeBool, false);
     public static ConfigItem dontSendStartCmdOnUnblockBot = addConfig(R.string.DontSendStartCmdOnUnblockBot, "DontSendStartCmdOnUnblockBot", configTypeBool, false);
-    public static ConfigItem smallerEmojiInChooser = addConfig(R.string.SmallerEmojisInChooser, "SmallerEmojisInChooser", configTypeBool, CHAT, false);
     public static ConfigItem alwaysLoadStickerSetFromServer = addConfig(R.string.AlwaysLoadStickerSetFromServer, "AlwaysLoadStickerSetFromServer", configTypeBool, CHAT, false);
     public static ConfigItem autoAttemptInstantView = addConfig(R.string.AutoAttemptInstantView, "AutoAttemptInstantView", configTypeBool, CHAT, false);
     public static ConfigItem useExtBrowserOnIVAttemptFail = addConfig(R.string.OpenExternalOnInstantViewFail, "OpenExternalOnInstantViewFail", configTypeBool, CHAT, false);
     public static ConfigItem saveIVFailDomains = addConfig(R.string.SaveIVFailDomains, "SaveIVFailDomains", configTypeBool, CHAT, true);
-    public static ConfigItem showChannelMsgFwdCount = addConfig(R.string.ShowChannelMsgFwdCount, "ShowChannelMsgFwdCount", configTypeBool, CHAT, true);
     public static ConfigItem enhancedVideoBitrate = addConfig(R.string.EnhancedVideoBitrate, "EnhancedVideoBitrate", configTypeBool, CHAT, false);
     public static ConfigItem keepSamePositionOnNewMsg = addConfig(R.string.KeepSamePositionOnNewMsg, "KeepSamePositionOnNewMsg", configTypeBool, CHAT, false);
-    public static ConfigItem useEmojiForEdited = addConfig(R.string.UseEmojiForEdited, "UseEmojiForEdited", configTypeBool, CHAT, false);
     public static ConfigItem showVoteCountBeforeVote = addConfig(R.string.ShowVoteCountBeforeVote, "ShowVoteCountBeforeVote", configTypeBool, CHAT, false);
 
     public static ConfigItem transcribeProvider = addConfig("TranscribeProvider", configTypeInt, CHAT, TRANSCRIBE_AUTO);
@@ -350,10 +351,7 @@ public class NekoConfig {
 
     public static ConfigItem nextCheckCustomStatusTime = addConfig("nextCheckCustomStatusTime", configTypeLong, 0L);
     public static ConfigItem disableSaveDraftToCloud = addConfig(R.string.DisableSaveDraftToCloud, "DisableSaveDraftToCloud", configTypeBool, CHAT, false);
-    public static ConfigItem ignoreTopicTabView = addConfig(R.string.IgnoreTopicTabView, "IgnoreTopicTabView", configTypeBool, CHAT, false);
     public static ConfigItem noStarReactionPlaceholder = addConfig(R.string.NoStarReactionPlaceholder, "NoStarReactionPlaceholder", configTypeBool, CHAT, true);
-    public static ConfigItem unroundedChatBottomView = addConfig(R.string.UnroundedChatBottomView, "UnroundedChatButtomView", configTypeBool, CHAT, false);
-    public static ConfigItem removeChatBottomViewPadding = addConfig(R.string.RemoveChatBottomViewPadding, "RemoveChatBottomViewPadding", configTypeBool, CHAT, false);
     public static ConfigItem disableEmbeddedPlayer = addConfig(R.string.DisableEmbeddedPlayer, "DisableEmbeddedPlayer", configTypeBool, CHAT, false);
     public static ConfigItem autoTestProxy = addConfig(R.string.AutoTestProxy, "AutoTestProxy", configTypeBool, CHAT, false);
 

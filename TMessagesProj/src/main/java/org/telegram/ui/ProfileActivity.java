@@ -355,6 +355,7 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.config.ConfigItem;
 import tw.nekomimi.nekogram.parts.DialogTransKt;
+import tw.nekomimi.nekogram.settings.MomoAppearanceSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoChatSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoExperimentalSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoGeneralSettingsActivity;
@@ -15127,6 +15128,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     String.format("%s - %s", modSettings, LocaleController.getString(R.string.General)),
                     String.format("%s - %s", modSettings, LocaleController.getString(R.string.Chat)),
                     String.format("%s - %s", modSettings, LocaleController.getString(R.string.Experiment)),
+                    String.format("%s - %s", modSettings, LocaleController.getString(R.string.AppearanceSettings)),
             };
             for (Map.Entry<Integer, ArrayList<Pair<Integer, String>>> e : strMap.entrySet()) {
                 for (Pair<Integer, String> v : e.getValue()) {
@@ -15136,6 +15138,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         switch (e.getKey()) {
                             case ConfigItem.GENERAL:
                                 f.presentFragment(new NekoGeneralSettingsActivity().setScrollTo(v.second, v.first));
+                                break;
+                            case ConfigItem.APPEARANCE:
+                                f.presentFragment(new MomoAppearanceSettingsActivity().setScrollTo(v.second, v.first));
                                 break;
                             case ConfigItem.CHAT:
                                 f.presentFragment(new NekoChatSettingsActivity().setScrollTo(v.second, v.first));
