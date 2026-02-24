@@ -577,8 +577,6 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
                         if (position == 0) {
                             textCell.setTextAndValueAndColorfulIcon(getString(R.string.NewGroup), "", false, R.drawable.settings_group, 0xFF1CA5ED, 0xFF1488E1, false);
                         } else if (position == 1) {
-                            textCell.setTextAndValueAndColorfulIcon(getString(R.string.NewContact), "", false, R.drawable.baseline_security_24, 0xFF6FA8DC, 0x3E91DD, false);
-                        } else if (position == 2) {
                             textCell.setTextAndValueAndColorfulIcon(getString(R.string.NewChannel), "", false, R.drawable.settings_channel, 0xFF55CA47, 0xFF27B434, false);
                         }
                     }
