@@ -3101,7 +3101,8 @@ public class ChatActivityEnterView extends FrameLayout implements
 
             @Override
             protected void dispatchDraw(@NonNull Canvas canvas) {
-                if (!audioVideoButtonContainerForbidden && !NekoConfig.removeChatBottomViewPadding.Bool()) {
+                final boolean noBottomPadding = NekoConfig.removeChatBottomViewPadding.Bool();
+                if (!audioVideoButtonContainerForbidden) {
                     float s = 1;
                     if (expandStickersButton != null) {
                         if (expandStickersButton.getVisibility() == View.VISIBLE) {
@@ -3109,11 +3110,11 @@ public class ChatActivityEnterView extends FrameLayout implements
                         }
                     }
 
-                    final float r = dpf2(19);
+                    final float r = dpf2(noBottomPadding ? 22 : 19);
                     paint.setColor(getThemedColor(Theme.key_chat_messagePanelSend));
                     final float margin = dpf2(3);
-                    final float height = dpf2(38);
-                    final float width = dpf2(38);
+                    final float height = dpf2(noBottomPadding ? 44 : 38);
+                    final float width = dpf2(noBottomPadding ? 44 : 38);
                     backgroundRect.set(
                             getMeasuredWidth() - width - margin,
                             getMeasuredHeight() - height - margin,
@@ -4445,8 +4446,8 @@ public class ChatActivityEnterView extends FrameLayout implements
                 botCommandsMenuContainer.dismiss();
             }
         });
-        int vg = Gravity.BOTTOM; // NekoConfig.removeChatBottomViewPadding.Bool() ? Gravity.CENTER_VERTICAL : Gravity.BOTTOM;
-        messageEditTextContainer.addView(botCommandsMenuButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 32, vg | Gravity.LEFT, 8, 6, 8, 6));
+        int bottomMargin = NekoConfig.removeChatBottomViewPadding.Bool() ? 9 : 6;
+        messageEditTextContainer.addView(botCommandsMenuButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 32, Gravity.BOTTOM | Gravity.LEFT, 8, 6, 8, bottomMargin));
         AndroidUtilities.updateViewVisibilityAnimated(botCommandsMenuButton, false, 1f, false);
         botCommandsMenuButton.setExpanded(true, false);
     }
@@ -15218,7 +15219,8 @@ public class ChatActivityEnterView extends FrameLayout implements
             updateColors();
             if (isNewDesignSendButton) {
                 checkBackgroundRect();
-                canvas.drawRoundRect(backgroundRect, dp(RADIUS), dp(RADIUS), backgroundPaint);
+                final float r = dpf2(NekoConfig.removeChatBottomViewPadding.Bool() ? 22 : 19);
+                canvas.drawRoundRect(backgroundRect, r, r, backgroundPaint);
             }
 
             final boolean inactive = isInactive();
@@ -15484,12 +15486,12 @@ public class ChatActivityEnterView extends FrameLayout implements
         /* * */
 
         private final RectF backgroundRect = new RectF();
-        private static final int RADIUS = 19;
 
         private void checkBackgroundRect() {
+            final boolean noBottomPadding = NekoConfig.removeChatBottomViewPadding.Bool();
             final float margin = dpf2(3);
-            final float height = dpf2(38);
-            final float width = Math.max(height, dpf2(10 + 10) + priceText.getCurrentWidth());
+            final float height = dpf2(noBottomPadding ? 44 : 38);
+            final float width = Math.max(height, dpf2((noBottomPadding ? 13 : 10) * 2) + priceText.getCurrentWidth());
             backgroundRect.set(
                     getMeasuredWidth() - width - margin,
                     getMeasuredHeight() - height - margin,
