@@ -52,6 +52,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.transtale.Translator;
@@ -2138,7 +2140,7 @@ public class TranslateController extends BaseController {
 
     public static class EntityTranslationState {
         public String maskedText;
-        public ArrayList<Placeholder> placeholders = new ArrayList<>();
+        public HashMap<Integer, TLRPC.MessageEntity> entities = new HashMap<>();
     }
 
     public static class Placeholder {
@@ -2193,9 +2195,6 @@ public class TranslateController extends BaseController {
             return state;
         }
 
-        final String MARKER_START = "⟦TGE";
-        final String MARKER_END = "⟧";
-
         String text = source.text;
 
         ArrayList<TLRPC.MessageEntity> entities = new ArrayList<>(source.entities);
@@ -2208,28 +2207,24 @@ public class TranslateController extends BaseController {
 
         for (TLRPC.MessageEntity entity : entities) {
 
-            if (!isEntityToPreserve(entity)) {
+            if (!isEntityToPreserve(entity))
                 continue;
-            }
 
             int start = entity.offset;
             int end = start + entity.length;
 
-            if (start < cursor || start > text.length() || end > text.length()) {
+            if (start < cursor || start < 0 || end > text.length())
                 continue;
-            }
 
             masked.append(text, cursor, start);
 
-            Placeholder ph = new Placeholder();
-            ph.id = id;
-            ph.marker = MARKER_START + id + MARKER_END;
-            ph.visibleText = text.substring(start, end);
-            ph.entity = entity;
+            String visible = text.substring(start, end);
 
-            state.placeholders.add(ph);
+            masked.append("⟦TGE").append(id).append("⟧");
+            masked.append(visible);
+            masked.append("⟦/TGE").append(id).append("⟧");
 
-            masked.append(ph.marker);
+            state.entities.put(id, entity);
 
             cursor = end;
             id++;
@@ -2238,7 +2233,6 @@ public class TranslateController extends BaseController {
         masked.append(text.substring(cursor));
 
         state.maskedText = masked.toString();
-        // Log.d("030-tx", String.format("pre: maskedText = %s", state.maskedText));
 
         return state;
     }
@@ -2246,75 +2240,47 @@ public class TranslateController extends BaseController {
     public static TLRPC.TL_textWithEntities postprocessEntities(
             String translated,
             EntityTranslationState state) {
-        // Log.d("030-tx", String.format("post: translated = %s", translated));
 
-        final String MARKER_START = "⟦TGE";
-        final String MARKER_END = "⟧";
+        Pattern pattern = Pattern.compile("⟦TGE(\\d+)⟧(.*?)⟦/TGE\\1⟧", Pattern.DOTALL);
+
+        Matcher matcher = pattern.matcher(translated);
 
         TLRPC.TL_textWithEntities result = new TLRPC.TL_textWithEntities();
         result.entities = new ArrayList<>();
 
-        if (state.placeholders.isEmpty()) {
-            result.text = translated;
-            return result;
-        }
-
         StringBuilder rebuilt = new StringBuilder();
 
-        int pos = 0;
+        int last = 0;
 
-        while (pos < translated.length()) {
+        while (matcher.find()) {
 
-            int markerStart = translated.indexOf(MARKER_START, pos);
+            rebuilt.append(translated, last, matcher.start());
 
-            if (markerStart == -1) {
-                rebuilt.append(translated.substring(pos));
-                break;
-            }
+            int id = Integer.parseInt(matcher.group(1));
+            String translatedText = matcher.group(2);
 
-            rebuilt.append(translated, pos, markerStart);
+            int offset = rebuilt.length();
 
-            int markerEnd = translated.indexOf(MARKER_END, markerStart);
+            rebuilt.append(translatedText);
 
-            if (markerEnd == -1) {
-                rebuilt.append(translated.substring(markerStart));
-                break;
-            }
+            TLRPC.MessageEntity original = state.entities.get(id);
 
-            String idStr = translated.substring(markerStart + MARKER_START.length(), markerEnd).trim();
+            if (original != null) {
 
-            int id;
+                TLRPC.MessageEntity cloned = cloneEntity(original);
 
-            try {
-                id = Integer.parseInt(idStr.replaceAll("\\D", ""));
-            } catch (Exception e) {
-                rebuilt.append(translated, markerStart, markerEnd + 1);
-                pos = markerEnd + 1;
-                continue;
-            }
-
-            if (id >= 0 && id < state.placeholders.size()) {
-
-                Placeholder ph = state.placeholders.get(id);
-
-                int offset = rebuilt.length();
-
-                rebuilt.append(ph.visibleText);
-
-                TLRPC.MessageEntity cloned = cloneEntity(ph.entity);
                 cloned.offset = offset;
-                cloned.length = ph.visibleText.length();
-
-                // Log.d("030-tx", String.format("adding entity back, offset=%d, len=%d, txt=%s", offset, cloned.length, ph.visibleText));
+                cloned.length = translatedText.length();
 
                 result.entities.add(cloned);
             }
 
-            pos = markerEnd + 1;
+            last = matcher.end();
         }
 
+        rebuilt.append(translated.substring(last));
+
         result.text = rebuilt.toString();
-        // Log.d("030-tx", "post: rebuilt = " + result.text);
 
         result.entities.sort(Comparator.comparingInt(e -> e.offset));
 
