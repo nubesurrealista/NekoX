@@ -164,6 +164,10 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
 
             messageObject.messageOwner.translated = false
 
+            if (messageObject.messageOwner.originalEntities != null) {
+                messageObject.messageOwner.entities = messageObject.messageOwner.originalEntities
+            }
+
             messageHelper.resetMessageContent(dialogId, messageObject)
 
         }
@@ -411,6 +415,13 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
                         else
                             selectedObject.messageOwner.message
 
+                    var textWithEntities = TLRPC.TL_textWithEntities()
+                    textWithEntities.text = originalText
+                    textWithEntities.entities = selectedObject.messageOwner.entities
+
+                    var state = TranslateController.preprocessEntities(textWithEntities)
+                    originalText = state.maskedText
+
                     var text = map?.get(target)?.get(originalText) ?: db?.query(originalText)
 
                     if (text == null) {
@@ -442,10 +453,17 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
 
 
                     }
+                    textWithEntities = TranslateController.postprocessEntities(text, state)
+
+                    if (NekoConfig.hideOriginalTextAfterTranslate.Bool()) {
+                        selectedObject.messageOwner.originalEntities = selectedObject.messageOwner.entities
+                        selectedObject.messageOwner.translatedEntities = textWithEntities.entities
+                        selectedObject.messageOwner.entities = textWithEntities.entities
+                    }
 
                     selectedObject.messageOwner.translatedMessage =
-                        if (NekoConfig.hideOriginalTextAfterTranslate.Bool()) text
-                        else "$originalText\n\n--------\n\n$text"
+                        if (NekoConfig.hideOriginalTextAfterTranslate.Bool()) textWithEntities.text
+                        else "$originalText\n\n--------\n\n${textWithEntities.text}"
 
                 }
 

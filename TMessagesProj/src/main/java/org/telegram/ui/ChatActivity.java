@@ -20116,7 +20116,7 @@ public class ChatActivity extends BaseFragment implements
                     }
                 }
             }
-            menuNekoTranslateItem.setText(showUndoTranslate ? getString("UndoTranslate") : getString("Translate"));
+            menuNekoTranslateItem.setText(showUndoTranslate ? getString(R.string.UndoTranslate) : getString(R.string.Translate));
         }
     }
 

@@ -2136,6 +2136,191 @@ public class TranslateController extends BaseController {
         }
     }
 
+    public static class EntityTranslationState {
+        public String maskedText;
+        public ArrayList<Placeholder> placeholders = new ArrayList<>();
+    }
+
+    public static class Placeholder {
+        int id;
+        String marker;
+        String visibleText;
+        TLRPC.MessageEntity entity;
+    }
+
+    private static boolean isEntityToPreserve(TLRPC.MessageEntity entity) {
+//        return entity != null;
+        return entity instanceof TLRPC.TL_messageEntityUrl
+                || entity instanceof TLRPC.TL_messageEntityTextUrl
+                || entity instanceof TLRPC.TL_messageEntityHashtag
+                || entity instanceof TLRPC.TL_messageEntityMention
+                || entity instanceof TLRPC.TL_messageEntityMentionName
+                || entity instanceof TLRPC.TL_inputMessageEntityMentionName;
+    }
+
+    private static TLRPC.MessageEntity cloneEntity(TLRPC.MessageEntity e) {
+
+        if (e instanceof TLRPC.TL_messageEntityUrl) {
+            TLRPC.TL_messageEntityUrl c = new TLRPC.TL_messageEntityUrl();
+            c.url = ((TLRPC.TL_messageEntityUrl) e).url;
+            return c;
+        }
+        if (e instanceof TLRPC.TL_messageEntityTextUrl) {
+            TLRPC.TL_messageEntityTextUrl c = new TLRPC.TL_messageEntityTextUrl();
+            c.url = ((TLRPC.TL_messageEntityTextUrl) e).url;
+            return c;
+        }
+
+        if (e instanceof TLRPC.TL_messageEntityMentionName) {
+            TLRPC.TL_messageEntityMentionName c = new TLRPC.TL_messageEntityMentionName();
+            c.user_id = ((TLRPC.TL_messageEntityMentionName) e).user_id;
+            return c;
+        }
+
+        try {
+            return e.getClass().newInstance();
+        } catch (Exception ex) {
+            return e;
+        }
+    }
+
+    public static EntityTranslationState preprocessEntities(TLRPC.TL_textWithEntities source) {
+
+        EntityTranslationState state = new EntityTranslationState();
+
+        if (source == null || source.text == null || source.entities == null || source.entities.isEmpty()) {
+            state.maskedText = source != null ? source.text : "";
+            return state;
+        }
+
+        final String MARKER_START = "⟦TGE";
+        final String MARKER_END = "⟧";
+
+        String text = source.text;
+
+        ArrayList<TLRPC.MessageEntity> entities = new ArrayList<>(source.entities);
+        entities.sort(Comparator.comparingInt(e -> e.offset));
+
+        StringBuilder masked = new StringBuilder();
+
+        int cursor = 0;
+        int id = 0;
+
+        for (TLRPC.MessageEntity entity : entities) {
+
+            if (!isEntityToPreserve(entity)) {
+                continue;
+            }
+
+            int start = entity.offset;
+            int end = start + entity.length;
+
+            if (start < cursor || start > text.length() || end > text.length()) {
+                continue;
+            }
+
+            masked.append(text, cursor, start);
+
+            Placeholder ph = new Placeholder();
+            ph.id = id;
+            ph.marker = MARKER_START + id + MARKER_END;
+            ph.visibleText = text.substring(start, end);
+            ph.entity = entity;
+
+            state.placeholders.add(ph);
+
+            masked.append(ph.marker);
+
+            cursor = end;
+            id++;
+        }
+
+        masked.append(text.substring(cursor));
+
+        state.maskedText = masked.toString();
+        // Log.d("030-tx", String.format("pre: maskedText = %s", state.maskedText));
+
+        return state;
+    }
+
+    public static TLRPC.TL_textWithEntities postprocessEntities(
+            String translated,
+            EntityTranslationState state) {
+        // Log.d("030-tx", String.format("post: translated = %s", translated));
+
+        final String MARKER_START = "⟦TGE";
+        final String MARKER_END = "⟧";
+
+        TLRPC.TL_textWithEntities result = new TLRPC.TL_textWithEntities();
+        result.entities = new ArrayList<>();
+
+        if (state.placeholders.isEmpty()) {
+            result.text = translated;
+            return result;
+        }
+
+        StringBuilder rebuilt = new StringBuilder();
+
+        int pos = 0;
+
+        while (pos < translated.length()) {
+
+            int markerStart = translated.indexOf(MARKER_START, pos);
+
+            if (markerStart == -1) {
+                rebuilt.append(translated.substring(pos));
+                break;
+            }
+
+            rebuilt.append(translated, pos, markerStart);
+
+            int markerEnd = translated.indexOf(MARKER_END, markerStart);
+
+            if (markerEnd == -1) {
+                rebuilt.append(translated.substring(markerStart));
+                break;
+            }
+
+            String idStr = translated.substring(markerStart + MARKER_START.length(), markerEnd).trim();
+
+            int id;
+
+            try {
+                id = Integer.parseInt(idStr.replaceAll("\\D", ""));
+            } catch (Exception e) {
+                rebuilt.append(translated, markerStart, markerEnd + 1);
+                pos = markerEnd + 1;
+                continue;
+            }
+
+            if (id >= 0 && id < state.placeholders.size()) {
+
+                Placeholder ph = state.placeholders.get(id);
+
+                int offset = rebuilt.length();
+
+                rebuilt.append(ph.visibleText);
+
+                TLRPC.MessageEntity cloned = cloneEntity(ph.entity);
+                cloned.offset = offset;
+                cloned.length = ph.visibleText.length();
+
+                // Log.d("030-tx", String.format("adding entity back, offset=%d, len=%d, txt=%s", offset, cloned.length, ph.visibleText));
+
+                result.entities.add(cloned);
+            }
+
+            pos = markerEnd + 1;
+        }
+
+        result.text = rebuilt.toString();
+        // Log.d("030-tx", "post: rebuilt = " + result.text);
+
+        result.entities.sort(Comparator.comparingInt(e -> e.offset));
+
+        return result;
+    }
+
 //    private static DispatchQueue checkProgressQueue;
 //    public static Runnable trackDownloadingProgress(String lng, Utilities.Callback<Float> onProgress) {
 //        TranslateRemoteModel model = new TranslateRemoteModel.Builder(lng).build();

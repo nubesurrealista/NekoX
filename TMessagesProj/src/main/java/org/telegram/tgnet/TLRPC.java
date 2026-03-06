@@ -62187,6 +62187,8 @@ public class TLRPC {
 
         // NekoX Customs
         public String translatedMessage; //custom
+        public ArrayList<MessageEntity> translatedEntities; //custom
+        public ArrayList<MessageEntity> originalEntities; //custom
         public boolean translated; // custom
         public String decryptedMessage = null; // custom
         public boolean decrypted; // custom
