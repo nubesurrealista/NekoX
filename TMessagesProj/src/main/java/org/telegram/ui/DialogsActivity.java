@@ -10310,7 +10310,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             };
 
             FrameLayout.LayoutParams lp = LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8);
-            lp.bottomMargin += navigationBarHeight + additionNavigationBarHeight;
+            lp.bottomMargin += navigationBarHeight + additionNavigationBarHeight + (NekoConfig.hideBottomNavTabs.Bool() ? 0 : dp(MAIN_TABS_HEIGHT_WITH_MARGINS));
             ((ContentView) fragmentView).addView(undoView[a], ++undoViewIndex, lp);
         }
     }
@@ -14080,7 +14080,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (commentView != null) {
             return (int) (windowInsetsStateHolder.getAnimatedMaxBottomInset() + dp(9) + chatInputViewsContainer.getInputBubbleHeight() + dp(7) + dp(2));
         } else {
-            return navigationBarHeight + additionNavigationBarHeight;
+            return navigationBarHeight + additionNavigationBarHeight + (NekoConfig.hideBottomNavTabs.Bool() ? 0 : dp(MAIN_TABS_HEIGHT_WITH_MARGINS));
         }
     }
 
