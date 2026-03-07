@@ -185,7 +185,7 @@ public class FilterTabsView extends FrameLayout {
                 String counterText = String.format("%d", c);
                 int counterWidth = (int) Math.ceil(textCounterPaint.measureText(counterText));
                 int countWidth = Math.max(dp(TAB_COUNTER_HEIGHT - 10), counterWidth) + dp(10);
-                counterResultWidth = countWidth + dp(-2);
+                counterResultWidth = countWidth + (NekoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON ? dp(6) : dp(-2));;
             } else {
                 counterResultWidth = !isDefault && isEditing ? dp(TAB_COUNTER_HEIGHT - 5) : 0;
             }
@@ -449,7 +449,7 @@ public class FilterTabsView extends FrameLayout {
             if (NekoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON) {
                 tabWidth = currentTab.iconWidth + currentTab.titleWidth + ((countWidth != 0 && !animateCounterRemove) ? countWidth + AndroidUtilities.dp(6 * (counterText != null ? 1.0f : editingStartAnimationProgress)) : 0);
             } else {
-                tabWidth = currentTab.titleWidth + ((countWidth != 0 && !animateCounterRemove) ? countWidth + AndroidUtilities.dp(-2 * (counterText != null ? 1.0f : editingStartAnimationProgress)) : 0);
+                tabWidth = currentTab.iconWidth + currentTab.titleWidth + ((countWidth != 0 && !animateCounterRemove) ? countWidth + AndroidUtilities.dp(-2 * (counterText != null ? 1.0f : editingStartAnimationProgress)) : 0);
             }
 
             boolean fixTextX = false;
@@ -793,7 +793,7 @@ public class FilterTabsView extends FrameLayout {
             if (NekoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON) {
                 tabWidth = currentTab.iconWidth + currentTab.titleWidth + (countWidth != 0 ? countWidth + AndroidUtilities.dp(6 * (counterText != null ? 1.0f : editingStartAnimationProgress)) : 0);
             } else {
-                tabWidth = currentTab.iconWidth + (countWidth != 0 ? countWidth + AndroidUtilities.dp(6 * (counterText != null ? 1.0f : editingStartAnimationProgress)) : 0);
+                tabWidth = currentTab.iconWidth + currentTab.titleWidth + (countWidth != 0 ? countWidth + AndroidUtilities.dp(-2 * (counterText != null ? 1.0f : editingStartAnimationProgress)) : 0);
             }
             int textX = (getMeasuredWidth() - tabWidth) / 2 + currentTab.iconWidth;
 
