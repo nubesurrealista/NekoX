@@ -293,6 +293,10 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
         }
     }
 
+    public void setCurrentDialogId(long dialogId) {
+        currentDialogId = dialogId;
+    }
+
     public void setIsTransitionSupport(boolean isTransitionSupport) {
         this.isTransitionSupport = isTransitionSupport;
     }
@@ -367,6 +371,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
     private CustomDialog customDialog;
     private long currentDialogId;
     private int currentDialogFolderId;
+    private String titleOverride;
     private int currentDialogFolderDialogsCount;
     private int currentEditDate;
     public boolean isDialogCell;
@@ -2058,7 +2063,9 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 }
             }
 
-            if (currentDialogFolderId != 0) {
+            if (titleOverride != null) {
+                nameString = titleOverride;
+            } else if (currentDialogFolderId != 0) {
                 nameString = getString(R.string.ArchivedChats);
             } else {
                 if (chat != null) {
@@ -2766,6 +2773,10 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             }
         }
         updateThumbsPosition();
+    }
+
+    public void setTitleOverride(String s) {
+        titleOverride = s;
     }
 
     private SpannableStringBuilder formatInternal(int messageFormatType, CharSequence s1, CharSequence s2) {
@@ -5354,7 +5365,10 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
     public void onPopulateAccessibilityEvent(AccessibilityEvent event) {
         super.onPopulateAccessibilityEvent(event);
         StringBuilder sb = new StringBuilder();
-        if (currentDialogFolderId == 1) {
+        if (titleOverride != null) {
+            sb.append(titleOverride);
+            sb.append(". ");
+        } else if (currentDialogFolderId == 1) {
             sb.append(getString(R.string.ArchivedChats));
             sb.append(". ");
         } else {

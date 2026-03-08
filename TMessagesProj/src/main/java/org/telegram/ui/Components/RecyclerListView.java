@@ -154,6 +154,7 @@ public class RecyclerListView extends RecyclerView implements IBlur3Capture {
 
     @SectionsType
     private int sectionsType;
+    private boolean skipDrawSection = false;
 
     private boolean hideIfEmpty = true;
 
@@ -2727,7 +2728,10 @@ public class RecyclerListView extends RecyclerView implements IBlur3Capture {
         if (overlayContainer != null) {
             overlayContainer.draw(canvas);
         }
-        if (sectionsType == SECTIONS_TYPE_STICKY_HEADERS) {
+
+        if (skipDrawSection) {
+
+        } else if (sectionsType == SECTIONS_TYPE_STICKY_HEADERS) {
             if (sectionsAdapter != null && !headers.isEmpty()) {
                 for (int a = 0; a < headers.size(); a++) {
                     View header = headers.get(a);
@@ -2771,6 +2775,10 @@ public class RecyclerListView extends RecyclerView implements IBlur3Capture {
                 canvas.restoreToCount(saveCount);
             }
         }
+    }
+
+    public void setSkipDrawSection(boolean skipDrawSection) {
+        this.skipDrawSection = skipDrawSection;
     }
 
     public void relayoutPinnedHeader() {
