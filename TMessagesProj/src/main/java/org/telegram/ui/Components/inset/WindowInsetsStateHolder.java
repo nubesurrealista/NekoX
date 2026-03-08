@@ -4,6 +4,7 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import org.telegram.messenger.AndroidUtilities;
@@ -64,9 +65,11 @@ public class WindowInsetsStateHolder implements WindowInsetsProvider, WindowInse
     private WindowInsetsCompat lastInsets;
 
     public void setInsets(@Nullable WindowInsetsCompat insets) {
-        final boolean animated = lastInsets != null;
-        this.lastInsets = insets;
+        setInsets(insets, lastInsets != null);
+    }
 
+    private void setInsets(@Nullable WindowInsetsCompat insets, boolean animated) {
+        this.lastInsets = insets;
 
         final Insets systemInsets = insets != null ? insets.getInsets(WindowInsetsCompat.Type.systemBars()) : Insets.NONE;
         final Insets imeInsets = insets != null ? insets.getInsets(WindowInsetsCompat.Type.ime()) : Insets.NONE;
@@ -147,7 +150,7 @@ public class WindowInsetsStateHolder implements WindowInsetsProvider, WindowInse
 
     @Override
     public float getAnimatedMaxBottomInset() {
-        if (animatedInsetsProvider != null) {
+        if (animatedInsetsProvider != null && activeAnimations > 0) {
             return Math.max(animatedImeInset, insetsMaxRect.getBottom());
         }
 
@@ -156,7 +159,7 @@ public class WindowInsetsStateHolder implements WindowInsetsProvider, WindowInse
 
     @Override
     public int getCurrentMaxBottomInset() {
-        if (animatedInsetsProvider != null) {
+        if (animatedInsetsProvider != null && activeAnimations > 0) {
             return Math.max(animatedImeInset, Math.max(getInsets(WindowInsetsCompat.Type.ime() | WindowInsetsCompat.Type.systemBars()).bottom, inAppKeyboardHeight));
         }
 
@@ -165,7 +168,7 @@ public class WindowInsetsStateHolder implements WindowInsetsProvider, WindowInse
 
     @Override
     public float getAnimatedImeBottomInset() {
-        if (animatedInsetsProvider != null) {
+        if (animatedInsetsProvider != null && activeAnimations > 0) {
             return Math.max(animatedImeInset, insetsImeRect.getBottom());
         }
 
@@ -247,5 +250,22 @@ public class WindowInsetsStateHolder implements WindowInsetsProvider, WindowInse
     public void onAnimatedInsetsChanged(View view, WindowInsetsCompat insets) {
         animatedImeInset = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
         onUpdateListener.run();
+    }
+
+    private int activeAnimations;
+
+    @Override
+    public void onAnimatedInsetsStarted() {
+        activeAnimations++;
+    }
+
+    @Override
+    public void onAnimatedInsetsFinished() {
+        if (animatedInsetsProviderTarget != null) {
+            animatedInsetsProviderTarget.postOnAnimation(() -> {
+                activeAnimations--;
+                setInsets(ViewCompat.getRootWindowInsets(animatedInsetsProviderTarget), false);
+            });
+        }
     }
 }
