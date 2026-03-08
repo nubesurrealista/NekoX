@@ -2603,6 +2603,9 @@ public class ChatActivity extends BaseFragment implements
         @Override
         public void prepareMessageSending() {
             waitingForSendingMessageLoad = true;
+            if (chatAdapter != null) {
+                chatAdapter.checkRemoveBotForumRowsStartThreadRow();
+            }
         }
 
         @Override
@@ -10205,6 +10208,10 @@ public class ChatActivity extends BaseFragment implements
         });
         topicsTabs.setOnTopicSelected((topicId, fromMessage) -> {
             if (topicId == getTopicId()) return;
+            if (topicId == 0) {
+                hasSendingMessagesInBotForum = false;
+            }
+
             TLRPC.TL_forumTopic topic = topicsTabs.getTopic(topicId);
             TLRPC.Message message = topic == null ? null : topic.topicStartMessage;
             if (message == null && topic != null) {
@@ -10260,6 +10267,9 @@ public class ChatActivity extends BaseFragment implements
                 isComments = false;
             }
 
+            if (chatAdapter != null) {
+                chatAdapter.updateRowsSafe();
+            }
             firstLoadMessages();
 
             updateTitle(true);
@@ -14918,6 +14928,9 @@ public class ChatActivity extends BaseFragment implements
         }
         if ((scheduleDate != 0) == (chatMode == MODE_SCHEDULED)) {
             waitingForSendingMessageLoad = true;
+            if (chatAdapter != null) {
+                chatAdapter.checkRemoveBotForumRowsStartThreadRow();
+            }
         }
         int result = getSendMessagesHelper().sendMessage(arrayList, dialog_id, fromMyName, hideCaption, notify, scheduleDate, 0, getThreadMessage(), -1, payStars, getSendMonoForumPeerId(), getSendMessageSuggestionParams());
         AlertsCreator.showSendMediaAlert(result, this, themeDelegate);
@@ -36559,6 +36572,8 @@ public class ChatActivity extends BaseFragment implements
             && (quickShareSelectorOverlay == null || !quickShareSelectorOverlay.isActive());
     }
 
+    private boolean hasSendingMessagesInBotForum;
+
     public class ChatActivityAdapter extends RecyclerAnimationScrollHelper.AnimatableAdapter {
 
         private Context mContext;
@@ -36599,6 +36614,24 @@ public class ChatActivity extends BaseFragment implements
             mContext = context;
             isBot = currentUser != null && currentUser.bot;
             setHasStableIds(true);
+        }
+
+        public void checkRemoveBotForumRowsStartThreadRow() {
+            boolean changed = false;
+            if (UserObject.isBotForum(currentUser) && getTopicId() == 0) {
+                hasSendingMessagesInBotForum = true;
+                if (botInfoRow >= 0) {
+                    super.notifyItemRemoved(botInfoRow);
+                    changed = true;
+                }
+                if (botForumStartThreadRow >= 0) {
+                    super.notifyItemRemoved(botForumStartThreadRow);
+                    changed = true;
+                }
+            }
+            if (changed) {
+                updateRowsInternal();
+            }
         }
 
         public void updateRowsSafe() {
@@ -36648,7 +36681,7 @@ public class ChatActivity extends BaseFragment implements
             userNameTimeRow = -5;
             botForumStartThreadRow = -5;
 
-            if (UserObject.isBotForumWithEditableTopics(currentUser) && getTopicId() == 0) {
+            if (UserObject.isBotForumWithEditableTopics(currentUser) && getTopicId() == 0 && !hasSendingMessagesInBotForum) {
                 botForumStartThreadRow = rowCount++;
             }
 
@@ -36682,7 +36715,7 @@ public class ChatActivity extends BaseFragment implements
                     }
                     userInfoRow = rowCount++;
                 } else if ((UserObject.isReplyUser(currentUser) || currentUser != null && currentUser.bot && !MessagesController.isSupportUser(currentUser) && chatMode == MODE_DEFAULT) && endReached[0]) {
-                    if (getTopicId() == 0) {
+                    if (getTopicId() == 0 && !hasSendingMessagesInBotForum) {
                         botInfoRow = rowCount++;
                     }
                 }
@@ -36705,7 +36738,7 @@ public class ChatActivity extends BaseFragment implements
                 if (currentUser != null && !UserObject.isBot(currentUser) && !UserObject.isReplyUser(currentUser) && !UserInfoCell.isEmpty(getMessagesController().getPeerSettings(currentUser.id)) && !MessagesController.isSupportUser(currentUser) && chatMode == MODE_DEFAULT) {
                     userInfoRow = rowCount++;
                 } else if (UserObject.isReplyUser(currentUser) || currentUser != null && currentUser.bot && !MessagesController.isSupportUser(currentUser) && chatMode == MODE_DEFAULT) {
-                    if (getTopicId() == 0) {
+                    if (getTopicId() == 0 && !hasSendingMessagesInBotForum) {
                         botInfoRow = rowCount++;
                     }
                 }
