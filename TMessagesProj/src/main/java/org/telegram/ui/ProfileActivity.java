@@ -4166,7 +4166,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         contentView = ((NestedFrameLayout) fragmentView);
         contentView.needBlur = true;
 
-        listView = new ClippedListView(context) {
+        listView = new ClippedListView(context, resourcesProvider) {
 
             private VelocityTracker velocityTracker;
 
@@ -16422,8 +16422,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     private class ClippedListView extends RecyclerListView implements StoriesListPlaceProvider.ClippedView {
-        public ClippedListView(Context context) {
-            super(context);
+        public ClippedListView(Context context, Theme.ResourcesProvider resourcesProvider) {
+            super(context, resourcesProvider);
         }
 
         @Override

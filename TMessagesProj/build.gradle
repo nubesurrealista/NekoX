@@ -145,6 +145,7 @@ android {
         buildConfigField "int", "OFFICIAL_VERSION_CODE", officialCode + ""
         buildConfigField "int", "APP_ID", appId
         buildConfigField "String", "APP_HASH", "\"" + appHash + "\""
+        buildConfigField "boolean", "BUNDLE", "false"
         buildConfigField "int", "VERSION_NUM", "6"
         resValue "string", "package_name", APP_PACKAGE
 
