@@ -208,7 +208,6 @@ import org.telegram.ui.Components.URLSpanMono;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.Components.VectorAvatarThumbDrawable;
 import org.telegram.ui.Components.VideoForwardDrawable;
-import org.telegram.ui.Components.WebPlayerView;
 import org.telegram.ui.Components.spoilers.SpoilerEffect;
 import org.telegram.ui.Components.spoilers.SpoilerEffect2;
 import org.telegram.ui.GradientClip;
@@ -237,7 +236,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import me.vkryl.android.animator.BoolAnimator;
@@ -247,7 +245,6 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.helpers.WhisperHelper;
 import tw.nekomimi.nekogram.parts.PollTransUpdates;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
 
 public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate, ImageReceiver.ImageReceiverDelegate,
         DownloadController.FileDownloadProgressListener, TextSelectionHelper.SelectableView,
@@ -8761,16 +8758,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             }
                         }
 
-                        boolean forceShowVote = (NekoConfig.showVoteCountBeforeVote.Bool() && !(pollVoted || pollClosed));
-                        String text = pollAnswer.text.text;
-                        if (forceShowVote && (media.results.total_voters > 0) && (media.results.results.size() > a)) {
-                            if (media.results.results.size() > a) {
-                                TLRPC.TL_pollAnswerVoters ans = media.results.results.get(a);
-                                int voters = ans.voters;
-                                float percent = voters * 100 / (float) media.results.total_voters;
-                                text = String.format("%s - (%d - %d%%)", pollAnswer.text.text, voters, (int) percent);
-                            }
-                        }
+                        String text = maybeAppendPollStat(media, a, pollAnswer.text.text);
 
                         CharSequence answerText = new SpannableStringBuilder(text);
                         answerText = Emoji.replaceEmoji(answerText, Theme.chat_audioTitlePaint.getFontMetricsInt(), false, null, DynamicDrawableSpan.ALIGN_BOTTOM, 1.0f, emojisCount);
@@ -9440,25 +9428,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         currentUrl = AndroidUtilities.formapMapUrl(isSecretChat, lat, lon, (int) (photoWidth / AndroidUtilities.density), (int) (photoHeight / AndroidUtilities.density), true, 15);
                         currentWebFile = WebFile.createWithGeoPoint(point, (int) (photoWidth / AndroidUtilities.density), (int) (photoHeight / AndroidUtilities.density), 15, Math.min(2, (int) Math.ceil(AndroidUtilities.density)));
                     }
-                    if (isSecretChat) {
-                        if (SharedConfig.mapPreviewType == 0) {
-                            currentMapProvider = 2;
-                        } else if (SharedConfig.mapPreviewType == 1) {
-                            currentMapProvider = 1;
-                        } else if (SharedConfig.mapPreviewType == 3) {
-                            currentMapProvider = 1;
-                        } else {
-                            currentMapProvider = -1;
-                        }
-                    } else {
-                        if (NekoConfig.mapPreviewProvider.Int() == 0) {
-                            currentMapProvider = 2;
-                        } else if (NekoConfig.mapPreviewProvider.Int() == 1) {
-                            currentMapProvider = 1;
-                        } else {
-                            currentMapProvider = -1;
-                        }
-                    }
+                    setMapProvider(isSecretChat);
                     if (locationLoadingThumb == null) {
                         SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(R.raw.map_placeholder, Theme.key_chat_outLocationIcon, (Theme.isCurrentThemeDark() ? 3 : 6) * .12f);
                         svgThumb.setAspectCenter(true);
@@ -10063,12 +10033,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             if (fixPhotoWidth) {
                                 captionWidth = captionLayout.textWidth;
                                 // feature: blur on sides, instead of cropping photo
-                                if (NekoConfig.imageMessageSizeTweak.Bool())
-                                if (!currentMessageObject.isVideo() && !currentMessageObject.isGif() && captionWidth > photoWidth - AndroidUtilities.dp(10)) {
-                                    fitPhotoImage = true;
-                                    photoImage.setAspectFit(true);
-                                    photoImage.setRoundRadiusEnabled(false);
-                                }
+                                maybeApplyPhotoTweak(photoWidth);
                                 if (captionWidth > widthForCaption) {
                                     captionWidth = widthForCaption;
                                 }
@@ -11242,6 +11207,51 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         highlightCaptionToSetStart = highlightCaptionToSetEnd = -1;
 
         updateFlagSecure();
+    }
+
+    private void maybeApplyPhotoTweak(int photoWidth) {
+        if (!NekoConfig.imageMessageSizeTweak.Bool()) return;
+        if (!currentMessageObject.isVideo() && !currentMessageObject.isGif() && captionWidth > photoWidth - AndroidUtilities.dp(10)) {
+            fitPhotoImage = true;
+            photoImage.setAspectFit(true);
+            photoImage.setRoundRadiusEnabled(false);
+        }
+    }
+
+    private String maybeAppendPollStat(TLRPC.TL_messageMediaPoll media, int a, String text) {
+        boolean forceShowVote = (NekoConfig.showVoteCountBeforeVote.Bool() && !(pollVoted || pollClosed));
+        if (!forceShowVote) return text;
+        if (media.results.total_voters > 0 && media.results.results.size() > a) {
+            if (media.results.results.size() > a) {
+                TLRPC.TL_pollAnswerVoters ans = media.results.results.get(a);
+                int voters = ans.voters;
+                float percent = voters * 100 / (float) media.results.total_voters;
+                text = String.format("%s - (%d - %d%%)", text, voters, (int) percent);
+            }
+        }
+        return text;
+    }
+
+    private void setMapProvider(boolean isSecretChat) {
+        if (isSecretChat) {
+            if (SharedConfig.mapPreviewType == 0) {
+                currentMapProvider = 2;
+            } else if (SharedConfig.mapPreviewType == 1) {
+                currentMapProvider = 1;
+            } else if (SharedConfig.mapPreviewType == 3) {
+                currentMapProvider = 1;
+            } else {
+                currentMapProvider = -1;
+            }
+        } else {
+            if (NekoConfig.mapPreviewProvider.Int() == 0) {
+                currentMapProvider = 2;
+            } else if (NekoConfig.mapPreviewProvider.Int() == 1) {
+                currentMapProvider = 1;
+            } else {
+                currentMapProvider = -1;
+            }
+        }
     }
 
     private boolean loopStickers() {

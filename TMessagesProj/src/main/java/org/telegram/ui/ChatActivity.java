@@ -7590,9 +7590,9 @@ public class ChatActivity extends BaseFragment implements
                 String query = MessageObject.findAnimatedEmojiEmoticon(document);
                 AlertsCreator.ensurePaidMessageConfirmation(currentAccount, getDialogId(), 1, price -> {
                     if (chatMode == MODE_SCHEDULED) {
-                        AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), dialog_id, (notify, scheduleDate, scheduleRepeatPeriod) -> SendMessagesHelper.getInstance(currentAccount).sendSticker(document, query, dialog_id, replyingMessageObject, getThreadMessage(), null, replyingQuote, null, notify, scheduleDate, 0, false, parent, quickReplyShortcut, getQuickReplyId(), 0, getSendMonoForumPeerId(), getSendMessageSuggestionParams(), 0), themeDelegate);
+                        AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), dialog_id, (notify, scheduleDate, scheduleRepeatPeriod) -> SendMessagesHelper.getInstance(currentAccount).sendSticker(document, query, dialog_id, replyingMessageObject, getThreadMessage(), null, replyingQuote, null, notify, scheduleDate, 0, false, parent, quickReplyShortcut, getQuickReplyId(), 0, getSendMonoForumPeerId(), getSendMessageSuggestionParams()), themeDelegate);
                     } else {
-                        getSendMessagesHelper().sendSticker(document, query, dialog_id, replyingMessageObject, getThreadMessage(), null, replyingQuote, sendAnimationData, true, 0, 0, false, parent, quickReplyShortcut, getQuickReplyId(), price, getSendMonoForumPeerId(), getSendMessageSuggestionParams(), 0);
+                        getSendMessagesHelper().sendSticker(document, query, dialog_id, replyingMessageObject, getThreadMessage(), null, replyingQuote, sendAnimationData, true, 0, 0, false, parent, quickReplyShortcut, getQuickReplyId(), price, getSendMonoForumPeerId(), getSendMessageSuggestionParams());
                     }
                     hideFieldPanel(false);
                     chatActivityEnterView.addStickerToRecent(document);

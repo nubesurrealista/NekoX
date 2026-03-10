@@ -12325,11 +12325,12 @@ public class ChatActivityEnterView extends FrameLayout implements
                             if (parentFragment != null) parentFragment.ignoreKeepPosition = true;
                             parentFragment.shouldShowAutoSendHint = true;
                             SendMessagesHelper.getInstance(currentAccount)
-                                .sendSticker(sticker, query, dialog_id, replyingMessageObject, getThreadMessage(),
-                                        null, replyingQuote, sendAnimationData, notify, scheduleDate,
-                                        parent instanceof TLRPC.TL_messages_stickerSet, parent,
-                                        parentFragment != null ? parentFragment.quickReplyShortcut : null,
-                                        parentFragment != null ? parentFragment.getQuickReplyId() : 0, 0, slowModeTimer);
+                                .sendSticker(sticker, query, dialog_id, null, null,
+                                        replyingMessageObject, getThreadMessage(), null, replyingQuote, sendAnimationData, notify,
+                                        scheduleDate, scheduleRepeatPeriod, parent instanceof TLRPC.TL_messages_stickerSet,
+                                        parent, parentFragment != null ? parentFragment.quickReplyShortcut : null,
+                                        parentFragment != null ? parentFragment.getQuickReplyId() : 0, 0, getSendMonoForumPeerId(),
+                                        null, slowModeTimer);
                             parentFragment.showSlowModeAutoSendHint(view == null ? slowModeButton : view, true, true);
                         }
                     }
@@ -12642,10 +12643,12 @@ public class ChatActivityEnterView extends FrameLayout implements
                                         TL_stories.StoryItem storyItem = delegate != null ? delegate.getReplyToStory() : null;
                                         if (parentFragment != null) parentFragment.ignoreKeepPosition = true;
                                         SendMessagesHelper.getInstance(currentAccount)
-                                                .sendSticker(document, query, dialog_id, replyingMessageObject, getThreadMessage(),
-                                                        storyItem, replyingQuote, null, notify, scheduleDate, false, parent,
-                                                        parentFragment != null ? parentFragment.quickReplyShortcut : null,
-                                                        parentFragment != null ? parentFragment.getQuickReplyId() : 0, 0, slowModeTimer);
+                                                .sendSticker(document, query, dialog_id, null, null,
+                                                        replyingMessageObject, getThreadMessage(), storyItem, replyingQuote, null, notify,
+                                                        scheduleDate, scheduleRepeatPeriod, parent instanceof TLRPC.TL_messages_stickerSet,
+                                                        parent, parentFragment != null ? parentFragment.quickReplyShortcut : null,
+                                                        parentFragment != null ? parentFragment.getQuickReplyId() : 0, 0, getSendMonoForumPeerId(),
+                                                        null, slowModeTimer);
                                     });
                                 }
                                 parentFragment.showSlowModeAutoSendHint(view == null ? slowModeButton : view, true, true);
@@ -13002,11 +13005,12 @@ public class ChatActivityEnterView extends FrameLayout implements
                                 parentFragment.shouldShowAutoSendHint = true;
                                 if (parentFragment != null) parentFragment.ignoreKeepPosition = true;
                                 SendMessagesHelper.getInstance(currentAccount)
-                                        .sendSticker(sticker, query, dialog_id, replyingMessageObject, getThreadMessage(),
-                                                null, replyingQuote, sendAnimationData, notify, scheduleDate,
-                                                parent instanceof TLRPC.TL_messages_stickerSet, parent,
-                                                parentFragment != null ? parentFragment.quickReplyShortcut : null,
-                                                parentFragment != null ? parentFragment.getQuickReplyId() : 0, 0, slowModeTimer);
+                                        .sendSticker(sticker, query, dialog_id, null, null,
+                                                replyingMessageObject, getThreadMessage(), null, replyingQuote, null, notify,
+                                                scheduleDate, scheduleRepeatPeriod, parent instanceof TLRPC.TL_messages_stickerSet,
+                                                parent, parentFragment != null ? parentFragment.quickReplyShortcut : null,
+                                                parentFragment != null ? parentFragment.getQuickReplyId() : 0, 0, getSendMonoForumPeerId(),
+                                                null, slowModeTimer);
                                 parentFragment.showSlowModeAutoSendHint(slowModeButton, true, true);
                             }
                         }

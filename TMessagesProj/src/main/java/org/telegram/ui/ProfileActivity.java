@@ -8935,7 +8935,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 otherItem.hideSubItem(set_as_main);
                                 otherItem.hideSubItem(logout);
                             }
-                        }*/
+                        }
                         if (searchItem != null) {
                             searchItem.setEnabled(false);
                         }
