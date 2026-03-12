@@ -268,6 +268,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     public ChannelRecommendationsCell channelRecommendationsCell;
     private final PostRunnableHolder postRunnableHolder = new PostRunnableHolder();
 
+    private boolean logSpoilerNullOnce = true, logSpoilerNullOnce2 = true;
+
     public RadialProgress2 getRadialProgress() {
         return radialProgress;
     }
@@ -11107,8 +11109,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 setPadding(0, starsPriceTopPadding + topicSeparatorTopPadding + suggestionOfferTopPadding, 0, askBotForumBottomPadding);
             }
             oldPollButtons.clear();
-
-            if (mediaSpoilerEffect != null && !(needReplyImage && currentMessageObject != null && currentMessageObject.hasValidReplyMessageObject() && currentMessageObject.replyMessageObject.hasMediaSpoilers())) {
+            if (mediaSpoilerEffect != null && !(needReplyImage && currentMessageObject != null &&
+                    (currentMessageObject.hasMediaSpoilers() || (currentMessageObject.hasValidReplyMessageObject() && currentMessageObject.replyMessageObject.hasMediaSpoilers())))) {
+                TLObject from = currentMessageObject.getFromPeerObject();
+                MessagesController mc = MessagesController.getInstance(currentAccount);
+                Log.w("030-spo", String.format("set mediaSpoilerEffect to null, current msg: dialog=%d from=%s caption=%s hasRawMedia=%s rawHasSpoiler=%s",
+                        currentMessageObject.getDialogId(), (from instanceof TLRPC.User u ? u.first_name : (from instanceof TLRPC.Chat c ? c.title : "n/a")),
+                        currentMessageObject.caption, currentMessageObject.messageOwner.media != null, currentMessageObject.messageOwner.media != null && currentMessageObject.messageOwner.media.spoiler));
                 mediaSpoilerEffect = null;
             }
             if (unlockSpoilerEffect != null && unlockLayout == null) {
@@ -14414,6 +14421,20 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             mediaSpoilerEffect2.draw(canvas, this, (int) photoImage.getImageWidth(), (int) photoImage.getImageHeight(), photoImage.getAlpha(), drawingToBitmap);
             invalidate();
         } else {
+            if (mediaSpoilerEffect == null) {
+                if (logSpoilerNullOnce2) {
+                    logSpoilerNullOnce2 = false;
+                    TLObject from = currentMessageObject.getFromPeerObject();
+                    TLObject replyFrom = currentMessageObject.replyMessageObject != null ? currentMessageObject.replyMessageObject.getFromPeerObject() : null;
+                    Log.w("030-spoiler", String.format("mediaSpoilerEffect == null, recreating, current msg: dialog=%d from=%s id=%d caption=%s hasRawMedia=%s rawHasSpoiler=%s hasReply=%s",
+                            currentMessageObject.getDialogId(), (from instanceof TLRPC.User u ? u.first_name : (from instanceof TLRPC.Chat c ? c.title : "n/a")),
+                            currentMessageObject.messageOwner.id,
+                            currentMessageObject.caption, currentMessageObject.messageOwner.media != null, currentMessageObject.messageOwner.media != null && currentMessageObject.messageOwner.media.spoiler,
+                            (replyFrom instanceof TLRPC.User u ? u.first_name : (replyFrom instanceof TLRPC.Chat c ? c.title : "n/a"))));
+                }
+                mediaSpoilerEffect = new SpoilerEffect();
+            }
+
             int sColor = Color.WHITE;
             mediaSpoilerEffect.setColor(ColorUtils.setAlphaComponent(sColor, (int) (Color.alpha(sColor) * 0.325f * photoImage.getAlpha())));
             mediaSpoilerEffect.setBounds((int) photoImage.getImageX(), (int) photoImage.getImageY(), (int) photoImage.getImageX2(), (int) photoImage.getImageY2());
@@ -21872,6 +21893,20 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         canvas.clipPath(mediaSpoilerPath);
 
                         int sColor = Color.WHITE;
+                        if (mediaSpoilerEffect == null) {
+                            if (logSpoilerNullOnce) {
+                                logSpoilerNullOnce = false;
+                                TLObject from = currentMessageObject.getFromPeerObject();
+                                TLObject replyFrom = currentMessageObject.replyMessageObject != null ? currentMessageObject.replyMessageObject.getFromPeerObject() : null;
+                                Log.w("030-spoiler", String.format("mediaSpoilerEffect == null, recreating, current msg: dialog=%d from=%s id=%d caption=%s hasRawMedia=%s rawHasSpoiler=%s hasReply=%s",
+                                        currentMessageObject.getDialogId(), (from instanceof TLRPC.User u ? u.first_name : (from instanceof TLRPC.Chat c ? c.title : "n/a")),
+                                        currentMessageObject.messageOwner.id,
+                                        currentMessageObject.caption, currentMessageObject.messageOwner.media != null, currentMessageObject.messageOwner.media != null && currentMessageObject.messageOwner.media.spoiler,
+                                        (replyFrom instanceof TLRPC.User u ? u.first_name : (replyFrom instanceof TLRPC.Chat c ? c.title : "n/a"))));
+                            }
+                            mediaSpoilerEffect = new SpoilerEffect();
+                        }
+
                         mediaSpoilerEffect.setColor(ColorUtils.setAlphaComponent(sColor, (int) (Color.alpha(sColor) * 0.325f * replyImageReceiver.getAlpha())));
                         mediaSpoilerEffect.setBounds((int) replyImageReceiver.getImageX(), (int) replyImageReceiver.getImageY(), (int) replyImageReceiver.getImageX2(), (int) replyImageReceiver.getImageY2());
                         mediaSpoilerEffect.draw(canvas);
