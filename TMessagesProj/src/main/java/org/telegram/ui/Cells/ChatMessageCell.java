@@ -11111,11 +11111,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             oldPollButtons.clear();
             if (mediaSpoilerEffect != null && !(needReplyImage && currentMessageObject != null &&
                     (currentMessageObject.hasMediaSpoilers() || (currentMessageObject.hasValidReplyMessageObject() && currentMessageObject.replyMessageObject.hasMediaSpoilers())))) {
-                TLObject from = currentMessageObject.getFromPeerObject();
-                MessagesController mc = MessagesController.getInstance(currentAccount);
-                Log.w("030-spo", String.format("set mediaSpoilerEffect to null, current msg: dialog=%d from=%s caption=%s hasRawMedia=%s rawHasSpoiler=%s",
-                        currentMessageObject.getDialogId(), (from instanceof TLRPC.User u ? u.first_name : (from instanceof TLRPC.Chat c ? c.title : "n/a")),
-                        currentMessageObject.caption, currentMessageObject.messageOwner.media != null, currentMessageObject.messageOwner.media != null && currentMessageObject.messageOwner.media.spoiler));
                 mediaSpoilerEffect = null;
             }
             if (unlockSpoilerEffect != null && unlockLayout == null) {
@@ -14424,13 +14419,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (mediaSpoilerEffect == null) {
                 if (logSpoilerNullOnce2) {
                     logSpoilerNullOnce2 = false;
-                    TLObject from = currentMessageObject.getFromPeerObject();
-                    TLObject replyFrom = currentMessageObject.replyMessageObject != null ? currentMessageObject.replyMessageObject.getFromPeerObject() : null;
-                    Log.w("030-spoiler", String.format("mediaSpoilerEffect == null, recreating, current msg: dialog=%d from=%s id=%d caption=%s hasRawMedia=%s rawHasSpoiler=%s hasReply=%s",
-                            currentMessageObject.getDialogId(), (from instanceof TLRPC.User u ? u.first_name : (from instanceof TLRPC.Chat c ? c.title : "n/a")),
-                            currentMessageObject.messageOwner.id,
-                            currentMessageObject.caption, currentMessageObject.messageOwner.media != null, currentMessageObject.messageOwner.media != null && currentMessageObject.messageOwner.media.spoiler,
-                            (replyFrom instanceof TLRPC.User u ? u.first_name : (replyFrom instanceof TLRPC.Chat c ? c.title : "n/a"))));
+                    //TLObject from = currentMessageObject.getFromPeerObject();
+                    //TLObject replyFrom = currentMessageObject.replyMessageObject != null ? currentMessageObject.replyMessageObject.getFromPeerObject() : null;
+                    //Log.w("030-spoiler", String.format("mediaSpoilerEffect == null, recreating, current msg: dialog=%d from=%s id=%d caption=%s hasRawMedia=%s rawHasSpoiler=%s hasReply=%s",
+                    //        currentMessageObject.getDialogId(), (from instanceof TLRPC.User u ? u.first_name : (from instanceof TLRPC.Chat c ? c.title : "n/a")),
+                    //        currentMessageObject.messageOwner.id,
+                    //        currentMessageObject.caption, currentMessageObject.messageOwner.media != null, currentMessageObject.messageOwner.media != null && currentMessageObject.messageOwner.media.spoiler,
+                    //        (replyFrom instanceof TLRPC.User u ? u.first_name : (replyFrom instanceof TLRPC.Chat c ? c.title : "n/a"))));
                 }
                 mediaSpoilerEffect = new SpoilerEffect();
             }
@@ -21896,13 +21891,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         if (mediaSpoilerEffect == null) {
                             if (logSpoilerNullOnce) {
                                 logSpoilerNullOnce = false;
-                                TLObject from = currentMessageObject.getFromPeerObject();
-                                TLObject replyFrom = currentMessageObject.replyMessageObject != null ? currentMessageObject.replyMessageObject.getFromPeerObject() : null;
-                                Log.w("030-spoiler", String.format("mediaSpoilerEffect == null, recreating, current msg: dialog=%d from=%s id=%d caption=%s hasRawMedia=%s rawHasSpoiler=%s hasReply=%s",
-                                        currentMessageObject.getDialogId(), (from instanceof TLRPC.User u ? u.first_name : (from instanceof TLRPC.Chat c ? c.title : "n/a")),
-                                        currentMessageObject.messageOwner.id,
-                                        currentMessageObject.caption, currentMessageObject.messageOwner.media != null, currentMessageObject.messageOwner.media != null && currentMessageObject.messageOwner.media.spoiler,
-                                        (replyFrom instanceof TLRPC.User u ? u.first_name : (replyFrom instanceof TLRPC.Chat c ? c.title : "n/a"))));
+                                //TLObject from = currentMessageObject.getFromPeerObject();
+                                //TLObject replyFrom = currentMessageObject.replyMessageObject != null ? currentMessageObject.replyMessageObject.getFromPeerObject() : null;
+                                //Log.w("030-spoiler", String.format("mediaSpoilerEffect == null, recreating, current msg: dialog=%d from=%s id=%d caption=%s hasRawMedia=%s rawHasSpoiler=%s hasReply=%s",
+                                //        currentMessageObject.getDialogId(), (from instanceof TLRPC.User u ? u.first_name : (from instanceof TLRPC.Chat c ? c.title : "n/a")),
+                                //        currentMessageObject.messageOwner.id,
+                                //        currentMessageObject.caption, currentMessageObject.messageOwner.media != null, currentMessageObject.messageOwner.media != null && currentMessageObject.messageOwner.media.spoiler,
+                                //        (replyFrom instanceof TLRPC.User u ? u.first_name : (replyFrom instanceof TLRPC.Chat c ? c.title : "n/a"))));
                             }
                             mediaSpoilerEffect = new SpoilerEffect();
                         }
