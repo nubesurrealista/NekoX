@@ -29,6 +29,8 @@ import tw.nekomimi.nekogram.utils.UIUtil
 import tw.nekomimi.nekogram.utils.receive
 import tw.nekomimi.nekogram.utils.receiveLazy
 import java.util.*
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.collections.HashMap
 
 
@@ -318,8 +320,17 @@ interface Translator {
                 transReqId = null
             }
 
-            var msgCount = 0
             var localIsSelfOutgoing = isSelfOutgoingMessage
+            val pendingCount = AtomicInteger(0)
+            val posted = AtomicBoolean(false)
+            var result = "" as CharSequence
+            fun postNotification() {
+                val notiType = if (localIsSelfOutgoing) NotificationCenter.outgoingMessageTranslated
+                                else NotificationCenter.forwardingMessageTranslated
+                AndroidUtilities.runOnUIThread {
+                    NotificationCenter.getInstance(currentAccount).postNotificationName(notiType, result, uuid)
+                }
+            }
             if (!isSelfOutgoingMessage) {
                 val chatActivity = maybeChatActivity!!
                 if (chatActivity.messagePreviewParams == null) {
@@ -330,7 +341,6 @@ interface Translator {
                     localIsSelfOutgoing = true
                 } else {
                     chatActivity.messagePreviewParamsForTranslate = chatActivity.messagePreviewParams
-                    msgCount = chatActivity.messagePreviewParams.forwardMessages.messages.size
 
                     val target = ArrayList<MessageObject>()
                     chatActivity.messagePreviewParams.forwardMessages.getSelectedMessages(target)
@@ -345,48 +355,44 @@ interface Translator {
                         // doc & media messages can't be tampered
                         if (targetText.isNullOrBlank() || it.isDocument || it.isSticker || it.isVideo || it.isMusic || it.isGif) {
                             FileLog.d("030-tx: null text or doc")
-                            --msgCount
                             return@forEach
                         }
 
+                        pendingCount.incrementAndGet()
                         doTranslateWithOfficialApi(currentAccount, targetText, targetLang, { result ->
                             // Log.d("030-tx", "fwd: $text -> $result")
-                            --msgCount
                             if (isMsgText) it.messageText = result
                             else it.caption = result
+                            if (pendingCount.decrementAndGet() == 0 && posted.compareAndSet(false, true)) {
+                                postNotification()
+                            }
                         }, {
                             // Log.d("030-tx", "fwd: $text -> <FAILED>")
-                            --msgCount
+                            if (pendingCount.decrementAndGet() == 0 && posted.compareAndSet(false, true)) {
+                                postNotification()
+                            }
                         })
                     }
                 }
             }
 
-            val notiType = if (localIsSelfOutgoing) NotificationCenter.outgoingMessageTranslated
-                            else NotificationCenter.forwardingMessageTranslated
-
-            var result = "" as CharSequence
-
-            val t = Thread {
-                // wait until everything is translated
-                while (msgCount > 0) {
-                    // Log.d("030-tx", "wait...")
-                    Thread.sleep(100)
-                }
-                // Log.d("030-tx", "ok")
-                AndroidUtilities.runOnUIThread {
-                    NotificationCenter.getInstance(currentAccount).postNotificationName(notiType, result, uuid)
+            fun maybePost() {
+                if (pendingCount.decrementAndGet() == 0 && posted.compareAndSet(false, true)) {
+                    postNotification()
                 }
             }
 
             if (text.isNullOrBlank()) {
-                t.start()
+                if (pendingCount.get() == 0 && posted.compareAndSet(false, true)) {
+                    postNotification()
+                }
                 return
             }
 
+            pendingCount.incrementAndGet()
             doTranslateWithOfficialApi(currentAccount, text, targetLang, {
                 result = it
-                t.start()
+                maybePost()
             }, {
                 if (localIsSelfOutgoing) {
                     FileLog.d("030-tx: showing err toast")
@@ -400,7 +406,7 @@ interface Translator {
                     }
                 }
                 result = it
-                t.start()
+                maybePost()
             })
 
         }
