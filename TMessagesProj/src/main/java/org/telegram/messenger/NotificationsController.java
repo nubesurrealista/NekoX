@@ -4233,11 +4233,11 @@ public class NotificationsController extends BaseController {
                 lastMessageObject = new MessageObject(currentAccount, msg, msg.message, name, name, false, false, false, false);
                 lastMessageObject.isStoryPush = true;
             } else {
-                lastMessageObject = pushMessages.get(0);
+                lastMessageObject = pushMessages.isEmpty() ? null : pushMessages.get(0);
             }
             SharedPreferences preferences = getAccountInstance().getNotificationsSettings();
             int dismissDate = preferences.getInt("dismissDate", 0);
-            if (!lastMessageObject.isStoryPush && lastMessageObject.messageOwner.date <= dismissDate) {
+            if (lastMessageObject == null || (!lastMessageObject.isStoryPush && lastMessageObject.messageOwner.date <= dismissDate)) {
                 dismissNotification();
                 return;
             }
