@@ -181,4 +181,8 @@
     <string name="StickerSettings">ملصق</string>
     <string name="ConfirmSettings">تأكيد</string>
     <string name="InteractionSettings">التفاعل</string>
+    <string name="UnblockDeleted">تم حذف إلغاء الحظر</string>
+    <string name="UnblockDeletedWarn">هل انت متأكد من إلغاء حظر **all deleted users/bots**؟</string>
+    <string name="PGPEncrypt">تشفير</string>
+    <string name="PGPDecryptErr">فشل فك التشفير، اضغط علي Ok للمحاولة مرة اخرى بإستخدام OpenKeychain UI</string>
 </resources>
