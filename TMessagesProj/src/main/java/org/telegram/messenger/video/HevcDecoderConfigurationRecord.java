@@ -1,10 +1,7 @@
 package org.telegram.messenger.video;
 
 
-import static com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes.NAL_TYPE_PPS_NUT;
-import static com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes.NAL_TYPE_PREFIX_SEI_NUT;
-import static com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes.NAL_TYPE_SPS_NUT;
-import static com.googlecode.mp4parser.authoring.tracks.h265.NalUnitTypes.NAL_TYPE_VPS_NUT;
+import com.googlecode.mp4parser.authoring.tracks.h265.H265NalUnitTypes;
 
 import androidx.annotation.NonNull;
 
@@ -15,7 +12,7 @@ import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
 import com.google.android.exoplayer2.util.Log;
 import com.googlecode.mp4parser.authoring.tracks.CleanInputStream;
 import com.googlecode.mp4parser.authoring.tracks.h265.H265TrackImpl;
-import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitHeader;
+// import com.googlecode.mp4parser.authoring.tracks.h265.NalUnitHeader;
 import com.googlecode.mp4parser.util.ByteBufferByteChannel;
 
 import org.telegram.messenger.Utilities;
@@ -559,18 +556,18 @@ public class HevcDecoderConfigurationRecord {
             nal.position(0);
             // collect sps/vps/pps
             switch (unitHeader.nalUnitType) {
-                case NAL_TYPE_PPS_NUT:
+                case H265NalUnitTypes.NAL_TYPE_PPS_NUT:
                     pps.add(nal.duplicate());
                     break;
-                case NAL_TYPE_VPS_NUT:
+                case H265NalUnitTypes.NAL_TYPE_VPS_NUT:
                     vps.add(nal.duplicate());
                     break;
-                case NAL_TYPE_SPS_NUT:
+                case H265NalUnitTypes.NAL_TYPE_SPS_NUT:
                     sps.add(nal.duplicate());
                     nal.position(2);
                     spsStruct = new SequenceParameterSetRbsp(new CleanInputStream(Channels.newInputStream(new ByteBufferByteChannel(nal.slice()))));
                     break;
-                case NAL_TYPE_PREFIX_SEI_NUT:
+                case H265NalUnitTypes.NAL_TYPE_PREFIX_SEI_NUT:
                     //new SEIMessage(new BitReaderBuffer(nal.slice()));
                     break;
             }
@@ -611,7 +608,7 @@ public class HevcDecoderConfigurationRecord {
 
         final HevcDecoderConfigurationRecord.Array vpsArray = new HevcDecoderConfigurationRecord.Array();
         vpsArray.array_completeness = true;
-        vpsArray.nal_unit_type = NAL_TYPE_VPS_NUT;
+        vpsArray.nal_unit_type = H265NalUnitTypes.NAL_TYPE_VPS_NUT;
         vpsArray.nalUnits = new ArrayList<>();
         for (ByteBuffer vp : vps) {
             vpsArray.nalUnits.add(vp.array());
@@ -619,7 +616,7 @@ public class HevcDecoderConfigurationRecord {
 
         final HevcDecoderConfigurationRecord.Array spsArray = new HevcDecoderConfigurationRecord.Array();
         spsArray.array_completeness = true;
-        spsArray.nal_unit_type = NAL_TYPE_SPS_NUT;
+        spsArray.nal_unit_type = H265NalUnitTypes.NAL_TYPE_SPS_NUT;
         spsArray.nalUnits = new ArrayList<>();
         for (ByteBuffer sp : sps) {
             spsArray.nalUnits.add(sp.array());
@@ -627,7 +624,7 @@ public class HevcDecoderConfigurationRecord {
 
         final HevcDecoderConfigurationRecord.Array ppsArray = new HevcDecoderConfigurationRecord.Array();
         ppsArray.array_completeness = true;
-        ppsArray.nal_unit_type = NAL_TYPE_PPS_NUT;
+        ppsArray.nal_unit_type = H265NalUnitTypes.NAL_TYPE_PPS_NUT;
         ppsArray.nalUnits = new ArrayList<>();
         for (ByteBuffer pp : pps) {
             ppsArray.nalUnits.add(pp.array());

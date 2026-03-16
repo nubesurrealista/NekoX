@@ -89,8 +89,8 @@ def nativeTarget = System.getenv("NATIVE_TARGET")
 if (nativeTarget == null) nativeTarget = ""
 
 android {
-    compileSdk 35
-    buildToolsVersion "35.0.0"
+    compileSdk 36
+    buildToolsVersion "36.0.0"
     ndkVersion rootProject.ext.ndkVersion
 
     buildFeatures.aidl = true
@@ -317,59 +317,63 @@ dependencies {
     implementation "androidx.core:core-ktx:1.16.0"
     implementation 'androidx.fragment:fragment-ktx:1.7.1'
     implementation "androidx.palette:palette-ktx:1.0.0"
-    implementation "androidx.viewpager:viewpager:1.0.0"
-    implementation "androidx.exifinterface:exifinterface:1.3.7"
+    implementation "androidx.viewpager:viewpager:1.1.0"
+    implementation "androidx.exifinterface:exifinterface:1.4.2"
     implementation "androidx.interpolator:interpolator:1.0.0"
-    implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"
+    implementation "androidx.dynamicanimation:dynamicanimation:1.1.0"
     implementation "androidx.multidex:multidex:2.0.1"
     implementation "androidx.sharetarget:sharetarget:1.2.0"
     implementation 'androidx.interpolator:interpolator:1.0.0'
     implementation 'androidx.biometric:biometric:1.1.0'
 
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
+    implementation "com.github.spotbugs:spotbugs-annotations:4.9.8"
 
     // just follow official
 //    implementation 'com.google.android.gms:play-services-cast-framework:21.4.0'
-    implementation("androidx.mediarouter:mediarouter:1.7.0") {
+    implementation("androidx.mediarouter:mediarouter:1.8.1") {
         exclude group: 'androidx.recyclerview'
     }
 //    implementation 'org.nanohttpd:nanohttpd:2.3.1'
 
-    compileOnly 'org.checkerframework:checker-qual:2.5.2'
-    compileOnly 'org.checkerframework:checker-compat-qual:2.5.0'
+    compileOnly 'org.checkerframework:checker-qual:2.5.8'
+    compileOnly 'org.checkerframework:checker-compat-qual:2.5.6'
 
     // don"t change this :)
     //noinspection GradleDependency
-    implementation "com.googlecode.mp4parser:isoparser:1.0.6"
+    implementation "com.googlecode.mp4parser:isoparser:1.1.22"
 
-    implementation "com.google.code.gson:gson:2.11.0"
-    implementation "org.osmdroid:osmdroid-android:6.1.14"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.21"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1"
+    implementation "com.google.code.gson:gson:2.13.2"
+    implementation "org.osmdroid:osmdroid-android:6.1.20"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.10"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2"
 
     implementation 'com.github.UnifiedPush:android-connector:2.3.1'
-    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.10"
+    implementation "com.squareup.okhttp3:okhttp:5.3.2"
     implementation 'com.neovisionaries:nv-websocket-client:2.14'
-    implementation 'dnsjava:dnsjava:3.4.1'
-    implementation "org.dizitart:nitrite:4.3.0"
-    implementation 'org.dizitart:nitrite-mvstore-adapter:4.3.0'
-    implementation 'org.apache.commons:commons-lang3:3.17.0'
+    implementation 'dnsjava:dnsjava:3.6.4'
+    implementation "org.dizitart:nitrite:4.3.2"
+    implementation 'org.dizitart:nitrite-mvstore-adapter:4.3.2'
+    implementation 'org.apache.commons:commons-lang3:3.20.0'
 
     // for whisper
-    implementation 'com.google.ai.edge.litert:litert:1.0.1'
-    implementation 'com.google.ai.edge.litert:litert-support:1.0.1'
+    implementation 'com.google.ai.edge.litert:litert:1.4.1'
+    implementation ('com.google.ai.edge.litert:litert-support:1.4.1') {
+        exclude group: "com.google.ai.edge.litert", module: "litert-api"
+    }
+
     // ogg to samples
 //    implementation 'com.soywiz.korlibs.korge:korio:4.0.0'
     implementation 'io.github.jaredmdobson:concentus:1.0.2'
     implementation "org.gagravarr:vorbis-java-core:0.8"
 
-    implementation "com.jakewharton:process-phoenix:2.1.2"
-    implementation 'com.google.guava:guava:31.1-android'
+    implementation "com.jakewharton:process-phoenix:3.0.0"
+    implementation 'com.google.guava:guava:33.5.0-android'
 //    implementation 'com.airbnb.android:lottie:6.4.0' // 030: removed from upstream
 //    implementation 'com.google.android.play:integrity:1.3.0'
 //    implementation 'com.google.android.gms:play-services-safetynet:18.0.1'
 
-    compileOnly 'org.yaml:snakeyaml:2.3'
+    compileOnly 'org.yaml:snakeyaml:2.6'
 //    fullImplementation 'org.yaml:snakeyaml:2.3'
 
     implementation project(":openpgp-api")
@@ -404,10 +408,10 @@ dependencies {
 //    implementation 'com.google.mlkit:translate:17.0.3'
 
     constraints {
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0") {
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.10") {
             because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
         }
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0") {
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.10") {
             because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
         }
     }

@@ -39,6 +39,7 @@ import android.os.Build;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -1282,26 +1283,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         userLocation.setLatitude(48.85825);
         userLocation.setLongitude(2.29448);
 
-        GpsMyLocationProvider imlp = new GpsMyLocationProvider(getParentActivity());
-        imlp.setLocationUpdateMinDistance(10);
-        imlp.setLocationUpdateMinTime(10000);
-        imlp.addLocationSource(LocationManager.NETWORK_PROVIDER);
-        myLocationOverlay = new MyLocationNewOverlay(imlp, mapView) {
-            @Override
-            public void onLocationChanged(final Location location, IMyLocationProvider source) {
-                super.onLocationChanged(location, source);
-                if (location != null) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            positionMarker(location);
-                            getLocationController().setMapLocation(location, isFirstLocation);
-                            isFirstLocation = false;
-                        }
-                    });
-                }
-            }
-        };
+        createLocationOverlay();
         myLocationOverlay.enableMyLocation();
         myLocationOverlay.setDrawAccuracyEnabled(true);
         //TODO
@@ -1749,7 +1731,14 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                 FileLog.e(e);
             }
             mapView.getOverlays().add(myLocationOverlay);
-            myLocationOverlay.enableMyLocation();
+            try {
+                myLocationOverlay.enableMyLocation();
+            } catch (Exception e) {
+                Log.e("030-loc", "enableMyLocation threw an exception, recreating", e);
+                mapView.getOverlays().remove(myLocationOverlay);
+                createLocationOverlay();
+                mapView.getOverlays().add(myLocationOverlay);
+            }
         }
         onResumeCalled = true;
     }
@@ -1805,6 +1794,29 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
 
     public void setDelegate(LocationActivityDelegate delegate) {
         this.delegate = delegate;
+    }
+
+    private void createLocationOverlay() {
+        GpsMyLocationProvider imlp = new GpsMyLocationProvider(getParentActivity());
+        imlp.setLocationUpdateMinDistance(10);
+        imlp.setLocationUpdateMinTime(10000);
+        imlp.addLocationSource(LocationManager.NETWORK_PROVIDER);
+        myLocationOverlay = new MyLocationNewOverlay(imlp, mapView) {
+            @Override
+            public void onLocationChanged(final Location location, IMyLocationProvider source) {
+                super.onLocationChanged(location, source);
+                if (location != null) {
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            positionMarker(location);
+                            getLocationController().setMapLocation(location, isFirstLocation);
+                            isFirstLocation = false;
+                        }
+                    });
+                }
+            }
+        };
     }
 
     @Override
