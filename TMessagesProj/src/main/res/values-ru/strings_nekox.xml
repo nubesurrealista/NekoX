@@ -194,4 +194,19 @@
     <string name="ReactionSettings">Реакции</string>
     <string name="ShowSelfInsteadOfSavedMessages">Чат с собой вместо \'Избранного\'</string>
     <string name="UnsupportedProxy">Неподдерживаемый прокси</string>
+    <string name="UnblockDeletedWarn">Вы действительно хотите разблокировать **всех удалённых пользователей/ботов**?</string>
+    <string name="PGPEncrypt">Шифрование</string>
+    <string name="PGPDecryptErr">Шифрование не удалось, нажмите ОК чтобы попробовать ещё в OpenKeychain UI</string>
+    <string name="UseOldAppName">Используйте старое имя приложения (NekoX)</string>
+    <string name="CustomApiId">Кастомный API ID</string>
+    <string name="CustomApiHash">Кастомный API hash</string>
+    <string name="AllowDupLogin">Разрешить вход в существующие учетные записи</string>
+    <string name="AllowDupLoginInfo">Это может вызвать различные проблемы, поэтому убедитесь, что вы сохраняете только один из сеансов после завершения работы</string>
+    <string name="MonetLightMode">Светлый</string>
+    <string name="MonetGradient">Градиент</string>
+    <string name="MonetAvatarGradient">Градиент для аватарок</string>
+    <string name="MonetAlterOut">Альтернативный стиль исходящего сообщения</string>
+    <string name="HideChannelBottomNotiToggle">Скрыть переключатель уведомлений в нижней части списка каналов</string>
+    <string name="CustomMaxCacheSize">Кастомный размер кэша</string>
+    <string name="UseCamera2API">Использовать камеру 2 API</string>
 </resources>
