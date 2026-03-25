@@ -49,6 +49,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.primitives.Ints;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -59,6 +60,7 @@ import org.checkerframework.checker.nullness.compatqual.NullableType;
 /* package */ final class AtomParsers {
 
   private static final String TAG = "AtomParsers";
+  private static final String ESDS_META_TAG = "EsdsMeta";
 
   @SuppressWarnings("ConstantCaseForConstants")
   private static final int TYPE_clcp = 0x636c6370;
@@ -1521,20 +1523,27 @@ import org.checkerframework.checker.nullness.compatqual.NullableType;
             childAtomType == Atom.TYPE_esds
                 ? childPosition
                 : findBoxPosition(parent, Atom.TYPE_esds, childPosition, childAtomSize);
+        Log.d(ESDS_META_TAG, MessageFormat.format("parseAudioSampleEntry esdsCandidate childAtomType={0} childPosition={1} childAtomSize={2} sampleEntryPosition={3} sampleEntrySize={4} esdsAtomPosition={5} parentPosition={6} bytesLeft={7}",
+                childAtomType, childPosition, childAtomSize, position, size, esdsAtomPosition, parent.getPosition(), parent.bytesLeft()));
         if (esdsAtomPosition != C.POSITION_UNSET) {
-          esdsData = parseEsdsFromParent(parent, esdsAtomPosition);
-          mimeType = esdsData.mimeType;
-          @Nullable byte[] initializationDataBytes = esdsData.initializationData;
-          if (initializationDataBytes != null) {
-            if (MimeTypes.AUDIO_AAC.equals(mimeType)) {
-              // Update sampleRate and channelCount from the AudioSpecificConfig initialization
-              // data, which is more reliable. See [Internal: b/10903778].
-              AacUtil.Config aacConfig = AacUtil.parseAudioSpecificConfig(initializationDataBytes);
-              sampleRate = aacConfig.sampleRateHz;
-              channelCount = aacConfig.channelCount;
-              codecs = aacConfig.codecs;
+          try {
+            esdsData = parseEsdsFromParent(parent, esdsAtomPosition);
+            mimeType = esdsData.mimeType;
+            @Nullable byte[] initializationDataBytes = esdsData.initializationData;
+            if (initializationDataBytes != null) {
+              if (MimeTypes.AUDIO_AAC.equals(mimeType)) {
+                // Update sampleRate and channelCount from the AudioSpecificConfig initialization
+                // data, which is more reliable. See [Internal: b/10903778].
+                AacUtil.Config aacConfig = AacUtil.parseAudioSpecificConfig(initializationDataBytes);
+                sampleRate = aacConfig.sampleRateHz;
+                channelCount = aacConfig.channelCount;
+                codecs = aacConfig.codecs;
+              }
+              initializationData = ImmutableList.of(initializationDataBytes);
             }
-            initializationData = ImmutableList.of(initializationDataBytes);
+          } catch (IllegalArgumentException e) {
+            Log.w(ESDS_META_TAG, MessageFormat.format("parseAudioSampleEntry ignoring malformed esds childPosition={0} childAtomSize={1} sampleEntryPosition={2} sampleEntrySize={3}",
+                    childPosition, childAtomSize, position, size), e);
           }
         }
       } else if (childAtomType == Atom.TYPE_dac3) {

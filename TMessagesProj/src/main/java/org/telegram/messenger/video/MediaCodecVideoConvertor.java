@@ -524,7 +524,7 @@ public class MediaCodecVideoConvertor {
                                         hdrFragmentShader(originalWidth, originalHeight, resultWidth, resultHeight, false, hdrInfo),
                                         false
                                 );
-                            } else if (!isRound && Math.max(resultHeight, resultHeight) / (float) Math.max(originalHeight, originalWidth) < 0.9f) {
+                            } else if (!isRound && Math.max(resultWidth, resultHeight) / (float) Math.max(originalHeight, originalWidth) < 0.9f) {
                                 outputSurface.changeFragmentShader(
                                         createFragmentShader(originalWidth, originalHeight, resultWidth, resultHeight, true, isStory ? 0 : 3),
                                         createFragmentShader(originalWidth, originalHeight, resultWidth, resultHeight, false, isStory ? 0 : 3),

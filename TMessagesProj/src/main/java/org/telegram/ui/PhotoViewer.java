@@ -21507,7 +21507,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
         if (resultWidth % 4 != 0 || resultHeight % 4 != 0) {
             resultWidth -= resultWidth % 4;
-            resultWidth -= resultHeight % 4;
+            resultHeight -= resultHeight % 4;
         }
         return new Size(resultWidth, resultHeight);
     }

@@ -9633,7 +9633,7 @@ public class MessagesStorage extends BaseController {
     public static final int SENT_FILE_TYPE_PHOTO_HIGH_QUALITY = 6;
     public static final int SENT_FILE_TYPE_PHOTO_HIGH_QUALITY_ENCRYPTED = 7;
     public Object[] getSentFile(String path, int type) {
-        if (path == null || path.toLowerCase().endsWith("attheme")) {
+        if (path == null || path.toLowerCase().endsWith("attheme") || NekoConfig.tempDebug.Bool()) {
             return null;
         }
         CountDownLatch countDownLatch = new CountDownLatch(1);

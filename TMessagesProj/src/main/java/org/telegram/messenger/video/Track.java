@@ -23,6 +23,7 @@ import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
 import com.googlecode.mp4parser.boxes.mp4.ESDescriptorBox;
 import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.AudioSpecificConfig;
 import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.DecoderConfigDescriptor;
+import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.DecoderSpecificInfo;
 import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.ESDescriptor;
 import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.SLConfigDescriptor;
 
@@ -266,8 +267,10 @@ public class Track {
             headerBox = new SoundMediaHeaderBox();
             sampleDescriptionBox = new SampleDescriptionBox();
             AudioSampleEntry audioSampleEntry = new AudioSampleEntry("mp4a");
-            audioSampleEntry.setChannelCount(format.getInteger(MediaFormat.KEY_CHANNEL_COUNT));
-            audioSampleEntry.setSampleRate(format.getInteger(MediaFormat.KEY_SAMPLE_RATE));
+            int channelCount = format.containsKey(MediaFormat.KEY_CHANNEL_COUNT) ? format.getInteger(MediaFormat.KEY_CHANNEL_COUNT) : -1;
+            int sampleRate = format.containsKey(MediaFormat.KEY_SAMPLE_RATE) ? format.getInteger(MediaFormat.KEY_SAMPLE_RATE) : -1;
+            audioSampleEntry.setChannelCount(channelCount);
+            audioSampleEntry.setSampleRate(sampleRate);
             audioSampleEntry.setDataReferenceIndex(1);
             audioSampleEntry.setSampleSize(16);
 
@@ -301,16 +304,33 @@ public class Track {
             }
             decoderConfigDescriptor.setAvgBitRate(timeScale);
 
-            AudioSpecificConfig audioSpecificConfig = new AudioSpecificConfig();
-            audioSpecificConfig.setAudioObjectType(2);
-            audioSpecificConfig.setSamplingFrequencyIndex(samplingFrequencyIndexMap.get((int) audioSampleEntry.getSampleRate()));
-            audioSpecificConfig.setChannelConfiguration(audioSampleEntry.getChannelCount());
-            decoderConfigDescriptor.setAudioSpecificInfo(audioSpecificConfig);
+            Integer samplingFrequencyIndex = samplingFrequencyIndexMap.get((int) audioSampleEntry.getSampleRate());
+            int csd0Size = -1;
+            if (format.containsKey("csd-0")) {
+                ByteBuffer csd0 = format.getByteBuffer("csd-0");
+                if (csd0 != null) {
+                    ByteBuffer csd0Copy = csd0.duplicate();
+                    byte[] csd0Bytes = new byte[csd0Copy.remaining()];
+                    csd0Copy.get(csd0Bytes);
+                    DecoderSpecificInfo decoderSpecificInfo = new DecoderSpecificInfo();
+                    decoderSpecificInfo.setData(csd0Bytes);
+                    decoderConfigDescriptor.setDecoderSpecificInfo(decoderSpecificInfo);
+                    csd0Size = csd0Bytes.length;
+                }
+            }
+            if (csd0Size < 0) {
+                AudioSpecificConfig audioSpecificConfig = new AudioSpecificConfig();
+                audioSpecificConfig.setAudioObjectType(2);
+                audioSpecificConfig.setSamplingFrequencyIndex(samplingFrequencyIndex == null ? 0 : samplingFrequencyIndex);
+                audioSpecificConfig.setChannelConfiguration(audioSampleEntry.getChannelCount());
+                decoderConfigDescriptor.setAudioSpecificInfo(audioSpecificConfig);
+            }
 
             descriptor.setDecoderConfigDescriptor(decoderConfigDescriptor);
 
             ByteBuffer data = descriptor.serialize();
             //esds.setEsDescriptor(descriptor);
+            data.rewind();
             esds.setData(data);
             audioSampleEntry.addBox(esds);
             sampleDescriptionBox.addBox(audioSampleEntry);
