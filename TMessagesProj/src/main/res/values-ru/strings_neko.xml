@@ -211,4 +211,22 @@
     <string name="AlwaysShowBotCommandButton">Всегда показывать кнопку управления ботом</string>
     <string name="BlacklistedQueryAllAdded">Все запросы в данной ссылке уже находятся в черном списке</string>
     <string name="ConvertGroupAlert">Это действие нельзя отменить. Супергруппу невозможно вернуть в состояние обычной группы</string>
+    <string name="AlwaysHideBotCommandButton">Всегда скрывать кнопку команд бота</string>
+    <string name="MomoSettings">Настройки Momo</string>
+    <string name="TranslateBeforeSend">Перевод перед отправкой</string>
+    <string name="SearchByMessageType">Поиск по типу сообщения</string>
+    <string name="AccDescrShowKeyboard">Показать клавиатуру</string>
+    <string name="NoFilesInfo">Папка пуста</string>
+    <string name="HideOriginalTextAfterTranslate">Скрыть оригинальный текст после перевода</string>
+    <string name="DontAutoPlayNextMessage">Не воспроизводить автоматически следующее голосовое сообщение</string>
+    <string name="UseCustomProviderForAutoTranslate">Использовать кастомного провайдера перевода для авто-перевода</string>
+    <string name="UploadImage">Загрузить изображение</string>
+    <string name="NoFilesFound">Ничего не найдено</string>
+    <string name="SearchRecentFiles">Искать недавние файлы</string>
+    <string name="UnofficialApp">Неофициальное приложение</string>
+    <string name="FileUploadLimit">Размер файла не должен превышать %1$s</string>
+    <string name="ReplyAsQuoteByDefault">По умолчанию отвечать цитатой</string>
+    <string name="maxRecentEmojiCount">Максимальное количество недавних эмодзи</string>
+    <string name="justOneEmoji">Только выбранные</string>
+    <string name="DisableAutoWebLogin">Отключить автоматический вход в аккаунт Telegram</string>
 </resources>
