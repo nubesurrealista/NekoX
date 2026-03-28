@@ -29,7 +29,7 @@ import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import org.osmdroid.util.GeoPoint;
+import org.maplibre.android.geometry.LatLng;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ContactsController;
@@ -352,7 +352,7 @@ public class SharingLiveLocationCell extends FrameLayout {
             }
         }
 
-        GeoPoint position = info.marker.getPosition();
+        LatLng position = info.marker.getPosition();
         location.setLatitude(position.getLatitude());
         location.setLongitude(position.getLongitude());
 
