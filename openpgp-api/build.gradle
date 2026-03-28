@@ -6,15 +6,15 @@ android {
     defaultConfig {
         // API-Version . minor
         minSdkVersion 21
-        targetSdkVersion 31
+        // targetSdkVersion 31
     }
 
     // buildToolsVersion '31.0.0'
     lint {
-        abortOnError false
+        abortOnError = false
     }
     buildFeatures {
-        aidl true
+        aidl = true
     }
 
     compileOptions {
@@ -22,5 +22,5 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
-    namespace 'org.openintents.openpgp'
+    namespace = 'org.openintents.openpgp'
 }

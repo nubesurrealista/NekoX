@@ -42,7 +42,7 @@ repositories {
     mavenCentral()
     google()
     maven {
-        url 'https://www.jitpack.io'
+        url = 'https://www.jitpack.io'
         content {
             includeModule 'com.github.UnifiedPush', 'android-connector'
         }
@@ -91,7 +91,7 @@ if (nativeTarget == null) nativeTarget = ""
 android {
     compileSdk 36
     buildToolsVersion "36.0.0"
-    ndkVersion rootProject.ext.ndkVersion
+    ndkVersion = rootProject.ext.ndkVersion
 
     buildFeatures.aidl = true
     buildFeatures.buildConfig = true
@@ -103,16 +103,16 @@ android {
 
         abi {
             if (nativeTarget.isBlank()) {
-                enable true
+                enable = true
                 reset()
                 include 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
-                universalApk false
+                universalApk = false
             } else if (nativeTarget.toLowerCase().equals("universal")) {
-                enable false
-                universalApk true
+                enable = false
+                universalApk = true
             } else if (!archs.contains(nativeTarget.toLowerCase())) {
-                enable false
-                universalApk false
+                enable = false
+                universalApk = false
             }
         }
 
@@ -155,7 +155,7 @@ android {
 
         externalNativeBuild {
             cmake {
-                version "3.10.2"
+                version = "3.10.2"
                 arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21' //, '-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON'
             }
         }
@@ -183,7 +183,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
 
-        coreLibraryDesugaringEnabled true
+        coreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -205,31 +205,31 @@ android {
 
     buildTypes {
         debug {
-            isDefault true
-            debuggable true
-            jniDebuggable true
-            multiDexEnabled true
-            signingConfig keystorePwd == null ? signingConfigs.debug : signingConfigs.release
+            isDefault = true
+            debuggable = true
+            jniDebuggable = true
+            multiDexEnabled = true
+            signingConfig = (keystorePwd == null ? signingConfigs.debug : signingConfigs.release)
             ndk.debugSymbolLevel = 'FULL'
         }
 
         release {
-            debuggable false
-            jniDebuggable false
-            minifyEnabled true
-            shrinkResources true
-            multiDexEnabled true
+            debuggable = false
+            jniDebuggable = false
+            minifyEnabled = true
+            shrinkResources = true
+            multiDexEnabled = true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro", '../TMessagesProj/proguard-rules-beta.pro'
             matchingFallbacks = ["release", "debug"]
-            signingConfig keystorePwd == null ? signingConfigs.debug : signingConfigs.release
+            signingConfig = (keystorePwd == null ? signingConfigs.debug : signingConfigs.release)
         }
 
         foss {
             debuggable false
-            jniDebuggable false
-            minifyEnabled true
-            shrinkResources true
-            multiDexEnabled true
+            jniDebuggable = false
+            minifyEnabled = true
+            shrinkResources = true
+            multiDexEnabled = true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro", '../TMessagesProj/proguard-rules-beta.pro'
             matchingFallbacks = ["release", "debug"]
         }
@@ -450,5 +450,5 @@ android {
         }
     }
 
-    namespace 'org.telegram.messenger'
+    namespace = 'org.telegram.messenger'
 }
