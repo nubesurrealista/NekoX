@@ -257,4 +257,17 @@
     <string name="MemLeak">Fuga de memoria</string>
     <string name="KeepSamePositionOnNewMsg">Mantener la posición de desplazamiento al recibir un nuevo mensaje desde otra sesión</string>
     <string name="UseAdGuardDNS">Usar AdGuard DNS</string>
+    <string name="PGPDecryptErr">Falló el descifrado, presiona OK para intentar de nuevo con la IU de OpenKeychain</string>
+    <string name="DisableSaveDraftToCloud">Deshabilitar guardar borrador en la nube</string>
+    <string name="ShareGroupMediaMessage">Te gustaría compartir...</string>
+    <string name="OnlyShowStoriesFromUsers">Solo mostrar historias de usuarios</string>
+    <string name="ResumeAudioPlaybackOnLaunch">Reanudar la reproducción de audio al iniciar</string>
+    <string name="MuteAccountNoti">Silenciar todas las notificaciones</string>
+    <string name="UnMuteAccountNoti">Reactivar notificaciones</string>
+    <string name="ClearTranslatorCache">Borrar caché del traductor</string>
+    <string name="IgnoreTranslatorCache">Ignorar caché del traductor</string>
+    <string name="TranslationUnavailable">La traducción oficial no está disponible, usando la API alternativa de Google</string>
+    <string name="GrantMediaPermission">Conceder permiso de medios</string>
+    <string name="IgnoreTopicTabView">Forzar vista de tema clásico</string>
+    <string name="NoPreloadTrackIfRepeatOne">No precargar la siguiente pista si se repite una sola</string>
 </resources>
