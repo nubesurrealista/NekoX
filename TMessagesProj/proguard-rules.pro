@@ -167,10 +167,8 @@
 -dontoptimize
 -dontobfuscate
 
-# https://github.com/osmdroid/osmdroid/issues/633
--dontwarn org.osmdroid.tileprovider.modules.NetworkAvailabliltyCheck
-# Osmdroid
--dontwarn org.osmdroid.**
+# MapLibre
+-dontwarn org.maplibre.**
 
 -keepnames class androidx.recyclerview.widget.RecyclerView
 -keepclassmembers class androidx.recyclerview.widget.RecyclerView {

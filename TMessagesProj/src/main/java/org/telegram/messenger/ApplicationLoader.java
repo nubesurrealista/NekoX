@@ -40,6 +40,7 @@ import androidx.multidex.MultiDex;
 
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
+import org.maplibre.android.MapLibre;
 import org.json.JSONObject;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.voip.VideoCapturerDevice;
@@ -368,8 +369,7 @@ public class ApplicationLoader extends Application {
 
         applicationHandler = new Handler(applicationContext.getMainLooper());
 
-        org.osmdroid.config.Configuration.getInstance().setUserAgentValue("Telegram-FOSS ( NekoX ) " + BuildConfig.VERSION_NAME);
-        org.osmdroid.config.Configuration.getInstance().setOsmdroidBasePath(new File(ApplicationLoader.applicationContext.getCacheDir(), "osmdroid"));
+        MapLibre.getInstance(ApplicationLoader.applicationContext);
 
         LauncherIconController.tryFixLauncherIconIfNeeded();
         ProxyRotationController.init();
