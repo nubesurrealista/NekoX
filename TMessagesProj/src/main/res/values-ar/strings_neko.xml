@@ -143,4 +143,12 @@
     <string name="ChatBlurAlphaValue">نسبة شفافية المحادثة</string>
     <string name="disablePremiumStickerAnimation">تعطيل الرسوم المتحركة لملصقات البريميوم</string>
     <string name="ForceHideShowAsList">إخفاء نص \"إظهار كقائمة\" عند البحث</string>
+    <string name="DeleteAllFromSelfDone">كل رسائلك محذوفة</string>
+    <string name="enhancedFileLoader">حسن سرعة التحميل</string>
+    <string name="mapDriftingFixForGoogleMaps">اصلح انحراف Google Maps في الصين</string>
+    <string name="useOSMDroidMap">استخدم OSMDroid Map</string>
+    <string name="MomoSettings">اعدادات مومو</string>
+    <string name="DeleteAllFromSelfAlertBefore">تحذير! سيتم **حذف كل رسائلك قبل %s**في هذة المحادثة **لكل** المشاركين.</string>
+    <string name="DeleteAllFromSelfBefore">قبل...</string>
+    <string name="DeleteAllFromSelfAdmin">بصلاحيات المدير</string>
 </resources>
