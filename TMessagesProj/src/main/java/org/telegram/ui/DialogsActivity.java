@@ -13750,7 +13750,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         ViewGroup.MarginLayoutParams lp;
         for (UndoView undoView : undoView) {
             if (undoView != null) {
-                final int bottomMargin = navigationBarHeight + additionNavigationBarHeight;
+                final int bottomMargin = navigationBarHeight + additionNavigationBarHeight + (NekoConfig.hideBottomNavTabs.Bool() ? 0 : dp(MAIN_TABS_HEIGHT_WITH_MARGINS));
                 lp = (ViewGroup.MarginLayoutParams) undoView.getLayoutParams();
                 if (lp != null && lp.bottomMargin != bottomMargin) {
                     lp.bottomMargin = bottomMargin;
