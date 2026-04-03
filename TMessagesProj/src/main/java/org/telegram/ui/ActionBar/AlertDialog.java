@@ -217,6 +217,10 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
     float blurAlpha = 0.8f;
     private boolean blurBehind;
     private int additioanalHorizontalPadding;
+    private int buttonTimeoutSec;
+    private int[] buttonTimeoutTypes;
+    private long buttonTimeoutUntil;
+    private final Runnable buttonTimeoutRunnable = this::updateButtonTimeout;
 
     private int getDefaultMaxDialogWidth() {
         if (AndroidUtilities.isTablet()) {
@@ -342,6 +346,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
         if (!AndroidUtilities.isSafeToShow(getContext())) return;
         dismissed = false;
         super.show();
+        applyButtonTimeout();
         if (progressViewContainer != null && progressViewStyle == ALERT_TYPE_SPINNER) {
             progressViewContainer.setScaleX(0);
             progressViewContainer.setScaleY(0);
@@ -352,6 +357,92 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
                 .start();
         }
         shownAt = System.currentTimeMillis();
+    }
+
+    private void applyButtonTimeout() {
+        AndroidUtilities.cancelRunOnUIThread(buttonTimeoutRunnable);
+        buttonTimeoutUntil = 0;
+        if (buttonTimeoutSec > 0 && buttonsLayout != null) {
+            buttonTimeoutUntil = System.currentTimeMillis() + buttonTimeoutSec * 1000L;
+            updateButtonTimeout();
+        } else {
+            restoreButtonTimeoutState();
+        }
+    }
+
+    private void updateButtonTimeout() {
+        if (buttonsLayout == null) {
+            return;
+        }
+        long remainingMs = Math.max(0L, buttonTimeoutUntil - System.currentTimeMillis());
+        int remainingSec = (int) ((remainingMs + 999L) / 1000L);
+        if (remainingSec <= 0) {
+            restoreButtonTimeoutState();
+            return;
+        }
+
+        for (int i = 0; i < buttonsLayout.getChildCount(); i++) {
+            View child = buttonsLayout.getChildAt(i);
+            Object tag = child.getTag();
+            if (!(tag instanceof Integer) || !isButtonTimeoutTarget((Integer) tag)) {
+                continue;
+            }
+            child.setEnabled(false);
+            if (child instanceof TextView) {
+                CharSequence text = getButtonText((Integer) tag);
+                if (text != null) {
+                    ((TextView) child).setText(text + " (" + remainingSec + ")");
+                }
+            }
+        }
+        AndroidUtilities.runOnUIThread(buttonTimeoutRunnable, Math.min(1000L, remainingMs));
+    }
+
+    private void restoreButtonTimeoutState() {
+        if (buttonsLayout == null) {
+            return;
+        }
+        for (int i = 0; i < buttonsLayout.getChildCount(); i++) {
+            View child = buttonsLayout.getChildAt(i);
+            Object tag = child.getTag();
+            if (!(tag instanceof Integer) || !isButtonTimeoutTarget((Integer) tag)) {
+                continue;
+            }
+            child.setEnabled(true);
+            if (child instanceof TextView) {
+                CharSequence text = getButtonText((Integer) tag);
+                if (text != null) {
+                    ((TextView) child).setText(text);
+                }
+            }
+        }
+    }
+
+    private boolean isButtonTimeoutTarget(int type) {
+        if (buttonTimeoutTypes == null || buttonTimeoutTypes.length == 0) {
+            return type == BUTTON_POSITIVE || type == BUTTON_NEGATIVE || type == BUTTON_NEGATIVE_2 || type == BUTTON_NEUTRAL;
+        }
+        for (int buttonType : buttonTimeoutTypes) {
+            if (buttonType == type) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private CharSequence getButtonText(int type) {
+        switch (type) {
+            case BUTTON_POSITIVE:
+                return positiveButtonText;
+            case BUTTON_NEGATIVE:
+                return negativeButtonText;
+            case BUTTON_NEGATIVE_2:
+                return negative2ButtonText;
+            case BUTTON_NEUTRAL:
+                return neutralButtonText;
+            default:
+                return null;
+        }
     }
 
     public void setCancelDialog(boolean enable) {
@@ -1531,6 +1622,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
 
         }
         AndroidUtilities.cancelRunOnUIThread(showRunnable);
+        AndroidUtilities.cancelRunOnUIThread(buttonTimeoutRunnable);
+        buttonTimeoutUntil = 0;
 
         if (blurShader != null && blurBitmap != null) {
             blurBitmap.recycle();
@@ -1587,6 +1680,18 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
     public void setNegativeButton(CharSequence text, final OnButtonClickListener listener) {
         negativeButtonText = text;
         negativeButtonListener = listener;
+    }
+
+    public void setTimeout(int sec) {
+        setTimeout(sec, (int[]) null);
+    }
+
+    public void setTimeout(int sec, int... buttonTypes) {
+        buttonTimeoutSec = Math.max(sec, 0);
+        buttonTimeoutTypes = buttonTypes == null || buttonTypes.length == 0 ? null : buttonTypes.clone();
+        if (isShowing()) {
+            applyButtonTimeout();
+        }
     }
 
     public void setNeutralButton(CharSequence text, final OnButtonClickListener listener) {
@@ -1770,6 +1875,16 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
 
         public Builder setWidth(int width) {
             alertDialog.customWidth = width;
+            return this;
+        }
+
+        public Builder setTimeout(int sec) {
+            alertDialog.setTimeout(sec);
+            return this;
+        }
+
+        public Builder setTimeout(int sec, int... buttonTypes) {
+            alertDialog.setTimeout(sec, buttonTypes);
             return this;
         }
 
@@ -1979,6 +2094,12 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
 
         public Builder makeCustomMaxHeight() {
             alertDialog.customMaxHeight = true;
+            return this;
+        }
+
+        public Builder setCancelable(boolean b) {
+            alertDialog.setCanceledOnTouchOutside(b);
+            alertDialog.setCancelable(b);
             return this;
         }
     }

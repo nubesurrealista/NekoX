@@ -322,4 +322,17 @@
     <string name="ScanQrCodeFromChatList">Show scan QR code button in chat list title</string>
     <string name="AppearanceSettings">Appearance</string>
     <string name="HideBottomNavTabs">Hide bottom navigation tabs</string>
+    <string name="DisableSessionChecker">Disable session checker</string>
+    <string name="DisableSessionCheckerDesc">Don\'t check if logged in with potentially malicious client(s)</string>
+    <string name="MaliciousClientSessionWarning">Found active session(s) of potentially malicious client(s):</string>
+    <string name="MaliciousClientReasonDataCollection">Unauthorized data collection</string>
+    <string name="MaliciousClientReasonClosedSource">Closed source components</string>
+    <string name="MaliciousClientReasonTest">TEST WARNING</string>
+    <string name="MaliciousClientSessionWarningBottom">Please make sure you understand the risks of continue using such client(s).</string>
+    <string name="MaliciousClientSessionWarningBottomOpenList">Press \'OK\' to open session list for current account.</string>
+    <string name="MaliciousClientSessionWarningBottomDismiss">Press \'Dismiss\' to mute warning for listed clients. Or press \'Log Out\' to logout from all listed clients automatically.</string>
+    <string name="ShareCurrentKnownApiIds">Share current API IDs</string>
+    <string name="ResetDismissedClientWarnings">Reset dismissed client warnings</string>
+    <string name="LogoutError">Error logging out from %1$s, please try logout manually.\nMessage: %2$s</string>
+    <string name="BatchLogoutConfirm">Please make sure you have save/noted all session-specific data (such as secret chats) before proceed!</string>
 </resources>

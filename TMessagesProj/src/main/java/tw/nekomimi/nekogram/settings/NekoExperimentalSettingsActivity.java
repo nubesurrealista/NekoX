@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
+import org.telegram.ui.LaunchActivity;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,6 +55,7 @@ import kotlin.Unit;
 import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
+import moe.hx030.momogram.util.SessionsUtil;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.database.NitritesKt;
 import tw.nekomimi.nekogram.transtale.Translator;
@@ -125,6 +128,23 @@ public class NekoExperimentalSettingsActivity extends MomoSettingsBaseActivity {
             () -> AndroidUtilities.runOnUIThread(() -> {
                 NitritesKt.mkDatabase("translate_caches", true).close();
                 TelegramUtil.restartApp(false);
+            })));
+    private final AbstractConfigCell shareApiIdsRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.ShareCurrentKnownApiIds), null, null,
+            () -> AndroidUtilities.runOnUIThread(() -> {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                if (Build.VERSION.SDK_INT >= 24) {
+                    i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                }
+                i.setType("message/rfc822");
+                i.putExtra(Intent.EXTRA_EMAIL, "");
+                i.putExtra(Intent.EXTRA_SUBJECT, SessionsUtil.getSessionsString());
+                i.setClass(getParentActivity(), LaunchActivity.class);
+                getParentActivity().startActivity(i);
+            })));
+    private final AbstractConfigCell resetClientWarningsRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.ResetDismissedClientWarnings), null, null,
+            () -> AndroidUtilities.runOnUIThread(() -> {
+                NekoConfig.warnedClients.setConfigString("");
+                NekoConfig.prevSessionCheck.setConfigLong(0L);
             })));
     private final AbstractConfigCell triggerCrashRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.TriggerCrash), null, null,
             () -> AndroidUtilities.runOnUIThread(() -> { int[] arr = new int[0]; arr[1] = 0;})));

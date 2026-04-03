@@ -56,7 +56,6 @@ import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.source.FirefoxLocalTranslator;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
 
 import static tw.nekomimi.nekogram.config.ConfigItem.*;
 import static tw.nekomimi.nekogram.utils.StrUtil.getAppName;
@@ -161,6 +160,7 @@ public class NekoConfig {
     public static ConfigItem memLeakThreshold = addConfig(R.string.MemLeakThreshold, "MemLeakThreshold", configTypeInt, GENERAL, EvilLeakerKiller.setThreshold(1.2F));
     public static ConfigItem noPreloadTrackIfRepeatOne = addConfig(R.string.NoPreloadTrackIfRepeatOne, "NoPreloadTrackIfRepeatOne", configTypeBool, GENERAL, false);
     public static ConfigItem noForwardToStories = addConfig(R.string.HideForwardToStories, "HideForwardToStories", configTypeBool, GENERAL, false);
+    public static ConfigItem disableSessionChecker = addConfig(R.string.DisableSessionChecker, "DisableSessionChecker", configTypeBool, GENERAL, false);
 
     public static ConfigItem preferredTranslateTargetLang = addConfig(R.string.PreferredTranslateTargetLangTitle, "PreferredTranslateTargetLangTitle", configTypeString, GENERAL, "");
     public static ArrayList<String> preferredTranslateTargetLangList = new ArrayList<>();
@@ -402,6 +402,8 @@ public class NekoConfig {
     public static ConfigItem lastCrashError = addConfig("LastCrashError", configTypeString, null);
     public static ConfigItem chatNameOverride = addConfig(R.string.ChatNameOverride, "ChatNameOverride", configTypeBool, false);
     public static ConfigItem customCacheSize = addConfig("CustomCacheSize", configTypeInt, -1);
+    public static ConfigItem warnedClients = addConfig("WarnedClients", configTypeString, "");
+    public static ConfigItem prevSessionCheck = addConfig("PrevSessionCheck", configTypeLong, 0L);
 
     // deprecated
     public static ConfigItem ccToLang = addConfig("opencc_to_lang", configTypeString, "");

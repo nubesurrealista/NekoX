@@ -12,6 +12,7 @@ import org.telegram.messenger.R
 import org.telegram.ui.ActionBar.BaseFragment
 import org.telegram.ui.Components.URLSpanNoUnderline
 import tw.nekomimi.nekogram.NekoConfig
+import tw.nekomimi.nekogram.config.ConfigItem
 import java.util.TreeSet
 import java.util.UUID
 import java.util.regex.Matcher
@@ -208,6 +209,13 @@ object StrUtil {
     @JvmStatic
     fun isAppName(s: String): Boolean {
         return appNames.contains(s)
+    }
+
+    @JvmStatic
+    fun appendToCSConfigString(cfg: ConfigItem, s: Collection<String>) {
+        val orig = cfg.String()
+        if (orig.isNullOrBlank()) cfg.setConfigString(s.joinToString(","))
+        else cfg.setConfigString("$orig,${s.joinToString(",")}")
     }
 
 }

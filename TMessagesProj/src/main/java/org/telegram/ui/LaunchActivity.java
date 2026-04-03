@@ -27,6 +27,7 @@ import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.PictureInPictureParams;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -138,7 +139,6 @@ import org.telegram.messenger.pip.activity.IPipActivity;
 import org.telegram.messenger.pip.activity.IPipActivityHandler;
 import org.telegram.messenger.pip.activity.IPipActivityListener;
 import org.telegram.messenger.utils.FrameMetricsOverlayView;
-import org.telegram.messenger.utils.RefreshRateController;
 import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.messenger.voip.VoIPGroupNotification;
 import org.telegram.messenger.voip.VoIPPendingCall;
@@ -163,7 +163,6 @@ import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
-import org.telegram.ui.Cells.DrawerActionCheckCell;
 import org.telegram.ui.Cells.LanguageCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AppIconBulletinLayout;
@@ -249,6 +248,7 @@ import java.util.zip.ZipInputStream;
 
 import kotlin.Unit;
 import kotlin.text.StringsKt;
+import moe.hx030.momogram.util.SessionsUtil;
 import tw.nekomimi.nekogram.helpers.EvilLeakerKiller;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
@@ -8133,7 +8133,12 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             }
         }
 
-        if (!isConnecting) TelegramUtil.toggleProxyOnOff(true);
+        if (!isConnecting) {
+            TelegramUtil.toggleProxyOnOff(true);
+            if (!NekoConfig.disableSessionChecker.Bool()) {
+                Utilities.searchQueue.postRunnable(() -> SessionsUtil.checkSessions(this, currentAccount));
+            }
+        }
 
         if (currentConnectionState == ConnectionsManager.ConnectionStateConnecting || currentConnectionState == ConnectionsManager.ConnectionStateConnectingToProxy) {
             action = () -> {

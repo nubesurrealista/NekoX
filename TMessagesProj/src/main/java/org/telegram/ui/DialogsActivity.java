@@ -277,6 +277,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.Random;
 import java.util.function.Consumer;
 
+import moe.hx030.momogram.util.SessionsUtil;
 import tw.nekomimi.nekogram.MomoUpdater;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
@@ -7600,6 +7601,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     AlertsCreator.createMemLeakDialog(getContext(), usage).show();
                 }
             }
+        }
+        if (!NekoConfig.disableSessionChecker.Bool()) {
+            Utilities.searchQueue.postRunnable(() -> SessionsUtil.checkSessions(LaunchActivity.instance, currentAccount));
         }
         WhisperRecognitionService.instance.onDestroy();
     }
