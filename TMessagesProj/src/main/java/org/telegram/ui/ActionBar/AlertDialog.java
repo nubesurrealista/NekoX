@@ -218,6 +218,24 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
     private boolean blurBehind;
     private int additioanalHorizontalPadding;
 
+    private int getDefaultMaxDialogWidth() {
+        if (AndroidUtilities.isTablet()) {
+            if (AndroidUtilities.isSmallTablet()) {
+                return dp(446);
+            } else {
+                return dp(496);
+            }
+        } else {
+            return dp(356);
+        }
+    }
+
+    private int getDesiredDialogWidth() {
+        final int calculatedWidth = AndroidUtilities.displaySize.x - dp(48) - additioanalHorizontalPadding * 2;
+        final int contentWidth = customWidth > 0 ? Math.min(customWidth, calculatedWidth) : Math.min(getDefaultMaxDialogWidth(), calculatedWidth);
+        return contentWidth + backgroundPaddings.left + backgroundPaddings.right;
+    }
+
     public void setBlurParams(float blurAlpha, boolean blurBehind, boolean blurBackground) {
         this.blurAlpha = blurAlpha;
         this.blurBehind = blurBehind;
@@ -376,7 +394,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
                 int height = MeasureSpec.getSize(heightMeasureSpec);
 
                 if (customWidth > 0) {
-                    width = customWidth + backgroundPaddings.left + backgroundPaddings.right;
+                    width = Math.min(width, customWidth + backgroundPaddings.left + backgroundPaddings.right);
                 }
 
                 int maxContentHeight;
@@ -487,22 +505,10 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
                 if (lastScreenWidth != AndroidUtilities.displaySize.x) {
                     AndroidUtilities.runOnUIThread(() -> {
                         lastScreenWidth = AndroidUtilities.displaySize.x;
-                        final int calculatedWidth = AndroidUtilities.displaySize.x - dp(56);
-                        int maxWidth;
-                        if (AndroidUtilities.isTablet()) {
-                            if (AndroidUtilities.isSmallTablet()) {
-                                maxWidth = dp(446);
-                            } else {
-                                maxWidth = dp(496);
-                            }
-                        } else {
-                            maxWidth = dp(356);
-                        }
-
                         Window window = getWindow();
                         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
                         params.copyFrom(window.getAttributes());
-                        params.width = Math.min(maxWidth, calculatedWidth) + backgroundPaddings.left + backgroundPaddings.right;
+                        params.width = getDesiredDialogWidth();
                         try {
                             window.setAttributes(params);
                         } catch (Throwable e) {
@@ -1246,19 +1252,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
             }
 
             lastScreenWidth = AndroidUtilities.displaySize.x;
-            final int calculatedWidth = AndroidUtilities.displaySize.x - dp(48) - additioanalHorizontalPadding * 2;
-            int maxWidth;
-            if (AndroidUtilities.isTablet()) {
-                if (AndroidUtilities.isSmallTablet()) {
-                    maxWidth = dp(446);
-                } else {
-                    maxWidth = dp(496);
-                }
-            } else {
-                maxWidth = dp(356);
-            }
-
-            params.width = Math.min(maxWidth, calculatedWidth) + backgroundPaddings.left + backgroundPaddings.right;
+            params.width = getDesiredDialogWidth();
         }
         if (customView == null || !checkFocusable || !canTextInput(customView)) {
             params.flags |= WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
