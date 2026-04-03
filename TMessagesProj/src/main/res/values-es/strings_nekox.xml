@@ -270,4 +270,5 @@
     <string name="GrantMediaPermission">Conceder permiso de medios</string>
     <string name="IgnoreTopicTabView">Forzar vista de tema clásico</string>
     <string name="NoPreloadTrackIfRepeatOne">No precargar la siguiente pista si se repite una sola</string>
+    <string name="BoostedContactRatingInProfile">Potenciar calificación de contactos en el perfil</string>
 </resources>
