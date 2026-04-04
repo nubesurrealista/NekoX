@@ -335,4 +335,5 @@
     <string name="ResetDismissedClientWarnings">Reset dismissed client warnings</string>
     <string name="LogoutError">Error logging out from %1$s, please try logout manually.\nMessage: %2$s</string>
     <string name="BatchLogoutConfirm">Please make sure you have save/noted all session-specific data (such as secret chats) before proceed!</string>
+    <string name="TrimCOTFromTranslateResult">Trim [COT]-prefixed thinking process from translate result</string>
 </resources>

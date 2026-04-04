@@ -114,6 +114,7 @@ public class NekoGeneralSettingsActivity extends MomoSettingsBaseActivity {
             new ConfigCellTextInput(LocaleController.getString(R.string.PreferredTranslateTargetLang),
                     NekoConfig.preferredTranslateTargetLang, LocaleController.getString(R.string.PreferredTranslateTargetLangExample),
                     null, NekoConfig::updatePreferredTranslateTargetLangList));
+    private final AbstractConfigCell trimCOTFromTranslateResultRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.trimCOTFromTranslateResult));
     private final AbstractConfigCell dividerTranslation = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell headerMap = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.Map)));

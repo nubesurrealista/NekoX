@@ -1,11 +1,7 @@
 package tw.nekomimi.nekogram.transtale.source
 
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
 import org.telegram.messenger.FileLog
-import org.telegram.messenger.SharedConfig
 import org.telegram.messenger.UserConfig
 import org.telegram.tgnet.ConnectionsManager
 import org.telegram.tgnet.TLObject
@@ -13,6 +9,7 @@ import org.telegram.tgnet.TLRPC
 import org.telegram.tgnet.TLRPC.TL_error
 import org.telegram.tgnet.TLRPC.TL_messages_translateResult
 import org.telegram.tgnet.TLRPC.TL_messages_translateText
+import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.transtale.Translator
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -37,7 +34,8 @@ object TelegramAPITranslator : Translator {
             try {
                 ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req) { res: TLObject?, err: TL_error? ->
                     if (res is TL_messages_translateResult && res.result.isNotEmpty()) {
-                        it.resume(res.result[0].text)
+                        val result = Translator.maybeStripCOT(res.result[0].text)
+                        it.resume(result ?: res.result[0].text)
                     } else {
                         FileLog.e(err?.text)
                         it.resumeWithException(RuntimeException("Failed to translate by Telegram API"))

@@ -141,7 +141,7 @@ interface Translator {
 
             // FileLog.d("[Trans] use provider ${translator.javaClass.simpleName}, toLang: $toLang, query: $query")
 
-            val result =  translator.doTranslate("auto", language, query).also {
+            val result = translator.doTranslate("auto", language, query).also {
                 if (Build.VERSION.SDK_INT < 26) {
                     translatedTexts.computeIfAbsent(to) { HashMap() }[query] = it
                 } else {
@@ -488,6 +488,22 @@ interface Translator {
                     }
                 }
             }
+        }
+
+        fun maybeStripCOT(result: String?): String? {
+            if (result == null || !NekoConfig.trimCOTFromTranslateResult.Bool() ||
+                (NekoConfig.translationProvider.Int() != providerTelegram)) {
+                return result
+            }
+            val rebuild = StringBuilder()
+            val spl = result.split("\n")
+            for (i in 0..<spl.size) {
+                val line = spl[i]
+                if (line.trimStart().startsWith("[COT] ")) break
+                if (i != 0) rebuild.append("\n")
+                rebuild.append(line)
+            }
+            return rebuild.toString()
         }
     }
 

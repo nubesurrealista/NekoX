@@ -123,7 +123,7 @@ fun MessageObject.translateFinished(locale: Locale): Int {
             else messageOwner.message
 
         val text = map?.get(locale)?.get(originalText)
-            ?: db?.query(originalText.takeIf { !it.isNullOrBlank() } ?: return STATUS_SKIPPED_NO_TEXT)
+            ?: Translator.maybeStripCOT(db?.query(originalText.takeIf { !it.isNullOrBlank() } ?: return STATUS_SKIPPED_NO_TEXT))
             ?: return STATUS_UNFINISHED
 
         messageOwner.translatedMessage =
