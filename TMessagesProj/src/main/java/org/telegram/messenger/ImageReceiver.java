@@ -321,6 +321,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     private boolean isVisible = true;
     private boolean isAspectFit;
     private boolean forcePreview;
+    private boolean forceNotMedia;
     private boolean forceCrossfade;
     private boolean useRoundRadius = true;
     private final int[] roundRadius = new int[4];
@@ -1953,7 +1954,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             }
             int orientation = 0, invert = 0;
             BitmapShader shaderToUse = null;
-            if (!forcePreview && currentMediaDrawable != null && !animationNotReady) {
+            if (!forcePreview && !forceNotMedia && currentMediaDrawable != null && !animationNotReady) {
                 drawable = currentMediaDrawable;
                 shaderToUse = mediaShader;
                 orientation = imageOrientation;
@@ -2506,6 +2507,10 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
 
     public void setForcePreview(boolean value) {
         forcePreview = value;
+    }
+
+    public void setForceNotMedia(boolean value) {
+        forceNotMedia = value;
     }
 
     public void setForceCrossfade(boolean value) {

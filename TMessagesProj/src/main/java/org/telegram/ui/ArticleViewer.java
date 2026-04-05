@@ -196,6 +196,7 @@ import org.telegram.ui.Components.TextPaintSpan;
 import org.telegram.ui.Components.TextPaintUrlSpan;
 import org.telegram.ui.Components.TextPaintWebpageUrlSpan;
 import org.telegram.ui.Components.TranslateAlert2;
+import org.telegram.ui.Components.TranslateAlert3;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.VideoPlayer;
 import org.telegram.ui.Components.WebPlayerView;
@@ -4673,11 +4674,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         textSelectionHelper = new TextSelectionHelper.ArticleTextSelectionHelper();
         textSelectionHelper.setParentView(pages[0].listView);
-//        if (MessagesController.getInstance(currentAccount).getTranslateController().isContextTranslateEnabled()) {
-        textSelectionHelper.setOnTranslate((text, fromLang, toLang, onAlertDismiss) -> {
-            TranslateAlert2.showAlert(parentActivity, parentFragment, currentAccount, fromLang, toLang, text, null, false, null, onAlertDismiss);
-        });
-//        }
+        if (true || MessagesController.getInstance(currentAccount).getTranslateController().isContextTranslateEnabled()) {
+            textSelectionHelper.setOnTranslate((text, fromLang, toLang, onAlertDismiss) -> {
+                TranslateAlert2.showAlert(parentActivity, parentFragment, currentAccount, fromLang, toLang, text, null, false, null, onAlertDismiss);
+//                final TranslateAlert3 alert =
+//                    new TranslateAlert3(parentActivity, parentFragment != null ? parentFragment.getResourceProvider() : getResourcesProvider())
+//                        .setText(fromLang, text);
+//                alert.setOnDismissListener(onAlertDismiss);
+//                alert.show();
+            });
+        }
         textSelectionHelper.layoutManager = pages[0].layoutManager;
         textSelectionHelper.setCallback(new TextSelectionHelper.Callback() {
             @Override
