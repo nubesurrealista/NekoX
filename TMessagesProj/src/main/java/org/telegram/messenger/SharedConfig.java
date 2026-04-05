@@ -340,6 +340,7 @@ public class SharedConfig {
     public static int callEncryptionHintDisplayedCount;
     public static boolean shadowsInSections;
     public static boolean debugViewMetrics;
+    public static boolean useEightPatch;
     public static boolean photoHighQualityDefault;
 
     public static TLRPC.TL_help_appUpdate pendingAppUpdate;
@@ -858,6 +859,7 @@ public class SharedConfig {
             debugVideoQualities = preferences.getBoolean("debugVideoQualities", false);
             shadowsInSections = preferences.getBoolean("shadowsInSections", false);
             debugViewMetrics = preferences.getBoolean("debugViewMetrics", false);
+            useEightPatch = preferences.getBoolean("useEightPatch", false);
             photoHighQualityDefault = preferences.getBoolean("photoHighQualityDefault", true) || NekoConfig.increasedMaxPhotoResolution.Bool();
 
             loadDebugConfig(preferences);
