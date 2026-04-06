@@ -141,6 +141,7 @@ public class NekoGeneralSettingsActivity extends MomoSettingsBaseActivity {
 
     private final AbstractConfigCell headerFolder = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.Folder)));
     private final AbstractConfigCell openArchiveOnPullRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.openArchiveOnPull));
+    private final AbstractConfigCell disablePullDownSearchRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disablePullDownSearch));
     private final AbstractConfigCell unarchiveOnSwipeRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.unarchiveOnSwipe));
     private final AbstractConfigCell swipeActionInTopicListRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.swipeActionInTopicList));
     private final AbstractConfigCell ignoreFilterEmoticonUpdateRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.ignoreFilterEmoticonUpdate));
