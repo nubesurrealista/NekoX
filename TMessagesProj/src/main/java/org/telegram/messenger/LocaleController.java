@@ -720,30 +720,34 @@ public class LocaleController {
         languagesDict.put(localeInfo.shortName, localeInfo);
 
         localeInfo = new LocaleInfo();
-        localeInfo.name = "简体中文";
-        localeInfo.nameEnglish = "Simplified Chinese";
-        localeInfo.shortName = "moecn";
-        localeInfo.baseLangCode = "zh_hans_raw";
+        localeInfo.name = "简体中文 (beta)";
+        localeInfo.nameEnglish = "Chinese (Simplified)";
+        localeInfo.shortName = "zh_hans_raw";
+        localeInfo.baseLangCode = "";
         localeInfo.isRtl = false;
         localeInfo.pathToFile = "unofficial";
-        localeInfo.pluralLangCode = "zh_cn";
-        localeInfo.builtIn = true;
+        localeInfo.pluralLangCode = "zh";
+        localeInfo.builtIn = false;
         languages.add(localeInfo);
         languagesDict.put(localeInfo.getKey(), localeInfo);
+        languagesDict.put("unofficial_moecn", localeInfo);
+        languagesDict.put("moecn", localeInfo);
         languagesDict.put("zh_cn", localeInfo);
         languagesDict.put("zh_sg", localeInfo);
 
         localeInfo = new LocaleInfo();
-        localeInfo.name = "正體中文";
-        localeInfo.nameEnglish = "Chinese (zh-Hant-TW)";
-        localeInfo.shortName = "taiwan";
-        localeInfo.baseLangCode = "zh_hant_raw";
+        localeInfo.name = "繁體中文 (beta)";
+        localeInfo.nameEnglish = "Chinese (Traditional)";
+        localeInfo.shortName = "zh_hant_raw";
+        localeInfo.baseLangCode = "";
         localeInfo.isRtl = false;
         localeInfo.pathToFile = "unofficial";
-        localeInfo.pluralLangCode = "zh_tw";
-        localeInfo.builtIn = true;
+        localeInfo.pluralLangCode = "zh";
+        localeInfo.builtIn = false;
         languages.add(localeInfo);
         languagesDict.put(localeInfo.getKey(), localeInfo);
+        languagesDict.put("unofficial_taiwan", localeInfo);
+        languagesDict.put("taiwan", localeInfo);
         languagesDict.put("zh_tw", localeInfo);
         languagesDict.put("zh_hk", localeInfo);
         languagesDict.put("zh_mo", localeInfo);
@@ -1386,8 +1390,42 @@ public class LocaleController {
     }
 
     public int applyLanguage(final LocaleInfo localeInfo, boolean override, boolean init, boolean fromFile, boolean force, final int currentAccount, Runnable onDone) {
+        return applyLanguage(localeInfo, override, init, fromFile, force, currentAccount, onDone, false);
+    }
+
+    private int applyLanguage(final LocaleInfo localeInfo, boolean override, boolean init, boolean fromFile, boolean force, final int currentAccount, Runnable onDone, boolean skipZhBetaResolve) {
         if (localeInfo == null) {
             return 0;
+        }
+        if (!skipZhBetaResolve && localeInfo.isUnofficial() && localeInfo.builtIn && ("zh_hans_beta".equals(localeInfo.shortName) || "zh_hant_beta".equals(localeInfo.shortName))) {
+            TLRPC.TL_langpack_getLanguage req = new TLRPC.TL_langpack_getLanguage();
+            req.lang_code = localeInfo.getLangCode();
+            req.lang_pack = "android";
+            return ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                if (response instanceof TLRPC.TL_langPackLanguage language) {
+                    language.lang_code = language.lang_code.replace('-', '_').toLowerCase();
+                    language.plural_code = language.plural_code.replace('-', '_').toLowerCase();
+                    if (language.base_lang_code != null) {
+                        language.base_lang_code = language.base_lang_code.replace('-', '_').toLowerCase();
+                    }
+
+                    String key = language.official ? "remote_" + language.lang_code : "unofficial_" + language.lang_code;
+                    LocaleInfo resolvedLocaleInfo = getLanguageFromDict(key);
+                    if (resolvedLocaleInfo == null) {
+                        resolvedLocaleInfo = new LocaleInfo();
+                        resolvedLocaleInfo.shortName = language.lang_code;
+                        resolvedLocaleInfo.pathToFile = language.official ? "remote" : "unofficial";
+                    }
+                    resolvedLocaleInfo.name = language.native_name;
+                    resolvedLocaleInfo.nameEnglish = language.name;
+                    resolvedLocaleInfo.baseLangCode = language.base_lang_code;
+                    resolvedLocaleInfo.pluralLangCode = language.plural_code;
+                    resolvedLocaleInfo.isRtl = language.rtl;
+                    applyLanguage(resolvedLocaleInfo, override, init, false, force, currentAccount, onDone, true);
+                } else {
+                    applyLanguage(localeInfo, override, init, fromFile, force, currentAccount, onDone, true);
+                }
+            }), ConnectionsManager.RequestFlagWithoutLogin);
         }
         int requestId = 0;
         boolean hasBase = localeInfo.hasBaseLang();
