@@ -242,7 +242,7 @@
 群组 "**%2$s**" 将转变成私人频道。</string>
 <string name="SendWithoutGrouping">不以图片组方式发送</string>
 <string name="StopQuizAlertText">如果你现在停止测验，任何人都将无法继续提交结果。这个操作是不可逆的。</string>
-<string name="SwipeSettingsFolders">修改文件夹</string>
+<string name="SwipeSettingsFolders">切换文件夹</string>
 <string name="EventLogLeftGroup">un1 退出了群组</string>
 <string name="PassportLanguage_VI">越南语</string>
 <string name="AutoDownloadOff">关闭</string>

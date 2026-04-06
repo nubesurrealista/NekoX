@@ -3304,4 +3304,5 @@ To confirm Telegram login, please go to Settings &gt; Devices &gt; Scan QR and s
 <string name="EmpryUsersPlaceholder">新增用戶</string>
 <string name="BackgroundColor">顏色</string>
 <string name="DeleteFromRecent">從「最近」刪除</string>
+<string name="SwipeSettingsFolders">變更資料夾</string>
 </resources>
