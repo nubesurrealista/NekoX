@@ -43,7 +43,7 @@ object FirefoxLocalTranslator : Translator {
                 override fun onTranslationError(errorMessage: TranslationError) {
                     Log.e("030-tx", "ff err: ${errorMessage.type} ${errorMessage.message}")
                     val msg =
-                        if (errorMessage != null && !"null".equals(errorMessage.message))
+                        if (!"null".equals(errorMessage.message))
                             "${ErrorEnum.from(errorMessage.type.toInt())!!.name} - ${errorMessage.message}"
                         else ErrorEnum.from(errorMessage.type.toInt())!!.name
                     it.resumeWithException(RuntimeException(msg))

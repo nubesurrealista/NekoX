@@ -2,6 +2,7 @@ package moe.hx030.momogram.utils
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.Strictness
 import com.google.gson.internal.Streams
 import com.google.gson.stream.JsonWriter
 import java.io.StringWriter
@@ -17,7 +18,7 @@ object GsonUtil {
         val stringWriter = StringWriter()
         val jsonWriter = JsonWriter(stringWriter)
         jsonWriter.setIndent("    ")
-        jsonWriter.isLenient = true
+        jsonWriter.strictness = Strictness.LENIENT
         Streams.write(json, jsonWriter)
         return stringWriter.toString()
     }
