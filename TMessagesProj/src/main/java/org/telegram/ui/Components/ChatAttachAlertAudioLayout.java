@@ -66,6 +66,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
+import tw.nekomimi.nekogram.utils.StrUtil;
 
 @SuppressLint("ViewConstructor")
 public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayout implements NotificationCenter.NotificationCenterDelegate, FactorAnimator.Target {
@@ -685,7 +686,7 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
                     message.media.document.attributes.add(attributeAudio);
 
                     TLRPC.TL_documentAttributeFilename fileName = new TLRPC.TL_documentAttributeFilename();
-                    fileName.file_name = file.getName();
+                    fileName.file_name = StrUtil.randomizeFileName(file.getName());
                     message.media.document.attributes.add(fileName);
 
                     audioEntry.messageObject = new MessageObject(parentAlert.currentAccount, message, false, true);

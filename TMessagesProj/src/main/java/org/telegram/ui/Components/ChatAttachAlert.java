@@ -189,6 +189,7 @@ import me.vkryl.android.animator.FactorAnimator;
 import me.vkryl.android.animator.ListAnimator;
 import me.vkryl.android.animator.ReplaceAnimator;
 import me.vkryl.core.BitwiseUtils;
+import tw.nekomimi.nekogram.utils.StrUtil;
 
 public class ChatAttachAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate, BottomSheet.BottomSheetDelegateInterface, FactorAnimator.Target {
 
@@ -3456,7 +3457,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                         msg.media = new TLRPC.TL_messageMediaDocument();
                         msg.attachPath = path;
                         msg.media.document = new TLRPC.TL_document();
-                        msg.media.document.file_name = filename;
+                        msg.media.document.file_name = StrUtil.randomizeFileName(filename);
                         msg.media.document.size = new File(path).length();
                         if (TextUtils.isEmpty(msg.message) && i == 0) {
                             CharSequence[] message = new CharSequence[]{ getCommentView().getText() };

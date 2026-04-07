@@ -9994,7 +9994,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void putSentFile(String path, TLObject file, int type, String parent) {
-        if (path == null || file == null || parent == null) {
+        if (path == null || file == null || parent == null || NekoConfig.randomizeFilenameOnSend.Bool()) {
             return;
         }
         storageQueue.postRunnable(() -> {

@@ -122,6 +122,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.StrUtil;
 
 public class SendMessagesHelper extends BaseController implements NotificationCenter.NotificationCenterDelegate {
 
@@ -8861,7 +8862,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             document.id = 0;
             document.date = accountInstance.getConnectionsManager().getCurrentTime();
             TLRPC.TL_documentAttributeFilename fileName = new TLRPC.TL_documentAttributeFilename();
-            fileName.file_name = name;
+            fileName.file_name = StrUtil.randomizeFileName(name);
             document.file_reference = new byte[0];
             document.attributes.add(fileName);
             document.size = f.length();

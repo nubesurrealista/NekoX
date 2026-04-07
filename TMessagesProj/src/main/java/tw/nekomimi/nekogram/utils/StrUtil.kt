@@ -17,6 +17,7 @@ import java.util.TreeSet
 import java.util.UUID
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import kotlin.random.Random
 
 object StrUtil {
 
@@ -216,6 +217,22 @@ object StrUtil {
         val orig = cfg.String()
         if (orig.isNullOrBlank()) cfg.setConfigString(s.joinToString(","))
         else cfg.setConfigString("$orig,${s.joinToString(",")}")
+    }
+
+    @JvmStatic
+    fun randomizeFileName(n: String): String {
+        val chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        val dot = n.lastIndexOf('.')
+        val ext = if (dot != -1) n.substring(dot) else ""
+        if (!NekoConfig.randomizeFilenameOnSend.Bool() || n.endsWith(".m0m0-crash.txt")) {
+            return n
+        }
+
+        val random = (1..6)
+            .map { chars[Random.nextInt(chars.length)] }
+            .joinToString("")
+
+        return random + ext
     }
 
 }
