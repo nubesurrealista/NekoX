@@ -114,7 +114,7 @@ public class TranslateAlert3 extends BottomSheetWithRecyclerListView {
                     AndroidUtilities.addToClipboard(translated);
                 }
             } else if (item.id == 2) {
-                if (!UserConfig.getInstance(currentAccount).isPremium()) {
+                if (false && !UserConfig.getInstance(currentAccount).isPremium()) {
                     final BaseFragment fragment = LaunchActivity.getSafeLastFragment();
                     if (fragment == null) return;
                     new PremiumFeatureBottomSheet(getContext(), PremiumPreviewFragment.PREMIUM_FEATURE_TRANSLATIONS, true, resourcesProvider)
@@ -326,6 +326,7 @@ public class TranslateAlert3 extends BottomSheetWithRecyclerListView {
 
         adapter.itemsOffset = 1;
         adapter.whiteSectionStart();
+        if (text != null) {
         items.add(Header.Factory.of(3, "", from_lang != null ? capitalFirst(languageName(from_lang)) : getString(R.string.AIEditorOriginalText), null, null));
         items.add(Text.Factory.of(4, text, collapsed, noforwards, view -> {
             collapsed = false;
@@ -333,6 +334,7 @@ public class TranslateAlert3 extends BottomSheetWithRecyclerListView {
             adapter.update(true);
             applyScrolledPosition(true);
         }, this::onLinkPressed, null));
+        }
         items.add(Header.Factory.of(5, "", capitalFirst(languageName(to_lang) + (tone != 1 && tonesText != null ? " (" + tonesText[tone] + ")" : "")), null, this::onToLangMenu));
         items.add(Text.Factory.of(6, translated, false, noforwards, null, this::onLinkPressed, null));
         adapter.whiteSectionEnd();

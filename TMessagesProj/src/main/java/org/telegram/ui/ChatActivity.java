@@ -44848,7 +44848,7 @@ public class ChatActivity extends BaseFragment implements
 //                    alert.setDimBehind(true);
                     final TranslateAlert3 alert =
                         new TranslateAlert3(getContext(), resourceProvider)
-                            .setText(null, finalMessageText)
+                            .setText(finalMessageText)
                             .setMessage(dialog_id, shouldTranslateByText ? 0 : messageIdToTranslate[0], selectedObject.summarized)
                             .setToLanguage(toLang)
                             .setOnLinkPress(onLinkPress);
