@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import moe.hx030.momogram.ui.MessageHelper;
 
 @SuppressLint("RtlHardcoded")
-public class NekoAccountSettingsActivity extends BaseFragment {
+public class MomoAccountSettingsActivity extends BaseFragment {
 
     private RecyclerListView listView;
     private ListAdapter listAdapter;

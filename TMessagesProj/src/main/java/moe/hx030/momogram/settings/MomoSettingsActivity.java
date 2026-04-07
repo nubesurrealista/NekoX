@@ -6,22 +6,16 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
@@ -39,13 +33,11 @@ import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UniversalAdapter;
 import org.telegram.ui.Components.UniversalRecyclerView;
 import org.telegram.ui.DocumentSelectActivity;
-import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.SettingsActivity;
 
 import java.io.File;
@@ -60,8 +52,6 @@ import java.util.function.Function;
 
 import kotlin.text.StringsKt;
 import moe.hx030.momogram.MomoConfig;
-import moe.hx030.momogram.MomoConfig;
-import moe.hx030.momogram.NekoXConfig;
 import moe.hx030.momogram.utils.AlertUtil;
 import moe.hx030.momogram.utils.FileUtil;
 import moe.hx030.momogram.utils.GsonUtil;
@@ -70,7 +60,7 @@ import moe.hx030.momogram.utils.StrUtil;
 import moe.hx030.momogram.utils.TelegramUtil;
 
 @SuppressLint("RtlHardcoded")
-public class NekoSettingsActivity extends BaseFragment {
+public class MomoSettingsActivity extends BaseFragment {
 
     private UniversalRecyclerView listView;
 
@@ -374,19 +364,19 @@ public class NekoSettingsActivity extends BaseFragment {
     private void onClick(UItem item, View view, int position, float x, float y) {
         switch (item.id) {
             case 1:
-                presentFragment(new NekoGeneralSettingsActivity());
+                presentFragment(new MomoGeneralSettingsActivity());
                 break;
             case 2:
                 presentFragment(new MomoAppearanceSettingsActivity());
                 break;
             case 3:
-                presentFragment(new NekoChatSettingsActivity());
+                presentFragment(new MomoChatSettingsActivity());
                 break;
             case 4:
-                presentFragment(new NekoAccountSettingsActivity());
+                presentFragment(new MomoAccountSettingsActivity());
                 break;
             case 5:
-                presentFragment(new NekoExperimentalSettingsActivity());
+                presentFragment(new MomoExperimentalSettingsActivity());
                 break;
             case 6:
                 MessagesController.getInstance(currentAccount).openByUserName("momogram_update", this, 1);

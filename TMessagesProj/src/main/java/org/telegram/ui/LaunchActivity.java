@@ -27,7 +27,6 @@ import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.PictureInPictureParams;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -38,8 +37,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.location.Location;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -254,7 +251,7 @@ import moe.hx030.momogram.helpers.EvilLeakerKiller;
 import moe.hx030.momogram.ui.BottomBuilder;
 import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.NekoXConfig;
-import moe.hx030.momogram.settings.NekoSettingsActivity;
+import moe.hx030.momogram.settings.MomoSettingsActivity;
 import moe.hx030.momogram.utils.AlertUtil;
 import moe.hx030.momogram.utils.StrUtil;
 import moe.hx030.momogram.utils.TelegramUtil;
@@ -3193,7 +3190,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 } else if (open_settings == 12) {
                     fragment = new PrivacySettingsActivity();
                 } else if (open_settings == 100) {
-                    fragment = new NekoSettingsActivity();
+                    fragment = new MomoSettingsActivity();
                 } else if (open_settings == 14) {
                     fragment = new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_PHONE);
                 } else if (open_settings == 15) {

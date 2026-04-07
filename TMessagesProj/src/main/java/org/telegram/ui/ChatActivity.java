@@ -153,7 +153,6 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BotForumHelper;
 import org.telegram.messenger.BotInlineKeyboard;
 import org.telegram.messenger.BotWebViewVibrationEffect;
-import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChannelBoostsController;
 import org.telegram.messenger.ChatMessageSharedResources;
@@ -370,11 +369,10 @@ import moe.hx030.momogram.ui.MessageDetailsActivity;
 import moe.hx030.momogram.ui.MessageHelper;
 import moe.hx030.momogram.ui.PopupBuilder;
 import moe.hx030.momogram.utils.EnvUtil;
-import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.NekoXConfig;
 import moe.hx030.momogram.parts.MessageTransKt;
 import moe.hx030.momogram.parts.PollTransUpdatesKt;
-import moe.hx030.momogram.settings.NekoSettingsActivity;
+import moe.hx030.momogram.settings.MomoSettingsActivity;
 import moe.hx030.momogram.transtale.Translator;
 import moe.hx030.momogram.utils.AlertUtil;
 import moe.hx030.momogram.utils.PGPUtil;
@@ -33717,7 +33715,7 @@ public class ChatActivity extends BaseFragment implements
 
                         File finalLocFile = locFile;
 
-                        NekoSettingsActivity.importSettings(getParentActivity(), finalLocFile);
+                        MomoSettingsActivity.importSettings(getParentActivity(), finalLocFile);
 
                     }
                 }
@@ -41705,7 +41703,7 @@ public class ChatActivity extends BaseFragment implements
                         return;
                     }
                     File finalLocFile = locFile;
-                    NekoSettingsActivity.importSettings(getParentActivity(), finalLocFile);
+                    MomoSettingsActivity.importSettings(getParentActivity(), finalLocFile);
 
                 } else {
                     boolean handled = false;

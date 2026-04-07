@@ -145,9 +145,8 @@ import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
 import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.MomoUpdater;
-import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.NekoXConfig;
-import moe.hx030.momogram.settings.NekoSettingsActivity;
+import moe.hx030.momogram.settings.MomoSettingsActivity;
 import moe.hx030.momogram.settings.NekoXSettingActivity;
 import moe.hx030.momogram.ui.BottomBuilder;
 import moe.hx030.momogram.utils.AlertUtil;
@@ -952,7 +951,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 break;
             }
             case MOMO_SETTINGS: {
-                presentFragment(new NekoSettingsActivity());
+                presentFragment(new MomoSettingsActivity());
                 break;
             }
         }

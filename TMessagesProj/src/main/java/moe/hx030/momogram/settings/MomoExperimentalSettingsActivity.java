@@ -66,13 +66,12 @@ import moe.hx030.momogram.utils.FileUtil;
 import moe.hx030.momogram.utils.StrUtil;
 import moe.hx030.momogram.utils.TelegramUtil;
 import moe.hx030.momogram.utils.ZipUtil;
-import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.config.CellGroup;
 import moe.hx030.momogram.config.cell.AbstractConfigCell;
 import moe.hx030.momogram.config.cell.*;
 
 @SuppressLint("RtlHardcoded")
-public class NekoExperimentalSettingsActivity extends MomoSettingsBaseActivity {
+public class MomoExperimentalSettingsActivity extends MomoSettingsBaseActivity {
     private AnimatorSet animatorSet;
 
     private boolean sensitiveCanChange = false;

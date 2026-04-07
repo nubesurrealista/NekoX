@@ -14,7 +14,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
 import android.text.TextPaint;
-import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -37,15 +36,12 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.ArticleViewer;
@@ -84,13 +80,12 @@ import moe.hx030.momogram.utils.AlertUtil;
 import moe.hx030.momogram.utils.PGPUtil;
 
 import moe.hx030.momogram.config.ConfigItem;
-import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.config.CellGroup;
 import moe.hx030.momogram.config.cell.AbstractConfigCell;
 import moe.hx030.momogram.config.cell.*;
 
 @SuppressLint("RtlHardcoded")
-public class NekoGeneralSettingsActivity extends MomoSettingsBaseActivity {
+public class MomoGeneralSettingsActivity extends MomoSettingsBaseActivity {
 
     private ValueAnimator statusBarColorAnimator;
     private final AbstractConfigCell checkUpdateRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.checkUpdate));

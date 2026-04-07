@@ -52,12 +52,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import kotlin.Unit;
-import moe.hx030.momogram.util.ReflectUtil;
 import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.NekoXConfig;
 import moe.hx030.momogram.ui.PopupBuilder;
 import moe.hx030.momogram.config.CellGroup;
-import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.config.cell.AbstractConfigCell;
 import moe.hx030.momogram.config.cell.ConfigCellCustom;
 import moe.hx030.momogram.config.cell.ConfigCellDivider;
@@ -69,7 +67,7 @@ import moe.hx030.momogram.config.cell.ConfigCellTextInput;
 import moe.hx030.momogram.helpers.WhisperHelper;
 
 @SuppressLint("RtlHardcoded")
-public class NekoChatSettingsActivity extends MomoSettingsBaseActivity implements NotificationCenter.NotificationCenterDelegate {
+public class MomoChatSettingsActivity extends MomoSettingsBaseActivity implements NotificationCenter.NotificationCenterDelegate {
 
     // Sticker Size
     private final AbstractConfigCell header0 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.StickerSize)));
@@ -311,12 +309,12 @@ public class NekoChatSettingsActivity extends MomoSettingsBaseActivity implement
                         }
                     }
                     if (modelInUse && !WhisperModelDownloader.deleteModels()) {
-                        BulletinFactory.of(NekoChatSettingsActivity.this)
+                        BulletinFactory.of(MomoChatSettingsActivity.this)
                                 .createSimpleBulletin(R.raw.error, LocaleController.getString(R.string.WhisperModelInUse))
                                 .show(true);
                         return;
                     }
-                    BulletinFactory.of(NekoChatSettingsActivity.this)
+                    BulletinFactory.of(MomoChatSettingsActivity.this)
                             .createSimpleBulletin(R.raw.info, LocaleController.getString(R.string.WhisperModelRemoved))
                             .show(true);
                 }

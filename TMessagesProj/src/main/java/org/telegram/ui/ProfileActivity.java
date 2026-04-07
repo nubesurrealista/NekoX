@@ -140,7 +140,6 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.AuthTokensHelper;
 import org.telegram.messenger.BillingController;
 import org.telegram.messenger.BirthdayController;
-import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ChatThemeController;
@@ -283,7 +282,6 @@ import org.telegram.ui.Components.StickerEmptyView;
 import org.telegram.ui.Components.TagEditCell;
 import org.telegram.ui.Components.TimerDrawable;
 import org.telegram.ui.Components.TranslateAlert2;
-import org.telegram.ui.Components.TranslateAlert3;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UndoView;
@@ -354,15 +352,13 @@ import me.vkryl.android.animator.BoolAnimator;
 import moe.hx030.momogram.util.ThreadUtil;
 import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.MomoUpdater;
-import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.NekoXConfig;
 import moe.hx030.momogram.config.ConfigItem;
-import moe.hx030.momogram.parts.DialogTransKt;
 import moe.hx030.momogram.settings.MomoAppearanceSettingsActivity;
-import moe.hx030.momogram.settings.NekoChatSettingsActivity;
-import moe.hx030.momogram.settings.NekoExperimentalSettingsActivity;
-import moe.hx030.momogram.settings.NekoGeneralSettingsActivity;
-import moe.hx030.momogram.settings.NekoSettingsActivity;
+import moe.hx030.momogram.settings.MomoChatSettingsActivity;
+import moe.hx030.momogram.settings.MomoExperimentalSettingsActivity;
+import moe.hx030.momogram.settings.MomoGeneralSettingsActivity;
+import moe.hx030.momogram.settings.MomoSettingsActivity;
 import moe.hx030.momogram.settings.NekoXSettingActivity;
 import moe.hx030.momogram.ui.BottomBuilder;
 import moe.hx030.momogram.utils.AlertUtil;
@@ -4580,7 +4576,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             } else if (position == devicesRow) {
                 presentFragment(new SessionsActivity(0));
             } else if (position == nekoRow) {
-                presentFragment(new NekoSettingsActivity());
+                presentFragment(new MomoSettingsActivity());
             } else if (position == questionRow) {
                 Browser.openUrl(getParentActivity(), "https://t.me/momogram_update");
             } else if (position == faqRow) {
@@ -15343,16 +15339,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             R.drawable.notification, () -> {
                         switch (e.getKey()) {
                             case ConfigItem.GENERAL:
-                                f.presentFragment(new NekoGeneralSettingsActivity().setScrollTo(v.second, v.first));
+                                f.presentFragment(new MomoGeneralSettingsActivity().setScrollTo(v.second, v.first));
                                 break;
                             case ConfigItem.APPEARANCE:
                                 f.presentFragment(new MomoAppearanceSettingsActivity().setScrollTo(v.second, v.first));
                                 break;
                             case ConfigItem.CHAT:
-                                f.presentFragment(new NekoChatSettingsActivity().setScrollTo(v.second, v.first));
+                                f.presentFragment(new MomoChatSettingsActivity().setScrollTo(v.second, v.first));
                                 break;
                             case ConfigItem.EXPERIMENTAL:
-                                f.presentFragment(new NekoExperimentalSettingsActivity().setScrollTo(v.second, v.first));
+                                f.presentFragment(new MomoExperimentalSettingsActivity().setScrollTo(v.second, v.first));
                                 break;
                             default:
                                 break;
