@@ -337,4 +337,5 @@
     <string name="BatchLogoutConfirm">Please make sure you have save/noted all session-specific data (such as secret chats) before proceed!</string>
     <string name="TrimCOTFromTranslateResult">Trim [COT]-prefixed thinking process from translate result</string>
     <string name="RandomizeFilenameOnSend">Randomize file name on send</string>
+    <string name="HideAIEditButton">Hide AI button in text field</string>
 </resources>

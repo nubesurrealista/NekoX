@@ -358,6 +358,7 @@ public class MomoConfig {
     public static ConfigItem disableEmbeddedPlayer = addConfig(R.string.DisableEmbeddedPlayer, "DisableEmbeddedPlayer", configTypeBool, CHAT, false);
     public static ConfigItem autoTestProxy = addConfig(R.string.AutoTestProxy, "AutoTestProxy", configTypeBool, CHAT, false);
     public static ConfigItem randomizeFilenameOnSend = addConfig(R.string.RandomizeFilenameOnSend, "RandomizeFilenameOnSend", configTypeBool, CHAT, false);
+    public static ConfigItem hideAIEditButton = addConfig(R.string.HideAIEditButton, "HideAIEditButton", configTypeBool, CHAT, false);
 
 
     public static ConfigItem unlimitedFavedStickers = addConfig(R.string.UnlimitedFavoredStickers, "UnlimitedFavoredStickers", configTypeBool, EXPERIMENTAL, false);
