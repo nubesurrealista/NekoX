@@ -4126,6 +4126,7 @@ public class AlertsCreator {
         final int[] repeat = new int[] { currentRepeatPeriod };
 
         long selfUserId = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+        doNotShowReminder |= (!UserConfig.getInstance(UserConfig.selectedAccount).isPremium() && MomoConfig.removePremiumAnnoyance.Bool());
 
         BottomSheet.Builder builder = new BottomSheet.Builder(context, false, resourcesProvider);
         builder.setApplyBottomPadding(false);
