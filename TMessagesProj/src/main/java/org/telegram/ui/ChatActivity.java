@@ -47297,13 +47297,14 @@ public class ChatActivity extends BaseFragment implements
             boolean showViewHistory = allowViewHistory && chatMode != MODE_PINNED;
             if (showViewHistory && MomoConfig.showViewHistory.Bool()) {
                 if (searchContainer == null || searchUserButton == null) createSearchContainer(false);
-                if (searchContainer == null || searchUserButton == null) return;
-                items.add(LocaleController.getString(R.string.ViewHistory));
-                options.add(nkbtn_view_history);
-                icons.add(R.drawable.baseline_schedule_24);
+                if (searchContainer != null && searchUserButton != null) {
+                    items.add(LocaleController.getString(R.string.ViewHistory));
+                    options.add(nkbtn_view_history);
+                    icons.add(R.drawable.baseline_schedule_24);
+                }
             }
 
-            if (MomoConfig.showMessageDetails.Bool() && (chatMode != MODE_PINNED || !message.isFromUser())) {
+            if (MomoConfig.showMessageDetails.Bool() && chatMode != MODE_PINNED) {
                 items.add(LocaleController.getString(R.string.MessageDetails));
                 options.add(nkbtn_detail);
                 icons.add(R.drawable.menu_info);
