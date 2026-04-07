@@ -38,7 +38,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import tw.nekomimi.nekogram.utils.TelegramUtil;
+import moe.hx030.momogram.utils.TelegramUtil;
 
 public class Utilities {
     public static Pattern pattern = Pattern.compile("[\\-0-9]+");

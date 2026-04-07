@@ -83,7 +83,7 @@ import org.telegram.ui.Components.StickerEmptyView;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class UsersSelectActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, View.OnClickListener {
 
@@ -1540,7 +1540,7 @@ public class UsersSelectActivity extends BaseFragment implements NotificationCen
                                 username = UserObject.getPublicUsername(user);
                                 if (UserObject.isReplyUser(user)) {
                                     names[2] = getString(R.string.RepliesTitle).toLowerCase();
-                                } else if (UserObject.isUserSelf(user) && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+                                } else if (UserObject.isUserSelf(user) && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                                     if (!allowSelf) continue;
                                     names[2] = getString(R.string.SavedMessages).toLowerCase();
                                 } else if (user.bot && !allowBots) {

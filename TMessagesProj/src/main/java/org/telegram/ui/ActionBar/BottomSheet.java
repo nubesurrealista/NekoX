@@ -84,8 +84,8 @@ import org.telegram.ui.LaunchActivity;
 import java.util.ArrayList;
 
 import kotlin.Unit;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.ui.BottomBuilder;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.ui.BottomBuilder;
 
 public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
     private final static boolean AVOID_SYSTEM_CUTOUT_FULLSCREEN = false;
@@ -1194,7 +1194,7 @@ public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
 
         Rect padding = new Rect();
         internalBackgroundColor = getThemedColor(Theme.key_dialogBackground);
-        if (NekoConfig.unroundedChatBottomView.Bool()) {
+        if (MomoConfig.unroundedChatBottomView.Bool()) {
             shadowDrawable = new ColorDrawable(internalBackgroundColor);
         } else {
             shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();

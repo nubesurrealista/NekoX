@@ -38,7 +38,7 @@ import org.telegram.ui.MemberRequestsActivity;
 import java.util.HashMap;
 import java.util.List;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class ChatActivityMemberRequestsDelegate {
 
@@ -64,7 +64,7 @@ public class ChatActivityMemberRequestsDelegate {
         this.currentChat = currentChat;
         this.currentAccount = fragment.getCurrentAccount();
 
-        if (NekoConfig.autoDismissJoinReq.Bool() && ChatObject.hasAdminRights(currentChat)) {
+        if (MomoConfig.autoDismissJoinReq.Bool() && ChatObject.hasAdminRights(currentChat)) {
             checkJoinRequests(null, null);
         }
     }

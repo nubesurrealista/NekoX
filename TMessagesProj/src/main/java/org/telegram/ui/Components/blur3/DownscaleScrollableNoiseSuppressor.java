@@ -23,7 +23,7 @@ import org.telegram.ui.Components.blur3.capture.IBlur3Capture;
 import java.util.ArrayList;
 import java.util.List;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class DownscaleScrollableNoiseSuppressor {
@@ -339,7 +339,7 @@ public class DownscaleScrollableNoiseSuppressor {
                 canvas.save();
                 canvas.translate(sourcePart.position.left, sourcePart.position.top);
 
-                canvas.saveLayerAlpha(null, NekoConfig.chatBlurAlphaValue.Int()); // custom alpha
+                canvas.saveLayerAlpha(null, MomoConfig.chatBlurAlphaValue.Int()); // custom alpha
                 final RenderNode rn = getRenderNode(a, b);
                 canvas.drawRenderNode(rn);
                 canvas.restore(); // restore saveLayerAlpha

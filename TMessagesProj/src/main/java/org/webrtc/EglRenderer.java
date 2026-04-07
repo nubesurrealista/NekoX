@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import tw.nekomimi.nekogram.utils.BufferUtil;
+import moe.hx030.momogram.utils.BufferUtil;
 
 /**
  * Implements VideoSink by displaying the video stream on an EGL Surface. This class is intended to

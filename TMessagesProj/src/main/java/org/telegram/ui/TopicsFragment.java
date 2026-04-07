@@ -145,7 +145,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.concurrent.CountDownLatch;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class TopicsFragment extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ChatActivityInterface, RightSlidingDialogContainer.BaseFragmentWithFullscreen, MainTabsActivity.TabFragmentDelegate {
 
@@ -1062,7 +1062,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
                 }
             }
             toggleSelection(view);
-            if (!NekoConfig.disableVibration.Bool())
+            if (!MomoConfig.disableVibration.Bool())
                 try {
                     view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 } catch (Exception ignored) {}
@@ -1196,7 +1196,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
                         if (canShowHiddenArchive != canShowInternal) {
                             canShowHiddenArchive = canShowInternal;
                             if (pullViewState == ARCHIVE_ITEM_STATE_HIDDEN) {
-                                if (!NekoConfig.disableVibration.Bool())
+                                if (!MomoConfig.disableVibration.Bool())
                                 try {
                                     recyclerListView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                 } catch (Exception ignored) {}
@@ -1859,7 +1859,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
                                 }
                                 if (!canShowHiddenArchive) {
                                     canShowHiddenArchive = true;
-                                    if (!NekoConfig.disableVibration.Bool())
+                                    if (!MomoConfig.disableVibration.Bool())
                                     try {
                                         performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                     } catch (Exception ignored) {}
@@ -1956,7 +1956,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
     }
 
     private boolean showChatPreview(DialogCell cell) {
-        if (!NekoConfig.disableVibration.Bool())
+        if (!MomoConfig.disableVibration.Bool())
         try {
             cell.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
         } catch (Exception ignored) {}
@@ -2458,7 +2458,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
                 return makeMovementFlags(0, 0);
             }
             TLRPC.TL_forumTopic topic = forumTopics.get(position).topic;
-            if (selectedTopics.isEmpty() && viewHolder.itemView instanceof TopicDialogCell && topic.id == 1 && NekoConfig.swipeActionInTopicList.Bool()) {
+            if (selectedTopics.isEmpty() && viewHolder.itemView instanceof TopicDialogCell && topic.id == 1 && MomoConfig.swipeActionInTopicList.Bool()) {
                 TopicDialogCell dialogCell = (TopicDialogCell) viewHolder.itemView;
                 swipeFolderBack = false;
                 swipingFolder = true;

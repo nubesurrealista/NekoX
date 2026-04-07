@@ -11,7 +11,7 @@ import org.telegram.messenger.R;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class LauncherIconController {
     private static final boolean adaptiveIconSupported = Build.VERSION.SDK_INT > 32;
@@ -47,7 +47,7 @@ public class LauncherIconController {
     }
 
     public static boolean isEnabled(LauncherIcon icon) {
-        return isEnabled(icon, NekoConfig.useOldName.Bool());
+        return isEnabled(icon, MomoConfig.useOldName.Bool());
     }
 
     public static boolean isEnabled(LauncherIcon icon, boolean oldName) {
@@ -56,7 +56,7 @@ public class LauncherIconController {
         return i == PackageManager.COMPONENT_ENABLED_STATE_ENABLED || i == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT && icon == LauncherIcon.DEFAULT;
     }
 
-    public static void setIcon(LauncherIcon icon) { setIcon(icon, NekoConfig.useOldName.Bool()); }
+    public static void setIcon(LauncherIcon icon) { setIcon(icon, MomoConfig.useOldName.Bool()); }
 
     public static void setIcon(LauncherIcon icon, boolean oldName) {
         Context ctx = ApplicationLoader.applicationContext;
@@ -115,8 +115,8 @@ public class LauncherIconController {
         private boolean useOldName = true;
 
         public ComponentName getComponentName(Context ctx) {
-            if (componentName == null || useOldName != NekoConfig.useOldName.Bool()) {
-                useOldName = NekoConfig.useOldName.Bool();
+            if (componentName == null || useOldName != MomoConfig.useOldName.Bool()) {
+                useOldName = MomoConfig.useOldName.Bool();
                 String cls = String.format("org.telegram.messenger.%s%s", useOldName ? "" : "Momogram", key);
                 componentName = new ComponentName(ctx.getPackageName(), cls);
             }

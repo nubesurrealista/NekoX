@@ -108,10 +108,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.ui.PinnedStickerHelper;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
+import moe.hx030.momogram.ui.PinnedStickerHelper;
+import moe.hx030.momogram.utils.TelegramUtil;
 
 @SuppressWarnings("unchecked")
 public class MediaDataController extends BaseController {
@@ -586,7 +586,7 @@ public class MediaDataController extends BaseController {
 
     public void loadPremiumPromo(boolean cache) {
         isLoadingPremiumPromo = true;
-        if (NekoConfig.removePremiumAnnoyance.Bool() || UserConfig.isBot(currentAccount)) return;
+        if (MomoConfig.removePremiumAnnoyance.Bool() || UserConfig.isBot(currentAccount)) return;
         if (cache) {
             getMessagesStorage().getStorageQueue().postRunnable(() -> {
                 SQLiteCursor c = null;
@@ -624,7 +624,7 @@ public class MediaDataController extends BaseController {
     }
 
     public void processLoadedPremiumPromo(TLRPC.TL_help_premiumPromo premiumPromo, int date, boolean cache) {
-        if (NekoConfig.removePremiumAnnoyance.Bool()) return;
+        if (MomoConfig.removePremiumAnnoyance.Bool()) return;
         if (premiumPromo != null) {
             this.premiumPromo = premiumPromo;
             premiumPromoUpdateDate = date;
@@ -853,7 +853,7 @@ public class MediaDataController extends BaseController {
         if (type == TYPE_PREMIUM_STICKERS) {
             return new ArrayList<>(recentStickers[type]);
         }
-        ArrayList<TLRPC.Document> result = new ArrayList<>(arrayList.subList(0, Math.min(arrayList.size(), NekoConfig.maxRecentStickerCount.Int())));
+        ArrayList<TLRPC.Document> result = new ArrayList<>(arrayList.subList(0, Math.min(arrayList.size(), MomoConfig.maxRecentStickerCount.Int())));
         if (firstEmpty && !result.isEmpty() && !StickersAlert.DISABLE_STICKER_EDITOR) {
             result.add(0, new TLRPC.TL_documentEmpty());
         }
@@ -938,7 +938,7 @@ public class MediaDataController extends BaseController {
                     AndroidUtilities.runOnUIThread(() -> getMediaDataController().loadRecents(MediaDataController.TYPE_FAVE, false, false, true));
                 }
             });
-            maxCount = NekoConfig.unlimitedFavedStickers.Bool() ? Integer.MAX_VALUE : getMessagesController().maxFaveStickersCount;
+            maxCount = MomoConfig.unlimitedFavedStickers.Bool() ? Integer.MAX_VALUE : getMessagesController().maxFaveStickersCount;
         } else {
             if (type == TYPE_IMAGE && remove) {
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_STICKER, document, StickerSetBulletinLayout.TYPE_REMOVED_FROM_RECENT);
@@ -1827,7 +1827,7 @@ public class MediaDataController extends BaseController {
     }
 
     public void loadRecents(int type, boolean gif, boolean cache, boolean force) {
-        if (NekoConfig.unlimitedFavedStickers.Bool() && type == TYPE_FAVE && !cache) {
+        if (MomoConfig.unlimitedFavedStickers.Bool() && type == TYPE_FAVE && !cache) {
             return;
         }
         if (gif) {
@@ -2015,7 +2015,7 @@ public class MediaDataController extends BaseController {
                         if (type == TYPE_GREETINGS || type == TYPE_PREMIUM_STICKERS) {
                             maxCount = 200;
                         } else if (type == TYPE_FAVE) {
-                            maxCount = NekoConfig.unlimitedFavedStickers.Bool() ? Integer.MAX_VALUE : getMessagesController().maxFaveStickersCount;
+                            maxCount = MomoConfig.unlimitedFavedStickers.Bool() ? Integer.MAX_VALUE : getMessagesController().maxFaveStickersCount;
                         } else {
                             maxCount = getMessagesController().maxRecentStickersCount;
                         }
@@ -2192,7 +2192,7 @@ public class MediaDataController extends BaseController {
     }
 
     public void loadFeaturedStickers(boolean emoji, boolean cache) {
-        if (loadingFeaturedStickers[emoji ? 1 : 0] || NekoConfig.disableTrending.Bool()) {
+        if (loadingFeaturedStickers[emoji ? 1 : 0] || MomoConfig.disableTrending.Bool()) {
             return;
         }
         loadingFeaturedStickers[emoji ? 1 : 0] = true;
@@ -2552,7 +2552,7 @@ public class MediaDataController extends BaseController {
         } else {
             LongSparseArray<TLRPC.TL_messages_stickerSet> newStickerSets = new LongSparseArray<>();
             // NekoX: Pin Sticker
-            if (NekoConfig.enableStickerPin.Bool() && type == MediaDataController.TYPE_IMAGE) {
+            if (MomoConfig.enableStickerPin.Bool() && type == MediaDataController.TYPE_IMAGE) {
                 PinnedStickerHelper ins = PinnedStickerHelper.getInstance(UserConfig.selectedAccount);
                 if (ins.reorderPinnedStickersForSS(res.sets, true))
                     AndroidUtilities.runOnUIThread(() -> {
@@ -3321,7 +3321,7 @@ public class MediaDataController extends BaseController {
         }
         final int type = type1;
 
-        if (NekoConfig.enableStickerPin.Bool() && type == MediaDataController.TYPE_IMAGE && (toggle == 0 || toggle == 1)) {
+        if (MomoConfig.enableStickerPin.Bool() && type == MediaDataController.TYPE_IMAGE && (toggle == 0 || toggle == 1)) {
             PinnedStickerHelper.getInstance(currentAccount).removePinnedStickerLocal(stickerSet.id);
         }
 
@@ -3358,7 +3358,7 @@ public class MediaDataController extends BaseController {
             toggleStickerSetInternal(context, toggle, baseFragment, showSettings, stickerSetObject, stickerSet, type, false);
         } else {
             StickerSetBulletinLayout bulletinLayout = new StickerSetBulletinLayout(context, stickerSetObject, toggle, null, baseFragment == null ? null : baseFragment.getResourceProvider());
-            int finalCurrentIndex = NekoConfig.enableStickerPin.Bool() && type == TYPE_IMAGE && PinnedStickerHelper.getInstance(UserConfig.selectedAccount).isPinned(stickerSet.id)
+            int finalCurrentIndex = MomoConfig.enableStickerPin.Bool() && type == TYPE_IMAGE && PinnedStickerHelper.getInstance(UserConfig.selectedAccount).isPinned(stickerSet.id)
                     ? PinnedStickerHelper.getInstance(UserConfig.selectedAccount).pinnedList.size()
                     : currentIndex;
             // NekoX: Pin Sticker, Fix undo for Archiving and Deleting
@@ -5488,7 +5488,7 @@ public class MediaDataController extends BaseController {
             return;
         }
         TLRPC.User user = getMessagesController().getUser(dialogId);
-        if (user == null || (!NekoConfig.allowBotInDirectShare.Bool() && user.bot) || user.self) {
+        if (user == null || (!MomoConfig.allowBotInDirectShare.Bool() && user.bot) || user.self) {
             return;
         }
         getMessagesStorage().getStorageQueue().postRunnable(() -> {
@@ -5668,7 +5668,7 @@ public class MediaDataController extends BaseController {
                 } else if (UserObject.isReplyUser(user)) {
                     name = LocaleController.getString(R.string.RepliesTitle);
                     overrideAvatar = true;
-                } else if (UserObject.isUserSelf(user) && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+                } else if (UserObject.isUserSelf(user) && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                     name = LocaleController.getString(R.string.SavedMessages);
                     overrideAvatar = true;
                 } else {
@@ -5700,7 +5700,7 @@ public class MediaDataController extends BaseController {
                             AvatarDrawable avatarDrawable = new AvatarDrawable(user);
                             if (UserObject.isReplyUser(user)) {
                                 avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_REPLIES);
-                            } else if (!NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+                            } else if (!MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                                 avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);
                             }
                             avatarDrawable.setBounds(0, 0, size, size);
@@ -7708,7 +7708,7 @@ public class MediaDataController extends BaseController {
         }
 
         saveDraft(dialogId, threadId, draftMessage, replyToMessage, false);
-        if (NekoConfig.disableSaveDraftToCloud.Bool()) return;
+        if (MomoConfig.disableSaveDraftToCloud.Bool()) return;
 
         if (threadId == 0 || ChatObject.isForum(chat) || ChatObject.isMonoForum(chat)) {
             if (!DialogObject.isEncryptedDialog(dialogId)) {

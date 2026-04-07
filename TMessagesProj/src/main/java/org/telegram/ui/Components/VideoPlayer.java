@@ -109,7 +109,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 @SuppressLint("NewApi")
 public class VideoPlayer implements Player.Listener, VideoListener, AnalyticsListener, NotificationCenter.NotificationCenterDelegate {
@@ -427,7 +427,7 @@ public class VideoPlayer implements Player.Listener, VideoListener, AnalyticsLis
         currentUri = null;
         isStreaming = true;
 
-        if (NekoConfig.chooseBestVideoQualityByDefault.Bool()) {
+        if (MomoConfig.chooseBestVideoQualityByDefault.Bool()) {
             select = this.videoQualityToSelect = getHighestQuality(null);
         }
 

@@ -15,7 +15,7 @@ import android.os.Build;
 
 import java.io.File;
 
-import tw.nekomimi.nekogram.utils.FileUtil;
+import moe.hx030.momogram.utils.FileUtil;
 
 public class NativeLoader {
 

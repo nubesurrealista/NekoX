@@ -99,9 +99,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
 
 import moe.hx030.momogram.util.FilterUtils;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.StrUtil;
+import moe.hx030.momogram.NekoXConfig;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.utils.StrUtil;
 
 public class NotificationsController extends BaseController {
 
@@ -2508,7 +2508,7 @@ public class NotificationsController extends BaseController {
             return null;
         }
         StringBuilder stringBuilder = new StringBuilder(text);
-        if ((NekoConfig.showSpoilersDirectly.Bool() && !messageObject.isCustomSpoiler()) || (messageObject != null && messageObject.didSpoilLoginCode())) {
+        if ((MomoConfig.showSpoilersDirectly.Bool() && !messageObject.isCustomSpoiler()) || (messageObject != null && messageObject.didSpoilLoginCode())) {
             return stringBuilder.toString();
         }
         for (int i = 0; i < messageObject.messageOwner.entities.size(); i++) {
@@ -3661,7 +3661,7 @@ public class NotificationsController extends BaseController {
             } else {
                 icon = IconCompat.createWithResource(ApplicationLoader.applicationContext, R.drawable.book_group);
             }
-            if (supportsBubble && !NekoConfig.disableNotificationBubbles.Bool()) {
+            if (supportsBubble && !MomoConfig.disableNotificationBubbles.Bool()) {
                 NotificationCompat.BubbleMetadata.Builder bubbleBuilder =
                         new NotificationCompat.BubbleMetadata.Builder(
                                 PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT),
@@ -4182,8 +4182,8 @@ public class NotificationsController extends BaseController {
                 return;
             }
 
-            filterNotifications(delayedPushMessages, NekoConfig.muteBlockedFromGroup.Bool(), NekoConfig.muteBotsFromGroup.Bool());
-            filterNotifications(pushMessages, NekoConfig.muteBlockedFromGroup.Bool(), NekoConfig.muteBotsFromGroup.Bool());
+            filterNotifications(delayedPushMessages, MomoConfig.muteBlockedFromGroup.Bool(), MomoConfig.muteBotsFromGroup.Bool());
+            filterNotifications(pushMessages, MomoConfig.muteBlockedFromGroup.Bool(), MomoConfig.muteBotsFromGroup.Bool());
 
             Bitmap largeBitmap = null;
             MessageObject lastMessageObject;
@@ -5292,7 +5292,7 @@ public class NotificationsController extends BaseController {
                 } else {
                     text.append(LocaleController.formatPluralString("StoryNotification4", storyPushMessages.size() - 2, cutLastName(names.get(0)), cutLastName(names.get(1))));
                 }
-                if (NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockedPeers.indexOfKey(lastMessageObject.getSenderId()) >= 0) {
+                if (MomoConfig.ignoreBlocked.Bool() && getMessagesController().blockedPeers.indexOfKey(lastMessageObject.getSenderId()) >= 0) {
                     continue;
                 }
                 String message = getShortStringForMessage(lastMessageObject, senderName, preview);

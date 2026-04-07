@@ -67,7 +67,7 @@ import org.telegram.ui.LaunchActivity;
 import java.io.File;
 import java.util.Collections;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class StoriesUtilities {
 
@@ -668,7 +668,7 @@ public class StoriesUtilities {
             return;
         }
         if (params.progressToArc == 0) {
-            if (NekoConfig.squareAvatar.Bool()) {
+            if (MomoConfig.squareAvatar.Bool()) {
                 canvas.drawRect(rectTmp.left, rectTmp.top, rectTmp.right, rectTmp.bottom, paint);
             } else {
                 canvas.drawCircle(rectTmp.centerX(), rectTmp.centerY(), rectTmp.width() / 2f, paint);
@@ -1212,7 +1212,7 @@ public class StoriesUtilities {
     private final static short[][] CornersSign = new short[][]{ {-1, -1}, {-1 ,1}, {1, 1}, {1, -1} };
     private final static short[] Corners = { 225, 315, 405, 495 };
     private static void drawArcFork(Canvas canvas, RectF oval, float startAngle, float sweepAngle, boolean useCenter, Paint paint) {
-        if (!NekoConfig.squareAvatar.Bool()) {
+        if (!MomoConfig.squareAvatar.Bool()) {
             canvas.drawArc(oval, startAngle, sweepAngle, useCenter, paint);
             return;
         }
@@ -1453,8 +1453,8 @@ public class StoriesUtilities {
         }
 
         public void openStory(long dialogId, Runnable onDone) {
-            if (NekoConfig.disableStories.Bool()) return;
-            if (dialogId < 0 && NekoConfig.onlyShowStoriesFromUsers.Bool()) return;
+            if (MomoConfig.disableStories.Bool()) return;
+            if (dialogId < 0 && MomoConfig.onlyShowStoriesFromUsers.Bool()) return;
             BaseFragment fragment = LaunchActivity.getLastFragment();
             if (fragment != null && child != null) {
                 fragment.getOrCreateStoryViewer().doOnAnimationReady(onDone);

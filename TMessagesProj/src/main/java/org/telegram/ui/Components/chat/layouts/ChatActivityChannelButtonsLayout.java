@@ -30,7 +30,7 @@ import java.util.HashSet;
 
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 @SuppressLint("ViewConstructor")
 public class ChatActivityChannelButtonsLayout extends FrameLayout implements FactorAnimator.Target {
@@ -78,7 +78,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
 
         container = new FrameLayout(context);
         container.setClipToOutline(true);
-        if (!NekoConfig.unroundedChatBottomView.Bool()) {
+        if (!MomoConfig.unroundedChatBottomView.Bool()) {
             container.setOutlineProvider(new ViewOutlineProvider() {
                 @Override
                 public void getOutline(View view, Outline outline) {
@@ -110,7 +110,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
             return;
         }
 
-        if (NekoConfig.hideChannelBottomMuteUnmute.Bool()) show = false;
+        if (MomoConfig.hideChannelBottomMuteUnmute.Bool()) show = false;
 
         if (buttonHolders[buttonId] == null && !show) {
             return;
@@ -137,7 +137,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
                     onClickListeners[buttonId].onClick(v);
                 }
             });
-            int edge = NekoConfig.removeChatBottomViewPadding.Bool() ? ChatActivityBlurredRoundButton.BUTTON_SIZE : 56;
+            int edge = MomoConfig.removeChatBottomViewPadding.Bool() ? ChatActivityBlurredRoundButton.BUTTON_SIZE : 56;
             addView(button, LayoutHelper.createFrame(edge, edge));
 
             buttonHolders[buttonId] = new ButtonHolder(button, visibilityAnimator);
@@ -252,8 +252,8 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
 
     private void checkContainerPaddings(boolean canRequestLayout) {
         int buttonSize = ChatActivityBlurredRoundButton.BUTTON_SIZE;
-        int extra = NekoConfig.removeChatBottomViewPadding.Bool() ? 0 : 10;
-        int padding = NekoConfig.removeChatBottomViewPadding.Bool() ? 0 : 7;
+        int extra = MomoConfig.removeChatBottomViewPadding.Bool() ? 0 : 10;
+        int padding = MomoConfig.removeChatBottomViewPadding.Bool() ? 0 : 7;
         int paddingLeft = dp(padding), paddingRight = dp(padding);
         for (final int buttonId : buttonsOrderLeft) {
             final ButtonHolder holder = buttonHolders[buttonId];
@@ -283,7 +283,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
     }
 
     private void checkButtonsPositionsAndVisibility() {
-        boolean removePadding = NekoConfig.removeChatBottomViewPadding.Bool();
+        boolean removePadding = MomoConfig.removeChatBottomViewPadding.Bool();
         int buttonSize = ChatActivityBlurredRoundButton.BUTTON_SIZE;
         totalWidthLeft = 0;
         totalWidthRight = 0;
@@ -407,7 +407,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
     @Override
     protected void dispatchDraw(@NonNull Canvas canvas) {
         final int accentAlpha = (int) (255 * totalVisibilityFactor * animatorCenterAccentBackground.getFloatValue());
-        final boolean removePadding = NekoConfig.removeChatBottomViewPadding.Bool();
+        final boolean removePadding = MomoConfig.removeChatBottomViewPadding.Bool();
         final int offset = (removePadding ? 0 : dp(9));
         if (accentAlpha > 0) {
             tmpRect.set(
@@ -418,7 +418,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
             );
             backgroundAccentPaint.setColor(accentColor);
             backgroundAccentPaint.setAlpha(accentAlpha);
-            if (!NekoConfig.unroundedChatBottomView.Bool()) {
+            if (!MomoConfig.unroundedChatBottomView.Bool()) {
                 canvas.drawRoundRect(tmpRect, dp(19), dp(19), backgroundAccentPaint);
             } else {
                 canvas.drawRect(tmpRect, backgroundAccentPaint);

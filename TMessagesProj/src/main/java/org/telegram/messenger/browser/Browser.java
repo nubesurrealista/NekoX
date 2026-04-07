@@ -65,10 +65,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
-import tw.nekomimi.nekogram.utils.UrlUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
+import moe.hx030.momogram.utils.TelegramUtil;
+import moe.hx030.momogram.utils.UrlUtil;
 
 public class Browser {
 
@@ -311,8 +311,8 @@ public class Browser {
             tryTelegraph = false;
             _allowCustom = false;
         }
-        final boolean allowCustom = _allowCustom || NekoConfig.forceAllowChooseBrowser.Bool();
-        if (!internalUri && NekoConfig.patchAndCleanupLinks.Bool()) {
+        final boolean allowCustom = _allowCustom || MomoConfig.forceAllowChooseBrowser.Bool();
+        if (!internalUri && MomoConfig.patchAndCleanupLinks.Bool()) {
             uri = UrlUtil.cleanUrl(uri);
         }
         if (tryTelegraph) {
@@ -384,7 +384,7 @@ public class Browser {
                 }
             }
             String host = AndroidUtilities.getHostAuthority(uri.toString().toLowerCase());
-            if (!NekoConfig.disableAutoWebLogin.Bool() && AccountInstance.getInstance(currentAccount).getMessagesController().autologinDomains.contains(host)) {
+            if (!MomoConfig.disableAutoWebLogin.Bool() && AccountInstance.getInstance(currentAccount).getMessagesController().autologinDomains.contains(host)) {
                 final String autologin_token = URLEncoder.encode(AccountInstance.getInstance(UserConfig.selectedAccount).getMessagesController().autologinToken, "UTF-8");
                 uri = uri.buildUpon()
                     .appendQueryParameter("autologin_token", autologin_token)
@@ -438,7 +438,7 @@ public class Browser {
                 allowInAppBrowser && BubbleActivity.instance == null &&
                 SharedConfig.inappBrowser &&
                 TextUtils.isEmpty(browserPackage) &&
-                !(NekoConfig.saveIVFailDomains.Bool() && NekoXConfig.isInstantViewFailedDomain(uri.getHost())) &&
+                !(MomoConfig.saveIVFailDomains.Bool() && NekoXConfig.isInstantViewFailedDomain(uri.getHost())) &&
                 !RestrictedDomainsList.getInstance().isRestricted(AndroidUtilities.getHostAuthority(uri, true)) &&
                 (uri.getScheme() == null || "https".equals(uri.getScheme()) || "http".equals(uri.getScheme()) || "tonsite".equals(uri.getScheme()))
                 ||
@@ -531,7 +531,7 @@ public class Browser {
                     new Intent(Intent.ACTION_VIEW, uri);
             if (!TextUtils.isEmpty(browser)) {
                 Log.d("030-ext", String.format("%s was specified\n%s", browser, TelegramUtil.getStackTraceAsString(null)));
-                if (!NekoConfig.forceAllowChooseBrowser.Bool())
+                if (!MomoConfig.forceAllowChooseBrowser.Bool())
                     intent.setPackage(browser);
                 else
                     Log.d("030-ext", "ignored");

@@ -25,7 +25,7 @@ import org.telegram.ui.Components.RLottieDrawable;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class ActionBarMenu extends LinearLayout {
 
@@ -645,7 +645,7 @@ public class ActionBarMenu extends LinearLayout {
     }
 
     public void detachedFromWindow() {
-        if (NekoConfig.alwaysDestroyPhotoViewer.Bool())
+        if (MomoConfig.alwaysDestroyPhotoViewer.Bool())
             onDetachedFromWindow();
     }
 }

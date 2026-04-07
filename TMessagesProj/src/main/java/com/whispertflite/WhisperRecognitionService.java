@@ -16,7 +16,7 @@ import org.telegram.messenger.R;
 
 import java.io.File;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class WhisperRecognitionService {
     private static final String TAG = "WhisperRecognitionSvc";
@@ -82,7 +82,7 @@ public class WhisperRecognitionService {
 
     public void startTranscription(float[] samples, Callback callback) {
         sdcardDataFolder = ApplicationLoader.applicationContext.getExternalFilesDir(null);
-        selectedTfliteFile = new File(sdcardDataFolder, NekoConfig.useSlowWhisperModel.Bool() ?
+        selectedTfliteFile = new File(sdcardDataFolder, MomoConfig.useSlowWhisperModel.Bool() ?
                 MULTI_LINGUAL_TOP_WORLD_SLOW : MULTI_LINGUAL_TOP_WORLD_FAST);
 
         if (!selectedTfliteFile.exists()) {

@@ -49,7 +49,7 @@ import org.telegram.ui.Components.SizeNotifierFrameLayout;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoXConfig;
+import moe.hx030.momogram.NekoXConfig;
 
 public class ExternalActionActivity extends Activity implements INavigationLayout.INavigationLayoutDelegate {
 

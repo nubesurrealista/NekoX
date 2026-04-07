@@ -6,7 +6,7 @@ import android.media.AudioTrack;
 
 import java.nio.ByteBuffer;
 
-import tw.nekomimi.nekogram.utils.BufferUtil;
+import moe.hx030.momogram.utils.BufferUtil;
 
 /**
  * Created by grishka on 20.12.16.

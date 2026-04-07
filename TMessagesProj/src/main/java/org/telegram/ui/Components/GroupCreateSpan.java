@@ -41,7 +41,7 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.GroupCreateUserCell;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class GroupCreateSpan extends View {
 
@@ -176,7 +176,7 @@ public class GroupCreateSpan extends View {
                 avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_REPLIES);
                 imageLocation = null;
                 imageParent = null;
-            } else if (UserObject.isUserSelf(user) && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+            } else if (UserObject.isUserSelf(user) && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                 firstName = LocaleController.getString(R.string.SavedMessages);
                 avatarDrawable.setScaleSize(.8f);
                 avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);

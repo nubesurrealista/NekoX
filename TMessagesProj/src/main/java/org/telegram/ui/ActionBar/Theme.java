@@ -157,8 +157,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.StrUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.utils.StrUtil;
 
 public class Theme {
 
@@ -5260,7 +5260,7 @@ public class Theme {
                 canStartHolidayAnimation = false;
             }
             if (dialogs_holidayDrawable == null) {
-                if (getEventType() == 0 || NekoConfig.newYear.Bool()) {
+                if (getEventType() == 0 || MomoConfig.newYear.Bool()) {
                     dialogs_holidayDrawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.newyear);
                     dialogs_holidayDrawableOffsetX = -dp(3);
                     dialogs_holidayDrawableOffsetY = -dp(-7);
@@ -8426,7 +8426,7 @@ public class Theme {
             dialogs_tagPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         }
 
-        boolean overrideSize = NekoConfig.chatListFontSizeFollowChat.Bool();
+        boolean overrideSize = MomoConfig.chatListFontSizeFollowChat.Bool();
         dialogs_countTextPaint.setTextSize(dp(overrideSize ? (SharedConfig.fontSize + 1) : 12));
         dialogs_countTextPaint2.setTextSize(dp(overrideSize ? (SharedConfig.fontSize + 2) : 13));
     }
@@ -8434,7 +8434,7 @@ public class Theme {
     public static void createDialogsResources(Context context) {
         createCommonResources(context);
         createCommonDialogResources(context);
-        boolean overrideSize = NekoConfig.chatListFontSizeFollowChat.Bool();
+        boolean overrideSize = MomoConfig.chatListFontSizeFollowChat.Bool();
         int dp_1 = overrideSize ? dp(SharedConfig.fontSize - 1) : 0;
         int dp1 = overrideSize ? dp(SharedConfig.fontSize + 1) : 0;
         int dp2 = overrideSize ? dp(SharedConfig.fontSize + 2) : 0;

@@ -44,7 +44,7 @@ import org.telegram.ui.Components.StaticLayoutEx;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class BotCommandsMenuView extends View {
 
@@ -93,7 +93,7 @@ public class BotCommandsMenuView extends View {
         backDrawable.setRotation(0f, false);
         backDrawable.setCallback(this);
         textPaint.setTypeface(AndroidUtilities.bold());
-        if (!NekoConfig.unroundedChatBottomView.Bool()) backDrawable.setRoundCap();
+        if (!MomoConfig.unroundedChatBottomView.Bool()) backDrawable.setRoundCap();
         backgroundDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(16), Color.TRANSPARENT, Theme.getColor(Theme.key_featuredStickers_addButtonPressed));
         backgroundDrawable.setCallback(this);
         setContentDescription(getString(R.string.AccDescrBotMenu));
@@ -197,7 +197,7 @@ public class BotCommandsMenuView extends View {
 
             if (drawBackgroundDrawable) {
                 rectTmp.set(0, 0, AndroidUtilities.dp(40) + (menuTextWidth + AndroidUtilities.dp(4)) * expandProgress, getMeasuredHeight());
-                if (NekoConfig.unroundedChatBottomView.Bool()) canvas.drawRect(rectTmp, paint);
+                if (MomoConfig.unroundedChatBottomView.Bool()) canvas.drawRect(rectTmp, paint);
                 else canvas.drawRoundRect(rectTmp, AndroidUtilities.dp(16), AndroidUtilities.dp(16), paint);
                 backgroundDrawable.setBounds((int) rectTmp.left, (int) rectTmp.top, (int) rectTmp.right, (int) rectTmp.bottom);
                 backgroundDrawable.draw(canvas);

@@ -30,7 +30,7 @@ import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.webrtc.Logging;
 import org.webrtc.ThreadUtils;
 
-import tw.nekomimi.nekogram.utils.BufferUtil;
+import moe.hx030.momogram.utils.BufferUtil;
 
 public class WebRtcAudioRecord {
 

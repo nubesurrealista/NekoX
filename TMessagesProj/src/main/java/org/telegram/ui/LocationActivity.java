@@ -138,8 +138,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.location.NekoLocation;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.location.NekoLocation;
 
 public class LocationActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -1547,7 +1547,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             } else if (liveLocation.chat != null) {
                 avatarDrawable.setInfo(currentAccount, liveLocation.chat);
             }
-            boolean squareAvatar = NekoConfig.squareAvatar.Bool();
+            boolean squareAvatar = MomoConfig.squareAvatar.Bool();
             int w = squareAvatar ? 38 : 50;
             int edge = dp(w);
             int start = dp((float) (62 - w) / 2);
@@ -2351,7 +2351,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             for (int i = providers.size() - 1; i >= 0; i--) {
                 l = lm.getLastKnownLocation(providers.get(i));
                 if (l != null) {
-                    if (NekoConfig.fixDriftingForGoogleMaps()) {
+                    if (MomoConfig.fixDriftingForGoogleMaps()) {
                         NekoLocation.transform(l);
                     }
                     break;

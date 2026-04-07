@@ -52,8 +52,10 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import org.telegram.ui.Components.AnimatedEmojiSpan;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.NekoConfig;
+
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class Emoji {
 
@@ -92,7 +94,7 @@ public class Emoji {
         "\uD83D\uDE06", "\uD83D\uDC4C", "\uD83D\uDE10", "\uD83D\uDE15"
     };
 
-    public static int MAX_RECENT_EMOJI_COUNT = NekoConfig.maxRecentEmojiCount.Int();
+    public static int MAX_RECENT_EMOJI_COUNT = MomoConfig.maxRecentEmojiCount.Int();
 
     static {
         drawImgSize = AndroidUtilities.dp(20);
@@ -398,7 +400,7 @@ public class Emoji {
 
         @Override
         public void draw(Canvas canvas) {
-            if (!NekoConfig.useSystemEmoji.Bool() && !isLoaded()) {
+            if (!MomoConfig.useSystemEmoji.Bool() && !isLoaded()) {
                 loadEmoji(info.page, info.page2);
                 placeholderPaint.setColor(placeholderColor);
                 Rect bounds = getBounds();
@@ -413,7 +415,7 @@ public class Emoji {
                 b = getBounds();
             }
 
-            if (NekoConfig.useSystemEmoji.Bool()) {
+            if (MomoConfig.useSystemEmoji.Bool()) {
                 String emoji = fixEmoji(EmojiData.data[info.page][info.emojiIndex]);
                 textPaint.setTextSize(b.height() * 0.8f);
                 textPaint.setTypeface(NekoXConfig.getSystemEmojiTypeface());
@@ -686,7 +688,7 @@ public class Emoji {
     }
 
     public static CharSequence replaceEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics, boolean createNew, int[] emojiOnly, int alignment, float scale, int minusLimit) {
-        if ((NekoConfig.useSystemEmoji.Bool() || SharedConfig.useSystemEmoji) || cs == null || cs.length() == 0) {
+        if ((MomoConfig.useSystemEmoji.Bool() || SharedConfig.useSystemEmoji) || cs == null || cs.length() == 0) {
             return cs;
         }
         Spannable s;
@@ -756,7 +758,7 @@ public class Emoji {
     }
 
     public static CharSequence replaceWithRestrictedEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics, Runnable update) {
-        if (NekoConfig.useSystemEmoji.Bool() || cs == null || cs.length() == 0) {
+        if (MomoConfig.useSystemEmoji.Bool() || cs == null || cs.length() == 0) {
             return cs;
         }
 

@@ -250,10 +250,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
 import me.vkryl.core.BitwiseUtils;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.helpers.WhisperHelper;
-import tw.nekomimi.nekogram.parts.PollTransUpdates;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
+import moe.hx030.momogram.helpers.WhisperHelper;
+import moe.hx030.momogram.parts.PollTransUpdates;
 
 public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate, ImageReceiver.ImageReceiverDelegate,
         DownloadController.FileDownloadProgressListener, TextSelectionHelper.SelectableView,
@@ -382,7 +383,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
     public void setSpoilersSuppressed(boolean s) {
         if (s && currentMessageObject != null && currentMessageObject.isCustomSpoiler()) return;
-//        s |= NekoConfig.showSpoilersDirectly.Bool();
+//        s |= MomoConfig.showSpoilersDirectly.Bool();
         for (int i = 0; i < replySpoilers.size(); i++) {
             SpoilerEffect eff = replySpoilers.get(i);
             eff.setSuppressUpdates(s);
@@ -408,7 +409,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     public boolean hasSpoilers() {
-        if (NekoConfig.showSpoilersDirectly.Bool() || spoilerOverride)
+        if (MomoConfig.showSpoilersDirectly.Bool() || spoilerOverride)
             return spoilerOverride;
         if (captionLayout != null && captionLayout.textLayoutBlocks != null) {
             for (MessageObject.TextLayoutBlock bl : captionLayout.textLayoutBlocks) {
@@ -1868,7 +1869,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     // NekoX
     private boolean needHideMessage() {
         if (needHide || currentMessageObject.shouldBeHidden()) return (needHide = true);
-        boolean hasHideRegex = NekoConfig.hideMessageRegexString != null && !NekoConfig.hideMessageRegexString.isBlank();
+        boolean hasHideRegex = MomoConfig.hideMessageRegexString != null && !MomoConfig.hideMessageRegexString.isBlank();
         if (hasHideRegex) {
             if (currentMessagesGroup != null && currentMessagesGroup.messages != null) {
                 int len = currentMessagesGroup.messages.size();
@@ -1880,7 +1881,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
         return false;
 //                || MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(currentMessageObject.getFromChatId()) >= 0
-//                && NekoConfig.ignoreBlocked.Bool()
+//                && MomoConfig.ignoreBlocked.Bool()
 //                && !(getParent() != null && getParent().getClass().getName().contains("ChannelAdminLogActivity"));
     }
 
@@ -1910,7 +1911,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         replyImageReceiver.setRoundRadius(dp(4));
         locationImageReceiver = new ImageReceiver(this);
         locationImageReceiver.setAllowLoadingOnAttachedOnly(true);
-        locationImageReceiver.setRoundRadius(dp(NekoConfig.squareAvatar.Bool() ? 0 : 26.1f));
+        locationImageReceiver.setRoundRadius(dp(MomoConfig.squareAvatar.Bool() ? 0 : 26.1f));
         TAG = DownloadController.getInstance(currentAccount).generateObserverTag();
 
         contactAvatarDrawable = new AvatarDrawable();
@@ -5506,7 +5507,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         final PollButton button = pollButtons.get(index);
         if (delegate.didPressToDoButton(this, button.task, !button.chosen)) {
             try {
-                if (vibrate && !NekoConfig.disableVibration.Bool()) performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                if (vibrate && !MomoConfig.disableVibration.Bool()) performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignored) {}
             final long dialogId = currentMessageObject.getDialogId();
             final long send_as = ChatObject.getSendAsPeerId(MessagesController.getInstance(currentAccount).getChat(dialogId), MessagesController.getInstance(currentAccount).getChatFull(dialogId), true);
@@ -9497,10 +9498,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     float maxHeight;
                     int maxWidth;
                     if (AndroidUtilities.isTablet()) {
-                        maxHeight = AndroidUtilities.getMinTabletSide() * (0.4f + (NekoConfig.stickerSize.Float() - 14.0f) / 40);
+                        maxHeight = AndroidUtilities.getMinTabletSide() * (0.4f + (MomoConfig.stickerSize.Float() - 14.0f) / 40);
                         maxWidth = (int) maxHeight;
                     } else {
-                        maxHeight = Math.min(getParentWidth(), AndroidUtilities.displaySize.y) * (0.5f + (NekoConfig.stickerSize.Float() - 14.0f) / 30);
+                        maxHeight = Math.min(getParentWidth(), AndroidUtilities.displaySize.y) * (0.5f + (MomoConfig.stickerSize.Float() - 14.0f) / 30);
                         maxWidth = (int) maxHeight;
                     }
                     String filter;
@@ -9661,7 +9662,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         }
                     }
                     photoHeight = photoWidth + dp(100);
-                    if (NekoConfig.imageMessageSizeTweak.Bool()) photoHeight += dp(50);
+                    if (MomoConfig.imageMessageSizeTweak.Bool()) photoHeight += dp(50);
                     if (!useFullWidth) {
                         if (messageObject.type != MessageObject.TYPE_ROUND_VIDEO && checkNeedDrawShareButton(messageObject)) {
                             photoWidth -= dp(20);
@@ -9788,7 +9789,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
                     if (w == 0 || h == 0) {
                         w = h = dp(150);
-                        if (messageObject.type == MessageObject.TYPE_PHOTO && NekoConfig.imageMessageSizeTweak.Bool()) {
+                        if (messageObject.type == MessageObject.TYPE_PHOTO && MomoConfig.imageMessageSizeTweak.Bool()) {
                             h += dp(50);
                         }
                     }
@@ -9840,7 +9841,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         photoImage.setRoundRadius(w / 2);
                         canChangeRadius = false;
                     } else if (messageObject.needDrawBluredPreview() && !messageObject.hasExtendedMediaPreview()) {
-                        boolean imageMessageSizeTweak = NekoConfig.imageMessageSizeTweak.Bool();
+                        boolean imageMessageSizeTweak = MomoConfig.imageMessageSizeTweak.Bool();
                         float wFactor = imageMessageSizeTweak ? 0.65f : 0.6f;
                         float hFactor = imageMessageSizeTweak ? 0.72f : 0.61f;
                         if (AndroidUtilities.isTablet()) {
@@ -11173,7 +11174,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     private void maybeApplyPhotoTweak(int photoWidth) {
-        if (!NekoConfig.imageMessageSizeTweak.Bool()) return;
+        if (!MomoConfig.imageMessageSizeTweak.Bool()) return;
         if (!currentMessageObject.isVideo() && !currentMessageObject.isGif() && captionWidth > photoWidth - AndroidUtilities.dp(10)) {
             fitPhotoImage = true;
             photoImage.setAspectFit(true);
@@ -11182,7 +11183,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     private String maybeAppendPollStat(TLRPC.TL_messageMediaPoll media, int a, String text) {
-        boolean forceShowVote = (NekoConfig.showVoteCountBeforeVote.Bool() && !(pollVoted || pollClosed));
+        boolean forceShowVote = (MomoConfig.showVoteCountBeforeVote.Bool() && !(pollVoted || pollClosed));
         if (!forceShowVote) return text;
         if (media.results.total_voters > 0 && media.results.results.size() > a) {
             if (media.results.results.size() > a) {
@@ -11207,9 +11208,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 currentMapProvider = -1;
             }
         } else {
-            if (NekoConfig.mapPreviewProvider.Int() == 0) {
+            if (MomoConfig.mapPreviewProvider.Int() == 0) {
                 currentMapProvider = 2;
-            } else if (NekoConfig.mapPreviewProvider.Int() == 1) {
+            } else if (MomoConfig.mapPreviewProvider.Int() == 1) {
                 currentMapProvider = 1;
             } else {
                 currentMapProvider = -1;
@@ -11413,7 +11414,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
 
         int maxVote = 0;
-        if (!animatePollAnswer && pollVoteInProgress && vibrateOnPollVote && !NekoConfig.disableVibration.Bool()) {
+        if (!animatePollAnswer && pollVoteInProgress && vibrateOnPollVote && !MomoConfig.disableVibration.Bool()) {
             try {
                 performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignored) {}
@@ -12689,7 +12690,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 updatePlayingMessageProgress();
                 String str;
 
-                if (NekoConfig.takeGIFasVideo.Bool() && MessageObject.isGifDocument(documentAttach)) {
+                if (MomoConfig.takeGIFasVideo.Bool() && MessageObject.isGifDocument(documentAttach)) {
                     str = getString(R.string.AttachGif);
                     infoWidth = (int) Math.ceil(Theme.chat_infoPaint.measureText(str));
                     infoLayout = new StaticLayout(str, Theme.chat_infoPaint, infoWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
@@ -18412,7 +18413,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
         }
         String editStr = null;
-        if (edited) editStr = NekoConfig.useEmojiForEdited.Bool() ? " ✏\uFE0F" : getString(R.string.EditedMessage);
+        if (edited) editStr = MomoConfig.useEmojiForEdited.Bool() ? " ✏\uFE0F" : getString(R.string.EditedMessage);
         currentMessageObject.edited = edited;
         if (currentMessageObject.notime || currentMessageObject.isSponsored() || currentMessageObject.isQuickReply()) {
             timeString = "";
@@ -18457,7 +18458,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             currentTimeString = String.format("(%s) %s", messageObject.messageOwner.post_author, currentTimeString);
         }
 
-        if (messageObject.messageOwner.forwards > 0 && NekoConfig.showChannelMsgFwdCount.Bool()) {
+        if (messageObject.messageOwner.forwards > 0 && MomoConfig.showChannelMsgFwdCount.Bool()) {
             currentTimeString = " \uD83D\uDD4A " + LocaleController.formatShortNumber(messageObject.messageOwner.forwards, null) + " " + currentTimeString;
         }
 
@@ -18815,7 +18816,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 nameWidth -= adminWidth;
             } else if (isMegagroup && currentChat != null && currentMessageObject.isSenderChannel()) {
                 final String channelStr = LocaleController.getString(R.string.channelLabel);
-                boolean labelChannelUser = NekoConfig.labelChannelUser.Bool();
+                boolean labelChannelUser = MomoConfig.labelChannelUser.Bool();
                 if (labelChannelUser) {
                     String aliasName = NekoXConfig.getChannelAlias(currentMessageObject.messageOwner.from_id.channel_id);
                     SpannableStringBuilder maybeAdminString = new SpannableStringBuilder();
@@ -18987,7 +18988,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         forwardedNameWidth = 0;
         String originalTimestamp = "";
         if (messageObject.isForwarded()) {
-            if (NekoConfig.appendOriginalTimestamp.Bool()) originalTimestamp = ", " + LocaleController.formatSeenDate(currentMessageObject.messageOwner.fwd_from.date);
+            if (MomoConfig.appendOriginalTimestamp.Bool()) originalTimestamp = ", " + LocaleController.formatSeenDate(currentMessageObject.messageOwner.fwd_from.date);
             if (messageObject.messageOwner.fwd_from.from_id instanceof TLRPC.TL_peerChannel) {
                 currentForwardChannel = MessagesController.getInstance(currentAccount).getChat(messageObject.messageOwner.fwd_from.from_id.channel_id);
             } else if (messageObject.messageOwner.fwd_from.from_id instanceof TLRPC.TL_peerChat) {
@@ -19378,7 +19379,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         stringFinalText = Emoji.replaceEmoji(stringFinalText, textPaint.getFontMetricsInt(), false);
                         if (messageObject.messageOwner.reply_to.quote_entities != null) {
                             stringFinalText = MessageObject.replaceAnimatedEmoji(stringFinalText, messageObject.messageOwner.reply_to.quote_entities, textPaint.getFontMetricsInt(), true);
-                            if (NekoConfig.showSpoilersDirectly.Bool() && (currentMessageObject != null && !currentMessageObject.isCustomSpoiler()))
+                            if (MomoConfig.showSpoilersDirectly.Bool() && (currentMessageObject != null && !currentMessageObject.isCustomSpoiler()))
                                 messageObject.messageOwner.reply_to.quote_entities.removeIf(x -> x instanceof TLRPC.TL_messageEntitySpoiler);
                             MessageObject.addEntitiesToText(stringFinalText, messageObject.messageOwner.reply_to.quote_entities, currentMessageObject.isOutOwner(), false, false, false);
                         }
@@ -19594,7 +19595,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         getMessageObject().reloadCustomSpoiler();
                         if (hasReplyQuote || getMessageObject().replyMessageObject != null
                                 && !getMessageObject().replyMessageObject.isSpoilersRevealed
-                                && (!NekoConfig.showSpoilersDirectly.Bool() || getMessageObject().isCustomSpoiler())) {
+                                && (!MomoConfig.showSpoilersDirectly.Bool() || getMessageObject().isCustomSpoiler())) {
                             SpoilerEffect.addSpoilers(this, replyTextLayout, replyTextOffset, replyTextOffset + replyTextWidth, replySpoilersPool, replySpoilers);
                         }
                         animatedEmojiReplyStack = AnimatedEmojiSpan.update(AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES, this, false, animatedEmojiReplyStack, replyTextLayout);
@@ -19689,7 +19690,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         if (cs == null) return null;
         SpannableStringBuilder ssb = null;
         String str = cs.toString();
-        if (edited && NekoConfig.useEmojiForEdited.Bool()) {
+        if (edited && MomoConfig.useEmojiForEdited.Bool()) {
             int index = str.indexOf("✏\uFE0F");
             int len = 2;
             if (index == -1) {
@@ -19703,7 +19704,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 ssb.setSpan(span, index, index + len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
-        if (messageObject != null && messageObject.messageOwner != null && messageObject.messageOwner.forwards > 0 && NekoConfig.showChannelMsgFwdCount.Bool()) {
+        if (messageObject != null && messageObject.messageOwner != null && messageObject.messageOwner.forwards > 0 && MomoConfig.showChannelMsgFwdCount.Bool()) {
             int index = str.indexOf("\uD83D\uDD4A");
             int len = 2;
             if (index != -1) {
@@ -19721,7 +19722,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
     protected boolean isAnonAdminMessage() {
         if (isAnonAdmin != null) return isAnonAdmin;
-        return (isAnonAdmin = NekoConfig.alwaysLabelAnonAdmin.Bool() &&
+        return (isAnonAdmin = MomoConfig.alwaysLabelAnonAdmin.Bool() &&
                 currentMessageObject.messageOwner != null &&
                 (currentMessageObject.messageOwner.from_id != null &&
                         currentMessageObject.messageOwner.from_id.channel_id == currentMessageObject.getChatId()) &&
@@ -20230,7 +20231,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
                 if (drawForwardedName) {
                     forwardHeight = dp(4) + (int) Theme.chat_forwardNamePaint.getTextSize() * 2;
-                    if (NekoConfig.appendOriginalTimestamp.Bool() && forwardedNameLayout[0] != null && forwardedNameLayout[1] != null) {
+                    if (MomoConfig.appendOriginalTimestamp.Bool() && forwardedNameLayout[0] != null && forwardedNameLayout[1] != null) {
                         boolean ok = !currentMessageObject.isAnyKindOfSticker();
                         if (!ok) {
                             int lineCount = Math.max(forwardedNameLayout[0].getLineCount(), forwardedNameLayout[1].getLineCount());
@@ -20285,7 +20286,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         if ((!autoPlayingMedia || !MediaController.getInstance().isPlayingMessageAndReadyToDraw(currentMessageObject) || isRoundVideo) && !transitionParams.animateBackgroundBoundsInner && !(currentMessageObject != null && currentMessageObject.preview)) {
             drawOverlays(canvas);
         }
-        if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInProgress && !currentMessageObject.isVoice()) && (!currentMessageObject.isQuickReply() || currentMessageObject.isSendError()) && (!currentMessageObject.isAnyKindOfSticker() || !NekoConfig.hideTimeForSticker.Bool())) {
+        if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInProgress && !currentMessageObject.isVoice()) && (!currentMessageObject.isQuickReply() || currentMessageObject.isSendError()) && (!currentMessageObject.isAnyKindOfSticker() || !MomoConfig.hideTimeForSticker.Bool())) {
             drawTime(canvas, 1f, false);
         }
 
@@ -22219,7 +22220,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 forwardNameY = dp(12);
                 forwardHeight = dp(4) + (int) Theme.chat_forwardNamePaint.getTextSize() * 2;
 
-                if (NekoConfig.appendOriginalTimestamp.Bool()) {
+                if (MomoConfig.appendOriginalTimestamp.Bool()) {
                     boolean ok = !currentMessageObject.isAnyKindOfSticker();
                     if (!ok && forwardedNameLayout[0] != null && forwardedNameLayout[1] != null) {
                         int lineCount = Math.max(forwardedNameLayout[0].getLineCount(), forwardedNameLayout[1].getLineCount());
@@ -25054,7 +25055,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         msgAvatarLiveLocation.setAlpha((int) (255 * Math.min(1, progress * 5)));
                         msgAvatarLiveLocation.draw(canvas);
 
-                        boolean squareAvatar = NekoConfig.squareAvatar.Bool();
+                        boolean squareAvatar = MomoConfig.squareAvatar.Bool();
                         int size = dp(squareAvatar ? 36 : 52);
                         int shift = dp(squareAvatar ? 8 : 0);
                         locationImageReceiver.setImageCoords(cx + dp(5.0f) + shift, cy + dp(5.0f) + shift, size, size);
@@ -26483,7 +26484,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
 
             photoHeight = photoWidth + dp(100);
-            if (NekoConfig.imageMessageSizeTweak.Bool() && photoHeight < imageH) {
+            if (MomoConfig.imageMessageSizeTweak.Bool() && photoHeight < imageH) {
                 photoHeight = imageH;
             }
 
@@ -26496,7 +26497,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
 
         float scale = (float) imageW / (float) photoWidth;
-        if (NekoConfig.imageMessageSizeTweak.Bool() && imageW < imageH) {
+        if (MomoConfig.imageMessageSizeTweak.Bool() && imageW < imageH) {
             float scale2 = (float) imageH / (float) photoHeight;
             scale = (scale * 2 + scale2) / 3;
         }
@@ -28195,7 +28196,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
             }
             if (edited && !lastDrawingEdited && timeLayout != null) {
-                CharSequence editedStr = NekoConfig.useEmojiForEdited.Bool() ? replaceIndicators(" ✏\uFE0F", currentMessageObject) : getString(R.string.EditedMessage);
+                CharSequence editedStr = MomoConfig.useEmojiForEdited.Bool() ? replaceIndicators(" ✏\uFE0F", currentMessageObject) : getString(R.string.EditedMessage);
                 CharSequence text = timeLayout.getText();
                 int i = text.toString().indexOf(editedStr.toString());
                 if (i >= 0) {

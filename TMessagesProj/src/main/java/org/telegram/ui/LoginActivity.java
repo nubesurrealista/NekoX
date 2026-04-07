@@ -15,7 +15,7 @@ import static org.telegram.messenger.LocaleController.formatString;
 import static org.telegram.messenger.LocaleController.getString;
 import static org.telegram.messenger.MessagesController.findUpdatesAndRemove;
 
-import static tw.nekomimi.nekogram.utils.StrUtil.getAppName;
+import static moe.hx030.momogram.utils.StrUtil.getAppName;
 
 import android.Manifest;
 import android.animation.Animator;
@@ -225,15 +225,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import kotlin.Unit;
-import tw.nekomimi.nekogram.DataCenter;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.ui.BottomBuilder;
-import tw.nekomimi.nekogram.ui.EditTextAutoFill;
-import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.ProxyUtil;
-import tw.nekomimi.nekogram.utils.StrUtil;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
+import moe.hx030.momogram.DataCenter;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
+import moe.hx030.momogram.ui.BottomBuilder;
+import moe.hx030.momogram.ui.EditTextAutoFill;
+import moe.hx030.momogram.utils.AlertUtil;
+import moe.hx030.momogram.utils.ProxyUtil;
+import moe.hx030.momogram.utils.StrUtil;
+import moe.hx030.momogram.utils.TelegramUtil;
 
 @SuppressLint("HardwareIds")
 public class LoginActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -1247,7 +1247,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     }
 
     private void onFieldError(View view, boolean allowErrorSelection) {
-        if (!NekoConfig.disableVibration.Bool())
+        if (!MomoConfig.disableVibration.Bool())
             try {
                 view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignored) {}
@@ -3046,7 +3046,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     testBackend = LoginActivity.this.testBackend;
                 }
 
-                if (!NekoConfig.allowDupLogin.Bool() && getParentActivity() instanceof LaunchActivity) {
+                if (!MomoConfig.allowDupLogin.Bool() && getParentActivity() instanceof LaunchActivity) {
                     for (int a : SharedConfig.activeAccounts) {
                         UserConfig userConfig = UserConfig.getInstance(a);
                         if (!userConfig.isClientActivated()) {
@@ -4792,7 +4792,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                             animateSuccess(()-> {
                                 try {
-                                    if (!NekoConfig.disableVibration.Bool())
+                                    if (!MomoConfig.disableVibration.Bool())
                                         fragmentView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                 } catch (Exception ignored) {}
                                 new AlertDialog.Builder(getContext())
@@ -5055,7 +5055,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
         private void shakeWrongCode() {
             try {
-                if (!NekoConfig.disableVibration.Bool())
+                if (!MomoConfig.disableVibration.Bool())
                     codeFieldContainer.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignore) {}
 
@@ -6046,7 +6046,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 return;
             }
             try {
-                if (!NekoConfig.disableVibration.Bool())
+                if (!MomoConfig.disableVibration.Bool())
                     emailOutlineView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignore) {}
             if (clear) {
@@ -6657,7 +6657,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 return;
             }
             try {
-                if (!NekoConfig.disableVibration.Bool())
+                if (!MomoConfig.disableVibration.Bool())
                     codeFieldContainer.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignore) {}
             if (clear) {
@@ -6868,7 +6868,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
         private void shakeWrongCode() {
             try {
-                if (!NekoConfig.disableVibration.Bool())
+                if (!MomoConfig.disableVibration.Bool())
                     codeFieldContainer.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignore) {}
 
@@ -7115,7 +7115,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 return;
             }
             try {
-                if (!NekoConfig.disableVibration.Bool())
+                if (!MomoConfig.disableVibration.Bool())
                     codeFieldContainer.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignore) {}
             if (clear) {
@@ -7453,7 +7453,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 return;
             }
             try {
-                if (!NekoConfig.disableVibration.Bool())
+                if (!MomoConfig.disableVibration.Bool())
                     codeField[num].performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignore) {}
             AndroidUtilities.shakeView(codeField[num]);
@@ -10316,15 +10316,15 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     }
 
     public void doCustomApi() {
-        boolean hasCustomApiCreds = StringUtils.isNotBlank(NekoConfig.customApiId.String())
-                && StringUtils.isNotBlank(NekoConfig.customApiHash.String());
+        boolean hasCustomApiCreds = StringUtils.isNotBlank(MomoConfig.customApiId.String())
+                && StringUtils.isNotBlank(MomoConfig.customApiHash.String());
         BottomBuilder builder = new BottomBuilder(getParentActivity());
 
         EditText[] inputs = new EditText[2];
         inputs[0] = builder.addEditText("App Id");
         inputs[0].setInputType(InputType.TYPE_CLASS_NUMBER);
         if (hasCustomApiCreds) {
-            inputs[0].setText(customApiCredential[0] = NekoConfig.customApiId.String());
+            inputs[0].setText(customApiCredential[0] = MomoConfig.customApiId.String());
         }
         inputs[0].addTextChangedListener(new TextWatcher() {
             @Override
@@ -10348,7 +10348,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         inputs[1] = builder.addEditText("App Hash");
         inputs[1].setFilters(new InputFilter[]{new InputFilter.LengthFilter(BuildVars.OFFICAL_APP_HASH.length())});
         if (hasCustomApiCreds) {
-            inputs[1].setText(customApiCredential[1] = NekoConfig.customApiHash.String());
+            inputs[1].setText(customApiCredential[1] = MomoConfig.customApiHash.String());
         }
         inputs[1].addTextChangedListener(new TextWatcher() {
             @Override
@@ -10416,11 +10416,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     return Unit.INSTANCE;
                 }
 
-                NekoConfig.customApiId.setConfigString(customApiCredential[0].trim());
-                NekoConfig.customApiHash.setConfigString(customApiCredential[1].trim());
+                MomoConfig.customApiId.setConfigString(customApiCredential[0].trim());
+                MomoConfig.customApiHash.setConfigString(customApiCredential[1].trim());
             } else {
-                NekoConfig.customApiId.setConfigString("");
-                NekoConfig.customApiHash.setConfigString("");
+                MomoConfig.customApiId.setConfigString("");
+                MomoConfig.customApiHash.setConfigString("");
             }
 
 

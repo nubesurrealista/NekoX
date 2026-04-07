@@ -38,7 +38,7 @@ import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class ChatThemeController extends BaseController {
 
@@ -373,7 +373,7 @@ public class ChatThemeController extends BaseController {
 
     public TLRPC.WallPaper getDialogWallpaper(long dialogId) {
         if (dialogId >= 0) {
-            if (NekoConfig.disableCustomWallpaperUser.Bool()) {
+            if (MomoConfig.disableCustomWallpaperUser.Bool()) {
                 return null;
             }
             TLRPC.UserFull userFull = getMessagesController().getUserFull(dialogId);
@@ -381,7 +381,7 @@ public class ChatThemeController extends BaseController {
                 return userFull.wallpaper;
             }
         } else {
-            if (NekoConfig.disableCustomWallpaperChannel.Bool()) {
+            if (MomoConfig.disableCustomWallpaperChannel.Bool()) {
                 return null;
             }
             TLRPC.ChatFull chatFull = getMessagesController().getChatFull(-dialogId);

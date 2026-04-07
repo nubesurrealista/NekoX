@@ -139,8 +139,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
 
 public class ShareAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
 
@@ -1983,7 +1983,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             if (filter.isDefault()) {
                 filterTabsView.addTab(a, 0, LocaleController.getString(R.string.Recent), null, null, filter.title_noanimate, false, false);
             } else {
-                switch (NekoConfig.tabsTitleType.Int()) {
+                switch (MomoConfig.tabsTitleType.Int()) {
                     case NekoXConfig.TITLE_TYPE_TEXT:
                         filterTabsView.addTab(a, filter.localId, filter.name, filter.name, filter.entities, filter.title_noanimate, false, false);
                         break;
@@ -2489,7 +2489,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         }
         sendPopupWindow.showAtLocation(view, Gravity.LEFT | Gravity.TOP, location[0] + view.getMeasuredWidth() - layout.getMeasuredWidth() + dp(8), y);
         sendPopupWindow.dimBehind();
-        if (!NekoConfig.disableVibration.Bool())
+        if (!MomoConfig.disableVibration.Bool())
             try {
                 view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignored) {}
@@ -2599,7 +2599,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     }
                     int result = 0;
 
-                    if (NekoConfig.sendCommentAfterForward.Bool()) {
+                    if (MomoConfig.sendCommentAfterForward.Bool()) {
                         // send fwd message first.
                         result = SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, !showSendersName,false, withSound, 0, replyTopMsg, video_timestamp, price == null ? 0 : price);
                     }
@@ -2609,7 +2609,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                         params.monoForumPeer = monoForumPeerId;
                         SendMessagesHelper.getInstance(currentAccount).sendMessage(params);
                     }
-                    if (!NekoConfig.sendCommentAfterForward.Bool()) {
+                    if (!MomoConfig.sendCommentAfterForward.Bool()) {
                         // send fwd message afterwards.
                         result = SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, !showSendersName,false, withSound, 0, 0, replyTopMsg, video_timestamp, price == null ? 0 : price, monoForumPeerId, null);
                     }

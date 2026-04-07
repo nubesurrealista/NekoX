@@ -66,8 +66,8 @@ import org.telegram.ui.Components.UniversalRecyclerView;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.ui.PinnedStickerHelper;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.ui.PinnedStickerHelper;
 
 public class StickerSetCell extends FrameLayout {
     private final static String LINK_PREFIX = "t.me/addstickers/";
@@ -335,7 +335,7 @@ public class StickerSetCell extends FrameLayout {
         }
 
         // NekoX: Pinned Sticker Mark
-        if (NekoConfig.enableStickerPin.Bool() && PinnedStickerHelper.getInstance(UserConfig.selectedAccount).isPinned(set.set.id)) {
+        if (MomoConfig.enableStickerPin.Bool() && PinnedStickerHelper.getInstance(UserConfig.selectedAccount).isPinned(set.set.id)) {
             pinnedImageView.setVisibility(VISIBLE);
         } else {
             pinnedImageView.setVisibility(INVISIBLE);
@@ -414,7 +414,7 @@ public class StickerSetCell extends FrameLayout {
 
     // NekoX: Pinned Sticker Mark -> Change Visibility
     public void setPinnedMarkVisibility(boolean visible) {
-        if (!NekoConfig.enableStickerPin.Bool()) {
+        if (!MomoConfig.enableStickerPin.Bool()) {
             pinnedImageView.setVisibility(INVISIBLE);
             return;
         }

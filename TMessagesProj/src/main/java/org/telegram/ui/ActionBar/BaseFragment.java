@@ -72,10 +72,10 @@ import org.telegram.ui.bots.BotWebViewAttachedSheet;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
-import tw.nekomimi.nekogram.utils.VibrateUtil;
-import tw.nekomimi.nekogram.ui.MessageHelper;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.utils.TelegramUtil;
+import moe.hx030.momogram.utils.VibrateUtil;
+import moe.hx030.momogram.ui.MessageHelper;
 
 public abstract class BaseFragment {
 
@@ -351,7 +351,7 @@ public abstract class BaseFragment {
     public void setParentFragment(BaseFragment fragment) {
         setParentLayout(fragment.parentLayout);
         fragmentView = createView(parentLayout.getView().getContext());
-        if (NekoConfig.disableVibration.Bool()) {
+        if (MomoConfig.disableVibration.Bool()) {
             VibrateUtil.disableHapticFeedback(fragmentView);
         }
     }
@@ -797,7 +797,7 @@ public abstract class BaseFragment {
         if (dialog == null || parentLayout == null || parentLayout.isTransitionAnimationInProgress() || parentLayout.isSwipeInProgress() || !allowInTransition && parentLayout.checkTransitionAnimation()) {
             return null;
         }
-        if (NekoConfig.removePremiumAnnoyance.Bool() && dialog instanceof PremiumPreviewBottomSheet) {
+        if (MomoConfig.removePremiumAnnoyance.Bool() && dialog instanceof PremiumPreviewBottomSheet) {
             return null;
         }
         if (sheetsStack != null) {

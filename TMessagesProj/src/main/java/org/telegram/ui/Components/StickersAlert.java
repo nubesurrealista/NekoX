@@ -118,8 +118,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.ProxyUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.utils.ProxyUtil;
 
 public class StickersAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
 
@@ -614,7 +614,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     public void loadStickerSet(boolean force) {
         if (inputStickerSet != null) {
             final MediaDataController mediaDataController = MediaDataController.getInstance(currentAccount);
-            if (!force && !NekoConfig.alwaysLoadStickerSetFromServer.Bool()) {
+            if (!force && !MomoConfig.alwaysLoadStickerSetFromServer.Bool()) {
                 if (stickerSet == null && inputStickerSet.short_name != null) {
                     stickerSet = mediaDataController.getStickerSetByName(inputStickerSet.short_name);
                 }
@@ -667,7 +667,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                         }
                         optionsButton.setVisibility(View.VISIBLE);
                         stickerSet = (TLRPC.TL_messages_stickerSet) response;
-                        mediaDataController.putStickerSet(stickerSet, NekoConfig.alwaysLoadStickerSetFromServer.Bool());
+                        mediaDataController.putStickerSet(stickerSet, MomoConfig.alwaysLoadStickerSetFromServer.Bool());
                         if (stickerSet != null && stickerSet.documents.isEmpty()) {
                             dismiss();
                             return;

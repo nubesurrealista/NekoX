@@ -5,8 +5,8 @@ import android.graphics.PointF;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.BufferUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.utils.BufferUtil;
 
 public class RenderState {
     private static final int DEFAULT_STATE_SIZE = 256;
@@ -97,7 +97,7 @@ public class RenderState {
         count = 0;
         remainder = 0;
         if (buffer != null) {
-            if (NekoConfig.bufferCleaner.Bool()) {
+            if (MomoConfig.bufferCleaner.Bool()) {
                 BufferUtil.clear(buffer);
             } else {
                 buffer.position(0);

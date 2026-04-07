@@ -64,8 +64,8 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.utils.TelegramUtil;
 
 public class WebInstantView {
 

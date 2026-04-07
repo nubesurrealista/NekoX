@@ -29,7 +29,7 @@ import org.webrtc.ThreadUtils;
 
 import java.nio.ByteBuffer;
 
-import tw.nekomimi.nekogram.utils.BufferUtil;
+import moe.hx030.momogram.utils.BufferUtil;
 
 public class WebRtcAudioTrack {
   private static final boolean DEBUG = false;

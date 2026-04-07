@@ -22,7 +22,7 @@ import org.telegram.ui.LaunchActivity;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 /*
  * You can add your own search engines of preference with extending custom langpack with such keys:
@@ -114,7 +114,7 @@ public class SearchEngine {
                 final String privacy_policy_url = nullable(getString("SearchEngine" + i + "PrivacyPolicyURL"));
                 searchEngines.add(new SearchEngine(name, search_url, autocomplete_url, privacy_policy_url));
             }
-            String customSearchEngineUrl = NekoConfig.customSearchEngine.String();
+            String customSearchEngineUrl = MomoConfig.customSearchEngine.String();
             if (!StringUtils.isEmpty(customSearchEngineUrl)) {
                 try {
                     Uri u = Uri.parse(customSearchEngineUrl);

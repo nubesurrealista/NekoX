@@ -61,7 +61,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class BottomSheetTabs extends FrameLayout {
 
@@ -142,7 +142,7 @@ public class BottomSheetTabs extends FrameLayout {
 //                }
 //            }
         };
-        boolean needsContextOverride = tab.needsContext && !NekoConfig.openWebViewTabWithoutBot.Bool();
+        boolean needsContextOverride = tab.needsContext && !MomoConfig.openWebViewTabWithoutBot.Bool();
         open.run(lastFragment);
         if (needsContextOverride && (!(lastFragment instanceof ChatActivity) || ((ChatActivity) lastFragment).getDialogId() != tab.props.botId)) {
             doNotDismiss = true;
@@ -443,7 +443,7 @@ public class BottomSheetTabs extends FrameLayout {
             callback.run(true);
             return;
         }
-        if (!tab.confirmDismiss || NekoConfig.closeWebViewWithoutConfirmation.Bool()) {
+        if (!tab.confirmDismiss || MomoConfig.closeWebViewWithoutConfirmation.Bool()) {
             removeTab(tab, true);
             callback.run(true);
             return;
@@ -593,7 +593,7 @@ public class BottomSheetTabs extends FrameLayout {
         final ArrayList<WebTabData> tabs = getTabs();
         final ArrayList<TabDrawable> tabDrawables = getTabDrawables();
 
-        final boolean forceDraw = (NekoConfig.hideWebViewTabOverlayInChat.Bool() || NekoConfig.hideWebViewTabOverlayWhenSharing.Bool()) && drawTabs;
+        final boolean forceDraw = (MomoConfig.hideWebViewTabOverlayInChat.Bool() || MomoConfig.hideWebViewTabOverlayWhenSharing.Bool()) && drawTabs;
         if (bottomTabsProgress <= 0 && !forceDraw) {
             return;
         }

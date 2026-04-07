@@ -3,7 +3,7 @@ package com.c3r5b8.telegram_monet
 import android.content.Context
 import android.util.Log
 import androidx.annotation.RequiresApi
-import tw.nekomimi.nekogram.utils.ShareUtil
+import moe.hx030.momogram.utils.ShareUtil
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader

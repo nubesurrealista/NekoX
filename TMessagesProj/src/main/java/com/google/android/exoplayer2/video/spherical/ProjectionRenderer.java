@@ -27,7 +27,7 @@ import com.google.android.exoplayer2.util.GlUtil;
 import java.nio.FloatBuffer;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
-import tw.nekomimi.nekogram.utils.BufferUtil;
+import moe.hx030.momogram.utils.BufferUtil;
 
 /**
  * Utility class to render spherical meshes for video or images. Call {@link #init()} on the GL

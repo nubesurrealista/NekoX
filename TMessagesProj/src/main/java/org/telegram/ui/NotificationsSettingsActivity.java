@@ -82,7 +82,7 @@ import java.util.Map;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import tw.nekomimi.nekogram.utils.AlertUtil;
+import moe.hx030.momogram.utils.AlertUtil;
 
 public class NotificationsSettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 

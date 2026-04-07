@@ -15,7 +15,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import tw.nekomimi.nekogram.utils.BufferUtil;
+import moe.hx030.momogram.utils.BufferUtil;
 
 public class InstantCameraVideoEncoderOverlayHelper {
     private final static int DOWNSCALED_WIDTH = 48, DOWNSCALED_HEIGHT = 48;

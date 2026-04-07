@@ -148,9 +148,10 @@ import java.util.Objects;
 import java.util.Stack;
 
 import me.vkryl.android.animator.BoolAnimator;
-import tw.nekomimi.nekogram.folder.FolderIconHelper;
-import tw.nekomimi.nekogram.ui.MessageHelper;
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.folder.FolderIconHelper;
+import moe.hx030.momogram.ui.MessageHelper;
+import moe.hx030.momogram.MomoConfig;
 
 public class DialogCell extends BaseCell implements StoriesListPlaceProvider.AvatarOverlaysView {
 
@@ -214,7 +215,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
     public final StoriesUtilities.AvatarStoryParams storyParams = new StoriesUtilities.AvatarStoryParams(false) {
         @Override
         public void openStory(long dialogId, Runnable onDone) {
-            if (NekoConfig.disableStories.Bool()) return;
+            if (MomoConfig.disableStories.Bool()) return;
             if (delegate == null) {
                 return;
             }
@@ -1156,7 +1157,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
         }
 
         if (useForceThreeLines || SharedConfig.useThreeLinesLayout || true) {
-            if (!NekoConfig.chatListFontSizeFollowChat.Bool()) {
+            if (!MomoConfig.chatListFontSizeFollowChat.Bool()) {
                 Theme.dialogs_namePaint[0].setTextSize(dp(17));
                 Theme.dialogs_nameEncryptedPaint[0].setTextSize(dp(17));
                 Theme.dialogs_messagePaint[0].setTextSize(dp(16));
@@ -1172,7 +1173,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             paintIndex = 1;
             thumbSize = 18;
         } else {
-            if (!NekoConfig.chatListFontSizeFollowChat.Bool()) {
+            if (!MomoConfig.chatListFontSizeFollowChat.Bool()) {
                 Theme.dialogs_namePaint[0].setTextSize(dp(17));
                 Theme.dialogs_nameEncryptedPaint[0].setTextSize(dp(17));
                 Theme.dialogs_messagePaint[0].setTextSize(dp(16));
@@ -1791,7 +1792,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                                             if (message != null) {
                                                 message.spoilLoginCode();
                                             }
-                                            if (!NekoConfig.showSpoilersDirectly.Bool() || message.didSpoilLoginCode()) {
+                                            if (!MomoConfig.showSpoilersDirectly.Bool() || message.didSpoilLoginCode()) {
                                                 MediaDataController.addTextStyleRuns(message.messageOwner.entities, message.caption, msgBuilder, TextStyleSpan.FLAG_STYLE_SPOILER | TextStyleSpan.FLAG_STYLE_STRIKE);
                                             }
                                             MediaDataController.addAnimatedEmojiSpans(message.messageOwner.entities, msgBuilder, currentMessagePaint == null ? null : currentMessagePaint.getFontMetricsInt());
@@ -1883,7 +1884,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                                             if (message != null) {
                                                 message.spoilLoginCode();
                                             }
-                                            if (!NekoConfig.showSpoilersDirectly.Bool() || message.didSpoilLoginCode()) {
+                                            if (!MomoConfig.showSpoilersDirectly.Bool() || message.didSpoilLoginCode()) {
                                                 MediaDataController.addTextStyleRuns(message, stringBuilder, TextStyleSpan.FLAG_STYLE_SPOILER | TextStyleSpan.FLAG_STYLE_STRIKE);
                                             }
                                             if (message != null && message.messageOwner != null) {
@@ -2022,7 +2023,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                     } else {
                         drawMention = false;
                     }
-                    drawReactionMention = reactionMentionCount > 0 && !NekoConfig.ignoreAllReactions.Bool();
+                    drawReactionMention = reactionMentionCount > 0 && !MomoConfig.ignoreAllReactions.Bool();
                     drawPollVotesMention = pollVotesMentionCount > 0;
                     if (!drawReactionMention) {
                         reactionMentionCount = 0;
@@ -2122,7 +2123,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                         nameString = getString(R.string.RepliesTitle);
                     } else if (UserObject.isAnonymous(user)) {
                         nameString = getString(R.string.AnonymousForward);
-                    } else if (UserObject.isUserSelf(user) && !isMonoForumTopicDialog && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+                    } else if (UserObject.isUserSelf(user) && !isMonoForumTopicDialog && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                         if (isSavedDialog) {
                             nameString = getString(R.string.MyNotes);
                         } else if (useMeForMyMessages) {
@@ -2653,7 +2654,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             }
             spoilersPool.addAll(spoilers);
             spoilers.clear();
-            if (!NekoConfig.showSpoilersDirectly.Bool())
+            if (!MomoConfig.showSpoilersDirectly.Bool())
                 SpoilerEffect.addSpoilers(this, messageLayout, -2, -2, spoilersPool, spoilers);
         } catch (Exception e) {
             messageLayout = null;
@@ -3078,7 +3079,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
         boolean rebuildLayout = false;
         boolean invalidate = false;
         boolean oldIsForumCell = isForumCell();
-        boolean ignoreAllReactions = NekoConfig.ignoreAllReactions.Bool();
+        boolean ignoreAllReactions = MomoConfig.ignoreAllReactions.Bool();
         drawAvatarSelector = false;
         ttlPeriod = 0;
 
@@ -3119,7 +3120,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                         message = groupMessages != null && groupMessages.size() > 0 ? groupMessages.get(0) : null;
                         boolean shouldIgnore = message != null &&
                                 (message.shouldBeHidden() ||
-                                        (NekoConfig.ignoreBlocked.Bool() &&
+                                        (MomoConfig.ignoreBlocked.Bool() &&
                                         MessagesController.getInstance(currentAccount).blockedPeers.indexOfKey(message.getSenderId()) >= 0));
                         if (message != null && shouldIgnore) {
                             if (MessagesController.getInstance(currentAccount).dialogMessageFiltered.get(dialog.id) != null)
@@ -3435,7 +3436,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                     } else if (UserObject.isUserSelf(user) && isSavedDialog && !isMonoForumTopicDialog) {
                         avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_MY_NOTES);
                         avatarImage.setImage(null, null, avatarDrawable, null, user, 0);
-                    } else if (UserObject.isUserSelf(user) && !useMeForMyMessages && !isMonoForumTopicDialog && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+                    } else if (UserObject.isUserSelf(user) && !useMeForMyMessages && !isMonoForumTopicDialog && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                         avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);
                         avatarImage.setImage(null, null, avatarDrawable, null, user, 0);
                     } else {
@@ -3610,7 +3611,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
         if (isSliding && !swipeCanceled) {
             boolean prevValue = drawRevealBackground;
             drawRevealBackground = Math.abs(translationX) >= getMeasuredWidth() * 0.45f;
-            if (prevValue != drawRevealBackground && archiveHidden == SharedConfig.archiveHidden && !NekoConfig.disableVibration.Bool()) {
+            if (prevValue != drawRevealBackground && archiveHidden == SharedConfig.archiveHidden && !MomoConfig.disableVibration.Bool()) {
                 try {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 } catch (Exception ignore) {}
@@ -4025,10 +4026,10 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 canvas.restore();
             }
 
-            boolean chatListFontSizeFollowChat = NekoConfig.chatListFontSizeFollowChat.Bool();
+            boolean chatListFontSizeFollowChat = MomoConfig.chatListFontSizeFollowChat.Bool();
             boolean threeLines = (useForceThreeLines || SharedConfig.useThreeLinesLayout) && !chatListFontSizeFollowChat;
             // draw folder icons on left of time/read indicator
-            if (timeLayout != null && parentFragment != null && NekoConfig.showAddedToFoldersAtTitleType.Int() == 2) {
+            if (timeLayout != null && parentFragment != null && MomoConfig.showAddedToFoldersAtTitleType.Int() == 2) {
                 HashSet<String> icons = new HashSet<>();
                 for (var f : parentFragment.getMessagesController().dialogFilters) {
                     if (f.emoticon != null && !f.isDefault() &&
@@ -4421,7 +4422,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 (drawScam == 1 ? Theme.dialogs_scamDrawable : Theme.dialogs_fakeDrawable).draw(canvas);
             }
 
-            if (parentFragment != null && NekoConfig.showAddedToFoldersAtTitleType.Int() == 1) {
+            if (parentFragment != null && MomoConfig.showAddedToFoldersAtTitleType.Int() == 1) {
                 HashSet<String> icons = new HashSet<>();
                 for (var f : parentFragment.getMessagesController().dialogFilters) {
                     if (f.emoticon != null && !f.isDefault() &&
@@ -5016,7 +5017,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 if (isOnline || onlineProgress != 0) {
                     int top = (int) (storyParams.originalAvatarRect.bottom - dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 6 : 8));
                     int left;
-                    int extraX = NekoConfig.squareAvatar.Bool() ? dp(4) : 0;
+                    int extraX = MomoConfig.squareAvatar.Bool() ? dp(4) : 0;
                     if (LocaleController.isRTL) {
                         left = (int) (storyParams.originalAvatarRect.left + dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 10 : 6)) - extraX;
                     } else {
@@ -5470,7 +5471,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                         sb.append(getString(R.string.Bot));
                         sb.append(". ");
                     }
-                    if (user.self && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+                    if (user.self && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                         sb.append(getString(R.string.SavedMessages));
                     } else {
                         sb.append(ContactsController.formatName(user.first_name, user.last_name));
@@ -5591,7 +5592,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
     }
 
     public void updateMessageThumbs() {
-        if (message == null || !NekoConfig.mediaPreview.Bool()) {
+        if (message == null || !MomoConfig.mediaPreview.Bool()) {
             return;
         }
         String restrictionReason = MessagesController.getInstance(message.currentAccount).getRestrictionReason(message.messageOwner.restriction_reason);
@@ -5885,7 +5886,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 if (message != null) {
                     message.spoilLoginCode();
                 }
-                if (!NekoConfig.showSpoilersDirectly.Bool() || message.didSpoilLoginCode()) {
+                if (!MomoConfig.showSpoilersDirectly.Bool() || message.didSpoilLoginCode()) {
                     MediaDataController.addTextStyleRuns(message.messageOwner.entities, mess, msgBuilder, TextStyleSpan.FLAG_STYLE_SPOILER | TextStyleSpan.FLAG_STYLE_STRIKE);
                 }
                 if (message != null && message.messageOwner != null) {
@@ -5989,7 +5990,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             if (message != null) {
                 message.spoilLoginCode();
             }
-            if (!NekoConfig.showSpoilersDirectly.Bool() || message.didSpoilLoginCode()) {
+            if (!MomoConfig.showSpoilersDirectly.Bool() || message.didSpoilLoginCode()) {
                 MediaDataController.addTextStyleRuns(message, (Spannable) mess, TextStyleSpan.FLAG_STYLE_SPOILER | TextStyleSpan.FLAG_STYLE_STRIKE);
             }
             if (message != null && message.messageOwner != null) {

@@ -115,7 +115,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
-import tw.nekomimi.nekogram.NekoXConfig;
+import moe.hx030.momogram.NekoXConfig;
 
 public class SecretMediaViewer implements NotificationCenter.NotificationCenterDelegate, GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
 

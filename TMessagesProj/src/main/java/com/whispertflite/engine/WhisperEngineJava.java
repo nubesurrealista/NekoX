@@ -24,8 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.BufferUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.utils.BufferUtil;
 
 public class WhisperEngineJava implements WhisperEngine {
     private final String TAG = "WhisperEngineJava";
@@ -205,7 +205,7 @@ public class WhisperEngineJava implements WhisperEngine {
             offset += byteArray.length;
         }
 
-        if (NekoConfig.bufferCleaner.Bool()) {
+        if (MomoConfig.bufferCleaner.Bool()) {
             BufferUtil.clear(mInputBuffer);
         } else {
             mInputBuffer.clear();

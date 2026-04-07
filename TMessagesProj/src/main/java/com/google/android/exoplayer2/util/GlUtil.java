@@ -41,7 +41,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.microedition.khronos.egl.EGL10;
 
-import tw.nekomimi.nekogram.utils.BufferUtil;
+import moe.hx030.momogram.utils.BufferUtil;
 
 /** OpenGL ES utilities. */
 @SuppressWarnings("InlinedApi") // GLES constants are used safely based on the API version.

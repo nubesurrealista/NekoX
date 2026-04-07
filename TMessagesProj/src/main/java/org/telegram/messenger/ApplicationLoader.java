@@ -56,10 +56,10 @@ import org.telegram.ui.LauncherIconController;
 import java.io.File;
 import java.util.LinkedList;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.parts.SignturesKt;
-import tw.nekomimi.nekogram.utils.FileUtil;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.parts.SignturesKt;
+import moe.hx030.momogram.utils.FileUtil;
+import moe.hx030.momogram.utils.TelegramUtil;
 
 import java.util.Locale;
 
@@ -108,7 +108,7 @@ public class ApplicationLoader extends Application {
                     AndroidUtilities.getSystemProperty("ro.build.fingerprint"),
                     error.getClass().getName(), error.getMessage(), error.getCause(),
                     TelegramUtil.getStackTraceAsString(error.getStackTrace()));
-            NekoConfig.preferences.edit().putString(NekoConfig.lastCrashError.key, errStr).commit();
+            MomoConfig.preferences.edit().putString(MomoConfig.lastCrashError.key, errStr).commit();
             ProcessPhoenix.triggerRebirth(applicationContext,
                     new Intent(applicationContext, LaunchActivity.class));
         });
@@ -382,7 +382,7 @@ public class ApplicationLoader extends Application {
 
     private static void startPushServiceInternal() {
         if (PushListenerController.getProvider().hasServices()) {
-            if (NekoConfig.enableUnifiedPush.Bool()) stopPushService();
+            if (MomoConfig.enableUnifiedPush.Bool()) stopPushService();
             return;
         }
         SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
@@ -580,7 +580,7 @@ public class ApplicationLoader extends Application {
                     return lastKnownNetworkType;
                 }
                 if (connectivityManager.isActiveNetworkMetered()) {
-                    lastKnownNetworkType = (NekoConfig.mapMobileDataSaverToRoaming.Bool() && isDataSaverEnabled()) ?
+                    lastKnownNetworkType = (MomoConfig.mapMobileDataSaverToRoaming.Bool() && isDataSaverEnabled()) ?
                             StatsController.TYPE_ROAMING : StatsController.TYPE_MOBILE;
                 } else {
                     lastKnownNetworkType = StatsController.TYPE_WIFI;
@@ -594,7 +594,7 @@ public class ApplicationLoader extends Application {
         } catch (Exception e) {
             FileLog.e(e);
         }
-        return (NekoConfig.mapMobileDataSaverToRoaming.Bool() && isDataSaverEnabled()) ?
+        return (MomoConfig.mapMobileDataSaverToRoaming.Bool() && isDataSaverEnabled()) ?
                 StatsController.TYPE_ROAMING : StatsController.TYPE_MOBILE;
     }
 

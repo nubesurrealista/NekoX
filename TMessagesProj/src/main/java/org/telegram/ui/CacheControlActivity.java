@@ -89,7 +89,6 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.FilePathDatabase;
-import org.telegram.messenger.FilePathDatabase;
 import org.telegram.messenger.FilesMigrationService;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
@@ -165,14 +164,15 @@ import java.util.HashSet;
 import java.util.Objects;
 
 import kotlin.Unit;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.ui.BottomBuilder;
-import tw.nekomimi.nekogram.transtale.TranslateDb;
-import tw.nekomimi.nekogram.utils.EnvUtil;
-import tw.nekomimi.nekogram.utils.FileUtil;
-import tw.nekomimi.nekogram.utils.IoUtil;
-import tw.nekomimi.nekogram.utils.StrUtil;
-import tw.nekomimi.nekogram.utils.UIUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.ui.BottomBuilder;
+import moe.hx030.momogram.transtale.TranslateDb;
+import moe.hx030.momogram.utils.EnvUtil;
+import moe.hx030.momogram.utils.FileUtil;
+import moe.hx030.momogram.utils.IoUtil;
+import moe.hx030.momogram.utils.StrUtil;
+import moe.hx030.momogram.utils.UIUtil;
 
 public class CacheControlActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -1677,7 +1677,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
         builder.setPositiveButton(LocaleController.getString(R.string.CacheClear), (dialogInterface, i) -> {
             String tag = StrUtil.get030Tag(this);
-            String currentPath = NekoConfig.cachePath.String();
+            String currentPath = MomoConfig.cachePath.String();
             double claimedSpace = 0;
             for (String path : EnvUtil.getAvailableDirectories()) {
                 Log.d(tag, "cleanup for " + path);
@@ -1724,7 +1724,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         input.setSingleLine();
         input.setFocusable(true);
         input.setBackgroundDrawable(null);
-        input.setText(String.valueOf(NekoConfig.customCacheSize.Int()));
+        input.setText(String.valueOf(MomoConfig.customCacheSize.Int()));
         input.setHint(R.string.CustomMaxCacheSizeHint);
         builder.setView(input);
         builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
@@ -1733,7 +1733,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                 String txt = input.getText().toString().trim();
                 int size = Integer.parseInt(txt);
                 Log.d("030-cache", String.format("parsed %s to %d", txt, size));
-                NekoConfig.customCacheSize.setConfigInt(size);
+                MomoConfig.customCacheSize.setConfigInt(size);
                 float totalSizeInGb = (int) (totalDeviceSize / 1024L / 1024L) / 1000.0f;
                 ArrayList<Integer> options = new ArrayList<>();
                 if (totalSizeInGb <= 17) {
@@ -1748,7 +1748,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                 if (totalSizeInGb > 32) {
                     options.add(32);
                 }
-                int customSize = NekoConfig.customCacheSize.Int(), customSizeIndex = -1;
+                int customSize = MomoConfig.customCacheSize.Int(), customSizeIndex = -1;
                 if (customSize > 0) {
                     options.add(customSizeIndex = options.size(), customSize);
                 }
@@ -1769,7 +1769,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                 cacheSizeSliderView.setCallback(i -> {
                     boolean isCustom = (i == finalCustomSizeIndex);
                     if (isCustom) {
-                        int newCustomSize = NekoConfig.customCacheSize.Int();
+                        int newCustomSize = MomoConfig.customCacheSize.Int();
                         SharedConfig.getPreferences().edit().putInt("custom_cache_limit", newCustomSize).apply();
                         BulletinFactory.of(CacheControlActivity.this)
                                 .createSimpleBulletin(R.raw.info,
@@ -2710,7 +2710,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                         options.add(32);
                     }
 
-                    int customSize = NekoConfig.customCacheSize.Int(), customSizeIndex = -1;
+                    int customSize = MomoConfig.customCacheSize.Int(), customSizeIndex = -1;
                     if (customSize > 0) {
                         options.add(customSizeIndex = options.size(), customSize);
                     }
@@ -2732,7 +2732,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                     slideChooseView2.setCallback(i -> {
                         boolean isCustom = (i == finalCustomSizeIndex);
                         if (isCustom) {
-                            int newCustomSize = NekoConfig.customCacheSize.Int();
+                            int newCustomSize = MomoConfig.customCacheSize.Int();
                             SharedConfig.getPreferences().edit().putInt("custom_cache_limit", newCustomSize).apply();
                             BulletinFactory.of(CacheControlActivity.this)
                                     .createSimpleBulletin(R.raw.info,

@@ -45,7 +45,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 
-import tw.nekomimi.nekogram.utils.StrUtil;
+import moe.hx030.momogram.utils.StrUtil;
 
 
 public class FileLog {

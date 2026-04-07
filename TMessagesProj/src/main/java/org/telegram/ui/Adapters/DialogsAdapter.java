@@ -82,7 +82,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class DialogsAdapter extends RecyclerListView.SelectionAdapter implements DialogCell.DialogCellDelegate {
     public final static int VIEW_TYPE_DIALOG = 0,
@@ -1596,7 +1596,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter implements
             itemInternals.add(new ItemInternal(VIEW_TYPE_TEXT));
         }
 
-        if (allowForwardAsStories && dialogsType == DialogsActivity.DIALOGS_TYPE_FORWARD && (!NekoConfig.noForwardToStories.Bool() || NekoConfig.disableStories.Bool())) {
+        if (allowForwardAsStories && dialogsType == DialogsActivity.DIALOGS_TYPE_FORWARD && (!MomoConfig.noForwardToStories.Bool() || MomoConfig.disableStories.Bool())) {
             itemInternals.add(new ItemInternal(VIEW_TYPE_FORWARD_TO_STORIES_CELL));
         }
 

@@ -27,7 +27,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Components.AvatarDrawable;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 class QuickShareAvatarCell implements ValueAnimator.AnimatorUpdateListener {
     private static final long DURATION = 180L;
@@ -297,7 +297,7 @@ class QuickShareAvatarCell implements ValueAnimator.AnimatorUpdateListener {
         if (DialogObject.isUserDialog(uid)) {
             final TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(uid);
             avatarDrawable.setInfo(currentAccount, user);
-            if (UserObject.isUserSelf(user) && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+            if (UserObject.isUserSelf(user) && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                 displayName = LocaleController.getString(R.string.SavedMessages);
                 avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);
                 avatarDrawable.setScaleSize(0.75f);

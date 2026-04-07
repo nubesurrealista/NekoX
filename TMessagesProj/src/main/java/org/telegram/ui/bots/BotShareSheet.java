@@ -50,7 +50,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class BotShareSheet extends BottomSheetWithRecyclerListView {
 
@@ -344,7 +344,7 @@ public class BotShareSheet extends BottomSheetWithRecyclerListView {
     }
 
     public ArrayList<Long> ensureDialogIds(ArrayList<Long> dialogIds) {
-        if (!NekoConfig.removePremiumAnnoyance.Bool()) return dialogIds;
+        if (!MomoConfig.removePremiumAnnoyance.Bool()) return dialogIds;
         if (dialogIds == null) dialogIds = new ArrayList<>();
         if (dialogIds.isEmpty()) dialogIds.add((long) new Random().nextInt(999999999));
         return dialogIds;

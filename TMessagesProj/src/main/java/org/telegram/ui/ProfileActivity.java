@@ -21,7 +21,7 @@ import static org.telegram.ui.Stars.StarGiftSheet.replaceUnderstood;
 import static org.telegram.ui.Stars.StarsIntroActivity.formatStarsAmountShort;
 import static org.telegram.ui.bots.AffiliateProgramFragment.percents;
 
-import static tw.nekomimi.nekogram.utils.StrUtil.getAppName;
+import static moe.hx030.momogram.utils.StrUtil.getAppName;
 
 import android.Manifest;
 import android.animation.Animator;
@@ -352,25 +352,26 @@ import java.util.zip.ZipOutputStream;
 import kotlin.Unit;
 import me.vkryl.android.animator.BoolAnimator;
 import moe.hx030.momogram.util.ThreadUtil;
-import tw.nekomimi.nekogram.MomoUpdater;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.config.ConfigItem;
-import tw.nekomimi.nekogram.parts.DialogTransKt;
-import tw.nekomimi.nekogram.settings.MomoAppearanceSettingsActivity;
-import tw.nekomimi.nekogram.settings.NekoChatSettingsActivity;
-import tw.nekomimi.nekogram.settings.NekoExperimentalSettingsActivity;
-import tw.nekomimi.nekogram.settings.NekoGeneralSettingsActivity;
-import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
-import tw.nekomimi.nekogram.settings.NekoXSettingActivity;
-import tw.nekomimi.nekogram.ui.BottomBuilder;
-import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.FileUtil;
-import tw.nekomimi.nekogram.utils.IoUtil;
-import tw.nekomimi.nekogram.utils.LangsKt;
-import tw.nekomimi.nekogram.utils.ProxyUtil;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
-import tw.nekomimi.nekogram.utils.UIUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.MomoUpdater;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
+import moe.hx030.momogram.config.ConfigItem;
+import moe.hx030.momogram.parts.DialogTransKt;
+import moe.hx030.momogram.settings.MomoAppearanceSettingsActivity;
+import moe.hx030.momogram.settings.NekoChatSettingsActivity;
+import moe.hx030.momogram.settings.NekoExperimentalSettingsActivity;
+import moe.hx030.momogram.settings.NekoGeneralSettingsActivity;
+import moe.hx030.momogram.settings.NekoSettingsActivity;
+import moe.hx030.momogram.settings.NekoXSettingActivity;
+import moe.hx030.momogram.ui.BottomBuilder;
+import moe.hx030.momogram.utils.AlertUtil;
+import moe.hx030.momogram.utils.FileUtil;
+import moe.hx030.momogram.utils.IoUtil;
+import moe.hx030.momogram.utils.LangsKt;
+import moe.hx030.momogram.utils.ProxyUtil;
+import moe.hx030.momogram.utils.TelegramUtil;
+import moe.hx030.momogram.utils.UIUtil;
 
 public class ProfileActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, SharedMediaLayout.SharedMediaPreloaderDelegate, ImageUpdater.ImageUpdaterDelegate, SharedMediaLayout.Delegate, MainTabsActivity.TabFragmentDelegate {
     private final static int PHONE_OPTION_CALL = 0,
@@ -949,7 +950,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         public void createBlurEffect(int actionsSize) {
             this.actionsSize = actionsSize;
-            this.blurEnabled = NekoConfig.enableAvatarBlur.Bool(); // actionsSize > 0;
+            this.blurEnabled = MomoConfig.enableAvatarBlur.Bool(); // actionsSize > 0;
         }
 
         public AvatarImageView(Context context) {
@@ -1291,7 +1292,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 hasColorById = false;
                 if (AndroidUtilities.computePerceivedBrightness(getThemedColor(Theme.key_actionBarDefault)) > .8f) {
                     emojiColor = Color.WHITE; // getThemedColor(Theme.key_windowBackgroundWhiteBlueText);
-                    int mul = NekoConfig.enableAvatarBlur.Bool() ? 1 : 2;
+                    int mul = MomoConfig.enableAvatarBlur.Bool() ? 1 : 2;
                     // btnColor = Color.WHITE; // Theme.multAlpha(getThemedColor(Theme.key_windowBackgroundWhiteBlueText), .75f);
                     btnColor = Theme.multAlpha(getThemedColor(Theme.key_windowBackgroundWhiteBlueText), .15f * mul);
                 } else if (AndroidUtilities.computePerceivedBrightness(getThemedColor(Theme.key_actionBarDefault)) < .2f) {
@@ -3053,28 +3054,28 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     presentFragment(fragment);
                 } else if (id == block_from_search) {
                     long did = getDialogId();
-                    if (NekoConfig.searchBlacklistData.contains(did)) {
-                        NekoConfig.searchBlacklistData.remove(did);
+                    if (MomoConfig.searchBlacklistData.contains(did)) {
+                        MomoConfig.searchBlacklistData.remove(did);
                         blockFromSearchItem.setText(getString(R.string.SearchBlacklistShort));
                     } else {
-                        NekoConfig.searchBlacklistData.add(did);
+                        MomoConfig.searchBlacklistData.add(did);
                         blockFromSearchItem.setText(getString(R.string.SearchBlacklistRevert));
                     }
-                    NekoConfig.saveSearchBlacklist();
+                    MomoConfig.saveSearchBlacklist();
                 } else if (id == add_to_folder) {
                     showAddCurrentChatToFolderSheet();
                 } else if (id == all_media_spoiler) {
                     long did = getDialogId();
-                    if (NekoConfig.alwaysUseSpoilerForMediaChats.contains(did)) {
-                        NekoConfig.alwaysUseSpoilerForMediaChats.remove(did);
+                    if (MomoConfig.alwaysUseSpoilerForMediaChats.contains(did)) {
+                        MomoConfig.alwaysUseSpoilerForMediaChats.remove(did);
                         allMediaSpoilerItem.setIcon(R.drawable.msg_spoiler_off);
                     } else {
-                        NekoConfig.alwaysUseSpoilerForMediaChats.add(did);
+                        MomoConfig.alwaysUseSpoilerForMediaChats.add(did);
                         allMediaSpoilerItem.setIcon(R.drawable.msg_spoiler);
                     }
 
-                    String str = Arrays.toString(NekoConfig.alwaysUseSpoilerForMediaChats.toArray()).replace(" ", "");
-                    NekoConfig.alwaysUseSpoilerForMedia.setConfigString(str.substring(1, str.length() - 1));
+                    String str = Arrays.toString(MomoConfig.alwaysUseSpoilerForMediaChats.toArray()).replace(" ", "");
+                    MomoConfig.alwaysUseSpoilerForMedia.setConfigString(str.substring(1, str.length() - 1));
                 } else if (id == show_phone) {
                     showPhoneTemp = !showPhoneTemp;
                     updateListAnimated(false);
@@ -3763,7 +3764,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         int initialTab = -1;
         if (openCommonChats) {
             initialTab = SharedMediaLayout.TAB_COMMON_GROUPS;
-        } else if (!NekoConfig.removePremiumAnnoyance.Bool() && openGifts && (userInfo != null && userInfo.stargifts_count > 0 || chatInfo != null && chatInfo.stargifts_count > 0)) {
+        } else if (!MomoConfig.removePremiumAnnoyance.Bool() && openGifts && (userInfo != null && userInfo.stargifts_count > 0 || chatInfo != null && chatInfo.stargifts_count > 0)) {
             initialTab = SharedMediaLayout.TAB_GIFTS;
             openedGifts = true;
         } else if (openSimilar) {
@@ -3832,7 +3833,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
             @Override
             protected int getInitialTab() {
-                return NekoConfig.showSharedMediaOnOpeningProfile.Bool() ? TAB_PHOTOVIDEO : TAB_STORIES;
+                return MomoConfig.showSharedMediaOnOpeningProfile.Bool() ? TAB_PHOTOVIDEO : TAB_STORIES;
             }
 
             @Override
@@ -5684,7 +5685,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 return;
             }
-            if (!NekoConfig.openAvatarInsteadOfExpand.Bool() && expandAvatar()) {
+            if (!MomoConfig.openAvatarInsteadOfExpand.Bool() && expandAvatar()) {
                 return;
             }
             openAvatar();
@@ -5755,7 +5756,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 //        }
         overlaysView = new OverlaysView(context);
         avatarsBlurView = new ProfileGalleryBlurView(context);
-        avatarsBlurView.setSize(NekoConfig.enableAvatarBlur.Bool() ? getActionsExtraHeight() : 0);
+        avatarsBlurView.setSize(MomoConfig.enableAvatarBlur.Bool() ? getActionsExtraHeight() : 0);
         avatarsViewPager = new ProfileGalleryView(context, userId != 0 ? userId : -chatId, actionBar, listView, avatarImage, getClassGuid(), overlaysView, avatarsBlurView) {
             @Override
             protected void setCustomAvatarProgress(float progress) {
@@ -5988,7 +5989,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     getOrCreateStoryViewer().open(context, userInfo.stories, provider);
                 } else if (chatInfo != null && chatInfo.stories != null && !chatInfo.stories.stories.isEmpty()) {
                     getOrCreateStoryViewer().open(context, chatInfo.stories, provider);
-                } else if (NekoConfig.openAvatarInsteadOfExpand.Bool()) {
+                } else if (MomoConfig.openAvatarInsteadOfExpand.Bool()) {
                     openAvatar();
                 } else {
                     expandAvatar();
@@ -6360,7 +6361,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int getActionsExtraHeight(boolean withMusic) {
         if (userId != 0 && imageUpdater != null && !myProfile)
             return 0;
-//        float multiplier = NekoConfig.profileActionCircleBtn.Bool() ? 1.3f : 1;
+//        float multiplier = MomoConfig.profileActionCircleBtn.Bool() ? 1.3f : 1;
 //        return dp(74 * multiplier + (withMusic && hasMusic ? 25 : 0));
         return dp(74 + (withMusic && hasMusic ? 25 : 0));
     }
@@ -6444,7 +6445,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (user == null) {
             return;
         }
-        if (!isBot || NekoConfig.keepBlockedBotChatHistory.Bool() || MessagesController.isSupportUser(user)) {
+        if (!isBot || MomoConfig.keepBlockedBotChatHistory.Bool() || MessagesController.isSupportUser(user)) {
             if (userBlocked) {
                 getMessagesController().unblockPeer(userId);
                 if (BulletinFactory.canShowBulletin(ProfileActivity.this)) {
@@ -11070,8 +11071,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 numberSectionRow = rowCount++;
                 setUsernameRow = rowCount++;
-                if (NekoConfig.showIdAndDc.Bool()) idRow = rowCount++;
-                if (!hideNumber && !NekoConfig.hidePhone.Bool()) {
+                if (MomoConfig.showIdAndDc.Bool()) idRow = rowCount++;
+                if (!hideNumber && !MomoConfig.hidePhone.Bool()) {
                     numberRow = rowCount++;
                 }
                 bioRow = rowCount++;
@@ -11109,7 +11110,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 //                    starsRow = rowCount++;
 //                }
                 StarsController.getInstance(currentAccount, true).getBalance();
-                if (!NekoConfig.removePremiumAnnoyance.Bool() && ApplicationLoader.isStandaloneBuild() &&
+                if (!MomoConfig.removePremiumAnnoyance.Bool() && ApplicationLoader.isStandaloneBuild() &&
                         (StarsController.getInstance(currentAccount, true).balanceAvailable() &&
                                 (StarsController.getInstance(currentAccount, true).hasTransactions() ||
                                         StarsController.getInstance(currentAccount, true).getBalance().positive()))) {
@@ -11165,9 +11166,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 } else {
                     infoHeaderRowEmpty = rowCount++;
                 }
-                if (NekoConfig.showIdAndDc.Bool()) idRow = rowCount++;
+                if (MomoConfig.showIdAndDc.Bool()) idRow = rowCount++;
                 if (!isBot && (hasPhone || !hasInfo) && !hideNumber &&
-                        !(myProfile && !showPhoneTemp && NekoConfig.hidePhone.Bool())) {
+                        !(myProfile && !showPhoneTemp && MomoConfig.hidePhone.Bool())) {
                     phoneRow = rowCount++;
                 }
                 if (userInfo != null && !TextUtils.isEmpty(userInfo.about)) {
@@ -11287,7 +11288,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     emptyRow = rowCount++;
                 }
             }
-            if (NekoConfig.showIdAndDc.Bool()) idRow = rowCount++;
+            if (MomoConfig.showIdAndDc.Bool()) idRow = rowCount++;
             usernameRow = rowCount++;
             if (actionsView == null) {
                 notificationsSimpleRow = rowCount++;
@@ -11312,7 +11313,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (actionsView == null) {
                     infoHeaderRow = rowCount++;
                 }
-                if (NekoConfig.showIdAndDc.Bool()) idRow = rowCount++;
+                if (MomoConfig.showIdAndDc.Bool()) idRow = rowCount++;
                 if (chatInfo != null) {
                     if (!TextUtils.isEmpty(chatInfo.about)) {
                         channelInfoRow = rowCount++;
@@ -12603,7 +12604,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     setUsernameItem = otherItem.addSubItem(set_username, R.drawable.menu_username_change, getString(R.string.ProfileUsernameEdit));
                     linkItem = otherItem.addSubItem(copy_link_profile, R.drawable.msg_link2, getString(R.string.ProfileCopyLink));
                     updateItemsUsername();
-                    if (NekoConfig.hidePhone.Bool()) {
+                    if (MomoConfig.hidePhone.Bool()) {
                         otherItem.addSubItem(show_phone, R.drawable.msg_voice_phone, getString(R.string.ShowPhoneNumTemp));
                     }
                 }
@@ -12645,7 +12646,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 otherItem.hideSubItem(bot_privacy);
                             }
                             otherItem.addSubItem(report, R.drawable.msg_report, LocaleController.getString(R.string.ReportBot)).setColors(getThemedColor(Theme.key_text_RedRegular), getThemedColor(Theme.key_text_RedRegular));
-                            if (NekoConfig.keepBlockedBotChatHistory.Bool()) {
+                            if (MomoConfig.keepBlockedBotChatHistory.Bool()) {
                                 otherItem.addSubItem(block_contact, R.drawable.baseline_block_24, !userBlocked ? LocaleController.getString(R.string.BlockBot) : LocaleController.getString(R.string.Unblock));
                             } else if (!userBlocked) {
                                 otherItem.addSubItem(block_contact, R.drawable.baseline_block_24, LocaleController.getString(R.string.DeleteAndBlock)).setColors(getThemedColor(Theme.key_text_RedRegular), getThemedColor(Theme.key_text_RedRegular));
@@ -12668,7 +12669,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     otherItem.addSubItem(delete_contact, R.drawable.baseline_delete_24, LocaleController.getString(R.string.DeleteContact));
                 }
                 if (!UserObject.isDeleted(user) && !isBot && currentEncryptedChat == null && !userBlocked && userId != 333000 && userId != 777000 && userId != 42777) {
-                    if (!NekoConfig.removePremiumAnnoyance.Bool() && !BuildVars.IS_BILLING_UNAVAILABLE && !user.self && !user.bot && !MessagesController.isSupportUser(user) && !getMessagesController().premiumPurchaseBlocked()) {
+                    if (!MomoConfig.removePremiumAnnoyance.Bool() && !BuildVars.IS_BILLING_UNAVAILABLE && !user.self && !user.bot && !MessagesController.isSupportUser(user) && !getMessagesController().premiumPurchaseBlocked()) {
                         StarsController.getInstance(currentAccount).loadStarGifts();
                         otherItem.addSubItem(gift_premium, R.drawable.msg_gift_premium, LocaleController.getString(R.string.ProfileSendAGift));
                         giftAction = true;
@@ -12691,7 +12692,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (!isBot && getContactsController().contactsDict.get(userId) != null) {
                     otherItem.addSubItem(add_shortcut, R.drawable.baseline_home_24, LocaleController.getString(R.string.AddShortcut));
                 }
-                if (NekoConfig.showFBan.Bool()) {
+                if (MomoConfig.showFBan.Bool()) {
                     otherItem.addSubItem(fban, R.drawable.group_ban_new, LocaleController.getString(R.string.FBan));
                 }
             }
@@ -12704,7 +12705,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 createAutoDeleteItem(context);
             }
             if (chat != null && (chat.has_link || (chatInfo != null && chatInfo.linked_chat_id != 0))
-                    && NekoConfig.profileShowLinkedChat.Bool()) {
+                    && MomoConfig.profileShowLinkedChat.Bool()) {
                 String text;
                 if (!chat.megagroup) {
                     text = LocaleController.getString(R.string.LinkedGroupChat);
@@ -12714,11 +12715,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 otherItem.addSubItem(view_discussion, R.drawable.baseline_layers_24, text);
             }
 
-            if (NekoConfig.chatNameOverride.Bool()) {
+            if (MomoConfig.chatNameOverride.Bool()) {
                 otherItem.addSubItem(overrideName, R.drawable.baseline_edit_24, LocaleController.getString(R.string.ChatNameOverrideMenu));
             }
 
-            if (NekoConfig.showFBan.Bool() && (DialogObject.isUserDialog(dialogId) || ChatObject.isChannel(chat))) {
+            if (MomoConfig.showFBan.Bool() && (DialogObject.isUserDialog(dialogId) || ChatObject.isChannel(chat))) {
                 otherItem.addSubItem(fban, R.drawable.group_ban_new, LocaleController.getString(R.string.FBan));
             }
 
@@ -12785,10 +12786,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         otherItem.addSubItem(share, R.drawable.baseline_forward_24, LocaleController.getString(R.string.BotShare));
                         shareAction = !chat.creator;
                     }
-                    if (NekoConfig.channelAlias.Bool()) {
+                    if (MomoConfig.channelAlias.Bool()) {
                         otherItem.addSubItem(aliasChannelName, R.drawable.ic_ab_fave, LocaleController.getString(R.string.setChannelAliasName));
                     }
-                    if (!NekoConfig.removePremiumAnnoyance.Bool() && !BuildVars.IS_BILLING_UNAVAILABLE && !getMessagesController().premiumPurchaseBlocked()) {
+                    if (!MomoConfig.removePremiumAnnoyance.Bool() && !BuildVars.IS_BILLING_UNAVAILABLE && !getMessagesController().premiumPurchaseBlocked()) {
                         StarsController.getInstance(currentAccount).loadStarGifts();
                         otherItem.addSubItem(gift_premium, R.drawable.msg_gift_premium, LocaleController.getString(R.string.ProfileSendAGiftToChannel));
                         otherItem.setSubItemShown(gift_premium, chatInfo != null && chatInfo.stargifts_available);
@@ -12814,7 +12815,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         }
                     }
                 }
-                if (ChatObject.hasAdminRights(currentChat) && NekoConfig.profileShowRecentActions.Bool()) {
+                if (ChatObject.hasAdminRights(currentChat) && MomoConfig.profileShowRecentActions.Bool()) {
                     otherItem.addSubItem(event_log, R.drawable.baseline_content_paste_24, LocaleController.getString(R.string.EventLog));
                 }
             } else {
@@ -12865,21 +12866,21 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (selfUser && !myProfile) {
             otherItem.addSubItem(logout, R.drawable.msg_leave, LocaleController.getString(R.string.LogOut));
         } else {
-            if (NekoConfig.profileShowAddToFolder.Bool())
+            if (MomoConfig.profileShowAddToFolder.Bool())
                 otherItem.addSubItem(add_to_folder, R.drawable.msg_folders, LocaleController.getString(R.string.FilterAddTo));
 
-            if (NekoConfig.profileShowClearCache.Bool())
+            if (MomoConfig.profileShowClearCache.Bool())
                 otherItem.addSubItem(clear_cache, R.drawable.msg_delete, LocaleController.getString(R.string.ClearCache));
 
-            if (NekoConfig.profileShowBlockSearch.Bool()) {
-                int blockFromSearchTxt = (NekoConfig.searchBlacklistData.contains(getDialogId()) ?
+            if (MomoConfig.profileShowBlockSearch.Bool()) {
+                int blockFromSearchTxt = (MomoConfig.searchBlacklistData.contains(getDialogId()) ?
                         R.string.SearchBlacklistRevert : R.string.SearchBlacklistShort);
                 blockFromSearchItem = otherItem.addSubItem(block_from_search, R.drawable.msg_block,
                         LocaleController.getString(blockFromSearchTxt));
             }
 
-            if (NekoConfig.profileShowSpoilerOnAllMedia.Bool()) {
-                int spoilerIcon = (NekoConfig.alwaysUseSpoilerForMediaChats.contains(getDialogId()) ?
+            if (MomoConfig.profileShowSpoilerOnAllMedia.Bool()) {
+                int spoilerIcon = (MomoConfig.alwaysUseSpoilerForMediaChats.contains(getDialogId()) ?
                         R.drawable.msg_spoiler : R.drawable.msg_spoiler_off);
                 allMediaSpoilerItem = otherItem.addSubItem(all_media_spoiler, spoilerIcon,
                         LocaleController.getString(R.string.SpoilerOnAllMedia));
@@ -14364,7 +14365,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else if (position == chatRow) {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.ChatSettings), R.drawable.msg2_discussion, true);
                     } else if (position == nekoRow) {
-                        textCell.setTextAndIcon(LocaleController.getString(NekoConfig.useOldName.Bool() ? R.string.NekoSettings : R.string.MomoSettings),
+                        textCell.setTextAndIcon(LocaleController.getString(MomoConfig.useOldName.Bool() ? R.string.NekoSettings : R.string.MomoSettings),
                                 R.drawable.notification, true);
                     } else if (position == filtersRow) {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.Filters), R.drawable.msg2_folder, true);
@@ -15326,8 +15327,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             int g = 9999;
             ArrayList<SearchResult> inclNekoSettings = new ArrayList<>();
             for (SearchResult sr : defaults) if (sr != null) inclNekoSettings.add(sr);
-            HashMap<Integer, ArrayList<Pair<Integer, String>>> strMap = NekoConfig.getStringsForSearch();
-            String modSettings = LocaleController.getString(NekoConfig.useOldName.Bool() ? R.string.NekoSettings : R.string.MomoSettings);
+            HashMap<Integer, ArrayList<Pair<Integer, String>>> strMap = MomoConfig.getStringsForSearch();
+            String modSettings = LocaleController.getString(MomoConfig.useOldName.Bool() ? R.string.NekoSettings : R.string.MomoSettings);
             String[] pageNames = {
                     null,
                     String.format("%s - %s", modSettings, LocaleController.getString(R.string.General)),
@@ -16235,7 +16236,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             put(++pointer, numberRow, sparseIntArray);
             put(++pointer, setUsernameRow, sparseIntArray);
             put(++pointer, bioRow, sparseIntArray);
-            if (NekoConfig.showIdAndDc.Bool()) put(++pointer, idRow, sparseIntArray);
+            if (MomoConfig.showIdAndDc.Bool()) put(++pointer, idRow, sparseIntArray);
             put(++pointer, phoneSuggestionRow, sparseIntArray);
             put(++pointer, phoneSuggestionSectionRow, sparseIntArray);
             put(++pointer, passwordSuggestionRow, sparseIntArray);
@@ -17461,7 +17462,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             linearLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 6, 0, 6, -2));
         }
         // 030
-        if (NekoConfig.boostedContactRatingInProfile.Bool()) {
+        if (MomoConfig.boostedContactRatingInProfile.Bool()) {
             PremiumFeatureCell cell = new PremiumFeatureCell(context, resourcesProvider);
             cell.title.setText(getString(R.string.BoostedContactRatingInProfile));
             cell.description.setText(LocaleController.formatSpannable(R.string.BoostedContactRatingInProfileDesc, createNewSpan(getString(R.string.StarRatingAdded), Theme.getColor(Theme.key_featuredStickers_addButton, resourcesProvider))));

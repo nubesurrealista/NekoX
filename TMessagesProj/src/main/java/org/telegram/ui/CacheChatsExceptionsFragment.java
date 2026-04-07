@@ -33,7 +33,7 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class CacheChatsExceptionsFragment extends BaseFragment {
 
@@ -275,7 +275,7 @@ public class CacheChatsExceptionsFragment extends BaseFragment {
                 String title = null;
                 if (object instanceof TLRPC.User) {
                     TLRPC.User user = (TLRPC.User) object;
-                    if (user.self && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+                    if (user.self && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                         title = LocaleController.getString(R.string.SavedMessages);
                     } else {
                         title = ContactsController.formatName(user.first_name, user.last_name);

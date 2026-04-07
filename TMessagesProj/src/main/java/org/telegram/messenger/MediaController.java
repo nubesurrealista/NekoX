@@ -131,10 +131,11 @@ import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
-import tw.nekomimi.nekogram.SaveToDownloadReceiver;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.utils.BufferUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.SaveToDownloadReceiver;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
+import moe.hx030.momogram.utils.BufferUtil;
 
 public class MediaController implements AudioManager.OnAudioFocusChangeListener, NotificationCenter.NotificationCenterDelegate, SensorEventListener {
 
@@ -523,7 +524,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         public Boolean highQuality;
         public boolean isHighQuality() {
             if (highQuality == null)
-                return SharedConfig.photoHighQualityDefault || NekoConfig.increasedMaxPhotoResolution.Bool();
+                return SharedConfig.photoHighQualityDefault || MomoConfig.increasedMaxPhotoResolution.Bool();
             return highQuality;
         }
 
@@ -554,7 +555,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             savedFilterState = null;
             stickers = null;
             cropState = null;
-            highQuality = NekoConfig.increasedMaxPhotoResolution.Bool();
+            highQuality = MomoConfig.increasedMaxPhotoResolution.Bool();
         }
 
         public void copyFrom(MediaEditState state) {
@@ -1364,7 +1365,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public void recreateProximityWakeLock() {
 
-        if (NekoConfig.disableProximityEvents.Bool()) {
+        if (MomoConfig.disableProximityEvents.Bool()) {
             proximityWakeLock = null;
             return;
         }
@@ -2004,7 +2005,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     }
 
     private boolean isNearToSensor(float value) {
-        return !NekoConfig.disableProximityEvents.Bool() && value < 5.0f && value != proximitySensor.getMaximumRange();
+        return !MomoConfig.disableProximityEvents.Bool() && value < 5.0f && value != proximitySensor.getMaximumRange();
     }
 
     public boolean isRecordingOrListeningByProximity() {
@@ -3102,7 +3103,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         if (currentPlayList == null || currentPlayList.size() < 2) {
             return;
         }
-        if (NekoConfig.noPreloadTrackIfRepeatOne.Bool() && SharedConfig.repeatMode == 2) {
+        if (MomoConfig.noPreloadTrackIfRepeatOne.Bool() && SharedConfig.repeatMode == 2) {
             return;
         }
         int nextIndex;
@@ -3905,7 +3906,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                                     playNextMessageWithoutOrder(true);
                                 } else {
 
-                                    if (NekoConfig.dontAutoPlayNextMessage.Bool())
+                                    if (MomoConfig.dontAutoPlayNextMessage.Bool())
                                         MediaController.getInstance().cleanupPlayer(true, true);
                                     cleanupPlayer(true, hasNoNextVoiceOrRoundVideoMessage(), messageObject.isVoice(), false);
                                 }
@@ -4660,7 +4661,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         manualRecording = manual;
         requestRecordAudioFocus(true);
 
-        if (!NekoConfig.disableVibration.Bool()) {
+        if (!MomoConfig.disableVibration.Bool()) {
             try {
                 feedbackView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignore) {}
@@ -4959,7 +4960,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             if (send == 0) {
                 stopRecordingInternal(0, false, 0, false, 0);
             }
-            if (!NekoConfig.disableVibration.Bool()) {
+            if (!MomoConfig.disableVibration.Bool()) {
                 try {
                     feedbackView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 } catch (Exception ignore) {}
@@ -5311,7 +5312,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 try {
                     Uri uri;
                     boolean result = true;
-                    final String folderName = NekoConfig.customSavePath.String();
+                    final String folderName = MomoConfig.customSavePath.String();
                     if (Build.VERSION.SDK_INT >= 29) {
                         uri = saveFileInternal(type, sourceFile, null);
                         result = uri != null;
@@ -5436,7 +5437,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     selectedType = 1;
                 }
             }
-            final String folderName = NekoConfig.customSavePath.String();
+            final String folderName = MomoConfig.customSavePath.String();
             if (selectedType == 0) {
                 if (filename == null) {
                     filename = AndroidUtilities.generateFileName(0, extension);
@@ -6405,7 +6406,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         float minCompressFactor;
         int maxBitrate;
         int size = Math.min(height, width);
-        boolean betterBitrate = NekoConfig.enhancedVideoBitrate.Bool();
+        boolean betterBitrate = MomoConfig.enhancedVideoBitrate.Bool();
         if (size >= 2160) {
             VIDEO_BITRATE_2160 = maxBitrate = (betterBitrate ? 51200_000 : 28400_000);
             compressFactor = 1f;

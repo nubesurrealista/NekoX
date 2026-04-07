@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram.cc
+package moe.hx030.momogram.cc
 
 import org.junit.Test
 import org.junit.runner.RunWith

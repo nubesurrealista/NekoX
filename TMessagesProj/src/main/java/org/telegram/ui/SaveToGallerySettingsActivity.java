@@ -60,7 +60,7 @@ import org.telegram.ui.Components.SeekBarView;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class SaveToGallerySettingsActivity extends BaseFragment {
 
@@ -557,7 +557,7 @@ public class SaveToGallerySettingsActivity extends BaseFragment {
                 String title = null;
                 if (object instanceof TLRPC.User) {
                     TLRPC.User user = (TLRPC.User) object;
-                    if (user.self && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+                    if (user.self && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                         title = LocaleController.getString(R.string.SavedMessages);
                     } else {
                         title = ContactsController.formatName(user.first_name, user.last_name);

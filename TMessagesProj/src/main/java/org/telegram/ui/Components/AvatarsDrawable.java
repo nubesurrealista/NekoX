@@ -36,7 +36,7 @@ import org.telegram.ui.Stories.StoriesGradientTools;
 
 import java.util.Random;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class AvatarsDrawable {
 
@@ -339,7 +339,7 @@ public class AvatarsDrawable {
             animatingStates[index].id = id;
         } else if (object instanceof TLRPC.User) {
             currentUser = (TLRPC.User) object;
-            if (currentUser.self && showSavedMessages && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+            if (currentUser.self && showSavedMessages && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                 animatingStates[index].avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);
                 animatingStates[index].avatarDrawable.setScaleSize(0.6f);
             } else {

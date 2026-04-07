@@ -23,7 +23,7 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import tw.nekomimi.nekogram.utils.BufferUtil;
+import moe.hx030.momogram.utils.BufferUtil;
 
 /**
  * Helper class to implement an instance of RendererCommon.GlDrawer that can accept multiple input

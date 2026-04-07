@@ -49,7 +49,7 @@ import org.telegram.ui.Components.NumberTextView;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.utils.VibrateUtil;
+import moe.hx030.momogram.utils.VibrateUtil;
 
 public class ChangeBioActivity extends BaseFragment {
 

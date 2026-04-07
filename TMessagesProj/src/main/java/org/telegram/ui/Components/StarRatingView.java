@@ -18,8 +18,8 @@ import org.telegram.messenger.R;
 import org.telegram.tgnet.tl.TL_stars;
 import org.telegram.ui.ActionBar.Theme;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
 
 public class StarRatingView extends View {
     private final BadgeLevelDrawable drawable;
@@ -58,7 +58,7 @@ public class StarRatingView extends View {
     }
 
     public void set(TL_stars.Tl_starsRating starsRating) {
-        if (NekoConfig.hideProfileRating.Bool())
+        if (MomoConfig.hideProfileRating.Bool())
             starsRating = null;
 
         isVisibleInternal = starsRating != null;

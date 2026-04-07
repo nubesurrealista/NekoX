@@ -86,7 +86,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class StarsController {
 
@@ -1697,7 +1697,7 @@ public class StarsController {
 
             final long totalStars = amount;
             if (starsController.balanceAvailable() && starsController.getBalance(false) < totalStars) {
-                if (NekoConfig.removePremiumAnnoyance.Bool()) {
+                if (MomoConfig.removePremiumAnnoyance.Bool()) {
                     BulletinFactory.of(chatActivity).createSimpleBulletin(R.raw.chats_infotip, getString(R.string.NoStarsForReaction)).show(true);
                     return;
                 }
@@ -1756,7 +1756,7 @@ public class StarsController {
                     NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.didUpdateReactions, messageObject.getDialogId(), messageObject.getId(), messageObject.messageOwner.reactions);
 
                     if ("BALANCE_TOO_LOW".equals(error.text)) {
-                        if (NekoConfig.removePremiumAnnoyance.Bool()) {
+                        if (MomoConfig.removePremiumAnnoyance.Bool()) {
                             BulletinFactory.of(chatActivity).createSimpleBulletin(R.raw.chats_infotip, getString(R.string.NoStarsForReaction)).show(true);
                             return;
                         }
@@ -1811,7 +1811,7 @@ public class StarsController {
         final Context context = getContext(chatActivity);
         if (context == null) return null;
         if (checkBalance && s.balanceAvailable() && s.getBalance(false) <= 0) {
-            if (NekoConfig.removePremiumAnnoyance.Bool()) {
+            if (MomoConfig.removePremiumAnnoyance.Bool()) {
                 currentPendingReactions = new PendingPaidReactions(key, messageObject, chatActivity, ConnectionsManager.getInstance(currentAccount).getCurrentTime(), affect);;
                 currentPendingReactions.add(amount, affect);
                 return currentPendingReactions;

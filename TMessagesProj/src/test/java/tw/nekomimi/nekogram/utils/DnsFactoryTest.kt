@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram.utils
+package moe.hx030.momogram.utils
 
 import junit.framework.TestCase
 import org.junit.Test

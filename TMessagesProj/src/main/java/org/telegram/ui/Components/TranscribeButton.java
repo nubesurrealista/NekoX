@@ -62,7 +62,7 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
-import tw.nekomimi.nekogram.helpers.WhisperHelper;
+import moe.hx030.momogram.helpers.WhisperHelper;
 
 public class TranscribeButton {
 

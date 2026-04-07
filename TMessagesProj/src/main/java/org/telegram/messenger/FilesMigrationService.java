@@ -35,7 +35,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
-import tw.nekomimi.nekogram.utils.StrUtil;
+import moe.hx030.momogram.utils.StrUtil;
 
 @RequiresApi(api = Build.VERSION_CODES.R)
 public class FilesMigrationService extends Service {

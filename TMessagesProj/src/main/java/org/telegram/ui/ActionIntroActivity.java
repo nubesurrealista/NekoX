@@ -62,8 +62,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 
 import kotlin.Unit;
-import tw.nekomimi.nekogram.ui.BottomBuilder;
-import tw.nekomimi.nekogram.utils.StrUtil;
+import moe.hx030.momogram.ui.BottomBuilder;
+import moe.hx030.momogram.utils.StrUtil;
 
 @TargetApi(23)
 public class ActionIntroActivity extends BaseFragment implements LocationController.LocationFetchCallback {

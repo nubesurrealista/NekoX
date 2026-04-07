@@ -11,7 +11,7 @@ package org.telegram.ui.Components;
 import static org.telegram.messenger.AndroidUtilities.dp;
 import static org.telegram.messenger.AndroidUtilities.dpf2;
 
-import static tw.nekomimi.nekogram.utils.StrUtil.isRTLString;
+import static moe.hx030.momogram.utils.StrUtil.isRTLString;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -72,7 +72,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class ChatAvatarContainer extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
@@ -193,7 +193,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             StoriesUtilities.AvatarStoryParams params = new StoriesUtilities.AvatarStoryParams(true) {
                 @Override
                 public void openStory(long dialogId, Runnable onDone) {
-                    if (NekoConfig.disableStories.Bool()) return;
+                    if (MomoConfig.disableStories.Bool()) return;
                     baseFragment.getOrCreateStoryViewer().open(getContext(), dialogId, (dialogId1, messageId, storyId, type, holder) -> {
                         holder.crossfadeToAvatarImage = holder.storyImage = imageReceiver;
                         holder.params = params;
@@ -284,7 +284,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         titleTextView.setCanHideRightDrawable(false);
         titleTextView.setRightDrawableOutside(true);
         titleTextView.setPadding(0, dp(6), 0, dp(12));
-        if (NekoConfig.marqueeForLongChatTitles.Bool()) {
+        if (MomoConfig.marqueeForLongChatTitles.Bool()) {
             titleTextView.setScrollNonFitText(true);
         }
         addView(titleTextView);
@@ -917,7 +917,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             value = Emoji.replaceEmoji(value, titleTextView.getPaint().getFontMetricsInt(), false);
         }
         titleTextView.setText(value);
-        if (NekoConfig.marqueeForLongChatTitles.Bool()) {
+        if (MomoConfig.marqueeForLongChatTitles.Bool()) {
             titleTextView.setScrollNonFitText(!isRTLString(String.valueOf(value)));
         }
         if (scam || fake) {
@@ -1066,7 +1066,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             return;
         }
         TLRPC.User user = parentFragment.getCurrentUser();
-        boolean showAsSelf = NekoConfig.showSelfInsteadOfSavedMessages.Bool();
+        boolean showAsSelf = MomoConfig.showSelfInsteadOfSavedMessages.Bool();
         TLRPC.Chat chat = parentFragment.getCurrentChat();
         if (((UserObject.isUserSelf(user) && !showAsSelf) || UserObject.isReplyUser(user) || user != null && user.id == UserObject.VERIFY || parentFragment.getChatMode() != 0 && parentFragment.getChatMode() != ChatActivity.MODE_SUGGESTIONS) && parentFragment.getChatMode() != ChatActivity.MODE_SAVED) {
             if (getSubtitleTextView().getVisibility() != GONE) {
@@ -1350,7 +1350,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             if (avatarImageView != null) {
                 avatarImageView.setImage(null, null, avatarDrawable, user);
             }
-        } else if (UserObject.isUserSelf(user) && !showSelf && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+        } else if (UserObject.isUserSelf(user) && !showSelf && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
             avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);
             avatarDrawable.setScaleSize(.8f);
             if (avatarImageView != null) {
@@ -1404,7 +1404,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                     avatarImageView.setAnimatedEmojiDrawable(null);
                     avatarImageView.setImage(null, null, avatarDrawable, user);
                 }
-            } else if (UserObject.isUserSelf(user) && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+            } else if (UserObject.isUserSelf(user) && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                 avatarDrawable.setScaleSize(.8f);
                 avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);
                 if (avatarImageView != null) {

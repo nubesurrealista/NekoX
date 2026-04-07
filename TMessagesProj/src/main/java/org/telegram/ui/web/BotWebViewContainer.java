@@ -171,7 +171,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public abstract class BotWebViewContainer extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
     private final static String DURGER_KING_USERNAME = "DurgerKingBot";
@@ -427,10 +427,10 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
         }
         webView.setContainers(this, webViewScrollListener);
         webView.setCloseListener(onCloseListener);
-        boolean disableSafeBrowsing = NekoConfig.alwaysDisableSafeBrowsingInWebView.Bool();
+        boolean disableSafeBrowsing = MomoConfig.alwaysDisableSafeBrowsingInWebView.Bool();
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
-        settings.setGeolocationEnabled(!NekoConfig.disableWebViewGeolocation.Bool());
+        settings.setGeolocationEnabled(!MomoConfig.disableWebViewGeolocation.Bool());
         settings.setDomStorageEnabled(true);
         settings.setDatabaseEnabled(true);
         settings.setSupportMultipleWindows(true);
@@ -539,7 +539,7 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
             setKeyboardFocusable(false);
         }
 
-        if (NekoConfig.confirmOpenLinkInWebView.Bool()) {
+        if (MomoConfig.confirmOpenLinkInWebView.Bool()) {
             AlertsCreator.showOpenUrlAlert(parentActivity, uri.toString(), resourcesProvider);
             return;
         }
@@ -1684,7 +1684,7 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
                 break;
             }
             case "web_app_trigger_haptic_feedback": {
-                if (NekoConfig.disableVibration.Bool()) return;
+                if (MomoConfig.disableVibration.Bool()) return;
                 try {
                     JSONObject jsonData = new JSONObject(eventData);
                     String type = jsonData.optString("type");
@@ -2682,7 +2682,7 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
                     }
                     LaunchActivity.dismissAllWeb();
                 }, (error, dialogIds) -> {
-                    if (TextUtils.isEmpty(error) || NekoConfig.removePremiumAnnoyance.Bool()) {
+                    if (TextUtils.isEmpty(error) || MomoConfig.removePremiumAnnoyance.Bool()) {
                         notifyEvent("prepared_message_sent", null);
                         if (delegate != null) {
                             delegate.onOpenBackFromTabs();
@@ -3462,7 +3462,7 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
                     intent.setType("text/plain");
                 }
                 launchActivity.whenWebviewShareAPIDone(success -> {
-                    webView.evaluateJS("window.navigator.__share__receive("+((success || NekoConfig.removePremiumAnnoyance.Bool())?"":"'abort'")+")");
+                    webView.evaluateJS("window.navigator.__share__receive("+((success || MomoConfig.removePremiumAnnoyance.Bool())?"":"'abort'")+")");
                 });
                 launchActivity.startActivityForResult(Intent.createChooser(intent, getString(R.string.ShareFile)), LaunchActivity.WEBVIEW_SHARE_API_REQUEST_CODE);
             });

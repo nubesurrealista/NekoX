@@ -21,7 +21,7 @@ import android.text.TextUtils;
 import java.nio.ByteBuffer;
 import java.util.regex.Pattern;
 
-import tw.nekomimi.nekogram.utils.BufferUtil;
+import moe.hx030.momogram.utils.BufferUtil;
 
 public class AudioRecordJNI {
 

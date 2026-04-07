@@ -38,7 +38,7 @@ import org.telegram.ui.LaunchActivity;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class StarReactionsOverlay extends View {
 
@@ -135,7 +135,7 @@ public class StarReactionsOverlay extends View {
             final StarsController starsController = StarsController.getInstance(chatActivity.getCurrentAccount());
             final long totalStars = starsController.getPendingPaidReactions(msg);
             if (starsController.balanceAvailable() && starsController.getBalance(false) < totalStars) {
-                if (NekoConfig.removePremiumAnnoyance.Bool()) {
+                if (MomoConfig.removePremiumAnnoyance.Bool()) {
                     BulletinFactory.of(chatActivity).createSimpleBulletin(R.raw.chats_infotip, getString(R.string.NoStarsForReaction)).show(true);
                     return;
                 }

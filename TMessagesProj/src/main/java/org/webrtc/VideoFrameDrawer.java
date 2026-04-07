@@ -16,7 +16,7 @@ import android.opengl.GLES20;
 import androidx.annotation.Nullable;
 import java.nio.ByteBuffer;
 
-import tw.nekomimi.nekogram.utils.BufferUtil;
+import moe.hx030.momogram.utils.BufferUtil;
 
 /**
  * Helper class to draw VideoFrames. Calls either drawer.drawOes, drawer.drawRgb, or

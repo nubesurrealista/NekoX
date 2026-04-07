@@ -19,7 +19,7 @@ import org.telegram.ui.Components.BackButtonMenu;
 import java.util.ArrayList;
 import java.util.List;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public interface INavigationLayout {
     int REBUILD_FLAG_REBUILD_LAST = 1, REBUILD_FLAG_REBUILD_ONLY_LAST = 2;
@@ -345,7 +345,7 @@ public interface INavigationLayout {
 
         public boolean isFromDelay;
         public boolean delayDone;
-        public boolean customOverlay = NekoConfig.openChatOnWebView.Bool(); // custom
+        public boolean customOverlay = MomoConfig.openChatOnWebView.Bool(); // custom
 
         public NavigationParams(BaseFragment fragment) {
             this.fragment = fragment;

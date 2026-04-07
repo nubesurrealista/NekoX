@@ -63,10 +63,11 @@ import java.util.HashMap;
 import me.vkryl.core.BitwiseUtils;
 
 import moe.hx030.momogram.util.ArrayUtil;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.ui.MessageHelper;
-import tw.nekomimi.nekogram.utils.PGPUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
+import moe.hx030.momogram.ui.MessageHelper;
+import moe.hx030.momogram.utils.PGPUtil;
 
 @SuppressWarnings("unchecked")
 public class TLRPC {
@@ -62775,7 +62776,7 @@ public class TLRPC {
 
                 try {
                     boolean spoilerOverride = false;
-                    if (NekoConfig.ignoreBlocked.Bool()) {
+                    if (MomoConfig.ignoreBlocked.Bool()) {
                         for (int n : MessagesController.instanceNums) {
                             spoilerOverride = MessagesController.getInstance(n).blockedPeers.indexOfKey(result.from_id.user_id) >= 0;
                             if (spoilerOverride) break;
@@ -62786,8 +62787,8 @@ public class TLRPC {
                         s.length = result.message.length();
                         result.entities.add(s);
                     }
-                    if (NekoConfig.hideMessageRegexPattern != null) {
-                        result.hide = (result.message != null && NekoConfig.hideMessageRegexPattern.matcher(result.message).find());
+                    if (MomoConfig.hideMessageRegexPattern != null) {
+                        result.hide = (result.message != null && MomoConfig.hideMessageRegexPattern.matcher(result.message).find());
                     }
                 } catch (Throwable e) {
                     FileLog.e(e);

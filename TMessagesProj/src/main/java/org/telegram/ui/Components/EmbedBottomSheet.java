@@ -72,7 +72,7 @@ import org.telegram.ui.PhotoViewer;
 import java.util.HashMap;
 import java.util.Locale;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 @SuppressLint("WrongConstant")
 public class EmbedBottomSheet extends BottomSheet {
@@ -236,7 +236,7 @@ public class EmbedBottomSheet extends BottomSheet {
             instance.destroy();
         }
 
-        if (NekoConfig.disableEmbeddedPlayer.Bool()) {
+        if (MomoConfig.disableEmbeddedPlayer.Bool()) {
             AlertsCreator.showOpenUrlAlert(fragment, url, true, false, true);
             return;
         }

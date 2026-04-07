@@ -57,7 +57,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class ContactsController extends BaseController {
 
@@ -436,7 +436,7 @@ public class ContactsController extends BaseController {
             }
             if (getUserConfig().isClientActivated()) {
                 readContacts();
-                if (systemAccount == null && !NekoConfig.disableSystemAccount.Bool()) {
+                if (systemAccount == null && !MomoConfig.disableSystemAccount.Bool()) {
                     try {
                         systemAccount = new Account("" + getUserConfig().getClientUserId(), BuildConfig.APPLICATION_ID);
                         am.addAccountExplicitly(systemAccount, "", null);
@@ -455,7 +455,7 @@ public class ContactsController extends BaseController {
             Account[] accounts = am.getAccountsByType(BuildConfig.APPLICATION_ID);
             for (int a = 0; a < accounts.length; a++) {
                 Account acc = accounts[a];
-                if (NekoConfig.disableSystemAccount.Bool()) {
+                if (MomoConfig.disableSystemAccount.Bool()) {
                     try {
                         am.removeAccount(accounts[a], null, null);
                     } catch (Exception ignore) {
@@ -553,7 +553,7 @@ public class ContactsController extends BaseController {
                     } catch (Throwable ignore) {
 
                     }
-                    if (!NekoConfig.disableSystemAccount.Bool()) {
+                    if (!MomoConfig.disableSystemAccount.Bool()) {
                         try {
                             systemAccount = new Account("" + UserConfig.getInstance(currentAccount).getClientUserId(), BuildConfig.APPLICATION_ID);
                             am.addAccountExplicitly(systemAccount, "", null);
@@ -3270,7 +3270,7 @@ public class ContactsController extends BaseController {
             lastName = lastName.trim();
         }
         StringBuilder result = new StringBuilder((firstName != null ? firstName.length() : 0) + (lastName != null ? lastName.length() : 0) + 1);
-        if (NekoConfig.nameOrder.Int() == 1) {
+        if (MomoConfig.nameOrder.Int() == 1) {
             if (firstName != null && firstName.length() > 0) {
                 if (maxLength > 0 && firstName.length() > maxLength + 2) {
                     return firstName.substring(0, maxLength) + "…";

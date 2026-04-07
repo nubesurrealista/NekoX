@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class ChatObject {
 
@@ -2502,6 +2502,6 @@ public class ChatObject {
     }
 
     public static boolean areTabsEnabled(TLRPC.Chat chat) {
-        return (SharedConfig.forceForumTabs || chat != null && chat.forum_tabs) && !NekoConfig.ignoreTopicTabView.Bool();
+        return (SharedConfig.forceForumTabs || chat != null && chat.forum_tabs) && !MomoConfig.ignoreTopicTabView.Bool();
     }
 }

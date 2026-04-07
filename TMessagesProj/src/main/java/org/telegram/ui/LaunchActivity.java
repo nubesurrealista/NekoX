@@ -15,7 +15,7 @@ import static org.telegram.messenger.LocaleController.formatString;
 import static org.telegram.messenger.LocaleController.getString;
 import static org.telegram.ui.Components.Premium.LimitReachedBottomSheet.TYPE_BOOSTS_FOR_USERS;
 
-import static tw.nekomimi.nekogram.utils.StrUtil.getAppName;
+import static moe.hx030.momogram.utils.StrUtil.getAppName;
 
 import android.Manifest;
 import android.animation.Animator;
@@ -250,14 +250,14 @@ import java.util.zip.ZipInputStream;
 import kotlin.Unit;
 import kotlin.text.StringsKt;
 import moe.hx030.momogram.util.SessionsUtil;
-import tw.nekomimi.nekogram.helpers.EvilLeakerKiller;
-import tw.nekomimi.nekogram.ui.BottomBuilder;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
-import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.StrUtil;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
+import moe.hx030.momogram.helpers.EvilLeakerKiller;
+import moe.hx030.momogram.ui.BottomBuilder;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
+import moe.hx030.momogram.settings.NekoSettingsActivity;
+import moe.hx030.momogram.utils.AlertUtil;
+import moe.hx030.momogram.utils.StrUtil;
+import moe.hx030.momogram.utils.TelegramUtil;
 
 public class LaunchActivity extends BasePermissionsActivity implements INavigationLayout.INavigationLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, IPipActivity {
     public final static String EXTRA_FORCE_NOT_INTERNAL_APPS = "force_not_internal_apps";
@@ -5977,7 +5977,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                             }
                             if (UserObject.isReplyUser(user)) {
                                 names[2] = LocaleController.getString(R.string.RepliesTitle).toLowerCase();
-                            } else if (user.self && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+                            } else if (user.self && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                                 names[2] = LocaleController.getString(R.string.SavedMessages).toLowerCase();
                             }
 
@@ -8141,7 +8141,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
         if (!isConnecting) {
             TelegramUtil.toggleProxyOnOff(true);
-            if (!NekoConfig.disableSessionChecker.Bool()) {
+            if (!MomoConfig.disableSessionChecker.Bool()) {
                 Utilities.searchQueue.postRunnable(() -> SessionsUtil.checkSessions(this, currentAccount));
             }
         }
@@ -9041,7 +9041,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             }
         }
 
-        if (NekoConfig.openChatOnWebView.Bool()) return;
+        if (MomoConfig.openChatOnWebView.Bool()) return;
         final ArrayList<BotWebViewSheet> botSheets = new ArrayList<>();
         for (BotWebViewSheet sheet : BotWebViewSheet.activeSheets)
             botSheets.add(sheet);

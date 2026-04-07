@@ -79,9 +79,9 @@ import org.telegram.ui.Components.VerticalPositionAutoAnimator;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import tw.nekomimi.nekogram.ui.EditTextAutoFill;
-import tw.nekomimi.nekogram.utils.StrUtil;
-import tw.nekomimi.nekogram.utils.VibrateUtil;
+import moe.hx030.momogram.ui.EditTextAutoFill;
+import moe.hx030.momogram.utils.StrUtil;
+import moe.hx030.momogram.utils.VibrateUtil;
 
 public class TwoStepVerificationActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 

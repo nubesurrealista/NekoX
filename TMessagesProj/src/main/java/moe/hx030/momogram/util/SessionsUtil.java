@@ -26,8 +26,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.StrUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.utils.StrUtil;
 
 public class SessionsUtil {
 
@@ -96,7 +96,7 @@ public class SessionsUtil {
                         .setTitle(StrUtil.getAppName())
                         .setMessage(msg.toString())
                         .setButton(DialogInterface.BUTTON_NEGATIVE, LocaleController.getString(R.string.Dismiss), (dlg, which) -> {
-                            StrUtil.appendToCSConfigString(NekoConfig.warnedClients, newWarnedClients);
+                            StrUtil.appendToCSConfigString(MomoConfig.warnedClients, newWarnedClients);
                         })
                         .setButton(DialogInterface.BUTTON_NEUTRAL, LocaleController.getString(R.string.LogOut), (dlg, which) -> {
                             confirmLogoutFromAllWarningSessions(context, warnings);
@@ -120,8 +120,8 @@ public class SessionsUtil {
             Log.d(TAG, "checkSessions(): already checking");
             return;
         }
-        if ((System.currentTimeMillis() - NekoConfig.prevSessionCheck.Long()) < MIN_INTERVAL) {
-            Log.d(TAG, "checkSessions(): interval too short, skipping " + (System.currentTimeMillis() - NekoConfig.prevSessionCheck.Long()));
+        if ((System.currentTimeMillis() - MomoConfig.prevSessionCheck.Long()) < MIN_INTERVAL) {
+            Log.d(TAG, "checkSessions(): interval too short, skipping " + (System.currentTimeMillis() - MomoConfig.prevSessionCheck.Long()));
             return;
         }
         checking = new CountDownLatch(SharedConfig.activeAccounts.size());
@@ -131,7 +131,7 @@ public class SessionsUtil {
         }
         try {
             checking.await();
-            NekoConfig.prevSessionCheck.setConfigLong(System.currentTimeMillis());
+            MomoConfig.prevSessionCheck.setConfigLong(System.currentTimeMillis());
         } catch (InterruptedException e) {
             Log.e(TAG, "interrupted while waiting for session check", e);
         }
@@ -152,7 +152,7 @@ public class SessionsUtil {
                 for (String client : maliciousClients.keySet()) {
                     if (auth.app_name.toLowerCase().contains(client)) {
                         boolean skip = false;
-                        if (!NekoConfig.tempDebug.Bool()) {
+                        if (!MomoConfig.tempDebug.Bool()) {
                             for (int id : warnedClients) {
                                 if (id == auth.api_id) {
                                     skip = true;
@@ -165,7 +165,7 @@ public class SessionsUtil {
                         if (added.add(auth.api_id)) {
                             Set<Integer> reasons = maliciousClients.get(client);
                             if (reasons == null) continue;
-                            if (!NekoConfig.tempDebug.Bool() && reasons.contains(R.string.MaliciousClientReasonTest)) continue;
+                            if (!MomoConfig.tempDebug.Bool() && reasons.contains(R.string.MaliciousClientReasonTest)) continue;
                             clients.add(new MaliciousClient(auth.api_id, auth.app_name, reasons));
                         }
                     }
@@ -200,14 +200,14 @@ public class SessionsUtil {
     }
 
     public static List<Integer> getWarnedClientIds() {
-        if (NekoConfig.warnedClients.String().isEmpty()) return new ArrayList<>();
+        if (MomoConfig.warnedClients.String().isEmpty()) return new ArrayList<>();
         try {
             warnedClients.clear();
-            for (String s : NekoConfig.warnedClients.String().split(","))
+            for (String s : MomoConfig.warnedClients.String().split(","))
                 warnedClients.add(Integer.parseInt(s));
         } catch (NumberFormatException e) {
-            Log.e(TAG, "failed to parse dismissed clients " + NekoConfig.warnedClients.String(), e);
-            NekoConfig.warnedClients.setConfigString("");
+            Log.e(TAG, "failed to parse dismissed clients " + MomoConfig.warnedClients.String(), e);
+            MomoConfig.warnedClients.setConfigString("");
         }
 
         return warnedClients;
@@ -244,7 +244,7 @@ public class SessionsUtil {
 
     private static void logoutFromAllWarningSessions(List<MaliciousSessions> sessions) {
         Log.d(TAG, "logoutFromAllWarningSessions()");
-        if (NekoConfig.tempDebug.Bool()) return;
+        if (MomoConfig.tempDebug.Bool()) return;
         Set<Integer> targetApiIds = getCurrentWarningApiIds(sessions);
         for (MaliciousSessions s : sessions) {
             var allSessions = sessionMap.get(s.account);

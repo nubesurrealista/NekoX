@@ -82,7 +82,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import java.io.File;
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class EditWidgetActivity extends BaseFragment {
 
@@ -236,7 +236,7 @@ public class EditWidgetActivity extends BaseFragment {
         }
 
         public void updateDialogs() {
-            boolean displayAsSelf = NekoConfig.showSelfInsteadOfSavedMessages.Bool();
+            boolean displayAsSelf = MomoConfig.showSelfInsteadOfSavedMessages.Bool();
             if (widgetType == TYPE_CHATS) {
                 for (int a = 0; a < 2; a++) {
                     TLRPC.Dialog dialog;

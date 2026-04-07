@@ -133,7 +133,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 @SuppressLint("ViewConstructor")
 public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayout implements NotificationCenter.NotificationCenterDelegate {
@@ -740,7 +740,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     public ChatAttachAlertPhotoLayout(ChatAttachAlert alert, Context context, boolean forceDarkTheme, boolean needCamera, Theme.ResourcesProvider resourcesProvider) {
         super(alert, context, resourcesProvider);
         this.forceDarkTheme = forceDarkTheme;
-        this.needCamera = needCamera = (needCamera && !NekoConfig.hideCameraInAttachMenu.Bool());
+        this.needCamera = needCamera = (needCamera && !MomoConfig.hideCameraInAttachMenu.Bool());
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.albumsDidLoad);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.cameraInitied);
         FrameLayout container = alert.getContainer();
@@ -800,7 +800,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         starsItem = parentAlert.selectedMenuItem.addSubItem(stars, R.drawable.menu_feature_paid, getString(R.string.PaidMediaButton));
         parentAlert.selectedMenuItem.setFitSubItems(true);
 
-        if (NekoConfig.increasedMaxPhotoResolution.Bool()) parentAlert.selectedMenuItem.hideSubItem(quality);
+        if (MomoConfig.increasedMaxPhotoResolution.Bool()) parentAlert.selectedMenuItem.hideSubItem(quality);
 
         gridView = new RecyclerListView(context, resourcesProvider) {
             @Override
@@ -958,7 +958,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 return;
             }
 
-            if (position != 0 || !this.needCamera || NekoConfig.hideCameraInAttachMenu.Bool() || selectedAlbumEntry != galleryAlbumEntry) {
+            if (position != 0 || !this.needCamera || MomoConfig.hideCameraInAttachMenu.Bool() || selectedAlbumEntry != galleryAlbumEntry) {
                 if (adapter.hasCameraSpaceRow && position > itemsPerRow) {
                     position--;
                 }
@@ -1088,7 +1088,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             if (parentAlert.storyMediaPicker) {
                 return false;
             }
-            if (position == 0 && selectedAlbumEntry == galleryAlbumEntry && !NekoConfig.hideCameraInAttachMenu.Bool()) {
+            if (position == 0 && selectedAlbumEntry == galleryAlbumEntry && !MomoConfig.hideCameraInAttachMenu.Bool()) {
                 if (parentAlert.delegate != null) {
                     parentAlert.delegate.didPressedButton(0, false, true, 0, 0, 0, parentAlert.isCaptionAbove(), false, 0);
                 }
@@ -2443,7 +2443,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             }
             deviceHasGoodCamera = CameraController.getInstance().isCameraInitied();
         }
-        if (deviceHasGoodCamera /* && NekoConfig.disableInstantCamera.Bool() */) {
+        if (deviceHasGoodCamera /* && MomoConfig.disableInstantCamera.Bool() */) {
             // Clear cached bitmap
             File file = new File(ApplicationLoader.getFilesDirFixed(), "cthumb.jpg");
             if (file.exists()) file.delete();
@@ -2451,7 +2451,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         if ((old != deviceHasGoodCamera || old2 != noCameraPermissions) && adapter != null) {
             adapter.notifyDataSetChanged();
         }
-        if (!parentAlert.destroyed && parentAlert.isShowing() && deviceHasGoodCamera && parentAlert.getBackDrawable().getAlpha() != 0 && !cameraOpened /* && !NekoConfig.disableInstantCamera.Bool() */) {
+        if (!parentAlert.destroyed && parentAlert.isShowing() && deviceHasGoodCamera && parentAlert.getBackDrawable().getAlpha() != 0 && !cameraOpened /* && !MomoConfig.disableInstantCamera.Bool() */) {
             showCamera();
         }
     }
@@ -2722,7 +2722,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     }
 
     private void saveLastCameraBitmap() {
-        if (!canSaveCameraPreview /* || NekoConfig.disableInstantCamera.Bool() */) {
+        if (!canSaveCameraPreview /* || MomoConfig.disableInstantCamera.Bool() */) {
             return;
         }
         try {
@@ -4350,7 +4350,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
 
         public PhotoAttachAdapter(Context context, boolean camera, boolean limitedPermission) {
             mContext = context;
-            needCamera = camera && !NekoConfig.hideCameraInAttachMenu.Bool();
+            needCamera = camera && !MomoConfig.hideCameraInAttachMenu.Bool();
             limitedMediaAccess = limitedPermission;
         }
 

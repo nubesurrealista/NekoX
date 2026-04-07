@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 import org.telegram.messenger.FileLog;
 import org.webrtc.ThreadUtils.ThreadChecker;
 
-import tw.nekomimi.nekogram.utils.BufferUtil;
+import moe.hx030.momogram.utils.BufferUtil;
 
 /**
  * Android hardware video encoder.

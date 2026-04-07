@@ -56,7 +56,7 @@ import org.telegram.ui.ChatBackgroundDrawable;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class SizeNotifierFrameLayout extends FrameLayout implements Theme.Colorable {
 
@@ -632,12 +632,12 @@ public class SizeNotifierFrameLayout extends FrameLayout implements Theme.Colora
     final BlurBackgroundTask blurBackgroundTask = new BlurBackgroundTask();
 
     public void startBlur() {
-        if (!blurIsRunning || blurGeneratingTuskIsRunning || !invalidateBlur || !(SharedConfig.chatBlurEnabled() || NekoConfig.forceBlurInChat.Bool()) || DRAW_USING_RENDERNODE()) {
+        if (!blurIsRunning || blurGeneratingTuskIsRunning || !invalidateBlur || !(SharedConfig.chatBlurEnabled() || MomoConfig.forceBlurInChat.Bool()) || DRAW_USING_RENDERNODE()) {
             return;
         }
 
         int blurAlpha = Color.alpha(Theme.getColor(Theme.key_chat_BlurAlphaSlow));
-        if (NekoConfig.forceBlurInChat.Bool()) blurAlpha = NekoConfig.chatBlurAlphaValue.Int();
+        if (MomoConfig.forceBlurInChat.Bool()) blurAlpha = MomoConfig.chatBlurAlphaValue.Int();
         if (blurAlpha == 255) {
             return;
         }
@@ -998,9 +998,9 @@ public class SizeNotifierFrameLayout extends FrameLayout implements Theme.Colora
     }
 
     public void drawBlurRect(Canvas canvas, float y, Rect rectTmp, Paint blurScrimPaint, boolean top, int blurAlpha) {
-        boolean chatBlurEnabled = NekoConfig.forceBlurInChat.Bool() || SharedConfig.chatBlurEnabled();
+        boolean chatBlurEnabled = MomoConfig.forceBlurInChat.Bool() || SharedConfig.chatBlurEnabled();
         if (chatBlurEnabled) {
-            int customAlpha = NekoConfig.chatBlurAlphaValue.Int();
+            int customAlpha = MomoConfig.chatBlurAlphaValue.Int();
             if (customAlpha > 0) blurAlpha = customAlpha;
         }
         else {

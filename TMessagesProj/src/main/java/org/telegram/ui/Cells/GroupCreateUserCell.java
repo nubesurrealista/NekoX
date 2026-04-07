@@ -55,7 +55,7 @@ import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Premium.PremiumGradient;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class GroupCreateUserCell extends FrameLayout {
 
@@ -141,7 +141,7 @@ public class GroupCreateUserCell extends FrameLayout {
 
         drawDivider = false;
         padding = pad;
-        showSelfAsSaved = selfAsSaved && !NekoConfig.showSelfInsteadOfSavedMessages.Bool();
+        showSelfAsSaved = selfAsSaved && !MomoConfig.showSelfInsteadOfSavedMessages.Bool();
         avatarDrawable = new AvatarDrawable();
 
         avatarImageView = new BackupImageView(context);
@@ -568,7 +568,7 @@ public class GroupCreateUserCell extends FrameLayout {
             float cx = avatarImageView.getLeft() + avatarImageView.getMeasuredWidth() / 2;
             float cy = avatarImageView.getTop() + avatarImageView.getMeasuredHeight() / 2;
             final float dp = AndroidUtilities.dp(18) + AndroidUtilities.dp(4) * checkProgress;
-            if (NekoConfig.squareAvatar.Bool()) {
+            if (MomoConfig.squareAvatar.Bool()) {
                 canvas.drawRect(cx - dp, cy - dp, cx + dp, cy + dp, paint);
             } else {
                 canvas.drawCircle(cx, cy, dp, paint);

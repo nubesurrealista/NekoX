@@ -71,8 +71,8 @@ import org.telegram.ui.bots.BotWebViewSheet;
 
 import java.util.Locale;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
 
 public class ProfileSearchCell extends BaseCell implements NotificationCenter.NotificationCenterDelegate, Theme.Colorable {
 
@@ -825,7 +825,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
             if (UserObject.isReplyUser(user)) {
                 avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_REPLIES);
                 avatarImage.setImage(null, null, avatarDrawable, null, null, 0);
-            } else if (savedMessages && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+            } else if (savedMessages && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                 avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);
                 avatarImage.setImage(null, null, avatarDrawable, null, null, 0);
             } else {

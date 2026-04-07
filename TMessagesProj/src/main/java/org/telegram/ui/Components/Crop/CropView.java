@@ -35,11 +35,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class CropView extends FrameLayout implements CropAreaView.AreaViewListener, CropGestureDetector.CropGestureListener {
     private static final float EPSILON = 0.00001f;
-    private static final int RESULT_SIDE = NekoConfig.increasedMaxPhotoResolution.Bool() ? 2560 : 1280;
+    private static final int RESULT_SIDE = MomoConfig.increasedMaxPhotoResolution.Bool() ? 2560 : 1280;
     private static final float MAX_SCALE = 30.0f;
 
     public CropAreaView areaView;

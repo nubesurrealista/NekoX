@@ -42,7 +42,7 @@ import org.telegram.ui.ActionBar.Theme;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class AvatarDrawable extends Drawable {
 
@@ -598,7 +598,7 @@ public class AvatarDrawable extends Drawable {
             if (roundRadius > 0) {
                 AndroidUtilities.rectTmp.set(0, 0, size, size);
                 canvas.drawRoundRect(AndroidUtilities.rectTmp, roundRadius, roundRadius, backgroundPaint);
-            } else if (NekoConfig.squareAvatar.Bool()) {
+            } else if (MomoConfig.squareAvatar.Bool()) {
                 canvas.drawRect(0f, 0f, size, size, backgroundPaint);
             } else {
                 canvas.drawCircle(size / 2.0f, size / 2.0f, size / 2.0f, backgroundPaint);
@@ -636,7 +636,7 @@ public class AvatarDrawable extends Drawable {
             Theme.dialogs_archiveAvatarDrawable.setBounds(x, y, x + w, y + h);
             Theme.dialogs_archiveAvatarDrawable.draw(canvas);
             canvas.restore();
-        } else if ((avatarType != 0 || customIconDrawable != null) && !(avatarType == AVATAR_TYPE_SAVED && NekoConfig.showSelfInsteadOfSavedMessages.Bool())) {
+        } else if ((avatarType != 0 || customIconDrawable != null) && !(avatarType == AVATAR_TYPE_SAVED && MomoConfig.showSelfInsteadOfSavedMessages.Bool())) {
             Drawable drawable;
 
             if (customIconDrawable != null) {

@@ -66,7 +66,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
-import tw.nekomimi.nekogram.utils.StrUtil;
+import moe.hx030.momogram.utils.StrUtil;
 
 @SuppressLint("ViewConstructor")
 public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayout implements NotificationCenter.NotificationCenterDelegate, FactorAnimator.Target {

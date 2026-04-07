@@ -15,7 +15,7 @@ import static org.telegram.messenger.LocaleController.formatString;
 import static org.telegram.messenger.LocaleController.getString;
 import static org.telegram.ui.bots.AffiliateProgramFragment.percents;
 
-import static tw.nekomimi.nekogram.utils.StrUtil.getAppName;
+import static moe.hx030.momogram.utils.StrUtil.getAppName;
 
 import android.Manifest;
 import android.animation.Animator;
@@ -364,22 +364,23 @@ import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
 import me.vkryl.core.BitwiseUtils;
 import me.vkryl.core.reference.ReferenceList;
-import tw.nekomimi.nekogram.ui.BottomBuilder;
-import tw.nekomimi.nekogram.ui.MessageDetailsActivity;
-import tw.nekomimi.nekogram.ui.MessageHelper;
-import tw.nekomimi.nekogram.ui.PopupBuilder;
-import tw.nekomimi.nekogram.utils.EnvUtil;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.parts.MessageTransKt;
-import tw.nekomimi.nekogram.parts.PollTransUpdatesKt;
-import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
-import tw.nekomimi.nekogram.transtale.Translator;
-import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.PGPUtil;
-import tw.nekomimi.nekogram.utils.ProxyUtil;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
-import tw.nekomimi.nekogram.utils.UrlUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.ui.BottomBuilder;
+import moe.hx030.momogram.ui.MessageDetailsActivity;
+import moe.hx030.momogram.ui.MessageHelper;
+import moe.hx030.momogram.ui.PopupBuilder;
+import moe.hx030.momogram.utils.EnvUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
+import moe.hx030.momogram.parts.MessageTransKt;
+import moe.hx030.momogram.parts.PollTransUpdatesKt;
+import moe.hx030.momogram.settings.NekoSettingsActivity;
+import moe.hx030.momogram.transtale.Translator;
+import moe.hx030.momogram.utils.AlertUtil;
+import moe.hx030.momogram.utils.PGPUtil;
+import moe.hx030.momogram.utils.ProxyUtil;
+import moe.hx030.momogram.utils.TelegramUtil;
+import moe.hx030.momogram.utils.UrlUtil;
 
 @SuppressWarnings("unchecked")
 public class ChatActivity extends BaseFragment implements
@@ -1249,7 +1250,7 @@ public class ChatActivity extends BaseFragment implements
     private float switchingFromTopicsProgress;
     private boolean forwarding = false;
     public String cantSendMessage = null;
-    private boolean removeBottomPadding = NekoConfig.removeChatBottomViewPadding.Bool();
+    private boolean removeBottomPadding = MomoConfig.removeChatBottomViewPadding.Bool();
 
     public final static int OPTION_RETRY = 0;
     public final static int OPTION_DELETE = 1;
@@ -1755,7 +1756,7 @@ public class ChatActivity extends BaseFragment implements
             if (textSelectionHelper.isTryingSelect() || textSelectionHelper.isInSelectionMode() || inPreviewMode || isInsideContainer) {
                 return false;
             }
-            if((scrimPopupWindow != null && NekoConfig.reactions.Int() == 1))
+            if((scrimPopupWindow != null && MomoConfig.reactions.Int() == 1))
                 return false;
             wasManualScroll = true;
             boolean result = true;
@@ -1951,7 +1952,7 @@ public class ChatActivity extends BaseFragment implements
 
         @Override
         public boolean hasDoubleTap(View view, int position) {
-            int actionType = NekoConfig.reactions.Int();
+            int actionType = MomoConfig.reactions.Int();
             if (view instanceof ChatMessageCell && actionType == 1){
                 ChatMessageCell cell = (ChatMessageCell) view;
                 return !cell.getMessageObject().isSending() && !cell.getMessageObject().isEditing() && cell.getMessageObject().type != 16 && !actionBar.isActionModeShowed() && !isSecretChat() && !isInScheduleMode();
@@ -1963,7 +1964,7 @@ public class ChatActivity extends BaseFragment implements
             if (reaction == null && (reactionStringSetting == null || !reactionStringSetting.startsWith("animated_"))) {
                 return false;
             }
-            if (NekoConfig.reactions.Int() == 2) return false;
+            if (MomoConfig.reactions.Int() == 2) return false;
             boolean available = dialog_id >= 0 || actionType > 2;
             if (!available && chatInfo != null) {
                 available = ChatObject.reactionIsAvailable(chatInfo, reaction == null ? reactionStringSetting : reaction.reaction);
@@ -1987,7 +1988,7 @@ public class ChatActivity extends BaseFragment implements
             if (getParentActivity() == null || isSecretChat() || isInScheduleMode() || isInPreviewMode() || chatMode == MODE_QUICK_REPLIES) {
                 return;
             }
-            int actionType = NekoConfig.reactions.Int();
+            int actionType = MomoConfig.reactions.Int();
             if (actionType == 2) return;
 
             ChatMessageCell cell = (ChatMessageCell) view;
@@ -2019,7 +2020,7 @@ public class ChatActivity extends BaseFragment implements
                 }
                 return;
             }
-            if (NekoConfig.reactions.Int() == 1) {
+            if (MomoConfig.reactions.Int() == 1) {
                 createMenu(view, true, false, x, y, true, false, false, true);
                 return;
             }
@@ -2716,9 +2717,9 @@ public class ChatActivity extends BaseFragment implements
         super(args);
 
         navbarContentSourceWallpaper = new BlurredBackgroundSourceWrapped();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && (SharedConfig.chatBlurEnabled() || NekoConfig.forceBlurInChat.Bool())) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && (SharedConfig.chatBlurEnabled() || MomoConfig.forceBlurInChat.Bool())) {
             scrollableViewNoiseSuppressor = new DownscaleScrollableNoiseSuppressor();
-            recommendedAdditionalSizeY = dp(NekoConfig.removeChatBottomViewPadding.Bool() ? 16 : 48);
+            recommendedAdditionalSizeY = dp(MomoConfig.removeChatBottomViewPadding.Bool() ? 16 : 48);
 
             glassBackgroundSourceFrostedRenderNode = new BlurredBackgroundSourceRenderNode(navbarContentSourceWallpaper);
             glassBackgroundSourceFrostedRenderNode.setOnDrawablesRelativePositionChangeListener(this::invalidateMergedVisibleBlurredPositionsAndSourcesPositions);
@@ -3096,7 +3097,7 @@ public class ChatActivity extends BaseFragment implements
             getNotificationCenter().addObserver(this, NotificationCenter.hashtagSearchUpdated);
         }
 
-        if (NekoConfig.unreadBadgeOnBackButton.Bool()) {
+        if (MomoConfig.unreadBadgeOnBackButton.Bool()) {
             getNotificationCenter().addObserver(this, NotificationCenter.dialogsUnreadCounterChanged);
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.notificationsCountUpdated);
         }
@@ -3285,7 +3286,7 @@ public class ChatActivity extends BaseFragment implements
         }
 
         getMessagesController().openedChat(dialog_id);
-        removeBottomPadding = NekoConfig.removeChatBottomViewPadding.Bool();
+        removeBottomPadding = MomoConfig.removeChatBottomViewPadding.Bool();
         return true;
     }
 
@@ -3462,7 +3463,7 @@ public class ChatActivity extends BaseFragment implements
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
         searchFilterType = SEARCH_FILTER_NONE;
-        if (NekoConfig.hideWebViewTabOverlayInChat.Bool() && !forwarding) {
+        if (MomoConfig.hideWebViewTabOverlayInChat.Bool() && !forwarding) {
             BottomSheetTabsOverlay overlay = LaunchActivity.instance.getBottomSheetTabsOverlay();
             BottomSheetTabs tabs = overlay.tabsView;
             if (tabs != null) tabs.setTabSheetVisibility(true);
@@ -3610,7 +3611,7 @@ public class ChatActivity extends BaseFragment implements
             getNotificationCenter().removeObserver(this, NotificationCenter.hashtagSearchUpdated);
         }
 
-        if (NekoConfig.unreadBadgeOnBackButton.Bool()) {
+        if (MomoConfig.unreadBadgeOnBackButton.Bool()) {
             getNotificationCenter().removeObserver(this, NotificationCenter.dialogsUnreadCounterChanged);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.notificationsCountUpdated);
         }
@@ -4147,7 +4148,7 @@ public class ChatActivity extends BaseFragment implements
                     // Neko.030
                     TLObject cachedObject = userInfo == null ? null : getMessagesController().getUserOrChat(userInfo.id);
                     TLRPC.User user = (cachedObject instanceof TLRPC.User) ? (TLRPC.User) cachedObject : null;
-                    if (id == delete_chat && user != null && user.bot && NekoConfig.keepBlockedBotChatHistory.Bool()) {
+                    if (id == delete_chat && user != null && user.bot && MomoConfig.keepBlockedBotChatHistory.Bool()) {
                         if (userBlocked) {
                             getMessagesController().unblockPeer(user.id);
                             if (BulletinFactory.canShowBulletin(ChatActivity.this)) {
@@ -4567,7 +4568,7 @@ public class ChatActivity extends BaseFragment implements
 
         if (isThreadChat() && threadMessageId != 0 && !isTopic) {
             viewInChatItem = menu.addItem(nkbtn_view_in_chat, R.drawable.baseline_forum_24, themeDelegate);
-            if (NekoConfig.autoTranslate.Bool()) {
+            if (MomoConfig.autoTranslate.Bool()) {
                 translateChatItem = menu.addItem(translate, R.drawable.msg_translate, themeDelegate);
             }
         }
@@ -4827,7 +4828,7 @@ public class ChatActivity extends BaseFragment implements
                         if (!MessagesController.isSupportUser(currentUser)) {
                             headerItem.lazilyAddSubItem(report, R.drawable.msg_report, LocaleController.getString(R.string.ReportBot)).setColors(getThemedColor(Theme.key_text_RedRegular), getThemedColor(Theme.key_text_RedRegular));
                         }
-                        String blockStr = LocaleController.getString(NekoConfig.keepBlockedBotChatHistory.Bool() ? R.string.BlockBot : R.string.DeleteAndBlock);
+                        String blockStr = LocaleController.getString(MomoConfig.keepBlockedBotChatHistory.Bool() ? R.string.BlockBot : R.string.DeleteAndBlock);
                         headerItem.lazilyAddSubItem(delete_chat, R.drawable.msg_block2, blockStr).setColors(getThemedColor(Theme.key_text_RedRegular), getThemedColor(Theme.key_text_RedRegular));
                         updateBotButtons();
                     } else {
@@ -5386,7 +5387,7 @@ public class ChatActivity extends BaseFragment implements
                     } else if (startedTrackingSlidingView) {
                         if (Math.abs(dx) >= AndroidUtilities.dp(50)) {
                             if (!wasTrackingVibrate) {
-                                if (!NekoConfig.disableVibration.Bool()) {
+                                if (!MomoConfig.disableVibration.Bool()) {
                                     try {
                                         performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                     } catch (Exception ignore) {}
@@ -5427,7 +5428,7 @@ public class ChatActivity extends BaseFragment implements
                 if (e.getAction() == MotionEvent.ACTION_DOWN) {
                     scrollByTouch = true;
                 }
-                if (!NekoConfig.disableSwipeToNext.Bool() && pullingDownOffset != 0 && (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL)) {
+                if (!MomoConfig.disableSwipeToNext.Bool() && pullingDownOffset != 0 && (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL)) {
                     float progress = Math.min(1f, pullingDownOffset / AndroidUtilities.dp(110));
                     if (e.getAction() == MotionEvent.ACTION_UP && progress == 1 && pullingDownDrawable != null && !pullingDownDrawable.emptyStub) {
                         if (pullingDownDrawable.animationIsRunning()) {
@@ -5566,7 +5567,7 @@ public class ChatActivity extends BaseFragment implements
                     drawReplyButton(c);
                 }
 
-                if (!NekoConfig.disableSwipeToNext.Bool() && pullingDownOffset != 0 && !isInPreviewMode() && !isInsideContainer && chatMode != MODE_SAVED && chatMode != MODE_SCHEDULED) {
+                if (!MomoConfig.disableSwipeToNext.Bool() && pullingDownOffset != 0 && !isInPreviewMode() && !isInsideContainer && chatMode != MODE_SAVED && chatMode != MODE_SCHEDULED) {
                     c.save();
                     float transitionOffset = 0;
                     if (pullingDownAnimateProgress != 0) {
@@ -6921,7 +6922,7 @@ public class ChatActivity extends BaseFragment implements
 
             @Override
             public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
-                if (!NekoConfig.disableSwipeToNext.Bool() && dy < 0 && pullingDownOffset != 0) {
+                if (!MomoConfig.disableSwipeToNext.Bool() && dy < 0 && pullingDownOffset != 0) {
                     pullingDownOffset += dy;
                     if (pullingDownOffset < 0) {
                         dy = (int) pullingDownOffset;
@@ -6952,7 +6953,7 @@ public class ChatActivity extends BaseFragment implements
                     scrolled = super.scrollVerticallyBy(dy, recycler, state);
                 }
                 final boolean allowPullingDownScroll = !isInPollAddOptionMode();
-                if (!NekoConfig.disableSwipeToNext.Bool() && allowPullingDownScroll && dy > 0 && scrolled == 0 && (ChatObject.isChannel(currentChat) && !currentChat.megagroup || isTopic && !UserObject.isBotForum(currentUser)) && chatMode != MODE_SAVED && chatMode != MODE_SCHEDULED && chatListView.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING && !chatListView.isFastScrollAnimationRunning() && !chatListView.isMultiselect() && !isReport()) {
+                if (!MomoConfig.disableSwipeToNext.Bool() && allowPullingDownScroll && dy > 0 && scrolled == 0 && (ChatObject.isChannel(currentChat) && !currentChat.megagroup || isTopic && !UserObject.isBotForum(currentUser)) && chatMode != MODE_SAVED && chatMode != MODE_SCHEDULED && chatListView.getScrollState() == RecyclerView.SCROLL_STATE_DRAGGING && !chatListView.isFastScrollAnimationRunning() && !chatListView.isMultiselect() && !isReport()) {
                     if (pullingDownOffset == 0 && pullingDownDrawable != null) {
                         if (nextChannels != null && !nextChannels.isEmpty()) {
                             pullingDownDrawable.updateDialog(nextChannels.get(0));
@@ -7088,7 +7089,7 @@ public class ChatActivity extends BaseFragment implements
                         wasManualScroll = true;
                         scrollingChatListView = true;
                     } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                        if (NekoConfig.hideKeyboardOnChatScroll.Bool()) {
+                        if (MomoConfig.hideKeyboardOnChatScroll.Bool()) {
                             AndroidUtilities.hideKeyboard(getParentActivity().getCurrentFocus());
                         }
                         pollHintCell = null;
@@ -7252,7 +7253,7 @@ public class ChatActivity extends BaseFragment implements
         contentView.addView(topPanelLayoutFade, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 120, Gravity.LEFT | Gravity.TOP));
 
 
-        if (!NekoConfig.disableReactionsWhenSelecting.Bool() && getDialogId() != getUserConfig().getClientUserId()) {
+        if (!MomoConfig.disableReactionsWhenSelecting.Bool() && getDialogId() != getUserConfig().getClientUserId()) {
             selectionReactionsOverlay = new ChatSelectionReactionMenuOverlay(this, context);
             contentView.addView(selectionReactionsOverlay, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         }
@@ -8808,7 +8809,7 @@ public class ChatActivity extends BaseFragment implements
         });
 
         int btnH = ChatActivityBlurredRoundButton.BUTTON_SIZE;
-        int h = NekoConfig.removeChatBottomViewPadding.Bool() ? btnH : 56;
+        int h = MomoConfig.removeChatBottomViewPadding.Bool() ? btnH : 56;
         chatInputBubbleContainer.addView(bottomChannelButtonsLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, h, Gravity.BOTTOM, 0, 0, 0, (btnH - h) / 2));
 
         bottomOverlayStartButton = new TextView(context) {
@@ -8916,7 +8917,7 @@ public class ChatActivity extends BaseFragment implements
                     getMessagesController().unblockPeer(currentUser.id, () -> {
                         if (botUserLast != null && botUserLast.length() != 0) {
                             getMessagesController().sendBotStart(currentUser, botUserLast);
-                        } else if (!NekoConfig.dontSendStartCmdOnUnblockBot.Bool()) {
+                        } else if (!MomoConfig.dontSendStartCmdOnUnblockBot.Bool()) {
                             getSendMessagesHelper().sendMessage(SendMessagesHelper.SendMessageParams.of("/start", dialog_id, null, null, null, false, null, null, null, true, 0, 0, null, false));
                         }
                     });
@@ -10644,17 +10645,17 @@ public class ChatActivity extends BaseFragment implements
             }
 
             menuNekoTranslateItem = actionModeOtherItem.addSubItem(nkbtn_translate, R.drawable.ic_translate, LocaleController.getString(R.string.Translate));
-            if (NekoConfig.showShareMessages.Bool())
+            if (MomoConfig.showShareMessages.Bool())
                 actionModeOtherItem.addSubItem(nkbtn_sharemessage, R.drawable.baseline_share_24, LocaleController.getString(R.string.ShareMessages));
             actionModeOtherItem.addSubItem(nkbtn_unpin, R.drawable.deproko_baseline_pin_undo_24, LocaleController.getString(R.string.UnpinMessage));
             if (!noforward) {
                 actionModeOtherItem.addSubItem(nkbtn_savemessage, R.drawable.baseline_bookmark_24, LocaleController.getString(R.string.AddToSavedMessages));
             }
             actionModeOtherItem.addSubItem(nkbtn_copy_photo, R.drawable.msg_copy, LocaleController.getString(R.string.Copy));
-            if (NekoConfig.showRepeat.Bool() && !noforward)
+            if (MomoConfig.showRepeat.Bool() && !noforward)
                 actionModeOtherItem.addSubItem(nkbtn_repeat, R.drawable.msg_repeat, LocaleController.getString(R.string.Repeat));
 
-            if (NekoConfig.showMessageHide.Bool()) {
+            if (MomoConfig.showMessageHide.Bool()) {
                 actionModeOtherItem.addSubItem(nkbtn_hide, R.drawable.baseline_remove_circle_24, LocaleController.getString(R.string.Hide));
             }
 
@@ -11033,8 +11034,8 @@ public class ChatActivity extends BaseFragment implements
         };
         if (createUnreadMessageAfterId != 0) {
             scrollToMessageId(createUnreadMessageAfterId, 0, false, returnToLoadIndex, true, 0, null, inCaseLoading);
-        } else if (returnToMessageId > 0 || (NekoConfig.rememberAllBackMessages.Bool() && !returnToMessageIdsStack.empty())) {
-            if (NekoConfig.rememberAllBackMessages.Bool() && !returnToMessageIdsStack.empty())
+        } else if (returnToMessageId > 0 || (MomoConfig.rememberAllBackMessages.Bool() && !returnToMessageIdsStack.empty())) {
+            if (MomoConfig.rememberAllBackMessages.Bool() && !returnToMessageIdsStack.empty())
                 returnToMessageId = returnToMessageIdsStack.pop();
             scrollToMessageId(returnToMessageId, 0, true, returnToLoadIndex, true, 0, null, inCaseLoading);
         } else {
@@ -11309,7 +11310,7 @@ public class ChatActivity extends BaseFragment implements
             return;
         }
         boolean visible = reactionsMentionCount > 0 && (chatMode == 0 || chatMode == MODE_SUGGESTIONS);
-        if (visible && NekoConfig.ignoreAllReactions.Bool()) {
+        if (visible && MomoConfig.ignoreAllReactions.Bool()) {
             readAllReceivedReactions(false);
             visible = false;
         }
@@ -11715,7 +11716,7 @@ public class ChatActivity extends BaseFragment implements
         if (translateItem == null) {
             return;
         }
-        boolean allowed = NekoConfig.autoTranslate.Bool();
+        boolean allowed = MomoConfig.autoTranslate.Bool();
         // boolean hidden = getMessagesController().getTranslateController().isTranslateDialogHidden(getDialogId());
         boolean forceTranslatable = isSideMenued() || ChatObject.isMonoForum(currentChat);
         boolean translatable = forceTranslatable || getMessagesController().getTranslateController().isDialogTranslatable(getDialogId());
@@ -13136,7 +13137,7 @@ public class ChatActivity extends BaseFragment implements
             return;
         }
         if (chatAttachAlert == null) {
-            chatAttachAlert = new ChatAttachAlert(getParentActivity(), this, false, false, !NekoConfig.hideCameraInAttachMenu.Bool(), themeDelegate) {
+            chatAttachAlert = new ChatAttachAlert(getParentActivity(), this, false, false, !MomoConfig.hideCameraInAttachMenu.Bool(), themeDelegate) {
                 @Override
                 public void dismissInternal() {
                     if (chatAttachAlert != null && chatAttachAlert.isShowing()) {
@@ -13701,7 +13702,7 @@ public class ChatActivity extends BaseFragment implements
         if (getParentActivity() == null || fragmentView == null || hide && voiceHintTextView == null || chatMode != 0 || chatActivityEnterView == null  || chatActivityEnterView.getAudioVideoButtonContainer() == null || chatActivityEnterView.getAudioVideoButtonContainer().getVisibility() != View.VISIBLE || isInPreviewMode()) {
             return;
         }
-        if (NekoConfig.useChatAttachMediaMenu.Bool()) return;
+        if (MomoConfig.useChatAttachMediaMenu.Bool()) return;
         if (voiceHintTextView == null) {
             SizeNotifierFrameLayout frameLayout = contentView;
             int index = frameLayout.indexOfChild(chatInputViewsContainer);
@@ -14764,7 +14765,7 @@ public class ChatActivity extends BaseFragment implements
         return dialog != chatAttachAlert && dialog != chatThemeBottomSheet && !(dialog instanceof BotWebViewSheet) && super.dismissDialogOnPause(dialog);
     }
 
-    public boolean disableLinkPreview = NekoConfig.disableLinkPreviewByDefault.Bool();
+    public boolean disableLinkPreview = MomoConfig.disableLinkPreviewByDefault.Bool();
     int waitingForWebpageId;
     private void cancelSearchLinks() {
         if (linkSearchRequestId != 0) {
@@ -15428,7 +15429,7 @@ public class ChatActivity extends BaseFragment implements
     }
 
     public void beforeMessageSend(boolean notify, int scheduleDate, boolean beforeSend) {
-        if (beforeSend != NekoConfig.sendCommentAfterForward.Bool()) return;
+        if (beforeSend != MomoConfig.sendCommentAfterForward.Bool()) return;
         if (messagePreviewParams != null && messagePreviewParams.forwardMessages != null) {
             ArrayList<MessageObject> messagesToForward = new ArrayList<>();
             messagePreviewParams.forwardMessages.getSelectedMessages(messagesToForward);
@@ -15646,7 +15647,7 @@ public class ChatActivity extends BaseFragment implements
 
                 if (quoteCleared == null) quoteCleared = false;
 
-                boolean quoteByDefault = !quoteCleared && NekoConfig.replyAsQuoteByDefault.Bool();
+                boolean quoteByDefault = !quoteCleared && MomoConfig.replyAsQuoteByDefault.Bool();
                 if (quoteByDefault) {
                     quoteByDefault = MessagesController.getInstance(currentAccount).blockedPeers
                             .indexOfKey(replyingMessageObject.messageOwner.from_id.user_id) < 0;
@@ -17640,7 +17641,7 @@ public class ChatActivity extends BaseFragment implements
             }
         }
         returnToMessageId = fromMessageId;
-        if (NekoConfig.rememberAllBackMessages.Bool() && fromMessageId > 0)
+        if (MomoConfig.rememberAllBackMessages.Bool() && fromMessageId > 0)
             returnToMessageIdsStack.push(returnToMessageId);
         returnToLoadIndex = loadIndex;
         needSelectFromMessageId = select;
@@ -19027,7 +19028,7 @@ public class ChatActivity extends BaseFragment implements
 
             blurredViewTopOffset = 0;
             blurredViewBottomOffset = 0;
-            if ((SharedConfig.chatBlurEnabled() || NekoConfig.forceBlurInChat.Bool()) && !isInsideContainer) {
+            if ((SharedConfig.chatBlurEnabled() || MomoConfig.forceBlurInChat.Bool()) && !isInsideContainer) {
                 if (scrollableViewNoiseSuppressor != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     blurredViewTopOffset = actionBarHeight + recommendedAdditionalSizeY;
                     blurredViewBottomOffset = recommendedAdditionalSizeY;
@@ -19170,7 +19171,7 @@ public class ChatActivity extends BaseFragment implements
                     dontHide = false;
                 }
 
-                if (!dontHide && (NekoConfig.forceHideShowAsList.Bool() ||
+                if (!dontHide && (MomoConfig.forceHideShowAsList.Bool() ||
                     (searchGoToBeginningButton.getVisibility() == View.VISIBLE &&
                         searchCountText.getX() < (dp(4) + searchGoToBeginningButton.getX())))) {
                     // hide text first
@@ -19943,7 +19944,7 @@ public class ChatActivity extends BaseFragment implements
                 if (saveMessageItem != null)
                     saveMessageItem.setVisibility(canForward);
 
-                if (NekoConfig.showBottomActionsWhenSelecting.Bool())
+                if (MomoConfig.showBottomActionsWhenSelecting.Bool())
                     createBottomMessagesActionButtons();
 
                 if (menuDownloadItem != null)
@@ -20228,7 +20229,7 @@ public class ChatActivity extends BaseFragment implements
         }
         updateSelectedMessageReactions();
         updateNekoXActionModeTitle();
-        if (shouldHideBottomOverlay() && (!NekoConfig.showBottomActionsWhenSelecting.Bool() || getSelectedMessages1().isEmpty()))
+        if (shouldHideBottomOverlay() && (!MomoConfig.showBottomActionsWhenSelecting.Bool() || getSelectedMessages1().isEmpty()))
             bottomChannelButtonsLayout.setVisibility(View.INVISIBLE);
     }
 
@@ -20436,7 +20437,7 @@ public class ChatActivity extends BaseFragment implements
         } else if (currentChat != null) {
             avatarContainer.setTitle(AndroidUtilities.removeDiacritics(currentChat.title), currentChat.scam, currentChat.fake, currentChat.verifiedExtended(), false, currentChat.emoji_status, animated);
         } else if (currentUser != null) {
-            if (currentUser.self && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+            if (currentUser.self && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                 avatarContainer.setTitle(LocaleController.getString(R.string.SavedMessages));
             } else if (!MessagesController.isSupportUser(currentUser) && getContactsController().contactsDict.get(currentUser.id) == null && (getContactsController().contactsDict.size() != 0 || !getContactsController().isLoadingContacts())) {
                 if (!TextUtils.isEmpty(currentUser.phone)) {
@@ -23792,7 +23793,7 @@ public class ChatActivity extends BaseFragment implements
                             }
                         }
                         if (hasChosen) {
-                            if (!NekoConfig.disableVibration.Bool()) {
+                            if (!MomoConfig.disableVibration.Bool()) {
                                 try {
                                     pollView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                 } catch (Exception ignored) {};
@@ -26591,7 +26592,7 @@ public class ChatActivity extends BaseFragment implements
                     diff = 0;
                 }
                 if (!isAd) {
-                    boolean shouldKeepPosition = !ignoreKeepPosition && NekoConfig.keepSamePositionOnNewMsg.Bool();
+                    boolean shouldKeepPosition = !ignoreKeepPosition && MomoConfig.keepSamePositionOnNewMsg.Bool();
                     if (lastVisible == 0 && diff <= AndroidUtilities.dp(5) || (hasFromMe && !shouldKeepPosition)) {
                         newUnreadMessageCount = 0;
                         if (!firstLoading && chatMode != MODE_SCHEDULED) {
@@ -28258,7 +28259,7 @@ public class ChatActivity extends BaseFragment implements
                         } else {
                             bottomOverlayChatText.setText(LocaleController.getString(ChatObject.isChannelAndNotMegaGroup(currentChat) ? R.string.ChannelJoinNoCaps : R.string.GroupJoinNoCaps));
                             bottomOverlayChatText.setEnabled(true);
-                            showGiftButton = !NekoConfig.removePremiumAnnoyance.Bool() && chatInfo != null && chatInfo.stargifts_available;
+                            showGiftButton = !MomoConfig.removePremiumAnnoyance.Bool() && chatInfo != null && chatInfo.stargifts_available;
                             showSuggestButton = currentChat.broadcast_messages_allowed && currentChat.linked_monoforum_id != 0;
                             accentTextButton = true;
                         }
@@ -28278,7 +28279,7 @@ public class ChatActivity extends BaseFragment implements
                         bottomOverlayChatText.setEnabled(true);
                     }
                     showBottomOverlayProgress(false, bottomOverlayProgress.getTag() != null);
-                    showGiftButton = !NekoConfig.removePremiumAnnoyance.Bool() && chatInfo != null && chatInfo.stargifts_available;
+                    showGiftButton = !MomoConfig.removePremiumAnnoyance.Bool() && chatInfo != null && chatInfo.stargifts_available;
                     showSuggestButton = currentChat.broadcast_messages_allowed && currentChat.linked_monoforum_id != 0;
                 } else if (forumTopic != null && forumTopic.closed) {
                     if (!ChatObject.canManageTopic(currentAccount, currentChat, forumTopic)) {
@@ -28333,7 +28334,7 @@ public class ChatActivity extends BaseFragment implements
                     bottomOverlayChatText.setText(LocaleController.getString(R.string.ChannelUnmuteNoCaps), true);
                 }
                 showBottomOverlayProgress(false, true);
-                if (NekoConfig.hideChannelBottomMuteUnmute.Bool()) {
+                if (MomoConfig.hideChannelBottomMuteUnmute.Bool()) {
                     chatInputViewsContainer.setVisibility(View.GONE);
                 }
             } else if (botUser != null && currentUser.bot && !UserObject.isDeleted(currentUser)) {
@@ -28365,7 +28366,7 @@ public class ChatActivity extends BaseFragment implements
             chatActivityEnterView.setFieldFocused(false);
             chatActivityEnterView.setVisibility(View.INVISIBLE);
         } else if (bottomOverlayLinks || forceVisible) {
-            boolean hide = NekoConfig.hideChannelBottomMuteUnmute.Bool();
+            boolean hide = MomoConfig.hideChannelBottomMuteUnmute.Bool();
             if (hide) chatInputViewsContainer.setVisibility(View.GONE);
             chatActivityEnterView.setVisibility(View.INVISIBLE);
         } else if (searchItem != null && searchItemVisible) {
@@ -28897,7 +28898,7 @@ public class ChatActivity extends BaseFragment implements
                         if (botButton instanceof TLRPC.TL_keyboardButtonUrl) {
                             openClickableLink(null, botButton.url, true, null, buttonMessage, false);
                             try {
-                                if (!NekoConfig.disableVibration.Bool())
+                                if (!MomoConfig.disableVibration.Bool())
                                     buttonTextView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                             } catch (Exception ignore) {}
                             return true;
@@ -29944,7 +29945,7 @@ public class ChatActivity extends BaseFragment implements
         }
 
         if (shareKeyItem != null) {
-            if ((currentChat != null && ChatObject.canSendMessages(currentChat) || user != null && !user.self) && StringUtils.isNotBlank(NekoConfig.openPGPApp.String())) {
+            if ((currentChat != null && ChatObject.canSendMessages(currentChat) || user != null && !user.self) && StringUtils.isNotBlank(MomoConfig.openPGPApp.String())) {
                 shareKeyItem.setVisibility(View.VISIBLE);
             } else {
                 shareKeyItem.setVisibility(View.GONE);
@@ -30252,8 +30253,8 @@ public class ChatActivity extends BaseFragment implements
         }
         checkChecksHint();
 
-        boolean hideTabWhenSharing = NekoConfig.hideWebViewTabOverlayWhenSharing.Bool();
-        boolean hideTabInChat = NekoConfig.hideWebViewTabOverlayInChat.Bool();
+        boolean hideTabWhenSharing = MomoConfig.hideWebViewTabOverlayWhenSharing.Bool();
+        boolean hideTabInChat = MomoConfig.hideWebViewTabOverlayInChat.Bool();
         if ((LaunchActivity.instance != null) && (hideTabWhenSharing || hideTabInChat)) {
             BottomSheetTabsOverlay overlay = LaunchActivity.instance.getBottomSheetTabsOverlay();
             BottomSheetTabs tabs = overlay.tabsView;
@@ -31096,7 +31097,7 @@ public class ChatActivity extends BaseFragment implements
         if (chatActivityEnterView != null) {
             chatActivityEnterView.preventInput = false;
         }
-        if (NekoConfig.hideChannelBottomMuteUnmute.Bool()) {
+        if (MomoConfig.hideChannelBottomMuteUnmute.Bool()) {
             updatePaddings();
         }
         textSelectionHintWasShowed = false;
@@ -31367,7 +31368,7 @@ public class ChatActivity extends BaseFragment implements
                 icons.add(R.drawable.msg_user_search);
             }
 
-            if (!NekoConfig.removePremiumAnnoyance.Bool() && !getUserConfig().isPremium() && !getMessagesController().premiumFeaturesBlocked() && message.getDocument() != null && message.getDocument().size >= 150 * 1024 * 1024 && FileLoader.getInstance(currentAccount).isLoadingFile(FileLoader.getAttachFileName(message.getDocument())) && chatMode != MODE_SAVED) {
+            if (!MomoConfig.removePremiumAnnoyance.Bool() && !getUserConfig().isPremium() && !getMessagesController().premiumFeaturesBlocked() && message.getDocument() != null && message.getDocument().size >= 150 * 1024 * 1024 && FileLoader.getInstance(currentAccount).isLoadingFile(FileLoader.getAttachFileName(message.getDocument())) && chatMode != MODE_SAVED) {
                 items.add(LocaleController.getString(R.string.PremiumSpeedPromo));
                 options.add(OPTION_SPEED_PROMO);
                 icons.add(R.drawable.msg_speed);
@@ -31475,7 +31476,7 @@ public class ChatActivity extends BaseFragment implements
             Rect rect = new Rect();
 
             List<TLRPC.TL_availableReaction> availableReacts = getMediaDataController().getEnabledReactionsList();
-            boolean nekoXShowReactionsView = (NekoConfig.reactions.Int() != 1 || onDoubleTapped); // Show reactions and hide them from tap
+            boolean nekoXShowReactionsView = (MomoConfig.reactions.Int() != 1 || onDoubleTapped); // Show reactions and hide them from tap
             final boolean isReactionsViewAvailable = !isSecretChat() && !isInScheduleMode() && currentUser == null && primaryMessage.hasReactions() && (!ChatObject.isChannel(currentChat) || currentChat.megagroup) && !ChatObject.isMonoForum(currentChat) && !availableReacts.isEmpty() && primaryMessage.messageOwner.reactions.can_see_list && !primaryMessage.isSecretMedia();
             boolean isReactionsAvailable;
             if (suggestEdit) {
@@ -31497,8 +31498,8 @@ public class ChatActivity extends BaseFragment implements
             final boolean showPrivateMessageFwdOriginal = !suggestEdit && false && (currentUser == null || !UserObject.isReplyUser(currentUser) && !UserObject.isAnonymous(currentUser)) && !isInScheduleMode() && message.isForwarded() && !(message.messageOwner.action instanceof TLRPC.TL_messageActionChatJoinedByRequest);
             final boolean showSponsorInfo = !suggestEdit && selectedObject != null && selectedObject.isSponsored() && (selectedObject.sponsoredInfo != null || selectedObject.sponsoredAdditionalInfo != null || selectedObject.sponsoredUrl != null && !selectedObject.sponsoredUrl.startsWith("https://" + getMessagesController().linkPrefix));
             final boolean isReactionsAvailableFinal = !suggestEdit && isReactionsAvailable;
-            final boolean showEditTimestamp = NekoConfig.showEditTimeInPopupMenu.Bool() && message.edited;
-            final boolean showForwardTimestamp = NekoConfig.showForwardTimeInPopupMenu.Bool() && message.isForwarded();
+            final boolean showEditTimestamp = MomoConfig.showEditTimeInPopupMenu.Bool() && message.edited;
+            final boolean showForwardTimestamp = MomoConfig.showForwardTimeInPopupMenu.Bool() && message.isForwarded();
 
             int flags = 0;
             if (isReactionsViewAvailable || showMessageSeen || showSponsorInfo) {
@@ -34068,7 +34069,7 @@ public class ChatActivity extends BaseFragment implements
                     bulletin.show();
                     View view = bulletin.getLayout();
                     view.postDelayed(() -> {
-                        if (!NekoConfig.disableVibration.Bool())
+                        if (!MomoConfig.disableVibration.Bool())
                             try {
                                 view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                             } catch (Exception ignored) {}
@@ -34574,8 +34575,8 @@ public class ChatActivity extends BaseFragment implements
         }
 
         // 030: hide tab overlay when fwd msgs
-        boolean hideTabWhenSharing = NekoConfig.hideWebViewTabOverlayWhenSharing.Bool();
-        boolean hideTabInChat = NekoConfig.hideWebViewTabOverlayInChat.Bool();
+        boolean hideTabWhenSharing = MomoConfig.hideWebViewTabOverlayWhenSharing.Bool();
+        boolean hideTabInChat = MomoConfig.hideWebViewTabOverlayInChat.Bool();
         if (hideTabWhenSharing || hideTabInChat) {
             BottomSheetTabsOverlay overlay = LaunchActivity.instance.getBottomSheetTabsOverlay();
             BottomSheetTabs tabs = overlay.tabsView;
@@ -34652,13 +34653,13 @@ public class ChatActivity extends BaseFragment implements
                         params.payStars = price == null ? 0 : price;
                         params.monoForumPeer = getSendMonoForumPeerId();
                         params.suggestionParams = messageSuggestionParams;
-                        if (!NekoConfig.sendCommentAfterForward.Bool()) {
+                        if (!MomoConfig.sendCommentAfterForward.Bool()) {
                             getSendMessagesHelper().sendMessage(params);
                         }
                     }
                     // getSendMessagesHelper().sendMessage(fmessages, did, false, false, notify, scheduleDate, price == null ? 0 : price);
                     forwardMessages(fmessages, noForwardQuote, notify, scheduleDate, did, getSendMonoForumPeerId());
-                    if (params != null && NekoConfig.sendCommentAfterForward.Bool()) {
+                    if (params != null && MomoConfig.sendCommentAfterForward.Bool()) {
                         getSendMessagesHelper().sendMessage(params);
                     }
                 }
@@ -35878,7 +35879,7 @@ public class ChatActivity extends BaseFragment implements
             if (!AndroidUtilities.isTablet() && WebviewActivity.supportWebview()) {
                 if (parentLayout.getFragmentStack().get(parentLayout.getFragmentStack().size() - 1) == this) {
                     // 030: different bot webview modes
-                    if (NekoConfig.useBotWebviewForGames.Bool()) {
+                    if (MomoConfig.useBotWebviewForGames.Bool()) {
                         TLRPC.TL_inlineBotWebView obj = new TLRPC.TL_inlineBotWebView();
                         obj.text = game.title;
                         obj.url = urlStr;
@@ -36170,7 +36171,7 @@ public class ChatActivity extends BaseFragment implements
             return;
         }
 
-        if (NekoConfig.patchAndCleanupLinks.Bool()) {
+        if (MomoConfig.patchAndCleanupLinks.Bool()) {
             try {
                 url = UrlUtil.cleanUrl(url);
             } catch (Exception e) {
@@ -36383,7 +36384,7 @@ public class ChatActivity extends BaseFragment implements
                 }
                 final int finalTimestamp = timestamp;
                 boolean noforwards = isPeerNoForwards() || (messageObject != null && messageObject.messageOwner != null && messageObject.messageOwner.noforwards && !NekoXConfig.disableFlagSecure);
-                boolean showOpenInApp = NekoConfig.forceExternalBrowserForBots.Bool();
+                boolean showOpenInApp = MomoConfig.forceExternalBrowserForBots.Bool();
                 if (showOpenInApp) {
                     showOpenInApp = str.startsWith("http");
                     if (showOpenInApp) {
@@ -36453,7 +36454,7 @@ public class ChatActivity extends BaseFragment implements
                             }
                             AndroidUtilities.addToClipboard(link);
                         } else {
-                            String finalStr = (NekoConfig.patchAndCleanupLinks.Bool() ? UrlUtil.cleanUrl(str) : str);
+                            String finalStr = (MomoConfig.patchAndCleanupLinks.Bool() ? UrlUtil.cleanUrl(str) : str);
                             AndroidUtilities.addToClipboard(finalStr);
                         }
                         createUndoView();
@@ -36668,7 +36669,7 @@ public class ChatActivity extends BaseFragment implements
     }
 
     private void processExternalUrl(int type, String url, CharacterStyle span, ChatMessageCell cell, boolean forceAlert, boolean forceNoIV) {
-        if (!NekoConfig.disableAutoWebLogin.Bool()) {
+        if (!MomoConfig.disableAutoWebLogin.Bool()) {
             try {
                 String host = AndroidUtilities.getHostAuthority(url);
                 if ((currentEncryptedChat == null || getMessagesController().secretWebpagePreview == 1) && getMessagesController().authDomains.contains(host)) {
@@ -36873,7 +36874,7 @@ public class ChatActivity extends BaseFragment implements
                                     url1 = url1.substring(4);
                                     tel = true;
                                 }
-                                if (!tel && !mail && NekoConfig.patchAndCleanupLinks.Bool()) {
+                                if (!tel && !mail && MomoConfig.patchAndCleanupLinks.Bool()) {
                                     url1 = UrlUtil.cleanUrl(url1);
                                 }
                                 if (which == 1) {
@@ -39713,7 +39714,7 @@ public class ChatActivity extends BaseFragment implements
 
         @Override
         public void didPressUserStatus(ChatMessageCell cell, TLRPC.User user, TLRPC.Document document, String giftSlug) {
-            if (cell == null || NekoConfig.removePremiumAnnoyance.Bool()) {
+            if (cell == null || MomoConfig.removePremiumAnnoyance.Bool()) {
                 return;
             }
             if (!TextUtils.isEmpty(giftSlug)) {
@@ -40245,7 +40246,7 @@ public class ChatActivity extends BaseFragment implements
                     getMessagesController().pressTranscribeButton();
                 });
                 try {
-                    if (!NekoConfig.disableVibration.Bool())
+                    if (!MomoConfig.disableVibration.Bool())
                         topUndoView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 } catch (Exception ignored) {}
             } else if (type == 1) {
@@ -40299,7 +40300,7 @@ public class ChatActivity extends BaseFragment implements
             if (button instanceof TLRPC.TL_keyboardButtonUrl) {
                 openClickableLink(null, button.url, true, cell, cell.getMessageObject(), false);
                 try {
-                    if (!NekoConfig.disableVibration.Bool())
+                    if (!MomoConfig.disableVibration.Bool())
                         cell.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                 } catch (Exception ignore) {}
             }
@@ -44537,7 +44538,7 @@ public class ChatActivity extends BaseFragment implements
             Integer end = ids.get(ids.size() - 1);
             for (int i = 0; i < messages.size(); i++) {
                 int msgId = messages.get(i).getId();
-                if (NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockedPeers.indexOfKey(messages.get(i).getSenderId()) >= 0)
+                if (MomoConfig.ignoreBlocked.Bool() && getMessagesController().blockedPeers.indexOfKey(messages.get(i).getSenderId()) >= 0)
                     continue;
                 if (msgId > begin && msgId < end && selectedMessagesIds[0].indexOfKey(msgId) < 0) {
                     MessageObject message = messages.get(i);
@@ -44761,7 +44762,7 @@ public class ChatActivity extends BaseFragment implements
                             }
                         }
                     } else {
-                        if (path.startsWith(EnvUtil.getTelegramPath().getAbsolutePath()) || path.startsWith(NekoConfig.cachePath.String())) {
+                        if (path.startsWith(EnvUtil.getTelegramPath().getAbsolutePath()) || path.startsWith(MomoConfig.cachePath.String())) {
                             try {
                                 file.delete();
                                 so.mediaExists = false;
@@ -44832,8 +44833,8 @@ public class ChatActivity extends BaseFragment implements
                 break;
             }
             case nkbtn_translate: {
-                if (NekoConfig.useTelegramTranslateInChat.Bool() && !selectedObject.isPoll() && !selectedObject.messageOwner.translated) {
-                    String toLang = NekoConfig.translateToLang.String();
+                if (MomoConfig.useTelegramTranslateInChat.Bool() && !selectedObject.isPoll() && !selectedObject.messageOwner.translated) {
+                    String toLang = MomoConfig.translateToLang.String();
                     if (StringUtils.isBlank(toLang)) toLang = LocaleController.getInstance().getCurrentLocale().getLanguage();
                     int[] messageIdToTranslate = new int[] { selectedObject.getId() };
                     final CharSequence finalMessageText = getMessageCaption(selectedObject, selectedObjectGroup, messageIdToTranslate);
@@ -44915,7 +44916,7 @@ public class ChatActivity extends BaseFragment implements
                     Intent open = new Intent(Intent.ACTION_SEND);
                     open.setType("application/pgp-message");
                     open.putExtra(Intent.EXTRA_TEXT, finalMessageObject.messageOwner.message);
-                    open.setClassName(NekoConfig.openPGPApp.String(), NekoConfig.openPGPApp.String() + ".ui.DecryptActivity");
+                    open.setClassName(MomoConfig.openPGPApp.String(), MomoConfig.openPGPApp.String() + ".ui.DecryptActivity");
 
                     try {
                         getParentActivity().startActivity(open);
@@ -44960,8 +44961,8 @@ public class ChatActivity extends BaseFragment implements
             case nkbtn_PGPImportPrivate:
             case nkbtn_PGPImport: {
 
-                Intent open = new Intent(NekoConfig.openPGPApp.String() + ".action.IMPORT_KEY");
-                open.putExtra(NekoConfig.openPGPApp.String() + ".EXTRA_KEY_BYTES", selectedObject.messageOwner.message.getBytes(StandardCharsets.UTF_8));
+                Intent open = new Intent(MomoConfig.openPGPApp.String() + ".action.IMPORT_KEY");
+                open.putExtra(MomoConfig.openPGPApp.String() + ".EXTRA_KEY_BYTES", selectedObject.messageOwner.message.getBytes(StandardCharsets.UTF_8));
 
                 try {
 
@@ -45028,7 +45029,7 @@ public class ChatActivity extends BaseFragment implements
                 if (selectedMessagesIds[0].get(selectedMessagesIds[0].keyAt(k)) != null)
                     messages.add(selectedMessagesIds[0].get(selectedMessagesIds[0].keyAt(k)));
         }
-        if (!NekoConfig.repeatConfirm.Bool()) {
+        if (!MomoConfig.repeatConfirm.Bool()) {
             doRepeatMessage(isLongClick, messages);
             return;
         }
@@ -45138,7 +45139,7 @@ public class ChatActivity extends BaseFragment implements
                         headerItem.lazilyAddSubItem(delete_chat, R.drawable.msg_leave, LocaleController.getString(R.string.DeleteAndExit));
                     } else if (currentUser != null && currentUser.bot) {
                         headerItem.lazilyAddSubItem(delete_chat, R.drawable.msg_block2,
-                                LocaleController.getString(NekoConfig.keepBlockedBotChatHistory.Bool() ? R.string.BlockBot : R.string.DeleteAndBlock))
+                                LocaleController.getString(MomoConfig.keepBlockedBotChatHistory.Bool() ? R.string.BlockBot : R.string.DeleteAndBlock))
                                 .setColors(getThemedColor(Theme.key_text_RedRegular), getThemedColor(Theme.key_text_RedRegular));
                     } else {
                         headerItem.lazilyAddSubItem(delete_chat, R.drawable.msg_delete, LocaleController.getString(R.string.DeleteChatUser));
@@ -45311,7 +45312,7 @@ public class ChatActivity extends BaseFragment implements
             options.add(R.drawable.msg_language, getString(R.string.OpenInSystemBrowser), () -> {
                 Browser.openInExternalBrowser(getParentActivity(), str, false);
             });
-        } else if (NekoConfig.forceExternalBrowserForBots.Bool()) {
+        } else if (MomoConfig.forceExternalBrowserForBots.Bool()) {
             options.add(R.drawable.msg_openin, getString(R.string.OpenLinkInApp), () -> {
                 TLRPC.Peer p = messageObject.messageOwner.from_id;
                 if (p.user_id == 0) return;
@@ -45974,7 +45975,7 @@ public class ChatActivity extends BaseFragment implements
 
     private boolean shouldHideBottomOverlay() {
         if (bottomOverlayChatText == null) return hideJoin;
-        return (NekoConfig.hideChannelBottomMuteUnmute.Bool() &&
+        return (MomoConfig.hideChannelBottomMuteUnmute.Bool() &&
                 (currentChat != null && ChatObject.isChannelAndNotMegaGroup(currentChat) && !ChatObject.hasAdminRights(currentChat)))
                 || hideJoin;
     }
@@ -46027,7 +46028,7 @@ public class ChatActivity extends BaseFragment implements
             return;
         }
         if (longpress || messageObject.areTags() && (isInsideContainer || searchingReaction != null && searchingReaction.isSame(reaction.reaction))) {
-            if (!NekoConfig.disableVibration.Bool()) cell.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+            if (!MomoConfig.disableVibration.Bool()) cell.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
             FrameLayout scrimPopupContainerLayout = new FrameLayout(getParentActivity()) {
                 @Override
                 public boolean dispatchKeyEvent(KeyEvent event) {
@@ -46416,7 +46417,7 @@ public class ChatActivity extends BaseFragment implements
     public void checkOpenAppMenuButton() {
         TLRPC.User usr = getMessagesController().getUser(dialog_id);
         if (((usr == null || !usr.bot_has_main_app) && !NekoXConfig.botHasWebView(dialog_id))
-                || !NekoConfig.forceExternalBrowserForBots.Bool()) {
+                || !MomoConfig.forceExternalBrowserForBots.Bool()) {
             headerItem.hideSubItem(nkheaderbtn_bot_app);
             addedOpenAppMenuButton = false;
             return;
@@ -46813,7 +46814,7 @@ public class ChatActivity extends BaseFragment implements
                                 options.add(OPTION_SAVE_TO_GALLERY);
                                 icons.add(R.drawable.baseline_image_24);
 
-                                if (NekoConfig.showCopyPhoto.Bool()) {
+                                if (MomoConfig.showCopyPhoto.Bool()) {
                                     items.add(LocaleController.getString(R.string.CopyPhoto));
                                     options.add(OPTION_COPY_PHOTO);
                                     icons.add(R.drawable.msg_copy);
@@ -46868,7 +46869,7 @@ public class ChatActivity extends BaseFragment implements
                             options.add(nkbtn_stickerdl);
                             icons.add(R.drawable.baseline_image_24);
 
-                            if (NekoConfig.showCopyPhoto.Bool()) {
+                            if (MomoConfig.showCopyPhoto.Bool()) {
                                 items.add(LocaleController.getString(R.string.CopySticker));
                                 options.add(OPTION_COPY_PHOTO);
                                 icons.add(R.drawable.msg_copy);
@@ -46917,7 +46918,7 @@ public class ChatActivity extends BaseFragment implements
                         options.add(nkbtn_stickerdl);
                         icons.add(R.drawable.baseline_image_24);
 
-                        if (NekoConfig.showCopyPhoto.Bool()) {
+                        if (MomoConfig.showCopyPhoto.Bool()) {
                             items.add(LocaleController.getString(R.string.CopySticker));
                             options.add(OPTION_COPY_PHOTO);
                             icons.add(R.drawable.msg_copy);
@@ -46952,7 +46953,7 @@ public class ChatActivity extends BaseFragment implements
                     }
                 }
                 if (chatMode != MODE_SCHEDULED) {
-                    if (!UserObject.isUserSelf(currentUser) && NekoConfig.showAddToSavedMessages.Bool()) {
+                    if (!UserObject.isUserSelf(currentUser) && MomoConfig.showAddToSavedMessages.Bool()) {
                         if (!noforwards) {
                             items.add(LocaleController.getString(R.string.AddToSavedMessages));
                             options.add(nkbtn_savemessage);
@@ -46961,13 +46962,13 @@ public class ChatActivity extends BaseFragment implements
                     }
                     boolean allowRepeat = currentUser != null
                             || (currentChat != null && ChatObject.canSendMessages(currentChat));
-                    if (allowRepeat && NekoConfig.showRepeat.Bool() && !noforwards) {
+                    if (allowRepeat && MomoConfig.showRepeat.Bool() && !noforwards) {
                         items.add(LocaleController.getString(R.string.Repeat));
                         options.add(nkbtn_repeat);
                         icons.add(R.drawable.msg_repeat);
                     }
 
-                    if (NekoConfig.showDeleteDownloadedFile.Bool() && TelegramUtil.messageObjectIsFile(type, selectedObject)) {
+                    if (MomoConfig.showDeleteDownloadedFile.Bool() && TelegramUtil.messageObjectIsFile(type, selectedObject)) {
                         items.add(LocaleController.getString(R.string.DeleteDownloadedFile));
                         options.add(nkbtn_deldlcache);
                         icons.add(R.drawable.baseline_delete_sweep_24);
@@ -46982,7 +46983,7 @@ public class ChatActivity extends BaseFragment implements
                             }
                         }
                     }
-                    if (NekoConfig.showTranslate.Bool()) {
+                    if (MomoConfig.showTranslate.Bool()) {
                         if (messageObject != null || docsWithMessages) {
                             boolean td;
                             if (messageObject != null) {
@@ -46995,14 +46996,14 @@ public class ChatActivity extends BaseFragment implements
                             icons.add(R.drawable.ic_translate);
                         }
                     }
-                    if (NekoConfig.showShareMessages.Bool()) {
+                    if (MomoConfig.showShareMessages.Bool()) {
                         if (messageObject != null || docsWithMessages) {
                             items.add(LocaleController.getString(R.string.ShareMessages));
                             options.add(nkbtn_sharemessage);
                             icons.add(R.drawable.baseline_share_24);
                         }
                     }
-                    if (messageObject != null && StringUtils.isNotBlank(messageObject.messageOwner.message) && StringUtils.isNotBlank(NekoConfig.openPGPApp.String())) {
+                    if (messageObject != null && StringUtils.isNotBlank(messageObject.messageOwner.message) && StringUtils.isNotBlank(MomoConfig.openPGPApp.String())) {
                         if (PgpHelper.PGP_CLEARTEXT_SIGNATURE.matcher(selectedObject.messageOwner.message).matches()) {
                             items.add(LocaleController.getString(R.string.PGPVerify));
                             options.add(nkbtn_PGPVerify);
@@ -47022,7 +47023,7 @@ public class ChatActivity extends BaseFragment implements
                         }
                     }
                 }
-                if (NekoConfig.showMessageHide.Bool()) {
+                if (MomoConfig.showMessageHide.Bool()) {
                     items.add(LocaleController.getString(R.string.Hide));
                     options.add(nkbtn_hide);
                     icons.add(R.drawable.baseline_remove_circle_24);
@@ -47060,7 +47061,7 @@ public class ChatActivity extends BaseFragment implements
                     options.add(OPTION_EDIT);
                     icons.add(R.drawable.msg_edit);
                 }
-                if (!NekoConfig.removePremiumAnnoyance.Bool() && ChatObject.isMonoForum(currentChat) && selectedObject.getGroupId() == 0 && selectedObjectGroup == null && message != null && message.messageOwner != null && message.messageOwner.suggested_post == null && message.messageOwner.action == null) {
+                if (!MomoConfig.removePremiumAnnoyance.Bool() && ChatObject.isMonoForum(currentChat) && selectedObject.getGroupId() == 0 && selectedObjectGroup == null && message != null && message.messageOwner != null && message.messageOwner.suggested_post == null && message.messageOwner.action == null) {
                     items.add(LocaleController.getString(R.string.EditOfferAdd));
                     options.add(OPTION_SUGGESTION_ADD_OFFER);
                     icons.add(R.drawable.menu_edit_price);
@@ -47081,7 +47082,7 @@ public class ChatActivity extends BaseFragment implements
                         items.add(LocaleController.getString(R.string.BlockContact));
                         options.add(OPTION_REPORT_CHAT);
                         icons.add(R.drawable.baseline_report_24);
-                    } else if (NekoConfig.showReport.Bool()) {
+                    } else if (MomoConfig.showReport.Bool()) {
                         items.add(LocaleController.getString(R.string.ReportChat));
                         options.add(OPTION_REPORT_CHAT);
                         icons.add(R.drawable.baseline_report_24);
@@ -47153,7 +47154,7 @@ public class ChatActivity extends BaseFragment implements
                         options.add(OPTION_SAVE_TO_GALLERY);
                         icons.add(R.drawable.baseline_image_24);
 
-                        if (selectedObject.isPhoto() && NekoConfig.showCopyPhoto.Bool()){
+                        if (selectedObject.isPhoto() && MomoConfig.showCopyPhoto.Bool()){
                             items.add(LocaleController.getString(R.string.CopyPhoto));
                             options.add(OPTION_COPY_PHOTO);
                             icons.add(R.drawable.msg_copy);
@@ -47203,7 +47204,7 @@ public class ChatActivity extends BaseFragment implements
                         }
                     }
                 }
-                if (NekoConfig.showTranslate.Bool()) {
+                if (MomoConfig.showTranslate.Bool()) {
                     if (messageObject != null || docsWithMessages) {
                         boolean td;
                         if (messageObject != null) {
@@ -47217,7 +47218,7 @@ public class ChatActivity extends BaseFragment implements
                     }
                 }
 
-                if (messageObject != null && StringUtils.isNotBlank(messageObject.messageOwner.message) && StringUtils.isNotBlank(NekoConfig.openPGPApp.String())) {
+                if (messageObject != null && StringUtils.isNotBlank(messageObject.messageOwner.message) && StringUtils.isNotBlank(MomoConfig.openPGPApp.String())) {
                     if (PgpHelper.PGP_CLEARTEXT_SIGNATURE.matcher(selectedObject.messageOwner.message).matches()) {
                         items.add(LocaleController.getString(R.string.PGPVerify));
                         options.add(nkbtn_PGPVerify);
@@ -47236,7 +47237,7 @@ public class ChatActivity extends BaseFragment implements
                         icons.add(R.drawable.baseline_vpn_key_24);
                     }
                 }
-                if (NekoConfig.showMessageHide.Bool()) {
+                if (MomoConfig.showMessageHide.Bool()) {
                     items.add(LocaleController.getString(R.string.Hide));
                     options.add(204);
                     icons.add(R.drawable.baseline_remove_circle_24);
@@ -47273,13 +47274,13 @@ public class ChatActivity extends BaseFragment implements
                             editingAdmin = participant instanceof TLRPC.TL_chatParticipantAdmin;
                         }
 
-                        if (canEditAdmin && NekoConfig.showAdminActions.Bool()) {
+                        if (canEditAdmin && MomoConfig.showAdminActions.Bool()) {
                             items.add(editingAdmin ? LocaleController.getString(R.string.EditAdminRights) : LocaleController.getString(R.string.SetAsAdmin));
                             icons.add(R.drawable.baseline_stars_24);
                             options.add(nkbtn_editAdmin);
                             selectedParticipant = participant;
                         }
-                        if (canRestrict && NekoConfig.showChangePermissions.Bool()) {
+                        if (canRestrict && MomoConfig.showChangePermissions.Bool()) {
                             items.add(LocaleController.getString(R.string.ChangePermissions));
                             icons.add(R.drawable.baseline_block_24);
                             options.add(nkbtn_editPermission);
@@ -47296,7 +47297,7 @@ public class ChatActivity extends BaseFragment implements
                     && (currentChat != null && !currentChat.broadcast && message.isFromUser())
                     && selectedObject.messageOwner.from_id != null);
             boolean showViewHistory = allowViewHistory && chatMode != MODE_PINNED;
-            if (showViewHistory && NekoConfig.showViewHistory.Bool()) {
+            if (showViewHistory && MomoConfig.showViewHistory.Bool()) {
                 if (searchContainer == null || searchUserButton == null) createSearchContainer(false);
                 if (searchContainer == null || searchUserButton == null) return;
                 items.add(LocaleController.getString(R.string.ViewHistory));
@@ -47304,7 +47305,7 @@ public class ChatActivity extends BaseFragment implements
                 icons.add(R.drawable.baseline_schedule_24);
             }
 
-            if (NekoConfig.showMessageDetails.Bool() && (chatMode != MODE_PINNED || !message.isFromUser())) {
+            if (MomoConfig.showMessageDetails.Bool() && (chatMode != MODE_PINNED || !message.isFromUser())) {
                 items.add(LocaleController.getString(R.string.MessageDetails));
                 options.add(nkbtn_detail);
                 icons.add(R.drawable.menu_info);

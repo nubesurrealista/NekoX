@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 @Keep
 public class PushListenerController {
@@ -1487,7 +1487,7 @@ public class PushListenerController {
                                         final int mid = msg_id;
                                         AndroidUtilities.runOnUIThread(() -> MessagesController.getInstance(accountFinal).reportMessageDelivery(did, mid, true));
                                     }
-                                    if (!NekoConfig.autoArchiveAndMute.Bool() || MessagesStorage.getInstance(currentAccount).getChatSync(fromId) != null)
+                                    if (!MomoConfig.autoArchiveAndMute.Bool() || MessagesStorage.getInstance(currentAccount).getChatSync(fromId) != null)
                                         NotificationsController.getInstance(currentAccount).processNewMessages(arrayList, true, true, countDownLatch);
                                 }
                             } else if ("CONF_CALL_MISSED".equalsIgnoreCase(loc_key)) {
@@ -1706,7 +1706,7 @@ public class PushListenerController {
             }
         }
 
-        if (NekoConfig.enableUnifiedPush.Bool()) {
+        if (MomoConfig.enableUnifiedPush.Bool()) {
             FileLog.d("UnifiedPush is enabled");
             instance = UnifiedPushListenerServiceProvider.getInstance();
         }
@@ -1732,7 +1732,7 @@ public class PushListenerController {
 
         @Override
         public boolean hasServices() {
-            if (!NekoConfig.enableUnifiedPush.Bool()) return false;
+            if (!MomoConfig.enableUnifiedPush.Bool()) return false;
             return !UnifiedPush.getDistributors(ApplicationLoader.applicationContext, new ArrayList()).isEmpty();
         }
 

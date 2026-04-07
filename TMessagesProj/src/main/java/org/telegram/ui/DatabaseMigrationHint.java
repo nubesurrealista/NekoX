@@ -20,8 +20,9 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RLottieImageView;
 
-import tw.nekomimi.nekogram.utils.EnvUtil;
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.utils.EnvUtil;
+import moe.hx030.momogram.MomoConfig;
 
 public class DatabaseMigrationHint extends FrameLayout {
 
@@ -81,8 +82,8 @@ public class DatabaseMigrationHint extends FrameLayout {
         if (Build.VERSION.SDK_INT >= 30) {
             ContextCompat.getMainExecutor(getContext()).execute(() -> {
                 var directories = EnvUtil.getAvailableDirectories();
-                if (!NekoConfig.cachePath.String().contains("/data/") && directories.length > 3) {
-                    NekoConfig.cachePath.setConfigString(EnvUtil.getAvailableDirectories()[2]);
+                if (!MomoConfig.cachePath.String().contains("/data/") && directories.length > 3) {
+                    MomoConfig.cachePath.setConfigString(EnvUtil.getAvailableDirectories()[2]);
                     ImageLoader.getInstance().checkMediaPaths();
                 }
             });

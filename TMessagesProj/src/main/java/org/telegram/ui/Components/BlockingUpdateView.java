@@ -38,7 +38,7 @@ import org.telegram.ui.Components.voip.CellFlickerDrawable;
 
 import java.util.Locale;
 
-import tw.nekomimi.nekogram.MomoUpdater;
+import moe.hx030.momogram.MomoUpdater;
 
 public class BlockingUpdateView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 

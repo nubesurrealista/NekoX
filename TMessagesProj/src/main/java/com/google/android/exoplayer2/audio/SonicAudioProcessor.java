@@ -26,8 +26,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.BufferUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.utils.BufferUtil;
 
 /**
  * An {@link AudioProcessor} that uses the Sonic library to modify audio speed/pitch/sample rate.
@@ -201,7 +201,7 @@ public final class SonicAudioProcessor implements AudioProcessor {
           buffer = ByteBuffer.allocateDirect(outputSize).order(ByteOrder.nativeOrder());
           shortBuffer = buffer.asShortBuffer();
         } else {
-          if (NekoConfig.bufferCleaner.Bool()) {
+          if (MomoConfig.bufferCleaner.Bool()) {
             BufferUtil.clear(buffer);
             BufferUtil.clear(shortBuffer);
           } else {

@@ -68,7 +68,7 @@ import org.telegram.ui.Components.spoilers.SpoilerEffect;
 import org.telegram.ui.Components.spoilers.SpoilerEffect2;
 import org.telegram.ui.PhotoViewer;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class PhotoAttachPhotoCell extends FrameLayout {
 
@@ -324,7 +324,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
                     videoPlayImageView.setVisibility(VISIBLE);
                     ((LayoutParams) videoTextView.getLayoutParams()).leftMargin = dp(13);
                     videoTextView.setText(AndroidUtilities.formatShortDuration(photoEntry.duration));
-                } else if (photoEntry.isHighQuality() && !NekoConfig.increasedMaxPhotoResolution.Bool()) {
+                } else if (photoEntry.isHighQuality() && !MomoConfig.increasedMaxPhotoResolution.Bool()) {
                     videoInfoContainer.setVisibility(VISIBLE);
                     videoPlayImageView.setVisibility(GONE);
                     ((LayoutParams) videoTextView.getLayoutParams()).leftMargin = dp(0);
@@ -510,7 +510,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
             videoPlayImageView.setVisibility(VISIBLE);
             ((LayoutParams) videoTextView.getLayoutParams()).leftMargin = dp(13);
             videoTextView.setText(AndroidUtilities.formatShortDuration(photoEntry.duration));
-        } else if (photoEntry.isHighQuality() && isChecked() && !NekoConfig.increasedMaxPhotoResolution.Bool()) {
+        } else if (photoEntry.isHighQuality() && isChecked() && !MomoConfig.increasedMaxPhotoResolution.Bool()) {
             videoInfoContainer.setVisibility(VISIBLE);
             videoPlayImageView.setVisibility(GONE);
             ((LayoutParams) videoTextView.getLayoutParams()).leftMargin = dp(0);
@@ -580,7 +580,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         videoInfoContainer.setAlpha(showing ? 0.0f : 1.0f);
         requestLayout();
         setHasSpoiler(false);
-        setHighQuality(NekoConfig.increasedMaxPhotoResolution.Bool());
+        setHighQuality(MomoConfig.increasedMaxPhotoResolution.Bool());
         setStarsPrice(0, false);
     }
 

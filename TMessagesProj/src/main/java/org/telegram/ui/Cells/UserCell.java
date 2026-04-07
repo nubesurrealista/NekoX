@@ -59,7 +59,7 @@ import org.telegram.ui.NotificationsSettingsActivity;
 import org.telegram.ui.Stories.StoriesListPlaceProvider;
 import org.telegram.ui.Stories.StoriesUtilities;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class UserCell extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
@@ -109,7 +109,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
     };
 
     public void openStory(long dialogId, Runnable runnable) {
-        if (NekoConfig.disableStories.Bool()) return;
+        if (MomoConfig.disableStories.Bool()) return;
         BaseFragment fragment = LaunchActivity.getLastFragment();
         if (fragment != null) {
             fragment.getOrCreateStoryViewer().doOnAnimationReady(runnable);
@@ -759,7 +759,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
     }
 
     public void setSelfAsSavedMessages(boolean value) {
-        selfAsSavedMessages = value && !NekoConfig.showSelfInsteadOfSavedMessages.Bool();
+        selfAsSavedMessages = value && !MomoConfig.showSelfInsteadOfSavedMessages.Bool();
     }
 
     @Override

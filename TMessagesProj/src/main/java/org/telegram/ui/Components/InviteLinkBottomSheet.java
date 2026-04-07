@@ -80,7 +80,7 @@ import java.util.List;
 import java.util.Locale;
 
 import moe.hx030.momogram.util.ModUtil;
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class InviteLinkBottomSheet extends BottomSheet {
 

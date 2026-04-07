@@ -115,14 +115,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import kotlin.Unit;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.ui.BottomBuilder;
-import tw.nekomimi.nekogram.ui.PinnedStickerHelper;
-import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.FileUtil;
-import tw.nekomimi.nekogram.utils.ShareUtil;
-import tw.nekomimi.nekogram.utils.StickersUtil;
-import tw.nekomimi.nekogram.utils.UIUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.ui.BottomBuilder;
+import moe.hx030.momogram.ui.PinnedStickerHelper;
+import moe.hx030.momogram.utils.AlertUtil;
+import moe.hx030.momogram.utils.FileUtil;
+import moe.hx030.momogram.utils.ShareUtil;
+import moe.hx030.momogram.utils.StickersUtil;
+import moe.hx030.momogram.utils.UIUtil;
 
 public class StickersActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -280,7 +281,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         exportMenuItem = actionMode.addItemWithWidth(MENU_EXPORT, R.drawable.baseline_file_download_24, dp(54));
         archiveMenuItem = actionMode.addItemWithWidth(MENU_ARCHIVE, R.drawable.msg_archive, dp(54));
         deleteMenuItem = actionMode.addItemWithWidth(MENU_DELETE, R.drawable.msg_delete, dp(54));
-        // if (NekoConfig.enableStickerPin.Bool()) pinMenuItem = actionMode.addItemWithWidth(MENU_TOGGLE_PIN, R.drawable.msg_pin, dp(54));
+        // if (MomoConfig.enableStickerPin.Bool()) pinMenuItem = actionMode.addItemWithWidth(MENU_TOGGLE_PIN, R.drawable.msg_pin, dp(54));
 
         if (currentType == TYPE_EMOJIPACKS && frozenEmojiPacks != null) {
             sets = frozenEmojiPacks;
@@ -403,7 +404,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         if (currentType == TYPE_IMAGE) {
             featuredRow = items.size();
             items.add(UItem.asButton(ID_FEATURED, R.drawable.msg2_trending, getString(R.string.FeaturedStickers), featuredCount > 0 ? formatNumber(featuredCount, ',') : ""));
-            if (NekoConfig.enableStickerPin.Bool() && currentType != TYPE_EMOJIPACKS) {
+            if (MomoConfig.enableStickerPin.Bool() && currentType != TYPE_EMOJIPACKS) {
                 if (PinnedStickerHelper.getInstance(currentAccount).reorderPinnedStickers(sets)) {
                     PinnedStickerHelper.getInstance(currentAccount).sendOrderSync(sets);
                 }
@@ -681,7 +682,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         if (view == null || !(view.getParent() instanceof StickerSetCell)) return;
         final StickerSetCell cell = (StickerSetCell) view.getParent();
         final TLRPC.TL_messages_stickerSet set = cell.getStickersSet();
-        boolean pinned = NekoConfig.enableStickerPin.Bool() && PinnedStickerHelper.getInstance(UserConfig.selectedAccount).isPinned(cell.getStickersSet().set.id);
+        boolean pinned = MomoConfig.enableStickerPin.Bool() && PinnedStickerHelper.getInstance(UserConfig.selectedAccount).isPinned(cell.getStickersSet().set.id);
         String pinText = pinned ? LocaleController.getString(R.string.UnpinSticker) : LocaleController.getString(R.string.PinSticker);
         ItemOptions.makeOptions(StickersActivity.this, cell)
             .add(R.drawable.msg_archive, LocaleController.getString(R.string.StickersHide), () -> {
@@ -714,7 +715,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 MediaDataController.getInstance(currentAccount).toggleStickerSet(getParentActivity(), set, 0, StickersActivity.this, true, true);
             })
             // TODO: broken at 12.4 update, fix or drop
-//            .addIf(NekoConfig.enableStickerPin.Bool(), R.drawable.msg_pin, pinText, () -> {
+//            .addIf(MomoConfig.enableStickerPin.Bool(), R.drawable.msg_pin, pinText, () -> {
 //                final PinnedStickerHelper ins = PinnedStickerHelper.getInstance(currentAccount);
 //                final MediaDataController mediaDataController = MediaDataController.getInstance(currentAccount);
 //                if (ins.isPinned(set.set.id)) {
@@ -1064,7 +1065,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     }
                     break;
             }
-        } else if (which == MENU_TOGGLE_PIN && NekoConfig.enableStickerPin.Bool() && currentType == MediaDataController.TYPE_IMAGE) {
+        } else if (which == MENU_TOGGLE_PIN && MomoConfig.enableStickerPin.Bool() && currentType == MediaDataController.TYPE_IMAGE) {
         }
 
     }
@@ -1297,7 +1298,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             if (source.getItemViewType() != target.getItemViewType()) {
                 return false;
             }
-            if (NekoConfig.enableStickerPin.Bool() && currentType == MediaDataController.TYPE_IMAGE) {
+            if (MomoConfig.enableStickerPin.Bool() && currentType == MediaDataController.TYPE_IMAGE) {
                 int from = source.getAdapterPosition();
                 int to = target.getAdapterPosition();
                 if (from < /* stickersStartRow + */ pinnedStickersCount) {

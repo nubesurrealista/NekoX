@@ -29,8 +29,8 @@ import java.util.UUID;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.BufferUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.utils.BufferUtil;
 
 public class Painting {
 
@@ -112,7 +112,7 @@ public class Painting {
             vertexBuffer = ByteBuffer.allocateDirect(8 * 4);
             vertexBuffer.order(ByteOrder.nativeOrder());
         } else {
-            if (NekoConfig.bufferCleaner.Bool()) {
+            if (MomoConfig.bufferCleaner.Bool()) {
                 BufferUtil.clear(vertexBuffer);
             } else {
                 vertexBuffer.clear();

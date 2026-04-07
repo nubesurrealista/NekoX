@@ -21,7 +21,7 @@ import org.telegram.ui.Components.BackupImageView;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class DialogObject {
 
@@ -148,7 +148,7 @@ public class DialogObject {
                 if (imageReceiver != null) {
                     imageReceiver.setForUserOrChat(null, avatarDrawable);
                 }
-            } else if (UserObject.isUserSelf(user) && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+            } else if (UserObject.isUserSelf(user) && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                 title = LocaleController.getString(R.string.SavedMessages);
                 if (avatarDrawable != null) {
                     avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);

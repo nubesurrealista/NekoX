@@ -10,7 +10,7 @@ import androidx.annotation.RequiresApi;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.R;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 @RequiresApi(api = 33)
 public class LiquidGlassEffect {
@@ -47,7 +47,7 @@ public class LiquidGlassEffect {
         float index,
         int foregroundColor
     ) {
-        if (NekoConfig.forceBlurInChat.Bool()) intensity *= ((255 - NekoConfig.chatBlurAlphaValue.Int()) / (float) 255);
+        if (MomoConfig.forceBlurInChat.Bool()) intensity *= ((255 - MomoConfig.chatBlurAlphaValue.Int()) / (float) 255);
         float resolutionX = node.getWidth();
         float resolutionY = node.getHeight();
         float centerX = (left + right) / 2;

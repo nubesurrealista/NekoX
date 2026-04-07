@@ -59,7 +59,7 @@ import java.util.Stack;
 import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class SpoilerEffect extends Drawable {
     public final static int MAX_PARTICLES_PER_ENTITY = measureMaxParticlesCount();
@@ -591,7 +591,7 @@ public class SpoilerEffect extends Drawable {
 
         boolean forceSpoilers = message != null && message.isCustomSpoiler();
 
-        if (!forceSpoilers && NekoConfig.showSpoilersDirectly.Bool()) {
+        if (!forceSpoilers && MomoConfig.showSpoilersDirectly.Bool()) {
             return;
         }
         if (textLayout.getText() instanceof Spanned) {

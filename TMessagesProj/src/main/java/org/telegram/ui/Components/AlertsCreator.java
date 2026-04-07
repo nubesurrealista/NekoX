@@ -175,12 +175,13 @@ import java.util.stream.Collectors;
 
 import kotlin.Unit;
 import me.vkryl.core.BitwiseUtils;
-import tw.nekomimi.nekogram.ui.BottomBuilder;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
-import tw.nekomimi.nekogram.utils.UrlUtil;
-import tw.nekomimi.nekogram.utils.VibrateUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.ui.BottomBuilder;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.utils.AlertUtil;
+import moe.hx030.momogram.utils.TelegramUtil;
+import moe.hx030.momogram.utils.UrlUtil;
+import moe.hx030.momogram.utils.VibrateUtil;
 
 public class AlertsCreator {
     public final static int PERMISSIONS_REQUEST_TOP_ICON_SIZE = 72;
@@ -1506,7 +1507,7 @@ public class AlertsCreator {
         Uri uri = null;
         try {
             uri = Uri.parse(url);
-            if (NekoConfig.patchAndCleanupLinks.Bool()) {
+            if (MomoConfig.patchAndCleanupLinks.Bool()) {
                 uri = UrlUtil.cleanUrl(uri);
             }
         } catch (Exception e) {
@@ -1570,7 +1571,7 @@ public class AlertsCreator {
         Uri uri = null;
         try {
             uri = Uri.parse(url);
-            if (NekoConfig.patchAndCleanupLinks.Bool()) {
+            if (MomoConfig.patchAndCleanupLinks.Bool()) {
                 uri = UrlUtil.cleanUrl(uri);
             }
         } catch (Exception e) {

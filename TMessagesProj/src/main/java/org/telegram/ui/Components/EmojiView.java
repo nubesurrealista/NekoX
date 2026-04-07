@@ -158,8 +158,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.ui.PinnedStickerHelper;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.ui.PinnedStickerHelper;
 import me.vkryl.android.animator.BoolAnimator;
 
 public class EmojiView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, InAppKeyboardInsetView {
@@ -168,7 +168,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     private final static int TAB_GIFS = 1;
     private final static int TAB_STICKERS = 2;
 
-    public static boolean smallerEmoji = NekoConfig.smallerEmojiInChooser.Bool();
+    public static boolean smallerEmoji = MomoConfig.smallerEmojiInChooser.Bool();
 
     public int emojiCacheType = AnimatedEmojiDrawable.CACHE_TYPE_KEYBOARD;
 
@@ -1549,7 +1549,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         this.resourcesProvider = resourcesProvider;
         this.glassDesign = glassDesign;
 
-        smallerEmoji = NekoConfig.smallerEmojiInChooser.Bool();
+        smallerEmoji = MomoConfig.smallerEmojiInChooser.Bool();
 
         blurredBackgroundSourceColor = new BlurredBackgroundSourceColor();
         blurredBackgroundSourceColor.setColor(getThemedColor(Theme.key_windowBackgroundWhite));
@@ -2567,7 +2567,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 } else if (event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP) {
                     backspacePressed = false;
                     if (!backspaceOnce) {
-                        if (delegate != null && delegate.onBackspace() && !NekoConfig.disableVibration.Bool()) {
+                        if (delegate != null && delegate.onBackspace() && !MomoConfig.disableVibration.Bool()) {
                             try {
                                 backspaceButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                             } catch (Exception ignore) {}
@@ -5384,7 +5384,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             if (!backspacePressed) {
                 return;
             }
-            if (delegate != null && delegate.onBackspace() && !NekoConfig.disableVibration.Bool()) {
+            if (delegate != null && delegate.onBackspace() && !MomoConfig.disableVibration.Bool()) {
                 try {
                     backspaceButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                 } catch (Exception ignore) {}
@@ -5443,7 +5443,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         if (trendingAdapter != null) {
             trendingAdapter.notifyDataSetChanged();
         }
-        if (!NekoConfig.disableTrending.Bool() && !featured.isEmpty() && (!BuildVars.DEBUG_PRIVATE_VERSION || featuredStickerSets.isEmpty() || preferences.getLong("featured_hidden", 0) == featured.get(0).set.id)) {
+        if (!MomoConfig.disableTrending.Bool() && !featured.isEmpty() && (!BuildVars.DEBUG_PRIVATE_VERSION || featuredStickerSets.isEmpty() || preferences.getLong("featured_hidden", 0) == featured.get(0).set.id)) {
             final int id = mediaDataController.getUnreadStickerSets().isEmpty() ? 2 : 3;
             final StickerTabView trendingStickersTabView = stickersTab.addStickerIconTab(id, stickerIcons[id]);
             trendingStickersTabView.textView.setText(getString(R.string.FeaturedStickersShort));
@@ -5515,7 +5515,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 //            stickerTabView.setContentDescription(LocaleController.getString(R.string.PremiumStickers));
 //        }
 
-        if (info != null && (!NekoConfig.hideGroupSticker.Bool())) {
+        if (info != null && (!MomoConfig.hideGroupSticker.Bool())) {
             long hiddenStickerSetId = MessagesController.getEmojiSettings(currentAccount).getLong("group_hide_stickers_" + info.id, -1);
             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(info.id);
             if (chat == null || info.stickerset == null || !ChatObject.hasAdminRights(chat)) {
@@ -5627,7 +5627,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             gifTabs.addIconTab(0, gifIcons[0]).setContentDescription(getString(R.string.RecentStickers));
         }
 
-        if (!NekoConfig.disableTrending.Bool()) {
+        if (!MomoConfig.disableTrending.Bool()) {
             gifTrendingTabNum = gifTabsCount++;
             gifTabs.addIconTab(1, gifIcons[1]).setContentDescription(getString(R.string.FeaturedGifs));
         }
@@ -6076,7 +6076,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     }
                 }
             }
-            recentStickers = new ArrayList<>(recentStickers.subList(0, Math.min(recentStickers.size(), NekoConfig.maxRecentStickerCount.Int())));
+            recentStickers = new ArrayList<>(recentStickers.subList(0, Math.min(recentStickers.size(), MomoConfig.maxRecentStickerCount.Int())));
             if (MessagesController.getInstance(currentAccount).premiumFeaturesBlocked()) {
                 for (int a = 0; a < favouriteStickers.size(); a++) {
                     if (MessageObject.isPremiumSticker(favouriteStickers.get(a))) {

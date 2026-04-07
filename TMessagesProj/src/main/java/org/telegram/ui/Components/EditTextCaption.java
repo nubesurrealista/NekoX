@@ -67,11 +67,11 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.transtale.TranslateDb;
-import tw.nekomimi.nekogram.transtale.Translator;
-import tw.nekomimi.nekogram.transtale.TranslatorKt;
-import tw.nekomimi.nekogram.utils.AlertUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.transtale.TranslateDb;
+import moe.hx030.momogram.transtale.Translator;
+import moe.hx030.momogram.transtale.TranslatorKt;
+import moe.hx030.momogram.utils.AlertUtil;
 
 public class EditTextCaption extends EditTextBoldCursor {
 
@@ -244,7 +244,7 @@ public class EditTextCaption extends EditTextBoldCursor {
 
         } else {
             Locale to;
-            Locale toDefault = TranslatorKt.getCode2Locale(NekoConfig.translateInputLang.String());
+            Locale toDefault = TranslatorKt.getCode2Locale(MomoConfig.translateInputLang.String());
             if (delegate != null) {
                 to = TranslateDb.getChatLanguage(delegate.getCurrentChat(), toDefault);
             } else {

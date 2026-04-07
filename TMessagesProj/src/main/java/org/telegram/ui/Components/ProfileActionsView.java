@@ -47,7 +47,8 @@ import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.ProfileActivity;
-import tw.nekomimi.nekogram.NekoConfig;
+
+import moe.hx030.momogram.MomoConfig;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -133,8 +134,8 @@ public class ProfileActionsView extends View {
         paint.setAlpha(40);
 
         xpadding = dpf2(14);
-        ypadding = dpf2(NekoConfig.profileActionCircleBtn.Bool() ? 6 : 12);
-        top = dpf2(NekoConfig.profileActionCircleBtn.Bool() ? 4 : 8);
+        ypadding = dpf2(MomoConfig.profileActionCircleBtn.Bool() ? 6 : 12);
+        top = dpf2(MomoConfig.profileActionCircleBtn.Bool() ? 4 : 8);
         textPadding = dpf2(4);
 
         this.targetHeight = (int) (targetHeight - ypadding - top);
@@ -230,7 +231,7 @@ public class ProfileActionsView extends View {
     }
 
     private float getItemWidth() {
-        if (NekoConfig.profileActionCircleBtn.Bool()) {
+        if (MomoConfig.profileActionCircleBtn.Bool()) {
             return targetHeight;
         }
         int w = getMeasuredWidth();
@@ -257,7 +258,7 @@ public class ProfileActionsView extends View {
         float betweenPadding = xpadding / 2f;
         final float width = getItemWidth();
         float left = xpadding;
-        if (NekoConfig.profileActionCircleBtn.Bool()) {
+        if (MomoConfig.profileActionCircleBtn.Bool()) {
             float totalWidth = activeCount * width;
             float availableSpace = getMeasuredWidth() - totalWidth;
             float space = availableSpace / (activeCount + 1);
@@ -533,7 +534,7 @@ public class ProfileActionsView extends View {
     }
 
     public float getRoundRadius() {
-        return NekoConfig.profileActionCircleBtn.Bool() ? getItemWidth() : dp(16);
+        return MomoConfig.profileActionCircleBtn.Bool() ? getItemWidth() : dp(16);
     }
 
     private Action hit = null;
@@ -664,7 +665,7 @@ public class ProfileActionsView extends View {
         Action action = new Action(ActionButton.SET_PHOTO);
         action.key = KEY_SET_PHOTO;
         action.setText(getString(R.string.ProfileActionsEditPhoto));
-        action.iconScale = NekoConfig.profileActionCircleBtn.Bool() ? (1.3f) : 1f;
+        action.iconScale = MomoConfig.profileActionCircleBtn.Bool() ? (1.3f) : 1f;
         actions.add(action);
         activeCount = actions.size();
     }
@@ -1071,7 +1072,7 @@ public class ProfileActionsView extends View {
         boolean isDeleted = false;
 
         int iconTranslationY = 0;
-        float iconScale = NekoConfig.profileActionCircleBtn.Bool() ? 1.3f : 1f;
+        float iconScale = MomoConfig.profileActionCircleBtn.Bool() ? 1.3f : 1f;
 
         Drawable rippleDrawable = Theme.AdaptiveRipple.createRect(0, Theme.multAlpha(Theme.getColor(Theme.key_windowBackgroundWhite), 0.45f), 8);
         LoadingDrawable loadingDrawable;

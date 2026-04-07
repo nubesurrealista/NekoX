@@ -59,10 +59,10 @@ import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.EnvUtil;
-import tw.nekomimi.nekogram.utils.FileUtil;
-import tw.nekomimi.nekogram.utils.UIUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.utils.EnvUtil;
+import moe.hx030.momogram.utils.FileUtil;
+import moe.hx030.momogram.utils.UIUtil;
 
 public class SharedConfig {
     /**
@@ -561,10 +561,10 @@ public class SharedConfig {
     public static ProxyInfo currentProxy;
 
     public static void saveConfig() {
-        // ensure cache path in NekoConfig and storageCacheDir matches
-        if (storageCacheDir != null && !storageCacheDir.equals(NekoConfig.cachePath.String())) {
-            Log.d("030-path", String.format("cache overridden from '%s' to '%s'", storageCacheDir, NekoConfig.cachePath.String()));
-            storageCacheDir = NekoConfig.cachePath.String();
+        // ensure cache path in MomoConfig and storageCacheDir matches
+        if (storageCacheDir != null && !storageCacheDir.equals(MomoConfig.cachePath.String())) {
+            Log.d("030-path", String.format("cache overridden from '%s' to '%s'", storageCacheDir, MomoConfig.cachePath.String()));
+            storageCacheDir = MomoConfig.cachePath.String();
         }
         synchronized (sync) {
             try {
@@ -681,9 +681,9 @@ public class SharedConfig {
                 pushAuthKey = Base64.decode(authKeyString, Base64.DEFAULT);
             }
 
-            if (storageCacheDir != null && !storageCacheDir.equals(NekoConfig.cachePath.String())) {
-                Log.d("030-path", String.format("cache overridden from '%s' to '%s'", storageCacheDir, NekoConfig.cachePath.String()));
-                storageCacheDir = NekoConfig.cachePath.String();
+            if (storageCacheDir != null && !storageCacheDir.equals(MomoConfig.cachePath.String())) {
+                Log.d("030-path", String.format("cache overridden from '%s' to '%s'", storageCacheDir, MomoConfig.cachePath.String()));
+                storageCacheDir = MomoConfig.cachePath.String();
             }
 
             if (passcodeHash.length() > 0 && lastPauseTime == 0) {
@@ -758,7 +758,7 @@ public class SharedConfig {
             bubbleRadius = preferences.getInt("bubbleRadius", 3);
             ivFontSize = preferences.getInt("iv_font_size", fontSize);
             allowBigEmoji = preferences.getBoolean("allowBigEmoji", true);
-            useSystemEmoji = preferences.getBoolean("useSystemEmoji", NekoConfig.useSystemEmoji.Bool()) || NekoConfig.useSystemEmoji.Bool();
+            useSystemEmoji = preferences.getBoolean("useSystemEmoji", MomoConfig.useSystemEmoji.Bool()) || MomoConfig.useSystemEmoji.Bool();
             useSystemBoldFont = preferences.getBoolean("useSystemBoldFont", false);
             forceForumTabs = preferences.getBoolean("forceForumTabs", false);
             fastWallpaperDisabled = preferences.getBoolean("fastWallpaperDisabled", false);
@@ -858,7 +858,7 @@ public class SharedConfig {
             debugVideoQualities = preferences.getBoolean("debugVideoQualities", false);
             shadowsInSections = preferences.getBoolean("shadowsInSections", false);
             debugViewMetrics = preferences.getBoolean("debugViewMetrics", false);
-            photoHighQualityDefault = preferences.getBoolean("photoHighQualityDefault", true) || NekoConfig.increasedMaxPhotoResolution.Bool();
+            photoHighQualityDefault = preferences.getBoolean("photoHighQualityDefault", true) || MomoConfig.increasedMaxPhotoResolution.Bool();
 
             loadDebugConfig(preferences);
 
@@ -2051,11 +2051,11 @@ public class SharedConfig {
     }
 
     public static boolean canBlurChat() {
-        return NekoConfig.forceBlurInChat.Bool() || getDevicePerformanceClass() >= (Build.VERSION.SDK_INT >= 31 ? PERFORMANCE_CLASS_AVERAGE : PERFORMANCE_CLASS_HIGH) || BuildVars.DEBUG_PRIVATE_VERSION;
+        return MomoConfig.forceBlurInChat.Bool() || getDevicePerformanceClass() >= (Build.VERSION.SDK_INT >= 31 ? PERFORMANCE_CLASS_AVERAGE : PERFORMANCE_CLASS_HIGH) || BuildVars.DEBUG_PRIVATE_VERSION;
     }
 
     public static boolean chatBlurEnabled() {
-        return (canBlurChat() && LiteMode.isEnabled(LiteMode.FLAG_CHAT_BLUR)) || NekoConfig.forceBlurInChat.Bool();
+        return (canBlurChat() && LiteMode.isEnabled(LiteMode.FLAG_CHAT_BLUR)) || MomoConfig.forceBlurInChat.Bool();
     }
 
     public static class BackgroundActivityPrefs {

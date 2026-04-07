@@ -115,8 +115,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.ui.CustomChatListBottomSheet;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.ui.CustomChatListBottomSheet;
 
 public class BotWebViewSheet extends Dialog implements NotificationCenter.NotificationCenterDelegate, BottomSheetTabsOverlay.Sheet {
     public final static int TYPE_WEB_VIEW_BUTTON = 0, TYPE_SIMPLE_WEB_VIEW_BUTTON = 1, TYPE_BOT_MENU_BUTTON = 2, TYPE_WEB_VIEW_BOT_APP = 3, TYPE_WEB_VIEW_BOT_MAIN = 4;
@@ -124,7 +124,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
     public final static int FLAG_FROM_INLINE_SWITCH = 1;
     public final static int FLAG_FROM_SIDE_MENU = 2;
     private int lineColor;
-    private boolean inApp = !NekoConfig.forceExternalBrowserForBots.Bool();
+    private boolean inApp = !MomoConfig.forceExternalBrowserForBots.Bool();
     private String initialUrl = null;
 
     public static HashSet<BotWebViewSheet> activeSheets = new HashSet<>();
@@ -1872,7 +1872,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
             TLRPC.TL_webViewResultUrl resultUrl = (TLRPC.TL_webViewResultUrl) requestProps.response;
             queryId = resultUrl.query_id;
             url = resultUrl.url;
-            fullsize = resultUrl.fullsize || NekoConfig.preventPullDownWebview.Bool();
+            fullsize = resultUrl.fullsize || MomoConfig.preventPullDownWebview.Bool();
             if (!fromTab) {
                 setFullscreen(resultUrl.fullscreen, !fromTab);
             }
@@ -1888,7 +1888,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
         initialUrl = url;
         if (url != null && !fromTab) {
             MediaDataController.getInstance(currentAccount).increaseWebappRating(requestProps.botId);
-            if (tempOpenExternally || (!inApp && NekoConfig.forceExternalBrowserForBots.Bool())) {
+            if (tempOpenExternally || (!inApp && MomoConfig.forceExternalBrowserForBots.Bool())) {
                 tempOpenExternally = false;
                 Browser.openUrl(parentActivity, url);
                 dismiss(false, null);
@@ -2041,7 +2041,7 @@ public class BotWebViewSheet extends Dialog implements NotificationCenter.Notifi
     }
 
     public boolean onCheckDismissByUser() {
-        if (needCloseConfirmation && !NekoConfig.closeWebViewWithoutConfirmation.Bool()) {
+        if (needCloseConfirmation && !MomoConfig.closeWebViewWithoutConfirmation.Bool()) {
             String botName = null;
             TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(botId);
             if (user != null) {

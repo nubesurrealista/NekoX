@@ -111,10 +111,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import kotlin.Unit;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.folder.FolderIconHelper;
-import tw.nekomimi.nekogram.folder.IconSelectorAlert;
-import tw.nekomimi.nekogram.ui.BottomBuilder;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.folder.FolderIconHelper;
+import moe.hx030.momogram.folder.IconSelectorAlert;
+import moe.hx030.momogram.ui.BottomBuilder;
 
 public class FilterCreateActivity extends BaseFragment {
 
@@ -155,10 +156,10 @@ public class FilterCreateActivity extends BaseFragment {
         if (oldEmoticon == null) oldEmoticon = filter.emoticon;
         BottomBuilder builder = new BottomBuilder(getParentActivity());
         builder.addTitle(LocaleController.getString(R.string.TabTitleTypeIcon));
-        boolean ignoreUpdate = NekoConfig.ignoreFilterEmoticonUpdate.Bool();
+        boolean ignoreUpdate = MomoConfig.ignoreFilterEmoticonUpdate.Bool();
         builder.addCheckItem(LocaleController.getString(R.string.IgnoreFilterEmoticonUpdate),
                 ignoreUpdate, ignoreUpdate, (__, checked) -> {
-            NekoConfig.ignoreFilterEmoticonUpdate.setConfigBool(true);
+            MomoConfig.ignoreFilterEmoticonUpdate.setConfigBool(true);
             return Unit.INSTANCE;
         });
         EditText input = builder.addEditText(LocaleController.getString(R.string.Emoji));
@@ -247,10 +248,10 @@ public class FilterCreateActivity extends BaseFragment {
             while (getMessagesController().dialogFiltersById.get(filter.id) != null) {
                 filter.id++;
             }
-            String title = NekoConfig.customAllChatsText;
+            String title = MomoConfig.customAllChatsText;
             boolean isDefault = title.isBlank();
             if (isDefault) title = LocaleController.getString(R.string.FilterAllChats);
-            else filter.entities = NekoConfig.customAllChatsTextEntities;
+            else filter.entities = MomoConfig.customAllChatsTextEntities;
             filter.name = title;
             isAllChats = true;
         } else if (filter == null) {
@@ -1120,7 +1121,7 @@ public class FilterCreateActivity extends BaseFragment {
         MediaDataController mediaDataController = getMediaDataController();
         final ArrayList<TLRPC.MessageEntity> entities = mediaDataController.getEntities(parsedTitle, false);
         if (isAllChats) {
-            NekoConfig.customAllChatsTextEntities = entities;
+            MomoConfig.customAllChatsTextEntities = entities;
             StringBuilder str = new StringBuilder(newFilterName.toString());
             if (!str.toString().endsWith("\n")) str.append("\n");
             ArrayList<TLRPC.TL_messages_stickerSet> packs = null;
@@ -1135,7 +1136,7 @@ public class FilterCreateActivity extends BaseFragment {
                 }
             }
             String data = str.substring(0, str.length() - 1);
-            NekoConfig.customAllChatsName.setConfigString(data);
+            MomoConfig.customAllChatsName.setConfigString(data);
             if (after != null) after.run();
             return;
         }
@@ -1224,7 +1225,7 @@ public class FilterCreateActivity extends BaseFragment {
             req.filter.flags |= 134217728;
             req.filter.color = newFilterColor;
         }
-        if (!NekoConfig.ignoreFilterEmoticonUpdate.Bool() && newFilterEmoticon != null) {
+        if (!MomoConfig.ignoreFilterEmoticonUpdate.Bool() && newFilterEmoticon != null) {
             req.filter.emoticon = newFilterEmoticon;
             req.filter.flags |= 33554432;
         }

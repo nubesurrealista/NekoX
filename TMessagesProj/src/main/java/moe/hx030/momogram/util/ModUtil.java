@@ -26,9 +26,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.cc.CCConverter;
-import tw.nekomimi.nekogram.cc.CCTarget;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.cc.CCConverter;
+import moe.hx030.momogram.cc.CCTarget;
 
 public class ModUtil {
 
@@ -36,15 +36,15 @@ public class ModUtil {
     private static final AtomicInteger banned = new AtomicInteger(0), dismissed = new AtomicInteger(0);
 
     public static TLRPC.TL_messages_chatInviteImporters filterJoinRequests(int currentAccount, long chatId, TLRPC.TL_messages_chatInviteImporters importers) {
-        if (importers == null || !NekoConfig.autoDismissJoinReq.Bool()) {
-            Log.d("030-filterJoinReq", String.format("importers=%s autoDismiss=%s", importers != null , NekoConfig.autoDismissJoinReq.Bool()));
+        if (importers == null || !MomoConfig.autoDismissJoinReq.Bool()) {
+            Log.d("030-filterJoinReq", String.format("importers=%s autoDismiss=%s", importers != null , MomoConfig.autoDismissJoinReq.Bool()));
             return importers;
         }
         if (bannedUserIds == null) bannedUserIds = new ArrayDeque<>(60);
-        final boolean bio = NekoConfig.autoDismissJoinReqBio.Bool();
-        final boolean dummy = NekoConfig.autoDismissDummy.Bool();
-        final boolean regex = NekoConfig.autoDismissRegexPattern != null;
-        final boolean useOpenCC = NekoConfig.autoDismissNameUseOpenCC.Bool();
+        final boolean bio = MomoConfig.autoDismissJoinReqBio.Bool();
+        final boolean dummy = MomoConfig.autoDismissDummy.Bool();
+        final boolean regex = MomoConfig.autoDismissRegexPattern != null;
+        final boolean useOpenCC = MomoConfig.autoDismissNameUseOpenCC.Bool();
         int oldSize = importers.importers.size();
         Log.d("030-filterJoinReq", String.format("b4 | count=%d size=%d", importers.count, importers.importers.size()));
 
@@ -61,8 +61,8 @@ public class ModUtil {
                 dismissJoinRequest(currentAccount, chatId, i, u);
                 dismissed.addAndGet(1);
             } else if (u.deleted || (regex &&
-                    FilterUtils.checkName(NekoConfig.autoDismissRegexPattern, u.first_name, u.last_name, useOpenCC)) ||
-                    (bio && FilterUtils.checkString(NekoConfig.autoDismissRegexPattern, i.about, useOpenCC))) {
+                    FilterUtils.checkName(MomoConfig.autoDismissRegexPattern, u.first_name, u.last_name, useOpenCC)) ||
+                    (bio && FilterUtils.checkString(MomoConfig.autoDismissRegexPattern, i.about, useOpenCC))) {
 
                 if (bannedUserIds.contains(u.id)) continue;
                 bannedUserIds.add(u.id);
@@ -77,7 +77,7 @@ public class ModUtil {
                 });
                 banned.addAndGet(1);
             } else {
-                boolean match = NekoConfig.autoDismissRegexPattern.matcher(u.first_name).find();
+                boolean match = MomoConfig.autoDismissRegexPattern.matcher(u.first_name).find();
                 Log.d("030-filterJoinReq", String.format("passed, DA=%s regex=%s match=%s first_name=%s", u.deleted, regex, match, u.first_name));
                 finalImporters.add(i);
             }

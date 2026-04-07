@@ -66,12 +66,12 @@ import org.telegram.ui.RestrictedLanguagesSelectActivity;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.transtale.TranslateDb;
-import tw.nekomimi.nekogram.transtale.Translator;
-import tw.nekomimi.nekogram.transtale.TranslatorKt;
-import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.ProxyUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.transtale.TranslateDb;
+import moe.hx030.momogram.transtale.Translator;
+import moe.hx030.momogram.transtale.TranslatorKt;
+import moe.hx030.momogram.utils.AlertUtil;
+import moe.hx030.momogram.utils.ProxyUtil;
 
 import static com.google.zxing.common.detector.MathUtils.distance;
 import static org.telegram.ui.ActionBar.FloatingToolbar.STYLE_THEME;
@@ -284,7 +284,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                 textY = maybeTextY;
 
                 selectedView = newView;
-                if (!NekoConfig.disableVibration.Bool())
+                if (!MomoConfig.disableVibration.Bool())
                     try {
                         textSelectionOverlay.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                     } catch (Exception ignored) {}
@@ -948,7 +948,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
 
                                     if (viewChanged || layoutOld != layoutNew || newSelectionLine != layoutNew.getLineForOffset(selectionStart) && newSelectionLine == nextWhitespaceLine) {
                                         jumpToLine(newSelection, nextWhitespace, viewChanged, layoutBlock.yOffset, oldYoffset, oldSelectedView);
-                                        if (!NekoConfig.disableVibration.Bool())
+                                        if (!MomoConfig.disableVibration.Bool())
                                             AndroidUtilities.vibrateCursor(textSelectionOverlay);
                                         TextSelectionHelper.this.invalidate();
                                     } else if (Layout.DIR_RIGHT_TO_LEFT == layoutNew.getParagraphDirection(layoutNew.getLineForOffset(newSelection)) || layoutNew.isRtlCharAt(newSelection) || nextWhitespaceLine != currentLine || newSelectionLine != nextWhitespaceLine) {
@@ -959,7 +959,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                                             selectionStart = k;
                                             movingHandleStart = false;
                                         }
-                                        if (!NekoConfig.disableVibration.Bool())
+                                        if (!MomoConfig.disableVibration.Bool())
                                             AndroidUtilities.vibrateCursor(textSelectionOverlay);
                                         TextSelectionHelper.this.invalidate();
                                     } else {
@@ -1009,7 +1009,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                                                 selectionStart = k;
                                                 movingHandleStart = false;
                                             }
-                                            if (!NekoConfig.disableVibration.Bool())
+                                            if (!MomoConfig.disableVibration.Bool())
                                                 AndroidUtilities.vibrateCursor(textSelectionOverlay);
                                             TextSelectionHelper.this.invalidate();
                                         }
@@ -1046,7 +1046,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
 
                                     if (viewChanged || layoutOld != layoutNew || newSelectionLine != layoutNew.getLineForOffset(selectionEnd) && newSelectionLine == nextWhitespaceLine) {
                                         jumpToLine(newSelection, nextWhitespace, viewChanged, layoutBlock.yOffset, oldYoffset, oldSelectedView);
-                                        if (!NekoConfig.disableVibration.Bool())
+                                        if (!MomoConfig.disableVibration.Bool())
                                             AndroidUtilities.vibrateCursor(textSelectionOverlay);
                                         TextSelectionHelper.this.invalidate();
                                     } else if (Layout.DIR_RIGHT_TO_LEFT == layoutNew.getParagraphDirection(layoutNew.getLineForOffset(newSelection)) || layoutNew.isRtlCharAt(newSelection) || currentLine != nextWhitespaceLine || newSelectionLine != nextWhitespaceLine) {
@@ -1057,7 +1057,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                                             selectionStart = k;
                                             movingHandleStart = true;
                                         }
-                                        if (!NekoConfig.disableVibration.Bool())
+                                        if (!MomoConfig.disableVibration.Bool())
                                             AndroidUtilities.vibrateCursor(textSelectionOverlay);
                                         TextSelectionHelper.this.invalidate();
                                     } else {
@@ -1088,7 +1088,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                                                 selectionStart = k;
                                                 movingHandleStart = true;
                                             }
-                                            if (!NekoConfig.disableVibration.Bool())
+                                            if (!MomoConfig.disableVibration.Bool())
                                                 AndroidUtilities.vibrateCursor(textSelectionOverlay);
                                             TextSelectionHelper.this.invalidate();
                                         }
@@ -1490,8 +1490,8 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                     return true;
                 } else if (itemId == TRANSLATE) {
                     // NekoX / 030: Translate ~~removed~~ revived
-                    if (!(NekoConfig.useTelegramTranslateInChat.Bool() || NekoConfig.translationProvider.Int() != Translator.providerTelegram) && onTranslateListener != null) {
-                        String configTargetLanguage = NekoConfig.translateToLang.String();
+                    if (!(MomoConfig.useTelegramTranslateInChat.Bool() || MomoConfig.translationProvider.Int() != Translator.providerTelegram) && onTranslateListener != null) {
+                        String configTargetLanguage = MomoConfig.translateToLang.String();
                         String translateToLanguage = configTargetLanguage.isEmpty() ? LocaleController.getInstance().getCurrentLocale().getLanguage() : configTargetLanguage;
                         onTranslateListener.run(getSelectedText(), "auto", translateToLanguage, () -> showActions());
                     } else {

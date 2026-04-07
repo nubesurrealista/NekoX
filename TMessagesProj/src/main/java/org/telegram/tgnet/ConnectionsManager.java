@@ -83,11 +83,11 @@ import java.util.stream.Collectors;
 
 import javax.net.ssl.SSLException;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.proxynext.Utils;
-import tw.nekomimi.nekogram.utils.DnsFactory;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
+import moe.hx030.momogram.proxynext.Utils;
+import moe.hx030.momogram.utils.DnsFactory;
+import moe.hx030.momogram.utils.TelegramUtil;
 
 public class ConnectionsManager extends BaseController {
 
@@ -1259,7 +1259,7 @@ public class ConnectionsManager extends BaseController {
                 if (!hasIpv4) {
                     ipStrategy = USE_IPV6_ONLY;
                 }
-                if (NekoConfig.useIPv6.Bool()) {
+                if (MomoConfig.useIPv6.Bool()) {
                     ipStrategy = USE_IPV4_IPV6_RANDOM;
                 }
                 return ipStrategy;
@@ -1294,7 +1294,7 @@ public class ConnectionsManager extends BaseController {
             InputStream httpConnectionStream = null;
             boolean done = false;
             try {
-                if (!NekoConfig.useAdGuardDNS.Bool()) {
+                if (!MomoConfig.useAdGuardDNS.Bool()) {
                     List<InetAddress> answers = DnsFactory.lookup(currentHostName);
                     return new ResolvedDomain(new ArrayList<>(answers.stream().map(InetAddress::getHostAddress).collect(Collectors.toSet())), System.currentTimeMillis());
                 }

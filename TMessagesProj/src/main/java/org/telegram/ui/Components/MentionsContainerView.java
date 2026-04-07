@@ -56,8 +56,8 @@ import org.telegram.ui.PhotoViewer;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.utils.TelegramUtil;
 
 public class MentionsContainerView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
@@ -907,7 +907,7 @@ public class MentionsContainerView extends FrameLayout implements NotificationCe
     }
 
     public void detachedFromWindow() {
-        if (NekoConfig.alwaysDestroyPhotoViewer.Bool())
+        if (MomoConfig.alwaysDestroyPhotoViewer.Bool())
             onDetachedFromWindow();
     }
 
@@ -950,9 +950,9 @@ public class MentionsContainerView extends FrameLayout implements NotificationCe
 
     public void setBackgroundDrawable(@NonNull BlurredBackgroundDrawable backgroundDrawable) {
         this.backgroundDrawable = backgroundDrawable;
-        if (!NekoConfig.unroundedChatBottomView.Bool())
+        if (!MomoConfig.unroundedChatBottomView.Bool())
             this.backgroundDrawable.setRadius(dp(22));
-        if (!NekoConfig.removeChatBottomViewPadding.Bool())
+        if (!MomoConfig.removeChatBottomViewPadding.Bool())
             this.backgroundDrawable.setPadding(dp(5));
 
         checkListViewPadding();

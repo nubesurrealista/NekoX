@@ -11,7 +11,7 @@ package org.telegram.messenger;
 import static org.telegram.messenger.LocaleController.formatString;
 import static org.telegram.messenger.LocaleController.getString;
 
-import static tw.nekomimi.nekogram.utils.StrUtil.getAppName;
+import static moe.hx030.momogram.utils.StrUtil.getAppName;
 
 import android.Manifest;
 import android.animation.Animator;
@@ -246,14 +246,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.EnvUtil;
-import tw.nekomimi.nekogram.utils.FileUtil;
-import tw.nekomimi.nekogram.utils.ProxyUtil;
-import tw.nekomimi.nekogram.utils.StrUtil;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
+import moe.hx030.momogram.utils.AlertUtil;
+import moe.hx030.momogram.utils.EnvUtil;
+import moe.hx030.momogram.utils.FileUtil;
+import moe.hx030.momogram.utils.ProxyUtil;
+import moe.hx030.momogram.utils.StrUtil;
+import moe.hx030.momogram.utils.TelegramUtil;
 import me.vkryl.core.BitwiseUtils;
 
 public class AndroidUtilities {
@@ -2472,7 +2472,7 @@ public class AndroidUtilities {
 
     public static Typeface getTypeface(String assetPath) {
         synchronized (typefaceCache) {
-            if (NekoConfig.typeface.Bool() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (MomoConfig.typeface.Bool() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 if (assetPath.contains("medium") && assetPath.contains("italic")) {
                     return Typeface.create("sans-serif-medium", Typeface.ITALIC);
                 }
@@ -2896,7 +2896,7 @@ public class AndroidUtilities {
                 provider = 1;
             }
         } else {
-            if (NekoConfig.mapPreviewProvider.Int() == 1) {
+            if (MomoConfig.mapPreviewProvider.Int() == 1) {
                 provider = 1;
             }
         }
@@ -2986,7 +2986,7 @@ public class AndroidUtilities {
     }
 
     public static boolean isTabletInternal() {
-        if (isTablet == null) switch (NekoConfig.tabletMode.Int()) {
+        if (isTablet == null) switch (MomoConfig.tabletMode.Int()) {
             case 0:
                 isTablet = isTabletForce();
                 break;
@@ -3056,7 +3056,7 @@ public class AndroidUtilities {
     }
 
     public static int getPhotoSize(boolean highQuality) {
-        highQuality |= NekoConfig.increasedMaxPhotoResolution.Bool();
+        highQuality |= MomoConfig.increasedMaxPhotoResolution.Bool();
         if (highQuality) {
             if (highQualityPhotoSize == null) {
                 highQualityPhotoSize = 2560;
@@ -4780,7 +4780,7 @@ public class AndroidUtilities {
                 if (checking[0]) return;
 
                 checking[0] = true;
-                String txt = getString(NekoConfig.autoTestProxy.Bool() ? R.string.ProxyBottomSheetChecking : R.string.TestPing);
+                String txt = getString(MomoConfig.autoTestProxy.Bool() ? R.string.ProxyBottomSheetChecking : R.string.TestPing);
                 statusTextView[0].setText(txt);
                 statusTextView[0].clear();
                 try {
@@ -4811,7 +4811,7 @@ public class AndroidUtilities {
 //            });
 
             final SharedPreferences pref = MessagesController.getGlobalMainSettings();
-            if (pref.getBoolean("proxycheckstatusip", false) && NekoConfig.autoTestProxy.Bool()) {
+            if (pref.getBoolean("proxycheckstatusip", false) && MomoConfig.autoTestProxy.Bool()) {
                 check.run();
             } else {
                 new AlertDialog.Builder(activity)
@@ -5656,7 +5656,7 @@ public class AndroidUtilities {
     }
 
     public static boolean shouldShowUrlInAlert(String url) {
-        if (NekoConfig.skipOpenLinkConfirm.Bool()) {
+        if (MomoConfig.skipOpenLinkConfirm.Bool()) {
             return false;
         }
         try {

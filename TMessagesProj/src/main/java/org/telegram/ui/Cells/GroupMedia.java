@@ -62,7 +62,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class GroupMedia {
 
@@ -910,7 +910,7 @@ public class GroupMedia {
         }
 
         public int maxSizeWidth = 800;
-        public float maxSizeHeight = NekoConfig.imageMessageSizeTweak.Bool() ? 1935 : 814;
+        public float maxSizeHeight = MomoConfig.imageMessageSizeTweak.Bool() ? 1935 : 814;
 
         public final GroupedMessages.TransitionParams transitionParams = new GroupedMessages.TransitionParams();
 

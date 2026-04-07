@@ -67,7 +67,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Objects;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class ReactionsLayoutInBubble {
 
@@ -194,7 +194,7 @@ public class ReactionsLayoutInBubble {
                 boolean includeEmptyDislikeButton = forceLikeDislikeReactions;
 
                 final TLRPC.ChatFull chatInfo = MessagesController.getInstance(currentAccount).getChatFull(-messageObject.getDialogId());
-                if (!isSmall && !messageObject.messageOwner.reactions.results.isEmpty() && chatInfo != null && chatInfo.paid_reactions_available && !NekoConfig.noStarReactionPlaceholder.Bool()) {
+                if (!isSmall && !messageObject.messageOwner.reactions.results.isEmpty() && chatInfo != null && chatInfo.paid_reactions_available && !MomoConfig.noStarReactionPlaceholder.Bool()) {
                     boolean hasPaidReaction = false;
                     for (int i = 0; i < messageObject.messageOwner.reactions.results.size(); i++) {
                         TLRPC.ReactionCount reactionCount = messageObject.messageOwner.reactions.results.get(i);

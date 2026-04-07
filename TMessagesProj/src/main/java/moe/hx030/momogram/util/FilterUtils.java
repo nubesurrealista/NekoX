@@ -23,9 +23,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Pattern;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.cc.CCConverter;
-import tw.nekomimi.nekogram.cc.CCTarget;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.cc.CCConverter;
+import moe.hx030.momogram.cc.CCTarget;
 
 public class FilterUtils {
 
@@ -51,15 +51,15 @@ public class FilterUtils {
         MessagesStorage messagesStorage = MessagesStorage.getInstance(currentAccount);
         NotificationsController notificationsController = NotificationsController.getInstance(currentAccount);
 
-        if (NekoConfig.ignoreBlocked.Bool() && messagesController.blockedPeers.indexOfKey(senderId) >= 0) {
+        if (MomoConfig.ignoreBlocked.Bool() && messagesController.blockedPeers.indexOfKey(senderId) >= 0) {
             return Result.Blocked;
         }
 
-        if (!NekoConfig.autoArchiveAndMute.Bool() || senderId <= 0 || chatId != 0 || !isFromUser) {
+        if (!MomoConfig.autoArchiveAndMute.Bool() || senderId <= 0 || chatId != 0 || !isFromUser) {
             return Result.Passed;
         }
 
-        if (NekoConfig.debugAntiSpam.Bool())
+        if (MomoConfig.debugAntiSpam.Bool())
             Log.d("030-debugspam", String.format("PM?, id=%d, chat=%d, isSvc=%s, isContact=%s",
                     senderId, chatId, UserObject.isService(senderId),
                     contactsController.isContact(senderId)));
@@ -100,7 +100,7 @@ public class FilterUtils {
             if (currentUser.bot) return Result.Passed; // bots can't send first msg
             final ArrayList<Long> list = new ArrayList<>(1);
             list.add(senderId);
-            if (NekoConfig.autoArchiveAndMuteNoCommonGroupOnly.Bool()) {
+            if (MomoConfig.autoArchiveAndMuteNoCommonGroupOnly.Bool()) {
                 messagesController.loadFullUser(currentUser, messagesStorage.classGuid, true, uf -> {
                     if (uf != null && uf.common_chats_count > 0) return;
                     Log.d("030-spam", "no common group => archive & mute " + senderId);

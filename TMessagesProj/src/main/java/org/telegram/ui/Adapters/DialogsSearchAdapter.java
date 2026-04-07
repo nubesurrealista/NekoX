@@ -78,7 +78,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
 
@@ -594,7 +594,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                 }
                 for (int a = 0; a < res.messages.size(); a++) {
                     TLRPC.Message message = res.messages.get(a);
-                    if (NekoConfig.searchBlacklistData.contains(MessageObject.getDialogId(message))) continue;
+                    if (MomoConfig.searchBlacklistData.contains(MessageObject.getDialogId(message))) continue;
                     MessageObject messageObject = new MessageObject(currentAccount, message, usersMap, chatsMap, false, true);
                     messageObjects.add(messageObject);
                     messageObject.setQuery(query);
@@ -1904,7 +1904,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                 }
                 cell.setChecked(false, false);
                 boolean savedMessages = false;
-                boolean displayAsSelf = NekoConfig.showSelfInsteadOfSavedMessages.Bool();
+                boolean displayAsSelf = MomoConfig.showSelfInsteadOfSavedMessages.Bool();
                 if (!displayAsSelf && user != null && user.id == selfUserId && dialogsType != DialogsActivity.DIALOGS_TYPE_BOT_SELECT_VERIFY) {
                     name = LocaleController.getString(R.string.SavedMessages);
                     username = null;

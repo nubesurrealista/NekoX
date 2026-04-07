@@ -98,8 +98,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 import java.util.Locale;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.ui.CustomChatListBottomSheet;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.ui.CustomChatListBottomSheet;
 
 public class BotWebViewAttachedSheet implements NotificationCenter.NotificationCenterDelegate, BaseFragment.AttachedSheet, BottomSheetTabsOverlay.Sheet {
     public final static int TYPE_WEB_VIEW_BUTTON = 0, TYPE_SIMPLE_WEB_VIEW_BUTTON = 1, TYPE_BOT_MENU_BUTTON = 2, TYPE_WEB_VIEW_BOT_APP = 3, TYPE_WEB_VIEW_BOT_MAIN = 4;
@@ -267,9 +267,9 @@ public class BotWebViewAttachedSheet implements NotificationCenter.NotificationC
         if (tab.overrideActionBarColor) {
             setBackgroundColor(tab.backgroundColor, false);
         }
-        showExpanded = tab.expanded || NekoConfig.preventPullDownWebview.Bool() || forceExpanded;
+        showExpanded = tab.expanded || MomoConfig.preventPullDownWebview.Bool() || forceExpanded;
         showOffsetY = tab.expandedOffset;
-        fullsize = tab.fullsize || NekoConfig.preventPullDownWebview.Bool();
+        fullsize = tab.fullsize || MomoConfig.preventPullDownWebview.Bool();
         needsContext = tab.needsContext;
         webViewContainer.setIsBackButtonVisible(backButtonShown = tab.backButton);
         swipeContainer.setAllowSwipes(tab.allowSwipes);
@@ -981,7 +981,7 @@ public class BotWebViewAttachedSheet implements NotificationCenter.NotificationC
         ActionBarMenuItem otherItem = optionsItem = menu.addItem(0, R.drawable.ic_ab_other);
         otherItem.addSubItem(R.id.menu_open_bot, R.drawable.msg_bot, LocaleController.getString(R.string.BotWebViewOpenBot));
         settingsItem = otherItem.addSubItem(R.id.menu_settings, R.drawable.msg_settings, LocaleController.getString(R.string.BotWebViewSettings));
-        if (!NekoConfig.showBotWebViewSettings.Bool()) settingsItem.setVisibility(View.GONE);
+        if (!MomoConfig.showBotWebViewSettings.Bool()) settingsItem.setVisibility(View.GONE);
         otherItem.addSubItem(R.id.menu_reload_page, R.drawable.msg_retry, LocaleController.getString(R.string.BotWebViewReloadPage));
         if (userbot != null && userbot.bot_has_main_app) {
             otherItem.addSubItem(R.id.menu_add_to_home_screen_bot, R.drawable.msg_home, LocaleController.getString(R.string.AddShortcut));
@@ -1018,7 +1018,7 @@ public class BotWebViewAttachedSheet implements NotificationCenter.NotificationC
                         ((LaunchActivity) parentActivity).presentFragment(new ChatActivity(bundle));
                     }
                     dismiss(true, null);
-                    if (NekoConfig.hideWebViewTabOverlayInChat.Bool()) {
+                    if (MomoConfig.hideWebViewTabOverlayInChat.Bool()) {
                         BottomSheetTabsOverlay overlay = LaunchActivity.instance.getBottomSheetTabsOverlay();
                         BottomSheetTabs tabs = overlay.tabsView;
                         if (tabs != null) tabs.setTabSheetVisibility(false);
@@ -1481,7 +1481,7 @@ public class BotWebViewAttachedSheet implements NotificationCenter.NotificationC
     }
 
     public boolean onCheckDismissByUser() {
-        if (needCloseConfirmation && !NekoConfig.closeWebViewWithoutConfirmation.Bool()) {
+        if (needCloseConfirmation && !MomoConfig.closeWebViewWithoutConfirmation.Bool()) {
             String botName = null;
             TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(botId);
             if (user != null) {

@@ -112,7 +112,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class QrActivity extends BaseFragment {
 
@@ -1142,7 +1142,7 @@ public class QrActivity extends BaseFragment {
                                 }
                             } catch (Exception ignore) {
                                 try {
-                                    if (!NekoConfig.disableVibration.Bool())
+                                    if (!MomoConfig.disableVibration.Bool())
                                     performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                 } catch (Exception ignore2) {}
                             }

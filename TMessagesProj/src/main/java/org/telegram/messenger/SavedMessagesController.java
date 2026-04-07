@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class SavedMessagesController {
 
@@ -163,7 +163,7 @@ public class SavedMessagesController {
             String name2 = null;
             if (d.dialogId == UserObject.ANONYMOUS) {
                 name = LocaleController.getString(R.string.AnonymousForward);
-            } else if (!NekoConfig.showSelfInsteadOfSavedMessages.Bool() && d.dialogId == UserConfig.getInstance(currentAccount).getClientUserId()) {
+            } else if (!MomoConfig.showSelfInsteadOfSavedMessages.Bool() && d.dialogId == UserConfig.getInstance(currentAccount).getClientUserId()) {
                 name = LocaleController.getString(R.string.MyNotes);
                 name2 = LocaleController.getString(R.string.SavedMessages);
             } else if (d.dialogId >= 0) {

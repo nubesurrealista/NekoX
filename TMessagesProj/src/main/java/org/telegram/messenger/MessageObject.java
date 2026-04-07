@@ -125,9 +125,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import me.vkryl.core.BitwiseUtils;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.utils.PGPUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
+import moe.hx030.momogram.utils.PGPUtil;
 
 public class MessageObject {
 
@@ -260,7 +261,7 @@ public class MessageObject {
     public boolean expandedExplanation;
     public boolean forceShowPollResults;
 
-    public boolean isSpoilersRevealed;// = NekoConfig.showSpoilersDirectly.Bool();
+    public boolean isSpoilersRevealed;// = MomoConfig.showSpoilersDirectly.Bool();
     public boolean isMediaSpoilersRevealed;
     public boolean isMediaSpoilersRevealedInSharedMedia;
     public boolean revealingMediaSpoilers;
@@ -638,7 +639,7 @@ public class MessageObject {
     }
 
     public boolean hasMediaSpoilers() {
-        boolean showSpoilersDirectly = NekoConfig.showSpoilersDirectly.Bool() && !isCustomSpoiler();
+        boolean showSpoilersDirectly = MomoConfig.showSpoilersDirectly.Bool() && !isCustomSpoiler();
         return isCustomSpoiler()
                 || !isRepostPreview && (messageOwner.media != null && (messageOwner.media.spoiler && !showSpoilersDirectly) || needDrawBluredPreview())
                 || isHiddenSensitive();
@@ -648,7 +649,7 @@ public class MessageObject {
     public boolean isCustomSpoiler() {
         if (messageOwner == null) return false;
         if (isCustomSpoiler != null) return isCustomSpoiler;
-        boolean maskForBlockedUser = (NekoConfig.ignoreBlocked.Bool() && MessagesController.getInstance(currentAccount).blockedPeers.indexOfKey(getSenderId()) >= 0);
+        boolean maskForBlockedUser = (MomoConfig.ignoreBlocked.Bool() && MessagesController.getInstance(currentAccount).blockedPeers.indexOfKey(getSenderId()) >= 0);
         boolean maskForSpecifiedChat = isCustomMediaSpoiler();
         boolean is = (maskForBlockedUser || maskForSpecifiedChat);
 //        if (is) isCustomSpoiler = true;
@@ -657,7 +658,7 @@ public class MessageObject {
 
     public boolean reloadCustomSpoiler() {
         isCustomSpoiler = null;
-        isSpoilersRevealed = NekoConfig.showSpoilersDirectly.Bool() && !isCustomSpoiler();
+        isSpoilersRevealed = MomoConfig.showSpoilersDirectly.Bool() && !isCustomSpoiler();
         return isCustomSpoiler();
     }
 
@@ -666,7 +667,7 @@ public class MessageObject {
         if (messageOwner == null) return false;
         if (isCustomMediaSpoiler != null) return isCustomMediaSpoiler;
         return isCustomMediaSpoiler = (messageOwner.media != null) &&
-                NekoConfig.alwaysUseSpoilerForMediaChats.contains(messageOwner.dialog_id);
+                MomoConfig.alwaysUseSpoilerForMediaChats.contains(messageOwner.dialog_id);
     }
 
     public Boolean isSensitiveCached;
@@ -5862,7 +5863,7 @@ public class MessageObject {
         } else {
             isRestrictedMessage = false;
             String restrictionReason = MessagesController.getInstance(currentAccount).getRestrictionReason(messageOwner.restriction_reason);
-            if (!TextUtils.isEmpty(restrictionReason) && !NekoConfig.ignoreContentRestrictions.Bool()) {
+            if (!TextUtils.isEmpty(restrictionReason) && !MomoConfig.ignoreContentRestrictions.Bool()) {
                 messageText = restrictionReason;
                 isRestrictedMessage = true;
             } else if (!isMediaEmpty() && !isSponsored()) {
@@ -7227,7 +7228,7 @@ public class MessageObject {
         }
 
         if (!checkedPgpMsg && !messageOwner.decrypted &&
-                NekoConfig.autoDecryptPGPMessages.Bool() && text != null &&
+                MomoConfig.autoDecryptPGPMessages.Bool() && text != null &&
                 text.startsWith("--") && PgpHelper.PGP_MESSAGE.matcher(text).matches()) {
             checkedPgpMsg = true;
             ByteArrayInputStream is = new ByteArrayInputStream(text.getBytes());
@@ -7580,7 +7581,7 @@ public class MessageObject {
     }
 
     public void replaceEmojiToLottieFrame(CharSequence text, int[] emojiOnly) {
-        if (!(text instanceof Spannable) || NekoConfig.useSystemEmoji.Bool()) {
+        if (!(text instanceof Spannable) || MomoConfig.useSystemEmoji.Bool()) {
             return;
         }
         Spannable spannable = (Spannable) text;
@@ -9993,8 +9994,8 @@ public class MessageObject {
         if (SharedConfig.streamMkv && !isVideo && "video/x-matroska".equals(document.mime_type)) {
             isVideo = true;
         }
-        boolean ret = isVideo && !isAnimated; // || (NekoConfig.takeGIFasVideo.Bool() && document.mime_type.startsWith("video/"));
-        if (ret || PhotoViewer.tempDisableGifAsVideo || !NekoConfig.takeGIFasVideo.Bool()) return ret;
+        boolean ret = isVideo && !isAnimated; // || (MomoConfig.takeGIFasVideo.Bool() && document.mime_type.startsWith("video/"));
+        if (ret || PhotoViewer.tempDisableGifAsVideo || !MomoConfig.takeGIFasVideo.Bool()) return ret;
         return isGifDocument(document);
     }
 
@@ -12685,10 +12686,10 @@ public class MessageObject {
     private Boolean hiddenByRegex = null;
     public boolean shouldBeHidden() {
         if (messageOwner.hide) return true;
-        boolean hasHideRegex = NekoConfig.hideMessageRegexPattern != null;
+        boolean hasHideRegex = MomoConfig.hideMessageRegexPattern != null;
         if (!hasHideRegex) return false;
         if (hiddenByRegex != null) return hiddenByRegex;
-        return hiddenByRegex = (messageOwner.message != null && NekoConfig.hideMessageRegexPattern.matcher(messageOwner.message).find());
+        return hiddenByRegex = (messageOwner.message != null && MomoConfig.hideMessageRegexPattern.matcher(messageOwner.message).find());
     }
 
     private CharSequence getActionSuggestionApprovalText(String channelName, String userName) {

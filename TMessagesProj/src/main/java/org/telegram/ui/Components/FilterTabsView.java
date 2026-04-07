@@ -76,10 +76,11 @@ import org.telegram.ui.Stories.recorder.HintView2;
 import java.util.ArrayList;
 import java.util.Map;
 
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.folder.FolderIconHelper;
-import tw.nekomimi.nekogram.ui.MessageDetailsActivity;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.folder.FolderIconHelper;
+import moe.hx030.momogram.ui.MessageDetailsActivity;
 
 @SuppressLint("ViewConstructor")
 public class FilterTabsView extends FrameLayout {
@@ -139,17 +140,17 @@ public class FilterTabsView extends FrameLayout {
         public boolean isCustom = false;
 
         public Tab(int i, CharSequence t, String emo, ArrayList<TLRPC.MessageEntity> e, boolean noanimate) {
-            localTitleType = NekoConfig.tabsTitleType.Int();
+            localTitleType = MomoConfig.tabsTitleType.Int();
             id = i;
-            if (NekoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON) {
+            if (MomoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON) {
                 title = new SpannableStringBuilder(t);
                 title = Emoji.replaceEmoji(title, textPaint.getFontMetricsInt(), false);
                 try {
                     title = MessageObject.replaceAnimatedEmoji(title, e, textPaint.getFontMetricsInt());
                 } catch (Exception ex) {
                     Log.e("030-tab", MessageDetailsActivity.gson.toJson(e), ex);
-                    NekoConfig.customAllChatsTextEntities = null;
-                    NekoConfig.customAllChatsName.setConfigString(t.toString());
+                    MomoConfig.customAllChatsTextEntities = null;
+                    MomoConfig.customAllChatsName.setConfigString(t.toString());
                 }
             } else {
                 title = "";
@@ -168,7 +169,7 @@ public class FilterTabsView extends FrameLayout {
             int width = titleWidth = (int) Math.ceil(HintView2.measureCorrectly(title, textPaint));
             width += iconWidth;
             int c;
-            if (!NekoConfig.hideUnreadCounterOnFolderTabs.Bool() && store) {
+            if (!MomoConfig.hideUnreadCounterOnFolderTabs.Bool() && store) {
                 c = delegate.getTabCounter(id);
                 if (c < 0) {
                     c = 0;
@@ -185,7 +186,7 @@ public class FilterTabsView extends FrameLayout {
                 String counterText = String.format("%d", c);
                 int counterWidth = (int) Math.ceil(textCounterPaint.measureText(counterText));
                 int countWidth = Math.max(dp(TAB_COUNTER_HEIGHT - 10), counterWidth) + dp(10);
-                counterResultWidth = countWidth + (NekoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON ? dp(6) : dp(-2));;
+                counterResultWidth = countWidth + (MomoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON ? dp(6) : dp(-2));;
             } else {
                 counterResultWidth = !isDefault && isEditing ? dp(TAB_COUNTER_HEIGHT - 5) : 0;
             }
@@ -195,7 +196,7 @@ public class FilterTabsView extends FrameLayout {
         }
 
         public boolean setTitle(String newTitle, ArrayList<TLRPC.MessageEntity> newEntities, boolean noanimate) {
-            newTitle = NekoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON ? newTitle : "";
+            newTitle = MomoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON ? newTitle : "";
             if (TextUtils.equals(title, newTitle)) {
                 return false;
             }
@@ -209,12 +210,12 @@ public class FilterTabsView extends FrameLayout {
         }
 
         public boolean applyCustomAllTab() {
-            boolean defaultName = NekoConfig.customAllChatsText.isBlank();
+            boolean defaultName = MomoConfig.customAllChatsText.isBlank();
             String title = (defaultName) ?
                     LocaleController.getString(R.string.FilterAllChats) :
-                    NekoConfig.customAllChatsText;
+                    MomoConfig.customAllChatsText;
             if (isCustom && title.contentEquals(this.title)) return true;
-            setTitle(title, NekoConfig.customAllChatsTextEntities, false);
+            setTitle(title, MomoConfig.customAllChatsTextEntities, false);
             isCustom = true;
             return true;
         }
@@ -446,14 +447,14 @@ public class FilterTabsView extends FrameLayout {
                 countWidth = (int) (countWidth + (dp(TAB_COUNTER_HEIGHT) - countWidth) * editingStartAnimationProgress);
             }
 
-            if (NekoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON) {
+            if (MomoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON) {
                 tabWidth = currentTab.iconWidth + currentTab.titleWidth + ((countWidth != 0 && !animateCounterRemove) ? countWidth + AndroidUtilities.dp(6 * (counterText != null ? 1.0f : editingStartAnimationProgress)) : 0);
             } else {
                 tabWidth = currentTab.iconWidth + currentTab.titleWidth + ((countWidth != 0 && !animateCounterRemove) ? countWidth + AndroidUtilities.dp(-2 * (counterText != null ? 1.0f : editingStartAnimationProgress)) : 0);
             }
 
             boolean fixTextX = false;
-            if (currentTab.localTitleType == NekoXConfig.TITLE_TYPE_TEXT && currentTab.localTitleType != NekoConfig.tabsTitleType.Int()) {
+            if (currentTab.localTitleType == NekoXConfig.TITLE_TYPE_TEXT && currentTab.localTitleType != MomoConfig.tabsTitleType.Int()) {
                 tabWidth -= currentTab.iconWidth;
                 currentTab.iconWidth = 0;
                 fixTextX = true;
@@ -467,7 +468,7 @@ public class FilterTabsView extends FrameLayout {
                 textX *= 0.75f;
             }
 
-            boolean pauseInactiveTabAnimation = NekoConfig.pauseInactiveTabAnimation.Bool();
+            boolean pauseInactiveTabAnimation = MomoConfig.pauseInactiveTabAnimation.Bool();
             boolean titleChanged = !TextUtils.equals(currentTab.title, currentText);
             if (titleChanged || pauseInactiveTabAnimation) {
                 boolean shouldPauseAnimation = pauseInactiveTabAnimation && (selectedTabId != currentTab.id);
@@ -597,7 +598,7 @@ public class FilterTabsView extends FrameLayout {
                 if (animateTextChange) {
                     titleWidth = animateFromTitleWidth * (1f - changeProgress) + currentTab.titleWidth * changeProgress;
                 }
-                int textSpace = NekoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON ? AndroidUtilities.dp(5) : 0;
+                int textSpace = MomoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON ? AndroidUtilities.dp(5) : 0;
                 if (animateTextChange && titleAnimateOutLayout == null) {
                     x = textX - titleXOffset + titleOffsetX + titleWidth + textSpace;
                 } else {
@@ -790,7 +791,7 @@ public class FilterTabsView extends FrameLayout {
                 countWidth = 0;
             }
             int tabWidth;
-            if (NekoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON) {
+            if (MomoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON) {
                 tabWidth = currentTab.iconWidth + currentTab.titleWidth + (countWidth != 0 ? countWidth + AndroidUtilities.dp(6 * (counterText != null ? 1.0f : editingStartAnimationProgress)) : 0);
             } else {
                 tabWidth = currentTab.iconWidth + currentTab.titleWidth + (countWidth != 0 ? countWidth + AndroidUtilities.dp(-2 * (counterText != null ? 1.0f : editingStartAnimationProgress)) : 0);

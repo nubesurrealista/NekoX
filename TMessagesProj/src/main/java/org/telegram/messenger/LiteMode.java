@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import tw.nekomimi.nekogram.utils.EnvUtil;
+import moe.hx030.momogram.utils.EnvUtil;
 
 public class LiteMode {
 

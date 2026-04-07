@@ -63,11 +63,11 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.parts.LocFiltersKt;
-import tw.nekomimi.nekogram.shamsicalendar.PersianDate;
-import tw.nekomimi.nekogram.utils.FileUtil;
-import tw.nekomimi.nekogram.utils.GsonUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.parts.LocFiltersKt;
+import moe.hx030.momogram.shamsicalendar.PersianDate;
+import moe.hx030.momogram.utils.FileUtil;
+import moe.hx030.momogram.utils.GsonUtil;
 
 public class LocaleController {
 
@@ -93,7 +93,7 @@ public class LocaleController {
         if (formatterDay == null) {
             synchronized (this) {
                 if (formatterDay == null) {
-                    boolean showSeconds = NekoConfig.showSeconds.Bool();
+                    boolean showSeconds = MomoConfig.showSeconds.Bool();
                     String formatStr = (is24HourFormat ? getStringInternal("formatterDay24H", R.string.formatterDay24H) : getStringInternal("formatterDay12H", R.string.formatterDay12H)).replace(":mm", showSeconds ? ":mm:ss" : ":mm");
                     String defaultFmt = (is24HourFormat ? "HH:mm" : "h:mm a").replace(":mm", showSeconds ? ":mm:ss" : ":mm");
                     final Locale locale = currentLocale == null ? Locale.getDefault() : currentLocale;
@@ -131,7 +131,7 @@ public class LocaleController {
     public FastDateFormat getFormatterConstDay() {
         if (formatterConstDay == null) {
             synchronized (this) {
-                boolean showSeconds = NekoConfig.showSeconds.Bool();
+                boolean showSeconds = MomoConfig.showSeconds.Bool();
                 String defaultFmt = (is24HourFormat ? "HH:mm" : "h:mm a").replace(":mm", showSeconds ? ":mm:ss" : ":mm");
                 if (formatterConstDay == null) {
                     final Locale locale = currentLocale == null ? Locale.getDefault() : currentLocale;
@@ -444,7 +444,7 @@ public class LocaleController {
     private HashMap<String, String> translitChars;
     private HashMap<String, String> ruTranslitChars;
 
-    public static boolean usePersianCalendar = NekoConfig.usePersianCalendar.Bool(); // need restart
+    public static boolean usePersianCalendar = MomoConfig.usePersianCalendar.Bool(); // need restart
 
     private class TimeZoneChangedReceiver extends BroadcastReceiver {
         @Override
@@ -861,7 +861,7 @@ public class LocaleController {
 
         });
 
-        new Thread(NekoConfig::init).start();
+        new Thread(MomoConfig::init).start();
     }
 
     public static String getLanguageFlag(String countryCode) {
@@ -3113,7 +3113,7 @@ public class LocaleController {
     }
 
     public static String formatShortNumber(int number, int[] rounded) {
-        if (NekoConfig.disableNumberRounding.Bool()) {
+        if (MomoConfig.disableNumberRounding.Bool()) {
             if (rounded != null) {
                 rounded[0] = number;
             }

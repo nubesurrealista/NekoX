@@ -63,7 +63,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class MediaActivity extends BaseFragment implements SharedMediaLayout.SharedMediaPreloaderDelegate, FloatingDebugProvider, NotificationCenter.NotificationCenterDelegate {
 
@@ -792,7 +792,7 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
         } else if (DialogObject.isUserDialog(avatarDialogId)) {
             TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(avatarDialogId);
             if (user != null) {
-                if (user.self && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+                if (user.self && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                     nameTextView[0].setText(LocaleController.getString(R.string.SavedMessages));
                     avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);
                     avatarDrawable.setScaleSize(.8f);

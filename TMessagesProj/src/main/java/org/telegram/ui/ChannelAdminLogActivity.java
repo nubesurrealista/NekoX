@@ -155,11 +155,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import kotlin.Unit;
-import tw.nekomimi.nekogram.ui.BottomBuilder;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.ui.MessageDetailsActivity;
-import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.ProxyUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.ui.BottomBuilder;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.ui.MessageDetailsActivity;
+import moe.hx030.momogram.utils.AlertUtil;
+import moe.hx030.momogram.utils.ProxyUtil;
 
 public class ChannelAdminLogActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -1918,7 +1919,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             scrimPopupWindow.dimBehind();
         };
 
-        if (NekoConfig.showMessageDetails.Bool()) {
+        if (MomoConfig.showMessageDetails.Bool()) {
             items.add(getString(R.string.MessageDetails));
             icons.add(R.drawable.msg_info);
             options.add(OPTION_DETAILS);
@@ -2792,7 +2793,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     }
 
     public void showOpenUrlAlert(final String url, boolean ask) {
-        if (Browser.isInternalUrl(url, null) || !ask || NekoConfig.skipOpenLinkConfirm.Bool()) {
+        if (Browser.isInternalUrl(url, null) || !ask || MomoConfig.skipOpenLinkConfirm.Bool()) {
             Browser.openUrl(getParentActivity(), url, true);
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());

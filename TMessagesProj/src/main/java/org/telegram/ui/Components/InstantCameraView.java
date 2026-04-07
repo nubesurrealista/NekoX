@@ -126,8 +126,8 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.BufferUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.utils.BufferUtil;
 
 @SuppressLint("ViewConstructor")
 public class InstantCameraView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
@@ -734,7 +734,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         cameraReady = false;
         selectedCamera = null;
         if (!fromPaused) {
-            isFrontface = !NekoConfig.rearVideoMessages.Bool();
+            isFrontface = !MomoConfig.rearVideoMessages.Bool();
             updateFlash();
             recordedTime = 0;
             progress = 0;
@@ -2253,7 +2253,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             }
                             double amplitude = Math.sqrt(s / readResult / 2);
                             AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.recordProgressChanged, recordingGuid, amplitude));
-                            if (NekoConfig.bufferCleaner.Bool()) {
+                            if (MomoConfig.bufferCleaner.Bool()) {
                                 BufferUtil.clear(byteBuffer);
                             } else {
                                 byteBuffer.position(0);
@@ -3262,7 +3262,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     if (cancelled) {
                         return;
                     }
-                    if (!NekoConfig.disableVibration.Bool())
+                    if (!MomoConfig.disableVibration.Bool())
                         try {
                             performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                         } catch (Exception ignore) {}
@@ -3848,7 +3848,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     public static class AudioBufferInfoArray extends ArrayList<InstantCameraView.AudioBufferInfo> {
         @Override
         public void clear() {
-            if (NekoConfig.bufferCleaner.Bool()) {
+            if (MomoConfig.bufferCleaner.Bool()) {
                 for (InstantCameraView.AudioBufferInfo info : this) {
                     for (ByteBuffer byteBuffer : info.buffer) {
                         BufferUtil.clear(byteBuffer);
@@ -3861,7 +3861,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
         @Override
         public boolean remove(@Nullable Object o) {
-            if (o != null && NekoConfig.bufferCleaner.Bool()) {
+            if (o != null && MomoConfig.bufferCleaner.Bool()) {
                 for (ByteBuffer byteBuffer : ((InstantCameraView.AudioBufferInfo) o).buffer) {
                     BufferUtil.clear(byteBuffer);
                 }

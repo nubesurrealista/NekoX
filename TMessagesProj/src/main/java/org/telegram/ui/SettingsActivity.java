@@ -143,15 +143,16 @@ import java.util.Set;
 import kotlin.Unit;
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
-import tw.nekomimi.nekogram.MomoUpdater;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
-import tw.nekomimi.nekogram.settings.NekoXSettingActivity;
-import tw.nekomimi.nekogram.ui.BottomBuilder;
-import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.StrUtil;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.MomoUpdater;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
+import moe.hx030.momogram.settings.NekoSettingsActivity;
+import moe.hx030.momogram.settings.NekoXSettingActivity;
+import moe.hx030.momogram.ui.BottomBuilder;
+import moe.hx030.momogram.utils.AlertUtil;
+import moe.hx030.momogram.utils.StrUtil;
+import moe.hx030.momogram.utils.TelegramUtil;
 
 public class SettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ImageUpdater.ImageUpdaterDelegate, MainTabsActivity.TabFragmentDelegate, FactorAnimator.Target {
 
@@ -617,7 +618,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         avatarView.setForUserOrChat(user, avatarDrawable);
         titleView.setText(UserObject.getUserName(user));
         final StringBuilder sb = new StringBuilder();
-        boolean showPhoneNum = !NekoConfig.hidePhone.Bool();
+        boolean showPhoneNum = !MomoConfig.hidePhone.Bool();
         if (showPhoneNum && user != null) {
             sb.append(PhoneFormat.getInstance().format("+" + user.phone));
         }
@@ -784,10 +785,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
         items.add(UItem.asShadow(null));
 
-        if (!NekoConfig.removePremiumAnnoyance.Bool() && !getMessagesController().premiumFeaturesBlocked()) {
+        if (!MomoConfig.removePremiumAnnoyance.Bool() && !getMessagesController().premiumFeaturesBlocked()) {
             items.add(SettingCell.Factory.of(11, 0xFFB659FF, 0xFF617CFF, R.drawable.settings_premium, getString(R.string.TelegramPremium)));
         }
-        if (!NekoConfig.removePremiumAnnoyance.Bool() && getMessagesController().starsPurchaseAvailable()) {
+        if (!MomoConfig.removePremiumAnnoyance.Bool() && getMessagesController().starsPurchaseAvailable()) {
             StarsController c = StarsController.getInstance(currentAccount);
             long balance = c.getBalance().amount;
             items.add(SettingCell.Factory.of(12, 0xFFEFA612, 0xFFE77512, R.drawable.settings_stars, getString(R.string.TelegramStars), null, c.balanceAvailable() && balance > 0 ? StarsIntroActivity.formatStarsAmount(c.getBalance(), 0.85f, ' ') : ""));
@@ -812,13 +813,13 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
 
 //        items.add(SettingCell.Factory.of(14, 0, "Wallet"));
-        if (!NekoConfig.removePremiumAnnoyance.Bool() && !getMessagesController().premiumFeaturesBlocked()) {
+        if (!MomoConfig.removePremiumAnnoyance.Bool() && !getMessagesController().premiumFeaturesBlocked()) {
             items.add(SettingCell.Factory.of(15, 0xFFF45255, 0xFFDF3955, R.drawable.settings_business, getString(R.string.TelegramBusiness)));
         }
-        if (!NekoConfig.removePremiumAnnoyance.Bool() && !getMessagesController().premiumPurchaseBlocked()) {
+        if (!MomoConfig.removePremiumAnnoyance.Bool() && !getMessagesController().premiumPurchaseBlocked()) {
             items.add(SettingCell.Factory.of(16, 0xFFF38B31, 0xFFE26314, R.drawable.settings_gift, getString(R.string.SendAGift)));
         }
-        items.add(SettingCell.Factory.of(MOMO_SETTINGS, 0xFFB659FF, 0xFF617CFF, R.drawable.notification, getString(NekoConfig.useOldName.Bool() ? R.string.NekoSettings : R.string.MomoSettings)));
+        items.add(SettingCell.Factory.of(MOMO_SETTINGS, 0xFFB659FF, 0xFF617CFF, R.drawable.notification, getString(MomoConfig.useOldName.Bool() ? R.string.NekoSettings : R.string.MomoSettings)));
         if (items.get(items.size() - 1).viewType != UniversalAdapter.VIEW_TYPE_SHADOW)
             items.add(UItem.asShadow(null));
 

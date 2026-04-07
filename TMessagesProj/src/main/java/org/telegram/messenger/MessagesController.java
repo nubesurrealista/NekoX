@@ -134,11 +134,12 @@ import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
 import moe.hx030.momogram.util.ThreadUtil;
-import tw.nekomimi.nekogram.ui.InternalFilters;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.UIUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.ui.InternalFilters;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
+import moe.hx030.momogram.utils.AlertUtil;
+import moe.hx030.momogram.utils.UIUtil;
 
 public class MessagesController extends BaseController implements NotificationCenter.NotificationCenterDelegate {
 
@@ -774,7 +775,7 @@ public class MessagesController extends BaseController implements NotificationCe
         return isTranslationsAutoEnabled() || !"disabled".equals(translationsManualEnabled);
     }
     public boolean isTranslationsAutoEnabled() {
-        return NekoConfig.autoTranslate.Bool() || !"disabled".equals(translationsAutoEnabled);
+        return MomoConfig.autoTranslate.Bool() || !"disabled".equals(translationsAutoEnabled);
     }
 
     // 030: for future use
@@ -1451,25 +1452,25 @@ public class MessagesController extends BaseController implements NotificationCe
         boolean is1user = !DialogObject.isChannel(dialog1) && dialog1.id > 0;
         boolean is2user = !DialogObject.isChannel(dialog2) && dialog2.id > 0;
 
-        if (NekoConfig.sortByUnread.Bool()) {
+        if (MomoConfig.sortByUnread.Bool()) {
             if (dialog1.unread_count == 0 && dialog2.unread_count > 0) {
                 return 1;
             } else if (dialog1.unread_count > 0 && dialog2.unread_count == 0) {
                 return -1;
             } else if (dialog1.unread_count > 0 && dialog2.unread_count > 0) {
-                if (NekoConfig.sortByUnmuted.Bool()) {
+                if (MomoConfig.sortByUnmuted.Bool()) {
                     if (isDialogMuted(dialog1.id) && !isDialogMuted(dialog2.id)) {
                         return 1;
                     } else if (!isDialogMuted(dialog1.id) && isDialogMuted(dialog2.id)) {
                         return -1;
                     } else if (!isDialogMuted(dialog1.id) && !isDialogMuted(dialog2.id)) {
-                        if (NekoConfig.sortByUser.Bool()) {
+                        if (MomoConfig.sortByUser.Bool()) {
                             if (!is1user && is2user) {
                                 return 1;
                             } else if (is1user && !is2user) {
                                 return -1;
                             } else if (is1user && is2user) {
-                                if (NekoConfig.sortByContacts.Bool()) {
+                                if (MomoConfig.sortByContacts.Bool()) {
                                     boolean is1contact = is1user && getContactsController().isContact((int) dialog1.id);
                                     boolean is2contact = is2user && getContactsController().isContact((int) dialog2.id);
                                     if (!is1contact && is2contact) {
@@ -1491,19 +1492,19 @@ public class MessagesController extends BaseController implements NotificationCe
                     return 0;
                 }
             }
-        } else if (NekoConfig.sortByUnmuted.Bool()) {
+        } else if (MomoConfig.sortByUnmuted.Bool()) {
             if (dialog1.unread_count == 0 && dialog2.unread_count > 0 && isDialogMuted(dialog1.id) && !isDialogMuted(dialog2.id)) {
                 return 1;
             } else if (dialog1.unread_count > 0 && dialog2.unread_count == 0 && !isDialogMuted(dialog1.id) && isDialogMuted(dialog2.id)) {
                 return -1;
             } else if (dialog1.unread_count > 0 && dialog2.unread_count > 0 && !isDialogMuted(dialog1.id) && !isDialogMuted(dialog2.id)) {
-                if (NekoConfig.sortByUser.Bool()) {
+                if (MomoConfig.sortByUser.Bool()) {
                     if (!is1user && is2user) {
                         return 1;
                     } else if (is1user && !is2user) {
                         return -1;
                     } else if (is1user && is2user) {
-                        if (NekoConfig.sortByContacts.Bool()) {
+                        if (MomoConfig.sortByContacts.Bool()) {
                             boolean is1contact = is1user && getContactsController().isContact((int) dialog1.id);
                             boolean is2contact = is2user && getContactsController().isContact((int) dialog2.id);
                             if (!is1contact && is2contact) {
@@ -8987,7 +8988,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 loadingBlockedPeers = false;
                 getNotificationCenter().postNotificationName(NotificationCenter.blockedUsersDidLoad);
                 if (!reset && !blockedEndReached &&
-                        (NekoConfig.ignoreBlocked.Bool() || NekoConfig.muteBlockedFromGroup.Bool())) {
+                        (MomoConfig.ignoreBlocked.Bool() || MomoConfig.muteBlockedFromGroup.Bool())) {
                     getBlockedPeers(false);
                 }
             }
@@ -10746,7 +10747,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 TLRPC.TL_help_promoData res = (TLRPC.TL_help_promoData) response;
 
                 SharedConfig.ProxyInfo proxy = SharedConfig.currentProxy;
-                if (res.proxy && (NekoConfig.hideProxySponsorChannel.Bool() || (proxy != null && proxy.getProxyType() != SharedConfig.PROXY_TYPE_ORIGINAL))) {
+                if (res.proxy && (MomoConfig.hideProxySponsorChannel.Bool() || (proxy != null && proxy.getProxyType() != SharedConfig.PROXY_TYPE_ORIGINAL))) {
                     nextPromoInfoCheckTime = getConnectionsManager().getCurrentTime() + 60 * 60;
                     noDialog = true;
                 } else {
@@ -11037,7 +11038,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 newStrings.put(key, newPrintingStrings);
                 newTypes.put(key, newPrintingStringsTypes);
 
-                if (NekoConfig.ignoreBlocked.Bool()) {
+                if (MomoConfig.ignoreBlocked.Bool()) {
                     arr = arr.stream().filter(it -> getMessagesController().blockedPeers.indexOfKey(it.userId) == -1).collect(Collectors.toCollection(ArrayList::new));
                 }
                 if (arr.isEmpty()) continue;
@@ -11191,11 +11192,11 @@ public class MessagesController extends BaseController implements NotificationCe
                     if (paint == null) {
                         paint = new Paint();
                         paint.setTypeface(AndroidUtilities.bold());
-                        int size = NekoConfig.chatListFontSizeFollowChat.Bool() ? (SharedConfig.fontSize + 2) : 14;
+                        int size = MomoConfig.chatListFontSizeFollowChat.Bool() ? (SharedConfig.fontSize + 2) : 14;
                         paint.setTextSize(AndroidUtilities.dp(size));
                     } else {
                         float oldTextSize = paint.getTextSize();
-                        float desiredSize = NekoConfig.chatListFontSizeFollowChat.Bool() ? dp(SharedConfig.fontSize + 2) : oldTextSize;
+                        float desiredSize = MomoConfig.chatListFontSizeFollowChat.Bool() ? dp(SharedConfig.fontSize + 2) : oldTextSize;
                         if (oldTextSize != desiredSize) {
                             paint.setTextSize(dp(SharedConfig.fontSize));
                         }
@@ -11236,7 +11237,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean sendTyping(long dialogId, long threadMsgId, int action, String emojicon, int classGuid) {
-        if (NekoConfig.disableChatAction.Bool()) return false;
+        if (MomoConfig.disableChatAction.Bool()) return false;
         if (action < 0 || action >= sendingTypings.length || dialogId == 0) {
             return false;
         }
@@ -11310,7 +11311,7 @@ public class MessagesController extends BaseController implements NotificationCe
             } else if (action == 9) {
                 req.action = new TLRPC.TL_sendMessageUploadAudioAction();
             } else if (action == 10) {
-                if (NekoConfig.disableChoosingSticker.Bool())
+                if (MomoConfig.disableChoosingSticker.Bool())
                     req.action = new TLRPC.TL_sendMessageTypingAction();
                 else
                     req.action = new TLRPC.TL_sendMessageChooseStickerAction();
@@ -13133,7 +13134,7 @@ public class MessagesController extends BaseController implements NotificationCe
             ArrayList<MessageObject> newMessages = new ArrayList<>();
             for (int a = 0; a < dialogsRes.messages.size(); a++) {
                 TLRPC.Message message = dialogsRes.messages.get(a);
-                if ((NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockedPeers.indexOfKey(message.peer_id.user_id) >= 0) || message.date == 0) {
+                if ((MomoConfig.ignoreBlocked.Bool() && getMessagesController().blockedPeers.indexOfKey(message.peer_id.user_id) >= 0) || message.date == 0) {
                     continue;
                 }
                 if (lastMessage == null || message.date < lastMessage.date) {
@@ -16714,7 +16715,7 @@ public class MessagesController extends BaseController implements NotificationCe
             }
             getMessagesStorage().setDialogsPinned(dids, pinned);
 
-            if (NekoConfig.unlimitedPinnedDialogs.Bool()) {
+            if (MomoConfig.unlimitedPinnedDialogs.Bool()) {
                 return;
             }
 
@@ -16789,7 +16790,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 inputDialogPeer.peer = peer;
                 req.peer = inputDialogPeer;
 
-                if (NekoConfig.unlimitedPinnedDialogs.Bool()) {
+                if (MomoConfig.unlimitedPinnedDialogs.Bool()) {
                     getMessagesStorage().setDialogPinned(dialogId, dialog.pinnedNum);
                     return true;
                 }
@@ -16823,7 +16824,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void loadPinnedDialogs(final int folderId, long newDialogId, ArrayList<Long> order) {
-        if (NekoConfig.unlimitedPinnedDialogs.Bool()) {
+        if (MomoConfig.unlimitedPinnedDialogs.Bool()) {
             return;
         }
         if (loadingPinnedDialogs.indexOfKey(folderId) >= 0 || getUserConfig().isPinnedDialogsLoaded(folderId)) {
@@ -17463,7 +17464,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     message.ttl_period = updates.ttl_period;
                     message.media = new TLRPC.TL_messageMediaEmpty();
 
-                    if (!message.out && NekoConfig.ignoreBlocked.Bool()) {
+                    if (!message.out && MomoConfig.ignoreBlocked.Bool()) {
                         if (blockedPeers.indexOfKey(message.from_id.user_id) >= 0) {
                             if (message.message != null && !message.message.isBlank()) {
                                 TLRPC.TL_messageEntitySpoiler s = new TLRPC.TL_messageEntitySpoiler();
@@ -19342,7 +19343,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         toDbUser.username = (update.usernames != null && update.usernames.size() == 1) ? update.usernames.get(0).username : null;
                         dbUsers.add(toDbUser);
                     } else if (baseUpdate instanceof TLRPC.TL_updateDialogPinned) {
-                        if (NekoConfig.unlimitedPinnedDialogs.Bool()) {
+                        if (MomoConfig.unlimitedPinnedDialogs.Bool()) {
                             FileLog.w("030-pin: ignore TL_updateDialogPinned for unlimited pinned dlgs");
                         } else {
                             TLRPC.TL_updateDialogPinned update = (TLRPC.TL_updateDialogPinned) baseUpdate;
@@ -19361,7 +19362,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         }
                     } else if (baseUpdate instanceof TLRPC.TL_updatePinnedDialogs) {
                         TLRPC.TL_updatePinnedDialogs update = (TLRPC.TL_updatePinnedDialogs) baseUpdate;
-                        if (NekoConfig.unlimitedPinnedDialogs.Bool()) {
+                        if (MomoConfig.unlimitedPinnedDialogs.Bool()) {
                             FileLog.w("030-pin: ignore status update of TL_updatePinnedDialogs for unlimited pinned dlgs");
                         } else {
                             getUserConfig().setPinnedDialogsLoaded(update.folder_id, false);
@@ -20982,7 +20983,7 @@ public class MessagesController extends BaseController implements NotificationCe
                             message.entities = sponsoredMessage.entities;
                             message.flags |= 128;
                         }
-                        if (NekoConfig.hideSponsoredMessage.Bool())
+                        if (MomoConfig.hideSponsoredMessage.Bool())
                             message.hide = true;
                         message.peer_id = getPeer(dialogId);
                         message.flags |= 256;
@@ -21376,7 +21377,7 @@ public class MessagesController extends BaseController implements NotificationCe
 
                 // (is blocked && should filter) || (matches regex)
                 boolean hide = lastMessage.shouldBeHidden();
-                if (hide || (NekoConfig.ignoreBlocked.Bool() && blockedPeers.indexOfKey(lastMessage.getSenderId()) >= 0)) {
+                if (hide || (MomoConfig.ignoreBlocked.Bool() && blockedPeers.indexOfKey(lastMessage.getSenderId()) >= 0)) {
                     ArrayList<MessageObject> previousMsgs = dialogMessage.get(dialogId);
                     boolean notBlocked = (!previousMsgs.isEmpty() && blockedPeers.indexOfKey(previousMsgs.get(0).getSenderId()) < 0);
                     if (previousMsgs != null && notBlocked && !previousMsgs.get(0).shouldBeHidden())
@@ -21563,10 +21564,10 @@ public class MessagesController extends BaseController implements NotificationCe
         try {
             Collections.sort(allDialogs, dialogComparator);
         } catch (Exception e) {
-            NekoConfig.sortByUnread.setConfigBool(false);
-            NekoConfig.sortByUnmuted.setConfigBool(false);
-            NekoConfig.sortByUser.setConfigBool(false);
-            NekoConfig.sortByContacts.setConfigBool(false);
+            MomoConfig.sortByUnread.setConfigBool(false);
+            MomoConfig.sortByUnmuted.setConfigBool(false);
+            MomoConfig.sortByUser.setConfigBool(false);
+            MomoConfig.sortByContacts.setConfigBool(false);
             try {
                 Collections.sort(allDialogs, dialogComparator);
             } catch (Exception ex) {
@@ -21715,7 +21716,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public String getRestrictionReason(ArrayList<TLRPC.RestrictionReason> reasons) {
-        if (reasons.isEmpty() || NekoConfig.ignoreContentRestrictions.Bool()) {
+        if (reasons.isEmpty() || MomoConfig.ignoreContentRestrictions.Bool()) {
             return null;
         }
         for (int a = 0, N = reasons.size(); a < N; a++) {
@@ -21734,7 +21735,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean isSensitive(ArrayList<TLRPC.RestrictionReason> reasons) {
-        if (reasons == null || reasons.isEmpty() || NekoConfig.ignoreContentRestrictions.Bool()) {
+        if (reasons == null || reasons.isEmpty() || MomoConfig.ignoreContentRestrictions.Bool()) {
             return false;
         }
         for (int a = 0, N = reasons.size(); a < N; a++) {
@@ -21900,7 +21901,7 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         if (reason != null) {
             showCantOpenAlert(fragment, reason);
-            if (!NekoConfig.ignoreContentRestrictions.Bool()) return false;
+            if (!MomoConfig.ignoreContentRestrictions.Bool()) return false;
         }
         if (messageId != 0 && originalMessage != null && chat != null && chat.access_hash == 0) {
             long did = originalMessage.getDialogId();
@@ -22008,7 +22009,7 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         if (reason != null) {
             showCantOpenAlert(fragment, reason);
-            if (!NekoConfig.ignoreContentRestrictions.Bool()) return;
+            if (!MomoConfig.ignoreContentRestrictions.Bool()) return;
         }
 
             Bundle args = new Bundle();
@@ -22807,7 +22808,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean storiesEnabled() {
-        if (NekoConfig.disableStories.Bool()) return false;
+        if (MomoConfig.disableStories.Bool()) return false;
         switch (storiesPosting) {
             case "premium":
                 return getUserConfig().isPremium();
@@ -23930,7 +23931,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (dialog_id == 0) {
             return;
         }
-        int maxSize = NekoConfig.recentChatFolderSize.Int();
+        int maxSize = MomoConfig.recentChatFolderSize.Int();
         recentChats.remove(dialog_id);
         if (recentChats.contains(-dialog_id))
             recentChats.remove(-dialog_id);

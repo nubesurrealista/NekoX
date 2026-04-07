@@ -95,8 +95,8 @@ import org.telegram.ui.Components.TypefaceSpan;
 import java.util.ArrayList;
 
 import kotlin.Unit;
-import tw.nekomimi.nekogram.ui.BottomBuilder;
-import tw.nekomimi.nekogram.utils.VibrateUtil;
+import moe.hx030.momogram.ui.BottomBuilder;
+import moe.hx030.momogram.utils.VibrateUtil;
 
 public class ChannelCreateActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ImageUpdater.ImageUpdaterDelegate {
 

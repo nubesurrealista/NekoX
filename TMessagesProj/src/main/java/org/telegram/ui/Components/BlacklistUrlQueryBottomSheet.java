@@ -29,7 +29,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class BlacklistUrlQueryBottomSheet extends BottomSheetWithRecyclerListView {
     private UniversalAdapter adapter;
@@ -203,7 +203,7 @@ public class BlacklistUrlQueryBottomSheet extends BottomSheetWithRecyclerListVie
 
     private Set<String> getCurrentBlacklistedStrings() {
         Set<String> blacklistSet = new HashSet<>();
-        String oldBlacklistString = NekoConfig.customGetQueryBlacklist.String();
+        String oldBlacklistString = MomoConfig.customGetQueryBlacklist.String();
         if (!oldBlacklistString.trim().isEmpty()) {
             blacklistSet.addAll(Arrays.asList(oldBlacklistString.split(",")));
         }
@@ -230,7 +230,7 @@ public class BlacklistUrlQueryBottomSheet extends BottomSheetWithRecyclerListVie
         }
         if (sb.indexOf(", ") > -1) sb.setLength(sb.length() - 2);
 
-        NekoConfig.replaceCustomGetQueryBlacklist(newBlacklistSet);
+        MomoConfig.replaceCustomGetQueryBlacklist(newBlacklistSet);
         if (added > 0)
             BulletinFactory.of(getBaseFragment()).createSimpleBulletin(R.raw.done, getString(R.string.BlacklistedQuery), sb.toString()).show();
         else if (removed > 0)

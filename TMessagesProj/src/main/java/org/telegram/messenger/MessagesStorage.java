@@ -73,9 +73,10 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 import moe.hx030.momogram.util.FilterUtils;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.transtale.TranslateDb;
-import tw.nekomimi.nekogram.utils.StrUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.transtale.TranslateDb;
+import moe.hx030.momogram.utils.StrUtil;
 
 public class MessagesStorage extends BaseController {
 
@@ -1035,7 +1036,7 @@ public class MessagesStorage extends BaseController {
                                 break;
                             }
                             case 4: {
-                                if (NekoConfig.unlimitedPinnedDialogs.Bool()) break;
+                                if (MomoConfig.unlimitedPinnedDialogs.Bool()) break;
                                 long did = data.readInt64(false);
                                 boolean pin = data.readBool(false);
                                 TLRPC.InputPeer peer = TLRPC.InputPeer.TLdeserialize(data, data.readInt32(false), false);
@@ -2908,7 +2909,7 @@ public class MessagesStorage extends BaseController {
                         continue;
                     }
                     flags = filter.flags;
-                    if (NekoConfig.ignoreMutedCount.Bool() && (flags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED) == 0) {
+                    if (MomoConfig.ignoreMutedCount.Bool() && (flags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED) == 0) {
                         flags |= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED;
                     }
                 } else {
@@ -3148,7 +3149,7 @@ public class MessagesStorage extends BaseController {
             state.bindInteger(4, filter.flags);
             state.bindString(5, filter.id == 0 ? "ALL_CHATS" : filter.name);
             String emoticon = dialogFilters.get(dialogFilters.indexOf(filter)).emoticon;
-            if (NekoConfig.ignoreFilterEmoticonUpdate.Bool()) {
+            if (MomoConfig.ignoreFilterEmoticonUpdate.Bool()) {
                 if (emoticon != null) state.bindString(6, emoticon);
                 else state.bindNull(6);
             } else {
@@ -3302,7 +3303,7 @@ public class MessagesStorage extends BaseController {
                         boolean changed = false;
                         boolean changedNonTitle = false;
                         boolean unreadChanged = false;
-                        if (!NekoConfig.ignoreFilterEmoticonUpdate.Bool() && !TextUtils.equals(filter.name, newFilter.title.text) || !MediaDataController.entitiesEqual(filter.entities, newFilter.title.entities)) {
+                        if (!MomoConfig.ignoreFilterEmoticonUpdate.Bool() && !TextUtils.equals(filter.name, newFilter.title.text) || !MediaDataController.entitiesEqual(filter.entities, newFilter.title.entities)) {
                             changed = true;
                             filter.name = newFilter.title.text;
                             filter.entities = newFilter.title.entities;
@@ -3312,7 +3313,7 @@ public class MessagesStorage extends BaseController {
                             changedNonTitle = true;
                             filter.title_noanimate= newFilter.title_noanimate;
                         }
-                        if (!NekoConfig.ignoreFilterEmoticonUpdate.Bool() && !TextUtils.equals(filter.emoticon, newFilter.emoticon)) {
+                        if (!MomoConfig.ignoreFilterEmoticonUpdate.Bool() && !TextUtils.equals(filter.emoticon, newFilter.emoticon)) {
                             changed = true;
                             filter.emoticon = newFilter.emoticon;
                         }
@@ -3446,7 +3447,7 @@ public class MessagesStorage extends BaseController {
                             filterDialogRemovals.put(filter.id, existingDialogsIds);
                             changed = true;
                         }
-                        if (changed && (changedNonTitle || !NekoConfig.ignoreFilterEmoticonUpdate.Bool())) {
+                        if (changed && (changedNonTitle || !MomoConfig.ignoreFilterEmoticonUpdate.Bool())) {
                             filtersToSave.add(filter);
                         }
                         if (unreadChanged) {
@@ -6121,7 +6122,7 @@ public class MessagesStorage extends BaseController {
                 }
                 unreadCount = filter.pendingUnreadCount;
                 flags = filter.flags;
-                if (NekoConfig.ignoreMutedCount.Bool() && (flags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED) == 0) {
+                if (MomoConfig.ignoreMutedCount.Bool() && (flags & MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED) == 0) {
                     flags |= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED;
                 }
             } else {
@@ -9681,7 +9682,7 @@ public class MessagesStorage extends BaseController {
     public static final int SENT_FILE_TYPE_VIDEO_HIGH_QUALITY = 8;
 
     public Object[] getSentFile(String path, int type) {
-        if (path == null || path.toLowerCase().endsWith("attheme") || NekoConfig.tempDebug.Bool()) {
+        if (path == null || path.toLowerCase().endsWith("attheme") || MomoConfig.tempDebug.Bool()) {
             return null;
         }
         CountDownLatch countDownLatch = new CountDownLatch(1);
@@ -9994,7 +9995,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public void putSentFile(String path, TLObject file, int type, String parent) {
-        if (path == null || file == null || parent == null || NekoConfig.randomizeFilenameOnSend.Bool()) {
+        if (path == null || file == null || parent == null || MomoConfig.randomizeFilenameOnSend.Bool()) {
             return;
         }
         storageQueue.postRunnable(() -> {

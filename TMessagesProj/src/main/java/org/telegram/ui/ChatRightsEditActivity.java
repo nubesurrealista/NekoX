@@ -92,8 +92,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.VibrateUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.utils.VibrateUtil;
 
 public class ChatRightsEditActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -1387,7 +1387,7 @@ public class ChatRightsEditActivity extends BaseFragment implements Notification
         }
         if (rankRow != -1 && currentRank != null && currentRank.codePointCount(0, currentRank.length()) > MAX_RANK_LENGTH) {
             listView.smoothScrollToPosition(rankRow);
-            if (!NekoConfig.disableVibration.Bool()) {
+            if (!MomoConfig.disableVibration.Bool()) {
                 Vibrator v = (Vibrator) getParentActivity().getSystemService(Context.VIBRATOR_SERVICE);
                 if (v != null) {
                     v.vibrate(200);

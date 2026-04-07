@@ -75,8 +75,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.ui.CustomChatListBottomSheet;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.ui.CustomChatListBottomSheet;
 
 public class BotWebViewMenuContainer extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, BottomSheetTabsOverlay.Sheet, BottomSheetTabsOverlay.SheetView {
     private final static int POLL_PERIOD = 60000;
@@ -264,7 +264,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
 
             botMenuItem.addSubItem(R.id.menu_reload_page, R.drawable.msg_retry, LocaleController.getString(R.string.BotWebViewReloadPage));
             settingsItem = botMenuItem.addSubItem(R.id.menu_settings, R.drawable.msg_settings, LocaleController.getString(R.string.BotWebViewSettings));
-            if (!NekoConfig.showBotWebViewSettings.Bool()) settingsItem.setVisibility(View.GONE);
+            if (!MomoConfig.showBotWebViewSettings.Bool()) settingsItem.setVisibility(View.GONE);
             addToHomeScreenItem = botMenuItem.addSubItem(R.id.menu_add_to_home_screen_bot, R.drawable.msg_home, LocaleController.getString(R.string.AddShortcut));
             if (botId != 0 && MediaDataController.getInstance(currentAccount).canCreateAttachedMenuBotShortcut(botId)) {
                 addToHomeScreenItem.setVisibility(View.VISIBLE);
@@ -616,7 +616,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
     }
 
     public boolean onCheckDismissByUser() {
-        if (needCloseConfirmation && !NekoConfig.closeWebViewWithoutConfirmation.Bool()) {
+        if (needCloseConfirmation && !MomoConfig.closeWebViewWithoutConfirmation.Bool()) {
             String botName = null;
             TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(botId);
             if (user != null) {

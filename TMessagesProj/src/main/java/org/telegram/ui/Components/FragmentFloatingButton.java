@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 @SuppressLint("ViewConstructor")
 public class FragmentFloatingButton extends FrameLayout implements FactorAnimator.Target {
@@ -177,13 +177,13 @@ public class FragmentFloatingButton extends FrameLayout implements FactorAnimato
     public static FrameLayout.LayoutParams createSubButtonLayoutParams() {
         return LayoutHelper.createFrame(48, 48,
                 (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM,
-                20, 0, 20, NekoConfig.hideBottomNavTabs.Bool() ? 14 : 14 + DialogsActivity.MAIN_TABS_HEIGHT_WITH_MARGINS);
+                20, 0, 20, MomoConfig.hideBottomNavTabs.Bool() ? 14 : 14 + DialogsActivity.MAIN_TABS_HEIGHT_WITH_MARGINS);
     }
 
     public static FrameLayout.LayoutParams createDefaultLayoutParams() {
         return LayoutHelper.createFrame(48, 48,
                 (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM,
-                20, 0, 20, NekoConfig.hideBottomNavTabs.Bool() ? 14 : 14 + DialogsActivity.MAIN_TABS_HEIGHT_WITH_MARGINS);
+                20, 0, 20, MomoConfig.hideBottomNavTabs.Bool() ? 14 : 14 + DialogsActivity.MAIN_TABS_HEIGHT_WITH_MARGINS);
     }
 
 

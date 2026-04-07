@@ -75,7 +75,7 @@ import org.telegram.ui.LNavigation.NavigationExt;
 import java.io.File;
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class ContactAddActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ImageUpdater.ImageUpdaterDelegate {
 
@@ -522,7 +522,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         return fragmentView = frameLayout;
     }
 
-    private boolean checkShare = !NekoConfig.dontShareNumberWhenAddContactByDefault.Bool();
+    private boolean checkShare = !MomoConfig.dontShareNumberWhenAddContactByDefault.Bool();
 
     private boolean firstSet = true;
     private void fillItems(ArrayList<UItem> items, UniversalAdapter adapter) {

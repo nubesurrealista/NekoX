@@ -43,7 +43,7 @@ import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.utils.BufferUtil;
+import moe.hx030.momogram.utils.BufferUtil;
 
 public class WebmEncoder {
 

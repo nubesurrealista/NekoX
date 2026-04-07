@@ -70,8 +70,8 @@ import org.telegram.ui.Components.UndoView;
 
 import java.util.ArrayList;
 
-import tw.nekomimi.nekogram.folder.FolderIconHelper;
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.folder.FolderIconHelper;
+import moe.hx030.momogram.MomoConfig;
 
 public class FiltersSetupActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -474,7 +474,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             }
 
             String name = filter.name;
-            if (filter.isDefault() && NekoConfig.customAllChatsName.String().isBlank()) {
+            if (filter.isDefault() && MomoConfig.customAllChatsName.String().isBlank()) {
                 name = LocaleController.getString(R.string.FilterAllChats);
             }
             if (!animated) {
@@ -1200,7 +1200,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
 
     protected void onDefaultTabMoved() {
         try {
-            if (!NekoConfig.disableVibration.Bool())
+            if (!MomoConfig.disableVibration.Bool())
                 fragmentView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
         } catch (Exception ignore) {}
         BulletinFactory.of(this).createSimpleBulletin(R.raw.filter_reorder, AndroidUtilities.replaceTags(LocaleController.formatString(R.string.LimitReachedReorderFolder, LocaleController.getString(R.string.FilterAllChats))), LocaleController.getString(R.string.PremiumMore), Bulletin.DURATION_PROLONG, () -> {

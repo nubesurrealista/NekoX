@@ -227,18 +227,19 @@ import java.util.List;
 import java.util.Locale;
 
 import kotlin.Unit;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.ui.BottomBuilder;
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.parts.ArticleTransKt;
-import tw.nekomimi.nekogram.transtale.TranslateDb;
-import tw.nekomimi.nekogram.utils.AlertUtil;
-import tw.nekomimi.nekogram.utils.ProxyUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
+import moe.hx030.momogram.ui.BottomBuilder;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.parts.ArticleTransKt;
+import moe.hx030.momogram.transtale.TranslateDb;
+import moe.hx030.momogram.utils.AlertUtil;
+import moe.hx030.momogram.utils.ProxyUtil;
 
 public class ArticleViewer implements NotificationCenter.NotificationCenterDelegate {
 
     public static HashSet<ArticleViewer> activeSheets = new HashSet<>();
-    public static boolean BOTTOM_ACTION_BAR = NekoConfig.articleViewerBottomActionBar.Bool();
+    public static boolean BOTTOM_ACTION_BAR = MomoConfig.articleViewerBottomActionBar.Bool();
 
     public final boolean isSheet;
     public final ArticleViewer.Sheet sheet;
@@ -1265,7 +1266,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (checkingForLongPress && windowView != null) {
                 checkingForLongPress = false;
                 if (pressedLink != null) {
-                    if (!NekoConfig.disableVibration.Bool()) {
+                    if (!MomoConfig.disableVibration.Bool()) {
                         try {
                             windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                         } catch (Exception ignored) {}
@@ -1282,13 +1283,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     } else {
                         textSelectionHelper.trySelect(pressedLinkOwnerView);
                     }
-                    if (!NekoConfig.disableVibration.Bool() && textSelectionHelper.isInSelectionMode()) {
+                    if (!MomoConfig.disableVibration.Bool() && textSelectionHelper.isInSelectionMode()) {
                         try {
                             windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                         } catch (Exception ignored) {}
                     }
                 } else if (pressedLinkOwnerLayout != null && pressedLinkOwnerView != null) {
-                    if (!NekoConfig.disableVibration.Bool())
+                    if (!MomoConfig.disableVibration.Bool())
                         try {
                             windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                         } catch (Exception ignored) {}
@@ -11014,7 +11015,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         public void setBlock(TLRPC.TL_pageBlockBlockquote block) {
             currentBlock = block;
 
-            if (NekoConfig.hideCocoonAISummary.Bool())
+            if (MomoConfig.hideCocoonAISummary.Bool())
                 isCocoon = (checkIsCocoonSummary(block.text) || checkIsCocoonSummary(block.caption));
 
             if (isCocoon) setVisibility(View.GONE);
@@ -11660,9 +11661,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 String currentUrl = AndroidUtilities.formapMapUrl(false, currentBlock.geo.lat, currentBlock.geo._long, (int) (photoWidth / AndroidUtilities.density), (int) (height / AndroidUtilities.density), true, 15);
                 WebFile currentWebFile = WebFile.createWithGeoPoint(currentBlock.geo, (int) (photoWidth / AndroidUtilities.density), (int) (height / AndroidUtilities.density), 15, Math.min(2, (int) Math.ceil(AndroidUtilities.density)));
 
-                if (NekoConfig.mapPreviewProvider.Int() == 0) {
+                if (MomoConfig.mapPreviewProvider.Int() == 0) {
                     currentMapProvider = 2;
-                } else if (NekoConfig.mapPreviewProvider.Int() == 1) {
+                } else if (MomoConfig.mapPreviewProvider.Int() == 1) {
                     currentMapProvider = 1;
                 } else {
                     currentMapProvider = -1;
@@ -12993,7 +12994,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         public int webBackgroundColor = getThemedColor(Theme.key_iv_background);
 
         public WebInstantView.Loader currentInstantLoader;
-        private final boolean autoAttemptInstantView = NekoConfig.autoAttemptInstantView.Bool();
+        private final boolean autoAttemptInstantView = MomoConfig.autoAttemptInstantView.Bool();
 
         public boolean paused = false;
         public void pause() {
@@ -13677,14 +13678,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 };
                 currentInstantLoader.onInstantViewFail = () -> {
                     if (loadingIndicator != null) loadingIndicator.dismiss();
-                    if (NekoConfig.saveIVFailDomains.Bool()) {
+                    if (MomoConfig.saveIVFailDomains.Bool()) {
                         try {
                             NekoXConfig.addInstantViewFailedDomain(Uri.parse(lastUrl).getHost());
                         } catch (Exception e) {
                             FileLog.e("failed to parse/save iv fail domain", e);
                         }
                     }
-                    if (NekoConfig.useExtBrowserOnIVAttemptFail.Bool()) {
+                    if (MomoConfig.useExtBrowserOnIVAttemptFail.Bool()) {
                         Browser.openInExternalBrowser(parentActivity, lastUrl, true);
                         ArticleViewer.this.close(false, true);
                     } else {
@@ -13763,7 +13764,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 pageLayout.setWebBgColor(true, actionBarColor);
                 pageLayout.setWebBgColor(false, backgroundColor);
             } else if (lastUrl != null) {
-                if (NekoConfig.autoAttemptInstantView.Bool() && !Browser.isTonsite(lastUrl)) {
+                if (MomoConfig.autoAttemptInstantView.Bool() && !Browser.isTonsite(lastUrl)) {
                     if (loadingIndicator != null) loadingIndicator.show();
                     pageLayout.webViewContainer.setVisibility(View.INVISIBLE);
                 }

@@ -50,7 +50,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class SearchAdapter extends RecyclerListView.SelectionAdapter {
 
@@ -189,7 +189,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                     }
                     if (UserObject.isReplyUser(user)) {
                         names[2] = LocaleController.getString(R.string.RepliesTitle).toLowerCase();
-                    } else if (user.self && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+                    } else if (user.self && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                         names[2] = LocaleController.getString(R.string.SavedMessages).toLowerCase();
                     }
 
@@ -468,7 +468,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                         userCell.setChecked(selectedUsers.indexOfKey(id) >= 0, false);
                     } else {
                         ProfileSearchCell profileSearchCell = (ProfileSearchCell) holder.itemView;
-                        if (self && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+                        if (self && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                             name = LocaleController.getString(R.string.SavedMessages);
                         }
                         profileSearchCell.setData(object, null, name, username, false, self);

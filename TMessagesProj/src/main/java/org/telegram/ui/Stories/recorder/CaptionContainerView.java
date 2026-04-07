@@ -87,8 +87,8 @@ import org.telegram.ui.Components.blur3.drawable.color.impl.BlurredBackgroundPro
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.Stories.DarkThemeResourceProvider;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.TelegramUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.utils.TelegramUtil;
 
 public class CaptionContainerView extends FrameLayout {
 
@@ -1200,7 +1200,7 @@ public class CaptionContainerView extends FrameLayout {
             hintTextBitmap.recycle();
             hintTextBitmap = null;
         }
-        if (NekoConfig.alwaysDestroyPhotoViewer.Bool()) {
+        if (MomoConfig.alwaysDestroyPhotoViewer.Bool()) {
             if (editText != null) {
                 editText.onDestroy();
                 editText = null;
@@ -1214,7 +1214,7 @@ public class CaptionContainerView extends FrameLayout {
     }
 
     public void detachedFromWindow() {
-        if (NekoConfig.alwaysDestroyPhotoViewer.Bool())
+        if (MomoConfig.alwaysDestroyPhotoViewer.Bool())
             onDetachedFromWindow();
     }
 

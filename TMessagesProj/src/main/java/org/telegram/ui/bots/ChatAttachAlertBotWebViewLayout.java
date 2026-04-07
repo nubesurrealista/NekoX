@@ -64,8 +64,8 @@ import org.telegram.ui.Components.SimpleFloatPropertyCompat;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.web.BotWebViewContainer;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.ui.CustomChatListBottomSheet;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.ui.CustomChatListBottomSheet;
 
 public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlertLayout implements NotificationCenter.NotificationCenterDelegate {
     private final static int POLL_PERIOD = 60000;
@@ -221,7 +221,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
         otherItem = menu.addItem(0, R.drawable.ic_ab_other);
         otherItem.addSubItem(R.id.menu_open_bot, R.drawable.msg_bot, LocaleController.getString(R.string.BotWebViewOpenBot));
         settingsItem = otherItem.addSubItem(R.id.menu_settings, R.drawable.msg_settings, LocaleController.getString(R.string.BotWebViewSettings));
-        if (!NekoConfig.showBotWebViewSettings.Bool()) settingsItem.setVisibility(View.GONE);
+        if (!MomoConfig.showBotWebViewSettings.Bool()) settingsItem.setVisibility(View.GONE);
         otherItem.addSubItem(R.id.menu_reload_page, R.drawable.msg_retry, LocaleController.getString(R.string.BotWebViewReloadPage));
         addToHomeScreenItem = otherItem.addSubItem(R.id.menu_add_to_home_screen_bot, R.drawable.msg_home, LocaleController.getString(R.string.AddShortcut));
         addToHomeScreenItem.setVisibility(View.GONE);
@@ -308,7 +308,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
     }
 
     public boolean onCheckDismissByUser() {
-        if (needCloseConfirmation && !NekoConfig.closeWebViewWithoutConfirmation.Bool()) {
+        if (needCloseConfirmation && !MomoConfig.closeWebViewWithoutConfirmation.Bool()) {
             String botName = null;
             TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(botId);
             if (user != null) {
@@ -870,7 +870,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
                     if (isSwipeDisallowed || !allowSwipes || fullsize && !allowFullSizeSwipe || (shouldWaitWebViewScroll && !allowingScroll(false))) {
                         return false;
                     }
-                    if (NekoConfig.preventPullDownWebview.Bool()) {
+                    if (MomoConfig.preventPullDownWebview.Bool()) {
                         stickTo(-offsetY + topActionBarOffsetY);
                         return true;
                     }
@@ -899,7 +899,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
 
                 @Override
                 public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                    if (NekoConfig.preventPullDownWebview.Bool()) {
+                    if (MomoConfig.preventPullDownWebview.Bool()) {
                         stickTo(-offsetY + topActionBarOffsetY);
                         return false;
                     }
@@ -1179,7 +1179,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
 
                 } else if (flingInProgress) {
                     flingInProgress = false;
-                } else if (!NekoConfig.preventPullDownWebview.Bool() && allowSwipes && (!shouldWaitWebViewScroll || swipeOffsetY != -offsetY + topActionBarOffsetY && allowingScroll(false))) {
+                } else if (!MomoConfig.preventPullDownWebview.Bool() && allowSwipes && (!shouldWaitWebViewScroll || swipeOffsetY != -offsetY + topActionBarOffsetY && allowingScroll(false))) {
                     if (swipeOffsetY <= -swipeStickyRange) {
                         if (stickToEdges) {
                             stickTo(-offsetY + topActionBarOffsetY);
@@ -1226,7 +1226,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
         }
 
         public void stickTo(float offset, boolean force, Runnable callback) {
-            if ((fullsize || NekoConfig.preventPullDownWebview.Bool() || forceExpanded) && !force) {
+            if ((fullsize || MomoConfig.preventPullDownWebview.Bool() || forceExpanded) && !force) {
                 offset = -getOffsetY() + getTopActionBarOffsetY();
             }
             if (swipeOffsetY == offset || scrollAnimator != null && scrollAnimator.getSpring().getFinalPosition() == offset) {

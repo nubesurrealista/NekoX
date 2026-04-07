@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import moe.hx030.momogram.util.ModUtil;
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class MemberRequestsController extends BaseController {
 

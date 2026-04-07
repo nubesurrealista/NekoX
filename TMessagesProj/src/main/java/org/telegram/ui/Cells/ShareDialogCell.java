@@ -66,7 +66,7 @@ import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.Text;
 import org.telegram.ui.Stars.StarsIntroActivity;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class ShareDialogCell extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
@@ -227,7 +227,7 @@ public class ShareDialogCell extends FrameLayout implements NotificationCenter.N
                 nameTextView.setText(LocaleController.getString(R.string.RepliesTitle));
                 avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_REPLIES);
                 imageView.setImage(null, null, avatarDrawable, user);
-            } else if (currentType != TYPE_CREATE && UserObject.isUserSelf(user) && !NekoConfig.showSelfInsteadOfSavedMessages.Bool()) {
+            } else if (currentType != TYPE_CREATE && UserObject.isUserSelf(user) && !MomoConfig.showSelfInsteadOfSavedMessages.Bool()) {
                 nameTextView.setText(LocaleController.getString(R.string.SavedMessages));
                 avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);
                 imageView.setImage(null, null, avatarDrawable, user);
@@ -446,7 +446,7 @@ public class ShareDialogCell extends FrameLayout implements NotificationCenter.N
 
     @Override
     protected void onDraw(Canvas canvas) {
-        boolean square = NekoConfig.squareAvatar.Bool();
+        boolean square = MomoConfig.squareAvatar.Bool();
         int cx = imageView.getLeft() + imageView.getMeasuredWidth() / 2;
         int cy = imageView.getTop() + imageView.getMeasuredHeight() / 2;
         Theme.checkboxSquare_checkPaint.setColor(getThemedColor(Theme.key_dialogRoundCheckBox));

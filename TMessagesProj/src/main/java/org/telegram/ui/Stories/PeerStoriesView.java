@@ -218,10 +218,10 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.transtale.Translator;
-import tw.nekomimi.nekogram.transtale.TranslatorKt;
-import tw.nekomimi.nekogram.ui.MessageDetailsActivity;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.transtale.Translator;
+import moe.hx030.momogram.transtale.TranslatorKt;
+import moe.hx030.momogram.ui.MessageDetailsActivity;
 
 public class PeerStoriesView extends SizeNotifierFrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
@@ -2259,7 +2259,7 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                 private void shouldAddDetailsButton(ActionBarPopupWindow.ActionBarPopupWindowLayout popupLayout) {
                     if (addedDetails) return;
                     addedDetails = true;
-                    if (NekoConfig.showMessageDetails.Bool()) {
+                    if (MomoConfig.showMessageDetails.Bool()) {
                         ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_info, LocaleController.getString(R.string.MessageDetails), false, resourcesProvider).setOnClickListener(v -> {
                             MessageDetailsActivity activity = new MessageDetailsActivity(currentStory.storyItem);
                             LaunchActivity.getLastFragment().presentFragment(activity);

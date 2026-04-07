@@ -89,9 +89,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 
-import tw.nekomimi.nekogram.utils.EnvUtil;
-import tw.nekomimi.nekogram.utils.FileUtil;
-import tw.nekomimi.nekogram.utils.StrUtil;
+import moe.hx030.momogram.utils.EnvUtil;
+import moe.hx030.momogram.utils.FileUtil;
+import moe.hx030.momogram.utils.StrUtil;
 
 /**
  * image filter types

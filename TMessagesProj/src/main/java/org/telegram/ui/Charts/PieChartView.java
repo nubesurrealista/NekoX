@@ -20,7 +20,7 @@ import org.telegram.ui.Charts.view_data.LineViewData;
 import org.telegram.ui.Charts.view_data.PieLegendView;
 import org.telegram.ui.Charts.view_data.TransitionParams;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 
 public class PieChartView extends StackLinearChartView<PieChartViewData> {
@@ -387,7 +387,7 @@ public class PieChartView extends StackLinearChartView<PieChartViewData> {
 
             pieLegendView.setTranslationX(xl);
             pieLegendView.setTranslationY(yl);
-            if (!NekoConfig.disableVibration.Bool())
+            if (!MomoConfig.disableVibration.Bool())
                 AndroidUtilities.vibrateCursor(this);
         }
         moveLegend();

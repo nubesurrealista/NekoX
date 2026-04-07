@@ -56,7 +56,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class ProfileStoriesView extends View implements NotificationCenter.NotificationCenterDelegate {
 
@@ -950,7 +950,7 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
     }
 
     private void drawArcs(Canvas canvas, StoryCircle A, StoryCircle B, StoryCircle C, Paint paint) {
-        if (NekoConfig.squareAvatar.Bool()) return;
+        if (MomoConfig.squareAvatar.Bool()) return;
         if (A == null && C == null) {
             drawArc(canvas, B.borderRect, 0, 360, false, paint);
         } else if (A != null && C != null) {

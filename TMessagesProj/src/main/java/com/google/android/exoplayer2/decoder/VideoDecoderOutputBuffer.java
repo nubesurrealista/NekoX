@@ -20,7 +20,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Format;
 import java.nio.ByteBuffer;
 
-import tw.nekomimi.nekogram.utils.BufferUtil;
+import moe.hx030.momogram.utils.BufferUtil;
 
 /** Video decoder output buffer containing video frame data. */
 public class VideoDecoderOutputBuffer extends DecoderOutputBuffer {

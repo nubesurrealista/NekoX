@@ -23,8 +23,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.helpers.WhisperHelper;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.helpers.WhisperHelper;
 
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -55,7 +55,7 @@ public class WhisperModelDownloader {
     }
 
     public static boolean deleteModels() {
-        boolean ok = false, useSlow = NekoConfig.useSlowWhisperModel.Bool(), modelInUse = false;
+        boolean ok = false, useSlow = MomoConfig.useSlowWhisperModel.Bool(), modelInUse = false;
         File base = new File(extDir + "/" + modelMultiLingualBase);
         File small = new File(extDir + "/" + modelMultiLingualSmall);
         for (int acc : SharedConfig.activeAccounts) {
@@ -103,7 +103,7 @@ public class WhisperModelDownloader {
         if (modelMultiLingualBaseFile.exists() && !(calcModelMultiLingualBaseMD5.equals(modelMultiLingualBaseMD5))) { modelMultiLingualBaseFile.delete(); modelMultiLingualBaseFinished = false;}
         if (modelMultiLingualSmallFile.exists() && !(calcModelMultiLingualSmallMD5.equals(modelMultiLingualSmallMD5))) { modelMultiLingualSmallFile.delete(); modelMultiLingualSmallFinished = false;}
 
-        boolean useSlowModel = NekoConfig.useSlowWhisperModel.Bool();
+        boolean useSlowModel = MomoConfig.useSlowWhisperModel.Bool();
         return (!useSlowModel || calcModelMultiLingualSmallMD5.equals(modelMultiLingualSmallMD5)) && (useSlowModel || calcModelMultiLingualBaseMD5.equals(modelMultiLingualBaseMD5));
     }
 
@@ -115,7 +115,7 @@ public class WhisperModelDownloader {
 
         Thread baseThread, smallThread;
         File modelMultiLingualBaseFile = new File(ApplicationLoader.applicationContext.getExternalFilesDir(null)+ "/" + modelMultiLingualBase);
-        if (!NekoConfig.useSlowWhisperModel.Bool()) {
+        if (!MomoConfig.useSlowWhisperModel.Bool()) {
             if (!modelMultiLingualBaseFile.exists()) {
                 modelMultiLingualBaseFinished = false;
                 Log.d("WhisperASR", "multi-lingual base model file does not exist");
@@ -133,7 +133,7 @@ public class WhisperModelDownloader {
         }
 
         File modelMultiLingualSmallFile = new File(ApplicationLoader.applicationContext.getExternalFilesDir(null)+ "/" + modelMultiLingualSmall);
-        if (NekoConfig.useSlowWhisperModel.Bool()) {
+        if (MomoConfig.useSlowWhisperModel.Bool()) {
             if (!modelMultiLingualSmallFile.exists()) {
                 modelMultiLingualSmallFinished = false;
                 Log.d("WhisperASR", "multi-lingual small model file does not exist");

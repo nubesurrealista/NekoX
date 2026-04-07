@@ -55,9 +55,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.transtale.Translator;
-import tw.nekomimi.nekogram.transtale.TranslatorKt;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.transtale.Translator;
+import moe.hx030.momogram.transtale.TranslatorKt;
 
 public class TranslateController extends BaseController {
 
@@ -102,7 +102,7 @@ public class TranslateController extends BaseController {
     }
 
     public boolean isFeatureAvailable() {
-        return NekoConfig.autoTranslate.Bool() || isChatTranslateEnabled() || UserConfig.getInstance(currentAccount).isPremium();
+        return MomoConfig.autoTranslate.Bool() || isChatTranslateEnabled() || UserConfig.getInstance(currentAccount).isPremium();
     }
 
     public boolean isFeatureAvailable(long dialogId) {
@@ -111,16 +111,16 @@ public class TranslateController extends BaseController {
         }
         final TLRPC.Chat chat = getMessagesController().getChat(-dialogId);
         // if allowed by us and not using 'community' provider
-        boolean forceAutoTranslate = NekoConfig.autoTranslate.Bool() && usingCustomProviderForAutoTranslate();
+        boolean forceAutoTranslate = MomoConfig.autoTranslate.Bool() && usingCustomProviderForAutoTranslate();
         return (forceAutoTranslate ||
             UserConfig.getInstance(currentAccount).isPremium() ||
             (chat != null && chat.autotranslation));
     }
 
     public boolean usingCustomProviderForAutoTranslate() {
-        return (NekoConfig.useCustomProviderForAutoTranslate.Bool() &&
-                NekoConfig.translationProvider.Int() != Translator.providerLingva &&
-                NekoConfig.translationProvider.Int() != Translator.providerDeepLX);
+        return (MomoConfig.useCustomProviderForAutoTranslate.Bool() &&
+                MomoConfig.translationProvider.Int() != Translator.providerLingva &&
+                MomoConfig.translationProvider.Int() != Translator.providerDeepLX);
     }
 
     private Boolean chatTranslateEnabled;
@@ -155,7 +155,7 @@ public class TranslateController extends BaseController {
     }
 
     public static boolean isSummarizable(MessageObject messageObject) {
-        if (NekoConfig.hideCocoonAISummary.Bool()) return false;
+        if (MomoConfig.hideCocoonAISummary.Bool()) return false;
         return (
             messageObject != null &&
             messageObject.messageOwner != null &&

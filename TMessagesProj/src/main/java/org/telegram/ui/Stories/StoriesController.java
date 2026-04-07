@@ -90,7 +90,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class StoriesController {
 
@@ -251,7 +251,7 @@ public class StoriesController {
     }
 
     public boolean hasStories(long dialogId) {
-        if (NekoConfig.disableStories.Bool()) return false;
+        if (MomoConfig.disableStories.Bool()) return false;
         if (dialogId == 0) {
             return false;
         }
@@ -261,7 +261,7 @@ public class StoriesController {
         if (isLastUploadingFailed(dialogId)) {
             return true;
         }
-        if (dialogId <= 0 && NekoConfig.onlyShowStoriesFromUsers.Bool()) {
+        if (dialogId <= 0 && MomoConfig.onlyShowStoriesFromUsers.Bool()) {
             return false;
         }
         TL_stories.PeerStories stories = allStoriesMap.get(dialogId);
@@ -288,7 +288,7 @@ public class StoriesController {
     }
 
     public boolean hasStories() {
-        if (NekoConfig.disableStories.Bool()) return false;
+        if (MomoConfig.disableStories.Bool()) return false;
         return (dialogListStories != null && dialogListStories.size() > 0) || hasSelfStories();
     }
 
@@ -1301,7 +1301,7 @@ public class StoriesController {
             TL_stories.TL_stories_readStories req = new TL_stories.TL_stories_readStories();
             req.peer = MessagesController.getInstance(currentAccount).getInputPeer(dialogId);
             req.max_id = storyItem.id;
-            if (NekoConfig.disableSendReadStories.Bool()) return true;
+            if (MomoConfig.disableSendReadStories.Bool()) return true;
             ConnectionsManager.getInstance(currentAccount).sendRequest(req, null);
             NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.storiesReadUpdated);
             return true;

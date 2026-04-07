@@ -93,8 +93,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.utils.VibrateUtil;
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.utils.VibrateUtil;
 
 public class ActionBarLayout extends FrameLayout implements INavigationLayout, FloatingDebugProvider {
 
@@ -432,7 +432,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
                                         ripple.setState(shouldBeEnabled ? new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled} : new int[]{});
                                         if (shouldBeEnabled) {
                                             try {
-                                                if (!NekoConfig.disableVibration.Bool())
+                                                if (!MomoConfig.disableVibration.Bool())
                                                     AndroidUtilities.vibrateCursor(button);
                                             } catch (Exception ignore) {}
                                         }
@@ -619,7 +619,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
 
         if (layerShadowDrawable == null) {
             layerShadowDrawable = getResources().getDrawable(R.drawable.layer_shadow);
-            headerShadowDrawable = NekoConfig.disableAppBarShadow.Bool() ? null : getResources().getDrawable(R.drawable.header_shadow).mutate();
+            headerShadowDrawable = MomoConfig.disableAppBarShadow.Bool() ? null : getResources().getDrawable(R.drawable.header_shadow).mutate();
             scrimPaint = new Paint();
         }
 
@@ -2439,7 +2439,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
             }
         });
         animatorSet.start();
-        if (!NekoConfig.disableVibration.Bool()) {
+        if (!MomoConfig.disableVibration.Bool()) {
             try {
                 performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
             } catch (Exception ignore) {}
@@ -3447,7 +3447,7 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
 
     private boolean shouldHideTabs() {
         if (LaunchActivity.instance == null) return false;
-        return (NekoConfig.hideWebViewTabOverlayInChat.Bool() || NekoConfig.hideWebViewTabOverlayWhenSharing.Bool())
+        return (MomoConfig.hideWebViewTabOverlayInChat.Bool() || MomoConfig.hideWebViewTabOverlayWhenSharing.Bool())
             && !LaunchActivity.instance.getBottomSheetTabsOverlay().tabsView.drawTabs;
     }
 

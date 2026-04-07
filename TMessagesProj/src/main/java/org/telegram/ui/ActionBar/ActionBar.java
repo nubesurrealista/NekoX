@@ -80,7 +80,7 @@ import org.telegram.ui.TopicsFragment;
 import java.util.ArrayList;
 
 import me.vkryl.android.animator.ReplaceAnimator;
-import tw.nekomimi.nekogram.NekoConfig;
+import moe.hx030.momogram.MomoConfig;
 
 public class ActionBar extends FrameLayout implements Theme.Colorable {
 
@@ -215,7 +215,7 @@ public class ActionBar extends FrameLayout implements Theme.Colorable {
         backButtonImageView.setScaleType(ImageView.ScaleType.CENTER);
         backButtonImageView.setBackgroundDrawable(Theme.createSelectorDrawable(itemsBackgroundColor));
         backButtonImageView.setPadding(dp(1), 0, 0, 0);
-        if (NekoConfig.unreadBadgeOnBackButton.Bool() && parentFragment instanceof ChatActivity)
+        if (MomoConfig.unreadBadgeOnBackButton.Bool() && parentFragment instanceof ChatActivity)
             ((ChatActivity) parentFragment).didReceivedNotification(NotificationCenter.dialogsUnreadCounterChanged, 0);
         addView(backButtonImageView, LayoutHelper.createFrame(54, 54, Gravity.LEFT | Gravity.TOP));
 
@@ -373,11 +373,11 @@ public class ActionBar extends FrameLayout implements Theme.Colorable {
                     }
                 }
             }
-            if (NekoConfig.actionBarDecoration.Int() == 2) {
+            if (MomoConfig.actionBarDecoration.Int() == 2) {
                 if (fireworksEffect == null) {
                     fireworksEffect = new FireworksEffect();
                 }
-            } else if (NekoConfig.actionBarDecoration.Int() == 1 || Theme.canStartHolidayAnimation()) {
+            } else if (MomoConfig.actionBarDecoration.Int() == 1 || Theme.canStartHolidayAnimation()) {
                 if (snowflakesEffect == null) {
                     snowflakesEffect = new SnowflakesEffect(0);
                 }
@@ -1147,7 +1147,7 @@ public class ActionBar extends FrameLayout implements Theme.Colorable {
         final ArrayList<View> viewsToHide = new ArrayList<>();
 
         // test if UI glitch (elements overlap) be gone by only let ignoreTitles be false when not in tablet mode
-        final boolean ignoreTitles = onSearchChangedIgnoreTitles() && NekoConfig.tabletMode.Int() != 1 && !AndroidUtilities.isTablet();
+        final boolean ignoreTitles = onSearchChangedIgnoreTitles() && MomoConfig.tabletMode.Int() != 1 && !AndroidUtilities.isTablet();
         if (!ignoreTitles) {
             if (titleTextView[0] != null) {
                 viewsToHide.add(titleTextView[0]);
@@ -1587,10 +1587,10 @@ public class ActionBar extends FrameLayout implements Theme.Colorable {
             return;
         }
         if (title == null || R.string.AppName == titleId) {
-            if (NekoConfig.nameAsTitleText.Bool()) {
+            if (MomoConfig.nameAsTitleText.Bool()) {
                 TLRPC.User self = UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser();
                 if (self != null && self.first_name != null) lastTitle = self.first_name;
-            } else lastTitle = NekoConfig.customTitleText.String();
+            } else lastTitle = MomoConfig.customTitleText.String();
         }
         lastOverlayTitle = title;
 
@@ -1918,7 +1918,7 @@ public class ActionBar extends FrameLayout implements Theme.Colorable {
     }
 
     public void detachedFromWindow() {
-        if (NekoConfig.alwaysDestroyPhotoViewer.Bool())
+        if (MomoConfig.alwaysDestroyPhotoViewer.Bool())
             onDetachedFromWindow();
     }
 
@@ -2090,7 +2090,7 @@ public class ActionBar extends FrameLayout implements Theme.Colorable {
     }
 
     public void unreadBadgeSetCount(int count) {
-        if (backButtonImageView != null && NekoConfig.unreadBadgeOnBackButton.Bool()) {
+        if (backButtonImageView != null && MomoConfig.unreadBadgeOnBackButton.Bool()) {
             backButtonImageView.setUnread(count);
         }
     }
