@@ -346,6 +346,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
         }
 
         final float wrapping = animatorWrappingButton.getFloatValue();
+        final boolean compactWrapping = MomoConfig.unroundedChatBottomView.Bool() || MomoConfig.removeChatBottomViewPadding.Bool();
         if (wrapping > 0 && getMeasuredWidth() > 0) {
             float left = getMeasuredWidth(), right = 0;
             for (int i = 0; i < getContainer().getChildCount(); ++i) {
@@ -358,8 +359,10 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
             if (left > right) {
                 left = right = (left + right) / 2f;
             }
-            totalWidthLeft = lerp(totalWidthLeft, left - dp(3.33f), wrapping);
-            totalWidthRight = lerp(totalWidthRight, getMeasuredWidth() - right - dp(17.66f), wrapping);
+            final float wrappedLeft = compactWrapping ? left : left - dp(3.33f);
+            final float wrappedRight = compactWrapping ? getMeasuredWidth() - right : getMeasuredWidth() - right - dp(17.66f);
+            totalWidthLeft = lerp(totalWidthLeft, wrappedLeft, wrapping);
+            totalWidthRight = lerp(totalWidthRight, wrappedRight, wrapping);
         }
 
         if (onButtonsTotalWidthChanged != null) {
@@ -407,13 +410,15 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
     @Override
     protected void dispatchDraw(@NonNull Canvas canvas) {
         final int accentAlpha = (int) (255 * totalVisibilityFactor * animatorCenterAccentBackground.getFloatValue());
+        final boolean compactWrapping = MomoConfig.unroundedChatBottomView.Bool() || MomoConfig.removeChatBottomViewPadding.Bool();
         final boolean removePadding = MomoConfig.removeChatBottomViewPadding.Bool();
         final int offset = (removePadding ? 0 : dp(9));
+        final int horizontalInset = compactWrapping ? 0 : dp(10);
         if (accentAlpha > 0) {
             tmpRect.set(
-                totalWidthLeft + (removePadding ? 0 : dp(10)),
+                totalWidthLeft + horizontalInset,
                 offset,
-                getMeasuredWidth() - (removePadding ? 0 : dp(10)) - totalWidthRight,
+                getMeasuredWidth() - horizontalInset - totalWidthRight,
                 getMeasuredHeight() - offset
             );
             backgroundAccentPaint.setColor(accentColor);
