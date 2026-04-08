@@ -44851,6 +44851,7 @@ public class ChatActivity extends BaseFragment implements
                             .setMessage(dialog_id, shouldTranslateByText ? 0 : messageIdToTranslate[0], selectedObject.summarized)
                             .setToLanguage(toLang)
                             .setOnLinkPress(onLinkPress);
+                    alert.setOKToDismiss();
                     alert.setOnDismissListener(() -> dimBehindView(false));
                     alert.setDimBehind(false);
                     alert.show();

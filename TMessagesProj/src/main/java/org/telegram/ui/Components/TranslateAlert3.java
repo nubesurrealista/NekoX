@@ -60,6 +60,9 @@ import org.telegram.ui.PremiumPreviewFragment;
 import org.telegram.ui.Stories.recorder.ButtonWithCounterView;
 import java.util.ArrayList;
 
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.transtale.Translator;
+
 public class TranslateAlert3 extends BottomSheetWithRecyclerListView {
 
     private ImageView closeView;
@@ -411,6 +414,9 @@ public class TranslateAlert3 extends BottomSheetWithRecyclerListView {
                     return;
                 }
 
+                if (MomoConfig.trimCOTFromTranslateResult.Bool()) {
+                    res.text = Translator.Companion.maybeStripCOT(res.text);
+                }
                 translated = MessageObject.formatTextWithEntities(res);
                 translatedLoading = false;
 
@@ -451,6 +457,9 @@ public class TranslateAlert3 extends BottomSheetWithRecyclerListView {
                     button.setOnClickListener(v -> dismiss());
                     return;
                 }
+                if (MomoConfig.trimCOTFromTranslateResult.Bool()) {
+                    res.result.get(0).text = Translator.Companion.maybeStripCOT(res.result.get(0).text);
+                }
                 translated = MessageObject.formatTextWithEntities(res.result.get(0));
                 translatedLoading = false;
 
@@ -465,6 +474,10 @@ public class TranslateAlert3 extends BottomSheetWithRecyclerListView {
             ConnectionsManager.getInstance(currentAccount).cancelRequest(requestId, true);
             requestId = -1;
         }
+    }
+
+    public void setOKToDismiss() {
+        button.setOnClickListener(v -> dismiss());
     }
 
     public static class Header extends FrameLayout implements Theme.Colorable {
