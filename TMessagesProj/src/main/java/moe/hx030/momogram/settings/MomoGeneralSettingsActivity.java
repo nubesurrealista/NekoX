@@ -195,6 +195,7 @@ public class MomoGeneralSettingsActivity extends MomoSettingsBaseActivity {
     private final AbstractConfigCell useOldNameRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.useOldName, LocaleController.getString(R.string.UseOldAppNameDesc)));
     private final AbstractConfigCell noForwardToStoriesRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.noForwardToStories));
     private final AbstractConfigCell disableSessionCheckerRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.disableSessionChecker));
+    private final AbstractConfigCell switchAccountsFromChatListMenuRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.switchAccountsFromChatListMenu));
 
     private final AbstractConfigCell customApiIdRow = cellGroup.appendCell(new ConfigCellTextDetail(MomoConfig.customApiId, (view, position) -> {
         customDialog_BottomInputString(position, MomoConfig.customApiId, LocaleController.getString(R.string.UseCustomApiNotice), "api_id");

@@ -338,4 +338,5 @@
     <string name="TrimCOTFromTranslateResult">Trim [COT]-prefixed thinking process from translate result</string>
     <string name="RandomizeFilenameOnSend">Randomize file name on send</string>
     <string name="HideAIEditButton">Hide AI button in text field</string>
+    <string name="SwitchAccountsFromChatListMenu">Switch accounts from chat list menu</string>
 </resources>

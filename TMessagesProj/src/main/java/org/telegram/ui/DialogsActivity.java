@@ -13621,6 +13621,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
 
         if (!isArchive()) {
+            maybeAddAccountsToMenu(io);
+
             final boolean isCurrentThemeDark;
             if (resourceProvider != null) {
                 isCurrentThemeDark = resourceProvider.isDark();
@@ -14260,5 +14262,34 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             final int shadowAlpha = (int) (255 * headerShadowAlpha * headerShadowAlphaBase);
             parentLayout.drawHeaderShadow(canvas, shadowAlpha, headerShadowY);
         }
+    }
+
+    private void maybeAddAccountsToMenu(ItemOptions io) {
+        if (!MomoConfig.switchAccountsFromChatListMenu.Bool()) return;
+
+        ArrayList<Integer> accountNumbers = new ArrayList<>();
+
+        for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+            if (UserConfig.getInstance(a).isClientActivated() && currentAccount != a) {
+                accountNumbers.add(a);
+            }
+        }
+        Collections.sort(accountNumbers, (o1, o2) -> {
+            long l1 = UserConfig.getInstance(o1).loginTime;
+            long l2 = UserConfig.getInstance(o2).loginTime;
+            if (l1 > l2) {
+                return 1;
+            } else if (l1 < l2) {
+                return -1;
+            }
+            return 0;
+        });
+
+        for (int a : accountNumbers) {
+            io.addProfile(UserConfig.getInstance(a).getCurrentUser(), "", () -> {
+                LaunchActivity.instance.switchToAccount(a, true);
+            });
+        }
+        io.addGap();
     }
 }

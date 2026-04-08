@@ -40,6 +40,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.ColorUtils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BotWebViewVibrationEffect;
 import org.telegram.messenger.ChatObject;
@@ -850,6 +851,7 @@ public class ItemOptions {
     }
 
     public ItemOptions addProfile(TLObject obj, CharSequence subtitle, Runnable onClickListener) {
+        final boolean hasSubtitle = !StringUtils.isBlank(subtitle);
         final FrameLayout userButton = new FrameLayout(context);
         userButton.setBackground(Theme.createRadSelectorDrawable(Theme.getColor(Theme.key_listSelector, resourcesProvider), 0, 12));
 
@@ -871,13 +873,15 @@ public class ItemOptions {
             TLRPC.Chat chat = (TLRPC.Chat) obj;
             titleText.setText(chat.title);
         }
-        userButton.addView(titleText, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.FILL_HORIZONTAL | Gravity.TOP, 59, 6, 16, 0));
+        userButton.addView(titleText, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.FILL_HORIZONTAL | (hasSubtitle ? Gravity.TOP : Gravity.CENTER_VERTICAL), 59, (hasSubtitle ? 6 : 0), 16, 0));
 
-        final TextView subtitleText = new TextView(context);
-        subtitleText.setTextColor(Theme.getColor(Theme.key_dialogTextGray2, resourcesProvider));
-        subtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
-        subtitleText.setText(AndroidUtilities.replaceArrows(subtitle, false, dp(1), dp(.66f)));
-        userButton.addView(subtitleText, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.FILL_HORIZONTAL | Gravity.TOP, 59, 27, 16, 0));
+        if (hasSubtitle) {
+            final TextView subtitleText = new TextView(context);
+            subtitleText.setTextColor(Theme.getColor(Theme.key_dialogTextGray2, resourcesProvider));
+            subtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+            subtitleText.setText(AndroidUtilities.replaceArrows(subtitle, false, dp(1), dp(.66f)));
+            userButton.addView(subtitleText, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.FILL_HORIZONTAL | Gravity.TOP, 59, 27, 16, 0));
+        }
 
         userButton.setOnClickListener(v -> {
             dismiss();

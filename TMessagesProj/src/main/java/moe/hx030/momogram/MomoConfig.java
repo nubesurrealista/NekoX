@@ -163,6 +163,7 @@ public class MomoConfig {
     public static ConfigItem noForwardToStories = addConfig(R.string.HideForwardToStories, "HideForwardToStories", configTypeBool, GENERAL, false);
     public static ConfigItem disableSessionChecker = addConfig(R.string.DisableSessionChecker, "DisableSessionChecker", configTypeBool, GENERAL, false);
     public static ConfigItem disablePullDownSearch = addConfig(R.string.DisablePullDownSearch, "DisablePullDownSearch", configTypeBool, GENERAL, false);
+    public static ConfigItem switchAccountsFromChatListMenu = addConfig(R.string.SwitchAccountsFromChatListMenu, "SwitchAccountsFromChatListMenu", configTypeBool, GENERAL, false);
 
     public static ConfigItem preferredTranslateTargetLang = addConfig(R.string.PreferredTranslateTargetLangTitle, "PreferredTranslateTargetLangTitle", configTypeString, GENERAL, "");
     public static ArrayList<String> preferredTranslateTargetLangList = new ArrayList<>();
