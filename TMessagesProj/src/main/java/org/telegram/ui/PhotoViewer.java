@@ -19095,7 +19095,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 videoPlayer = null;
             }
             if (actionBar != null) {
-                actionBar.detachedFromWindow();
                 actionBar = null;
             }
             animatingImageView = null;

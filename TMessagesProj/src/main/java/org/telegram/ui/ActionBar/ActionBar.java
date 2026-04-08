@@ -520,7 +520,7 @@ public class ActionBar extends FrameLayout implements Theme.Colorable {
             createTitleTextView(0);
         }
         if (titleTextView[0] != null) {
-            titleTextView[0].setVisibility(value != null && !isSearchFieldVisible && !onSearchChangedIgnoreTitles() ? VISIBLE : INVISIBLE);
+            titleTextView[0].setVisibility(value != null && !isSearchFieldVisible ? VISIBLE : INVISIBLE);
             titleTextView[0].setText(lastTitle = value);
             if (attached && lastRightDrawable instanceof AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable) {
                 ((AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable) lastRightDrawable).setParentView(null);
@@ -1040,7 +1040,7 @@ public class ActionBar extends FrameLayout implements Theme.Colorable {
             }
         });
         actionModeAnimation.start();
-        if (!isSearchFieldVisible && !onSearchChangedIgnoreTitles()) {
+        if (!isSearchFieldVisible) {
             if (titleTextView[0] != null) {
                 titleTextView[0].setVisibility(VISIBLE);
             }
@@ -1146,8 +1146,7 @@ public class ActionBar extends FrameLayout implements Theme.Colorable {
         searchVisibleAnimator = new AnimatorSet();
         final ArrayList<View> viewsToHide = new ArrayList<>();
 
-        // test if UI glitch (elements overlap) be gone by only let ignoreTitles be false when not in tablet mode
-        final boolean ignoreTitles = onSearchChangedIgnoreTitles() && MomoConfig.tabletMode.Int() != 1 && !AndroidUtilities.isTablet();
+        final boolean ignoreTitles = onSearchChangedIgnoreTitles();
         if (!ignoreTitles) {
             if (titleTextView[0] != null) {
                 viewsToHide.add(titleTextView[0]);
@@ -1199,8 +1198,7 @@ public class ActionBar extends FrameLayout implements Theme.Colorable {
                     }
                 }
 
-                boolean shouldHideTitle = onSearchChangedIgnoreTitles();
-                if ((visible && !ignoreTitles) || shouldHideTitle) {
+                if (visible && !ignoreTitles) {
                     if (titleTextView[0] != null) {
                         titleTextView[0].setVisibility(View.GONE);
                     }
@@ -1915,11 +1913,6 @@ public class ActionBar extends FrameLayout implements Theme.Colorable {
             ((AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable) lastRightDrawable).setParentView(null);
         }
         if (actionMode != null) actionMode.detachedFromWindow();
-    }
-
-    public void detachedFromWindow() {
-        if (MomoConfig.alwaysDestroyPhotoViewer.Bool())
-            onDetachedFromWindow();
     }
 
     private void updateAttachState() {
