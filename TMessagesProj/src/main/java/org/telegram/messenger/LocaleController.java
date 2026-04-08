@@ -726,7 +726,7 @@ public class LocaleController {
         localeInfo.baseLangCode = "";
         localeInfo.isRtl = false;
         localeInfo.pathToFile = "unofficial";
-        localeInfo.pluralLangCode = "zh";
+        localeInfo.pluralLangCode = "zh_cn";
         localeInfo.builtIn = false;
         languages.add(localeInfo);
         languagesDict.put(localeInfo.getKey(), localeInfo);
@@ -742,7 +742,7 @@ public class LocaleController {
         localeInfo.baseLangCode = "";
         localeInfo.isRtl = false;
         localeInfo.pathToFile = "unofficial";
-        localeInfo.pluralLangCode = "zh";
+        localeInfo.pluralLangCode = "zh_tw";
         localeInfo.builtIn = false;
         languages.add(localeInfo);
         languagesDict.put(localeInfo.getKey(), localeInfo);
