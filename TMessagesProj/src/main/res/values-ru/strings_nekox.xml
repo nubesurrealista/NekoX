@@ -16,7 +16,7 @@
     <string name="CustomApiOfficial">Telegram для Android</string>
     <string name="CustomApiTGX">Telegram X</string>
     <string name="CustomApiInput">Ввести вручную</string>
-    <string name="CheckUpdate">Проверить обновления</string>
+    <string name="CheckUpdate">Проверка обновлений</string>
     <string name="NoUpdate">Обновлений не найдено</string>
     <string name="UpdateAvailable">Доступно обновление</string>
     <string name="UpdateUpdate">Обновить</string>
