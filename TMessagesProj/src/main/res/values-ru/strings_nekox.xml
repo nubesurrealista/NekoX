@@ -330,4 +330,8 @@
     <string name="ResetDismissedClientWarnings">Сброс предупреждений отклонённых клиентов</string>
     <string name="LogoutError">Ошибка при выходе из %1$s. Попробуйте выйти вручную.\nСообщение: %2$s</string>
     <string name="BatchLogoutConfirm">Прежде чем продолжить, убедитесь, что вы сохранили или записали все данные, относящиеся к данной сессии (например, секретные чаты)!</string>
+    <string name="OverrideForumStyleDefault">По умолчанию</string>
+    <string name="OverrideForumStyleClassic">Классический</string>
+    <string name="OverrideForumStyleTab">Вкладки</string>
+    <string name="OverrideForumStyle">Заменить стиль форумов</string>
 </resources>
