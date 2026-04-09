@@ -101,7 +101,7 @@ public class MomoChatSettingsActivity extends MomoSettingsBaseActivity implement
     private final AbstractConfigCell alwaysLoadStickerSetFromServerRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.alwaysLoadStickerSetFromServer));
     private final AbstractConfigCell keepSamePositionOnNewMsgRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.keepSamePositionOnNewMsg));
     private final AbstractConfigCell disableSaveDraftToCloudRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.disableSaveDraftToCloud));
-    private final AbstractConfigCell showVoteCountBeforeVoteRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.showVoteCountBeforeVote));
+    private final AbstractConfigCell showVoteCountBeforeVoteRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.keepVoteCountAfterRetractVote));
     private final AbstractConfigCell randomizeFilenameOnSendRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.randomizeFilenameOnSend));
     private final AbstractConfigCell hideAIEditButtonRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.hideAIEditButton));
     private final AbstractConfigCell hideMessageRegexRow = cellGroup.appendCell(new ConfigCellTextInput(null, MomoConfig.hideMessageRegex, null));

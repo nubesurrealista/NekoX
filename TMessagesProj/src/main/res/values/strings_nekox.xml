@@ -288,7 +288,7 @@
     <string name="EnableAvatarBlur">Enable avatar blur</string>
     <string name="HideProfileRating">Hide profile rating</string>
     <string name="UseEmojiForEdited">Use pen emoji as edited indicator</string>
-    <string name="ShowVoteCountBeforeVote">Show vote count before voting</string>
+    <string name="KeepVoteCountAfterRetractVote">Keep vote count after retract vite</string>
     <string name="RecentChats">Recent chats</string>
     <string name="PreventPauseWebViewByOpenChat">Don\'t pause webview when opening chat from notification</string>
     <string name="MomoPaymentWarning">Payment is untested and provided as is without any sort of warranty, you may be throwing money for nothing, use official app to pay if you\'re not sure about this.</string>

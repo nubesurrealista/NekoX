@@ -284,7 +284,6 @@
     <string name="EnableAvatarBlur">Aktifkan blur pada avatar</string>
     <string name="HideProfileRating">Sembunyikan penilaian profil</string>
     <string name="UseEmojiForEdited">Gunakan pena emoji sebagai indikator yang telah disunting</string>
-    <string name="ShowVoteCountBeforeVote">Tampilkan jumlah suara sebelum pemungutan suara</string>
     <string name="RecentChats">Percakapan terkini</string>
     <string name="PreventPauseWebViewByOpenChat">Jangan hentikan webview saat membuka obrolan dari notifikasi</string>
     <string name="MomoPaymentWarning">Pembayaran ini belum diuji dan disediakan apa adanya tanpa jaminan apa pun. Anda mungkin membuang-buang uang dengan sia-sia. Gunakan aplikasi resmi untuk melakukan pembayaran jika Anda tidak yakin tentang hal ini.</string>

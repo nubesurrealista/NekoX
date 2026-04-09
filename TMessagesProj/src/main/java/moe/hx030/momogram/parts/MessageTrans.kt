@@ -83,6 +83,7 @@ fun MessageObject.translateFinished(locale: Locale): Int {
             translatedAns.translatedText = it.translatedText
             translatedAns.text = it.translatedText.toTextWithEntities()
             translatedAns.option = it.option
+            translatedAns.unshuffled_index = it.unshuffled_index
             translatedPoll.answers.add(translatedAns)
 
         }

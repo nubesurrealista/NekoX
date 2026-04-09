@@ -325,7 +325,7 @@ public class MomoConfig {
     public static ConfigItem saveIVFailDomains = addConfig(R.string.SaveIVFailDomains, "SaveIVFailDomains", configTypeBool, CHAT, true);
     public static ConfigItem enhancedVideoBitrate = addConfig(R.string.EnhancedVideoBitrate, "EnhancedVideoBitrate", configTypeBool, CHAT, false);
     public static ConfigItem keepSamePositionOnNewMsg = addConfig(R.string.KeepSamePositionOnNewMsg, "KeepSamePositionOnNewMsg", configTypeBool, CHAT, false);
-    public static ConfigItem showVoteCountBeforeVote = addConfig(R.string.ShowVoteCountBeforeVote, "ShowVoteCountBeforeVote", configTypeBool, CHAT, false);
+    public static ConfigItem keepVoteCountAfterRetractVote = addConfig(R.string.KeepVoteCountAfterRetractVote, "KeepVoteCountAfterRetractVote", configTypeBool, CHAT, false);
 
     public static ConfigItem transcribeProvider = addConfig("TranscribeProvider", configTypeInt, CHAT, TRANSCRIBE_AUTO);
     public static ConfigItem cfAccountID = addConfig("cfAccountID", configTypeString, CHAT, "");
@@ -537,12 +537,15 @@ public class MomoConfig {
             showAddedToFoldersAtTitleType.setConfigInt(showAddedToFoldersAtTitle.Bool() ? 1 : 0);
         }
 
-//        if ((migrate030.Int() < 5 || !SharedConfig.forceDisableTabletMode) && !NekoXConfig.isDeveloper()) {
-//            if (migrate030.Int() < 5) migrate030.setConfigInt(5);
-//            SharedConfig.toggleForceDisableTabletMode();
-//            MomoConfig.tabletMode.setConfigInt(2);
-//            TelegramUtil.restartApp(false);
-//        }
+        // ShowVoteCountBeforeVote -> KeepVoteCountAfterRetractVote
+        if (migrate030.Int() < 6) {
+            if (migrate030.Int() < 6) migrate030.setConfigInt(6);
+            if (preferences.getBoolean("ShowVoteCountBeforeVote", false)) {
+                keepVoteCountAfterRetractVote.setConfigBool(true);
+            }
+        }
+
+
 
         // TODO remove this after some versions.
         if (migrate.Bool() || force)

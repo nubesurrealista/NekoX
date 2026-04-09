@@ -1495,6 +1495,7 @@ public class TranslateController extends BaseController {
                                     TLRPC.PollAnswer dstAnswer = new TLRPC.TL_pollAnswer();
                                     dstAnswer.text = text;
                                     dstAnswer.option = answer.option;
+                                    dstAnswer.unshuffled_index = answer.unshuffled_index;
                                     dst.answers.add(dstAnswer);
                                 }
                             } else if (alreadyTranslated != null) {
@@ -2107,6 +2108,7 @@ public class TranslateController extends BaseController {
                 TLRPC.TL_pollAnswer answerText = new TLRPC.TL_pollAnswer();
                 answerText.text = answer.text;
                 answerText.option = answer.option;
+                answerText.unshuffled_index = answer.unshuffled_index;
                 pollText.answers.add(answerText);
             }
             if (mediaPoll.results != null && !TextUtils.isEmpty(mediaPoll.results.solution)) {

@@ -135,6 +135,7 @@ import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.WebFile;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.messenger.support.ArrayUtils;
 import org.telegram.messenger.utils.CountdownTimer;
 import org.telegram.messenger.utils.DrawableUtils;
 import org.telegram.messenger.utils.FrameTickScheduler;
@@ -251,10 +252,10 @@ import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
 import me.vkryl.core.BitwiseUtils;
 import moe.hx030.momogram.MomoConfig;
-import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.NekoXConfig;
 import moe.hx030.momogram.helpers.WhisperHelper;
 import moe.hx030.momogram.parts.PollTransUpdates;
+import moe.hx030.momogram.util.ArrayUtil;
 
 public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate, ImageReceiver.ImageReceiverDelegate,
         DownloadController.FileDownloadProgressListener, TextSelectionHelper.SelectableView,
@@ -11182,16 +11183,29 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
     }
 
-    private String maybeAppendPollStat(TLRPC.TL_messageMediaPoll media, int a, String text) {
-        boolean forceShowVote = (MomoConfig.showVoteCountBeforeVote.Bool() && !(pollVoted || pollClosed));
+    private String maybeAppendPollStat(TLRPC.TL_messageMediaPoll media, int rawIndex, TLRPC.PollAnswer pollAnswer) {
+        boolean forceShowVote = (MomoConfig.keepVoteCountAfterRetractVote.Bool() && !(pollVoted || pollClosed));
+        String text = pollAnswer.text.text;
         if (!forceShowVote) return text;
-        if (media.results.total_voters > 0 && media.results.results.size() > a) {
-            if (media.results.results.size() > a) {
-                TLRPC.PollAnswerVoters ans = media.results.results.get(a);
-                int voters = ans.voters;
-                float percent = voters * 100 / (float) media.results.total_voters;
-                text = String.format("%s - (%d - %d%%)", text, voters, (int) percent);
+
+        int unshuffledIndex = pollAnswer.unshuffled_index;
+        int a = (unshuffledIndex != 0) ? unshuffledIndex : rawIndex;
+
+        if (media.results.total_voters > 0) {
+            TLRPC.PollAnswerVoters ans = null;
+            if (unshuffledIndex == 0) {
+                for (int i = 0; i < media.results.results.size(); ++i) {
+                    ans = media.results.results.get(i);
+                    if (ArrayUtils.equals(ans.option, pollAnswer.option, Math.max(ans.option.length, pollAnswer.option.length))) break;
+                    ans = null;
+                }
+            } else if (media.results.results.size() > a) {
+                ans = media.results.results.get(a);
             }
+
+            int voters = ans.voters;
+            float percent = voters * 100 / (float) media.results.total_voters;
+            text = String.format("%s - (%d - %d%%)", text, voters, (int) percent);
         }
         return text;
     }
@@ -11505,7 +11519,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         }
                     }
                 }
-                CharSequence answerText = new SpannableStringBuilder(maybeAppendPollStat(media, a, pollAnswer.text.text));
+                CharSequence answerText = new SpannableStringBuilder(maybeAppendPollStat(media, a, pollAnswer));
                 answerText = Emoji.replaceEmoji(answerText, Theme.chat_audioTitlePaint.getFontMetricsInt(), false, null, DynamicDrawableSpan.ALIGN_BOTTOM, 1.0f, emojisCount);
                 if (pollAnswer.text.entities != null) {
                     answerText = MessageObject.replaceAnimatedEmoji(answerText, pollAnswer.text.entities, Theme.chat_audioPerformerPaint.getFontMetricsInt(), true, 1.2f, emojisCount);
