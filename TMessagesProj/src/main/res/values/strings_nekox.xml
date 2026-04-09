@@ -339,4 +339,8 @@
     <string name="RandomizeFilenameOnSend">Randomize file name on send</string>
     <string name="HideAIEditButton">Hide AI button in text field</string>
     <string name="SwitchAccountsFromChatListMenu">Switch accounts from chat list menu</string>
+    <string name="OverrideForumStyle">Override forum style</string>
+    <string name="OverrideForumStyleDefault">Default</string>
+    <string name="OverrideForumStyleClassic">Classic</string>
+    <string name="OverrideForumStyleTab">Tabs</string>
 </resources>

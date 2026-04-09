@@ -187,7 +187,9 @@ public class MomoAppearanceSettingsActivity extends MomoSettingsBaseActivity {
     private final AbstractConfigCell forceHideShowAsListRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.forceHideShowAsList));
     private final AbstractConfigCell largerImageMessageRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.imageMessageSizeTweak));
     private final AbstractConfigCell showChannelMsgFwdCountRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.showChannelMsgFwdCount));
-    private final AbstractConfigCell ignoreTopicTabViewRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.ignoreTopicTabView));
+    // private final AbstractConfigCell ignoreTopicTabViewRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.ignoreTopicTabView));
+    private final AbstractConfigCell overrideForumStyleRow = cellGroup.appendCell(new ConfigCellSelectBox(null, MomoConfig.overrideForumStyle,
+            MomoConfig.overrideForumStyleOptions, null));
     private final AbstractConfigCell useEmojiForEditedRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.useEmojiForEdited));
     private final AbstractConfigCell divider4 = cellGroup.appendCell(new ConfigCellDivider());
 

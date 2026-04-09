@@ -35,6 +35,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -536,5 +537,26 @@ public class NekoXConfig {
         }
 
         return rating;
+    }
+
+    public static final String FORUM_VIEW_OVERRIDE_KEY = "forum_view_";
+    public enum ForumViewOverride {
+        DEFAULT(0),
+        CLASSIC(1),
+        TAB(2);
+
+        public static final List<ForumViewOverride> values = List.of(DEFAULT, CLASSIC, TAB);
+
+        public final int value;
+        ForumViewOverride(int v) { value = v; }
+    }
+
+    public static ForumViewOverride getForumViewOverride(long chatId) {
+        ForumViewOverride ret = ForumViewOverride.values.get(preferences.getInt(FORUM_VIEW_OVERRIDE_KEY + chatId, 0));
+        return ret;
+    }
+
+    public static void setForumViewOverride(long chatId, ForumViewOverride type) {
+        preferences.edit().putInt(FORUM_VIEW_OVERRIDE_KEY + chatId, type.value).apply();
     }
 }

@@ -225,6 +225,9 @@ public class MomoConfig {
     public static ConfigItem removeChatBottomViewPadding = addConfig(R.string.RemoveChatBottomViewPadding, "RemoveChatBottomViewPadding", configTypeBool, APPEARANCE, false);
     public static ConfigItem hideBottomNavTabs = addConfig(R.string.HideBottomNavTabs, "HideBottomNavTabs", configTypeBool, APPEARANCE, false);
 
+    public static ConfigItem overrideForumStyle = addConfig(R.string.OverrideForumStyle, "OverrideForumStyle", configTypeInt, APPEARANCE, 0);
+    public static String[] overrideForumStyleOptions = null;
+
     public static ConfigItem ignoreBlocked = addConfig(R.string.IgnoreBlocked, "IgnoreBlocked", configTypeBool, CHAT, false);
     public static ConfigItem muteBlockedFromGroup = addConfig(R.string.MuteBlockedFromGroup, "MuteBlockedFromGroup", configTypeBool, CHAT, false);
     public static ConfigItem muteBotsFromGroup = addConfig(R.string.MuteBotsFromGroup, "MuteBotsFromGroup", configTypeBool, CHAT, false);
@@ -537,11 +540,14 @@ public class MomoConfig {
             showAddedToFoldersAtTitleType.setConfigInt(showAddedToFoldersAtTitle.Bool() ? 1 : 0);
         }
 
-        // ShowVoteCountBeforeVote -> KeepVoteCountAfterRetractVote
         if (migrate030.Int() < 6) {
             if (migrate030.Int() < 6) migrate030.setConfigInt(6);
+            // ShowVoteCountBeforeVote -> KeepVoteCountAfterRetractVote
             if (preferences.getBoolean("ShowVoteCountBeforeVote", false)) {
                 keepVoteCountAfterRetractVote.setConfigBool(true);
+            }
+            if (ignoreTopicTabView.Bool()) {
+                overrideForumStyle.setConfigInt(NekoXConfig.ForumViewOverride.CLASSIC.value);
             }
         }
 
@@ -787,6 +793,11 @@ public class MomoConfig {
                 getString(R.string.Disable),
                 getString(R.string.PositionLeft),
                 getString(R.string.PositionRight)
+        };
+        overrideForumStyleOptions = new String[] {
+                getString(R.string.OverrideForumStyleDefault),
+                getString(R.string.OverrideForumStyleClassic),
+                getString(R.string.OverrideForumStyleTab)
         };
         applyHideMsgRegex();
         applyAutoBanByRegex();

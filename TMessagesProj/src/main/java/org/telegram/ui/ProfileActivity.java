@@ -285,6 +285,7 @@ import org.telegram.ui.Components.TranslateAlert2;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UndoView;
+import org.telegram.ui.Components.UniversalAdapter;
 import org.telegram.ui.Components.VectorAvatarThumbDrawable;
 import org.telegram.ui.Components.blur3.BlurredBackgroundDrawableViewFactory;
 import org.telegram.ui.Components.blur3.DownscaleScrollableNoiseSuppressor;
@@ -483,6 +484,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private ActionBarMenuSubItem blockFromSearchItem;
     private ActionBarMenuSubItem allMediaSpoilerItem;
     private ActionBarMenuSubItem muteToggleItem;
+    private ActionBarMenuSubItem overrideForumItem;
     private ImageView ttlIconView;
     private ActionBarMenuSubItem autoDeleteItem;
     AutoDeletePopupWrapper autoDeletePopupWrapper;
@@ -646,6 +648,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private final static int show_phone = 1007;
     private final static int fban = 1008;
     private final static int mute_acc = 1009;
+    private final static int override_forum = 1010;
 
     private Rect rect = new Rect();
 
@@ -3079,6 +3082,42 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     boolean mutedAcc = NekoXConfig.toggleMuteCurrentAccount();
                     muteToggleItem.setIcon(mutedAcc ? R.drawable.msg_unmute : R.drawable.msg_mute);
                     muteToggleItem.setText(LocaleController.getString(mutedAcc ? R.string.UnMuteAccountNoti : R.string.MuteAccountNoti));
+                } else if (id == override_forum) {
+                    final int[] selected = { NekoXConfig.getForumViewOverride(chatId).value };
+                    RecyclerListView listView = new RecyclerListView(context);
+                    listView.setLayoutManager(new LinearLayoutManager(context));
+                    UniversalAdapter adapter = new UniversalAdapter(
+                            listView,
+                            context,
+                            currentAccount,
+                            classGuid,
+                            true,
+                            (items, adapter1) -> {
+                                for (int i = 0; i < NekoXConfig.ForumViewOverride.values.size(); i++) {
+                                    items.add(UItem.asRadio(i, MomoConfig.overrideForumStyleOptions[i]).setChecked(selected[0] == i));
+                                }
+                            },
+                            resourcesProvider
+                    );
+                    listView.setAdapter(adapter);
+                    listView.setOnItemClickListener((view1, position) -> {
+                        if (position < 0 || position >= NekoXConfig.ForumViewOverride.values.size()) {
+                            return;
+                        }
+                        selected[0] = position;
+                        adapter.update(true);
+                    });
+
+                    AlertDialog dialog = new AlertDialog.Builder(context, resourcesProvider)
+                            .setTitle(LocaleController.getString(R.string.OverrideForumStyle))
+                            .setView(listView)
+                            .setPositiveButton(LocaleController.getString(R.string.OK), (d, which) -> {
+                                NekoXConfig.setForumViewOverride(chatId, NekoXConfig.ForumViewOverride.values.get(selected[0]));
+                            })
+                            .setNegativeButton(LocaleController.getString(R.string.Cancel), null)
+                            .create();
+
+                    dialog.show();
                 }
             }
         });
@@ -12862,24 +12901,50 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (selfUser && !myProfile) {
             otherItem.addSubItem(logout, R.drawable.msg_leave, LocaleController.getString(R.string.LogOut));
         } else {
-            if (MomoConfig.profileShowAddToFolder.Bool())
+            boolean addedGap = false;
+            if (MomoConfig.profileShowAddToFolder.Bool()) {
+                addedGap = true;
+                otherItem.addColoredGap();
                 otherItem.addSubItem(add_to_folder, R.drawable.msg_folders, LocaleController.getString(R.string.FilterAddTo));
+            }
 
-            if (MomoConfig.profileShowClearCache.Bool())
+            if (MomoConfig.profileShowClearCache.Bool()) {
+                if (!addedGap) {
+                    addedGap = true;
+                    otherItem.addColoredGap();
+                }
                 otherItem.addSubItem(clear_cache, R.drawable.msg_delete, LocaleController.getString(R.string.ClearCache));
+            }
 
             if (MomoConfig.profileShowBlockSearch.Bool()) {
                 int blockFromSearchTxt = (MomoConfig.searchBlacklistData.contains(getDialogId()) ?
                         R.string.SearchBlacklistRevert : R.string.SearchBlacklistShort);
+                if (!addedGap) {
+                    addedGap = true;
+                    otherItem.addColoredGap();
+                }
                 blockFromSearchItem = otherItem.addSubItem(block_from_search, R.drawable.msg_block,
                         LocaleController.getString(blockFromSearchTxt));
             }
 
             if (MomoConfig.profileShowSpoilerOnAllMedia.Bool()) {
+                if (!addedGap) {
+                    addedGap = true;
+                    otherItem.addColoredGap();
+                }
                 int spoilerIcon = (MomoConfig.alwaysUseSpoilerForMediaChats.contains(getDialogId()) ?
                         R.drawable.msg_spoiler : R.drawable.msg_spoiler_off);
                 allMediaSpoilerItem = otherItem.addSubItem(all_media_spoiler, spoilerIcon,
                         LocaleController.getString(R.string.SpoilerOnAllMedia));
+            }
+            TLRPC.Chat chat = getMessagesController().getChat(chatId);
+            if (chat != null && chat.forum) {
+                if (!addedGap) {
+                    addedGap = true;
+                    otherItem.addColoredGap();
+                }
+                overrideForumItem = otherItem.addSubItem(override_forum, R.drawable.msg_topics,
+                        LocaleController.getString(R.string.OverrideForumStyle));
             }
         }
         if (!isPulledDown) {

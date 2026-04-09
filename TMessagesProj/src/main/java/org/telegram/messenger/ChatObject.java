@@ -37,6 +37,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
 
 public class ChatObject {
 
@@ -2502,6 +2503,17 @@ public class ChatObject {
     }
 
     public static boolean areTabsEnabled(TLRPC.Chat chat) {
-        return (SharedConfig.forceForumTabs || chat != null && chat.forum_tabs) && !MomoConfig.ignoreTopicTabView.Bool();
+        boolean forceClassic = MomoConfig.overrideForumStyle.Int() == NekoXConfig.ForumViewOverride.CLASSIC.value;
+        boolean forceTab = MomoConfig.overrideForumStyle.Int() == NekoXConfig.ForumViewOverride.TAB.value;
+        if (chat == null) {
+            return SharedConfig.forceForumTabs && !forceClassic;
+        }
+
+        NekoXConfig.ForumViewOverride override = NekoXConfig.getForumViewOverride(chat.id);
+        if (override == NekoXConfig.ForumViewOverride.TAB) return true;
+        if (override == NekoXConfig.ForumViewOverride.CLASSIC) return false;
+
+        return (SharedConfig.forceForumTabs || chat.forum_tabs || forceTab) && !forceClassic;
     }
+
 }
