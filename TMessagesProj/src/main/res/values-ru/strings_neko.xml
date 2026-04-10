@@ -317,4 +317,5 @@
     <string name="AllowBotInDirectShare">Разрешить ботов в качестве адресатов Direct Share</string>
     <string name="AllowTestingUpdate">При поиске обновлений проверять тестовые сборки</string>
     <string name="enhancedFileLoaderWarning">Это может негативно повлиять на фактическую скорость скачивания, особенно если у вас нет Premium-аккаунта. Продолжить?</string>
+    <string name="DisablePullDownSearch">Отключить потягивание для поиска</string>
 </resources>
