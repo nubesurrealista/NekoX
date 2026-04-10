@@ -11203,6 +11203,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 ans = media.results.results.get(a);
             }
 
+            if (ans == null) {
+                if (unshuffledIndex == 0 && !media.results.results.isEmpty())
+                    ans = media.results.results.get(0);
+                else
+                    return text;
+            }
+
             int voters = ans.voters;
             float percent = voters * 100 / (float) media.results.total_voters;
             text = String.format("%s - (%d - %d%%)", text, voters, (int) percent);
