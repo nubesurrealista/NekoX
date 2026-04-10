@@ -334,4 +334,7 @@
     <string name="OverrideForumStyleClassic">Классический</string>
     <string name="OverrideForumStyleTab">Вкладки</string>
     <string name="OverrideForumStyle">Заменить стиль форумов</string>
+    <string name="KeepVoteCountAfterRetractVote">Сохранять количество голосов после отмены голоса</string>
+    <string name="TrimCOTFromTranslateResult">Обрезать процесс мышления с префиксом [COT] из перевода</string>
+    <string name="HideAIEditButton">Скрыть кнопку ИИ в текстовом поле</string>
 </resources>
