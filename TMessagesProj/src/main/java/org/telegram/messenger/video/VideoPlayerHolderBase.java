@@ -350,8 +350,8 @@ public class VideoPlayerHolderBase {
                 playerStubPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                AndroidUtilities.getBitmapFromSurface(surfaceView, playerStubBitmap);
-                if (playerStubBitmap.getPixel(0, 0) == Color.TRANSPARENT) {
+                stubAvailable = AndroidUtilities.getBitmapFromSurface(surfaceView, playerStubBitmap);
+                if (stubAvailable && playerStubBitmap.getPixel(0, 0) == Color.TRANSPARENT) {
                     stubAvailable = false;
                 }
             }

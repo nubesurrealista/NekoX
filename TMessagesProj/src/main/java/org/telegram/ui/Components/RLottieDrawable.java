@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.JsonReader;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 
@@ -44,6 +45,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import moe.hx030.momogram.MomoConfig;
@@ -322,6 +324,9 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
         @Override
         public void run() {
             if (isRecycled) {
+                if (frameWaitSync != null) {
+                    frameWaitSync.countDown();
+                }
                 return;
             }
             if (!canLoadFrames() || isDice == 2 && secondNativePtr == 0) {
@@ -1066,7 +1071,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
         if (scheduleNextGetFrame()) {
             if (!async) {
                 try {
-                    frameWaitSync.await();
+                    boolean ok = frameWaitSync.await(Looper.myLooper() == Looper.getMainLooper() ? 1000 : 2000, TimeUnit.MILLISECONDS);
+                    if (!ok) Log.e("030-rlottie", "frameWaitSync timeout", new Exception());
                 } catch (Exception e) {
                     FileLog.e(e);
                 }

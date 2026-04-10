@@ -60,6 +60,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.Vibrator;
@@ -1068,19 +1069,22 @@ public class AndroidUtilities {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void getBitmapFromSurface(SurfaceView surfaceView, Bitmap surfaceBitmap) {
+    public static boolean getBitmapFromSurface(SurfaceView surfaceView, Bitmap surfaceBitmap) {
         if (surfaceView == null || !surfaceView.getHolder().getSurface().isValid()) {
-            return;
+            return false;
         }
         CountDownLatch countDownLatch = new CountDownLatch(1);
         PixelCopy.request(surfaceView, surfaceBitmap, copyResult -> {
             countDownLatch.countDown();
         }, Utilities.searchQueue.getHandler());
+        boolean ok = false;
         try {
-            countDownLatch.await();
+            ok = countDownLatch.await(Looper.myLooper() == Looper.getMainLooper() ? 1000 : 2000, TimeUnit.MILLISECONDS);
+            if (!ok) Log.e("030-bitmap", "AndroidUtilities.getBitmapFromSurface timeout", new Exception());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        return ok;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
