@@ -343,4 +343,5 @@
     <string name="OverrideForumStyleDefault">Default</string>
     <string name="OverrideForumStyleClassic">Classic</string>
     <string name="OverrideForumStyleTab">Tabs</string>
+    <string name="DumpThreads">Dump threads</string>
 </resources>

@@ -48,6 +48,8 @@ import org.telegram.ui.LaunchActivity;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import kotlin.Unit;
@@ -63,6 +65,7 @@ import moe.hx030.momogram.transtale.Translator;
 import moe.hx030.momogram.transtale.source.FirefoxLocalTranslator;
 import moe.hx030.momogram.ui.PopupBuilder;
 import moe.hx030.momogram.utils.FileUtil;
+import moe.hx030.momogram.utils.ShareUtil;
 import moe.hx030.momogram.utils.StrUtil;
 import moe.hx030.momogram.utils.TelegramUtil;
 import moe.hx030.momogram.utils.ZipUtil;
@@ -145,6 +148,13 @@ public class MomoExperimentalSettingsActivity extends MomoSettingsBaseActivity {
             () -> AndroidUtilities.runOnUIThread(() -> {
                 MomoConfig.warnedClients.setConfigString("");
                 MomoConfig.prevSessionCheck.setConfigLong(0L);
+            })));
+    private final AbstractConfigCell dumpThreadsRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.DumpThreads), null, null,
+            () -> AndroidUtilities.runOnUIThread(() -> {
+                String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmmss"));
+                File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), timestamp + ".m0m0-threads.txt");
+                FileUtil.writeUtf8String(FileLog.dumpThreads(false), cacheFile);
+                ShareUtil.shareFile(getParentActivity(), cacheFile);
             })));
     private final AbstractConfigCell triggerCrashRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.TriggerCrash), null, null,
             () -> AndroidUtilities.runOnUIThread(() -> { int[] arr = new int[0]; arr[1] = 0;})));

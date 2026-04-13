@@ -482,7 +482,7 @@ public class FileLog {
         }
     }
 
-    private void dumpANR() {
+    public static String dumpThreads(boolean anr) {
         StringBuilder sb = new StringBuilder();
         Map<Thread, StackTraceElement[]> allThreads = Thread.getAllStackTraces();
 
@@ -497,7 +497,13 @@ public class FileLog {
             sb.append("\n\n");
         }
 
-        FileLog.e("ANR thread dump\n" + sb.toString());
+        if (anr) FileLog.e("ANR thread dump\n" + sb.toString());
+        else Log.d("tg-dump", "thread dump\n" + sb);
+        return sb.toString();
+    }
+
+    private void dumpANR() {
+        dumpThreads(true);
         dumpMemory(false);
     }
 
