@@ -89,6 +89,7 @@ function build_one {
 	--enable-decoder=mpeg4 \
 	--enable-decoder=mjpeg \
 	--enable-decoder=gif \
+	--enable-parser=gif \
 	--enable-decoder=alac \
 	--enable-demuxer=mov \
 	--enable-demuxer=gif \
