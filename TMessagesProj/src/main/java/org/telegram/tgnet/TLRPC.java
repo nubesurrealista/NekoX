@@ -62767,25 +62767,32 @@ public class TLRPC {
                     break;
             }
             result = TLdeserialize(Message.class, result, stream, constructor, exception);
-            if (result != null && result.from_id == null) {
-                if (result.id < 0 && result.random_id == 0) {
-                    result.from_id = new TL_peerUser();
-                } else {
-                    result.from_id = result.peer_id;
+            if (result != null) {
+                if (result.from_id == null) {
+                    if (result.id < 0 && result.random_id == 0) {
+                        result.from_id = new TL_peerUser();
+                    } else {
+                        result.from_id = result.peer_id;
+                    }
                 }
 
                 try {
-                    boolean spoilerOverride = false;
-                    if (MomoConfig.ignoreBlocked.Bool()) {
-                        for (int n : MessagesController.instanceNums) {
-                            spoilerOverride = MessagesController.getInstance(n).blockedPeers.indexOfKey(result.from_id.user_id) >= 0;
-                            if (spoilerOverride) break;
+                    if (result.from_id != null) {
+                        boolean spoilerOverride = false;
+                        if (MomoConfig.ignoreBlocked.Bool()) {
+                            long peerId = MessageObject.getPeerId(result.from_id);
+                            for (int n : MessagesController.instanceNums) {
+                                if (MessagesController.getInstance(n).blockedPeers.indexOfKey(peerId) >= 0) {
+                                    spoilerOverride = true;
+                                    break;
+                                }
+                            }
                         }
-                    }
-                    if (spoilerOverride) {
-                        TLRPC.TL_messageEntitySpoiler s = new TLRPC.TL_messageEntitySpoiler();
-                        s.length = result.message.length();
-                        result.entities.add(s);
+                        if (spoilerOverride && result.message != null) {
+                            TLRPC.TL_messageEntitySpoiler s = new TLRPC.TL_messageEntitySpoiler();
+                            s.length = result.message.length();
+                            result.entities.add(s);
+                        }
                     }
                     if (MomoConfig.hideMessageRegexPattern != null) {
                         result.hide = (result.message != null && MomoConfig.hideMessageRegexPattern.matcher(result.message).find());
