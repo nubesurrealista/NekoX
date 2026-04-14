@@ -3,7 +3,7 @@
 source "bin/init/env.sh"
 
 cd TMessagesProj/jni || exit 1
-# git submodule update --init ffmpeg
+git submodule update --init ffmpeg dav1d
 
 cd ffmpeg
 git reset --hard

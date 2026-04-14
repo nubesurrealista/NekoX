@@ -26,10 +26,25 @@ cp ffmpeg/libavcodec/bytestream.h ffmpeg/build/armeabi-v7a/include/libavcodec/by
 cp ffmpeg/libavcodec/bytestream.h ffmpeg/build/x86/include/libavcodec/bytestream.h
 cp ffmpeg/libavcodec/bytestream.h ffmpeg/build/x86_64/include/libavcodec/bytestream.h
 
+grep -q define\ HAVE_FAST_64BIT "ffmpeg/libavcodec/get_bits.h" || sed -i '0,/^#define /{
+/^#define /a\
+#ifndef HAVE_FAST_64BIT\
+#if defined(__aarch64__) || defined(__x86_64__)\
+#define HAVE_FAST_64BIT 1\
+#else\
+#define HAVE_FAST_64BIT 0\
+#endif\
+#endif\
+#ifndef SUINT\
+#define SUINT unsigned int\
+#endif
+}' ffmpeg/libavcodec/get_bits.h
+
 cp ffmpeg/libavcodec/get_bits.h ffmpeg/build/arm64-v8a/include/libavcodec/get_bits.h
 cp ffmpeg/libavcodec/get_bits.h ffmpeg/build/armeabi-v7a/include/libavcodec/get_bits.h
 cp ffmpeg/libavcodec/get_bits.h ffmpeg/build/x86/include/libavcodec/get_bits.h
 cp ffmpeg/libavcodec/get_bits.h ffmpeg/build/x86_64/include/libavcodec/get_bits.h
+
 
 cp ffmpeg/libavcodec/golomb.h ffmpeg/build/arm64-v8a/include/libavcodec/golomb.h
 cp ffmpeg/libavcodec/golomb.h ffmpeg/build/armeabi-v7a/include/libavcodec/golomb.h

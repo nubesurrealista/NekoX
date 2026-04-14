@@ -22,6 +22,8 @@ function build_one {
 	INCLUDES=" -I./${LIBVPXPREFIX}/include -I./../dav1d/$PREFIX/include"
 	LIBS=" -L${PLATFORM}/usr/$LIB_DIR -L./${LIBVPXPREFIX}/lib -L./../dav1d/$PREFIX/lib"
 
+	export PKG_CONFIG_PATH="$(pwd)/../dav1d/$PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
+
 	echo "Cleaning..."
 	rm -f config.h
 	make clean || true

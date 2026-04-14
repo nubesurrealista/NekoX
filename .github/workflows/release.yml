@@ -5,14 +5,8 @@ on:
       tag:
         description: 'Release Tag'
         required: true
-      play:
-        description: 'Play: If want ignore'
-        required: false
-      upload:
-        description: 'Upload: If want ignore'
-        required: false
       publish:
-        description: 'Publish: If want ignore'
+        description: 'Publish Release: If want ignore'
         required: false
 jobs:
   check:
@@ -31,31 +25,41 @@ jobs:
     needs: check
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - name: Fetch Status
         run: |
           git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
           git submodule status TMessagesProj/jni/libvpx > libvpx_status
+          git submodule status TMessagesProj/jni/dav1d > dav1d_status
       - name: FFmpeg Cache
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/jni/ffmpeg/build
             TMessagesProj/jni/libvpx/build
-          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
+            TMessagesProj/jni/dav1d/build
+          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'dav1d_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
       - name: Setup Android SDK Tools
-        uses: android-actions/setup-android@v2
+        uses: android-actions/setup-android@v3
         if: steps.cache.outputs.cache-hit != 'true'
       - name: Install NDK
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
+          SDK_MANAGER=$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager
+          if [ ! -f "$SDK_MANAGER" ]; then
+            SDK_MANAGER=$(find $ANDROID_HOME -name sdkmanager | head -n 1)
+          fi
+          echo "y" | sudo $SDK_MANAGER --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT}
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
-#          echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
+          echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          sudo apt-get install yasm -y || true
+          sudo apt-get update
+          sudo apt-get install yasm nasm meson ninja-build -y || true
           ./run init libs libvpx
           ./run init libs ffmpeg
   boringssl:
@@ -64,12 +68,14 @@ jobs:
     needs: check
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - name: Fetch Status
         run: git submodule status TMessagesProj/jni/boringssl > boringssl_status
       - name: BoringSSL Cache
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/jni/boringssl/build
@@ -80,8 +86,13 @@ jobs:
       - name: Install NDK
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
+          SDK_MANAGER=$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager
+          if [ ! -f "$SDK_MANAGER" ]; then
+            SDK_MANAGER=$ANDROID_HOME/tools/bin/sdkmanager
+          fi
+          echo "y" | sudo $SDK_MANAGER --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT}
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
-#          echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
+          echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
@@ -102,33 +113,37 @@ jobs:
           - x86_64
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - name: Fetch Status
         run: |
           git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
           git submodule status TMessagesProj/jni/libvpx > libvpx_status
+          git submodule status TMessagesProj/jni/dav1d > dav1d_status
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
       - name: Native Cache
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-${{ matrix.flavor }}
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status', 'dav1d_status') }}-${{ matrix.flavor }}
       - name: Checkout Library
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           git submodule update --init 'TMessagesProj/jni/*' || true
       - name: FFmpeg Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           path: |
             TMessagesProj/jni/ffmpeg/build
             TMessagesProj/jni/libvpx/build
-          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
+            TMessagesProj/jni/dav1d/build
+          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'dav1d_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
       - name: BoringSSL Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           path: |
@@ -140,20 +155,30 @@ jobs:
       - name: Install NDK
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
+          SDK_MANAGER=$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager
+          if [ ! -f "$SDK_MANAGER" ]; then
+            SDK_MANAGER=$ANDROID_HOME/tools/bin/sdkmanager
+          fi
+          echo "y" | sudo $SDK_MANAGER --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT}
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
-#          echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
+          echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
       - name: Fix BoringSSL
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           cd TMessagesProj/jni
-          ./patch_boringssl.sh || cd boringssl && git status | grep modified
+          ./patch_boringssl.sh || true
+      - name: Fix ffmpeg
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          cd TMessagesProj/jni
+          ./patch_ffmpeg.sh || true
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           export NATIVE_TARGET="${{ matrix.flavor }}"
           ./run libs native
-          mkdir -p ~/NekoXapks || true
-          cp -rfv TMessagesProj/build/outputs/apk ~/NekoXapks || true
+          mkdir -p ~/apks || true
+          cp -rfv TMessagesProj/build/outputs/apk ~/apks || true
   build:
     name: Gradle Build
     runs-on: ubuntu-latest
@@ -162,50 +187,75 @@ jobs:
     strategy:
       matrix:
         flavor:
-          - MiniReleaseNoGcm
+          - Release
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - name: Setup Android SDK Tools
         uses: android-actions/setup-android@v2
       - name: Install NDK
         run: |
+          SDK_MANAGER=$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager
+          if [ ! -f "$SDK_MANAGER" ]; then
+            SDK_MANAGER=$ANDROID_HOME/tools/bin/sdkmanager
+          fi
+          echo "y" | sudo $SDK_MANAGER --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT}
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
-#          echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
+          echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
       - name: Fetch Status
         run: |
           git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
+          git submodule status TMessagesProj/jni/libvpx > libvpx_status
+          git submodule status TMessagesProj/jni/dav1d > dav1d_status
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
       - name: Native Cache (armeabi-v7a)
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-armeabi-v7a
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status', 'dav1d_status') }}-armeabi-v7a
       - name: Native Cache (arm64-v8a)
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-arm64-v8a
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status', 'dav1d_status') }}-arm64-v8a
       - name: Native Cache (x86)
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-x86
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status', 'dav1d_status') }}-x86
       - name: Native Cache (x86_64)
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-x86_64
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status', 'dav1d_status') }}-x86_64
+      - name: FFmpeg Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            TMessagesProj/jni/ffmpeg/build
+            TMessagesProj/jni/libvpx/build
+            TMessagesProj/jni/dav1d/build
+          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'dav1d_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
+      - name: BoringSSL Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            TMessagesProj/jni/boringssl/build
+          key: ${{ hashFiles('boringssl_status') }}
       - name: Fix Gradle Memory
         run: |
           sed -i -e "s/16384/6144/g" gradle.properties
 #          echo "ndk.dir=${ANDROID_HOME}/ndk-bundle" > local.properties
+          echo "TELEGRAM_APP_ID=${{ secrets.TG_APP_ID }}" > local.properties
+          echo "TELEGRAM_APP_HASH=${{ secrets.TG_APP_HASH }}" >> local.properties
       - name: Gradle cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.gradle
           key: gradle-${{ hashFiles('**/*.gradle') }}
@@ -216,10 +266,10 @@ jobs:
 
           APK=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')
           APK=$(dirname $APK)
-          mkdir -p ~/NekoXapks || true
-          cp -rfv TMessagesProj/build/outputs/apk ~/NekoXapks/${{ github.event.inputs.tag }} || true
+          mkdir -p ~/apks || true
+          cp -rfv TMessagesProj/build/outputs/apk ~/apks/${{ github.event.inputs.tag }} || true
           echo "APK=$APK" >> $GITHUB_ENV
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.flavor }}
           path: ${{ env.APK }}
@@ -230,88 +280,16 @@ jobs:
     needs: build
     steps:
       - name: Download Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           path: artifacts
       - name: Release
         run: |
-          wget -O ghr.tar.gz https://github.com/tcnksm/ghr/releases/download/v0.13.0/ghr_v0.13.0_linux_amd64.tar.gz
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          wget -O ghr.tar.gz https://github.com/tcnksm/ghr/releases/download/v0.18.0/ghr_v0.18.0_linux_amd64.tar.gz
           tar -xvf ghr.tar.gz
           mv ghr*linux_amd64/ghr .
           mkdir apks
           find artifacts -name "*.apk" -exec cp {} apks \;
-          ./ghr -delete -t "${{ github.token }}" -n "${{ github.event.inputs.tag }}" "${{ github.event.inputs.tag }}" apks
-  upload:
-    name: Upload Release
-    if: github.event.inputs.upload != 'y'
-    runs-on: ubuntu-latest
-    needs:
-      - build
-      - telegram-bot-api
-    steps:
-      - name: Download Artifacts
-        uses: actions/download-artifact@v2
-        with:
-          path: artifacts
-      - name: Download Telegram Bot API Binary
-        uses: actions/download-artifact@master
-        with:
-          name: telegram-bot-api-binary
-          path: .
-      - name: Prepare Upload
-        run: |
-          chmod +x telegram-bot-api-binary
-          function start() {
-            ./telegram-bot-api-binary -p 38118 --api-id=21724 --api-hash=3e0cb5efcd52300aec5994fdfc5bdc16 --local 2>&1 > /dev/null &
-            sleep 5
-          }
-          start
-          curl http://127.0.0.1:38118/ || start
-          curl http://127.0.0.1:38118/ || start
-          curl http://127.0.0.1:38118/ || start
-      - name: Upload
-        run: |
-          mkdir apks
-          find artifacts -name "*.apk" -exec cp {} apks \;
-          curl https://raw.githubusercontent.com/NekoX-Dev/NekoX/dev/.github/scripts/upload.py -o upload.py
-          export BOT_TOKEN="${{ secrets.HELPER_BOT_TOKEN }}"
-          export BOT_TARGET="${{ secrets.HELPER_BOT_TARGET }}"
-          export VERSION_CODE="$(grep -E "def verCode = ([0-9]+)" TMessagesProj/build.gradle | sed "s/def verCode = //")"
-          export VERSION_NAME="$(grep -E "def verName = " TMessagesProj/build.gradle | sed "s/def verName = //" | sed "s/\"//g")"
-          python3 upload.py release
-          pkill telegram-bot
-
-  telegram-bot-api:
-    name: Telegram Bot API
-    if: github.event.inputs.upload != 'y'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Clone Telegram Bot API
-        run: |
-          git clone --recursive https://github.com/tdlib/telegram-bot-api.git
-          git status telegram-bot-api >> telegram-bot-api-status
-      - name: Cache Bot API Binary
-        id: cache-bot-api
-        uses: actions/cache@v2
-        with:
-          path: telegram-bot-api-binary
-          key: CI-telegram-bot-api-${{ hashFiles('telegram-bot-api-status') }}
-      - name: Compile Telegram Bot API
-        if: steps.cache-bot-api.outputs.cache-hit != 'true'
-        run: |
-          cd telegram-bot-api
-          rm -rf build
-          mkdir build
-          cd build
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=.. ..
-          cmake --build . --target install -j$(nproc)
-          cd ../..
-          ls -l telegram-bot-api/bin/telegram-bot-api*
-          cp telegram-bot-api/bin/telegram-bot-api telegram-bot-api-binary
-      - name: Upload Binary
-        uses: actions/upload-artifact@master
-        with:
-          name: telegram-bot-api-binary
-          path: telegram-bot-api-binary
+          ./ghr -delete -prerelease -u dic1911 -r Momogram -c $(git log --pretty=format:'%h' -n 1 | cat) -t "${{ github.token }}" -n "${{ github.event.inputs.tag }}" "${{ github.event.inputs.tag }}" apks

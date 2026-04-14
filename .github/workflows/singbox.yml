@@ -29,7 +29,7 @@ jobs:
           git submodule status TMessagesProj/jni/libvpx > libvpx_status
       - name: FFmpeg Cache
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/jni/ffmpeg/build
@@ -61,7 +61,7 @@ jobs:
         run: git submodule status TMessagesProj/jni/boringssl > boringssl_status
       - name: BoringSSL Cache
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/jni/boringssl/build
@@ -103,7 +103,7 @@ jobs:
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
       - name: Native Cache
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/src/main/libs
@@ -113,7 +113,7 @@ jobs:
         run: |
           git submodule update --init 'TMessagesProj/jni/*'
       - name: FFmpeg Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           path: |
@@ -121,7 +121,7 @@ jobs:
             TMessagesProj/jni/libvpx/build
           key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
       - name: BoringSSL Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           path: |
@@ -157,7 +157,7 @@ jobs:
         run: git submodule status v2ray > v2ray_status
       - name: V2ray Cache
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/libs/libv2ray.aar
@@ -190,7 +190,7 @@ jobs:
         run: git submodule status ss-rust/src/main/rust/shadowsocks-rust > shadowsocks_status
       - name: Shadowsocks Cache
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/libs/ss-rust-release.aar
@@ -221,7 +221,7 @@ jobs:
         run: git submodule status 'ssr-libev/*' > shadowsocksr_status
       - name: ShadowsocksR Cache
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/libs/ssr-libev-release.aar
@@ -271,43 +271,43 @@ jobs:
           git submodule status 'ssr-libev/*' > shadowsocksr_status
           git submodule status v2ray > v2ray_status
       - name: Native Cache (armeabi-v7a)
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/src/main/libs
           key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-armeabi-v7a
       - name: Native Cache (arm64-v8a)
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/src/main/libs
           key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-arm64-v8a
       - name: Native Cache (x86)
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/src/main/libs
           key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-x86
       - name: Native Cache (x86_64)
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/src/main/libs
           key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-x86_64
       - name: V2ray Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/libs/libv2ray.aar
           key: ${{ hashFiles('bin/libs/v2ray/*', 'v2ray_status') }}
       - name: Shadowsocks Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/libs/ss-rust-release.aar
           key: ${{ hashFiles('shadowsocks_status') }}
       - name: ShadowsocksR Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/libs/ssr-libev-release.aar
@@ -317,7 +317,7 @@ jobs:
           sed -i -e "s/16384/6144/g" gradle.properties
 #          echo "ndk.dir=${ANDROID_HOME}/ndk-bundle" > local.properties
       - name: Gradle cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.gradle
           key: gradle-${{ hashFiles('**/*.gradle') }}
@@ -407,7 +407,7 @@ jobs:
           git status telegram-bot-api >> telegram-bot-api-status
       - name: Cache Bot API Binary
         id: cache-bot-api
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: telegram-bot-api-binary
           key: CI-telegram-bot-api-${{ hashFiles('telegram-bot-api-status') }}
