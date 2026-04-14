@@ -210,6 +210,10 @@ public class SimpleTextView extends View implements Drawable.Callback {
         }
     }
 
+    public float getTextSize() {
+        return textPaint.getTextSize();
+    }
+
     public void setBuildFullLayout(boolean value) {
         buildFullLayout = value;
     }

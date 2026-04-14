@@ -46,6 +46,7 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.INavigationLayout;
+import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.ArticleViewer;
@@ -181,6 +182,7 @@ public class MomoAppearanceSettingsActivity extends MomoSettingsBaseActivity {
     private final AbstractConfigCell showEditTimeInPopupMenuRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.showEditTimeInPopupMenu));
     private final AbstractConfigCell showForwardTimeInPopupMenuRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.showForwardTimeInPopupMenu));
     private final AbstractConfigCell marqueeForLongChatTitlesRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.marqueeForLongChatTitles));
+    private final AbstractConfigCell marqueeForLongMomoOptionsRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.marqueeForLongMomoOptions));
     private final AbstractConfigCell disableCustomWallpaperUserRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.disableCustomWallpaperUser));
     private final AbstractConfigCell disableCustomWallpaperChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.disableCustomWallpaperChannel));
     private final AbstractConfigCell appendOriginalTimestampRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.appendOriginalTimestamp));
@@ -397,7 +399,7 @@ public class MomoAppearanceSettingsActivity extends MomoSettingsBaseActivity {
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             AbstractConfigCell a = cellGroup.rows.get(position);
-            TextView textView = null;
+            SimpleTextView textView = null;
             String currentText = null;
             if (a != null) {
                 if (a instanceof ConfigCellCustom) {

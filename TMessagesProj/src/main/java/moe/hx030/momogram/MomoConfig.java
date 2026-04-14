@@ -215,6 +215,7 @@ public class MomoConfig {
     public static ConfigItem showEditTimeInPopupMenu = addConfig(R.string.ShowEditTimestampInPopupMenu, "ShowEditTimestampInPopupMenu", configTypeBool, APPEARANCE, false);
     public static ConfigItem showForwardTimeInPopupMenu = addConfig(R.string.ShowForwardTimestampInPopupMenu, "ShowForwardTimestampInPopupMenu", configTypeBool, APPEARANCE, false);
     public static ConfigItem marqueeForLongChatTitles = addConfig(R.string.MarqueeForLongChatTitles, "MarqueeForLongChatTitles", configTypeBool, APPEARANCE, true);
+    public static ConfigItem marqueeForLongMomoOptions = addConfig(R.string.MarqueeForLongMomoOptions, "MarqueeForLongMomoSettings", configTypeBool, APPEARANCE, false);
     public static ConfigItem forceHideShowAsList = addConfig(R.string.ForceHideShowAsList, "ForceHideShowAsList", configTypeBool, APPEARANCE, false);
     public static ConfigItem imageMessageSizeTweak = addConfig(R.string.ImageMessageSizeTweak, "ImageMessageSizeTweak", configTypeBool, APPEARANCE, false);
     public static ConfigItem smallerEmojiInChooser = addConfig(R.string.SmallerEmojisInChooser, "SmallerEmojisInChooser", configTypeBool, APPEARANCE, false);

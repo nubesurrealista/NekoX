@@ -23,13 +23,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
+import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.EmojiTextView;
 import org.telegram.ui.Components.LayoutHelper;
 
+import moe.hx030.momogram.MomoConfig;
+
 public class TextDetailSettingsCell extends FrameLayout {
 
-    private TextView textView;
+    private SimpleTextView textView;
     private TextView valueTextView;
     private ImageView imageView;
     private boolean needDivider;
@@ -38,13 +41,12 @@ public class TextDetailSettingsCell extends FrameLayout {
     public TextDetailSettingsCell(Context context) {
         super(context);
 
-        textView = new TextView(context);
+        textView = new SimpleTextView(context);
         textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        textView.setLines(1);
+        textView.setTextSize(16);
         textView.setMaxLines(1);
-        textView.setSingleLine(true);
-        textView.setEllipsize(TextUtils.TruncateAt.END);
+        if (MomoConfig.marqueeForLongMomoOptions.Bool()) textView.setScrollNonFitText(true);
+        textView.setEllipsizeByGradient(!MomoConfig.marqueeForLongMomoOptions.Bool());
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 21, 10, 21, 0));
 
@@ -77,7 +79,7 @@ public class TextDetailSettingsCell extends FrameLayout {
         }
     }
 
-    public TextView getTextView() {
+    public SimpleTextView getTextView() {
         return textView;
     }
 

@@ -30,6 +30,7 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.tl.TL_account;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.EmptyCell;
@@ -527,7 +528,7 @@ public class MomoExperimentalSettingsActivity extends MomoSettingsBaseActivity {
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             AbstractConfigCell a = cellGroup.rows.get(position);
-            TextView textView = null;
+            SimpleTextView textView = null;
             String currentText = null;
             if (a != null) {
                 if (a instanceof ConfigCellCustom) {

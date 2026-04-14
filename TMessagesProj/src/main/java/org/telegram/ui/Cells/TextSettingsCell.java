@@ -30,6 +30,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
+import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.AnimatedTextView;
@@ -40,10 +41,12 @@ import org.telegram.ui.Components.RLottieImageView;
 
 import java.util.ArrayList;
 
+import moe.hx030.momogram.MomoConfig;
+
 public class TextSettingsCell extends FrameLayout {
 
     private Theme.ResourcesProvider resourcesProvider;
-    private TextView textView;
+    private SimpleTextView textView;
     private AnimatedTextView valueTextView;
     private ImageView imageView;
     private boolean imageViewIsColorful;
@@ -81,12 +84,11 @@ public class TextSettingsCell extends FrameLayout {
         this.resourcesProvider = resourcesProvider;
         this.padding = padding;
 
-        textView = new TextView(context);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        textView.setLines(1);
+        textView = new SimpleTextView(context);
+        textView.setTextSize(16);
         textView.setMaxLines(1);
-        textView.setSingleLine(true);
-        textView.setEllipsize(TextUtils.TruncateAt.END);
+        if (MomoConfig.marqueeForLongMomoOptions.Bool()) textView.setScrollNonFitText(true);
+        textView.setEllipsizeByGradient(!MomoConfig.marqueeForLongMomoOptions.Bool());
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider));
         addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, padding, 0, padding, 0));
@@ -174,7 +176,7 @@ public class TextSettingsCell extends FrameLayout {
         }
     }
 
-    public TextView getTextView() {
+    public SimpleTextView getTextView() {
         return textView;
     }
 

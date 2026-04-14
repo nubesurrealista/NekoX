@@ -37,6 +37,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.AvatarSpan;
 import org.telegram.ui.Components.AnimationProperties;
@@ -50,12 +51,14 @@ import org.telegram.ui.Components.ViewHelper;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import moe.hx030.momogram.MomoConfig;
+
 public class TextCheckCell extends FrameLayout {
     private boolean isAnimatingToThumbInsteadOfTouch;
 
     public int itemId;
 
-    private TextView textView;
+    private SimpleTextView textView;
     private TextView valueTextView;
     public Switch checkBox;
     public CheckBoxSquare checkBoxSquare;
@@ -108,9 +111,10 @@ public class TextCheckCell extends FrameLayout {
 
         this.padding = padding;
 
-        textView = new TextView(context);
+        textView = new SimpleTextView(context);
+        if (MomoConfig.marqueeForLongMomoOptions.Bool()) textView.setScrollNonFitText(true);
         textView.setTextColor(Theme.getColor(dialog ? Theme.key_dialogTextBlack : Theme.key_windowBackgroundWhiteBlackText, resourcesProvider));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        textView.setTextSize(16);
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 70 : padding, 0, LocaleController.isRTL ? padding : 70, 0));
 
@@ -162,11 +166,11 @@ public class TextCheckCell extends FrameLayout {
 
         String desc = valueTextView.getText().toString().trim();
         int viewHeight = textView.getMeasuredHeight();
-        if (desc.isEmpty() || viewHeight < (textView.getTextSize() * 2) || viewHeight >= AndroidUtilities.ydpi) {
+        if (MomoConfig.marqueeForLongMomoOptions.Bool() || desc.isEmpty() || viewHeight < (textView.getTextSize() * 2) || viewHeight >= AndroidUtilities.ydpi) {
             return;
         }
-        textView.setSingleLine(true);
-        textView.setEllipsize(TextUtils.TruncateAt.END);
+        textView.setMaxLines(1);
+        textView.setEllipsizeByGradient(true);
         // somehow truncated text moves itself....
         removeView(textView);
         addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT,
@@ -492,7 +496,7 @@ public class TextCheckCell extends FrameLayout {
         imageView.setBackground(Theme.createRoundRectDrawable(dp(9), color));
     }
 
-    public TextView getTextView() {
+    public SimpleTextView getTextView() {
         return textView;
     }
 }

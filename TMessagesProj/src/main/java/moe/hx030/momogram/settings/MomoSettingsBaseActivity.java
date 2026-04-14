@@ -14,7 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.exoplayer2.util.Consumer;
+
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
@@ -99,18 +102,24 @@ public class MomoSettingsBaseActivity extends BaseFragment {
         }
     }
 
-    private void setHighlightView(TextView textView) {
+    private void setHighlightView(View textView) {
         if (textView == null) return;
         if (highlightAnimator != null) highlightAnimator.end();
         highlightView = textView;
-        final int start = textView.getCurrentTextColor();
+        final int start;
+        if (textView instanceof TextView t) start = t.getCurrentTextColor();
+        else start = ((SimpleTextView) textView).getTextColor();
         final int end = Color.CYAN;
+
+        final Consumer<Integer> setColor = (textView instanceof TextView t) ?
+                t::setTextColor : ((SimpleTextView) textView)::setTextColor;
+
         ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), start, end);
         animator.setDuration(2000);
         animator.setRepeatMode(ValueAnimator.REVERSE);
         animator.setRepeatCount(3);
         animator.setInterpolator(new DecelerateInterpolator());
-        animator.addUpdateListener(a -> textView.setTextColor((Integer) a.getAnimatedValue()));
+        animator.addUpdateListener(a -> setColor.accept((Integer) a.getAnimatedValue()));
         highlightAnimator = animator;
         animator.start();
     }
@@ -127,7 +136,7 @@ public class MomoSettingsBaseActivity extends BaseFragment {
             return;
         }
 
-        TextView tv = null;
+        View tv = null;
         View item = holder.itemView;
         if (item instanceof TextCheckCell) {
             tv = ((TextCheckCell) item).getTextView();
@@ -215,7 +224,7 @@ public class MomoSettingsBaseActivity extends BaseFragment {
             }
         }
 
-        protected void checkScrollTo(int position, RecyclerView.ViewHolder holder, TextView textView, String currentText) {
+        protected void checkScrollTo(int position, RecyclerView.ViewHolder holder, View textView, String currentText) {
             boolean highlight = (position == scrollToIndex);
             if (highlight) {
                 if (textView == null && (holder.itemView instanceof TextSettingsCell c)) {
@@ -233,7 +242,11 @@ public class MomoSettingsBaseActivity extends BaseFragment {
                         }
                     }
                 }
-                String cmp = textView == null ? currentText : textView.getText().toString();
+                CharSequence cs;
+                if (textView instanceof TextView t) cs = t.getText();
+                else if (textView instanceof SimpleTextView st) cs = st.getText();
+                else cs = ""; // unreachable
+                String cmp = textView == null ? currentText : cs.toString();
                 boolean ne = textView != null && !cmp.equals(scrollToString);
                 if (textView == null || ne) {
                     if (scrollToString != null) {
@@ -249,7 +262,11 @@ public class MomoSettingsBaseActivity extends BaseFragment {
                     }
                 }
             } else if (position == (scrollToIndex - 1) || position == (scrollToIndex + 1)) {
-                String cmp = textView == null ? currentText : textView.getText().toString();
+                CharSequence cs;
+                if (textView instanceof TextView t) cs = t.getText();
+                else if (textView instanceof SimpleTextView st) cs = st.getText();
+                else cs = ""; // unreachable
+                String cmp = textView == null ? currentText : cs.toString();
                 boolean eq = textView != null && cmp.equals(scrollToString);
                 highlight = (textView != null && eq);
                 if (highlight) {

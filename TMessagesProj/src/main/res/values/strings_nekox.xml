@@ -344,4 +344,5 @@
     <string name="OverrideForumStyleClassic">Classic</string>
     <string name="OverrideForumStyleTab">Tabs</string>
     <string name="DumpThreads">Dump threads</string>
+    <string name="MarqueeForLongMomoOptions">Use Marquee for long Momo options</string>
 </resources>
