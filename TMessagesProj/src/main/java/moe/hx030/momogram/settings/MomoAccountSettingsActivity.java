@@ -1,5 +1,7 @@
 package moe.hx030.momogram.settings;
 
+import static org.telegram.messenger.LocaleController.getString;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -86,7 +88,7 @@ public class MomoAccountSettingsActivity extends BaseFragment {
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString(R.string.Account));
+        actionBar.setTitle(getString(R.string.Account));
 
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
@@ -114,12 +116,12 @@ public class MomoAccountSettingsActivity extends BaseFragment {
         listView.setOnItemClickListener((view, position, x, y) -> {
             if (position == deleteAccountRow) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setMessage(LocaleController.getString(R.string.TosDeclineDeleteAccount));
-                builder.setTitle(LocaleController.getString(R.string.DeleteAccount));
-                builder.setPositiveButton(LocaleController.getString(R.string.Deactivate), (dialog, which) -> {
+                builder.setMessage(getString(R.string.TosDeclineDeleteAccount));
+                builder.setTitle(getString(R.string.DeleteAccount));
+                builder.setPositiveButton(getString(R.string.Deactivate), (dialog, which) -> {
                     AlertDialog.Builder builder12 = new AlertDialog.Builder(getParentActivity());
-                    builder12.setMessage(LocaleController.getString(R.string.TosDeclineDeleteAccount));
-                    builder12.setTitle(LocaleController.getString(R.string.DeleteAccount));
+                    builder12.setMessage(getString(R.string.TosDeclineDeleteAccount));
+                    builder12.setTitle(getString(R.string.DeleteAccount));
 
                     LinearLayout linearLayout = new LinearLayout(context);
                     linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -132,7 +134,7 @@ public class MomoAccountSettingsActivity extends BaseFragment {
 
                     builder12.setView(linearLayout);
 
-                    builder12.setPositiveButton(LocaleController.getString(R.string.Deactivate), (dialogInterface, i) -> {
+                    builder12.setPositiveButton(getString(R.string.Deactivate), (dialogInterface, i) -> {
 
                         if (!editText.getText().toString().equals("YES")) return;
 
@@ -173,19 +175,19 @@ public class MomoAccountSettingsActivity extends BaseFragment {
                             if (response instanceof TLRPC.TL_boolTrue) {
                                 getMessagesController().performLogout(0);
                             } else if (error == null || error.code != -1000) {
-                                String errorText = LocaleController.getString(R.string.ErrorOccurred);
+                                String errorText = getString(R.string.ErrorOccurred);
                                 if (error != null) {
                                     errorText += "\n" + error.text;
                                 }
                                 AlertDialog.Builder builder1 = new AlertDialog.Builder(getParentActivity());
-                                builder1.setTitle(LocaleController.getString(R.string.AppName));
+                                builder1.setTitle(getString(R.string.AppName));
                                 builder1.setMessage(errorText);
-                                builder1.setPositiveButton(LocaleController.getString(R.string.OK), null);
+                                builder1.setPositiveButton(getString(R.string.OK), null);
                                 builder1.show();
                             }
                         }));
                     });
-                    builder12.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
+                    builder12.setNegativeButton(getString(R.string.Cancel), null);
                     AlertDialog dialog12 = builder12.create();
                     showDialog(dialog12);
                     TextView button = (TextView) dialog12.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -193,7 +195,7 @@ public class MomoAccountSettingsActivity extends BaseFragment {
                         button.setTextColor(Theme.getColor(Theme.key_text_RedBold));
                     }
                 });
-                builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
+                builder.setNegativeButton(getString(R.string.Cancel), null);
                 builder.show();
                 AlertDialog dialog = builder.create();
                 showDialog(dialog);
@@ -217,30 +219,31 @@ public class MomoAccountSettingsActivity extends BaseFragment {
     private void promptPasswordAndBackup() {
         Context context = getParentActivity();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Backup Secret Chats");
-        builder.setMessage("Enter a password to encrypt your backup. This password will be required for restoration.");
+        builder.setTitle(getString(R.string.SecretChatBackup));
+        builder.setMessage(getString(R.string.SecretChatBackupPasswordPrompt));
 
         LinearLayout layout = new LinearLayout(context);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(AndroidUtilities.dp(20), AndroidUtilities.dp(10), AndroidUtilities.dp(20), 0);
 
         EditTextBoldCursor editText = new EditTextBoldCursor(context);
-        editText.setHint("Password");
+        editText.setHint(getString(R.string.LoginPassword));
         editText.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         editText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         editText.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
         layout.addView(editText, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         builder.setView(layout);
-        builder.setPositiveButton("Binary (Efficient)", (dialog, which) -> startBackup(editText.getText().toString(), SecretChatBackupManager.FORMAT_BINARY));
-        builder.setNeutralButton("JSON (Readable)", (dialog, which) -> startBackup(editText.getText().toString(), SecretChatBackupManager.FORMAT_JSON));
-        builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
+        builder.setPositiveButton(getString(R.string.OK), (dialog, which) -> startBackup(editText.getText().toString(), SecretChatBackupManager.FORMAT_BINARY));
+        // builder.setPositiveButton("Binary (Efficient)", (dialog, which) -> startBackup(editText.getText().toString(), SecretChatBackupManager.FORMAT_BINARY));
+        // builder.setNeutralButton("JSON (Readable)", (dialog, which) -> startBackup(editText.getText().toString(), SecretChatBackupManager.FORMAT_JSON));
+        builder.setNegativeButton(getString(R.string.Cancel), null);
         showDialog(builder.create());
     }
 
     private void startBackup(String password, int format) {
         if (TextUtils.isEmpty(password)) {
-            AlertUtil.showSimpleAlert(getParentActivity(), "Password cannot be empty");
+            AlertUtil.showSimpleAlert(getParentActivity(), getString(R.string.SecretChatBackupPasswordRequired));
             return;
         }
         final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
@@ -261,9 +264,10 @@ public class MomoAccountSettingsActivity extends BaseFragment {
                 AndroidUtilities.runOnUIThread(() -> {
                     progressDialog.dismiss();
                     if (success) {
-                        showLogsDialog(false, "Backup Successful", logs, () -> ShareUtil.shareFile(getParentActivity(), cacheFile));
+                        showLogsDialog(false, getString(R.string.Done), logs, () -> ShareUtil.shareFile(getParentActivity(), cacheFile));
                     } else {
-                        showLogsDialog(false, "Backup Failed: " + error, logs, null);
+                        String str = error + "\n\n" + logs;
+                        showLogsDialog(false, getString(R.string.ErrorOccurred), str, null);
                     }
                 });
             }
@@ -279,7 +283,6 @@ public class MomoAccountSettingsActivity extends BaseFragment {
             public void didSelectFiles(DocumentSelectActivity activity, ArrayList<String> files, String caption, boolean notify, int scheduleDate) {
                 activity.finishFragment();
                 AndroidUtilities.runOnUIThread(() -> promptPasswordAndRestore(new File(files.get(0))));
-                Log.d("030-r", "openFileAndPromptPassword didSelectFiles");
             }
             @Override public void didSelectPhotos(ArrayList<SendMessagesHelper.SendingMediaInfo> photos, boolean notify, int scheduleDate) { }
             @Override public void startDocumentSelectActivity() { }
@@ -288,25 +291,24 @@ public class MomoAccountSettingsActivity extends BaseFragment {
     }
 
     private void promptPasswordAndRestore(File file) {
-        Log.d("030-r", "promptPasswordAndRestore");
         Context context = getParentActivity();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Restore Secret Chats");
-        builder.setMessage("Enter the password used to encrypt this backup.");
+        builder.setTitle(getString(R.string.SecretChatRestore));
+        builder.setMessage(getString(R.string.SecretChatRestorePasswordPrompt));
 
         LinearLayout layout = new LinearLayout(context);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(AndroidUtilities.dp(20), AndroidUtilities.dp(10), AndroidUtilities.dp(20), 0);
 
         EditTextBoldCursor editText = new EditTextBoldCursor(context);
-        editText.setHint("Password");
+        editText.setHint(getString(R.string.LoginPassword));
         editText.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         editText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         editText.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
         layout.addView(editText, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         builder.setView(layout);
-        builder.setPositiveButton(LocaleController.getString(R.string.OK), (dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.OK), (dialog, which) -> {
             final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
             progressDialog.setCanCancel(false);
             progressDialog.show();
@@ -316,14 +318,15 @@ public class MomoAccountSettingsActivity extends BaseFragment {
                 @Override public void onFinish(boolean success, String error, String logs) {
                     AndroidUtilities.runOnUIThread(() -> {
                         progressDialog.dismiss();
-                        showLogsDialog(success, success ? "Restore Successful" : ("Restore Failed: " + error), logs, null);
+                        String str = logs;
+                        if (!success) str = error + "\n\n" + logs;
+                        showLogsDialog(success, getString(success ? R.string.Done : R.string.ErrorOccurred), str, null);
                     });
                 }
             });
         });
-        builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
+        builder.setNegativeButton(getString(R.string.Cancel), null);
         builder.show();
-        Log.d("030-r", "promptPasswordAndRestore show dialog");
     }
 
     private void showLogsDialog(boolean restart, String title, String logs, Runnable onDismiss) {
@@ -340,7 +343,7 @@ public class MomoAccountSettingsActivity extends BaseFragment {
         scrollView.addView(textView);
 
         builder.setView(scrollView);
-        builder.setPositiveButton(LocaleController.getString(R.string.OK), (dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.OK), (dialog, which) -> {
             if (onDismiss != null) onDismiss.run();
             if (restart) TelegramUtil.restartApp(false);
         });
@@ -442,7 +445,7 @@ public class MomoAccountSettingsActivity extends BaseFragment {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                     if (position == deleteAccountRow) {
-                        textCell.setText(LocaleController.getString(R.string.DeleteAccount), false);
+                        textCell.setText(getString(R.string.DeleteAccount), false);
                         textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText2));
                     } else if (position == backupSecretChatRow) {
                         textCell.setText("Backup Secret Chats", false);
@@ -459,7 +462,7 @@ public class MomoAccountSettingsActivity extends BaseFragment {
                 case 4: {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == accountRow) {
-                        headerCell.setText(LocaleController.getString(R.string.Account));
+                        headerCell.setText(getString(R.string.Account));
                     } else if (position == secretChatHeaderRow) {
                         headerCell.setText("Secret Chats");
                     }

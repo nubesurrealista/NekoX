@@ -347,4 +347,10 @@
     <string name="MarqueeForLongMomoOptions">Use Marquee for long Momo options</string>
     <string name="SecretChatReqConfirm">Require confirm before accept secret chat</string>
     <string name="UnknownUser">Unknown User</string>
+    <string name="SecretChatBackup">Backup Secret Chats</string>
+    <string name="SecretChatBackupPasswordPrompt">Enter a password to encrypt your backup. This password will be required for restoration.</string>
+    <string name="SecretChatBackupPasswordRequired">Password is required.</string>
+    <string name="SecretChatRestore">Restore Secret Chats</string>
+    <string name="SecretChatRestorePasswordPrompt">Enter the password used to encrypt this backup.</string>
+    <string name="SecretChatRestoreSuccess">Restore Secret Chats</string>
 </resources>
