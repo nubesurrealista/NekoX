@@ -104,6 +104,7 @@ public class MomoChatSettingsActivity extends MomoSettingsBaseActivity implement
     private final AbstractConfigCell disableSaveDraftToCloudRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.disableSaveDraftToCloud));
     private final AbstractConfigCell showVoteCountBeforeVoteRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.keepVoteCountAfterRetractVote));
     private final AbstractConfigCell randomizeFilenameOnSendRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.randomizeFilenameOnSend));
+    private final AbstractConfigCell secretChatReqConfirmRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.secretChatReqConfirm));
     private final AbstractConfigCell hideAIEditButtonRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.hideAIEditButton));
     private final AbstractConfigCell hideMessageRegexRow = cellGroup.appendCell(new ConfigCellTextInput(null, MomoConfig.hideMessageRegex, null));
     private final AbstractConfigCell dividerChat = cellGroup.appendCell(new ConfigCellDivider());

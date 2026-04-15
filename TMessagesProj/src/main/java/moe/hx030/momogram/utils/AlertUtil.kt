@@ -3,8 +3,13 @@ package moe.hx030.momogram.utils
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.text.TextUtils
 import android.util.Log
+import android.util.TypedValue
+import android.view.Gravity
+import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.ApplicationLoader
@@ -17,6 +22,15 @@ import org.telegram.ui.Components.NumberPicker
 import moe.hx030.momogram.ui.BottomBuilder
 import moe.hx030.momogram.ui.PopupBuilder
 import moe.hx030.momogram.MomoConfig
+import org.apache.commons.lang3.StringUtils
+import org.telegram.messenger.AndroidUtilities.dp
+import org.telegram.messenger.MessagesStorage
+import org.telegram.messenger.UserObject
+import org.telegram.ui.ActionBar.Theme
+import org.telegram.ui.Components.AvatarDrawable
+import org.telegram.ui.Components.BackupImageView
+import org.telegram.ui.Components.LayoutHelper
+import org.telegram.ui.LaunchActivity
 import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 
@@ -340,6 +354,77 @@ object AlertUtil {
 
         })
 
+    }
+
+    @JvmStatic
+    fun showSecretChatConfirmation(user: TLRPC.User?, accept: Runnable) {
+        val fragment = LaunchActivity.getSafeLastFragment()
+        val context = fragment.parentActivity
+        val userButton = FrameLayout(context)
+        userButton.setBackground(
+            Theme.createRadSelectorDrawable(
+                Theme.getColor(
+                    Theme.key_listSelector,
+                    fragment.resourceProvider
+                ), 0, 12
+            )
+        )
+
+        val imageView = BackupImageView(context)
+        imageView.setRoundRadius(dp(17F))
+        val avatarDrawable = AvatarDrawable()
+        avatarDrawable.setInfo(user)
+        imageView.setForUserOrChat(user, avatarDrawable)
+        userButton.addView(
+            imageView,
+            LayoutHelper.createFrame(
+                34F,
+                34F,
+                Gravity.LEFT or Gravity.CENTER_VERTICAL,
+                13F,
+                0F,
+                0F,
+                0F
+            )
+        )
+
+        val titleText = TextView(context)
+        titleText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack, fragment.resourceProvider))
+        titleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16F)
+        titleText.ellipsize = TextUtils.TruncateAt.END
+        titleText.isSingleLine = true
+        titleText.text = if (user == null) LocaleController.getString(R.string.UnknownUser) else UserObject.getUserName(user)
+        userButton.addView(
+            titleText, LayoutHelper.createFrame(
+                LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT.toFloat(),
+                Gravity.FILL_HORIZONTAL or Gravity.TOP, 59F, 6F, 16F, 0F
+            )
+        )
+
+        val subtitleText = TextView(context)
+        subtitleText.setTextColor(
+            Theme.getColor(
+                Theme.key_dialogTextGray2,
+                fragment.resourceProvider
+            )
+        )
+        subtitleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13F)
+        subtitleText.text = UserObject.getPublicUsername(user)
+        if (StringUtils.isBlank(subtitleText.text)) subtitleText.text = "N/A"
+        else subtitleText.text = "@${subtitleText.text}"
+        userButton.addView(
+            subtitleText, LayoutHelper.createFrame(
+                LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT.toFloat(),
+                Gravity.FILL_HORIZONTAL or Gravity.TOP, 59F, 27F, 16F, 0F
+            )
+        )
+
+        val builder = AlertDialog.Builder(LaunchActivity.instance)
+        builder.setTitle(LocaleController.getString(R.string.NewSecretChat))
+        builder.setView(userButton)
+        builder.setPositiveButton(LocaleController.getString(R.string.Accept)) { dlg, w -> accept.run() }
+        builder.setNegativeButton(LocaleController.getString(R.string.Ignore), null)
+        builder.show()
     }
 
 }

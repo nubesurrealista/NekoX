@@ -345,4 +345,6 @@
     <string name="OverrideForumStyleTab">Tabs</string>
     <string name="DumpThreads">Dump threads</string>
     <string name="MarqueeForLongMomoOptions">Use Marquee for long Momo options</string>
+    <string name="SecretChatReqConfirm">Require confirm before accept secret chat</string>
+    <string name="UnknownUser">Unknown User</string>
 </resources>

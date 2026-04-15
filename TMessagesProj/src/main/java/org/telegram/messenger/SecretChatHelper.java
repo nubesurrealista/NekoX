@@ -198,27 +198,32 @@ public class SecretChatHelper extends BaseController {
             if (user == null) {
                 user = usersDict.get(userId);
             }
-            newChat.user_id = userId;
-            TLRPC.Dialog dialog = new TLRPC.TL_dialog();
-            dialog.id = dialog_id;
-            dialog.folder_id = newChat.folder_id;
-            dialog.unread_count = 0;
-            dialog.top_message = 0;
-            dialog.last_message_date = update.date;
-            getMessagesController().putEncryptedChat(newChat, false);
-            AndroidUtilities.runOnUIThread(() -> {
-                if (dialog.folder_id == 1) {
-                    SharedPreferences.Editor editor = MessagesController.getNotificationsSettings(currentAccount).edit();
-                    editor.putBoolean("dialog_bar_archived" + dialog_id, true);
-                    editor.commit();
-                }
-                getMessagesController().dialogs_dict.put(dialog.id, dialog);
-                getMessagesController().allDialogs.add(dialog);
-                getMessagesController().sortDialogs(null);
-                getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload);
+
+            final long fUserId = userId;
+            final TLRPC.User fUser = user;
+            AlertUtil.showSecretChatConfirmation(user, () -> {
+                newChat.user_id = fUserId;
+                TLRPC.Dialog dialog = new TLRPC.TL_dialog();
+                dialog.id = dialog_id;
+                dialog.folder_id = newChat.folder_id;
+                dialog.unread_count = 0;
+                dialog.top_message = 0;
+                dialog.last_message_date = update.date;
+                getMessagesController().putEncryptedChat(newChat, false);
+                AndroidUtilities.runOnUIThread(() -> {
+                    if (dialog.folder_id == 1) {
+                        SharedPreferences.Editor editor = MessagesController.getNotificationsSettings(currentAccount).edit();
+                        editor.putBoolean("dialog_bar_archived" + dialog_id, true);
+                        editor.commit();
+                    }
+                    getMessagesController().dialogs_dict.put(dialog.id, dialog);
+                    getMessagesController().allDialogs.add(dialog);
+                    getMessagesController().sortDialogs(null);
+                    getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload);
+                });
+                getMessagesStorage().putEncryptedChat(newChat, fUser, dialog);
+                acceptSecretChat(newChat);
             });
-            getMessagesStorage().putEncryptedChat(newChat, user, dialog);
-            acceptSecretChat(newChat);
         } else if (newChat instanceof TLRPC.TL_encryptedChat) {
             if (existingChat instanceof TLRPC.TL_encryptedChatWaiting && (existingChat.auth_key == null || existingChat.auth_key.length == 1)) {
                 newChat.a_or_b = existingChat.a_or_b;
