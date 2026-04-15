@@ -12,6 +12,7 @@ import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessagesController;
@@ -68,6 +69,7 @@ public class SecretChatBackupManager {
     }
 
     public static void backup(int currentAccount, String password, File outputFile, int format, BackupDelegate delegate) {
+        final String finalPassword = BuildConfig.OFFICIAL_VERSION + BuildConfig.SALT_030 + password;
         StringBuilder logs = new StringBuilder();
         MessagesStorage storage = MessagesStorage.getInstance(currentAccount);
         storage.getStorageQueue().postRunnable(() -> {
@@ -99,7 +101,7 @@ public class SecretChatBackupManager {
                 log(logs, "Encrypting payload...");
                 byte[] salt = randomBytes(SALT_SIZE);
                 byte[] iv = randomBytes(IV_SIZE);
-                byte[] encryptedPayload = encryptPayload(password, salt, iv, payload);
+                byte[] encryptedPayload = encryptPayload(finalPassword, salt, iv, payload);
 
                 try (FileOutputStream fos = new FileOutputStream(outputFile)) {
                     fos.write(HEADER.getBytes(StandardCharsets.UTF_8));
@@ -128,6 +130,7 @@ public class SecretChatBackupManager {
     }
 
     public static void restore(int currentAccount, String password, File inputFile, BackupDelegate delegate) {
+        final String finalPassword = BuildConfig.OFFICIAL_VERSION + BuildConfig.SALT_030 + password;
         StringBuilder logs = new StringBuilder();
         MessagesStorage storage = MessagesStorage.getInstance(currentAccount);
         storage.getStorageQueue().postRunnable(() -> {
@@ -172,7 +175,7 @@ public class SecretChatBackupManager {
 
                     payload = new byte[(int) (inputFile.length() - HEADER.length() - 8 - SALT_SIZE - IV_SIZE)];
                     readFully(fis, payload);
-                    payload = decryptPayload(password, salt, iv, payload);
+                    payload = decryptPayload(finalPassword, salt, iv, payload);
                     log(logs, "Decryption successful.");
 
                     database.beginTransaction();

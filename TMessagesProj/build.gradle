@@ -128,12 +128,14 @@ android {
 
         def appId = "1391584"
         def appHash = "355c91550b0d658cfb7ff89dcf91a08c"
+        def mySalt = "030?"
 
         //obtain your own keys at https://core.telegram.org/api/obtaining_api_id
 
         if (properties != null) {
             appId = properties.getProperty("TELEGRAM_APP_ID") ?: System.getenv("TELEGRAM_APP_ID") ?: appId
             appHash = properties.getProperty("TELEGRAM_APP_HASH") ?: System.getenv("TELEGRAM_APP_HASH") ?: appHash
+            mySalt = properties.getProperty("SALT_030") ?: System.getenv("SALT_030") ?: mySalt
         } else if (System.getenv("TELEGRAM_APP_ID") != null) {
             appId = System.getenv("TELEGRAM_APP_ID") ?: appId
             appHash = System.getenv("TELEGRAM_APP_HASH") ?: appHash
@@ -147,6 +149,7 @@ android {
         buildConfigField "String", "APP_HASH", "\"" + appHash + "\""
         buildConfigField "boolean", "BUNDLE", "false"
         buildConfigField "int", "VERSION_NUM", "6"
+        buildConfigField "String", "SALT_030", "\"" + mySalt + "\""
         resValue "string", "package_name", APP_PACKAGE
 
 //        ndk {
