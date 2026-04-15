@@ -167,8 +167,7 @@ apt install -y yasm
 3. Build native dependencies: `./run init libs`
 4. Build external libraries and native code: `./run libs update`
 5. Fill out `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` in `local.properties`
-6. Replace TMessagesProj/google-services.json if you want fcm to work.
-7. Replace release.keystore with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in `local.properties` if you want a custom sign key.
+6. Replace release.keystore with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in `local.properties` if you want a custom sign key.
 
 `./gradlew assemble<Debug/Release>`
 
