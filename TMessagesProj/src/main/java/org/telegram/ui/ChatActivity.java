@@ -364,6 +364,7 @@ import me.vkryl.android.animator.FactorAnimator;
 import me.vkryl.core.BitwiseUtils;
 import me.vkryl.core.reference.ReferenceList;
 import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.helpers.SecretChatBackupManager;
 import moe.hx030.momogram.ui.BottomBuilder;
 import moe.hx030.momogram.ui.MessageDetailsActivity;
 import moe.hx030.momogram.ui.MessageHelper;
@@ -19707,6 +19708,8 @@ public class ChatActivity extends BaseFragment implements
                                         return 22;
                                     } else if ((messageObject.getDocumentName().toLowerCase().endsWith(".nekox-settings.json"))) {
                                         return 23;
+                                    } else if ((messageObject.getDocumentName().toLowerCase().endsWith(".tgscb"))) {
+                                        return 69;
                                     } else if (!messageObject.isNewGif() && mime.endsWith("/mp4") || mime.endsWith("/png") || mime.endsWith("/jpg") || mime.endsWith("/jpeg")) {
                                         return 6;
                                     }
@@ -41707,6 +41710,47 @@ public class ChatActivity extends BaseFragment implements
                     File finalLocFile = locFile;
                     MomoSettingsActivity.importSettings(getParentActivity(), finalLocFile);
 
+                } else if (message.getDocumentName().toLowerCase().endsWith(".tgscb")) {
+                    Log.d("030-r", "promptPasswordAndRestore");
+                    Context context = getParentActivity();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("Restore Secret Chats");
+                    builder.setMessage("Enter the password used to encrypt this backup.");
+
+                    LinearLayout layout = new LinearLayout(context);
+                    layout.setOrientation(LinearLayout.VERTICAL);
+                    layout.setPadding(AndroidUtilities.dp(20), AndroidUtilities.dp(10), AndroidUtilities.dp(20), 0);
+
+                    EditTextBoldCursor editText = new EditTextBoldCursor(context);
+                    editText.setHint("Password");
+                    editText.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+                    editText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                    editText.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    layout.addView(editText, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
+                    builder.setView(layout);
+                    builder.setPositiveButton(LocaleController.getString(R.string.OK), (dialog, which) -> {
+                        final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
+                        progressDialog.setCanCancel(false);
+                        progressDialog.show();
+
+                        SecretChatBackupManager.restore(currentAccount, editText.getText().toString(), locFile, new SecretChatBackupManager.BackupDelegate() {
+                            @Override public void onProgress(float progress) { }
+                            @Override public void onFinish(boolean success, String error, String logs) {
+                                AndroidUtilities.runOnUIThread(() -> {
+                                    progressDialog.dismiss();
+                                    if (success) {
+                                        BulletinFactory.of(ChatActivity.this).createSimpleBulletin("Restore Successful", logs).show();
+                                    } else {
+                                        BulletinFactory.of(ChatActivity.this).createSimpleBulletin("Restore Failed: " + error, logs).show();
+                                    }
+                                });
+                            }
+                        });
+                    });
+                    builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
+                    builder.show();
+                    Log.d("030-r", "promptPasswordAndRestore show dialog");
                 } else {
                     boolean handled = false;
                     if (message.canPreviewDocument()) {

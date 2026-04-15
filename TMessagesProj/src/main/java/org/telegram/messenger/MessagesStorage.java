@@ -2540,6 +2540,31 @@ public class MessagesStorage extends BaseController {
         return dialogs;
     }
 
+    public TLRPC.messages_Dialogs loadDialogsByIdsForCache(ArrayList<Long> dialogIds, ArrayList<TLRPC.EncryptedChat> encryptedChats, ArrayList<TLRPC.User> users, ArrayList<TLRPC.Chat> chats) throws Exception {
+        TLRPC.messages_Dialogs dialogs = new TLRPC.TL_messages_dialogs();
+        if (dialogIds == null || dialogIds.isEmpty()) {
+            return dialogs;
+        }
+
+        ArrayList<Long> usersToLoad = new ArrayList<>();
+        ArrayList<Long> chatsToLoad = new ArrayList<>();
+        ArrayList<Integer> encryptedToLoad = new ArrayList<>();
+
+        dialogs = loadDialogsByIds(TextUtils.join(",", dialogIds), usersToLoad, chatsToLoad, encryptedToLoad);
+
+        if (encryptedChats != null && !encryptedToLoad.isEmpty()) {
+            getEncryptedChatsInternal(TextUtils.join(",", encryptedToLoad), encryptedChats, usersToLoad);
+        }
+        if (users != null && !usersToLoad.isEmpty()) {
+            getUsersInternal(usersToLoad, users);
+        }
+        if (chats != null && !chatsToLoad.isEmpty()) {
+            getChatsInternal(TextUtils.join(",", chatsToLoad), chats);
+        }
+
+        return dialogs;
+    }
+
     private void loadDialogFilters() {
         storageQueue.postRunnable(() -> {
             SQLiteCursor filtersCursor = null;

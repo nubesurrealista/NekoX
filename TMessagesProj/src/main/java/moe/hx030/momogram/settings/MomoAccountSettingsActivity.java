@@ -3,24 +3,28 @@ package moe.hx030.momogram.settings;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.tgnet.tl.TL_account;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -38,10 +42,17 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
+import org.telegram.ui.DocumentSelectActivity;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Locale;
 
+import moe.hx030.momogram.helpers.SecretChatBackupManager;
 import moe.hx030.momogram.ui.MessageHelper;
+import moe.hx030.momogram.utils.AlertUtil;
+import moe.hx030.momogram.utils.ShareUtil;
+import moe.hx030.momogram.utils.TelegramUtil;
 
 @SuppressLint("RtlHardcoded")
 public class MomoAccountSettingsActivity extends BaseFragment {
@@ -54,6 +65,11 @@ public class MomoAccountSettingsActivity extends BaseFragment {
     private int accountRow;
     private int deleteAccountRow;
     private int account2Row;
+
+    private int secretChatHeaderRow;
+    private int backupSecretChatRow;
+    private int restoreSecretChatRow;
+    private int secretChatShadowRow;
 
     private UndoView tooltip;
 
@@ -146,7 +162,7 @@ public class MomoAccountSettingsActivity extends BaseFragment {
                             }
                         }
                         // delete account
-                        TL_account.deleteAccount req = new TL_account.deleteAccount();
+                        org.telegram.tgnet.tl.TL_account.deleteAccount req = new org.telegram.tgnet.tl.TL_account.deleteAccount();
                         req.reason = "Meow";
                         getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
                             try {
@@ -185,6 +201,10 @@ public class MomoAccountSettingsActivity extends BaseFragment {
                 if (button != null) {
                     button.setTextColor(Theme.getColor(Theme.key_text_RedBold));
                 }
+            } else if (position == backupSecretChatRow) {
+                promptPasswordAndBackup();
+            } else if (position == restoreSecretChatRow) {
+                openFileAndPromptPassword();
             }
         });
 
@@ -192,6 +212,139 @@ public class MomoAccountSettingsActivity extends BaseFragment {
         frameLayout.addView(tooltip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
 
         return fragmentView;
+    }
+
+    private void promptPasswordAndBackup() {
+        Context context = getParentActivity();
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Backup Secret Chats");
+        builder.setMessage("Enter a password to encrypt your backup. This password will be required for restoration.");
+
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(AndroidUtilities.dp(20), AndroidUtilities.dp(10), AndroidUtilities.dp(20), 0);
+
+        EditTextBoldCursor editText = new EditTextBoldCursor(context);
+        editText.setHint("Password");
+        editText.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+        editText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        editText.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        layout.addView(editText, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
+        builder.setView(layout);
+        builder.setPositiveButton("Binary (Efficient)", (dialog, which) -> startBackup(editText.getText().toString(), SecretChatBackupManager.FORMAT_BINARY));
+        builder.setNeutralButton("JSON (Readable)", (dialog, which) -> startBackup(editText.getText().toString(), SecretChatBackupManager.FORMAT_JSON));
+        builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
+        showDialog(builder.create());
+    }
+
+    private void startBackup(String password, int format) {
+        if (TextUtils.isEmpty(password)) {
+            AlertUtil.showSimpleAlert(getParentActivity(), "Password cannot be empty");
+            return;
+        }
+        final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
+        progressDialog.setCanCancel(false);
+        progressDialog.show();
+
+        java.text.DateFormat df = new java.text.SimpleDateFormat("yyyyMMdd-HHmmss", Locale.getDefault());
+        java.util.Date today = java.util.Calendar.getInstance().getTime();
+        String ext = format == SecretChatBackupManager.FORMAT_BINARY ? ".tgscb" : ".json";
+        File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), "SecretChat_" + df.format(today) + ext);
+
+        SecretChatBackupManager.backup(currentAccount, password, cacheFile, format, new SecretChatBackupManager.BackupDelegate() {
+            @Override
+            public void onProgress(float progress) { }
+
+            @Override
+            public void onFinish(boolean success, String error, String logs) {
+                AndroidUtilities.runOnUIThread(() -> {
+                    progressDialog.dismiss();
+                    if (success) {
+                        showLogsDialog(false, "Backup Successful", logs, () -> ShareUtil.shareFile(getParentActivity(), cacheFile));
+                    } else {
+                        showLogsDialog(false, "Backup Failed: " + error, logs, null);
+                    }
+                });
+            }
+        });
+    }
+
+    private void openFileAndPromptPassword() {
+        DocumentSelectActivity fragment = new DocumentSelectActivity(false);
+        fragment.setMaxSelectedFiles(1);
+        fragment.setAllowPhoto(false);
+        fragment.setDelegate(new DocumentSelectActivity.DocumentSelectActivityDelegate() {
+            @Override
+            public void didSelectFiles(DocumentSelectActivity activity, ArrayList<String> files, String caption, boolean notify, int scheduleDate) {
+                activity.finishFragment();
+                AndroidUtilities.runOnUIThread(() -> promptPasswordAndRestore(new File(files.get(0))));
+                Log.d("030-r", "openFileAndPromptPassword didSelectFiles");
+            }
+            @Override public void didSelectPhotos(ArrayList<SendMessagesHelper.SendingMediaInfo> photos, boolean notify, int scheduleDate) { }
+            @Override public void startDocumentSelectActivity() { }
+        });
+        presentFragment(fragment);
+    }
+
+    private void promptPasswordAndRestore(File file) {
+        Log.d("030-r", "promptPasswordAndRestore");
+        Context context = getParentActivity();
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Restore Secret Chats");
+        builder.setMessage("Enter the password used to encrypt this backup.");
+
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(AndroidUtilities.dp(20), AndroidUtilities.dp(10), AndroidUtilities.dp(20), 0);
+
+        EditTextBoldCursor editText = new EditTextBoldCursor(context);
+        editText.setHint("Password");
+        editText.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+        editText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        editText.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        layout.addView(editText, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
+        builder.setView(layout);
+        builder.setPositiveButton(LocaleController.getString(R.string.OK), (dialog, which) -> {
+            final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
+            progressDialog.setCanCancel(false);
+            progressDialog.show();
+
+            SecretChatBackupManager.restore(currentAccount, editText.getText().toString(), file, new SecretChatBackupManager.BackupDelegate() {
+                @Override public void onProgress(float progress) { }
+                @Override public void onFinish(boolean success, String error, String logs) {
+                    AndroidUtilities.runOnUIThread(() -> {
+                        progressDialog.dismiss();
+                        showLogsDialog(success, success ? "Restore Successful" : ("Restore Failed: " + error), logs, null);
+                    });
+                }
+            });
+        });
+        builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
+        builder.show();
+        Log.d("030-r", "promptPasswordAndRestore show dialog");
+    }
+
+    private void showLogsDialog(boolean restart, String title, String logs, Runnable onDismiss) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        builder.setTitle(title);
+
+        ScrollView scrollView = new ScrollView(getParentActivity());
+        TextView textView = new TextView(getParentActivity());
+        textView.setText(logs);
+        textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        textView.setTextSize(12);
+        textView.setPadding(AndroidUtilities.dp(15), AndroidUtilities.dp(10), AndroidUtilities.dp(15), AndroidUtilities.dp(10));
+        textView.setTypeface(android.graphics.Typeface.MONOSPACE);
+        scrollView.addView(textView);
+
+        builder.setView(scrollView);
+        builder.setPositiveButton(LocaleController.getString(R.string.OK), (dialog, which) -> {
+            if (onDismiss != null) onDismiss.run();
+            if (restart) TelegramUtil.restartApp(false);
+        });
+        showDialog(builder.create());
     }
 
     @Override
@@ -208,6 +361,12 @@ public class MomoAccountSettingsActivity extends BaseFragment {
         accountRow = rowCount++;
         deleteAccountRow = rowCount++;
         account2Row = rowCount++;
+
+        secretChatHeaderRow = rowCount++;
+        backupSecretChatRow = rowCount++;
+        restoreSecretChatRow = rowCount++;
+        secretChatShadowRow = rowCount++;
+
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
@@ -272,7 +431,7 @@ public class MomoAccountSettingsActivity extends BaseFragment {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
                 case 1: {
-                    if (position == account2Row) {
+                    if (position == account2Row || position == secretChatShadowRow) {
                         holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else {
                         holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
@@ -285,6 +444,10 @@ public class MomoAccountSettingsActivity extends BaseFragment {
                     if (position == deleteAccountRow) {
                         textCell.setText(LocaleController.getString(R.string.DeleteAccount), false);
                         textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText2));
+                    } else if (position == backupSecretChatRow) {
+                        textCell.setText("Backup Secret Chats", false);
+                    } else if (position == restoreSecretChatRow) {
+                        textCell.setText("Restore Secret Chats", false);
                     }
                     break;
                 }
@@ -297,6 +460,8 @@ public class MomoAccountSettingsActivity extends BaseFragment {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == accountRow) {
                         headerCell.setText(LocaleController.getString(R.string.Account));
+                    } else if (position == secretChatHeaderRow) {
+                        headerCell.setText("Secret Chats");
                     }
                     break;
                 }
@@ -348,11 +513,11 @@ public class MomoAccountSettingsActivity extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == account2Row) {
+            if (position == account2Row || position == secretChatShadowRow) {
                 return 1;
-            } else if (position == deleteAccountRow) {
+            } else if (position == deleteAccountRow || position == backupSecretChatRow || position == restoreSecretChatRow) {
                 return 2;
-            } else if (position == accountRow) {
+            } else if (position == accountRow || position == secretChatHeaderRow) {
                 return 4;
             }
             return 3;
