@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.EditorInfo;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
@@ -324,9 +325,12 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             actionBar.setTitle(LocaleController.getString(R.string.GroupSettingsTitle));
         }
 
+        FrameLayout typeSectionContainer = new FrameLayout(context);
+        linearLayout.addView(typeSectionContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
         linearLayoutTypeContainer = new LinearLayout(context);
         linearLayoutTypeContainer.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.addView(linearLayoutTypeContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        typeSectionContainer.addView(linearLayoutTypeContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         headerCell2 = new HeaderCell(context, 23);
         headerCell2.setHeight(46);
@@ -381,9 +385,12 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             headerCell2.setVisibility(View.GONE);
         }
 
+        FrameLayout linkSectionContainer = new FrameLayout(context);
+        linearLayout.addView(linkSectionContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
         linkContainer = new LinearLayout(context);
         linkContainer.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.addView(linkContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        linkSectionContainer.addView(linkContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         headerCell = new HeaderCell(context, 23);
         linkContainer.addView(headerCell);
@@ -477,7 +484,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             }
         });
         permanentLinkView.setUsers(0, null, false);
-        privateContainer.addView(permanentLinkView);
+        privateContainer.addView(permanentLinkView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         checkTextView = new TextInfoPrivacyCell(context, 12, resourceProvider) {
             @Override
@@ -587,13 +594,19 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         manageLinksInfoCell = new TextInfoPrivacyCell(context, 12, resourceProvider);
         linearLayout.addView(manageLinksInfoCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
+        FrameLayout joinSectionContainer = new FrameLayout(context);
+        linearLayout.addView(joinSectionContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
         joinContainer = new JoinToSendSettingsView(context, currentChat);
         joinContainer.showJoinToSend(info != null && info.linked_chat_id != 0);
-        linearLayout.addView(joinContainer);
+        joinSectionContainer.addView(joinContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
+        FrameLayout saveSectionContainer = new FrameLayout(context);
+        linearLayout.addView(saveSectionContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         saveContainer = new LinearLayout(context);
         saveContainer.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.addView(saveContainer);
+        saveSectionContainer.addView(saveContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         saveHeaderCell = new HeaderCell(context, 23);
         saveHeaderCell.setHeight(46);
