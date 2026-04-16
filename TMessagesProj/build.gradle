@@ -53,6 +53,7 @@ configurations {
     compile.exclude module: "support-v4"
 }
 
+def keystorePath = null
 def keystorePwd = null
 def alias = null
 def pwd = null
@@ -69,14 +70,18 @@ if (base64 != null && !base64.isBlank()) {
 }
 
 if (properties != null) {
+    keystorePath = properties.getProperty("KEYSTORE_PATH")
     keystorePwd = properties.getProperty("KEYSTORE_PASS")
     alias = properties.getProperty("ALIAS_NAME")
     pwd = properties.getProperty("ALIAS_PASS")
 }
 
+keystorePath = keystorePath ?: System.getenv("KEYSTORE_PATH")
 keystorePwd = keystorePwd ?: System.getenv("KEYSTORE_PASS")
 alias = alias ?: System.getenv("ALIAS_NAME")
 pwd = pwd ?: System.getenv("ALIAS_PASS")
+def keystore = keystorePath ? rootProject.file(keystorePath) : project.file("release.keystore")
+System.out.println("using keystore: " + keystore.path)
 
 def targetTask = ""
 if (!gradle.startParameter.taskNames.isEmpty()) {
@@ -199,7 +204,7 @@ android {
 
     signingConfigs {
         release {
-            storeFile project.file("release.keystore")
+            storeFile keystore
             storePassword keystorePwd
             keyAlias alias
             keyPassword pwd
