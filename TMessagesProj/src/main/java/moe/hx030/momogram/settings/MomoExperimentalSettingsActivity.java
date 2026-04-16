@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -224,6 +225,7 @@ public class MomoExperimentalSettingsActivity extends MomoSettingsBaseActivity {
                                     ((ConfigCellTextCheck) a).onClick((TextCheckCell) view);
                                 })
                                 .setNegativeButton(LocaleController.getString(R.string.Cancel), null)
+                                .setTimeout(3, DialogInterface.BUTTON_POSITIVE)
                                 .show();
                         return;
                     }
