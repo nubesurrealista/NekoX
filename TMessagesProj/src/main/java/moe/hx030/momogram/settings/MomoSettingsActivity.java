@@ -153,7 +153,7 @@ public class MomoSettingsActivity extends BaseFragment {
         try {
             DateFormat df = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.getDefault());
             Date today = Calendar.getInstance().getTime();
-            File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), df.format(today) + ".nekox-settings.json");
+            File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), df.format(today) + ".momo-settings.json");
             FileUtil.writeUtf8String(backupSettingsJson(), cacheFile);
             ShareUtil.shareFile(getParentActivity(), cacheFile);
         } catch (JSONException e) {

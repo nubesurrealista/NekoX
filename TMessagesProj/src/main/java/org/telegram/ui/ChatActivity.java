@@ -19696,19 +19696,20 @@ public class ChatActivity extends BaseFragment implements
                         if (canSave) {
                             if (messageObject.getDocument() != null && !messageObject.isMusic()) {
                                 String mime = messageObject.getDocument().mime_type;
+                                String name = messageObject.getDocumentName().toLowerCase();
                                 if (mime != null) {
-                                    if (messageObject.getDocumentName().toLowerCase().endsWith("attheme")) {
+                                    if (name.endsWith("attheme")) {
                                         return 10;
                                     } else if (mime.endsWith("/xml")) {
                                         return 5;
-                                    } else if ((messageObject.getDocumentName().toLowerCase().endsWith(".nekox.json"))) {
+                                    } else if (name.endsWith(".nekox.json")) {
                                         // TODO wtf
                                         return 21;
-                                    } else if ((messageObject.getDocumentName().toLowerCase().endsWith(".nekox-stickers.json"))) {
+                                    } else if (name.endsWith(".nekox-stickers.json") || name.endsWith(".momo-stickers.json")) {
                                         return 22;
-                                    } else if ((messageObject.getDocumentName().toLowerCase().endsWith(".nekox-settings.json"))) {
+                                    } else if (name.endsWith(".nekox-settings.json") || name.endsWith(".momo-stickers.json")) {
                                         return 23;
-                                    } else if ((messageObject.getDocumentName().toLowerCase().endsWith(".tgscb"))) {
+                                    } else if ((name.endsWith(".tgscb"))) {
                                         return 69;
                                     } else if (!messageObject.isNewGif() && mime.endsWith("/mp4") || mime.endsWith("/png") || mime.endsWith("/jpg") || mime.endsWith("/jpeg")) {
                                         return 6;
@@ -33651,7 +33652,8 @@ public class ChatActivity extends BaseFragment implements
                     }
                 }
                 if (locFile != null) {
-                    if (locFile.getName().toLowerCase().endsWith("attheme")) {
+                    String name = locFile.getName().toLowerCase();
+                    if (name.endsWith("attheme")) {
                         Theme.ThemeInfo themeInfo = Theme.applyThemeFile(locFile, selectedObject.getDocumentName(), null, true);
                         if (themeInfo != null) {
                             presentFragment(new ThemePreviewActivity(themeInfo));
@@ -33672,7 +33674,7 @@ public class ChatActivity extends BaseFragment implements
                             builder.setOnPreDismissListener(di -> dimBehindView(false));
                             showDialog(builder.create());
                         }
-                    } else if (locFile.getName().toLowerCase().endsWith("xml")) {
+                    } else if (name.endsWith("xml")) {
                         if (LocaleController.getInstance().applyLanguageFile(locFile, currentAccount)) {
                             presentFragment(new LanguageSelectActivity());
                         } else {
@@ -33691,7 +33693,7 @@ public class ChatActivity extends BaseFragment implements
                             builder.setOnPreDismissListener(di -> dimBehindView(false));
                             showDialog(builder.create());
                         }
-                    } else if (locFile.getName().toLowerCase().endsWith(".nekox.json")) {
+                    } else if (name.endsWith(".nekox.json")) {
                         //TODO wtf
 
                         File finalLocFile1 = locFile;
@@ -33706,7 +33708,7 @@ public class ChatActivity extends BaseFragment implements
                                     Toast.makeText(ChatActivity.this.getContext(), "This function is removed temporarily.", Toast.LENGTH_LONG).show();
                                 });
 
-                    } else if (locFile.getName().toLowerCase().endsWith(".nekox-stickers.json")) {
+                    } else if (name.endsWith(".nekox-stickers.json") || name.endsWith(".momo-stickers.json")) {
 
                         File finalLocFile = locFile;
                         AlertUtil.showConfirm(getParentActivity(),
@@ -33716,7 +33718,7 @@ public class ChatActivity extends BaseFragment implements
                                     presentFragment(new StickersActivity(finalLocFile));
                                 });
 
-                    } else if (locFile.getName().toLowerCase().endsWith(".nekox-settings.json")) {
+                    } else if (name.endsWith(".nekox-settings.json") || name.endsWith(".momo-settings.json")) {
 
                         File finalLocFile = locFile;
 
@@ -41650,7 +41652,8 @@ public class ChatActivity extends BaseFragment implements
                 }
             } else if (message.type == MessageObject.TYPE_FILE || message.type == MessageObject.TYPE_TEXT) {
                 File locFile = getFileLoader().getPathToMessage(message.messageOwner);
-                if (message.getDocumentName().toLowerCase().endsWith("attheme")) {
+                String name = message.getDocumentName().toLowerCase();
+                if (name.endsWith("attheme")) {
                     Theme.ThemeInfo themeInfo = Theme.applyThemeFile(locFile, message.getDocumentName(), null, true);
                     if (themeInfo != null) {
                         presentFragment(new ThemePreviewActivity(themeInfo));
@@ -41672,7 +41675,7 @@ public class ChatActivity extends BaseFragment implements
                             alertUserOpenError(message);
                         }
                     }
-                } else if (message.getDocumentName().toLowerCase().endsWith(".nekox.json")) {
+                } else if (name.endsWith(".nekox.json")) {
                     if (locFile == null || !locFile.isFile()) {
                         AlertUtil.showToast("FILE_NOT_FOUND");
                         return;
@@ -41689,7 +41692,7 @@ public class ChatActivity extends BaseFragment implements
                                 Toast.makeText(ChatActivity.this.getContext(), "This function is removed.", Toast.LENGTH_LONG).show();
                             });
 
-                } else if (message.getDocumentName().toLowerCase().endsWith(".nekox-stickers.json")) {
+                } else if (name.endsWith(".nekox-stickers.json") || name.endsWith(".momo-stickers.json")) {
                     if (locFile == null || !locFile.isFile()) {
                         AlertUtil.showToast("FILE_NOT_FOUND");
                         return;
@@ -41702,7 +41705,7 @@ public class ChatActivity extends BaseFragment implements
                             });
 
 
-                } else if (message.getDocumentName().toLowerCase().endsWith(".nekox-settings.json")) {
+                } else if (name.endsWith(".nekox-settings.json") || name.endsWith(".momo-settings.json")) {
                     if (locFile == null || !locFile.isFile()) {
                         AlertUtil.showToast("FILE_NOT_FOUND");
                         return;
@@ -41710,7 +41713,7 @@ public class ChatActivity extends BaseFragment implements
                     File finalLocFile = locFile;
                     MomoSettingsActivity.importSettings(getParentActivity(), finalLocFile);
 
-                } else if (message.getDocumentName().toLowerCase().endsWith(".tgscb")) {
+                } else if (name.endsWith(".tgscb")) {
                     Log.d("030-r", "promptPasswordAndRestore");
                     Context context = getParentActivity();
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);

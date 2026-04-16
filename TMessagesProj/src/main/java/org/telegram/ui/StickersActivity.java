@@ -1159,7 +1159,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     
     public void processStickersFile(File file, boolean exitOnFail) {
 
-        if (!file.isFile() || !file.getName().endsWith("nekox-stickers.json")) {
+        if (!file.isFile() || !(file.getName().endsWith("nekox-stickers.json") || file.getName().endsWith("momo-stickers.json"))) {
 
             showError("not a stickers file", exitOnFail);
 
@@ -1264,7 +1264,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
             JsonObject exportObj = StickersUtil.exportStickers(currentAccount, exportSets, exportArchived);
 
-            File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), new Date().toLocaleString() + ".nekox-stickers.json");
+            File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), new Date().toLocaleString() + ".momo-stickers.json");
 
             StringWriter stringWriter = new StringWriter();
             JsonWriter jsonWriter = new JsonWriter(stringWriter);
