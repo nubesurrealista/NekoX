@@ -45,6 +45,7 @@ public class MomoSettingsBaseActivity extends BaseFragment {
     private int previousIndex = -1;
     protected int scrollToIndex = -1;
     protected String scrollToString = null;
+    protected int scrollToStringId = 0;
     protected void setScrollToIndex(int index, boolean schedule) {
         previousIndex = scrollToIndex;
         scrollToIndex = index;
@@ -52,7 +53,35 @@ public class MomoSettingsBaseActivity extends BaseFragment {
         if (schedule) scheduleScrollToIndex();
     }
 
+    private int findScrollToIndex() {
+        if (scrollToString == null) {
+            return -1;
+        }
+        for (int i = 0; i < cellGroup.rows.size(); ++i) {
+            AbstractConfigCell c = cellGroup.rows.get(i);
+            if (c instanceof ConfigCellCustom cell && scrollToStringId != 0 && cell.stringId == scrollToStringId) {
+                return i;
+            }
+            if (!ReflectUtil.hasField(c.getClass(), "title")) {
+                continue;
+            }
+            String cmp = (String) ReflectUtil.getFieldValue(c, "title");
+            if (scrollToString.equals(cmp)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    protected void resolveScrollToIndex() {
+        int index = findScrollToIndex();
+        if (index != -1 && index != scrollToIndex) {
+            setScrollToIndex(index, false);
+        }
+    }
+
     protected void scheduleScrollToIndex() {
+        resolveScrollToIndex();
         if (scrollToIndex == -1) return;
         listView.post(() -> {
             RecyclerView.LayoutManager layoutManager = listView.getLayoutManager();
@@ -62,7 +91,7 @@ public class MomoSettingsBaseActivity extends BaseFragment {
             if (scrollToIndex < 0 || scrollToIndex >= itemCount) return;
 
             if (layoutManager instanceof LinearLayoutManager lm) {
-                lm.scrollToPositionWithOffset(scrollToIndex, listView.getHeight() / 2);
+                lm.scrollToPositionWithOffset(scrollToIndex, 0);
             } else {
                 listView.smoothScrollToPosition(scrollToIndex);
             }
@@ -73,26 +102,8 @@ public class MomoSettingsBaseActivity extends BaseFragment {
         if (str == null) return this;
         Log.d("030-?", "searching for " + str);
         scrollToString = str;
-        for (int i = 0; i < cellGroup.rows.size(); ++i) {
-            AbstractConfigCell c = cellGroup.rows.get(i);
-            if (!ReflectUtil.hasField(c.getClass(), "title")) {
-                // workaround
-                if (c instanceof ConfigCellCustom cell) {
-                    if (cell.stringId == stringId) {
-                        Log.d("030-?", String.format("applying workaround for %s %d", str, stringId));
-                        setScrollToIndex(i, false);
-                        return this;
-                    }
-                }
-                continue;
-            }
-
-            String cmp = (String) ReflectUtil.getFieldValue(c, "title");
-            if (str.equals(cmp)) {
-                setScrollToIndex(i, false);
-                return this;
-            }
-        }
+        scrollToStringId = stringId;
+        resolveScrollToIndex();
         return this;
     }
 
@@ -235,9 +246,12 @@ public class MomoSettingsBaseActivity extends BaseFragment {
                     if (textViewField != null) {
                         textViewField.setAccessible(true);
                         try {
-                            textView = (TextView) textViewField.get(holder.itemView);
-                            if (textView != null) highlightView = textView; //holder.itemView;
-                        } catch (IllegalAccessException e) {
+                            Object textViewObject = textViewField.get(holder.itemView);
+                            if (textViewObject instanceof View view) {
+                                textView = view;
+                                highlightView = view;
+                            }
+                        } catch (Throwable e) {
                             Log.e("030-?", "", e);
                         }
                     }
@@ -251,6 +265,9 @@ public class MomoSettingsBaseActivity extends BaseFragment {
                 if (textView == null || ne) {
                     if (scrollToString != null) {
                         for (int pos : new int[]{position - 1, position + 1}) {
+                            if (pos < 0 || pos >= cellGroup.rows.size()) {
+                                continue;
+                            }
                             if (ReflectUtil.hasField(cellGroup.rows.get(pos).getClass(), "title")) {
                                 String s = (String) ReflectUtil.getFieldValue(cellGroup.rows.get(pos), "title");
                                 if (scrollToString.equals(s)) {
