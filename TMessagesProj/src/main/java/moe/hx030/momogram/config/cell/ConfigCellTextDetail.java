@@ -11,7 +11,7 @@ import moe.hx030.momogram.config.CellGroup;
 import moe.hx030.momogram.config.ConfigItem;
 
 public class ConfigCellTextDetail extends AbstractConfigCell {
-    private final ConfigItem bindConfig;
+    public final ConfigItem bindConfig;
     private final String title;
     private final String hint;
     public final RecyclerListView.OnItemClickListener onItemClickListener;

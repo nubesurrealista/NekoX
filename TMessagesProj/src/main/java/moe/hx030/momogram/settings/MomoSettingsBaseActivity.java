@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.exoplayer2.util.Consumer;
 
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
@@ -27,6 +28,7 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.lang.reflect.Field;
 
+import moe.hx030.momogram.config.ConfigItem;
 import moe.hx030.momogram.util.ReflectUtil;
 import moe.hx030.momogram.config.CellGroup;
 import moe.hx030.momogram.config.cell.AbstractConfigCell;
@@ -44,6 +46,7 @@ public class MomoSettingsBaseActivity extends BaseFragment {
 
     private int previousIndex = -1;
     protected int scrollToIndex = -1;
+    protected String scrollToKey = null;
     protected String scrollToString = null;
     protected int scrollToStringId = 0;
     protected void setScrollToIndex(int index, boolean schedule) {
@@ -54,14 +57,25 @@ public class MomoSettingsBaseActivity extends BaseFragment {
     }
 
     private int findScrollToIndex() {
-        if (scrollToString == null) {
+        if (scrollToString == null && scrollToKey == null) {
             return -1;
         }
         for (int i = 0; i < cellGroup.rows.size(); ++i) {
             AbstractConfigCell c = cellGroup.rows.get(i);
-            if (c instanceof ConfigCellCustom cell && scrollToStringId != 0 && cell.stringId == scrollToStringId) {
+            if (scrollToString != null && c instanceof ConfigCellCustom cell && scrollToStringId != 0 && cell.stringId == scrollToStringId) {
                 return i;
             }
+
+            if (scrollToKey != null) {
+                if (ReflectUtil.hasField(c.getClass(), "bindConfig")) {
+                    ConfigItem cfg = (ConfigItem) ReflectUtil.getFieldValue(c, "bindConfig");
+                    if (cfg != null && scrollToKey.equals(cfg.key)) {
+                        return i;
+                    }
+                }
+                continue;
+            }
+
             if (!ReflectUtil.hasField(c.getClass(), "title")) {
                 continue;
             }
@@ -83,26 +97,42 @@ public class MomoSettingsBaseActivity extends BaseFragment {
     protected void scheduleScrollToIndex() {
         resolveScrollToIndex();
         if (scrollToIndex == -1) return;
+        if (listView == null || listAdapter == null) return;
         listView.post(() -> {
+            if (listView == null || listAdapter == null) {
+                return;
+            }
             RecyclerView.LayoutManager layoutManager = listView.getLayoutManager();
             if (layoutManager == null) return;
 
             int itemCount = listAdapter != null ? listAdapter.getItemCount() : layoutManager.getItemCount();
             if (scrollToIndex < 0 || scrollToIndex >= itemCount) return;
+            if (listView.getHeight() <= 0) {
+                scheduleScrollToIndex();
+                return;
+            }
 
             if (layoutManager instanceof LinearLayoutManager lm) {
                 lm.scrollToPositionWithOffset(scrollToIndex, 0);
             } else {
-                listView.smoothScrollToPosition(scrollToIndex);
+                listView.scrollToPosition(scrollToIndex);
             }
+            listView.post(() -> setHighlightView(scrollToIndex));
         });
     }
 
-    public MomoSettingsBaseActivity setScrollTo(String str, int stringId) {
+    public MomoSettingsBaseActivity setScrollTo(String str, int stringId, boolean key) {
         if (str == null) return this;
         Log.d("030-?", "searching for " + str);
-        scrollToString = str;
-        scrollToStringId = stringId;
+        if (key) {
+            scrollToKey = str;
+            scrollToString = null;
+            scrollToStringId = 0;
+        } else {
+            scrollToKey = null;
+            scrollToString = str;
+            scrollToStringId = stringId;
+        }
         resolveScrollToIndex();
         return this;
     }
@@ -238,6 +268,14 @@ public class MomoSettingsBaseActivity extends BaseFragment {
         protected void checkScrollTo(int position, RecyclerView.ViewHolder holder, View textView, String currentText) {
             boolean highlight = (position == scrollToIndex);
             if (highlight) {
+                if (scrollToKey != null) {
+                    if (textView != null) {
+                        setHighlightView(textView);
+                    } else {
+                        setHighlightView(position);
+                    }
+                    return;
+                }
                 if (textView == null && (holder.itemView instanceof TextSettingsCell c)) {
                     textView = c.getTextView();
                 }

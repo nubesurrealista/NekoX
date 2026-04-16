@@ -353,4 +353,5 @@
     <string name="SecretChatRestore">Restore Secret Chats</string>
     <string name="SecretChatRestorePasswordPrompt">Enter the password used to encrypt this backup.</string>
     <string name="SecretChatRestoreSuccess">Restore Secret Chats</string>
+    <string name="MomoSettingNotFound">Specified option does not exist</string>
 </resources>

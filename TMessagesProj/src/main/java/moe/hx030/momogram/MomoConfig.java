@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 
 import org.apache.commons.lang3.StringUtils;
 import org.telegram.messenger.AndroidUtilities;
@@ -22,6 +23,7 @@ import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.LauncherIconController;
 import org.unifiedpush.android.connector.UnifiedPush;
@@ -52,6 +54,10 @@ import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
 import moe.hx030.momogram.config.ConfigItem;
 import moe.hx030.momogram.helpers.EvilLeakerKiller;
+import moe.hx030.momogram.settings.MomoAppearanceSettingsActivity;
+import moe.hx030.momogram.settings.MomoChatSettingsActivity;
+import moe.hx030.momogram.settings.MomoExperimentalSettingsActivity;
+import moe.hx030.momogram.settings.MomoGeneralSettingsActivity;
 import moe.hx030.momogram.transtale.Translator;
 import moe.hx030.momogram.transtale.source.FirefoxLocalTranslator;
 import moe.hx030.momogram.utils.FileUtil;
@@ -170,6 +176,9 @@ public class MomoConfig {
 
     public static ConfigItem perfClassOverride = addConfig(R.string.OverridePerformanceClass, "perfClassOverride", configTypeInt, GENERAL, 0);
     public static String[] perfClassOverrideOptions = null;
+
+    public static ConfigItem searchBlacklist = addConfig(R.string.SearchBlacklist, "searchBlackList", configTypeString, GENERAL, "");
+    public static ArrayList<Long> searchBlacklistData = new ArrayList<>();
 
 
     public static ConfigItem repeatConfirm = addConfig(R.string.repeatConfirm, "repeatConfirm", configTypeBool, CHAT, false);
@@ -351,11 +360,8 @@ public class MomoConfig {
     public static ConfigItem profileShowBlockSearch = addConfig("profileShowBlockSearch", configTypeBool, CHAT, false);
     public static ConfigItem profileShowSpoilerOnAllMedia = addConfig("profileShowSpoilerOnAllMedia", configTypeBool, CHAT, false);
 
-    public static ConfigItem customGetQueryBlacklist = addConfig(R.string.BlacklistUrlQueryTitle, "BlacklistUrlQueryTitle", configTypeString, "");
+    public static ConfigItem customGetQueryBlacklist = addConfig(R.string.BlacklistUrlQueryTitle, "BlacklistUrlQueryTitle", configTypeString, CHAT, "");
     public static ArrayList<String> customGetQueryBlacklistData = new ArrayList<>();
-
-    public static ConfigItem searchBlacklist = addConfig(R.string.SearchBlacklist, "searchBlackList", configTypeString, "");
-    public static ArrayList<Long> searchBlacklistData = new ArrayList<>();
 
     public static ConfigItem nextCheckCustomStatusTime = addConfig("nextCheckCustomStatusTime", configTypeLong, 0L);
     public static ConfigItem disableSaveDraftToCloud = addConfig(R.string.DisableSaveDraftToCloud, "DisableSaveDraftToCloud", configTypeBool, CHAT, false);
@@ -1090,9 +1096,9 @@ public class MomoConfig {
         }
     }
 
-    public static HashMap<Integer, ArrayList<Pair<Integer, String>>> nekoConfigStrings;
+    public static HashMap<Integer, ArrayList<Pair<Integer, String>>> momoConfigStrings;
     public static HashMap<Integer, ArrayList<Pair<Integer, String>>> getStringsForSearch() {
-        if (nekoConfigStrings != null) return nekoConfigStrings;
+        if (momoConfigStrings != null) return momoConfigStrings;
         HashMap<Integer, ArrayList<Pair<Integer, String>>> ret = new HashMap<>();
         for (Field f : MomoConfig.class.getDeclaredFields()) {
             if (f.getType() == ConfigItem.class && Modifier.isStatic(f.getModifiers())) {
@@ -1108,15 +1114,37 @@ public class MomoConfig {
                         ret.get(item.page).add(Pair.create(id, LocaleController.getString(id)));
                     }
                 } catch (IllegalAccessException e) {
-                    Log.e("030-nekocfg", "error getting field " + f.getName(), e);
+                    Log.e("030-cfg", "error getting field " + f.getName(), e);
                 }
             }
         }
-        return nekoConfigStrings = ret;
+        return momoConfigStrings = ret;
+    }
+
+    public static HashMap<String, Pair<Integer, ConfigItem>> momoConfigKeyMap;
+    public static Pair<Integer, ConfigItem> getConfigByKey(String key) {
+        Log.d("030-mo", "getConfigByKey: " + key);
+        if (momoConfigKeyMap != null) return momoConfigKeyMap.get(key);
+        HashMap<String, Pair<Integer, ConfigItem>> ret = new HashMap<>();
+        for (Field f : MomoConfig.class.getDeclaredFields()) {
+            if (f.getType() == ConfigItem.class && Modifier.isStatic(f.getModifiers())) {
+                try {
+                    ConfigItem item = (ConfigItem) f.get(null);
+                    assert item != null;
+                    if (item.page == 0) continue;
+                    Log.d("030-mo", String.format("found '%s' in page %d", item.key, item.page));
+                    ret.put(item.key, Pair.create(item.page, item));
+                } catch (IllegalAccessException e) {
+                    Log.e("030-cfg", "error getting field " + f.getName(), e);
+                }
+            }
+        }
+        momoConfigKeyMap = ret;
+        return ret.get(key);
     }
 
     public static String getNekoConfigValuesAsString() {
-        StringBuilder sb = new StringBuilder("\n\nNekoConfig:\n");
+        StringBuilder sb = new StringBuilder("\n\nMomoConfig:\n");
         for (Field f : MomoConfig.class.getDeclaredFields()) {
             if (f.getType() == ConfigItem.class && Modifier.isStatic(f.getModifiers())) {
                 if (f.getName().contains("Api"))
@@ -1136,6 +1164,46 @@ public class MomoConfig {
             }
         }
         return sb.toString();
+    }
+
+    public static void findAndOpenMomoSettings(LaunchActivity activity, String s) {
+        if (activity == null || TextUtils.isEmpty(s)) {
+            return;
+        }
+        String k = s;
+        Uri uri = Uri.parse(s);
+        String queryKey = uri.getQueryParameter("k");
+        if (!TextUtils.isEmpty(queryKey)) {
+            k = queryKey;
+        } else if (s.contains("=")) {
+            String[] spl = s.split("=", 2);
+            if (spl.length == 2 && !TextUtils.isEmpty(spl[1])) {
+                k = spl[1];
+            }
+        }
+        Pair<Integer, ConfigItem> loc = MomoConfig.getConfigByKey(k);
+        if (loc != null) {
+            switch (loc.first) {
+                case ConfigItem.GENERAL:
+                    activity.presentFragment(new MomoGeneralSettingsActivity().setScrollTo(k, 0, true));
+                    break;
+                case ConfigItem.APPEARANCE:
+                    activity.presentFragment(new MomoAppearanceSettingsActivity().setScrollTo(k, 0, true));
+                    break;
+                case ConfigItem.CHAT:
+                    activity.presentFragment(new MomoChatSettingsActivity().setScrollTo(k, 0, true));
+                    break;
+                case ConfigItem.EXPERIMENTAL:
+                    activity.presentFragment(new MomoExperimentalSettingsActivity().setScrollTo(k, 0, true));
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            BulletinFactory.of(LaunchActivity.getLastFragment())
+                    .createSimpleBulletin(R.raw.error, LocaleController.getString(R.string.MomoSettingNotFound))
+                    .show();
+        }
     }
 
     public static int resetModConfig() {

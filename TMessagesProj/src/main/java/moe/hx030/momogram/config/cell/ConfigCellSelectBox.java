@@ -22,7 +22,7 @@ import moe.hx030.momogram.config.ConfigItem;
 // TextSettingsCell, select from a list
 // Can be used without select list（custom）
 public class ConfigCellSelectBox extends AbstractConfigCell {
-    private final ConfigItem bindConfig;
+    public final ConfigItem bindConfig;
     private final String[] selectList; // split by \n
     private final String title;
     private final Runnable onClickCustom;

@@ -15404,16 +15404,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             R.drawable.notification, () -> {
                         switch (e.getKey()) {
                             case ConfigItem.GENERAL:
-                                f.presentFragment(new MomoGeneralSettingsActivity().setScrollTo(v.second, v.first));
+                                f.presentFragment(new MomoGeneralSettingsActivity().setScrollTo(v.second, v.first, false));
                                 break;
                             case ConfigItem.APPEARANCE:
-                                f.presentFragment(new MomoAppearanceSettingsActivity().setScrollTo(v.second, v.first));
+                                f.presentFragment(new MomoAppearanceSettingsActivity().setScrollTo(v.second, v.first, false));
                                 break;
                             case ConfigItem.CHAT:
-                                f.presentFragment(new MomoChatSettingsActivity().setScrollTo(v.second, v.first));
+                                f.presentFragment(new MomoChatSettingsActivity().setScrollTo(v.second, v.first, false));
                                 break;
                             case ConfigItem.EXPERIMENTAL:
-                                f.presentFragment(new MomoExperimentalSettingsActivity().setScrollTo(v.second, v.first));
+                                f.presentFragment(new MomoExperimentalSettingsActivity().setScrollTo(v.second, v.first, false));
                                 break;
                             default:
                                 break;

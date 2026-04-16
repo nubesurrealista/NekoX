@@ -20,7 +20,7 @@ import moe.hx030.momogram.config.CellGroup;
 import moe.hx030.momogram.config.ConfigItem;
 
 public class ConfigCellTextInput extends AbstractConfigCell {
-    private final ConfigItem bindConfig;
+    public final ConfigItem bindConfig;
     private final String hint;
     private final String title;
     private final Runnable callback, onClickCustom;

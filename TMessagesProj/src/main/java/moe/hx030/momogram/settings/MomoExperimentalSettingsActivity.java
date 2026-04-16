@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,7 @@ import org.telegram.ui.LaunchActivity;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -58,6 +60,8 @@ import kotlin.Unit;
 import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
+import moe.hx030.momogram.config.ConfigItem;
+import moe.hx030.momogram.util.ReflectUtil;
 import moe.hx030.momogram.util.SessionsUtil;
 import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.NekoXConfig;
@@ -303,6 +307,22 @@ public class MomoExperimentalSettingsActivity extends MomoSettingsBaseActivity {
                     builder.show();
                 }
             }
+        });
+
+        listView.setOnItemLongClickListener((v, i) -> {
+            AbstractConfigCell a = cellGroup.rows.get(i);
+            if (ReflectUtil.hasField(a.getClass(), "bindConfig")) {
+                Field cfgField = ReflectUtil.getField(a.getClass(), "bindConfig");
+                try {
+                    if (cfgField != null) {
+                        ConfigItem cfg = (ConfigItem) cfgField.get(a);
+                        AndroidUtilities.addToClipboard(String.format("https://t.me/momosettings/?k=%s", cfg.key));
+                    }
+                } catch (IllegalAccessException e) {
+                    Log.e("030-cfg", "failed to get config field", e);
+                }
+            }
+            return false;
         });
 
         // Cells: Set OnSettingChanged Callbacks

@@ -47,6 +47,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.Components.UndoView;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -55,6 +56,7 @@ import java.util.stream.Collectors;
 import kotlin.Unit;
 import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.NekoXConfig;
+import moe.hx030.momogram.config.ConfigItem;
 import moe.hx030.momogram.ui.PopupBuilder;
 import moe.hx030.momogram.config.CellGroup;
 import moe.hx030.momogram.config.cell.AbstractConfigCell;
@@ -66,6 +68,7 @@ import moe.hx030.momogram.config.cell.ConfigCellTextCheck;
 import moe.hx030.momogram.config.cell.ConfigCellTextDetail;
 import moe.hx030.momogram.config.cell.ConfigCellTextInput;
 import moe.hx030.momogram.helpers.WhisperHelper;
+import moe.hx030.momogram.util.ReflectUtil;
 
 @SuppressLint("RtlHardcoded")
 public class MomoChatSettingsActivity extends MomoSettingsBaseActivity implements NotificationCenter.NotificationCenterDelegate {
@@ -322,6 +325,22 @@ public class MomoChatSettingsActivity extends MomoSettingsBaseActivity implement
                             .show(true);
                 }
             }
+        });
+
+        listView.setOnItemLongClickListener((v, i) -> {
+            AbstractConfigCell a = cellGroup.rows.get(i);
+            if (ReflectUtil.hasField(a.getClass(), "bindConfig")) {
+                Field cfgField = ReflectUtil.getField(a.getClass(), "bindConfig");
+                try {
+                    if (cfgField != null) {
+                        ConfigItem cfg = (ConfigItem) cfgField.get(a);
+                        AndroidUtilities.addToClipboard(String.format("https://t.me/momosettings/?k=%s", cfg.key));
+                    }
+                } catch (IllegalAccessException e) {
+                    Log.e("030-cfg", "failed to get config field", e);
+                }
+            }
+            return false;
         });
 
         // Cells: Set OnSettingChanged Callbacks

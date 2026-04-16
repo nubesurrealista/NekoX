@@ -9,7 +9,7 @@ import moe.hx030.momogram.config.CellGroup;
 import moe.hx030.momogram.config.ConfigItem;
 
 public class ConfigCellTextCheck extends AbstractConfigCell {
-    private final ConfigItem bindConfig;
+    public final ConfigItem bindConfig;
     private final String title;
     private final String subtitle;
     private boolean enabled = true;

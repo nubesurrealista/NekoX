@@ -62,6 +62,7 @@ import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.LauncherIconController;
 import org.telegram.ui.web.SearchEngine;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -77,6 +78,7 @@ import moe.hx030.momogram.NekoXConfig;
 import moe.hx030.momogram.ui.PopupBuilder;
 import moe.hx030.momogram.transtale.Translator;
 import moe.hx030.momogram.transtale.TranslatorKt;
+import moe.hx030.momogram.util.ReflectUtil;
 import moe.hx030.momogram.utils.AlertUtil;
 import moe.hx030.momogram.utils.PGPUtil;
 
@@ -404,6 +406,18 @@ public class MomoGeneralSettingsActivity extends MomoSettingsBaseActivity {
                 if (EvilLeakerKiller.getInstance(null) != null)
                     AlertsCreator.createMemLeakDialog(getParentActivity(), EvilLeakerKiller.getInstance(null).checkRamUsage()).show();
                 return true;
+            }
+            AbstractConfigCell a = cellGroup.rows.get(position);
+            if (ReflectUtil.hasField(a.getClass(), "bindConfig")) {
+                Field cfgField = ReflectUtil.getField(a.getClass(), "bindConfig");
+                try {
+                    if (cfgField != null) {
+                        ConfigItem cfg = (ConfigItem) cfgField.get(a);
+                        AndroidUtilities.addToClipboard(String.format("https://t.me/momosettings/?k=%s", cfg.key));
+                    }
+                } catch (IllegalAccessException e) {
+                    Log.e("030-cfg", "failed to get config field", e);
+                }
             }
             return false;
         });

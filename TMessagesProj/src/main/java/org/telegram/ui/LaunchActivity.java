@@ -56,6 +56,7 @@ import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.util.Base64;
 import android.util.Log;
+import android.util.Pair;
 import android.util.SparseIntArray;
 import android.view.ActionMode;
 import android.view.Gravity;
@@ -246,6 +247,11 @@ import java.util.zip.ZipInputStream;
 
 import kotlin.Unit;
 import kotlin.text.StringsKt;
+import moe.hx030.momogram.config.ConfigItem;
+import moe.hx030.momogram.settings.MomoAppearanceSettingsActivity;
+import moe.hx030.momogram.settings.MomoChatSettingsActivity;
+import moe.hx030.momogram.settings.MomoExperimentalSettingsActivity;
+import moe.hx030.momogram.settings.MomoGeneralSettingsActivity;
 import moe.hx030.momogram.util.SessionsUtil;
 import moe.hx030.momogram.helpers.EvilLeakerKiller;
 import moe.hx030.momogram.ui.BottomBuilder;
@@ -2190,6 +2196,8 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                                 folderSlug = path.substring(8);
                                             } else if (path.startsWith("m/")) {
                                                 chatLinkSlug = path.substring(2);
+                                            } else if ("momosettings".equals(path) || path.startsWith("momosettings/")) {
+                                                MomoConfig.findAndOpenMomoSettings(this, data.getQueryParameter("k"));
                                             } else if (path.length() >= 1) {
                                                 botAppMaybe = null;
                                                 ArrayList<String> segments = new ArrayList<>(data.getPathSegments());
@@ -2813,6 +2821,8 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                         }
 
                                         return pushOpened;
+                                    } else if (url.startsWith("tg:momosettings") || url.startsWith("tg://momosettings")) {
+                                        MomoConfig.findAndOpenMomoSettings(this, url);
                                     } else {
                                         unsupportedUrl = url.replace("tg://", "").replace("tg:", "");
                                         int index;
