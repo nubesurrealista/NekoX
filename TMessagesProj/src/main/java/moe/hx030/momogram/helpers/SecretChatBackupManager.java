@@ -40,14 +40,15 @@ public class SecretChatBackupManager {
 
     private static final String TAG = "SecretChatBackupManager";
     private static final String HEADER = "NXSCB";
-    private static final int VERSION = 3;
+    private static final int VERSION = 4;
     public static final int FORMAT_BINARY = 0;
     public static final int FORMAT_JSON = 1;
 
     private static final int SALT_SIZE = 16;
     private static final int IV_SIZE = 12;
     private static final int TAG_BIT_LENGTH = 128;
-    private static final int PBKDF2_ITERATIONS = 10000;
+    private static final int PBKDF2_ITERATIONS_V3 = 10000;
+    private static final int PBKDF2_ITERATIONS = 500000;
     private static final int KEY_LENGTH = 256;
 
     public interface BackupDelegate {
@@ -175,7 +176,7 @@ public class SecretChatBackupManager {
 
                     payload = new byte[(int) (inputFile.length() - HEADER.length() - 8 - SALT_SIZE - IV_SIZE)];
                     readFully(fis, payload);
-                    payload = decryptPayload(finalPassword, salt, iv, payload);
+                    payload = decryptPayload(version, finalPassword, salt, iv, payload);
                     log(logs, "Decryption successful.");
 
                     database.beginTransaction();
@@ -1537,14 +1538,14 @@ public class SecretChatBackupManager {
     }
 
     private static byte[] encryptPayload(String password, byte[] salt, byte[] iv, byte[] payload) throws Exception {
-        SecretKey key = deriveKey(password, salt);
+        SecretKey key = deriveKey(password, salt, PBKDF2_ITERATIONS);
         Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
         cipher.init(Cipher.ENCRYPT_MODE, key, new GCMParameterSpec(TAG_BIT_LENGTH, iv));
         return cipher.doFinal(payload);
     }
 
-    private static byte[] decryptPayload(String password, byte[] salt, byte[] iv, byte[] payload) throws Exception {
-        SecretKey key = deriveKey(password, salt);
+    private static byte[] decryptPayload(int ver, String password, byte[] salt, byte[] iv, byte[] payload) throws Exception {
+        SecretKey key = deriveKey(password, salt, (ver == 3 ? PBKDF2_ITERATIONS_V3 : PBKDF2_ITERATIONS));
         Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
         cipher.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec(TAG_BIT_LENGTH, iv));
         return cipher.doFinal(payload);
@@ -1587,9 +1588,9 @@ public class SecretChatBackupManager {
         }
     }
 
-    private static SecretKey deriveKey(String password, byte[] salt) throws Exception {
+    private static SecretKey deriveKey(String password, byte[] salt, int iter) throws Exception {
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-        PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, PBKDF2_ITERATIONS, KEY_LENGTH);
+        PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iter, KEY_LENGTH);
         SecretKey tmp = factory.generateSecret(spec);
         return new SecretKeySpec(tmp.getEncoded(), "AES");
     }
