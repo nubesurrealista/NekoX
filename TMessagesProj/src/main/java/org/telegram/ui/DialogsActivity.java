@@ -5760,6 +5760,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             @Override
             void setOpenProgress(float progress) {
                 boolean opened = progress > 0f;
+                toggleCustomButtonsVisibility(!opened);
                 if (anotherFragmentOpened != opened) {
                     anotherFragmentOpened = opened;
                 }
@@ -8413,7 +8414,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                 } else {
                                     if (rightSlidingDialogContainer.currentFragment != null && ((TopicsFragment) rightSlidingDialogContainer.currentFragment).getDialogId() == dialogId) {
                                         rightSlidingDialogContainer.finishPreview();
+                                        toggleCustomButtonsVisibility(true);
                                     } else {
+                                        toggleCustomButtonsVisibility(false);
                                         viewPages[0].listView.prepareSelectorForAnimation();
                                         topicsFragment = new TopicsFragment(args) {
                                             @Override
@@ -9034,6 +9037,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     }
                 }
             }
+            toggleCustomButtonsVisibility(false);
             return true;
         }
         return false;
@@ -12588,6 +12592,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     @Override
     public void onSlideProgress(boolean isOpen, float progress) {
+        if (!isOpen) toggleCustomButtonsVisibility(true);
         if (SharedConfig.getDevicePerformanceClass() <= SharedConfig.PERFORMANCE_CLASS_LOW && !BuildVars.DEBUG_PRIVATE_VERSION) {
             return;
         }
@@ -14291,5 +14296,20 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             });
         }
         io.addGap();
+    }
+
+    Boolean customButtonsVisibility = null;
+    private void toggleCustomButtonsVisibility(boolean visible) {
+        if (customButtonsVisibility != null && visible == customButtonsVisibility) return;
+        customButtonsVisibility = visible;
+        if (proxyItem != null) {
+            proxyItem.setVisibility(visible);
+        }
+        if (recentItem != null) {
+            recentItem.setVisibility(visible && !getMessagesController().recentChats.isEmpty());
+        }
+        if (scanItem != null) {
+            scanItem.setVisibility(visible);
+        }
     }
 }
