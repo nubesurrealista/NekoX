@@ -2748,7 +2748,8 @@ public class ChatActivityEnterView extends FrameLayout implements
                 }
             }
         });
-        messageEditTextContainer.addView(emojiButton, LayoutHelper.createFrame(DEFAULT_HEIGHT, DEFAULT_HEIGHT, Gravity.BOTTOM | Gravity.LEFT, 2, 0, 0, 0));
+        int leftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 0 : 2;
+        messageEditTextContainer.addView(emojiButton, LayoutHelper.createFrame(DEFAULT_HEIGHT, DEFAULT_HEIGHT, Gravity.BOTTOM | Gravity.LEFT, leftMargin, 0, 0, 0));
         setEmojiButtonImage(false, false);
 
         if (isChat) {
@@ -6209,6 +6210,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         final int extraHeightDp = Math.max(0, DEFAULT_HEIGHT - baseHeightDp);
         final int extraTopPaddingDp = extraHeightDp / 2;
         final int extraBottomPaddingDp = extraHeightDp - extraTopPaddingDp;
+        final int leftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 50 : 52;
         messageEditText.setPadding(0, dp(9 + extraTopPaddingDp), 0, dp(10 + extraBottomPaddingDp));
         messageEditText.setBackgroundDrawable(null);
         messageEditText.setTextColor(getThemedColor(Theme.key_chat_messagePanelText));
@@ -6218,7 +6220,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         messageEditText.setHintTextColor(getThemedColor(Theme.key_chat_messagePanelHint));
         messageEditText.setCursorColor(getThemedColor(Theme.key_chat_messagePanelCursor));
         messageEditText.setHandlesColor(getThemedColor(Theme.key_chat_TextSelectionCursor));
-        messageEditTextContainer.addView(messageEditText, 1, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM, 52, 0, isChat ? 50 : 2, 1.5f));
+        messageEditTextContainer.addView(messageEditText, 1, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM, leftMargin, 0, isChat ? 50 : 2, 1.5f));
         messageEditText.setOnKeyListener(new OnKeyListener() {
 
             @Override
@@ -15207,21 +15209,27 @@ public class ChatActivityEnterView extends FrameLayout implements
         int wasHeight = textFieldContainer.getMeasuredHeight();
         if (botCommandsMenuButton != null && botCommandsMenuButton.getTag() != null) {
             botCommandsMenuButton.measure(widthMeasureSpec, heightMeasureSpec);
-            ((MarginLayoutParams) emojiButton.getLayoutParams()).leftMargin = dp(10) + (botCommandsMenuButton == null ? 0 : botCommandsMenuButton.getMeasuredWidth());
+            int leftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 4 : 10;
+            ((MarginLayoutParams) emojiButton.getLayoutParams()).leftMargin = dp(leftMargin) + (botCommandsMenuButton == null ? 0 : botCommandsMenuButton.getMeasuredWidth());
             if (messageEditText != null) {
-                ((MarginLayoutParams) messageEditText.getLayoutParams()).leftMargin = dp(57) + (botCommandsMenuButton == null ? 0 : botCommandsMenuButton.getMeasuredWidth());
+                int editLeftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 53 : 57;
+                ((MarginLayoutParams) messageEditText.getLayoutParams()).leftMargin = dp(editLeftMargin) + (botCommandsMenuButton == null ? 0 : botCommandsMenuButton.getMeasuredWidth());
             }
         } else if (senderSelectView != null && senderSelectView.getVisibility() == View.VISIBLE) {
             int width = senderSelectView.getLayoutParams().width, height = senderSelectView.getLayoutParams().height;
             senderSelectView.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
-            ((MarginLayoutParams) emojiButton.getLayoutParams()).leftMargin = dp(16) + width;
+            int leftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 10 : 16;
+            ((MarginLayoutParams) emojiButton.getLayoutParams()).leftMargin = dp(leftMargin) + width;
             if (messageEditText != null) {
-                ((MarginLayoutParams) messageEditText.getLayoutParams()).leftMargin = dp(63) + width;
+                int editLeftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 59 : 63;
+                ((MarginLayoutParams) messageEditText.getLayoutParams()).leftMargin = dp(editLeftMargin) + width;
             }
         } else {
-            ((MarginLayoutParams) emojiButton.getLayoutParams()).leftMargin = dp(3);
+            int leftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 0 : 3;
+            ((MarginLayoutParams) emojiButton.getLayoutParams()).leftMargin = dp(leftMargin);
             if (messageEditText != null) {
-                ((MarginLayoutParams) messageEditText.getLayoutParams()).leftMargin = dp(50);
+                int editLeftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 46 : 50;
+                ((MarginLayoutParams) messageEditText.getLayoutParams()).leftMargin = dp(editLeftMargin);
             }
         }
         updateBotCommandsMenuContainerTopPadding();
