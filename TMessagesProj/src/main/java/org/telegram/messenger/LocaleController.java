@@ -720,39 +720,6 @@ public class LocaleController {
         languagesDict.put(localeInfo.shortName, localeInfo);
 
         localeInfo = new LocaleInfo();
-        localeInfo.name = "简体中文 (beta)";
-        localeInfo.nameEnglish = "Chinese (Simplified)";
-        localeInfo.shortName = "zh_hans_raw";
-        localeInfo.baseLangCode = "";
-        localeInfo.isRtl = false;
-        localeInfo.pathToFile = "unofficial";
-        localeInfo.pluralLangCode = "zh_cn";
-        localeInfo.builtIn = false;
-        languages.add(localeInfo);
-        languagesDict.put(localeInfo.getKey(), localeInfo);
-        languagesDict.put("unofficial_moecn", localeInfo);
-        languagesDict.put("moecn", localeInfo);
-        languagesDict.put("zh_cn", localeInfo);
-        languagesDict.put("zh_sg", localeInfo);
-
-        localeInfo = new LocaleInfo();
-        localeInfo.name = "繁體中文 (beta)";
-        localeInfo.nameEnglish = "Chinese (Traditional)";
-        localeInfo.shortName = "zh_hant_raw";
-        localeInfo.baseLangCode = "";
-        localeInfo.isRtl = false;
-        localeInfo.pathToFile = "unofficial";
-        localeInfo.pluralLangCode = "zh_tw";
-        localeInfo.builtIn = false;
-        languages.add(localeInfo);
-        languagesDict.put(localeInfo.getKey(), localeInfo);
-        languagesDict.put("unofficial_taiwan", localeInfo);
-        languagesDict.put("taiwan", localeInfo);
-        languagesDict.put("zh_tw", localeInfo);
-        languagesDict.put("zh_hk", localeInfo);
-        languagesDict.put("zh_mo", localeInfo);
-
-        localeInfo = new LocaleInfo();
         localeInfo.name = "日本語";
         localeInfo.nameEnglish = "Japanese";
         localeInfo.shortName = "ja_raw";
