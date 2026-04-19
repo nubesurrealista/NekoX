@@ -210,7 +210,7 @@
     <string name="ConfirmOpenLinkInWebView">Подтвердить перед открытием ссылок из WebView</string>
     <string name="AlwaysShowBotCommandButton">Всегда показывать кнопку управления ботом</string>
     <string name="BlacklistedQueryAllAdded">Все запросы в данной ссылке уже находятся в чёрном списке.</string>
-    <string name="ConvertGroupAlert">Это действие нельзя отменить. Супергруппу невозможно вернуть в состояние обычной группы</string>
+    <string name="ConvertGroupAlert">Это действие нельзя отменить. Супергруппу невозможно вернуть в состояние обычной группы.</string>
     <string name="AlwaysHideBotCommandButton">Всегда скрывать кнопку команд бота</string>
     <string name="MomoSettings">Настройки Momo</string>
     <string name="TranslateBeforeSend">Перевод перед отправкой</string>
