@@ -4857,6 +4857,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             if (onlySelect) {
                                 didSelectResult(dialogCell.getDialogId(), topic.id, false, false);
                             } else {
+                                if (rightSlidingDialogContainer == null || !rightSlidingDialogContainer.hasFragment()) {
+                                    toggleCustomButtonsVisibility(true);
+                                }
                                 ForumUtilities.openTopic(DialogsActivity.this, -dialogCell.getDialogId(), topic, 0);
                             }
                         }
@@ -14298,18 +14301,28 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         io.addGap();
     }
 
-    Boolean customButtonsVisibility = null;
     private void toggleCustomButtonsVisibility(boolean visible) {
-        if (customButtonsVisibility != null && visible == customButtonsVisibility) return;
-        customButtonsVisibility = visible;
-        if (proxyItem != null) {
-            proxyItem.setVisibility(visible);
-        }
+        boolean changed = false;
         if (recentItem != null) {
-            recentItem.setVisibility(visible && !getMessagesController().recentChats.isEmpty());
+            int visibility = visible && MomoConfig.recentChatFolderSize.Int() > 0
+                    && !getMessagesController().recentChats.isEmpty()
+                    && (searchItem == null || searchItem.getVisibility() == View.VISIBLE) ? View.VISIBLE : View.GONE;
+            if (recentItem.getVisibility() != visibility) {
+                recentItem.setVisibility(visibility);
+                changed = true;
+            }
         }
         if (scanItem != null) {
-            scanItem.setVisibility(visible);
+            int visibility = visible && MomoConfig.scanQrCodeFromChatList.Bool()
+                    && (searchItem == null || searchItem.getVisibility() == View.VISIBLE) ? View.VISIBLE : View.GONE;
+            if (scanItem.getVisibility() != visibility) {
+                scanItem.setVisibility(visibility);
+                changed = true;
+            }
+        }
+        if (changed && actionBar != null) {
+            actionBar.createMenu().requestLayout();
+            actionBar.requestLayout();
         }
     }
 }
