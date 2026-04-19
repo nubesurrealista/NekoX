@@ -66,7 +66,7 @@
     <string name="DisablePhotoViewerSideAction">Не листать медиа нажатием</string>
     <string name="BotToken">Токен</string>
     <string name="UnlimitedPinnedDialogs">Не ограничивать закреплённые диалоги</string>
-    <string name="UnlimitedPinnedDialogsAbout">Их синхронизация будет отключена.</string>
+    <string name="UnlimitedPinnedDialogsAbout">Закрепить неограниченное число диалогов, отключив их синхронизацию.</string>
     <string name="OpenArchiveOnPull">Открывать архив сразу</string>
     <string name="HideKeyboardOnChatScroll">Скрыть клавиатуру при прокрутке</string>
     <string name="UserRestrictionsSendStickers2">Отправка стикеров</string>
