@@ -56,7 +56,7 @@ public class MomoSettingsBaseActivity extends BaseFragment {
         if (schedule) scheduleScrollToIndex();
     }
 
-    private int findScrollToIndex() {
+    protected int findScrollToIndex() {
         if (scrollToString == null && scrollToKey == null) {
             return -1;
         }
@@ -123,7 +123,7 @@ public class MomoSettingsBaseActivity extends BaseFragment {
 
     public MomoSettingsBaseActivity setScrollTo(String str, int stringId, boolean key) {
         if (str == null) return this;
-        Log.d("030-?", "searching for " + str);
+        Log.d("030-?", String.format("find option for '%s', strId = %d, isKey = %s", str, stringId, key));
         if (key) {
             scrollToKey = str;
             scrollToString = null;
