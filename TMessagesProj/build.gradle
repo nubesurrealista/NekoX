@@ -445,7 +445,7 @@ android {
         }
     }
     lint {
-        disable 'MissingTranslation', 'ExtraTranslation', 'BlockedPrivateApi'
+        disable 'MissingTranslation', 'ExtraTranslation', 'BlockedPrivateApi', 'Instantiatable'
     }
 
     tasks.all { task ->
