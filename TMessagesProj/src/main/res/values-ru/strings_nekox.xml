@@ -38,7 +38,7 @@
     <string name="CustomBackendTestDC">Тестовый DC</string>
     <string name="ChangeTranslateProvider">Изменить сервис перевода</string>
     <string name="ProviderYandexTranslate">Яндекс</string>
-    <string name="GoogleCloudTransKey">Ключ Google Переводчик API</string>
+    <string name="GoogleCloudTransKey">Ключ облачного перевода Google</string>
     <string name="GoogleCloudTransKeyNotice">Если вы ввели свой ключ, перевод будет быстрее и стабильнее.</string>
     <string name="TransToLang">Язык перевода</string>
     <string name="TransInputToLang">Переводить с</string>
