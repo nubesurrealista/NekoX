@@ -1,5 +1,7 @@
 package moe.hx030.momogram.settings;
 
+import static org.telegram.messenger.LocaleController.getString;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -72,6 +74,8 @@ import moe.hx030.momogram.util.ReflectUtil;
 
 @SuppressLint("RtlHardcoded")
 public class MomoChatSettingsActivity extends MomoSettingsBaseActivity implements NotificationCenter.NotificationCenterDelegate {
+    private final String MSG_MENU_KEY = "msgMenu";
+    private final String PROFILE_MENU_KEY = "profileMenu";
 
     // Sticker Size
     private final AbstractConfigCell header0 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.StickerSize)));
@@ -329,16 +333,37 @@ public class MomoChatSettingsActivity extends MomoSettingsBaseActivity implement
 
         listView.setOnItemLongClickListener((v, i) -> {
             AbstractConfigCell a = cellGroup.rows.get(i);
+            String key = null;
             if (ReflectUtil.hasField(a.getClass(), "bindConfig")) {
                 Field cfgField = ReflectUtil.getField(a.getClass(), "bindConfig");
                 try {
                     if (cfgField != null) {
                         ConfigItem cfg = (ConfigItem) cfgField.get(a);
-                        AndroidUtilities.addToClipboard(String.format("https://t.me/momosettings/?k=%s", cfg.key));
+                        key = (cfg == null) ? null : cfg.key;
                     }
                 } catch (IllegalAccessException e) {
                     Log.e("030-cfg", "failed to get config field", e);
                 }
+            }
+            if (key == null) {
+                if (i == cellGroup.rows.indexOf(maxRecentEmojiCountRow)) {
+                    key = MomoConfig.maxRecentEmojiCount.key;
+                } else if (i == cellGroup.rows.indexOf(maxRecentStickerCountRow)) {
+                    key = MomoConfig.maxRecentStickerCount.key;
+                } else if (i == cellGroup.rows.indexOf(stickerSizeRow)) {
+                    key = MomoConfig.stickerSize.key;
+                } else if (i == cellGroup.rows.indexOf(messageMenuRow)) {
+                    key = MSG_MENU_KEY;
+                } else if (i == cellGroup.rows.indexOf(profileMenuRow)) {
+                    key = PROFILE_MENU_KEY;
+                }
+            }
+            Log.d("030-cfg", String.format("key = %s", String.valueOf(key)));
+            if (key == null) return false;
+            if (AndroidUtilities.addToClipboard(String.format("https://t.me/momosettings/?k=%s", key))) {
+                BulletinFactory.of(this)
+                        .createCopyBulletin(getString(R.string.LinkCopied))
+                        .show();
             }
             return false;
         });
@@ -369,6 +394,25 @@ public class MomoChatSettingsActivity extends MomoSettingsBaseActivity implement
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    protected int findScrollToIndex() {
+        if (scrollToString == null && scrollToKey == null) {
+            return -1;
+        }
+        if (scrollToKey.equals(MomoConfig.maxRecentEmojiCount.key)) {
+            return cellGroup.rows.indexOf(maxRecentEmojiCountRow);
+        } else if (scrollToKey.equals(MomoConfig.maxRecentStickerCount.key)) {
+            return cellGroup.rows.indexOf(maxRecentStickerCountRow);
+        } else if (scrollToKey.equals(MomoConfig.stickerSize.key)) {
+            return cellGroup.rows.indexOf(stickerSizeRow);
+        } else if (scrollToKey.equals(MSG_MENU_KEY)) {
+            return cellGroup.rows.indexOf(messageMenuRow);
+        } else if (scrollToKey.equals(PROFILE_MENU_KEY)) {
+            return cellGroup.rows.indexOf(profileMenuRow);
+        }
+        return super.findScrollToIndex();
     }
 
     @Override

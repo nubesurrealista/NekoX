@@ -1,6 +1,8 @@
 
 package moe.hx030.momogram.settings;
 
+import static org.telegram.messenger.LocaleController.getString;
+
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -55,6 +57,7 @@ import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
@@ -408,16 +411,31 @@ public class MomoGeneralSettingsActivity extends MomoSettingsBaseActivity {
                 return true;
             }
             AbstractConfigCell a = cellGroup.rows.get(position);
+            String key = null;
             if (ReflectUtil.hasField(a.getClass(), "bindConfig")) {
                 Field cfgField = ReflectUtil.getField(a.getClass(), "bindConfig");
                 try {
                     if (cfgField != null) {
                         ConfigItem cfg = (ConfigItem) cfgField.get(a);
-                        AndroidUtilities.addToClipboard(String.format("https://t.me/momosettings/?k=%s", cfg.key));
+                        key = (cfg == null) ? null : cfg.key;
                     }
                 } catch (IllegalAccessException e) {
                     Log.e("030-cfg", "failed to get config field", e);
                 }
+            }
+            if (key == null) {
+                if (position == cellGroup.rows.indexOf(recentChatFolderSizeRow)) {
+                    key = MomoConfig.recentChatFolderSize.key;
+                } else if (position == cellGroup.rows.indexOf(memLeakThresholdRow)) {
+                    key = MomoConfig.memLeakThreshold.key;
+                }
+            }
+            Log.d("030-cfg", String.format("key = %s", String.valueOf(key)));
+            if (key == null) return false;
+            if (AndroidUtilities.addToClipboard(String.format("https://t.me/momosettings/?k=%s", key))) {
+                BulletinFactory.of(this)
+                        .createCopyBulletin(getString(R.string.LinkCopied))
+                        .show();
             }
             return false;
         });
@@ -499,6 +517,18 @@ public class MomoGeneralSettingsActivity extends MomoSettingsBaseActivity {
         return fragmentView;
     }
 
+    @Override
+    protected int findScrollToIndex() {
+        if (scrollToString == null && scrollToKey == null) {
+            return -1;
+        }
+        if (scrollToKey.equals(MomoConfig.recentChatFolderSize.key)) {
+            return cellGroup.rows.indexOf(recentChatFolderSizeRow);
+        } else if (scrollToKey.equals(MomoConfig.memLeakThreshold.key)) {
+            return cellGroup.rows.indexOf(memLeakThresholdRow);
+        }
+        return super.findScrollToIndex();
+    }
 
     private void requestKey(Intent data) {
 
