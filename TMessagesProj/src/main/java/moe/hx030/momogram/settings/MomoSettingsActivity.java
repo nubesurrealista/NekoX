@@ -97,13 +97,6 @@ public class MomoSettingsActivity extends BaseFragment {
                 } else if (id == backup_settings) {
                     backupSettings();
                 } else if (id == import_settings) {
-                    try {
-                        if (Build.VERSION.SDK_INT >= 23 && getParentActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
-                            return;
-                        }
-                    } catch (Throwable ignore) {
-                    }
                     DocumentSelectActivity fragment = new DocumentSelectActivity(false);
                     fragment.setMaxSelectedFiles(1);
                     fragment.setAllowPhoto(false);
