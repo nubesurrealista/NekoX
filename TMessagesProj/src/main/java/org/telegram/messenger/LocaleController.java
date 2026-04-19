@@ -1357,42 +1357,8 @@ public class LocaleController {
     }
 
     public int applyLanguage(final LocaleInfo localeInfo, boolean override, boolean init, boolean fromFile, boolean force, final int currentAccount, Runnable onDone) {
-        return applyLanguage(localeInfo, override, init, fromFile, force, currentAccount, onDone, false);
-    }
-
-    private int applyLanguage(final LocaleInfo localeInfo, boolean override, boolean init, boolean fromFile, boolean force, final int currentAccount, Runnable onDone, boolean skipZhBetaResolve) {
         if (localeInfo == null) {
             return 0;
-        }
-        if (!skipZhBetaResolve && localeInfo.isUnofficial() && localeInfo.builtIn && ("zh_hans_beta".equals(localeInfo.shortName) || "zh_hant_beta".equals(localeInfo.shortName))) {
-            TLRPC.TL_langpack_getLanguage req = new TLRPC.TL_langpack_getLanguage();
-            req.lang_code = localeInfo.getLangCode();
-            req.lang_pack = "android";
-            return ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
-                if (response instanceof TLRPC.TL_langPackLanguage language) {
-                    language.lang_code = language.lang_code.replace('-', '_').toLowerCase();
-                    language.plural_code = language.plural_code.replace('-', '_').toLowerCase();
-                    if (language.base_lang_code != null) {
-                        language.base_lang_code = language.base_lang_code.replace('-', '_').toLowerCase();
-                    }
-
-                    String key = language.official ? "remote_" + language.lang_code : "unofficial_" + language.lang_code;
-                    LocaleInfo resolvedLocaleInfo = getLanguageFromDict(key);
-                    if (resolvedLocaleInfo == null) {
-                        resolvedLocaleInfo = new LocaleInfo();
-                        resolvedLocaleInfo.shortName = language.lang_code;
-                        resolvedLocaleInfo.pathToFile = language.official ? "remote" : "unofficial";
-                    }
-                    resolvedLocaleInfo.name = language.native_name;
-                    resolvedLocaleInfo.nameEnglish = language.name;
-                    resolvedLocaleInfo.baseLangCode = language.base_lang_code;
-                    resolvedLocaleInfo.pluralLangCode = language.plural_code;
-                    resolvedLocaleInfo.isRtl = language.rtl;
-                    applyLanguage(resolvedLocaleInfo, override, init, false, force, currentAccount, onDone, true);
-                } else {
-                    applyLanguage(localeInfo, override, init, fromFile, force, currentAccount, onDone, true);
-                }
-            }), ConnectionsManager.RequestFlagWithoutLogin);
         }
         int requestId = 0;
         boolean hasBase = localeInfo.hasBaseLang();
