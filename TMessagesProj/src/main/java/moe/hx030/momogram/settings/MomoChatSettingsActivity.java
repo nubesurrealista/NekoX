@@ -401,16 +401,18 @@ public class MomoChatSettingsActivity extends MomoSettingsBaseActivity implement
         if (scrollToString == null && scrollToKey == null) {
             return -1;
         }
-        if (scrollToKey.equals(MomoConfig.maxRecentEmojiCount.key)) {
-            return cellGroup.rows.indexOf(maxRecentEmojiCountRow);
-        } else if (scrollToKey.equals(MomoConfig.maxRecentStickerCount.key)) {
-            return cellGroup.rows.indexOf(maxRecentStickerCountRow);
-        } else if (scrollToKey.equals(MomoConfig.stickerSize.key)) {
-            return cellGroup.rows.indexOf(stickerSizeRow);
-        } else if (scrollToKey.equals(MSG_MENU_KEY)) {
-            return cellGroup.rows.indexOf(messageMenuRow);
-        } else if (scrollToKey.equals(PROFILE_MENU_KEY)) {
-            return cellGroup.rows.indexOf(profileMenuRow);
+        if (scrollToKey != null) {
+            if (scrollToKey.equals(MomoConfig.maxRecentEmojiCount.key)) {
+                return cellGroup.rows.indexOf(maxRecentEmojiCountRow);
+            } else if (scrollToKey.equals(MomoConfig.maxRecentStickerCount.key)) {
+                return cellGroup.rows.indexOf(maxRecentStickerCountRow);
+            } else if (scrollToKey.equals(MomoConfig.stickerSize.key)) {
+                return cellGroup.rows.indexOf(stickerSizeRow);
+            } else if (scrollToKey.equals(MSG_MENU_KEY)) {
+                return cellGroup.rows.indexOf(messageMenuRow);
+            } else if (scrollToKey.equals(PROFILE_MENU_KEY)) {
+                return cellGroup.rows.indexOf(profileMenuRow);
+            }
         }
         return super.findScrollToIndex();
     }
