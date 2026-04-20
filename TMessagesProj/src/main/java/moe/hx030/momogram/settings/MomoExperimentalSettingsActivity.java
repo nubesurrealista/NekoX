@@ -1,5 +1,7 @@
 package moe.hx030.momogram.settings;
 
+import static org.telegram.messenger.LocaleController.getString;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -44,6 +46,7 @@ import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
@@ -318,7 +321,14 @@ public class MomoExperimentalSettingsActivity extends MomoSettingsBaseActivity {
                 try {
                     if (cfgField != null) {
                         ConfigItem cfg = (ConfigItem) cfgField.get(a);
-                        AndroidUtilities.addToClipboard(String.format("https://t.me/momosettings/?k=%s", cfg.key));
+                        String key = (cfg == null) ? null : cfg.key;
+
+                        if (key == null) return false;
+                        if (AndroidUtilities.addToClipboard(String.format("https://t.me/momosettings/?k=%s", key))) {
+                            BulletinFactory.of(this)
+                                    .createCopyBulletin(getString(R.string.LinkCopied))
+                                    .show();
+                        }
                     }
                 } catch (IllegalAccessException e) {
                     Log.e("030-cfg", "failed to get config field", e);

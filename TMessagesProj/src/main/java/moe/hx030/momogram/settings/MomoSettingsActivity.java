@@ -38,6 +38,7 @@ import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UniversalAdapter;
 import org.telegram.ui.Components.UniversalRecyclerView;
 import org.telegram.ui.DocumentSelectActivity;
+import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.SettingsActivity;
 
 import java.io.File;
@@ -97,13 +98,6 @@ public class MomoSettingsActivity extends BaseFragment {
                 } else if (id == backup_settings) {
                     backupSettings();
                 } else if (id == import_settings) {
-                    try {
-                        if (Build.VERSION.SDK_INT >= 23 && getParentActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
-                            return;
-                        }
-                    } catch (Throwable ignore) {
-                    }
                     DocumentSelectActivity fragment = new DocumentSelectActivity(false);
                     fragment.setMaxSelectedFiles(1);
                     fragment.setAllowPhoto(false);
@@ -326,6 +320,11 @@ public class MomoSettingsActivity extends BaseFragment {
                             hasCustomTitle = true;
                             if (StringUtils.isBlank(val))
                                 val = StrUtil.getAppName();
+                        }
+                    }
+                    if (key.equals("cachePath")) {
+                        if (val != null && val.contains("nekox.messenger.broken")) {
+                            val = val.replace("nekox.messenger.broken", LaunchActivity.instance.getPackageName());
                         }
                     }
                     editor.putString(key, val);
