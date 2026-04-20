@@ -758,7 +758,7 @@ public class SharedConfig {
             bubbleRadius = preferences.getInt("bubbleRadius", 3);
             ivFontSize = preferences.getInt("iv_font_size", fontSize);
             allowBigEmoji = preferences.getBoolean("allowBigEmoji", true);
-            useSystemEmoji = preferences.getBoolean("useSystemEmoji", MomoConfig.useSystemEmoji.Bool()) || MomoConfig.useSystemEmoji.Bool();
+            useSystemEmoji = preferences.getBoolean("useSystemEmoji", MomoConfig.useSystemEmoji.Bool());
             useSystemBoldFont = preferences.getBoolean("useSystemBoldFont", false);
             forceForumTabs = preferences.getBoolean("forceForumTabs", false);
             fastWallpaperDisabled = preferences.getBoolean("fastWallpaperDisabled", false);
@@ -882,7 +882,7 @@ public class SharedConfig {
     public static void updateTabletConfig() {
         if (fontSizeIsDefault) {
             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
-            fontSize = preferences.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
+            fontSize = preferences.getInt("fons_size", AndroidUtilities.isTablet() ? 14 : 12);
             ivFontSize = preferences.getInt("iv_font_size", fontSize);
         }
     }
