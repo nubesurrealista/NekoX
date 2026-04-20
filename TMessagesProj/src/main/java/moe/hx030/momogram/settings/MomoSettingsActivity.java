@@ -38,6 +38,7 @@ import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UniversalAdapter;
 import org.telegram.ui.Components.UniversalRecyclerView;
 import org.telegram.ui.DocumentSelectActivity;
+import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.SettingsActivity;
 
 import java.io.File;
@@ -319,6 +320,11 @@ public class MomoSettingsActivity extends BaseFragment {
                             hasCustomTitle = true;
                             if (StringUtils.isBlank(val))
                                 val = StrUtil.getAppName();
+                        }
+                    }
+                    if (key.equals("cachePath")) {
+                        if (val != null && val.contains("nekox.messenger.broken")) {
+                            val = val.replace("nekox.messenger.broken", LaunchActivity.instance.getPackageName());
                         }
                     }
                     editor.putString(key, val);
