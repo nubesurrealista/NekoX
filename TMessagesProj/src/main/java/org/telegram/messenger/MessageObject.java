@@ -6437,8 +6437,8 @@ public class MessageObject {
             return false;
         }
         if (layoutCreated) {
-            int newMinSize = AndroidUtilities.isTablet() ? AndroidUtilities.getMinTabletSide() : AndroidUtilities.displaySize.x;
-            if (Math.abs(generatedWithMinSize - newMinSize) > dp(52) || generatedWithDensity != AndroidUtilities.density) {
+            int newMinSize = AndroidUtilities.isTablet() && eventId != 0 ? dp(530) : AndroidUtilities.isTablet() ? AndroidUtilities.getMinTabletSide() : getParentWidth();
+            if (generatedWithMinSize != newMinSize || generatedWithDensity != AndroidUtilities.density) {
                 layoutCreated = false;
             }
         }
