@@ -522,10 +522,12 @@ public class MomoGeneralSettingsActivity extends MomoSettingsBaseActivity {
         if (scrollToString == null && scrollToKey == null) {
             return -1;
         }
-        if (scrollToKey.equals(MomoConfig.recentChatFolderSize.key)) {
-            return cellGroup.rows.indexOf(recentChatFolderSizeRow);
-        } else if (scrollToKey.equals(MomoConfig.memLeakThreshold.key)) {
-            return cellGroup.rows.indexOf(memLeakThresholdRow);
+        if (scrollToKey != null) {
+            if (scrollToKey.equals(MomoConfig.recentChatFolderSize.key)) {
+                return cellGroup.rows.indexOf(recentChatFolderSizeRow);
+            } else if (scrollToKey.equals(MomoConfig.memLeakThreshold.key)) {
+                return cellGroup.rows.indexOf(memLeakThresholdRow);
+            }
         }
         return super.findScrollToIndex();
     }
