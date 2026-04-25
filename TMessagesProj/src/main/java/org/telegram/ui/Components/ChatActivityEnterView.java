@@ -732,6 +732,16 @@ public class ChatActivityEnterView extends FrameLayout implements
     private AnimatorSet recordPannelAnimation;
     private int runningAnimationType;
     private int recordInterfaceState;
+    private final Runnable syncActionButtonsRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (isActionButtonsAnimationRunning()) {
+                AndroidUtilities.runOnUIThread(this, 16);
+                return;
+            }
+            syncActionButtonsState();
+        }
+    };
 
     private int keyboardHeight;
     private int keyboardHeightLand;
@@ -7918,6 +7928,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         if (controlsView != null) {
             controlsView.invalidate();
         }
+        scheduleSyncActionButtonsState();
     }
 
     private void hideRecordedAudioPanelInternal() {
@@ -9192,6 +9203,10 @@ public class ChatActivityEnterView extends FrameLayout implements
                             .alpha(attachButtonAlpha = captionNearAttach ? 0.0f : 1.0f)
                             .scaleX(captionNearAttach ? 0.5f : 1.0f)
                             .scaleY(captionNearAttach ? 0.5f : 1.0f)
+                            .withEndAction(() -> {
+                                attachButtonAnimator = null;
+                                scheduleSyncActionButtonsState();
+                            })
                             .setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT)
                             .setDuration(320);
                         attachButtonAnimator.start();
@@ -9591,6 +9606,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                 suggestButton.setTranslationX(shownSendButton ? -Math.max(0, sendButton.width() - dp(64)) : dp(42));
             }
         }
+        scheduleSyncActionButtonsState();
     }
 
     private void setSlowModeButtonVisible(boolean visible) {
@@ -10567,6 +10583,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         }
         delegate.onAudioVideoInterfaceUpdated();
         updateSendAsButton();
+        scheduleSyncActionButtonsState();
         lastRecordState = recordState;
     }
 
@@ -10592,6 +10609,7 @@ public class ChatActivityEnterView extends FrameLayout implements
 
         delegate.onAudioVideoInterfaceUpdated();
         updateSendAsButton();
+        scheduleSyncActionButtonsState();
     }
 
     protected void isRecordingStateChanged() {
@@ -11079,6 +11097,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         }
         updateFieldHint(true);
         updateSendAsButton(true);
+        scheduleSyncActionButtonsState();
     }
 
     @Nullable
@@ -15472,6 +15491,54 @@ public class ChatActivityEnterView extends FrameLayout implements
         }
     }
 
+    private boolean isActionButtonsAnimationRunning() {
+        return runningAnimation != null && runningAnimation.isRunning()
+            || runningAnimation2 != null && runningAnimation2.isRunning()
+            || runningAnimationAudio != null && runningAnimationAudio.isRunning()
+            || recordPannelAnimation != null && recordPannelAnimation.isRunning();
+    }
+
+    private float getAudioVideoButtonVisibleAlpha() {
+        float alpha = 1.0f;
+        TLRPC.Chat chat = parentFragment == null ? null : parentFragment.getCurrentChat();
+        TLRPC.UserFull userFull = parentFragment == null ? userInfo : parentFragment.getCurrentUserInfo();
+        if (chat != null) {
+            alpha = (ChatObject.canSendVoice(chat) || ChatObject.canSendRoundVideo(chat)) ? 1.0f : 0.5f;
+        } else if (userFull != null) {
+            alpha = userFull.voice_messages_forbidden ? 0.5f : 1.0f;
+        }
+        return alpha;
+    }
+
+    private void syncActionButtonsState() {
+        if (audioVideoButtonContainer != null && audioVideoButtonContainer.getVisibility() == VISIBLE) {
+            audioVideoButtonContainer.setScaleX(1f);
+            audioVideoButtonContainer.setScaleY(1f);
+            audioVideoButtonContainer.setAlpha(1f);
+            if (audioVideoSendButton != null) {
+                audioVideoSendButton.setVisibility(VISIBLE);
+                audioVideoSendButton.setScaleX(1f);
+                audioVideoSendButton.setScaleY(1f);
+                audioVideoSendButton.setAlpha(getAudioVideoButtonVisibleAlpha());
+            }
+        }
+        if (attachLayout != null && attachLayout.getVisibility() == VISIBLE) {
+            attachLayout.setScaleX(1f);
+            updateAttachLayoutParams();
+            if (attachButton != null && attachButtonAlpha > 0f) {
+                attachButton.setVisibility(VISIBLE);
+                attachButton.setScaleX(1f);
+                attachButton.setScaleY(1f);
+                attachButton.setAlpha(attachButtonAlpha);
+            }
+        }
+    }
+
+    private void scheduleSyncActionButtonsState() {
+        AndroidUtilities.cancelRunOnUIThread(syncActionButtonsRunnable);
+        AndroidUtilities.runOnUIThread(syncActionButtonsRunnable);
+    }
+
     private void updateAttachButtonTranslationX() {
         if (attachButton == null) return;
         attachButton.setTranslationX(attachLayoutPaddingTranslationX + attachLayoutTranslationX + (sendButton != null ? (
@@ -15538,6 +15605,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         if (recordCircle != null) {
             recordCircle.setSendButtonInvisible();
         }
+        scheduleSyncActionButtonsState();
     }
 
     public enum BotMenuButtonType {
@@ -16221,5 +16289,6 @@ public class ChatActivityEnterView extends FrameLayout implements
         }
         updateFieldRight(lastAttachVisible);
         checkSendButton(false);
+        scheduleSyncActionButtonsState();
     }
 }
