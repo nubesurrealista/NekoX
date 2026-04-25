@@ -11588,7 +11588,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 videoPlayerControlFrameLayout.setVisibility(visible ? View.VISIBLE : View.GONE);
                 videoPlayerControlFrameLayout.setAlpha(visible ? 1f : 0f);
             }
-            if (allowShare && pageBlocksAdapter == null) {
+            if (allowShare) {
                 if (visible || !isCurrentVideo) {
                     menuItem.showSubItem(gallery_menu_share);
                 } else {
