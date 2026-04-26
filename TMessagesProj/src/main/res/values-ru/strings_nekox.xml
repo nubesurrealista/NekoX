@@ -82,12 +82,12 @@
     <string name="UseProxyItem">Настройки прокси в боковом меню</string>
     <string name="HideProxyByDefault">Скрыть настройки прокси в боковом меню по умолчанию</string>
     <string name="SkipOpenLinkConfirm">Открывать ссылки без подтверждения</string>
-    <string name="UnblockAll">Очистить ЧС</string>
+    <string name="UnblockAll">Разбанить всех</string>
     <string name="UnblockAllWarn">Вы уверены, что хотите разблокировать **всех пользователей и ботов**?</string>
     <string name="BlockedListEmpty">В вашем ЧС пусто, как у гоблина в голове :)</string>
     <string name="ImportProxyList">Импорт прокси</string>
     <string name="ExportStickers">Экспорт стикеров</string>
-    <string name="ImportStickersX">Импорт стикеров</string>
+    <string name="ImportStickersX">Импорт стикеров из файла</string>
     <string name="ImportStickersList">Импорт стикеров</string>
     <string name="StickerSets">Наборы стикеров</string>
     <string name="InvalidStickersFile">Неверный список стикеров:</string>
@@ -233,7 +233,7 @@
     <string name="MuteBotsFromGroup">Отключить уведомления группы, если они от ботов</string>
     <string name="MuteBotsFromGroupDesc">Известные сообщения для администраторов не будут заглушены</string>
     <string name="BanForAllModeratingChats">Заблокировать этого пользователя во всех чатах, где вы модератор?</string>
-    <string name="BannedForChats">Заблокировал(а) %1$s для %2$d чт.</string>
+    <string name="BannedForChats">Заблокировал(а) %1$s для %2$d чат(а)(ов)</string>
     <string name="FBan">Глобальная блокировка</string>
     <string name="ShowAddedToFoldersAtTitle">Показать значок «В папку добавлен» рядом с названием чата</string>
     <string name="VideoBitrateToggled">Нажмите несколько раз для изменения битрейта; нажмите снова для возврата</string>
@@ -339,4 +339,15 @@
     <string name="HideAIEditButton">Скрыть кнопку ИИ в текстовом поле</string>
     <string name="RandomizeFilenameOnSend">Случайное имя файла при отправке</string>
     <string name="SwitchAccountsFromChatListMenu">Переключение аккаунтов в меню чатов</string>
+    <string name="DumpThreads">Сбросить потоки</string>
+    <string name="MarqueeForLongMomoOptions">Используйте Marquee для длинных вариантов Momo</string>
+    <string name="SecretChatReqConfirm">Требуйте подтверждения перед тем, как принять приглашение в секретный чат</string>
+    <string name="UnknownUser">Неизвестный пользователь</string>
+    <string name="SecretChatBackup">Вернуть секретные чаты</string>
+    <string name="SecretChatBackupPasswordPrompt">Введите пароль для шифрования резервной копии. Этот пароль потребуется для восстановления.</string>
+    <string name="SecretChatBackupPasswordRequired">Требуется ввести пароль.</string>
+    <string name="SecretChatRestore">Восстановить секретные чаты</string>
+    <string name="SecretChatRestorePasswordPrompt">Введите пароль, используемый для шифрования этой резервной копии.</string>
+    <string name="SecretChatRestoreSuccess">Восстановить секретные чаты</string>
+    <string name="MomoSettingNotFound">Указанная опция не существует</string>
 </resources>
