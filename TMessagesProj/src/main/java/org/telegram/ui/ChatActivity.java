@@ -445,6 +445,7 @@ public class ChatActivity extends BaseFragment implements
     private final static int nkheaderbtn_pinned_msgs = 3003;
 
     public boolean ignoreKeepPosition = false;
+    public boolean pressedNoPreview = false;
 
     public int shareAlertDebugMode = DEBUG_SHARE_ALERT_MODE_NORMAL;
     public boolean shareAlertDebugTopicsSlowMotion;
@@ -2165,12 +2166,13 @@ public class ChatActivity extends BaseFragment implements
 
         @Override
         public int getDisableLinkPreviewStatus() {
-            return disableLinkPreview ? 2 : 1;
+            return (disableLinkPreview || pressedNoPreview) ? 2 : 1;
         }
 
         @Override
         public void toggleDisableLinkPreview() {
             disableLinkPreview = !disableLinkPreview;
+            if (!disableLinkPreview) pressedNoPreview = false;
         }
 
         @Override
@@ -11368,6 +11370,7 @@ public class ChatActivity extends BaseFragment implements
 
             @Override
             protected void removeLink() {
+                pressedNoPreview = true;
                 dismiss(true);
                 foundWebPage = null;
                 if (chatActivityEnterView != null) {
@@ -14804,7 +14807,7 @@ public class ChatActivity extends BaseFragment implements
         if (currentEncryptedChat != null && getMessagesController().secretWebpagePreview == 0 || editingMessageObject != null && (!editingMessageObject.isWebpage() || editingMessageObject.messageOwner.media.webpage instanceof TLRPC.TL_webPagePending)) {
             return;
         }
-        if (disableLinkPreview) return;
+        if (disableLinkPreview || pressedNoPreview) return;
         if (currentChat != null && !ChatObject.canSendEmbed(currentChat)) {
             if (foundWebPage != null) {
                 foundWebPage = null;
@@ -14984,7 +14987,7 @@ public class ChatActivity extends BaseFragment implements
     private HashMap<String, TLRPC.WebPage> lastLinkPreviewResults;
 
     private void requestLinkPreviewCached(TL_account.getWebPagePreview req, Utilities.Callback2<Boolean, TLRPC.WebPage> done) {
-        if (disableLinkPreview) return;
+        if (disableLinkPreview || pressedNoPreview) return;
         if (lastLinkPreviewResults == null) {
             lastLinkPreviewResults = new HashMap<>();
         }
@@ -15008,7 +15011,7 @@ public class ChatActivity extends BaseFragment implements
 
     private void requestLinkPreview(TL_account.getWebPagePreview req, Utilities.Callback2<Boolean, TLRPC.WebPage> done) {
         cancelSearchLinks();
-        if (disableLinkPreview) return;
+        if (disableLinkPreview || pressedNoPreview) return;
         linkSearchRequestId = getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
             linkSearchRequestId = 0;
             TLRPC.TL_messageMediaWebPage media = null;

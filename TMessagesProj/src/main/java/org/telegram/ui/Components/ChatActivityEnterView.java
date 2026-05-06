@@ -7575,7 +7575,7 @@ public class ChatActivityEnterView extends FrameLayout implements
 
     public void setWebPage(TLRPC.WebPage webPage, boolean searchWebPages) {
         messageWebPage = webPage;
-        messageWebPageSearch = searchWebPages && !parentFragment.disableLinkPreview;
+        messageWebPageSearch = searchWebPages && (!parentFragment.disableLinkPreview && !parentFragment.pressedNoPreview);
     }
 
     public boolean isMessageWebPageSearchEnabled() {
@@ -8082,6 +8082,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                 if (delegate != null) {
                     delegate.onMessageSend(null, notify, scheduleDate, scheduleRepeatPeriod, payStars);
                 }
+                if (parentFragment != null) parentFragment.pressedNoPreview = false;
                 hideRecordedAudioPanel(true);
                 checkSendButton(true);
                 AndroidUtilities.runOnUIThread(() -> {
@@ -8112,6 +8113,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                 delegate.beforeMessageSend(message, notify, scheduleDate);
             }
             if (processSendingText(message, notify, scheduleDate, scheduleRepeatPeriod, payStars)) {
+                if (parentFragment != null) parentFragment.pressedNoPreview = false;
                 if (delegate != null && delegate.hasForwardingMessages() || (scheduleDate != 0 && !isInScheduleMode()) || isInScheduleMode()) {
                     if (messageEditText != null) {
                         messageEditText.setText("");
