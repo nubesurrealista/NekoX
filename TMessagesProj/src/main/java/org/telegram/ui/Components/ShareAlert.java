@@ -2449,6 +2449,20 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             }
             sendInternal(false);
         });
+        ActionBarMenuSubItem sendWithoutCaption = new ActionBarMenuSubItem(getContext(), true, true, resourcesProvider);
+        if (darkTheme) {
+            sendWithoutCaption.setTextColor(getThemedColor(Theme.key_voipgroup_nameText));
+            sendWithoutCaption.setIconColor(getThemedColor(Theme.key_windowBackgroundWhiteHintText));
+        }
+        sendWithoutCaption.setTextAndIcon(LocaleController.getString(R.string.SendWithoutCaption), R.drawable.menu_quote_delete);
+        sendWithoutCaption.setMinimumWidth(dp(196));
+        sendPopupLayout2.addView(sendWithoutCaption, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
+        sendWithoutCaption.setOnClickListener(v -> {
+            if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
+                sendPopupWindow.dismiss();
+            }
+            sendInternal(true, false);
+        });
         ActionBarMenuSubItem sendMessage = new ActionBarMenuSubItem(getContext(), true, true, resourcesProvider);
         if (darkTheme) {
             sendMessage.setTextColor(getThemedColor(Theme.key_voipgroup_nameText));
@@ -2498,6 +2512,11 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
     }
 
     protected void sendInternal(boolean withSound) {
+        sendInternal(withSound, true);
+    }
+
+    protected void sendInternal(boolean withSound, boolean withCaption) {
+        if (!withCaption) showSendersName = false;
         for (int a = 0; a < selectedDialogs.size(); a++) {
             long key = selectedDialogs.keyAt(a);
             if (AlertsCreator.checkSlowMode(getContext(), currentAccount, key, frameLayout2.getTag() != null && commentTextView.length() > 0)) {
@@ -2601,7 +2620,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
                     if (MomoConfig.sendCommentAfterForward.Bool()) {
                         // send fwd message first.
-                        result = SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, !showSendersName,false, withSound, 0, replyTopMsg, video_timestamp, price == null ? 0 : price);
+                        result = SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, !showSendersName, !withCaption, withSound, 0, replyTopMsg, video_timestamp, price == null ? 0 : price);
                     }
                     if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
                         SendMessagesHelper.SendMessageParams params = SendMessagesHelper.SendMessageParams.of(text[0] == null ? null : text[0].toString(), key, replyTopMsg, replyTopMsg, null, true, entities, null, null, withSound, 0, 0, null, false);
@@ -2611,7 +2630,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     }
                     if (!MomoConfig.sendCommentAfterForward.Bool()) {
                         // send fwd message afterwards.
-                        result = SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, !showSendersName,false, withSound, 0, 0, replyTopMsg, video_timestamp, price == null ? 0 : price, monoForumPeerId, null);
+                        result = SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, !showSendersName, false, withSound, 0, 0, replyTopMsg, video_timestamp, price == null ? 0 : price, monoForumPeerId, null);
                     }
                     if (result != 0) {
                         removeKeys.add(key);
