@@ -5,11 +5,11 @@
     <string name="MessageMenu">Меню действий с сообщением</string>
     <string name="HidePhone">Скрыть мой номер телефона</string>
     <string name="Hide">Скрыть</string>
-    <string name="DeleteAllFromSelf">Удалить мои сообщения</string>
+    <string name="DeleteAllFromSelf">Удалить все мои сообщения</string>
     <string name="DeleteAllFromSelfAlert">Внимание! Это удалит **все ваши сообщения** в этом чате для **всех**.</string>
     <string name="BotLogin">Вход по токену</string>
     <string name="InvalidAccessToken">Некорректный токен</string>
-    <string name="IgnoreBlocked">Скрыть сообщ. от заблокир. польз.</string>
+    <string name="IgnoreBlocked">Скрыть сообщения от заблокированного пользователя</string>
     <string name="Connection">Сеть</string>
     <string name="Chat">Чат</string>
     <string name="NameOrder">Сортировать контакты</string>
