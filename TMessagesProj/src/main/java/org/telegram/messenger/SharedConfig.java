@@ -392,11 +392,6 @@ public class SharedConfig {
         loadConfig();
     }
 
-    public static final int PROXY_TYPE_NON_EXIST = -1;
-    public static final int PROXY_TYPE_ORIGINAL = 0;
-    public static final int PROXY_TYPE_WSRELAY = 1;
-    public static final int PROXY_TYPE_SING = 2;
-
     public static class ProxyInfo {
 
         public String address;
@@ -479,29 +474,12 @@ public class SharedConfig {
             return builder.toString();
         }
 
-        /**
-         * is this proxy managed by NekoX
-         */
-        public int getProxyType() {
-            return PROXY_TYPE_ORIGINAL;
-        }
-
-        public void ensureStarted(Runnable runnable) {
-            runnable.run();
-        }
-        public void stop() {
-        }
-
-        public String getHash() {
-            return "";
-        }
     }
 
     public static void setCurrentProxy(ProxyInfo info) {
         SharedConfig.currentProxy = info;
         SharedPreferences.Editor editor = MessagesController.getGlobalMainSettings().edit();
         if (info == null) {
-            editor.putString("neko_current_proxy_hash", "");
             editor.putString("proxy_ip", "");
             editor.putString("proxy_pass", "");
             editor.putString("proxy_user", "");
@@ -511,28 +489,15 @@ public class SharedConfig {
             setProxyEnable(false);
             return;
         }
-        if (info.getProxyType() == PROXY_TYPE_ORIGINAL) {
-            editor.putString("neko_current_proxy_hash", "");
-            editor.putString("proxy_ip", info.address);
-            editor.putString("proxy_pass", info.password);
-            editor.putString("proxy_user", info.username);
-            editor.putInt("proxy_port", info.port);
-            editor.putString("proxy_secret", info.secret);
-            if (!info.secret.isEmpty()) {
-                editor.putBoolean("proxy_enabled_calls", false);
-            }
-            editor.apply();
-        } else {
-            editor.putString("proxy_ip", "");
-            editor.putString("proxy_pass", "");
-            editor.putString("proxy_user", "");
-            editor.putInt("proxy_port", 0);
-            editor.putString("proxy_secret", "");
-
-            editor.putString("neko_current_proxy_hash", info.getHash());
+        editor.putString("proxy_ip", info.address);
+        editor.putString("proxy_pass", info.password);
+        editor.putString("proxy_user", info.username);
+        editor.putInt("proxy_port", info.port);
+        editor.putString("proxy_secret", info.secret);
+        if (!info.secret.isEmpty()) {
             editor.putBoolean("proxy_enabled_calls", false);
-            editor.apply();
         }
+        editor.apply();
     }
 
     public static boolean getProxyEnable() {
@@ -548,10 +513,8 @@ public class SharedConfig {
             UIUtil.runOnUIThread(() -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged));
         } else {
             if (currentProxy != null) {
-                currentProxy.ensureStarted(() -> {
-                    ConnectionsManager.setProxySettings(true, currentProxy.address, currentProxy.port, currentProxy.username, currentProxy.password, currentProxy.secret);
-                    UIUtil.runOnUIThread(() -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged));
-                });
+                ConnectionsManager.setProxySettings(true, currentProxy.address, currentProxy.port, currentProxy.username, currentProxy.password, currentProxy.secret);
+                UIUtil.runOnUIThread(() -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged));
             }
         }
     }

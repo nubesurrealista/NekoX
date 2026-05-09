@@ -1124,7 +1124,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     }
 
     public void checkSingleProxy(SharedConfig.ProxyInfo proxyInfo, int repeat, Runnable callback) {
-        proxyInfo.ensureStarted(() -> proxyInfo.proxyCheckPingId = ConnectionsManager.getInstance(currentAccount).checkProxy(proxyInfo.address, proxyInfo.port, proxyInfo.username, proxyInfo.password, proxyInfo.secret, time -> AndroidUtilities.runOnUIThread(() -> {
+        proxyInfo.proxyCheckPingId = ConnectionsManager.getInstance(currentAccount).checkProxy(proxyInfo.address, proxyInfo.port, proxyInfo.username, proxyInfo.password, proxyInfo.secret, time -> AndroidUtilities.runOnUIThread(() -> {
             if (time == -1) {
                 if (repeat > 0) {
                     checkSingleProxy(proxyInfo, repeat - 1, callback);
@@ -1133,9 +1133,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     proxyInfo.checking = false;
                     proxyInfo.available = false;
                     proxyInfo.ping = 0;
-                    if (proxyInfo != SharedConfig.currentProxy) {
-                        proxyInfo.stop();
-                    }
                     if (callback != null) {
                         UIUtil.runOnUIThread(callback);
                     }
@@ -1145,13 +1142,10 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 proxyInfo.checking = false;
                 proxyInfo.ping = time;
                 proxyInfo.available = true;
-                if (proxyInfo != SharedConfig.currentProxy) {
-                    proxyInfo.stop();
-                }
                 if (callback != null) {
                     UIUtil.runOnUIThread(callback);
                 }
             }
-        })));
+        }));
     }
 }

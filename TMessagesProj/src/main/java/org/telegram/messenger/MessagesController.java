@@ -10746,8 +10746,7 @@ public class MessagesController extends BaseController implements NotificationCe
             } else if (response instanceof TLRPC.TL_help_promoData) {
                 TLRPC.TL_help_promoData res = (TLRPC.TL_help_promoData) response;
 
-                SharedConfig.ProxyInfo proxy = SharedConfig.currentProxy;
-                if (res.proxy && (MomoConfig.hideProxySponsorChannel.Bool() || (proxy != null && proxy.getProxyType() != SharedConfig.PROXY_TYPE_ORIGINAL))) {
+                if (res.proxy && MomoConfig.hideProxySponsorChannel.Bool()) {
                     nextPromoInfoCheckTime = getConnectionsManager().getCurrentTime() + 60 * 60;
                     noDialog = true;
                 } else {
