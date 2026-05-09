@@ -3328,7 +3328,7 @@ public class MessagesStorage extends BaseController {
                         boolean changed = false;
                         boolean changedNonTitle = false;
                         boolean unreadChanged = false;
-                        if (!MomoConfig.ignoreFilterEmoticonUpdate.Bool() && !TextUtils.equals(filter.name, newFilter.title.text) || !MediaDataController.entitiesEqual(filter.entities, newFilter.title.entities)) {
+                        if (!MomoConfig.ignoreFilterEmoticonUpdate.Bool() && (!TextUtils.equals(filter.name, newFilter.title.text) || !MediaDataController.entitiesEqual(filter.entities, newFilter.title.entities))) {
                             changed = true;
                             filter.name = newFilter.title.text;
                             filter.entities = newFilter.title.entities;

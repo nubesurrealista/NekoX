@@ -2294,6 +2294,17 @@ public class MessagesController extends BaseController implements NotificationCe
 
             AndroidUtilities.runOnUIThread(() -> {
                 if (remote != 2) {
+                    if (MomoConfig.ignoreFilterEmoticonUpdate.Bool()) {
+                        // apply locally overridden name & icon to filters where applicable
+                        for (DialogFilter f : filters) {
+                            DialogFilter local = dialogFiltersById.get(f.id);
+                            if (local == null) continue;
+                            f.emoticon = local.emoticon;
+                            if (f.name != null && local.entities != null && f.name.equals(local.name)) {
+                                f.entities = new ArrayList<>(local.entities);
+                            }
+                        }
+                    }
                     dialogFilters = filters;
                     dialogFiltersById.clear();
                     for (int a = 0, N = dialogFilters.size(); a < N; a++) {
