@@ -131,6 +131,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import moe.hx030.momogram.util.ThreadUtil;
@@ -23894,11 +23895,28 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void banUserFromAllModeratingChat(TLObject user, RequestDelegate delegate) {
+        banUserFromAllModeratingChat(user, null, delegate);
+    }
+
+    public void banUserFromAllModeratingChat(TLObject user, BiConsumer<Integer, Integer> onProgress, RequestDelegate delegate) {
         Set<TLRPC.Chat> targetChats = getModeratingChats();
+        if (targetChats.isEmpty()) {
+            TLRPC.TL_error res = new TLRPC.TL_error();
+            res.code = 0;
+            res.text = "0";
+            if (onProgress != null) {
+                onProgress.accept(0, 0);
+            }
+            if (delegate != null) {
+                delegate.run(res, null);
+            }
+            return;
+        }
         AtomicInteger ban = new AtomicInteger();
         AtomicInteger err = new AtomicInteger();
         AtomicInteger remains = new AtomicInteger(targetChats.size());
-        HashSet<String> errors = new HashSet<>();
+        int total = targetChats.size();
+        Set<String> errors = java.util.Collections.synchronizedSet(new HashSet<>());
 
         for (TLRPC.Chat c : targetChats) {
             banUserFromChat(c.id, user, (response, error) -> {
@@ -23911,14 +23929,20 @@ public class MessagesController extends BaseController implements NotificationCe
                     Log.d("030-ban", String.format("failed for %d %s -> %s", c.id, c.title, currentErr));
                 }
 
-                boolean finished = remains.decrementAndGet() == 0;
+                int left = remains.decrementAndGet();
+                if (onProgress != null) {
+                    onProgress.accept(total - left, total);
+                }
+                boolean finished = left == 0;
                 if (finished) {
                     TLRPC.TL_error outErr = null, res = null;
                     StringBuilder errorStr = new StringBuilder();
                     for (String e : errors) {
                         errorStr.append(e).append(",");
                     }
-                    errorStr.setLength(errorStr.length() - 1);
+                    if (errorStr.length() > 0) {
+                        errorStr.setLength(errorStr.length() - 1);
+                    }
                     if (ban.get() == 0) {
                         Log.e("030-ban", String.format("errors: %d\n%s", err.get(), errorStr.toString()));
                         outErr = new TLRPC.TL_error();

@@ -8141,26 +8141,45 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     private void doFBan() {
         BulletinFactory bulletinFactory = BulletinFactory.of(this);
-        if (userInfo == null) {
+        TLObject target;
+        if (userId != 0) {
+            target = getMessagesController().getUser(userId);
+        } else if (chatId != 0) {
+            target = getMessagesController().getChat(chatId);
+        } else {
+            target = null;
+        }
+        if (target == null) {
             AndroidUtilities.runOnUIThread(() -> {
-                bulletinFactory.createSimpleBulletin(R.raw.error, "ERR_NO_USER_INFO").show();
+                bulletinFactory.createSimpleBulletin(R.raw.error, "ERR_GET_TARGET").show();
             });
             return;
         }
-        TLObject target = userInfo.user;
-        long targetId = dialogId;
-        if (targetId == 0 || target == null) {
-            if (target != null && ((TLRPC.User) target).id != 0) {
-                targetId = ((TLRPC.User) target).id;
-            } else {
-                AndroidUtilities.runOnUIThread(() -> {
-                    bulletinFactory.createSimpleBulletin(R.raw.error, "ERR_GET_TARGET").show();
-                });
-            }
-            return;
+        long targetId = target instanceof TLRPC.User user ? user.id : target instanceof TLRPC.Chat chat ? chat.id : 0;
+        AlertDialog progressDialog = null;
+        Activity parentActivity = getParentActivity();
+        if (parentActivity != null) {
+            progressDialog = new AlertDialog(parentActivity, AlertDialog.ALERT_TYPE_MESSAGE, resourcesProvider);
+            progressDialog.setCanCancel(false);
+            progressDialog.setMessage(LocaleController.isRTL ?
+                    String.format("0/0 %s", LocaleController.getString(R.string.Loading)) :
+                    String.format("%s 0/0", LocaleController.getString(R.string.Loading)));
+            showDialog(progressDialog);
         }
+        final AlertDialog finalProgressDialog = progressDialog;
         Log.d("030-fban", String.format("banning %d", targetId));
-        getMessagesController().banUserFromAllModeratingChat(target, (response, error) -> {
+        getMessagesController().banUserFromAllModeratingChat(target, (current, total) ->
+                AndroidUtilities.runOnUIThread(() -> {
+                    if (finalProgressDialog != null) {
+                        if (current == total) {
+                            finalProgressDialog.dismiss();
+                        } else {
+                            finalProgressDialog.setMessage(LocaleController.isRTL ?
+                                    String.format("%d/%d %s", total, current, LocaleController.getString(R.string.Loading)) :
+                                    String.format("%s %d/%d", LocaleController.getString(R.string.Loading), current, total));
+                        }
+                    }
+                }), (response, error) -> {
             Log.d("030-fban", String.format("r: %s %s, e: %s %s",
                     response != null, (response == null ? "" : response.getClass().getName()),
                     error != null, (error == null ? "" : error.getClass().getName())));
@@ -8168,6 +8187,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 int amount = ((TLRPC.TL_error) response).code;
                 if (amount == 0) {
                     AndroidUtilities.runOnUIThread(() -> {
+                        if (finalProgressDialog != null) {
+                            finalProgressDialog.dismiss();
+                        }
                         bulletinFactory.createSimpleBulletin(R.raw.error, "ERR_NO_MODS_INFO").show(true);
                     });
                     return;
@@ -8176,12 +8198,19 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (target instanceof TLRPC.User u) _name = u.first_name;
                 else if (target instanceof TLRPC.Chat c) _name = c.title;
                 final String name = _name;
-                AndroidUtilities.runOnUIThread(() ->
-                        bulletinFactory.createSimpleBulletin(R.raw.done,
-                                        LocaleController.formatString(R.string.BannedForChats, name, amount))
-                                .show(true));
+                AndroidUtilities.runOnUIThread(() -> {
+                    if (finalProgressDialog != null) {
+                        finalProgressDialog.dismiss();
+                    }
+                    bulletinFactory.createSimpleBulletin(R.raw.done,
+                                    LocaleController.formatString(R.string.BannedForChats, name, amount))
+                            .show(true);
+                });
             } else {
                 AndroidUtilities.runOnUIThread(() -> {
+                    if (finalProgressDialog != null) {
+                        finalProgressDialog.dismiss();
+                    }
                     String err = String.format("ERR %d - %s", error.code, error.text);
                     bulletinFactory.createSimpleBulletin(R.raw.error, err).show();
                 });
