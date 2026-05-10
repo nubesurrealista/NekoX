@@ -4771,6 +4771,7 @@ public class ChatActivity extends BaseFragment implements
             // NekoX - start
             headerItem.addSubItem(nkheaderbtn_pinned_msgs, R.drawable.menu_pinnedlist, LocaleController.getString(R.string.PinnedMessages));
             headerItem.lazilyAddSubItem(nkheaderbtn_ch_direct_msg, R.drawable.input_message, LocaleController.getString(R.string.ChannelOpenDirect));
+            headerItem.hideSubItem(nkheaderbtn_ch_direct_msg);
 
             if (currentChat != null && (currentChat.has_link || (chatInfo != null && chatInfo.linked_chat_id != 0))) {
                 String text;
@@ -28543,10 +28544,12 @@ public class ChatActivity extends BaseFragment implements
             bottomChannelButtonsLayout.setTotalVisibilityFactor(0f);
             bottomChannelButtonsLayout.setVisibility(View.INVISIBLE);
             needDirectMsgButton = showSuggestButton;
-            if (headerItem.isSubItemVisible(nkheaderbtn_ch_direct_msg) != needDirectMsgButton) {
-                if (needDirectMsgButton) headerItem.showSubItem(nkheaderbtn_ch_direct_msg);
-                else headerItem.hideSubItem(nkheaderbtn_ch_direct_msg);
-            }
+        } else {
+            needDirectMsgButton = false;
+        }
+        if (headerItem.isSubItemVisible(nkheaderbtn_ch_direct_msg) != needDirectMsgButton) {
+            if (needDirectMsgButton) headerItem.showSubItem(nkheaderbtn_ch_direct_msg);
+            else headerItem.hideSubItem(nkheaderbtn_ch_direct_msg);
         }
     }
 
