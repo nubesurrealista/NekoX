@@ -11389,6 +11389,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (ChatObject.isPublic(currentChat)) {
                     usernameRow = rowCount++;
                 }
+            } else if (idRow < 0 && MomoConfig.showIdAndDc.Bool()) {
+                if (emptyRow < 0 && emptyRow2 < 0) {
+                    if (hasMusic || peerColor != null || actionsView == null) {
+                        emptyRow2 = rowCount++;
+                    } else {
+                        emptyRow = rowCount++;
+                    }
+                }
+                idRow = rowCount++;
             }
             if (emptyRow < 0 && emptyRow2 < 0) {
                 if (hasMusic || peerColor != null || actionsView == null) {
