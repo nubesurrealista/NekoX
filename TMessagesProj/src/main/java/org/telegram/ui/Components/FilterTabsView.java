@@ -160,12 +160,15 @@ public class FilterTabsView extends FrameLayout {
             this.noanimate = noanimate;
             if (!FolderIconHelper.isIconAvailable(emo) && localTitleType != NekoXConfig.TITLE_TYPE_TEXT) {
                 localTitleType = NekoXConfig.TITLE_TYPE_TEXT;
-                title = emoticon + " " + title;
+                String titleText = title == null ? "" : title.toString();
+                if (!TextUtils.isEmpty(emoticon) && !titleText.startsWith(emoticon)) {
+                    title = emoticon + " " + title;
+                }
             }
         }
 
         public int getWidth(boolean store) {
-            iconWidth = FolderIconHelper.getTotalIconWidth();
+            iconWidth = localTitleType != NekoXConfig.TITLE_TYPE_TEXT ? FolderIconHelper.getTotalIconWidth() : 0;
             int width = titleWidth = (int) Math.ceil(HintView2.measureCorrectly(title, textPaint));
             width += iconWidth;
             int c;
@@ -453,19 +456,10 @@ public class FilterTabsView extends FrameLayout {
                 tabWidth = currentTab.iconWidth + currentTab.titleWidth + ((countWidth != 0 && !animateCounterRemove) ? countWidth + AndroidUtilities.dp(-2 * (counterText != null ? 1.0f : editingStartAnimationProgress)) : 0);
             }
 
-            boolean fixTextX = false;
-            if (currentTab.localTitleType == NekoXConfig.TITLE_TYPE_TEXT && currentTab.localTitleType != MomoConfig.tabsTitleType.Int()) {
-                tabWidth -= currentTab.iconWidth;
-                currentTab.iconWidth = 0;
-                fixTextX = true;
-            }
-
             tabCounterVisible = (countWidth != 0 && !animateCounterRemove) ? (counterText != null ? 1.0f : editingStartAnimationProgress) : 0;
             float textX = ((getMeasuredWidth() - tabWidth) / 2f) + currentTab.iconWidth;
-            if (animateTextX && !fixTextX) {
+            if (animateTextX) {
                 textX = textX * changeProgress + animateFromTextX * (1f - changeProgress);
-            } else if (fixTextX) {
-                textX *= 0.75f;
             }
 
             boolean pauseInactiveTabAnimation = MomoConfig.pauseInactiveTabAnimation.Bool();

@@ -7071,13 +7071,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     } else {
                         switch (MomoConfig.tabsTitleType.Int()) {
                             case NekoXConfig.TITLE_TYPE_TEXT:
-                                filterTabsView.addTab(a, filter.localId, filter.name, filter.name, filter.entities, filter.title_noanimate, false, false);
+                                filterTabsView.addTab(a, filter.localId, filter.name, null, filter.entities, filter.title_noanimate, false, false);
                                 break;
                             case NekoXConfig.TITLE_TYPE_ICON:
                                 filterTabsView.addTab(a, filter.localId, filter.name, filter.emoticon != null ? filter.emoticon : "📂", filter.entities, filter.title_noanimate, false, false);
                                 break;
                             case NekoXConfig.TITLE_TYPE_MIX:
-                                filterTabsView.addTab(a, filter.localId, filter.name, filter.emoticon != null ? filter.emoticon : "\uD83D\uDCC1 " + filter.name, filter.entities, filter.title_noanimate, false, false);
+                                filterTabsView.addTab(a, filter.localId, filter.name, filter.emoticon != null ? filter.emoticon : "📂", filter.entities, filter.title_noanimate, false, false);
                                 break;
                         }
                     }
