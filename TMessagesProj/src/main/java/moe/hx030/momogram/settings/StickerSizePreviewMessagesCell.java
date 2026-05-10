@@ -70,7 +70,7 @@ public class StickerSizePreviewMessagesCell extends LinearLayout {
         attributeSticker.alt = "🐱";
         message.media.document.attributes.add(attributeSticker);
         TLRPC.TL_documentAttributeImageSize attributeImageSize = new TLRPC.TL_documentAttributeImageSize();
-        attributeImageSize.h = 512;
+        attributeImageSize.h = 443;
         attributeImageSize.w = 512;
         message.media.document.attributes.add(attributeImageSize);
         message.message = "";

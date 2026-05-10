@@ -47,7 +47,6 @@
     <string name="StickerSizeDialogMessageBigOne">Nagy méretű</string>
     <string name="StickerSizeDialogMessageSmallOne">Kis méretű</string>
     <string name="StickerSizeDialogMessageReplyTo">Miaú</string>
-    <string name="StickerSizeDialogName">Duang</string>
     <string name="Experiment">Kísérleti</string>
     <string name="UnlimitedFavoredStickers">Korlátlan kedvenc matrica</string>
     <string name="UnlimitedFavoredStickersAbout">Korlátlan mennyiségű matrica hozzáadása a kedvencekhez. Elképzelhető, hogy a matricák nem szinkronizálódnak más eszközeire.</string>

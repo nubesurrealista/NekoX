@@ -65,7 +65,6 @@
     <string name="TestBackendOff">Αυτός ο λογαριασμός θα συνδεθεί στο backend παραγωγής.</string>
     <string name="ViewHistory">Προβολή ιστορικού</string>
     <string name="Nya">Meow!</string>
-    <string name="StickerSizeDialogName">Duang</string>
     <string name="ProviderGoogleTranslate">Google</string>
     <string name="ProviderGoogleTranslateCN">Google CN</string>
     <string name="UndoTranslate">Αναίρεση μετάφρασης</string>

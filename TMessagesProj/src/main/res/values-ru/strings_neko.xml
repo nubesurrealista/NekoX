@@ -48,7 +48,6 @@
     <string name="StickerSizeDialogMessageBigOne">Большой</string>
     <string name="StickerSizeDialogMessageSmallOne">Маленький</string>
     <string name="StickerSizeDialogMessageReplyTo">Мяу</string>
-    <string name="StickerSizeDialogName">Орфей ⌲</string>
     <string name="Experiment">Экспериментальные</string>
     <string name="UnlimitedFavoredStickers">Не ограничивать избранные стикеры</string>
     <string name="UnlimitedFavoredStickersAbout">Их синхронизация будет отключена.</string>

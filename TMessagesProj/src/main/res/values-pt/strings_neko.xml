@@ -125,7 +125,6 @@
     <string name="doubleTapSendReactions">Enviar reação ao tocar duas vezes (padrão)</string>
     <string name="doubleTapShowReactions">Mostrar reações apenas ao tocar duas vezes</string>
     <string name="ReactionsDisabled">Desativar</string>
-    <string name="StickerSizeDialogName">Duang</string>
     <string name="hideSendAsChannel">Ocultar enviar como canal</string>
     <string name="customSavePath">Caminho de Armazenamento Personalizado</string>
     <string name="disablePremiumStickerAnimation">Desativar animação de sticker premium</string>

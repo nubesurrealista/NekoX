@@ -66,7 +66,6 @@
     <string name="TransparentStatusBar">Gjennomsiktig statusfelt</string>
     <string name="Connection">Tilkobling</string>
     <string name="AddToSavedMessages">Lagre melding</string>
-    <string name="StickerSizeDialogName">Duang</string>
     <string name="StickerSizeDialogMessageReplyTo">Mjau</string>
     <string name="UnlimitedFavoredStickers">Ubegrensede favorittklistremerker</string>
     <string name="TranslateFailed">Oversettelsestjenerfeil</string>

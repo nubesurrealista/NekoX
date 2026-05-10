@@ -52,7 +52,7 @@
     <string name="StickerSizeDialogMessageBigOne">A big one</string>
     <string name="StickerSizeDialogMessageSmallOne">A small one</string>
     <string name="StickerSizeDialogMessageReplyTo">Meow</string>
-    <string name="StickerSizeDialogName">Duang</string>
+    <string name="StickerSizeDialogName" translatable="false">030?</string>
     <string name="Experiment">Experimental</string>
     <string name="UnlimitedFavoredStickers">Unlimited favored stickers</string>
     <string name="UnlimitedFavoredStickersAbout">Add unlimited stickers to favorites. Stickers may not be synchronized to other devices.</string>
