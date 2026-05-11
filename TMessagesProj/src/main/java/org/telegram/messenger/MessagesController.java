@@ -320,7 +320,7 @@ public class MessagesController extends BaseController implements NotificationCe
     private HashSet<Long> loadingFullParticipants = new HashSet<>();
     private HashSet<Long> loadedFullParticipants = new HashSet<>();
     public LongSparseLongArray loadedFullChats = new LongSparseLongArray();
-    private LongSparseArray<LongSparseArray<TLRPC.ChannelParticipant>> channelAdmins = new LongSparseArray<>();
+    private final LongSparseArray<LongSparseArray<TLRPC.ChannelParticipant>> channelAdmins = new LongSparseArray<>();
     private LongSparseIntArray loadingChannelAdmins = new LongSparseIntArray();
 
     private SparseIntArray migratedChats = new SparseIntArray();
@@ -1562,17 +1562,14 @@ public class MessagesController extends BaseController implements NotificationCe
     private static SparseArray<MessagesController> Instance = new SparseArray<>();
     public static HashSet<Integer> instanceNums = new HashSet<>();
     public static MessagesController getInstance(int num) {
-        MessagesController localInstance = Instance.get(num);
-        if (localInstance == null) {
-            synchronized (lockObject) {
-                localInstance = Instance.get(num);
-                if (localInstance == null) {
-                    Instance.put(num, localInstance = new MessagesController(num));
-                }
-                instanceNums.add(num);
+        synchronized (lockObject) {
+            MessagesController localInstance = Instance.get(num);
+            if (localInstance == null) {
+                Instance.put(num, localInstance = new MessagesController(num));
             }
+            instanceNums.add(num);
+            return localInstance;
         }
-        return localInstance;
     }
 
     public SharedPreferences getMainSettings() {
@@ -7648,6 +7645,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                 }
             }
+            return false;
         }
         final TLRPC.ChannelParticipant participant = array.get(uid);
         return participant instanceof TLRPC.TL_channelParticipantCreator;

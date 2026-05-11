@@ -28547,7 +28547,7 @@ public class ChatActivity extends BaseFragment implements
         } else {
             needDirectMsgButton = false;
         }
-        if (headerItem.isSubItemVisible(nkheaderbtn_ch_direct_msg) != needDirectMsgButton) {
+        if (headerItem != null && headerItem.isSubItemVisible(nkheaderbtn_ch_direct_msg) != needDirectMsgButton) {
             if (needDirectMsgButton) headerItem.showSubItem(nkheaderbtn_ch_direct_msg);
             else headerItem.hideSubItem(nkheaderbtn_ch_direct_msg);
         }
