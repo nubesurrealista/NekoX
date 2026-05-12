@@ -202,6 +202,7 @@ public class MomoGeneralSettingsActivity extends MomoSettingsBaseActivity {
     private final AbstractConfigCell noForwardToStoriesRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.noForwardToStories));
     private final AbstractConfigCell disableSessionCheckerRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.disableSessionChecker));
     private final AbstractConfigCell switchAccountsFromChatListMenuRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.switchAccountsFromChatListMenu));
+    private final AbstractConfigCell alwaysTryHevcCodecRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.alwaysTryHevcCodec));
 
     private final AbstractConfigCell customApiIdRow = cellGroup.appendCell(new ConfigCellTextDetail(MomoConfig.customApiId, (view, position) -> {
         customDialog_BottomInputString(position, MomoConfig.customApiId, LocaleController.getString(R.string.UseCustomApiNotice), "api_id");

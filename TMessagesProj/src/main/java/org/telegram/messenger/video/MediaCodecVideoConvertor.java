@@ -7,7 +7,6 @@ import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.media.MediaMuxer;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -30,6 +29,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
+import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.utils.BufferUtil;
 
 public class MediaCodecVideoConvertor {
@@ -109,7 +109,7 @@ public class MediaCodecVideoConvertor {
         String selectedEncoderName = null;
 
         final boolean isWebm = convertVideoParams.isSticker;
-        boolean shouldUseHevc = isStory;
+        boolean shouldUseHevc = isStory || MediaController.hevcOverride;
         outputMimeType = isWebm ? "video/x-vnd.on2.vp9" : shouldUseHevc ? "video/hevc" : "video/avc";
 
         boolean canBeBrokenEncoder = false;
@@ -380,7 +380,8 @@ public class MediaCodecVideoConvertor {
                 int videoIndex = MediaController.findTrack(extractor, false);
                 int audioIndex = bitrate != -1 && !muted && volume > 0 ? MediaController.findTrack(extractor, true) : -1;
                 boolean needConvertVideo = false;
-                if (videoIndex >= 0 && !extractor.getTrackFormat(videoIndex).getString(MediaFormat.KEY_MIME).equals(MediaController.VIDEO_MIME_TYPE)) {
+                String targetMime = MomoConfig.alwaysTryHevcCodec.Bool() ? "video/hevc" : MediaController.VIDEO_MIME_TYPE;
+                if (videoIndex >= 0 && !extractor.getTrackFormat(videoIndex).getString(MediaFormat.KEY_MIME).equals(targetMime)) {
                     needConvertVideo = true;
                 }
 

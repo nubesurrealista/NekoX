@@ -69,6 +69,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -133,11 +134,12 @@ import java.util.concurrent.CountDownLatch;
 
 import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.SaveToDownloadReceiver;
-import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.NekoXConfig;
 import moe.hx030.momogram.utils.BufferUtil;
 
 public class MediaController implements AudioManager.OnAudioFocusChangeListener, NotificationCenter.NotificationCenterDelegate, SensorEventListener {
+
+    public static boolean hevcOverride = MomoConfig.alwaysTryHevcCodec.Bool();
 
     private native int startRecord(String path, int sampleRate);
 
@@ -6453,9 +6455,15 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         if (cachedBitrate != null) return cachedBitrate;
         try {
             MediaCodec encoder = null;
-            if (tryHevc) {
+            boolean forceHevc = MomoConfig.alwaysTryHevcCodec.Bool();
+            if (tryHevc || forceHevc) {
                 try {
                     encoder = MediaCodec.createEncoderByType("video/hevc");
+                    if (encoder == null && forceHevc) {
+                        hevcOverride = false;
+                        if (BuildVars.DEBUG_VERSION || BuildVars.DEBUG_PRIVATE_VERSION)
+                            Toast.makeText(LaunchActivity.instance, "HEVC_UNAVAILABLE", Toast.LENGTH_SHORT).show();
+                    }
                 } catch (Exception ignore) {}
             }
             if (encoder == null) {
