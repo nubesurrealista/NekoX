@@ -223,4 +223,21 @@
     <string name="AlwaysDestroyPhotoViewer">Sempre destruir o PhotoViewer</string>
     <string name="CustomMaxCacheSizeHint">Tamanho em MB (ex. 512)</string>
     <string name="UseCamera2API">Usar API da Câmera 2</string>
+    <string name="UnblockDeleted">Desbloquear Excluído</string>
+    <string name="UnblockDeletedWarn">Tem certeza de que deseja desbloquear **todos os usuários/bots excluídos**?</string>
+    <string name="PGPEncrypt">Criptografar</string>
+    <string name="PGPDecryptErr">A descriptografia falhou, pressione OK para tentar novamente com a interface do usuário do OpenKeychain</string>
+    <string name="ShowPhoneNumTemp">Alternar número de telefone.</string>
+    <string name="PauseInactiveTabAnimation">Pausar a animação das abas inativas</string>
+    <string name="MuteBlockedFromGroup">Silenciar notificações de bate-papo em grupo se forem de um usuário bloqueado</string>
+    <string name="MuteBotsFromGroup">Desative as notificações de bate-papo em grupo se forem de bots</string>
+    <string name="MuteBotsFromGroupDesc">Saiba que mensagens para administradores não serão silenciadas</string>
+    <string name="BanForAllModeratingChats">Banir este usuário de todos os seus chats de moderação?</string>
+    <string name="BannedForChats">Banido %1$s de %2$d chat(s)</string>
+    <string name="FBan">FBan</string>
+    <string name="ShowAddedToFoldersAtTitle">Exibir ícones de \"Adicionado à pasta\" ao lado do título do chat</string>
+    <string name="VideoBitrateToggled">A taxa de bits foi alterada com um toque múltiplo; toque novamente para retornar à anterior</string>
+    <string name="PositionLeft">Esquerda</string>
+    <string name="PositionRight">Direita</string>
+    <string name="RecentChatFolderSize">Tamanho dos chats abertos recentemente</string>
 </resources>
