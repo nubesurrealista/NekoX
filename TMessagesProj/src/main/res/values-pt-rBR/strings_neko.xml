@@ -316,4 +316,5 @@
     <string name="CloudflareCredentialsDialog">Configure o ID da conta Cloudflare e o Token de API\n**Como obter?**</string>
     <string name="CloudflareCredentialsObtainDesc">1. Abra o painel do Cloudflare e faça login com sua conta\n\n2. Expanda AI no menu lateral e clique em IA para trabalhadores\n\n3. Clique em Usar REST API\n\n4. Anote sua ID de conta e crie um token de API nessa página.</string>
     <string name="SwipeActionInTopicList">Ação de deslizar na lista de tópicos (Ocultar/Mostrar)</string>
+    <string name="DisablePullDownSearch">Desative a opção \"Abrir pesquisa\" ao puxar para baixo</string>
 </resources>
