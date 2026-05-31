@@ -20,6 +20,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -32,6 +33,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 
+import org.jetbrains.annotations.NotNull;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 //import org.telegram.messenger.LanguageDetector;
@@ -62,6 +64,8 @@ import java.util.ArrayList;
 
 import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.transtale.Translator;
+import moe.hx030.momogram.transtale.TranslatorKt;
+import moe.hx030.momogram.utils.AlertUtil;
 
 public class TranslateAlert3 extends BottomSheetWithRecyclerListView {
 
@@ -388,6 +392,7 @@ public class TranslateAlert3 extends BottomSheetWithRecyclerListView {
         translated = loadingText;
         translatedLoading = true;
 
+        Log.d("030-ta3", String.format("summarized=%s did=%d mid=%d", summarized, dialogId, messageId));
         if (summarized && dialogId != 0 && messageId != 0) {
             final TLRPC.TL_messages_summarizeText req = new TLRPC.TL_messages_summarizeText();
 
@@ -422,7 +427,7 @@ public class TranslateAlert3 extends BottomSheetWithRecyclerListView {
 
                 adapter.update(true);
             });
-        } else {
+        } else if (MomoConfig.translationProvider.Int() == Translator.providerTelegram) {
 
             final TLRPC.TL_messages_translateText req = new TLRPC.TL_messages_translateText();
             req.to_lang = to_lang;
@@ -464,6 +469,46 @@ public class TranslateAlert3 extends BottomSheetWithRecyclerListView {
                 translatedLoading = false;
 
                 adapter.update(true);
+            });
+        } else {
+            Utilities.stageQueue.postRunnable(() -> {
+                Translator.translate(TranslatorKt.getCode2Locale(to_lang), text.toString(),
+                        new Translator.Companion.TranslateCallBack() {
+                    @Override
+                    public void onSuccess(@NotNull String translation) {
+                        AndroidUtilities.runOnUIThread(() -> {
+                            button.setLoading(false);
+
+                            if (translation.isBlank()) {
+                                button.setText(getString(R.string.OK));
+                                button.setOnClickListener(v -> dismiss());
+                                return;
+                            }
+
+                            translated = translation;
+                            translatedLoading = false;
+
+                            adapter.update(true);
+                        });
+                    }
+
+                    @Override
+                    public void onFailed(boolean unsupported, @NotNull String message) {
+                        AndroidUtilities.runOnUIThread(() -> {
+                            button.setLoading(false);
+                            BaseFragment last = LaunchActivity.getLastFragment();
+                            if (last == null) {
+                                BulletinFactory.of(topBulletinContainer, resourcesProvider).showForError(message);
+                                return;
+                            }
+                            AlertUtil.showTransFailedDialog(last.getParentActivity(), unsupported, message, null, () -> {
+                                Translator.translate(text.toString(), this);
+                            });
+                            button.setText(getString(R.string.OK));
+                            button.setOnClickListener(v -> dismiss());
+                        });
+                    }
+                });
             });
         }
 

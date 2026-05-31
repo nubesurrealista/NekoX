@@ -1,6 +1,8 @@
 package moe.hx030.momogram.transtale.source
 
 import android.os.Build
+import android.util.Log
+import moe.hx030.momogram.transtale.TransUtils
 import okhttp3.FormBody
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
@@ -29,6 +31,7 @@ object YandexTranslator : Translator {
             .url("https://translate.yandex.net/api/v1/tr.json/translate?srv=android&uuid=$uuid&id=$uuid2-9-0")
             .applyUserAgent()
             .apply {
+                header("Content-Type", "application/x-www-form-urlencoded")
                 val formBody = FormBody.Builder()
                     .add("text", query)
                     .add("lang", if (from == "auto") to else "$from-$to")

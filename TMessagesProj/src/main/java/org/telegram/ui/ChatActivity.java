@@ -45250,7 +45250,8 @@ public class ChatActivity extends BaseFragment implements
                     String toLang = MomoConfig.translateToLang.String();
                     if (StringUtils.isBlank(toLang)) toLang = LocaleController.getInstance().getCurrentLocale().getLanguage();
                     int[] messageIdToTranslate = new int[] { selectedObject.getId() };
-                    final CharSequence finalMessageText = getMessageCaption(selectedObject, selectedObjectGroup, messageIdToTranslate);
+                    CharSequence caption = getMessageCaption(selectedObject, selectedObjectGroup, messageIdToTranslate);
+                    final CharSequence finalMessageText = caption == null ? getMessageContent(selectedObject, 0, false) : caption;
                     final boolean shouldTranslateByText = selectedObject != null && (selectedObject.isPoll() || selectedObject.isVoiceTranscriptionOpen() || selectedObject.isSponsored() || selectedObject.scheduled || chatMode == MODE_QUICK_REPLIES);
                     Utilities.CallbackReturn<URLSpan, Boolean> onLinkPress = (link) -> {
                         didPressMessageUrl(link, false, selectedObject, null);
@@ -45260,6 +45261,11 @@ public class ChatActivity extends BaseFragment implements
 //                    TranslateAlert2 alert = TranslateAlert2.showAlert(getParentActivity(), this, currentAccount, inputPeer, messageIdToTranslate[0], selectedObject.summarized, "und", toLang, finalMessageText,
 //                            selectedObject.messageOwner.entities, false, onLinkPress, null);
 //                    alert.setDimBehind(true);
+                    if (StringUtils.isBlank(finalMessageText)) {
+                        BulletinFactory.of(ChatActivity.this).createSimpleBulletin(R.raw.error, getString(R.string.NoTextToTranslate)).show();
+                        break;
+                    }
+                    Log.d("030-tx", finalMessageText.toString());
                     final TranslateAlert3 alert =
                         new TranslateAlert3(getContext(), resourceProvider)
                             .setText(finalMessageText)

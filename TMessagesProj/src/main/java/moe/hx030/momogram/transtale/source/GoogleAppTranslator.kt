@@ -1,5 +1,7 @@
 package moe.hx030.momogram.transtale.source
 
+import android.util.Log
+import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.Request
 import org.apache.commons.lang3.StringUtils
 import org.json.JSONObject
@@ -9,6 +11,9 @@ import moe.hx030.momogram.MomoConfig
 import moe.hx030.momogram.transtale.TransUtils
 import moe.hx030.momogram.transtale.Translator
 import moe.hx030.momogram.transtale.Translator.Companion.httpClient
+import org.telegram.messenger.TranslateController
+import org.telegram.messenger.Utilities
+import org.telegram.ui.Components.TranslateAlert2
 
 object GoogleAppTranslator : Translator {
 
@@ -22,6 +27,14 @@ object GoogleAppTranslator : Translator {
             throw UnsupportedOperationException(LocaleController.getString(R.string.TranslateApiUnsupported))
 
         }
+
+        val altResult: String = suspendCancellableCoroutine { cont ->
+            TranslateAlert2.alternativeTranslate(query, from, to) { s, err ->
+                if (!err) cont.resumeWith(Result.success(s))
+                else cont.resumeWith(Result.success(""))
+            }
+        }
+        if (!StringUtils.isBlank(altResult)) return altResult
 
         val url = "https://translate.google." + (if (MomoConfig.translationProvider.Int() == 2) "cn" else "com") + "/translate_a/single?dj=1" +
                 "&q=" + TransUtils.encodeURIComponent(query) +
