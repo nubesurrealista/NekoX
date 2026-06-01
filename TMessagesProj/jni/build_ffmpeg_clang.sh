@@ -9,11 +9,10 @@ function build_one {
 	TOOLS_PREFIX="${LLVM_BIN}/${ARCH_NAME}-linux-${BIN_MIDDLE}-"
 
 	LD=${TOOLS_PREFIX}ld
-	AR=llvm-ar
+	AR="${LLVM_BIN}/llvm-ar"
 	STRIP=${TOOLS_PREFIX}strip
-	RANLIB=llvm-ranlib
-	NM=llvm-nm
-
+	RANLIB="${LLVM_BIN}/llvm-ranlib"
+	NM="${LLVM_BIN}/llvm-nm"
 	CC_PREFIX="${LLVM_BIN}/${CLANG_PREFIX}-linux-${BIN_MIDDLE}${ANDROID_API}-"
 
 	CC=${CC_PREFIX}clang
