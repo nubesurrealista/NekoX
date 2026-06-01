@@ -6325,10 +6325,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
     public EditTextEmoji getCommentView() {
         if (captionAbove && (currentAttachLayout == photoLayout || currentAttachLayout == photoPreviewLayout)) {
-            createTopCommentTextView(baseFragment.getContext(), parentFragment);
+            createTopCommentTextView(baseFragment == null ? null : baseFragment.getContext(), parentFragment);
             return topCommentTextView;
         } else {
-            createCommentTextView(baseFragment.getContext());
+            createCommentTextView(baseFragment == null ? null : baseFragment.getContext());
             return commentTextView;
         }
     }
