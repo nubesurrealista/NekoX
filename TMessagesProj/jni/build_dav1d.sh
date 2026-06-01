@@ -18,7 +18,7 @@ pushd dav1d
 cat > "$TMPDIR/cross.ini" <<EOF
 [binaries]
 c = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang'
-ar = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ar'
+ar = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar'
 
 [host_machine]
 system = 'android'
@@ -40,7 +40,7 @@ ninja -C builddir-arm64 install
 cat > "$TMPDIR/cross.ini" <<EOF
 [binaries]
 c = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi21-clang'
-ar = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/arm-linux-androideabi-ar'
+ar = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar'
 
 [host_machine]
 system = 'android'
@@ -63,7 +63,7 @@ ninja -C builddir-armv7 install
 cat > "$TMPDIR/cross.ini" <<EOF
 [binaries]
 c = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android21-clang'
-ar = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android-ar'
+ar = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar'
 
 [host_machine]
 system = 'android'
@@ -85,7 +85,7 @@ ninja -C builddir-x86 install
 cat > "$TMPDIR/cross.ini" <<EOF
     [binaries]
     c = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/x86_64-linux-android21-clang'
-    ar = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/x86_64-linux-android-ar'
+    ar = '${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar'
 
     [host_machine]
     system = 'android'

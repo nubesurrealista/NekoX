@@ -3,15 +3,16 @@ set -e
 function build_one {
 	echo "Building ${ARCH}..."
 
-	PREBUILT=${NDK}/toolchains/${PREBUILT_ARCH}${PREBUILT_MIDDLE}-${VERSION}/prebuilt/${BUILD_PLATFORM}
+	PREBUILT=${NDK}/toolchains/llvm/prebuilt/${BUILD_PLATFORM}
 	PLATFORM=${NDK}/platforms/android-${ANDROID_API}/arch-${ARCH}
 
 	TOOLS_PREFIX="${LLVM_BIN}/${ARCH_NAME}-linux-${BIN_MIDDLE}-"
 
 	LD=${TOOLS_PREFIX}ld
-	AR=${TOOLS_PREFIX}ar
+	AR=llvm-ar
 	STRIP=${TOOLS_PREFIX}strip
-	NM=${TOOLS_PREFIX}nm
+	RANLIB=llvm-ranlib
+	NM=llvm-nm
 
 	CC_PREFIX="${LLVM_BIN}/${CLANG_PREFIX}-linux-${BIN_MIDDLE}${ANDROID_API}-"
 
@@ -33,6 +34,7 @@ function build_one {
 	./configure \
 	--nm=${NM} \
 	--ar=${AR} \
+	--ranlib=${RANLIB} \
 	--strip=${STRIP} \
 	--cc=${CC} \
 	--cxx=${CXX} \
@@ -54,7 +56,6 @@ function build_one {
 	--extra-cflags="${INCLUDES} -Wl,-Bsymbolic -Os -DCONFIG_LINUX_PERF=0 -DANDROID $OPTIMIZE_CFLAGS -fPIE -pie --static -fPIC" \
 	--extra-cxxflags="${INCLUDES} -Wl,-Bsymbolic -Os -DCONFIG_LINUX_PERF=0 -DANDROID $OPTIMIZE_CFLAGS -fPIE -pie --static -fPIC" \
 	--extra-ldflags="${LIBS} -Wl,-Bsymbolic -Wl,-rpath-link=$PLATFORM/usr/$LIB_DIR -L$PLATFORM/usr/$LIB_DIR -lc -lm -ldl -fPIC -v" \
-	--extra-libs="-lgcc" \
 	\
 	--enable-version3 \
 	--enable-gpl \
@@ -163,13 +164,12 @@ cd ffmpeg
 ## common
 LLVM_PREFIX="${NDK}/toolchains/llvm/prebuilt/linux-x86_64"
 LLVM_BIN="${LLVM_PREFIX}/bin"
-VERSION="4.9"
+ANDROID_API=21
 
 function build {
 	for arg in "$@"; do
 		case "${arg}" in
 			x86_64)
-				ANDROID_API=21
 
 				ARCH=x86_64
 				ARCH_NAME=x86_64
@@ -185,7 +185,6 @@ function build {
 				build_one
 			;;
 			arm64)
-				ANDROID_API=21
 
 				ARCH=arm64
 				ARCH_NAME=aarch64
@@ -202,7 +201,6 @@ function build {
 				build_one
 			;;
 			arm)
-				ANDROID_API=19
 
 				ARCH=arm
 				ARCH_NAME=arm
@@ -219,7 +217,6 @@ function build {
 				build_one
 			;;
 			x86)
-				ANDROID_API=19
 
 				ARCH=x86
 				ARCH_NAME=i686
