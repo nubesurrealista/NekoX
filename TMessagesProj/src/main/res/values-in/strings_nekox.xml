@@ -351,4 +351,5 @@
     <string name="MomoSettingNotFound">Opsi yang ditentukan tidak ada</string>
     <string name="SendWithoutCaption">Kirim Tanpa Keterangan</string>
     <string name="AlwaysTryHevcCodec">Selalu coba gunakan HEVC saat mengompresi video</string>
+    <string name="AlwaysSaveToDownloads">Selalu simpan ke folder Unduhan</string>
 </resources>
