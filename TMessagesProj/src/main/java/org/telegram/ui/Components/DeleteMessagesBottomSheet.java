@@ -105,6 +105,7 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
     private static final int RIGHT_SEND_POLLS = 13;
     private static final int RIGHT_SEND_LINKS = 14;
     private static final int RIGHT_SEND_REACTIONS = 15;
+    private static final int RIGHT_SEND_INLINE_BOT = 1001;
 
     private static final int OPTION_DELETE = 100;
     private static final int OPTION_DELETE_MESSAGES = 101;
@@ -629,6 +630,9 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
         if (!bannedRights.send_reactions && !defaultBannedRights.send_reactions) {
             i++;
         }
+        if (!bannedRights.send_inline && !defaultBannedRights.send_inline) {
+            i++;
+        }
         return i;
     }
 
@@ -756,7 +760,7 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
                         .setLocked(defaultBannedRights.send_plain));
 
                 int sendMediaCount = getSendMediaSelectedCount();
-                items.add(UItem.asExpandableSwitch(RIGHT_SEND_MEDIA, getString(R.string.UserRestrictionsSendMedia), String.format(Locale.US, "%d/10", sendMediaCount))
+                items.add(UItem.asExpandableSwitch(RIGHT_SEND_MEDIA, getString(R.string.UserRestrictionsSendMedia), String.format(Locale.US, "%d/11", sendMediaCount))
                         .setChecked(sendMediaCount > 0)
                         .setLocked(allDefaultMediaBanned())
                         .setCollapsed(sendMediaCollapsed)
@@ -825,6 +829,10 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
                     items.add(UItem.asRoundCheckbox(RIGHT_SEND_LINKS, getString(R.string.UserRestrictionsEmbedLinks))
                             .setChecked(!bannedRights.embed_links && !defaultBannedRights.embed_links && !bannedRights.send_plain && !defaultBannedRights.send_plain)
                             .setLocked(defaultBannedRights.embed_links)
+                            .setPad(1));
+                    items.add(UItem.asRoundCheckbox(RIGHT_SEND_INLINE_BOT, getString(R.string.PermUseInlineBots))
+                            .setChecked(!bannedRights.send_inline && !defaultBannedRights.send_inline)
+                            .setLocked(defaultBannedRights.send_inline)
                             .setPad(1));
                     items.add(UItem.asRoundCheckbox(RIGHT_SEND_REACTIONS, getString(R.string.UserRestrictionsSendReactions))
                             .setChecked(!bannedRights.send_reactions && !defaultBannedRights.send_reactions)
@@ -954,6 +962,9 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
                     onRestrictionsChanged();
                 } else if (item.id == RIGHT_SEND_REACTIONS) {
                     bannedRights.send_reactions = !bannedRights.send_reactions;
+                    onRestrictionsChanged();
+                } else if (item.id == RIGHT_SEND_INLINE_BOT) {
+                    bannedRights.send_inline = !bannedRights.send_inline;
                     onRestrictionsChanged();
                 } else if (item.id == RIGHT_SEND_STICKERS) {
                     bannedRights.send_stickers = bannedRights.send_games = bannedRights.send_gifs = bannedRights.send_inline = !bannedRights.send_stickers;
