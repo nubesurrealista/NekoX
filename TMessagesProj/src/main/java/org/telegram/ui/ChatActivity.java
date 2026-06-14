@@ -426,6 +426,7 @@ public class ChatActivity extends BaseFragment implements
     private final static int nkbtn_forward_noquote = 2011;
     private final static int nkbtn_sharemessage = 2030;
     private final static int nkbtn_copy_photo = 2031;
+    private final static int nkbtn_copy_fref = 2032;
 
     // chat click menu buttons
     private final static int nkbtn_detail = 2012;
@@ -1105,6 +1106,22 @@ public class ChatActivity extends BaseFragment implements
 
     public static boolean noForwardQuote;
     public static Boolean quoteCleared = null;
+    public static class FileRefClipboardItem {
+        public final TLRPC.TL_document document;
+        public final TLRPC.TL_photo photo;
+
+        public FileRefClipboardItem(TLRPC.TL_document document) {
+            this.document = document;
+            this.photo = null;
+        }
+
+        public FileRefClipboardItem(TLRPC.TL_photo photo) {
+            this.document = null;
+            this.photo = photo;
+        }
+    }
+
+    public static ArrayList<FileRefClipboardItem> fileRefClipboard = new ArrayList<>();
     private TLRPC.ChatParticipant selectedParticipant;
 
     private final BlurredBackgroundSourceBitmap scrimBlur3SourceBitmap = new BlurredBackgroundSourceBitmap();
@@ -1305,6 +1322,7 @@ public class ChatActivity extends BaseFragment implements
     private final static int OPTION_COPY_PHOTO = 1001;
     private final static int OPTION_COPY_PHOTO_AS_STICKER = 1002;
     private final static int OPTION_ADD_MUSIC_TO_PROFILE = 1003;
+    private final static int OPTION_COPY_REF = 69696;
 
     private final static int[] allowedNotificationsDuringChatListAnimations = new int[]{
             NotificationCenter.messagesRead,
@@ -10551,6 +10569,9 @@ public class ChatActivity extends BaseFragment implements
             actionModeOtherItem.addSubItem(nkbtn_copy_photo, R.drawable.msg_copy, LocaleController.getString(R.string.Copy));
             if (MomoConfig.showRepeat.Bool() && !noforward)
                 actionModeOtherItem.addSubItem(nkbtn_repeat, R.drawable.msg_repeat, LocaleController.getString(R.string.Repeat));
+
+            if (MomoConfig.showCopyFileRef.Bool() && !noforward)
+                actionModeOtherItem.addSubItem(nkbtn_copy_fref, R.drawable.msg_copy, LocaleController.getString(R.string.CopyFileRef));
 
             if (MomoConfig.showMessageHide.Bool()) {
                 actionModeOtherItem.addSubItem(nkbtn_hide, R.drawable.baseline_remove_circle_24, LocaleController.getString(R.string.Hide));
@@ -31531,6 +31552,7 @@ public class ChatActivity extends BaseFragment implements
                         case OPTION_SAVE_TO_GALLERY2:
                         case OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC:
                         case OPTION_ADD_MUSIC_TO_PROFILE:
+                        case OPTION_COPY_REF:
                         case OPTION_SHARE:
                         case OPTION_FORWARD:
                         case OPTION_REPLY:
@@ -34192,6 +34214,10 @@ public class ChatActivity extends BaseFragment implements
             }
             case OPTION_ADD_MUSIC_TO_PROFILE: {
                 addMusicToProfile(selectedObject);
+                break;
+            }
+            case OPTION_COPY_REF: {
+                copyFileReferences();
                 break;
             }
             case OPTION_ADD_TO_GIFS: {
@@ -37336,6 +37362,29 @@ public class ChatActivity extends BaseFragment implements
         req.random_id = object.sponsoredId;
         getConnectionsManager().sendRequest(req, null);
         getMessagesController().markSponsoredAsRead(dialog_id, object);
+    }
+
+    private void copyFileReferences() {
+        List<MessageObject> msgs = getSelectedMessages(false);
+        if (msgs.isEmpty()) {
+            if (selectedObject == null) return;
+            msgs = List.of(selectedObject);
+        }
+        fileRefClipboard.clear();
+        for (int i = 0; i < msgs.size(); ++i) {
+            MessageObject msg = msgs.get(i);
+            TLRPC.Document doc = msg.getDocument();
+            if (doc instanceof TLRPC.TL_document) {
+                fileRefClipboard.add(new FileRefClipboardItem((TLRPC.TL_document) doc));
+                continue;
+            }
+            if (msg.messageOwner != null && msg.messageOwner.media != null && msg.messageOwner.media.photo instanceof TLRPC.TL_photo) {
+                fileRefClipboard.add(new FileRefClipboardItem((TLRPC.TL_photo) msg.messageOwner.media.photo));
+                continue;
+            }
+        }
+        if (fileRefClipboard.isEmpty()) BulletinFactory.of(this).createErrorBulletin(getString(R.string.CopyFileRefFailed)).show();
+        else BulletinFactory.of(this).createSimpleBulletin(R.raw.info, formatString(R.string.CopyFileRefDone, fileRefClipboard.size())).show();
     }
 
     @Override
@@ -45080,6 +45129,8 @@ public class ChatActivity extends BaseFragment implements
                     BulletinFactory.of(this).createCopyBulletin(LocaleController.getString(R.string.PhotoCopied)).show();
                 }
             });
+        } else if (id == nkbtn_copy_fref) {
+            copyFileReferences();
         } else if (id == nkheaderbtn_recent_actions) {
             presentFragment(new ChannelAdminLogActivity(currentChat));
         } else if (id == nkheaderbtn_bot_app) {
@@ -47243,10 +47294,28 @@ public class ChatActivity extends BaseFragment implements
                             items.add(getString(R.string.AudioAddToProfile));
                             options.add(OPTION_ADD_MUSIC_TO_PROFILE);
                             icons.add(R.drawable.filled_track_add);
+
+                            if (MomoConfig.showCopyFileRef.Bool()) {
+                                items.add(getString(R.string.CopyFileRef));
+                                options.add(OPTION_COPY_REF);
+                                icons.add(R.drawable.baseline_content_copy_24);
+                            }
                         } else if (selectedObject.isDocument() && !noforwardsOrPaidMedia && !selectedObject.isVoiceOnce() && !selectedObject.isRoundOnce()) {
                             items.add(LocaleController.getString(R.string.SaveToDownloads));
                             options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
                             icons.add(R.drawable.baseline_file_download_24);
+
+                            if (MomoConfig.showCopyFileRef.Bool()) {
+                                items.add(getString(R.string.CopyFileRef));
+                                options.add(OPTION_COPY_REF);
+                                icons.add(R.drawable.baseline_content_copy_24);
+                            }
+                        } else if ((selectedObject.isVideo() || selectedObject.isPhoto()) && !noforwardsOrPaidMedia && !selectedObject.isVoiceOnce() && !selectedObject.isRoundOnce()) {
+                            if (MomoConfig.showCopyFileRef.Bool()) {
+                                items.add(getString(R.string.CopyFileRef));
+                                options.add(OPTION_COPY_REF);
+                                icons.add(R.drawable.baseline_content_copy_24);
+                            }
                         }
                     }
                 } else if (type == 3 && !noforwardsOrPaidMedia) {
@@ -47303,6 +47372,11 @@ public class ChatActivity extends BaseFragment implements
                                 }
                             }
                         }
+                        if (MomoConfig.showCopyFileRef.Bool()) {
+                            items.add(getString(R.string.CopyFileRef));
+                            options.add(OPTION_COPY_REF);
+                            icons.add(R.drawable.baseline_content_copy_24);
+                        }
                     }
                 } else if (type == 5) {
                     items.add(LocaleController.getString(R.string.ApplyLocalizationFile));
@@ -47334,6 +47408,11 @@ public class ChatActivity extends BaseFragment implements
                             items.add(LocaleController.getString(alwaysSaveToDownloads ? R.string.SaveToDownloads : R.string.SaveToGallery));
                             options.add(OPTION_SAVE_TO_GALLERY2);
                             icons.add(alwaysSaveToDownloads ? R.drawable.baseline_file_download_24 : R.drawable.baseline_image_24);
+                        }
+                        if (MomoConfig.showCopyFileRef.Bool()) {
+                            items.add(getString(R.string.CopyFileRef));
+                            options.add(OPTION_COPY_REF);
+                            icons.add(R.drawable.baseline_content_copy_24);
                         }
                         items.add(LocaleController.getString(R.string.SaveToDownloads));
                         options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);

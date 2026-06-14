@@ -265,6 +265,7 @@ public class MomoConfig {
     public static ConfigItem showShareMessages = addConfig("showShareMessages", configTypeBool, CHAT, false);
     public static ConfigItem showMessageHide = addConfig("showMessageHide", configTypeBool, CHAT, false);
     public static ConfigItem showFBan = addConfig("showFBan", configTypeBool, CHAT, false);
+    public static ConfigItem showCopyFileRef = addConfig("showCopyFileRef", configTypeBool, CHAT, false);
 
     public static ConfigItem filterUsers = addConfig("filter_users", configTypeBool, true);
     public static ConfigItem filterContacts = addConfig("filter_contacts", configTypeBool, true);

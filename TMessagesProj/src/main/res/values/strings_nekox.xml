@@ -358,4 +358,7 @@
     <string name="AlwaysTryHevcCodec">Always try to use HEVC when compressing video</string>
     <string name="AlwaysSaveToDownloads">Always save to downloads</string>
     <string name="PermUseInlineBots">Use Inline Bots</string>
+    <string name="CopyFileRef">Copy file ref</string>
+    <string name="CopyFileRefFailed">Failed to copy file reference</string>
+    <string name="CopyFileRefDone">Copied %1$d file(s)</string>
 </resources>

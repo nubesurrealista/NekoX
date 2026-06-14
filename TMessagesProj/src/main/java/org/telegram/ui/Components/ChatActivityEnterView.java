@@ -233,7 +233,6 @@ import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.NekoXConfig;
 import moe.hx030.momogram.parts.MessageTransKt;
 import moe.hx030.momogram.ui.BottomBuilder;
-import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.cc.CCConverter;
 import moe.hx030.momogram.cc.CCTarget;
 import moe.hx030.momogram.transtale.TranslateDb;
@@ -5267,6 +5266,19 @@ public class ChatActivityEnterView extends FrameLayout implements
                     Log.w("030-pgp", "openPGPApp is not set");
                 }
 
+                if (ChatActivity.fileRefClipboard != null && !ChatActivity.fileRefClipboard.isEmpty()) {
+                    ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getContext(), false, true, resourcesProvider);
+                    cell.setTextAndIcon("Send files by ref.", R.drawable.baseline_content_paste_24);
+                    cell.setOnClickListener(v -> {
+                        if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
+                            sendPopupWindow.dismiss();
+                        }
+                        sendFileRefsFromClipboard();
+                    });
+                    cell.setMinimumWidth(AndroidUtilities.dp(196));
+                    sendPopupLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
+                }
+
                 sendPopupLayout.setupRadialSelectors(getThemedColor(Theme.key_dialogButtonSelector));
 
                 sendPopupWindow = new ActionBarPopupWindow(sendPopupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT) {
@@ -5583,6 +5595,17 @@ public class ChatActivityEnterView extends FrameLayout implements
                 });
         } else {
             Log.w("030-pgp", "openPGPApp is not set");
+        }
+
+        if (ChatActivity.fileRefClipboard != null && !ChatActivity.fileRefClipboard.isEmpty()) {
+            Runnable r = () -> {
+                if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
+                    sendPopupWindow.dismiss();
+                }
+                sendFileRefsFromClipboard();
+            };
+            options.add(R.drawable.baseline_content_paste_24, null, "Send files by ref.",
+                    Theme.key_actionBarDefaultSubmenuItemIcon, Theme.key_actionBarDefaultSubmenuItem, r, r);
         }
 
         options.setupSelectors();
@@ -8631,6 +8654,76 @@ public class ChatActivityEnterView extends FrameLayout implements
             return true;
         }
         return false;
+    }
+
+    private void sendFileRefsFromClipboard() {
+        if (ChatActivity.fileRefClipboard == null || ChatActivity.fileRefClipboard.isEmpty()) {
+            return;
+        }
+        if (replyingQuote != null && parentFragment != null && replyingQuote.outdated) {
+            parentFragment.showQuoteMessageUpdate();
+            return;
+        }
+        if (delegate != null) {
+            delegate.beforeMessageSend(null, true, 0);
+        }
+        MessageObject replyToTopMsg = getThreadMessage();
+        if (replyToTopMsg == null && replyingTopMessage != null) {
+            replyToTopMsg = replyingTopMessage;
+        }
+        int validItemsCount = 0;
+        for (int i = 0; i < ChatActivity.fileRefClipboard.size(); i++) {
+            ChatActivity.FileRefClipboardItem item = ChatActivity.fileRefClipboard.get(i);
+            if (item.document != null || item.photo != null) {
+                validItemsCount++;
+            }
+        }
+        boolean groupMedia = validItemsCount > 1 && !DialogObject.isEncryptedDialog(dialog_id);
+        long groupId = 0;
+        int sentItemsCount = 0;
+        for (int i = 0; i < ChatActivity.fileRefClipboard.size(); i++) {
+            ChatActivity.FileRefClipboardItem item = ChatActivity.fileRefClipboard.get(i);
+            SendMessagesHelper.SendMessageParams params;
+            String caption = (messageEditText != null && messageEditText.getText() == null) ? null : messageEditText.getText().toString();
+            if (item.document != null) {
+                String path = FileLoader.getInstance(currentAccount).getPathToAttach(item.document, true).toString();
+                params = SendMessagesHelper.SendMessageParams.of(item.document, null, path, dialog_id, replyingMessageObject, replyToTopMsg, caption, null, null, null, true, 0, 0, 0, item.document, null, false);
+            } else if (item.photo != null) {
+                params = SendMessagesHelper.SendMessageParams.of(item.photo, null, dialog_id, replyingMessageObject, replyToTopMsg, caption, null, null, null, true, 0, 0, 0, item.photo, false);
+            } else {
+                continue;
+            }
+            params.quick_reply_shortcut = parentFragment != null ? parentFragment.quickReplyShortcut : null;
+            params.quick_reply_shortcut_id = parentFragment != null ? parentFragment.getQuickReplyId() : 0;
+            params.payStars = 0;
+            params.monoForumPeer = getSendMonoForumPeerId();
+            params.suggestionParams = getSendMessageSuggestionParams();
+            if (groupMedia) {
+                if (sentItemsCount % 10 == 0) {
+                    groupId = Utilities.random.nextLong();
+                }
+                if (params.params == null) {
+                    params.params = new HashMap<>();
+                }
+                params.params.put("groupId", "" + groupId);
+                if (sentItemsCount % 10 == 9 || sentItemsCount == validItemsCount - 1) {
+                    params.params.put("final", "1");
+                }
+            }
+            applyStoryToSendMessageParams(params);
+            SendMessagesHelper.getInstance(currentAccount).sendMessage(params);
+            sentItemsCount++;
+        }
+        if (delegate != null) {
+            delegate.onMessageSend(null, true, 0, 0, 0);
+        }
+        if (parentFragment != null) {
+            parentFragment.pressedNoPreview = false;
+        }
+        if (messageSendPreview != null) messageSendPreview.dismiss(false);
+        if (messageEditText != null) {
+            messageEditText.setText("");
+        }
     }
 
     public long getSendMonoForumPeerId() {

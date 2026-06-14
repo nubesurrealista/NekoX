@@ -473,7 +473,7 @@ public class MomoChatSettingsActivity extends MomoSettingsBaseActivity implement
         linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
         linearLayout.addView(linearLayoutInviteContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
-        int count = 12;
+        int count = 13;
         for (int a = 0; a < count; a++) {
             TextCheckCell textCell = new TextCheckCell(context);
             switch (a) {
@@ -524,6 +524,9 @@ public class MomoChatSettingsActivity extends MomoSettingsBaseActivity implement
                 case 11: {
                     textCell.setTextAndCheck(LocaleController.getString(R.string.CopyPhotoSticker), MomoConfig.showCopyPhoto.Bool(), false);
                     break;
+                }
+                case 12: {
+                    textCell.setTextAndCheck(LocaleController.getString(R.string.CopyFileRef), MomoConfig.showCopyFileRef.Bool(), false);
                 }
             }
             textCell.setTag(a);
@@ -578,6 +581,10 @@ public class MomoChatSettingsActivity extends MomoSettingsBaseActivity implement
                     }
                     case 11: {
                         textCell.setChecked(MomoConfig.showCopyPhoto.toggleConfigBool());
+                        break;
+                    }
+                    case 12: {
+                        textCell.setChecked(MomoConfig.showCopyFileRef.toggleConfigBool());
                         break;
                     }
                 }
