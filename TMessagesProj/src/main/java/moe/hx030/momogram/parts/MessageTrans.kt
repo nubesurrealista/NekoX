@@ -14,6 +14,7 @@ import moe.hx030.momogram.utils.AlertUtil
 import moe.hx030.momogram.utils.UIUtil
 import moe.hx030.momogram.utils.uDismiss
 import moe.hx030.momogram.utils.uUpdate
+import org.apache.commons.lang3.StringUtils
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
@@ -408,7 +409,9 @@ fun ChatActivity.translateMessages(target: Locale = MomoConfig.translateToLang.S
                     }
                     selectedObject.translated = true
                     selectedObject.messageOwner.translatedPoll = translatedPoll
-                } else {
+                }
+
+                if (selectedObject.messageOwner.decrypted or !StringUtils.isBlank(selectedObject.messageOwner.message)) {
 
                     var originalText =
                         if (selectedObject.messageOwner.decrypted)
