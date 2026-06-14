@@ -157,6 +157,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     private int sendPollsRow;
 
     private int sendStickersRow;
+    private int sendInlineBotsRow;
     private int embedLinksRow;
     private int changeInfoRow;
     private int addUsersRow;
@@ -262,6 +263,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     private boolean openTransitionStarted;
     private FlickerLoadingView flickerLoadingView;
     private View progressBar;
+    private CheckBoxCell sendInlineBotsCell;
 
     public interface ChatUsersActivityDelegate {
         default void didAddParticipantToList(long uid, TLObject participant) {
@@ -363,6 +365,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         sendMessagesRow = -1;
         sendMediaRow = -1;
         sendStickersRow = -1;
+        sendInlineBotsRow = -1;
         sendPollsRow = -1;
         embedLinksRow = -1;
         addUsersRow = -1;
@@ -411,6 +414,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 sendMediaPhotosRow = rowCount++;
                 sendMediaVideosRow = rowCount++;
                 sendMediaStickerGifsRow = rowCount++;
+                sendInlineBotsRow = rowCount++;
                 sendMediaMusicRow = rowCount++;
                 sendMediaFilesRow = rowCount++;
                 sendMediaVoiceMessagesRow = rowCount++;
@@ -871,7 +875,14 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     } else if (position == sendMediaVideosRow) {
                         defaultBannedRights.send_videos = !defaultBannedRights.send_videos;
                     } else if (position == sendMediaStickerGifsRow) {
-                        defaultBannedRights.send_stickers = defaultBannedRights.send_games = defaultBannedRights.send_gifs = defaultBannedRights.send_inline = !defaultBannedRights.send_stickers;
+                        if (defaultBannedRights.send_inline) {
+                            // don't restore send_inline if banned
+                            defaultBannedRights.send_stickers = defaultBannedRights.send_games = defaultBannedRights.send_gifs = !defaultBannedRights.send_stickers;
+                        } else {
+                            defaultBannedRights.send_stickers = defaultBannedRights.send_games = defaultBannedRights.send_gifs = defaultBannedRights.send_inline = !defaultBannedRights.send_stickers;
+                        }
+                    } else if (position == sendInlineBotsRow) {
+                        defaultBannedRights.send_inline = defaultBannedRights.send_games = !defaultBannedRights.send_inline;
                     } else if (position == sendMediaMusicRow) {
                         defaultBannedRights.send_audios = !defaultBannedRights.send_audios;
                     } else if (position == sendMediaFilesRow) {
@@ -1238,7 +1249,14 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                             AndroidUtilities.updateVisibleRows(listView);
                             updateListAnimated(diffCallback);
                         } else if (position == sendStickersRow) {
-                            defaultBannedRights.send_stickers = defaultBannedRights.send_games = defaultBannedRights.send_gifs = defaultBannedRights.send_inline = !defaultBannedRights.send_stickers;
+                            if (defaultBannedRights.send_inline) {
+                                // don't restore send_inline if banned
+                                defaultBannedRights.send_stickers = defaultBannedRights.send_games = defaultBannedRights.send_gifs = !defaultBannedRights.send_stickers;
+                            } else {
+                                defaultBannedRights.send_stickers = defaultBannedRights.send_games = defaultBannedRights.send_gifs = defaultBannedRights.send_inline = !defaultBannedRights.send_stickers;
+                            }
+                        } else if (position == sendInlineBotsRow) {
+                            defaultBannedRights.send_inline = defaultBannedRights.send_games = !defaultBannedRights.send_inline;
                         } else if (position == embedLinksRow) {
                             defaultBannedRights.embed_links = !defaultBannedRights.embed_links;
                         } else if (position == sendPollsRow) {
@@ -3619,7 +3637,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     } else if (position == sendMediaRow) {
                         int sentMediaCount = getSendMediaSelectedCount();
                         checkCell.setTextAndCheck(getString(R.string.UserRestrictionsSendMedia), sentMediaCount > 0, true, animated);
-                        checkCell.setCollapseArrow(String.format(Locale.US, "%d/10", sentMediaCount), !sendMediaExpanded, new Runnable() {
+                        checkCell.setCollapseArrow(String.format(Locale.US, "%d/11", sentMediaCount), !sendMediaExpanded, new Runnable() {
                             @Override
                             public void run() {
                                 boolean checked = !checkCell.isChecked();
@@ -3629,6 +3647,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                         });
                     } else if (position == sendStickersRow) {
                         checkCell.setTextAndCheck(getString(R.string.UserRestrictionsSendStickers), !defaultBannedRights.send_stickers, true, animated);
+                    } else if (position == sendInlineBotsRow) {
+                        checkCell.setTextAndCheck(getString(R.string.PermUseInlineBots), !defaultBannedRights.send_inline, true, animated);
                     } else if (position == embedLinksRow) {
                         checkCell.setTextAndCheck(getString(R.string.UserRestrictionsEmbedLinks), !defaultBannedRights.embed_links, true, animated);
                     } else if (position == sendPollsRow) {
@@ -3703,6 +3723,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                         checkBoxCell.setText(getString(R.string.SendMediaPermissionVideos), "", !defaultBannedRights.send_videos, true, animated);
                     } else if (position == sendMediaStickerGifsRow) {
                         checkBoxCell.setText(getString(R.string.SendMediaPermissionStickersGifs), "", !defaultBannedRights.send_stickers, true, animated);
+                    } else if (position == sendInlineBotsRow) {
+                        checkBoxCell.setText(getString(R.string.PermUseInlineBots), "", !defaultBannedRights.send_inline, true, animated);
                     } else if (position == sendMediaMusicRow) {
                         checkBoxCell.setText(getString(R.string.SendMediaPermissionMusic), "", !defaultBannedRights.send_audios, true, animated);
                     } else if (position == sendMediaFilesRow) {
@@ -3832,7 +3854,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     private boolean isExpandableSendMediaRow(int position) {
         return position == sendMediaPhotosRow || position == sendMediaVideosRow || position == sendMediaStickerGifsRow ||
                 position == sendMediaMusicRow || position == sendMediaFilesRow || position == sendMediaVoiceMessagesRow ||
-                position == sendReactionsRow ||
+                position == sendReactionsRow || position == sendInlineBotsRow ||
                 position == sendMediaVideoMessagesRow || position == sendMediaEmbededLinksRow || position == sendPollsRow;
     }
 
@@ -3952,6 +3974,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             put(++pointer, sendMessagesRow, sparseIntArray);
             put(++pointer, sendMediaRow, sparseIntArray);
             put(++pointer, sendStickersRow, sparseIntArray);
+            put(++pointer, sendInlineBotsRow, sparseIntArray);
             put(++pointer, sendPollsRow, sparseIntArray);
             put(++pointer, embedLinksRow, sparseIntArray);
             put(++pointer, addUsersRow, sparseIntArray);
@@ -4026,6 +4049,9 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             i++;
         }
         if (!bannedRights.send_reactions) {
+            i++;
+        }
+        if (!bannedRights.send_inline) {
             i++;
         }
         return i;
