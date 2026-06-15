@@ -8673,8 +8673,49 @@ public class ChatActivityEnterView extends FrameLayout implements
         return false;
     }
 
-    private void sendFileRefsFromClipboard() {
+    public void sendFileRefsFromClipboard() {
         if (ChatActivity.fileRefClipboard == null || ChatActivity.fileRefClipboard.isEmpty()) {
+            return;
+        }
+        if (editingMessageObject != null) {
+            ChatActivity.FileRefClipboardItem item = null;
+            for (int i = 0; i < ChatActivity.fileRefClipboard.size(); i++) {
+                ChatActivity.FileRefClipboardItem checkItem = ChatActivity.fileRefClipboard.get(i);
+                if (checkItem.document != null || checkItem.photo != null) {
+                    item = checkItem;
+                    break;
+                }
+            }
+            if (item == null) {
+                return;
+            }
+            if (delegate != null) {
+                delegate.beforeMessageSend(null, true, 0);
+            }
+            CharSequence text = messageEditText == null ? "" : messageEditText.getTextToUse();
+            if (editingMessageObject.type != MessageObject.TYPE_EMOJIS) {
+                text = AndroidUtilities.getTrimmedString(text);
+            }
+            CharSequence[] message = new CharSequence[]{text};
+            ArrayList<TLRPC.MessageEntity> entities = MediaDataController.getInstance(currentAccount).getEntities(message, supportsSendingNewEntities());
+            editingMessageObject.editingMessage = message[0];
+            editingMessageObject.editingMessageEntities = entities;
+
+            if (item.document != null) {
+                String path = FileLoader.getInstance(currentAccount).getPathToAttach(item.document, true).toString();
+                SendMessagesHelper.getInstance(currentAccount).editMessage(editingMessageObject, null, null, item.document, path, null, null, false, editingMessageObject.hasMediaSpoilers(), null);
+            } else if (item.photo != null) {
+                SendMessagesHelper.getInstance(currentAccount).editMessage(editingMessageObject, item.photo, null, null, null, null, null, false, editingMessageObject.hasMediaSpoilers(), null);
+            }
+
+            if (delegate != null) {
+                delegate.onMessageSend(null, true, 0, 0, 0);
+            }
+            if (parentFragment != null) {
+                parentFragment.pressedNoPreview = false;
+            }
+            if (messageSendPreview != null) messageSendPreview.dismiss(false);
+            setEditingMessageObject(null, null, false);
             return;
         }
         if (replyingQuote != null && parentFragment != null && replyingQuote.outdated) {

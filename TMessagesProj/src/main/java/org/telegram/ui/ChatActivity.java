@@ -8490,6 +8490,15 @@ public class ChatActivity extends BaseFragment implements
         });
         replyLayout.setOnLongClickListener(v -> {
             if (fieldPanelShown == 1 && editingMessageObject != null) {
+                if (!fileRefClipboard.isEmpty()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity(), getResourceProvider());
+                    builder.setMessage(LocaleController.getString(R.string.AttachCopiedFileRef));
+                    builder.setPositiveButton(LocaleController.getString(R.string.OK), (dialogInterface, i) -> chatActivityEnterView.sendFileRefsFromClipboard());
+                    builder.setTitle(getAppName());
+                    builder.setNegativeButton(LocaleController.getString(R.string.Cancel), (dialogInterface, i) -> scrollToMessageId(editingMessageObject.getId(), 0, true, 0, true, 0));
+                    showDialog(builder.create());
+                    return true;
+                }
                 scrollToMessageId(editingMessageObject.getId(), 0, true, 0, true, 0);
                 return true;
             } else if (messagePreviewParams != null) {
@@ -8607,6 +8616,17 @@ public class ChatActivity extends BaseFragment implements
                     byButtonPress[0] = true;
                     replyLayout.callOnClick();
                 }
+            });
+            button.setOnLongClickListener(v -> {
+                if (!button.isEditButton() && !fileRefClipboard.isEmpty()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity(), getResourceProvider());
+                    builder.setMessage(LocaleController.getString(R.string.AttachCopiedFileRef));
+                    builder.setPositiveButton(LocaleController.getString(R.string.OK), (dialogInterface, n) -> chatActivityEnterView.sendFileRefsFromClipboard());
+                    builder.setTitle(getAppName());
+                    builder.setNegativeButton(LocaleController.getString(R.string.Cancel), (dialogInterface, n) -> scrollToMessageId(editingMessageObject.getId(), 0, true, 0, true, 0));
+                    showDialog(builder.create());
+                }
+                return true;
             });
         }
         searchContainer = null;

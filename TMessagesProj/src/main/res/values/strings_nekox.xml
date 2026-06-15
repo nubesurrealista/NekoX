@@ -362,4 +362,5 @@
     <string name="CopyFileRefFailed">Failed to copy file reference</string>
     <string name="CopyFileRefDone">Copied %1$d file(s)</string>
     <string name="PasteFileRef">Send files by ref</string>
+    <string name="AttachCopiedFileRef">Attach copied file(s) and update message?\n(Note. only the first file could be attached)</string>
 </resources>
