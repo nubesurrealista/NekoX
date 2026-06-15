@@ -5086,6 +5086,23 @@ public class ChatActivityEnterView extends FrameLayout implements
             menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
         }
 
+        // paste copied file ref.
+        if (MomoConfig.showCopyFileRef.Bool() && !ChatActivity.fileRefClipboard.isEmpty()) {
+            cell = new ActionBarMenuSubItem(getContext(), false, true);
+            cell.setTextAndIcon(LocaleController.getString(R.string.PasteFileRef), R.drawable.baseline_content_paste_24);
+
+            ActionBarMenuSubItem finalCell = cell;
+            cell.setOnClickListener(v -> {
+                if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                    menuPopupWindow.dismiss();
+                }
+                sendFileRefsFromClipboard();
+            });
+
+            cell.setMinimumWidth(AndroidUtilities.dp(196));
+            menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
+        }
+
         menuPopupLayout.setupRadialSelectors(Theme.getColor(Theme.key_dialogButtonSelector));
 
         menuPopupWindow = new ActionBarPopupWindow(menuPopupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT);
@@ -5268,7 +5285,7 @@ public class ChatActivityEnterView extends FrameLayout implements
 
                 if (ChatActivity.fileRefClipboard != null && !ChatActivity.fileRefClipboard.isEmpty()) {
                     ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getContext(), false, true, resourcesProvider);
-                    cell.setTextAndIcon("Send files by ref.", R.drawable.baseline_content_paste_24);
+                    cell.setTextAndIcon(LocaleController.getString(R.string.PasteFileRef), R.drawable.baseline_content_paste_24);
                     cell.setOnClickListener(v -> {
                         if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                             sendPopupWindow.dismiss();
@@ -5604,7 +5621,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                 }
                 sendFileRefsFromClipboard();
             };
-            options.add(R.drawable.baseline_content_paste_24, null, "Send files by ref.",
+            options.add(R.drawable.baseline_content_paste_24, null, getString(R.string.PasteFileRef),
                     Theme.key_actionBarDefaultSubmenuItemIcon, Theme.key_actionBarDefaultSubmenuItem, r, r);
         }
 

@@ -361,4 +361,5 @@
     <string name="CopyFileRef">Copy file ref</string>
     <string name="CopyFileRefFailed">Failed to copy file reference</string>
     <string name="CopyFileRefDone">Copied %1$d file(s)</string>
+    <string name="PasteFileRef">Send files by ref</string>
 </resources>
