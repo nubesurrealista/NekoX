@@ -121,6 +121,7 @@ public class MemberRequestsActivity extends BaseFragment {
         });
 
         FrameLayout rootLayout = delegate.getRootLayout();
+        actionBar.setAdaptiveBackground(delegate.getRecyclerView(), false);
         delegate.loadMembers();
 
         return fragmentView = rootLayout;

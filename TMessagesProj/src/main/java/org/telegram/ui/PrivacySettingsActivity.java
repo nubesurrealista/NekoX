@@ -52,6 +52,7 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.tl.TL_account;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -289,6 +290,9 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                 }
             }
         });
+        if (parentLayout != null && parentLayout.isRightLayout()) {
+            actionBar.setBackButtonImage(R.drawable.ic_ab_close);
+        }
 
         listAdapter = new ListAdapter(context);
 

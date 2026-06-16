@@ -164,6 +164,7 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.tl.TL_account;
 import org.telegram.tgnet.tl.TL_bots;
+import org.telegram.tgnet.tl.TL_iv;
 import org.telegram.tgnet.tl.TL_stories;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
@@ -573,8 +574,8 @@ public class ChatActivityEnterView extends FrameLayout implements
             if (isPremiumMode) {
                 canvas.save();
                 int heightRect = dp(26);
-                canvas.translate(0, ((getMeasuredHeight() - heightRect) / 2f) - dp(1));
-                bgRect.set(0, 0f, (float) getMeasuredWidth() - getPaddingEnd(), (float) heightRect);
+                canvas.translate(dp(5), ((getMeasuredHeight() - heightRect) / 2f));
+                bgRect.set(-dp(5), 0f, (float) getMeasuredWidth() - getPaddingEnd(), (float) heightRect);
                 canvas.drawRoundRect(bgRect, heightRect / 2f, heightRect / 2f, gradientPaint);
                 canvas.translate(getMeasuredWidth() - getPaddingEnd() - dp(6) - closeDrawable.getIntrinsicWidth(), dp(5));
                 closeDrawable.draw(canvas);
@@ -588,7 +589,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                 SimpleTextView simpleTextView = (SimpleTextView) child;
                 canvas.save();
                 canvas.scale(0.8f, 0.8f);
-                canvas.translate(-dp(16), dp(5));
+                canvas.translate(-dp(12), dp(6));
                 int oldColor = simpleTextView.getTextPaint().getColor();
                 simpleTextView.getTextPaint().setColor(Color.WHITE);
                 boolean result = super.drawChild(canvas, child, drawingTime);
@@ -3528,13 +3529,13 @@ public class ChatActivityEnterView extends FrameLayout implements
         sendButtonContainer.addView(sendButtonBlockedByTypingView, LayoutHelper.createFrame(DEFAULT_HEIGHT, DEFAULT_HEIGHT, Gravity.RIGHT | Gravity.BOTTOM));
 
         slowModeButton = new SlowModeBtn(context);
-        slowModeButton.setTextSize(18);
+        slowModeButton.setTextSize(16);
         slowModeButton.setVisibility(INVISIBLE);
         slowModeButton.setSoundEffectsEnabled(false);
         slowModeButton.setScaleX(0.1f);
         slowModeButton.setScaleY(0.1f);
         slowModeButton.setAlpha(0.0f);
-        slowModeButton.setPadding(0, 0, dp(10), 0);
+        slowModeButton.setPadding(dp(14), 0, dp(14), 0);
         slowModeButton.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
         slowModeButton.setTextColor(getThemedColor(Theme.key_glass_defaultIcon));
         sendButtonContainer.addView(slowModeButton, LayoutHelper.createFrame(74, DEFAULT_HEIGHT, Gravity.RIGHT | Gravity.BOTTOM));
@@ -4484,7 +4485,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             }
         });
         senderSelectView.setVisibility(GONE);
-        messageEditTextContainer.addView(senderSelectView, LayoutHelper.createFrame(32, 32, Gravity.CENTER_VERTICAL | Gravity.LEFT, 8, 6, 8, 6));
+        messageEditTextContainer.addView(senderSelectView, LayoutHelper.createFrame(32, 32, Gravity.CENTER_VERTICAL | Gravity.LEFT, 4.66f, 4, 4.66f, 4));
     }
 
     private void createBotCommandsMenuButton() {
@@ -5394,10 +5395,20 @@ public class ChatActivityEnterView extends FrameLayout implements
             message.out = true;
             message.peer_id = MessagesController.getInstance(currentAccount).getPeer(dialog_id);
             message.from_id = MessagesController.getInstance(currentAccount).getPeer(UserConfig.getInstance(currentAccount).getClientUserId());
+
             CharSequence[] text = new CharSequence[]{ new SpannableStringBuilder(messageEditText == null ? "" : messageEditText.getTextToUse()) };
-            MessageObject.addLinks(true, text[0]);
-            message.entities.addAll(MediaDataController.getInstance(currentAccount).getEntities(text, true));
-            message.message = text[0].toString();
+            final ArrayList<TL_iv.PageBlock> blocks = new ArrayList<>();
+            MarkdownParser.parse(text[0].toString(), blocks);
+            if (BuildVars.DEBUG_PRIVATE_VERSION && MarkdownParser.isMarkdown(blocks)) {
+                message.flags2 |= TLObject.FLAG_13;
+                message.rich_message = new TL_iv.RichMessage();
+                message.rich_message.blocks = blocks;
+            } else {
+                MessageObject.addLinks(true, text[0]);
+                message.entities.addAll(MediaDataController.getInstance(currentAccount).getEntities(text, true));
+                message.message = text[0].toString();
+            }
+
             if (replyingMessageObject != null && !replyingMessageObject.isTopicMainMessage) {
                 TLRPC.TL_messageReplyHeader reply_to = new TLRPC.TL_messageReplyHeader();
                 if (replyingTopMessage != null) {
@@ -5726,7 +5737,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             }
         });
         botCommandsMenuContainer.setClipToPadding(false);
-        sizeNotifierLayout.addView(botCommandsMenuContainer, 14, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.BOTTOM));
+        sizeNotifierLayout.addView(botCommandsMenuContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.BOTTOM));
         botCommandsMenuContainer.setVisibility(View.GONE);
 
         if (lastBotInfo != null) {
@@ -9783,7 +9794,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         slowModeButton.setVisibility(visible ? VISIBLE : GONE);
         int padding = visible ? dp(slowModeButton.isPremiumMode ? 26 : 16) : 0;
         if (messageEditText != null && messageEditText.getPaddingRight() != padding) {
-            messageEditText.setPadding(0, dp(11), padding, dp(12));
+            messageEditText.setPadding(0, dp(9), padding, dp(10));
         }
     }
 
@@ -11391,8 +11402,11 @@ public class ChatActivityEnterView extends FrameLayout implements
     }
 
     public void setBlockedByStreaming(boolean blocked, boolean animated) {
+        final boolean changed = animatorIsBlockedByStreaming.getValue() != blocked;
         animatorIsBlockedByStreaming.setValue(blocked, animated);
-        checkSendButton(animated);
+        if (changed) {
+            checkSendButton(animated);
+        }
     }
 
     public ValueAnimator animateSendButton(boolean show) {
@@ -11916,103 +11930,105 @@ public class ChatActivityEnterView extends FrameLayout implements
             startX = endX = 0;
         }
 
-        if (wasVisible != isVisible) {
-            ValueAnimator animator = senderSelectView == null ? null : (ValueAnimator) senderSelectView.getTag();
-            if (animator != null) {
-                animator.cancel();
-                senderSelectView.setTag(null);
-            }
+        if (wasVisible == isVisible) {
+            return;
+        }
 
-            if ((isLiveComment || parentFragment != null && parentFragment.getOtherSameChatsDiff() == 0 && parentFragment.fragmentOpened) && animated) {
-                ValueAnimator anim = ValueAnimator.ofFloat(0, 1).setDuration(150);
+        ValueAnimator animator = senderSelectView == null ? null : (ValueAnimator) senderSelectView.getTag();
+        if (animator != null) {
+            animator.cancel();
+            senderSelectView.setTag(null);
+        }
+
+        if ((isLiveComment || parentFragment != null && parentFragment.getOtherSameChatsDiff() == 0 && parentFragment.fragmentOpened) && animated) {
+            ValueAnimator anim = ValueAnimator.ofFloat(0, 1).setDuration(150);
+            if (senderSelectView != null) {
+                senderSelectView.setTranslationX(startX);
+            }
+            messageTextTranslationX = startX;
+            updateMessageTextParams();
+            anim.addUpdateListener(animation -> {
+                final float val = (float) animation.getAnimatedValue();
+                final float tx = startX + (endX - startX) * val;
                 if (senderSelectView != null) {
-                    senderSelectView.setTranslationX(startX);
+                    senderSelectView.setAlpha(startAlpha + (endAlpha - startAlpha) * val);
+                    senderSelectView.setTranslationX(tx);
                 }
-                messageTextTranslationX = startX;
+                emojiButton.setTranslationX(tx);
+                messageTextTranslationX = tx;
                 updateMessageTextParams();
-                anim.addUpdateListener(animation -> {
-                    final float val = (float) animation.getAnimatedValue();
-                    final float tx = startX + (endX - startX) * val;
+            });
+            anim.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    if (isVisible) {
+                        createSenderSelectView();
+                        senderSelectView.setVisibility(VISIBLE);
+                    }
+                    float tx = 0;
                     if (senderSelectView != null) {
-                        senderSelectView.setAlpha(startAlpha + (endAlpha - startAlpha) * val);
-                        senderSelectView.setTranslationX(tx);
+                        senderSelectView.setAlpha(startAlpha);
+                        senderSelectView.setTranslationX(startX);
+                        tx = senderSelectView.getTranslationX();
                     }
                     emojiButton.setTranslationX(tx);
                     messageTextTranslationX = tx;
                     updateMessageTextParams();
-                });
-                anim.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        if (isVisible) {
-                            createSenderSelectView();
-                            senderSelectView.setVisibility(VISIBLE);
-                        }
-                        float tx = 0;
+
+                    if (botCommandsMenuButton != null && botCommandsMenuButton.getTag() == null) {
+                        animationParamsX.clear();
+                    }
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if (!isVisible) {
                         if (senderSelectView != null) {
-                            senderSelectView.setAlpha(startAlpha);
-                            senderSelectView.setTranslationX(startX);
-                            tx = senderSelectView.getTranslationX();
+                            senderSelectView.setVisibility(GONE);
                         }
-                        emojiButton.setTranslationX(tx);
-                        messageTextTranslationX = tx;
+                        emojiButton.setTranslationX(0);
+                        messageTextTranslationX = 0;
                         updateMessageTextParams();
-
-                        if (botCommandsMenuButton != null && botCommandsMenuButton.getTag() == null) {
-                            animationParamsX.clear();
-                        }
                     }
+                }
 
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        if (!isVisible) {
-                            if (senderSelectView != null) {
-                                senderSelectView.setVisibility(GONE);
-                            }
-                            emojiButton.setTranslationX(0);
-                            messageTextTranslationX = 0;
-                            updateMessageTextParams();
-                        }
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    float tx = 0;
+                    if (isVisible) {
+                        createSenderSelectView();
                     }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                        float tx = 0;
-                        if (isVisible) {
-                            createSenderSelectView();
-                        }
-                        if (senderSelectView != null) {
-                            senderSelectView.setVisibility(isVisible ? VISIBLE : GONE);
-                            senderSelectView.setAlpha(endAlpha);
-                            senderSelectView.setTranslationX(endX);
-                            tx = senderSelectView.getTranslationX();
-                        }
-                        emojiButton.setTranslationX(tx);
-                        messageTextTranslationX = tx;
-                        updateMessageTextParams();
-                        requestLayout();
+                    if (senderSelectView != null) {
+                        senderSelectView.setVisibility(isVisible ? VISIBLE : GONE);
+                        senderSelectView.setAlpha(endAlpha);
+                        senderSelectView.setTranslationX(endX);
+                        tx = senderSelectView.getTranslationX();
                     }
-                });
-                anim.start();
-                if (senderSelectView != null) {
-                    senderSelectView.setTag(anim);
+                    emojiButton.setTranslationX(tx);
+                    messageTextTranslationX = tx;
+                    updateMessageTextParams();
+                    requestLayout();
                 }
-            } else {
-                if (isVisible) {
-                    createSenderSelectView();
-                }
-                if (senderSelectView != null) {
-                    senderSelectView.setVisibility(isVisible ? VISIBLE : GONE);
-                    senderSelectView.setTranslationX(endX);
-                }
-                float translationX = isVisible ? endX : 0;
-                emojiButton.setTranslationX(translationX);
-                messageTextTranslationX = translationX;
-                updateMessageTextParams();
-                if (senderSelectView != null) {
-                    senderSelectView.setAlpha(endAlpha);
-                    senderSelectView.setTag(null);
-                }
+            });
+            anim.start();
+            if (senderSelectView != null) {
+                senderSelectView.setTag(anim);
+            }
+        } else {
+            if (isVisible) {
+                createSenderSelectView();
+            }
+            if (senderSelectView != null) {
+                senderSelectView.setVisibility(isVisible ? VISIBLE : GONE);
+                senderSelectView.setTranslationX(endX);
+            }
+            float translationX = isVisible ? endX : 0;
+            emojiButton.setTranslationX(translationX);
+            messageTextTranslationX = translationX;
+            updateMessageTextParams();
+            if (senderSelectView != null) {
+                senderSelectView.setAlpha(endAlpha);
+                senderSelectView.setTag(null);
             }
         }
     }
@@ -13322,7 +13338,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                 stickersExpandedHeight = sizeNotifierLayout.getHeight()
                     - AndroidUtilities.statusBarHeight
                     - AndroidUtilities.navigationBarHeight
-                    - dp(11)
+                    - dp(6)
                     - ActionBar.getCurrentActionBarHeight()
                     - getHeight();
                 if (searchingType == 2) {
@@ -14559,7 +14575,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         int newHeight = originalViewHeight
             - AndroidUtilities.statusBarHeight
             - AndroidUtilities.navigationBarHeight
-            - dp(11)
+            - dp(6)
             - ActionBar.getCurrentActionBarHeight()
             - getHeight();
         if (searchingType == 2) {
@@ -14684,7 +14700,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             stickersExpandedHeight = originalViewHeight
                 - AndroidUtilities.statusBarHeight
                 - AndroidUtilities.navigationBarHeight
-                - dp(11)
+                - dp(6)
                 - ActionBar.getCurrentActionBarHeight()
                 - getHeight();
             if (searchingType == 2) {
@@ -15438,10 +15454,10 @@ public class ChatActivityEnterView extends FrameLayout implements
         } else if (senderSelectView != null && senderSelectView.getVisibility() == View.VISIBLE) {
             int width = senderSelectView.getLayoutParams().width, height = senderSelectView.getLayoutParams().height;
             senderSelectView.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
-            int leftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 10 : 16;
+            int leftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 1 : 7;
             ((MarginLayoutParams) emojiButton.getLayoutParams()).leftMargin = dp(leftMargin) + width;
             if (messageEditText != null) {
-                int editLeftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 59 : 63;
+                int editLeftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 50 : 54;
                 ((MarginLayoutParams) messageEditText.getLayoutParams()).leftMargin = dp(editLeftMargin) + width;
             }
         } else {

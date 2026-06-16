@@ -300,8 +300,6 @@ public class SharedConfig {
     public static boolean raiseToListen = true;
     public static boolean nextMediaTap = true;
     public static boolean recordViaSco = false;
-    public static boolean customTabs = true;
-    public static boolean inappBrowser = true;
     public static boolean adaptableColorInBrowser = true;
     public static boolean onlyLocalInstantView = false;
     public static boolean directShare = true;
@@ -706,8 +704,6 @@ public class SharedConfig {
             raiseToSpeak = preferences.getBoolean("raise_to_speak", false);
             nextMediaTap = preferences.getBoolean("next_media_on_tap", true);
             recordViaSco = preferences.getBoolean("record_via_sco", false);
-            customTabs = preferences.getBoolean("custom_tabs", true);
-            inappBrowser = preferences.getBoolean("inapp_browser", false);
             adaptableColorInBrowser = preferences.getBoolean("adaptableBrowser", false);
             onlyLocalInstantView = preferences.getBoolean("onlyLocalInstantView", BuildVars.DEBUG_PRIVATE_VERSION);
             directShare = preferences.getBoolean("direct_share", true);
@@ -717,7 +713,7 @@ public class SharedConfig {
             hasCameraCache = preferences.contains("cameraCache");
             roundCamera16to9 = true;
             repeatMode = preferences.getInt("repeatMode", 0);
-            fontSize = preferences.getInt("fons_size", AndroidUtilities.isTablet() ? 14 : 12);
+            fontSize = preferences.getInt("fons_size", AndroidUtilities.isTablet() && !AndroidUtilities.isFold() ? 14 : 12);
             fontSizeIsDefault = !preferences.contains("fons_size");
             bubbleRadius = preferences.getInt("bubbleRadius", 3);
             ivFontSize = preferences.getInt("iv_font_size", fontSize);
@@ -847,7 +843,7 @@ public class SharedConfig {
     public static void updateTabletConfig() {
         if (fontSizeIsDefault) {
             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
-            fontSize = preferences.getInt("fons_size", AndroidUtilities.isTablet() ? 14 : 12);
+            fontSize = preferences.getInt("fons_size", AndroidUtilities.isTablet() && !AndroidUtilities.isFold() ? 14 : 12);
             ivFontSize = preferences.getInt("iv_font_size", fontSize);
         }
     }
@@ -1411,22 +1407,6 @@ public class SharedConfig {
 
     public static boolean enabledRaiseTo(boolean speak) {
         return raiseToListen && (!speak || raiseToSpeak);
-    }
-
-    public static void toggleCustomTabs(boolean newValue) {
-        customTabs = newValue;
-        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("custom_tabs", customTabs);
-        editor.apply();
-    }
-
-    public static void toggleInappBrowser() {
-        inappBrowser = !inappBrowser;
-        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("inapp_browser", inappBrowser);
-        editor.apply();
     }
 
     public static void toggleBrowserAdaptableColors() {

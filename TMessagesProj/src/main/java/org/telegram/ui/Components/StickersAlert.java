@@ -397,7 +397,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                     File stickerFile = FileLoader.getInstance(UserConfig.selectedAccount).getPathToAttach(document, true);
                     if (stickerFile != null) {
                         try {
-                            entry.averageDuration = (long) (RLottieDrawable.getDuration(stickerFile.getAbsolutePath(), null) * 1000L);
+                            entry.averageDuration = (long) (RLottieNative.getDuration(stickerFile.getAbsolutePath(), null) * 1000L);
                         } catch (Exception e) {
                             FileLog.e(e);
                         }

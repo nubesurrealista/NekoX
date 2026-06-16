@@ -48,7 +48,7 @@ public class SenderSelectView extends View {
 
     public SenderSelectView(Context context) {
         super(context);
-        radius = MomoConfig.squareAvatar.Bool() ? 0 : 16;
+        radius = MomoConfig.squareAvatar.Bool() ? 0 : 18;
         avatarImage.setRoundRadius(AndroidUtilities.dp(28));
         menuPaint.setStrokeWidth(AndroidUtilities.dp(2));
         menuPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -60,7 +60,7 @@ public class SenderSelectView extends View {
     private void updateColors() {
         backgroundPaint.setColor(Theme.getColor(Theme.key_chat_messagePanelVoiceBackground));
         menuPaint.setColor(Theme.getColor(Theme.key_chat_messagePanelVoicePressed));
-        selectorDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(radius), Color.TRANSPARENT, Theme.getColor(Theme.key_windowBackgroundWhite));
+        selectorDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(radius), Color.TRANSPARENT, Theme.multAlpha(Theme.getColor(Theme.key_windowBackgroundWhite), 0.2f));
         selectorDrawable.setCallback(this);
     }
 
@@ -112,7 +112,7 @@ public class SenderSelectView extends View {
 
         canvas.save();
         menuPaint.setAlpha(alpha);
-        float padding = AndroidUtilities.dp(9) + menuPaint.getStrokeWidth();
+        float padding = AndroidUtilities.dp(10) + menuPaint.getStrokeWidth();
         canvas.drawLine(padding, padding, getWidth() - padding, getHeight() - padding, menuPaint);
         canvas.drawLine(padding, getHeight() - padding, getWidth() - padding, padding, menuPaint);
         canvas.restore();
