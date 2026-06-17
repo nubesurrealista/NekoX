@@ -2956,7 +2956,7 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
             return spannableStringBuilder;
         } else if (richText instanceof TL_iv.textPlain) {
             String plainText = ((TL_iv.textPlain) richText).text;
-            if (!noTranslate && StringUtils.isNotBlank(plainText) && Instance.pages[0].adapter.trans) {
+            if (!noTranslate && StringUtils.isNotBlank(plainText) && getInstance().pages != null && getInstance().pages[0].adapter.trans) {
                 TranslateDb transDb = TranslateDb.currentTarget();
                 plainText = (transDb == null) ? null: transDb.query(plainText);
                 if (plainText == null) {
