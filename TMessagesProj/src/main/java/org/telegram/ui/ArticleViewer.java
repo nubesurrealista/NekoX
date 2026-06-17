@@ -2895,7 +2895,7 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
         return getText(adapter.currentPage, parentView, parentRichText, richText, parentBlock, maxWidth);
     }
     public static CharSequence getText(IArticleViewer parent, WebpageAdapter adapter, View parentView, TL_iv.RichText parentRichText, TL_iv.RichText richText, TL_iv.PageBlock parentBlock, int maxWidth) {
-        return getText(parent, adapter != null ? adapter.currentPage : null, parentView, parentRichText, richText, parentBlock, maxWidth);
+        return getText(parent, adapter != null ? adapter.currentPage : null, parentView, parentRichText, richText, parentBlock, maxWidth, false);
     }
 
     private CharSequence getText(TLRPC.WebPage page, View parentView, TL_iv.RichText parentRichText, TL_iv.RichText richText, TL_iv.PageBlock parentBlock, int maxWidth) {
@@ -2956,7 +2956,7 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
             return spannableStringBuilder;
         } else if (richText instanceof TL_iv.textPlain) {
             String plainText = ((TL_iv.textPlain) richText).text;
-            if (!noTranslate && StringUtils.isNotBlank(plainText) && pages[0].adapter.trans) {
+            if (!noTranslate && StringUtils.isNotBlank(plainText) && Instance.pages[0].adapter.trans) {
                 TranslateDb transDb = TranslateDb.currentTarget();
                 plainText = (transDb == null) ? null: transDb.query(plainText);
                 if (plainText == null) {
@@ -3015,11 +3015,11 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
             }
             return spannableStringBuilder;
         } else if (richText instanceof TL_iv.textSubscript) {
-            return getText(page, parentView, parentRichText, ((TL_iv.textSubscript) richText).text, parentBlock, maxWidth, noTranslate);
+            return getInstance().getText(page, parentView, parentRichText, ((TL_iv.textSubscript) richText).text, parentBlock, maxWidth, noTranslate);
         } else if (richText instanceof TL_iv.textSuperscript) {
-            return getText(page, parentView, parentRichText, ((TL_iv.textSuperscript) richText).text, parentBlock, maxWidth, noTranslate);
+            return getInstance().getText(page, parentView, parentRichText, ((TL_iv.textSuperscript) richText).text, parentBlock, maxWidth, noTranslate);
         } else if (richText instanceof TL_iv.textMarked) {
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getText(page, parentView, parentRichText, ((TL_iv.textMarked) richText).text, parentBlock, maxWidth, noTranslate));
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getInstance().getText(page, parentView, parentRichText, ((TL_iv.textMarked) richText).text, parentBlock, maxWidth, noTranslate));
             MetricAffectingSpan[] innerSpans = spannableStringBuilder.getSpans(0, spannableStringBuilder.length(), MetricAffectingSpan.class);
             if (spannableStringBuilder.length() != 0) {
                 spannableStringBuilder.setSpan(new TextPaintMarkSpan(innerSpans == null || innerSpans.length == 0 ? getTextPaint(parent, parentRichText, richText, parentBlock) : null), 0, spannableStringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -12438,8 +12438,8 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
 
         private static boolean checkIsCocoonSummary(TL_iv.RichText text) {
             if (text == null) return false;
-            if (text instanceof TLRPC.TL_textPlain) {
-                if (((TLRPC.TL_textPlain) text).text.endsWith("Cocoon AI Summary"))
+            if (text instanceof TL_iv.textPlain) {
+                if (((TL_iv.textPlain) text).text.endsWith("Cocoon AI Summary"))
                     return true;
             }
             if (text.text != null && text.text instanceof TL_iv.RichText) {

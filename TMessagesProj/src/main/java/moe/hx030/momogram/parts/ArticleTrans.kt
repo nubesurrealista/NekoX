@@ -8,6 +8,7 @@ import moe.hx030.momogram.transtale.Translator
 import moe.hx030.momogram.utils.AlertUtil
 import moe.hx030.momogram.utils.UIUtil
 import moe.hx030.momogram.utils.uUpdate
+import org.telegram.tgnet.tl.TL_iv
 import java.lang.Runnable
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -27,7 +28,7 @@ fun HashSet<Any>.filterBaseTexts(): HashSet<Any> {
 
             when (item) {
 
-                is TLRPC.TL_textConcat -> {
+                is TL_iv.textConcat -> {
 
                     remove(item)
                     addAll(item.texts)
@@ -83,7 +84,7 @@ fun ArticleViewer.doTransLATE() {
 
             when (item) {
 
-                is TLRPC.RichText -> getText(pages[0].adapter, null, item, item, copy[item]
+                is TL_iv.RichText -> getText(pages[0].adapter, null, item, item, copy[item]
                         ?: copy[item.parentRichText], 1000, true).takeIf { it.isNotBlank() }?.toString()
                 is String -> item
                 else -> null

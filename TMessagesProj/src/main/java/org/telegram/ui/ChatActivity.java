@@ -3203,10 +3203,6 @@ public class ChatActivity extends BaseFragment implements
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.notificationsCountUpdated);
         }
 
-        if (actionBarSearchTags != null) {
-            actionBarSearchTags.attach();
-        }
-
         super.onFragmentCreate();
 
         if (chatMode == MODE_PINNED) {
@@ -3617,9 +3613,6 @@ public class ChatActivity extends BaseFragment implements
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.notificationsCountUpdated);
         }
 
-        if (actionBarSearchTags != null) {
-            actionBarSearchTags.detach();
-        }
         if (chatMode == 0 && AndroidUtilities.isTablet()) {
             getNotificationCenter().postNotificationName(NotificationCenter.openedChatChanged, dialog_id, getTopicId(), true);
         }

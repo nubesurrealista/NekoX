@@ -19570,8 +19570,6 @@ public class MessagesController extends BaseController implements NotificationCe
                             TLRPC.TL_dialogPeer dialogPeer = (TLRPC.TL_dialogPeer) update.peer;
                             did = DialogObject.getPeerDialogId(dialogPeer.peer);
                         } else {
-                            TLRPC.TL_updateDialogPinned update = (TLRPC.TL_updateDialogPinned) baseUpdate;
-                            long did;
                             if (update.peer instanceof TLRPC.TL_dialogPeer) {
                                 TLRPC.TL_dialogPeer dialogPeer = (TLRPC.TL_dialogPeer) update.peer;
                                 did = DialogObject.getPeerDialogId(dialogPeer.peer);

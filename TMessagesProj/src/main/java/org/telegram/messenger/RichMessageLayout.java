@@ -4000,7 +4000,7 @@ public class RichMessageLayout {
                     imageReceiver.setImage(ImageLocation.getForWebFile(webFile), null, null, null, root.messageObject, 0);
                 }
             } else {
-                final String url = AndroidUtilities.formapMapUrl(currentAccount, block.geo.lat, block.geo._long, wDp, hDp, true, zoom, -1);
+                final String url = AndroidUtilities.formapMapUrl(false, block.geo.lat, block.geo._long, wDp, hDp, true, zoom);
                 if (url != null) {
                     imageReceiver.setImage(url, null, null, null, 0);
                 }
