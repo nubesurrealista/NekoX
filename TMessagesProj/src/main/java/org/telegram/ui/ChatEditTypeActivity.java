@@ -642,7 +642,6 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         joinSectionContainer.addView(joinContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         joinContainer.showJoinToSend(info != null && info.linked_chat_id != 0 && !isChannel);
         joinContainer.setFullInfo(this, info);
-        linearLayout.addView(joinContainer);
 
         saveContainer = new LinearLayout(context);
         saveContainer.setOrientation(LinearLayout.VERTICAL);
