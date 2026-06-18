@@ -308,7 +308,7 @@ public class Browser {
             tryTelegraph = false;
             _allowCustom = false;
         }
-        final boolean allowCustom = _allowCustom || MomoConfig.forceAllowChooseBrowser.Bool();
+        final boolean allowCustom = _allowCustom && !MomoConfig.forceAllowChooseBrowser.Bool();
         if (!internalUri && MomoConfig.patchAndCleanupLinks.Bool()) {
             uri = UrlUtil.cleanUrl(uri);
         }
