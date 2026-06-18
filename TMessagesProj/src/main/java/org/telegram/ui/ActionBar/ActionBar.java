@@ -221,8 +221,10 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
         setClipChildren(false);
         glassMode = true;
 
-        final int glassRadius = MomoConfig.unroundedChatView.Bool() ? 0 : dp(23);
-        final int glassPadding = MomoConfig.removeChatViewPadding.Bool() ? 0 : dp(6);
+        final boolean unrounded = MomoConfig.unroundedChatView.Bool(); // this is also kinda used as removeChatViewPadding here for better look
+
+        final int glassRadius = unrounded ? 0 : dp(23);
+        final int glassPadding = unrounded ? 0 : dp(6);
 
         glassDrawable = factory.create(this)
             .setColorProvider(colorProvider)
@@ -240,15 +242,15 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
             .setPadding(glassPadding);
 
         if (menu != null) {
-            menu.setTranslationX(MomoConfig.removeChatViewPadding.Bool() ? 0 : -dp(10));
+            menu.setTranslationX(unrounded ? 0 : -dp(10));
             menu.setGlassMode(true);
         }
         if (actionMode != null) {
-            actionMode.setTranslationX(MomoConfig.removeChatViewPadding.Bool() ? 0 : -dp(10));
+            actionMode.setTranslationX(unrounded ? 0 : -dp(10));
             actionMode.setGlassMode(true);
         }
         if (backButtonImageView != null) {
-            backButtonImageView.setTranslationX(MomoConfig.removeChatViewPadding.Bool() ? 0 : dp(2));
+            backButtonImageView.setTranslationX(unrounded ? 0 : dp(2));
         }
     }
 
@@ -1540,7 +1542,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        int additionalTop = occupyStatusBar ? AndroidUtilities.statusBarHeight - (glassMode ? dp(2) : 0) : 0;
+        int additionalTop = occupyStatusBar ? AndroidUtilities.statusBarHeight - (glassMode && MomoConfig.unroundedChatView.Bool() ? dp(2) : 0) : 0;
         if (prevWidth != getMeasuredWidth()) {
             prevWidth = getMeasuredWidth();
             checkAvatarContainerWidth(animatorAvatarContainerWidth.isAnimating());
@@ -1549,9 +1551,9 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
         int textLeft;
         if (backButtonImageView != null && backButtonImageView.getVisibility() != GONE) {
             backButtonImageView.layout(0, additionalTop, backButtonImageView.getMeasuredWidth(), additionalTop + backButtonImageView.getMeasuredHeight());
-            textLeft = glassMode ? (MomoConfig.removeChatViewPadding.Bool() ? dp(60) : dp(76)) : dp(AndroidUtilities.isTablet() ? 80 : 72);
+            textLeft = glassMode ? (MomoConfig.unroundedChatView.Bool() ? dp(60) : dp(76)) : dp(AndroidUtilities.isTablet() ? 80 : 72);
         } else {
-            textLeft = glassMode ? (MomoConfig.removeChatViewPadding.Bool() ? dp(14) : dp(24)) : dp(AndroidUtilities.isTablet() ? 26 : 18);
+            textLeft = glassMode ? (MomoConfig.unroundedChatView.Bool() ? dp(14) : dp(24)) : dp(AndroidUtilities.isTablet() ? 26 : 18);
         }
 
         if (menu != null && menu.getVisibility() != GONE) {
@@ -2145,7 +2147,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
             visualWidth = Math.max(visualWidth, dp(192));
         }
 
-        final int p = MomoConfig.removeChatViewPadding.Bool() ? 0 : dp(6);
+        final int p = MomoConfig.unroundedChatView.Bool() ? 0 : dp(6);
         final int width = Math.min(getMeasuredWidth() - dp(46) - p * 4 - dp(46), visualWidth);
         if (animated) {
             if (animatorAvatarContainerWidth.getToFactor() != width) {
@@ -2179,7 +2181,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
-        final int p = MomoConfig.removeChatViewPadding.Bool() ? 0 : dp(6);
+        final int p = MomoConfig.unroundedChatView.Bool() ? 0 : dp(6);
         final int s = dp(46);
 
         final float actionModeFactor = getActionModeFactor();
@@ -2188,9 +2190,10 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
         final int menuWidth = hasForcedMenuWidth ? forcedMenuWidth : lerp(defaultMenuWidth, actionMenuWidth, getActionModeFactor());
 
         final boolean hasBackButton = backButtonImageView != null && backButtonImageView.getVisibility() == View.VISIBLE;
+	final boolean fromTopEdge = glassMode && MomoConfig.unroundedChatView.Bool();
 
-        final int t = glassMode ? 0 : getHeight() - (getCurrentActionBarHeight() + s) / 2 - p;
-        final int b = glassMode ? getHeight() : t + s + p * 2;
+        final int t = fromTopEdge ? 0 : getHeight() - (getCurrentActionBarHeight() + s) / 2 - p;
+        final int b = fromTopEdge ? getHeight() : t + s + p * 2;
 
         if (glassDrawable != null) {
             final int menuWidthWithPadding = menuWidth > 0 ? (menuWidth + p) : 0;
