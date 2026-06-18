@@ -1324,7 +1324,7 @@ public class ChatActivity extends BaseFragment implements
     private float switchingFromTopicsProgress;
     private boolean forwarding = false;
     public String cantSendMessage = null;
-    private boolean removeBottomPadding = MomoConfig.removeChatBottomViewPadding.Bool();
+    private boolean removeBottomPadding = MomoConfig.removeChatViewPadding.Bool();
 
     public final static int OPTION_RETRY = 0;
     public final static int OPTION_DELETE = 1;
@@ -2813,7 +2813,7 @@ public class ChatActivity extends BaseFragment implements
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && (SharedConfig.chatBlurEnabled() || MomoConfig.forceBlurInChat.Bool())) {
             scrollableViewNoiseSuppressor = new DownscaleScrollableNoiseSuppressor();
 
-            recommendedAdditionalSizeY = Math.max(0, dp(48) - Math.min(AndroidUtilities.navigationBarHeight, AndroidUtilities.statusBarHeight)) - dp(MomoConfig.removeChatBottomViewPadding.Bool() ? 32 : 0);
+            recommendedAdditionalSizeY = Math.max(0, dp(48) - Math.min(AndroidUtilities.navigationBarHeight, AndroidUtilities.statusBarHeight)) - dp(MomoConfig.removeChatViewPadding.Bool() ? 32 : 0);
 
             glassBackgroundSourceFrostedRenderNode = new BlurredBackgroundSourceRenderNode(navbarContentSourceWallpaper);
             glassBackgroundSourceFrostedRenderNode.setOnDrawablesRelativePositionChangeListener(this::invalidateMergedVisibleBlurredPositionsAndSourcesPositions);
@@ -3383,7 +3383,7 @@ public class ChatActivity extends BaseFragment implements
         }
 
         getMessagesController().openedChat(dialog_id);
-        removeBottomPadding = MomoConfig.removeChatBottomViewPadding.Bool();
+        removeBottomPadding = MomoConfig.removeChatViewPadding.Bool();
         return true;
     }
 
@@ -8842,7 +8842,7 @@ public class ChatActivity extends BaseFragment implements
         });
 
         int btnH = ChatActivityBlurredRoundButton.BUTTON_SIZE;
-        int h = MomoConfig.removeChatBottomViewPadding.Bool() ? btnH : 56;
+        int h = MomoConfig.removeChatViewPadding.Bool() ? btnH : 56;
         chatInputBubbleContainer.addView(bottomChannelButtonsLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, h, Gravity.BOTTOM, 0, 0, 0, (btnH - h) / 2));
 
         bottomOverlayStartButton = new TextView(context) {
@@ -8862,7 +8862,7 @@ public class ChatActivity extends BaseFragment implements
                 invalidate();
             }
         };
-        bottomOverlayStartButton.setBackground(Theme.AdaptiveRipple.filledRect(getThemedColor(Theme.key_featuredStickers_addButton), (MomoConfig.unroundedChatBottomView.Bool() ? 0 : 22)));
+        bottomOverlayStartButton.setBackground(Theme.AdaptiveRipple.filledRect(getThemedColor(Theme.key_featuredStickers_addButton), (MomoConfig.unroundedChatView.Bool() ? 0 : 22)));
         bottomOverlayStartButton.setTextColor(getThemedColor(Theme.key_featuredStickers_buttonText));
         bottomOverlayStartButton.setText(LocaleController.getString(R.string.BotStart2));
         bottomOverlayStartButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
@@ -8872,8 +8872,8 @@ public class ChatActivity extends BaseFragment implements
         bottomOverlayStartButton.setOnClickListener(v -> bottomOverlayChatText.callOnClick());
         bottomOverlayStartButton.setPadding(dp(31), 0, dp(31), 0);
         ScaleStateListAnimator.apply(bottomOverlayStartButton, 0.02f, 1.2f);
-        int m = MomoConfig.removeChatBottomViewPadding.Bool() ? 0 : 3;
-        boolean flatStartButton = MomoConfig.unroundedChatBottomView.Bool() || MomoConfig.removeChatBottomViewPadding.Bool();
+        int m = MomoConfig.removeChatViewPadding.Bool() ? 0 : 3;
+        boolean flatStartButton = MomoConfig.unroundedChatView.Bool() || MomoConfig.removeChatViewPadding.Bool();
         bottomChannelButtonsLayout.getContainer().addView(bottomOverlayStartButton, LayoutHelper.createFrame(flatStartButton ? LayoutHelper.MATCH_PARENT : LayoutHelper.WRAP_CONTENT, 38, Gravity.CENTER, flatStartButton ? 0 : m, m, flatStartButton ? 0 : m, m));
         bottomChannelButtonsLayout.makeViewWrapContent(bottomOverlayStartButton);
 

@@ -33,7 +33,7 @@ import moe.hx030.momogram.MomoConfig;
 
 public class ChatActivityBlurredRoundButton extends FrameLayout implements FactorAnimator.Target {
     public static final int CLICK_ZONE_MARGIN = 6;
-    public static int BUTTON_SIZE = MomoConfig.removeChatBottomViewPadding.Bool() ? 50 : 44;
+    public static int BUTTON_SIZE = MomoConfig.removeChatViewPadding.Bool() ? 50 : 44;
 
     public ChatActivityBlurredRoundButton(Context context) {
         super(context);
@@ -123,9 +123,9 @@ public class ChatActivityBlurredRoundButton extends FrameLayout implements Facto
     private BlurredBackgroundDrawable backgroundDrawable;
     public void setBlurredBackgroundDrawable(BlurredBackgroundDrawable drawable) {
         backgroundDrawable = drawable;
-        if (!MomoConfig.removeChatBottomViewPadding.Bool() || forcePadding)
+        if (!MomoConfig.removeChatViewPadding.Bool() || forcePadding)
             backgroundDrawable.setPadding(dp(CLICK_ZONE_MARGIN));
-        if (!MomoConfig.unroundedChatBottomView.Bool()) {
+        if (!MomoConfig.unroundedChatView.Bool()) {
             backgroundDrawable.setRadius(dp(BUTTON_SIZE / 2f));
         }
     }
@@ -180,7 +180,7 @@ public class ChatActivityBlurredRoundButton extends FrameLayout implements Facto
         Theme.ResourcesProvider resourcesProvider
     ) {
         ChatActivityBlurredRoundButton button;
-        BUTTON_SIZE = MomoConfig.removeChatBottomViewPadding.Bool() ? 50 : 44;
+        BUTTON_SIZE = MomoConfig.removeChatViewPadding.Bool() ? 50 : 44;
 
         final int color = Theme.getColor(Theme.key_glass_defaultIcon, resourcesProvider);
         button = new ChatActivityBlurredRoundButton(context);

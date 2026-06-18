@@ -2666,7 +2666,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             @Override
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-                final int min = DEFAULT_HEIGHT = MomoConfig.removeChatBottomViewPadding.Bool() ? 50 : 44;
+                final int min = DEFAULT_HEIGHT = MomoConfig.removeChatViewPadding.Bool() ? 50 : 44;
                 final int height = Math.max(dp(min), getMeasuredHeight());
                 if (animatorInputFieldHeight.getFactor() > 0) {
                     animatorInputFieldHeight.animateTo(height);
@@ -2764,7 +2764,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                 }
             }
         });
-        int leftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 0 : 2;
+        int leftMargin = MomoConfig.removeChatViewPadding.Bool() ? 0 : 2;
         messageEditTextContainer.addView(emojiButton, LayoutHelper.createFrame(DEFAULT_HEIGHT, DEFAULT_HEIGHT, Gravity.BOTTOM | Gravity.LEFT, leftMargin, 0, 0, 0));
         setEmojiButtonImage(false, false);
 
@@ -3172,7 +3172,7 @@ public class ChatActivityEnterView extends FrameLayout implements
 
             @Override
             protected void dispatchDraw(@NonNull Canvas canvas) {
-                final boolean noBottomPadding = MomoConfig.removeChatBottomViewPadding.Bool();
+                final boolean noBottomPadding = MomoConfig.removeChatViewPadding.Bool();
                 if (!audioVideoButtonContainerForbidden) {
                     float s = 1;
                     if (expandStickersButton != null) {
@@ -3594,7 +3594,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         checkSendButton(false);
         checkChannelRights();
 
-        DEFAULT_HEIGHT = MomoConfig.removeChatBottomViewPadding.Bool() ? 50 : 44;
+        DEFAULT_HEIGHT = MomoConfig.removeChatViewPadding.Bool() ? 50 : 44;
         createMessageEditText();
         if (attachLayout != null && MomoConfig.alwaysShowBotCommandButton.Bool()) {
             createBotButton();
@@ -4524,8 +4524,8 @@ public class ChatActivityEnterView extends FrameLayout implements
                 botCommandsMenuContainer.dismiss();
             }
         });
-        int leftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 2 : 8;
-        int bottomMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 9 : 6;
+        int leftMargin = MomoConfig.removeChatViewPadding.Bool() ? 2 : 8;
+        int bottomMargin = MomoConfig.removeChatViewPadding.Bool() ? 9 : 6;
         messageEditTextContainer.addView(botCommandsMenuButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 32, Gravity.BOTTOM | Gravity.LEFT, leftMargin, 6, 8, bottomMargin));
         AndroidUtilities.updateViewVisibilityAnimated(botCommandsMenuButton, false, 1f, false);
         botCommandsMenuButton.setExpanded(true, false);
@@ -6285,7 +6285,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         final int extraHeightDp = Math.max(0, DEFAULT_HEIGHT - baseHeightDp);
         final int extraTopPaddingDp = extraHeightDp / 2;
         final int extraBottomPaddingDp = extraHeightDp - extraTopPaddingDp;
-        final int leftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 50 : 52;
+        final int leftMargin = MomoConfig.removeChatViewPadding.Bool() ? 50 : 52;
         messageEditText.setPadding(0, dp(9 + extraTopPaddingDp), 0, dp(10 + extraBottomPaddingDp));
         messageEditText.setBackgroundDrawable(null);
         messageEditText.setTextColor(getThemedColor(Theme.key_chat_messagePanelText));
@@ -7172,7 +7172,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         }
     }
 
-    public static int DEFAULT_HEIGHT = MomoConfig.removeChatBottomViewPadding.Bool() ? 50 : 44;
+    public static int DEFAULT_HEIGHT = MomoConfig.removeChatViewPadding.Bool() ? 50 : 44;
 
     private boolean resizeForTopViewLastShow;
     private void resizeForTopView(boolean show) {
@@ -15445,26 +15445,26 @@ public class ChatActivityEnterView extends FrameLayout implements
         int wasHeight = textFieldContainer.getMeasuredHeight();
         if (botCommandsMenuButton != null && botCommandsMenuButton.getTag() != null) {
             botCommandsMenuButton.measure(widthMeasureSpec, heightMeasureSpec);
-            int leftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 4 : 10;
+            int leftMargin = MomoConfig.removeChatViewPadding.Bool() ? 4 : 10;
             ((MarginLayoutParams) emojiButton.getLayoutParams()).leftMargin = dp(leftMargin) + (botCommandsMenuButton == null ? 0 : botCommandsMenuButton.getMeasuredWidth());
             if (messageEditText != null) {
-                int editLeftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 53 : 57;
+                int editLeftMargin = MomoConfig.removeChatViewPadding.Bool() ? 53 : 57;
                 ((MarginLayoutParams) messageEditText.getLayoutParams()).leftMargin = dp(editLeftMargin) + (botCommandsMenuButton == null ? 0 : botCommandsMenuButton.getMeasuredWidth());
             }
         } else if (senderSelectView != null && senderSelectView.getVisibility() == View.VISIBLE) {
             int width = senderSelectView.getLayoutParams().width, height = senderSelectView.getLayoutParams().height;
             senderSelectView.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
-            int leftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 1 : 7;
+            int leftMargin = MomoConfig.removeChatViewPadding.Bool() ? 1 : 7;
             ((MarginLayoutParams) emojiButton.getLayoutParams()).leftMargin = dp(leftMargin) + width;
             if (messageEditText != null) {
-                int editLeftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 50 : 54;
+                int editLeftMargin = MomoConfig.removeChatViewPadding.Bool() ? 50 : 54;
                 ((MarginLayoutParams) messageEditText.getLayoutParams()).leftMargin = dp(editLeftMargin) + width;
             }
         } else {
-            int leftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 0 : 3;
+            int leftMargin = MomoConfig.removeChatViewPadding.Bool() ? 0 : 3;
             ((MarginLayoutParams) emojiButton.getLayoutParams()).leftMargin = dp(leftMargin);
             if (messageEditText != null) {
-                int editLeftMargin = MomoConfig.removeChatBottomViewPadding.Bool() ? 46 : 50;
+                int editLeftMargin = MomoConfig.removeChatViewPadding.Bool() ? 46 : 50;
                 ((MarginLayoutParams) messageEditText.getLayoutParams()).leftMargin = dp(editLeftMargin);
             }
         }
@@ -16103,7 +16103,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             checkBackgroundRect();
             if (isNewDesignSendButton) {
                 checkBackgroundRect();
-                final float r = dpf2(MomoConfig.removeChatBottomViewPadding.Bool() ? 22 : 19);
+                final float r = dpf2(MomoConfig.removeChatViewPadding.Bool() ? 22 : 19);
                 canvas.drawRoundRect(backgroundRect, r, r, backgroundPaint);
             }
 
@@ -16388,7 +16388,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         private final RectF backgroundRect = new RectF();
 
         private void checkBackgroundRect() {
-            final boolean noBottomPadding = MomoConfig.removeChatBottomViewPadding.Bool();
+            final boolean noBottomPadding = MomoConfig.removeChatViewPadding.Bool();
             final float margin = dpf2(3);
             final float height = dpf2(noBottomPadding ? 44 : 38);
             final float width = Math.max(height, dpf2((noBottomPadding ? 13 : 10) * 2) + priceText.getCurrentWidth());

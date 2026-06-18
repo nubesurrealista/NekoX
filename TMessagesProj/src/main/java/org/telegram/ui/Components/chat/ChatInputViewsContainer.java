@@ -37,13 +37,13 @@ public class ChatInputViewsContainer extends FrameLayout {
     private final FrameLayout inputIslandBubbleContainer;
     private final FrameLayout inAppKeyboardBubbleContainer;
 
-    private final boolean removePadding = MomoConfig.removeChatBottomViewPadding.Bool();
+    private final boolean removePadding = MomoConfig.removeChatViewPadding.Bool();
 
     public ChatInputViewsContainer(@NonNull Context context) {
         super(context);
 
-        INPUT_BUBBLE_RADIUS = (MomoConfig.unroundedChatBottomView.Bool() ? 0 : 22);
-        INPUT_KEYBOARD_RADIUS = (MomoConfig.unroundedChatBottomView.Bool() ? 0 : 29);
+        INPUT_BUBBLE_RADIUS = (MomoConfig.unroundedChatView.Bool() ? 0 : 22);
+        INPUT_KEYBOARD_RADIUS = (MomoConfig.unroundedChatView.Bool() ? 0 : 29);
 
         inputIslandBubbleContainer = new FrameLayout(context);
         addView(inputIslandBubbleContainer,
@@ -85,13 +85,13 @@ public class ChatInputViewsContainer extends FrameLayout {
     public void setInputIslandBubbleDrawable(BlurredBackgroundDrawable drawable) {
         blurredBackgroundDrawable = drawable;
         if (!removePadding) blurredBackgroundDrawable.setPadding(dp(7));
-        if (!MomoConfig.unroundedChatBottomView.Bool()) blurredBackgroundDrawable.setRadius(dp(INPUT_BUBBLE_RADIUS));
+        if (!MomoConfig.unroundedChatView.Bool()) blurredBackgroundDrawable.setRadius(dp(INPUT_BUBBLE_RADIUS));
     }
 
     public void setUnderKeyboardBackgroundDrawable(BlurredBackgroundDrawable drawable) {
         underKeyboardBackgroundDrawable = drawable;
         underKeyboardBackgroundDrawable.enableInAppKeyboardOptimization();
-        if (!MomoConfig.unroundedChatBottomView.Bool()) underKeyboardBackgroundDrawable.setRadius(dp(INPUT_KEYBOARD_RADIUS), dp(INPUT_KEYBOARD_RADIUS), 0, 0);
+        if (!MomoConfig.unroundedChatView.Bool()) underKeyboardBackgroundDrawable.setRadius(dp(INPUT_KEYBOARD_RADIUS), dp(INPUT_KEYBOARD_RADIUS), 0, 0);
         underKeyboardBackgroundDrawable.setThickness(dp(32));
         underKeyboardBackgroundDrawable.setIntensity(0.4f);
     }
@@ -171,7 +171,7 @@ public class ChatInputViewsContainer extends FrameLayout {
         checkBlurredHeight(false);
         checkInAppKeyboardChild();
 
-        if (underKeyboardBackgroundDrawable != null && !MomoConfig.unroundedChatBottomView.Bool()) {
+        if (underKeyboardBackgroundDrawable != null && !MomoConfig.unroundedChatView.Bool()) {
             int leftBottomRadius = 0;
             int rightBottomRadius = 0;
             if (Build.VERSION.SDK_INT >= 31) {

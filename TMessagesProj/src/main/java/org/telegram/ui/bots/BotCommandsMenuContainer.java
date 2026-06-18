@@ -290,8 +290,8 @@ public class BotCommandsMenuContainer extends FrameLayout implements NestedScrol
 
     public void setBackgroundDrawable(@NonNull BlurredBackgroundDrawable backgroundDrawable) {
         this.backgroundDrawable = backgroundDrawable;
-        if (!MomoConfig.unroundedChatBottomView.Bool()) this.backgroundDrawable.setRadius(dp(22));
-        if (!MomoConfig.removeChatBottomViewPadding.Bool()) this.backgroundDrawable.setPadding(dp(5));
+        if (!MomoConfig.unroundedChatView.Bool()) this.backgroundDrawable.setRadius(dp(22));
+        if (!MomoConfig.removeChatViewPadding.Bool()) this.backgroundDrawable.setPadding(dp(5));
 
         listView.setOutlineProvider(backgroundDrawable.getViewOutlineProvider());
     }

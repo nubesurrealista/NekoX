@@ -303,9 +303,9 @@
     <string name="ConfirmBanAllJoinRequests">அனைத்து சேர கோரிக்கைகளையும் தடை செய்யவா?</string>
     <string name="PasskeyWarning">குறிப்பு. அதிகாரப்பூர்வமற்ற அமலாக்கம்</string>
     <string name="PasskeyWarningDesc">கடவுச் சாவியை செயல்படுத்துவது உத்தியோகபூர்வ டெலிகிராமில் இருந்து வேறுபட்டது, இது குறைவான பாதுகாப்பானது, தொடர்வதன் மூலம், அபாயங்களைப் புரிந்துகொண்டு ஏற்றுக்கொள்கிறீர்கள் என்பதை ஒப்புக்கொள்கிறீர்கள்.</string>
-    <string name="UnroundedChatBottomView">வட்டமிடப்படாத அரட்டையின் கீழ்ப் பார்வை</string>
+    <string name="UnroundedChatView">வட்டமிடப்படாத அரட்டை பார்வை</string>
     <string name="DisableEmbeddedPlayer">உட்பொதிக்கப்பட்ட வெப் பிளேயரை முடக்கு</string>
-    <string name="RemoveChatBottomViewPadding">அரட்டையின் கீழ் பார்வையில் இருந்து திணிப்பை அகற்றவும்</string>
+    <string name="RemoveChatViewPadding">அரட்டை பார்வையில் இருந்து திணிப்பை அகற்றவும்</string>
     <string name="BufferCleaner">பயன்பாட்டிற்குப் பிறகு நினைவகத்தை விடுவிக்க பஃபர் கிளீனரைப் பயன்படுத்தவும்</string>
     <string name="BufferCleanerDesc">நினைவக கசிவுகளை பெருமளவில் குறைக்கலாம், ஆனால் செயல்திறன் சிக்கல்கள் மற்றும் பிழைகள் ஏற்படலாம்.</string>
     <string name="AutoTestProxy">கிடைப்பதற்கான தானியங்கு சோதனை பதிலாள்</string>

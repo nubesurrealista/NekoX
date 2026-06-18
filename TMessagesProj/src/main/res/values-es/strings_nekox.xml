@@ -304,9 +304,9 @@
     <string name="ConfirmBanAllJoinRequests">¿Prohibir todas las solicitudes de unión?</string>
     <string name="PasskeyWarning">Nota. Implementación no oficial</string>
     <string name="PasskeyWarningDesc">La implementación del passkey es diferente a la de Telegram oficial, lo cual es menos seguro, al continuar, aceptas que entiendes y asumes los riesgos.</string>
-    <string name="UnroundedChatBottomView">Vista inferior del chat sin redondear</string>
+    <string name="UnroundedChatView">Vista del chat sin redondear</string>
     <string name="DisableEmbeddedPlayer">Deshabilitar reproductor web integrado</string>
-    <string name="RemoveChatBottomViewPadding">Eliminar el relleno de la vista inferior del chat</string>
+    <string name="RemoveChatViewPadding">Eliminar el relleno de la vista del chat</string>
     <string name="BufferCleaner">Usar limpiador de búfer para liberar memoria después de su uso</string>
     <string name="BufferCleanerDesc">Mitiga en gran medida las fugas de memoria, pero puede causar problemas de rendimiento y errores.</string>
     <string name="AutoTestProxy">Probar automáticamente la disponibilidad del proxy</string>

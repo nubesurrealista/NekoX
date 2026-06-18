@@ -234,8 +234,8 @@ public class MomoConfig {
     public static ConfigItem showChannelMsgFwdCount = addConfig(R.string.ShowChannelMsgFwdCount, "ShowChannelMsgFwdCount", configTypeBool, APPEARANCE, true);
     public static ConfigItem useEmojiForEdited = addConfig(R.string.UseEmojiForEdited, "UseEmojiForEdited", configTypeBool, APPEARANCE, false);
     public static ConfigItem ignoreTopicTabView = addConfig(R.string.IgnoreTopicTabView, "IgnoreTopicTabView", configTypeBool, APPEARANCE, false);
-    public static ConfigItem unroundedChatBottomView = addConfig(R.string.UnroundedChatBottomView, "UnroundedChatButtomView", configTypeBool, APPEARANCE, false);
-    public static ConfigItem removeChatBottomViewPadding = addConfig(R.string.RemoveChatBottomViewPadding, "RemoveChatBottomViewPadding", configTypeBool, APPEARANCE, false);
+    public static ConfigItem unroundedChatView = addConfig(R.string.UnroundedChatView, "UnroundedChatView", configTypeBool, APPEARANCE, false);
+    public static ConfigItem removeChatViewPadding = addConfig(R.string.RemoveChatViewPadding, "RemoveChatViewPadding", configTypeBool, APPEARANCE, false);
     public static ConfigItem hideBottomNavTabs = addConfig(R.string.HideBottomNavTabs, "HideBottomNavTabs", configTypeBool, APPEARANCE, false);
 
     public static ConfigItem overrideForumStyle = addConfig(R.string.OverrideForumStyle, "OverrideForumStyle", configTypeInt, APPEARANCE, 0);

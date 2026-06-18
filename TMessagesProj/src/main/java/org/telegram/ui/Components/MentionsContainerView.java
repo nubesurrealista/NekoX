@@ -950,9 +950,9 @@ public class MentionsContainerView extends FrameLayout implements NotificationCe
 
     public void setBackgroundDrawable(@NonNull BlurredBackgroundDrawable backgroundDrawable) {
         this.backgroundDrawable = backgroundDrawable;
-        if (!MomoConfig.unroundedChatBottomView.Bool())
+        if (!MomoConfig.unroundedChatView.Bool())
             this.backgroundDrawable.setRadius(dp(22));
-        if (!MomoConfig.removeChatBottomViewPadding.Bool())
+        if (!MomoConfig.removeChatViewPadding.Bool())
             this.backgroundDrawable.setPadding(dp(5));
 
         checkListViewPadding();

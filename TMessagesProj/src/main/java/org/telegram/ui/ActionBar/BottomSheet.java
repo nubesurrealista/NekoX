@@ -1202,7 +1202,7 @@ public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
 
         Rect padding = new Rect();
         internalBackgroundColor = getThemedColor(Theme.key_dialogBackground);
-        if (MomoConfig.unroundedChatBottomView.Bool()) {
+        if (MomoConfig.unroundedChatView.Bool()) {
             shadowDrawable = new ColorDrawable(internalBackgroundColor);
         } else {
             shadowDrawable = context.getResources().getDrawable(R.drawable.sheet_shadow_round).mutate();

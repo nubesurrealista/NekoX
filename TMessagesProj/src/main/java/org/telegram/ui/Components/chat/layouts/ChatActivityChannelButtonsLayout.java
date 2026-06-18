@@ -83,7 +83,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
 
         container = new FrameLayout(context);
         container.setClipToOutline(true);
-        if (!MomoConfig.unroundedChatBottomView.Bool()) {
+        if (!MomoConfig.unroundedChatView.Bool()) {
             container.setOutlineProvider(ViewOutlineProviderImpl.boundsWithPaddingRoundRect(0, dp(22)));
         }
         addView(container, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 44, Gravity.CENTER_VERTICAL));
@@ -147,7 +147,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
                     onClickListeners[buttonId].onClick(v);
                 }
             });
-            int edge = MomoConfig.removeChatBottomViewPadding.Bool() ? ChatActivityBlurredRoundButton.BUTTON_SIZE : 56;
+            int edge = MomoConfig.removeChatViewPadding.Bool() ? ChatActivityBlurredRoundButton.BUTTON_SIZE : 56;
             addView(button, LayoutHelper.createFrame(edge, edge));
 
             buttonHolders[buttonId] = new ButtonHolder(button, visibilityAnimator);
@@ -270,8 +270,8 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
 
     private void checkContainerPaddings(boolean canRequestLayout) {
         int buttonSize = ChatActivityBlurredRoundButton.BUTTON_SIZE;
-        int extra = MomoConfig.removeChatBottomViewPadding.Bool() ? 0 : 10;
-        int padding = MomoConfig.removeChatBottomViewPadding.Bool() ? 0 : 7;
+        int extra = MomoConfig.removeChatViewPadding.Bool() ? 0 : 10;
+        int padding = MomoConfig.removeChatViewPadding.Bool() ? 0 : 7;
         int paddingLeft = dp(padding), paddingRight = dp(padding);
         for (final int buttonId : buttonsOrderLeft) {
             final ButtonHolder holder = buttonHolders[buttonId];
@@ -301,7 +301,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
     }
 
     private void checkButtonsPositionsAndVisibility() {
-        boolean removePadding = MomoConfig.removeChatBottomViewPadding.Bool();
+        boolean removePadding = MomoConfig.removeChatViewPadding.Bool();
         int buttonSize = ChatActivityBlurredRoundButton.BUTTON_SIZE;
         totalWidthLeft = 0;
         totalWidthRight = 0;
@@ -364,7 +364,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
         }
 
         final float wrapping = animatorWrappingButton.getFloatValue();
-        final boolean compactWrapping = MomoConfig.unroundedChatBottomView.Bool() || MomoConfig.removeChatBottomViewPadding.Bool();
+        final boolean compactWrapping = MomoConfig.unroundedChatView.Bool() || MomoConfig.removeChatViewPadding.Bool();
         if (wrapping > 0 && getMeasuredWidth() > 0) {
             float left = getMeasuredWidth(), right = 0;
             for (int i = 0; i < getContainer().getChildCount(); ++i) {
@@ -444,8 +444,8 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
     @Override
     protected void dispatchDraw(@NonNull Canvas canvas) {
         final int accentAlpha = (int) (255 * totalVisibilityFactor * animatorCenterAccentBackground.getFloatValue());
-        final boolean compactWrapping = MomoConfig.unroundedChatBottomView.Bool() || MomoConfig.removeChatBottomViewPadding.Bool();
-        final boolean removePadding = MomoConfig.removeChatBottomViewPadding.Bool();
+        final boolean compactWrapping = MomoConfig.unroundedChatView.Bool() || MomoConfig.removeChatViewPadding.Bool();
+        final boolean removePadding = MomoConfig.removeChatViewPadding.Bool();
         final int offset = (removePadding ? 0 : dp(9));
         final int horizontalInset = compactWrapping ? 0 : dp(10);
         if (accentAlpha > 0) {
@@ -457,7 +457,7 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
             );
             backgroundAccentPaint.setColor(accentColor);
             backgroundAccentPaint.setAlpha(accentAlpha);
-            if (!MomoConfig.unroundedChatBottomView.Bool()) {
+            if (!MomoConfig.unroundedChatView.Bool()) {
                 canvas.drawRoundRect(tmpRect, dp(19), dp(19), backgroundAccentPaint);
             } else {
                 canvas.drawRect(tmpRect, backgroundAccentPaint);

@@ -309,9 +309,9 @@
     <string name="ConfirmBanAllJoinRequests">Заблокировать все заявки на вступление?</string>
     <string name="PasskeyWarning">Примечание. Неофициальная реализация</string>
     <string name="PasskeyWarningDesc">Реализация ключа доступа отличается от официального приложения Telegram, что снижает уровень безопасности. Продолжая, вы подтверждаете, что понимаете и принимаете на себя связанные с этим риски.</string>
-    <string name="UnroundedChatBottomView">Неокруглённый вид чата снизу</string>
+    <string name="UnroundedChatView">Неокруглённый вид чата</string>
     <string name="DisableEmbeddedPlayer">Отключить встроенный веб-плеер</string>
-    <string name="RemoveChatBottomViewPadding">Убрать отступы в нижней части окна чата</string>
+    <string name="RemoveChatViewPadding">Убрать отступы в окне чата</string>
     <string name="BufferCleaner">Очиститель буфера для освобождения памяти</string>
     <string name="BufferCleanerDesc">Значительно снижает утечки памяти, но может привести к проблемам с производительностью и появлению ошибок.</string>
     <string name="AutoTestProxy">Автопроверка прокси на доступность</string>

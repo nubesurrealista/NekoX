@@ -297,7 +297,7 @@
     <string name="SecretChatReqConfirm">接受加密对话需手动确认</string>
     <string name="DumpThreads">导出所有进程</string>
     <string name="ResetDismissedClientWarnings">重置手动忽略的应用警告</string>
-    <string name="UnroundedChatBottomView">聊天底部控件使用方形样式</string>
+    <string name="UnroundedChatView">聊天控件使用方形样式</string>
     <string name="ProfileActionCircleBtn">个人资料操作按钮改为圆形样式</string>
     <string name="AutoDecryptPGPMsg">自动解密 PGP 加密消息</string>
     <string name="ScanQrCodeFromChatList">对话顶栏显示扫描二维码按钮</string>
@@ -322,7 +322,7 @@
     <string name="ConfirmBanAllJoinRequests">是否拒绝所有加入申请？</string>
     <string name="PasskeyWarning">注意：非官方方法</string>
     <string name="PasskeyWarningDesc">该通行密钥设置方式不同于官方版Telegram，存在安全风险。如果您继续使用，则代表已理解并同意承担相关风险。</string>
-    <string name="RemoveChatBottomViewPadding">移除聊天底部控件的间隙</string>
+    <string name="RemoveChatViewPadding">移除聊天控件的间隙</string>
     <string name="DisableSessionChecker">禁用活动会话检测</string>
     <string name="DisableSessionCheckerDesc">登录未知客户端时禁止提示</string>
     <string name="MaliciousClientReasonClosedSource">闭源客户端</string>

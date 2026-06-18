@@ -304,9 +304,9 @@
     <string name="ConfirmBanAllJoinRequests">Larang semua permintaan bergabung?</string>
     <string name="PasskeyWarning">Catatan. Penerapan Tidak resmi</string>
     <string name="PasskeyWarningDesc">Penerapan kunci akses ini berbeda dengan Telegram resmi, yang kurang aman. Dengan melanjutkan, Anda setuju bahwa Anda memahami dan menerima risiko yang ada.</string>
-    <string name="UnroundedChatBottomView">Tampilan bawah obrolan yang tidak bulat</string>
+    <string name="UnroundedChatView">Tampilan obrolan yang tidak bulat</string>
     <string name="DisableEmbeddedPlayer">Nonaktifkan pemutar web tertanam</string>
-    <string name="RemoveChatBottomViewPadding">Hapus pembatas dari tampilan bagian bawah obrolan</string>
+    <string name="RemoveChatViewPadding">Hapus pembatas dari tampilan obrolan</string>
     <string name="BufferCleaner">Gunakan pembersih buffer untuk mengosongkan memori setelah digunakan</string>
     <string name="BufferCleanerDesc">Sebagian besar mengurangi kebocoran memori, tetapi dapat menyebabkan masalah kinerja dan gangguan.</string>
     <string name="AutoTestProxy">Tes otomatis untuk ketersediaan proksi</string>

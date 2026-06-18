@@ -182,8 +182,8 @@ public class MomoAppearanceSettingsActivity extends MomoSettingsBaseActivity {
     private final AbstractConfigCell alwaysLabelAnonAdminRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.alwaysLabelAnonAdmin));
     private final AbstractConfigCell hideSendAsChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.hideSendAsChannel));
     private final AbstractConfigCell hideChannelBottomMuteUnmuteRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.hideChannelBottomMuteUnmute));
-    private final AbstractConfigCell unroundedChatBottomViewRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.unroundedChatBottomView));
-    private final AbstractConfigCell removeChatBottomViewPaddingRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.removeChatBottomViewPadding));
+    private final AbstractConfigCell unroundedChatViewRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.unroundedChatView));
+    private final AbstractConfigCell removeChatViewPaddingRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.removeChatViewPadding));
     private final AbstractConfigCell showEditTimeInPopupMenuRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.showEditTimeInPopupMenu));
     private final AbstractConfigCell showForwardTimeInPopupMenuRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.showForwardTimeInPopupMenu));
     private final AbstractConfigCell marqueeForLongChatTitlesRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.marqueeForLongChatTitles));

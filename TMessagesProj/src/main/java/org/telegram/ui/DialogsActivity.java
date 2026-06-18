@@ -5287,7 +5287,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     info.setClickable(true);
                 }
             };
-            boolean flag = MomoConfig.removeChatBottomViewPadding.Bool() && MomoConfig.unroundedChatBottomView.Bool();
+            boolean flag = MomoConfig.removeChatViewPadding.Bool() && MomoConfig.unroundedChatView.Bool();
             writeButton.setCircleSize(dp(52), dp(flag ? 42 : 38));
             writeButton.setCirclePadding(dp(7), dp(flag ? 0 : 8));
             writeButton.newCounterPos = true;
