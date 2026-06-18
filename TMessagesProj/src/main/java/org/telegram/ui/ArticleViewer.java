@@ -2956,11 +2956,14 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
             return spannableStringBuilder;
         } else if (richText instanceof TL_iv.textPlain) {
             String plainText = ((TL_iv.textPlain) richText).text;
-            if (!noTranslate && StringUtils.isNotBlank(plainText) && getInstance().pages != null && getInstance().pages[0].adapter.trans) {
+            ArticleViewer av = (ArticleViewer) parent;
+            if (!noTranslate && StringUtils.isNotBlank(plainText) && av.pages != null && av.pages[0].adapter.trans) {
                 TranslateDb transDb = TranslateDb.currentTarget();
-                plainText = (transDb == null) ? null: transDb.query(plainText);
-                if (plainText == null) {
+                String resultText = transDb == null ? null : transDb.query(plainText);
+                if (resultText == null) {
                     plainText = ((TL_iv.textPlain) richText).text + " (Not translated)";
+                } else {
+                    plainText = resultText;
                 }
             }
             return plainText;
@@ -3118,7 +3121,7 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
         return "not supported " + richText;
     }
 
-    public static CharSequence getPlainText(TL_iv.RichText richText) {
+    public CharSequence getPlainText(TL_iv.RichText richText) {
         if (richText == null) {
             return "";
         }
@@ -3138,7 +3141,7 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
             return getPlainText(((TL_iv.textUrl) richText).text);
         } else if (richText instanceof TL_iv.textPlain) {
             String plainText = ((TL_iv.textPlain) richText).text;
-            if (plainText != null && Instance != null && Instance.pages != null && Instance.pages.length > 0 && Instance.pages[0] != null && Instance.pages[0].adapter != null && Instance.pages[0].adapter.trans) {
+            if (plainText != null && pages != null && pages.length > 0 && pages[0] != null && pages[0].adapter != null && pages[0].adapter.trans) {
                 TranslateDb transDb = TranslateDb.currentTarget();
                 String plainText2 = (transDb == null) ? null: transDb.query(plainText);
                 if (plainText2 != null) plainText = plainText2;

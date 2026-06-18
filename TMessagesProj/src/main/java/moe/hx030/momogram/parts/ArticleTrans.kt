@@ -32,9 +32,27 @@ fun HashSet<Any>.filterBaseTexts(): HashSet<Any> {
 
                     remove(item)
                     addAll(item.texts)
-
                     hasNext = true
 
+                }
+
+                is TL_iv.textFixed, is TL_iv.textItalic, is TL_iv.textBold,
+                is TL_iv.textUnderline, is TL_iv.textStrike, is TL_iv.textEmail,
+                is TL_iv.textPhone, is TL_iv.textUrl, is TL_iv.textSubscript,
+                is TL_iv.textSuperscript, is TL_iv.textMarked, is TL_iv.textSpoiler,
+                is TL_iv.textAnchor -> {
+
+                    val inner = item.text
+                    if (inner is TL_iv.RichText && inner !== item) {
+                        remove(item)
+                        add(inner)
+                        hasNext = true
+                    }
+
+                }
+
+                is TL_iv.textEmpty, is TL_iv.textImage, is TL_iv.textMath -> {
+                    remove(item)
                 }
 
             }

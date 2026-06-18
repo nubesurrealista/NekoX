@@ -15622,7 +15622,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                     TL_iv.PageBlock prevBlock = page.cached_page.blocks.get(a - 1);
                                     if (prevBlock instanceof TL_iv.pageBlockParagraph) {
                                         TL_iv.pageBlockParagraph pageBlockParagraph = (TL_iv.pageBlockParagraph) prevBlock;
-                                        paragraph = ArticleViewer.getPlainText(pageBlockParagraph.text).toString();
+                                        paragraph = ArticleViewer.getInstance().getPlainText(pageBlockParagraph.text).toString();
                                     }
                                 }
                                 TL_iv.pageBlockList list = (TL_iv.pageBlockList) block;
@@ -15631,7 +15631,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                     if (item instanceof TL_iv.TL_pageListItemText) {
                                         TL_iv.TL_pageListItemText itemText = (TL_iv.TL_pageListItemText) item;
                                         String url = ArticleViewer.getUrl(itemText.text);
-                                        String text = ArticleViewer.getPlainText(itemText.text).toString();
+                                        String text = ArticleViewer.getInstance().getPlainText(itemText.text).toString();
                                         if (TextUtils.isEmpty(url) || TextUtils.isEmpty(text)) {
                                             continue;
                                         }
