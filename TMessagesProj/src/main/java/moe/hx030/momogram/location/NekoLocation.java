@@ -13,19 +13,23 @@ import java.util.Locale;
 import java.util.Set;
 
 public class NekoLocation {
-    public final static Set<Integer> recent = Collections.synchronizedSet(Collections.newSetFromMap(new Cache<>()));
+    public final static Set<Long> recent = Collections.synchronizedSet(Collections.newSetFromMap(new Cache<>()));
+
+    private static long coordHash(double latitude, double longitude) {
+        return Double.doubleToLongBits(latitude) ^ Long.rotateRight(Double.doubleToLongBits(longitude), 1);
+    }
 
     public static void transform(Location location) {
         final double latitude = location.getLatitude();
         final double longitude = location.getLongitude();
 
-        if (recent.contains(new Pair<>(latitude, longitude).hashCode())) return;
+        if (recent.contains(coordHash(latitude, longitude))) return;
 
         final Pair<Double, Double> trans = GeodeticTransform.transform(latitude, longitude);
         location.setLatitude(trans.first);
         location.setLongitude(trans.second);
 
-        recent.add(trans.hashCode());
+        recent.add(coordHash(trans.first, trans.second));
 
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d(String.format(Locale.US, "%.4f,%.4f => %.4f,%.4f", latitude, longitude, trans.first, trans.second));

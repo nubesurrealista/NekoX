@@ -398,7 +398,7 @@ public class MomoConfig {
     public static ConfigItem chatListFontSizeFollowChat = addConfig(R.string.ChatListFontSizeFollowChat, "ChatListFontSizeFollowChat", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem allowDupLogin = addConfig(R.string.AllowDupLogin, "AllowDupLogin", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem alwaysDestroyPhotoViewer = addConfig(R.string.AlwaysDestroyPhotoViewer, "AlwaysDestroyPhotoViewer", configTypeBool, EXPERIMENTAL, true);
-    public static ConfigItem showQuickReconnect = addConfig(R.string.ShowQuickReconnect, "AllowBotInDirectShare", configTypeBool, EXPERIMENTAL, false);
+    public static ConfigItem showQuickReconnect = addConfig(R.string.ShowQuickReconnect, "ShowQuickReconnect", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem autoRestartOnLeak = addConfig(R.string.AutoRestartOnLeak, "AutoRestartOnLeak", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem resumeAudioPlaybackOnLaunch = addConfig(R.string.ResumeAudioPlaybackOnLaunch, "ResumeAudioPlaybackOnLaunch", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem ignoreTranslatorCache = addConfig(R.string.IgnoreTranslatorCache, "IgnoreTranslatorCache", configTypeBool, EXPERIMENTAL, false);

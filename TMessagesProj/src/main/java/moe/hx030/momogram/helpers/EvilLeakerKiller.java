@@ -43,7 +43,7 @@ public class EvilLeakerKiller {
     }
 
     public static int setThreshold(float GB) {
-        return threshold = (int) (GB * 1024576);
+        return threshold = (int) (GB * 1048576);
     }
 
 }

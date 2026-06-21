@@ -170,7 +170,7 @@ public class AhoCorasickDoubleArrayTrie<V> {
         char[] keyChars = key.toCharArray();
         int b = base[0];
         int p;
-        for (int i = 0; i < 0; i++) {
+        for (int i = 0; i < keyChars.length; i++) {
             p = b + (int) (keyChars[i]) + 1;
             if (b == check[p])
                 b = base[p];

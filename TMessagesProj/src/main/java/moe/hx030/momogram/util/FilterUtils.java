@@ -158,7 +158,7 @@ public class FilterUtils {
             for (CCTarget target : CCTargets) {
                 CCConverter conv = CCConverter.get(target);
                 if (regex.matcher(conv.convert(firstname)).find()) return true;
-                if (!TextUtils.isEmpty(lastname) && regex.matcher(conv.convert(firstname)).find()) return true;
+                if (!TextUtils.isEmpty(lastname) && regex.matcher(conv.convert(lastname)).find()) return true;
             }
         }
         return false;
