@@ -24152,7 +24152,7 @@ public class MessagesController extends BaseController implements NotificationCe
         AtomicInteger err = new AtomicInteger();
         AtomicInteger remains = new AtomicInteger(targetChats.size());
         int total = targetChats.size();
-        Set<String> errors = java.util.Collections.synchronizedSet(new HashSet<>());
+        Set<String> errors = Collections.synchronizedSet(new HashSet<>());
 
         for (TLRPC.Chat c : targetChats) {
             banUserFromChat(c.id, user, (response, error) -> {

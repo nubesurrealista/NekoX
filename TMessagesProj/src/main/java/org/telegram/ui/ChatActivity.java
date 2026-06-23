@@ -356,6 +356,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Stack;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -32873,7 +32874,7 @@ public class ChatActivity extends BaseFragment implements
 
                         int r = processSelectedOptionLongClick(cell, options.get(i));
 
-                        if (r == 2) {
+                        if (r > 1) {
                             if (scrimPopupWindow != null) {
                                 scrimPopupWindow.dismiss();
                             }
@@ -35231,6 +35232,65 @@ public class ChatActivity extends BaseFragment implements
             case nkbtn_repeat: {
                 repeatMessage(true);
                 return 2;
+            }
+            case OPTION_DELETE: {
+                long clientUserId = UserConfig.getInstance(currentAccount).getClientUserId();
+                long targetId = selectedObject.getSenderId();
+                boolean isMod = getMessagesController().isOwner(currentChat.id, targetId) || getMessagesController().isAdmin(currentChat.id, targetId);
+                if (clientUserId == targetId || isMod) return 3;
+                TLObject target = selectedObject.getFromPeerObject();
+
+                new AlertDialog.Builder(getContext())
+                        .setTitle(getAppName())
+                        .setMessage(getString(R.string.ConfirmBamHammer))
+                        .setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.OK), (a, i) -> {
+                            // ban
+                            if (target == null) {
+                                BulletinFactory.of(this).createErrorBulletin("ERR_FAILED_TO_GET_TARGET").show();
+                                return;
+                            }
+                            getMessagesController().banUserFromChat(currentChat.id, target, (r, e) -> {
+                                if (e == null) return;
+                                Log.e("030-bam", String.format("attempt to ban %d from dialog %d failed, %d %s", targetId, dialog_id, e.code, e.text));
+                                AndroidUtilities.runOnUIThread(() -> BulletinFactory.of(this).createErrorBulletin(String.format("ERR_BAN_FAILED: %d - %s", e.code, e.text)).show());
+                            });
+
+                            // report
+                            TLRPC.TL_channels_reportSpam req = new TLRPC.TL_channels_reportSpam();
+                            req.channel = MessagesController.getInputChannel(currentChat);
+                            if (target instanceof TLRPC.User) {
+                                req.participant = MessagesController.getInputPeer((TLRPC.User) target);
+                            } else if (target instanceof TLRPC.Chat) {
+                                req.participant = MessagesController.getInputPeer((TLRPC.Chat) target);
+                            }
+                            ArrayList<Integer> msgId = new ArrayList<>();
+                            msgId.add(selectedObject.getId());
+                            req.id = msgId;
+                            ConnectionsManager.getInstance(currentAccount).sendRequest(req, (r, e) -> {
+                                if (e == null) return;
+                                Log.e("030-bam", String.format("attempt to report spam for %d from dialog %d failed, %d %s", targetId, dialog_id, e.code, e.text));
+                                AndroidUtilities.runOnUIThread(() -> BulletinFactory.of(this).createErrorBulletin(String.format("ERR_REPORT_FAILED: %d - %s", e.code, e.text)).show());
+                            });
+
+                            // delete all msgs + reactions
+                            if (target instanceof TLRPC.User) {
+                                MessagesController.getInstance(currentAccount)
+                                        .deleteUserChannelHistory(currentChat, (TLRPC.User) target, null, 0);
+                            } else if (target instanceof TLRPC.Chat) {
+                                MessagesController.getInstance(currentAccount)
+                                        .deleteUserChannelHistory(currentChat, null, (TLRPC.Chat) target, 0);
+                            }
+                            if (target instanceof TLRPC.User) {
+                                MessagesController.getInstance(currentAccount)
+                                        .deleteUserChannelAllReactions(currentChat, (TLRPC.User) target, null);
+                            } else if (target instanceof TLRPC.Chat) {
+                                MessagesController.getInstance(currentAccount)
+                                        .deleteUserChannelAllReactions(currentChat, null, (TLRPC.Chat) target);
+                            }
+                        })
+                        .setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.Cancel), (a, i) -> {})
+                        .show();
+                return 3;
             }
         }
         return 0;
