@@ -33216,7 +33216,9 @@ public class ChatActivity extends BaseFragment implements
             if (keyboardHeight > AndroidUtilities.dp(20)) {
                 totalHeight += keyboardHeight;
             }
-            scrimPopupContainerLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(100), (int) (totalHeight * 0.5f)), View.MeasureSpec.AT_MOST));
+            float cap = MomoConfig.higherMinimumMenuHeight.Bool() ? 0.75f : 0.5f;
+            scrimPopupContainerLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST),
+                    View.MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(100), (int) (totalHeight * cap)), View.MeasureSpec.AT_MOST));
             scrimPopupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);
             scrimPopupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
             scrimPopupWindow.getContentView().setFocusableInTouchMode(true);
@@ -33246,7 +33248,7 @@ public class ChatActivity extends BaseFragment implements
 
                     chatListView.getLocationInWindow(location);
                     minY = dp(24);
-                    maxY = Math.min(location[1] + chatListView.getMeasuredHeight(), AndroidUtilities.displaySize.y) - dp(8) - height - AndroidUtilities.navigationBarHeight;
+                    maxY = Math.min(location[1] + chatListView.getMeasuredHeight(), AndroidUtilities.displaySize.y) - dp(24) - height - AndroidUtilities.navigationBarHeight;
                 } else if (height - backgroundPaddings.top - backgroundPaddings.bottom > AndroidUtilities.dp(240)) {
                     popupY += AndroidUtilities.dp(240) - height;
                 }

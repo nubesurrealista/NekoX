@@ -532,6 +532,7 @@ public class MomoChatSettingsActivity extends MomoSettingsBaseActivity implement
             textCell.setTag(a);
             textCell.setBackground(Theme.getSelectorDrawable(false));
             linearLayoutInviteContainer.addView(textCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+            if (a == (count - 1)) textCell.setDivider(true);
             textCell.setOnClickListener(v2 -> {
                 Integer tag = (Integer) v2.getTag();
                 switch (tag) {
@@ -590,6 +591,13 @@ public class MomoChatSettingsActivity extends MomoSettingsBaseActivity implement
                 }
             });
         }
+
+        TextCheckCell menuHeightCell = new TextCheckCell(context);
+        menuHeightCell.setBackground(Theme.getSelectorDrawable(false));
+        menuHeightCell.setTextAndCheck(LocaleController.getString(R.string.HigherMinimumMenuHeight), MomoConfig.higherMinimumMenuHeight.Bool(), false);
+        menuHeightCell.setOnClickListener(v -> menuHeightCell.setChecked(MomoConfig.higherMinimumMenuHeight.toggleConfigBool()));
+        linearLayoutInviteContainer.addView(menuHeightCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
         builder.setPositiveButton(LocaleController.getString(R.string.OK), null);
         builder.setView(linearLayout);
         showDialog(builder.create());
