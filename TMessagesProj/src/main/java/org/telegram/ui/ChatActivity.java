@@ -33236,7 +33236,7 @@ public class ChatActivity extends BaseFragment implements
             int height = scrimPopupContainerLayout.getMeasuredHeight() + AndroidUtilities.dp(48);
             int popupY;
             int minY = (int) (chatListView.getY() + dp(24));
-            int maxY = totalHeight - height - dp(8) - AndroidUtilities.navigationBarHeight;
+            int maxY = totalHeight - height - dp(24) - AndroidUtilities.navigationBarHeight;
             if (height < totalHeight) {
                 popupY = (int) (chatListView.getY() + v.getTop() + y);
                 if (isInsideContainer) {
@@ -33257,6 +33257,18 @@ public class ChatActivity extends BaseFragment implements
             final int finalPopupX = scrimPopupX = popupX;
             final int finalPopupY = scrimPopupY = popupY;
             scrimPopupContainerLayout.setMaxHeight(maxY + height - popupY);
+            int used = scrimPopupContainerLayout.getPaddingTop() + scrimPopupContainerLayout.getPaddingBottom();
+            for (int i = 0; i < scrimPopupContainerLayout.getChildCount(); i++) {
+                View child = scrimPopupContainerLayout.getChildAt(i);
+                LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) child.getLayoutParams();
+                used += child.getMeasuredHeight() + lp.topMargin + lp.bottomMargin;
+            }
+            int popupAvail = Math.max(AndroidUtilities.dp(48), maxY + height - popupY - used + popupLayout.getMeasuredHeight());
+            if (popupLayout.getMeasuredHeight() > popupAvail) {
+                popupLayout.getLayoutParams().height = popupAvail;
+                popupLayout.requestLayout();
+            }
+
             ReactionsContainerLayout finalReactionsLayout = reactionsLayout;
             Runnable showMenu = () -> {
                 if (scrimPopupWindow == null || fragmentView == null || scrimPopupWindow.isShowing() || !AndroidUtilities.isActivityRunning(getParentActivity())) {
