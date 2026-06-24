@@ -48272,6 +48272,49 @@ public class ChatActivity extends BaseFragment implements
                     options.add(OPTION_DELETE);
                     icons.add(deleteIconRes);
                 }
+
+                if (chatInfo != null && chatInfo.participants != null && chatInfo.participants.participants != null && selectedObject.messageOwner.from_id != null) {
+                    selectedParticipant = null;
+                    long user_id = selectedObject.messageOwner.from_id.user_id;
+                    for (int a = 0; a < chatInfo.participants.participants.size(); a++) {
+                        TLRPC.ChatParticipant participant = chatInfo.participants.participants.get(a);
+                        if (participant.user_id != user_id || participant.user_id == getUserConfig().getCurrentUser().id) {
+                            continue;
+                        }
+
+                        boolean canEditAdmin;
+                        boolean canRestrict;
+                        boolean editingAdmin;
+                        final TLRPC.ChannelParticipant channelParticipant;
+
+                        if (ChatObject.isChannel(currentChat) && (participant instanceof TLRPC.TL_chatChannelParticipant)) {
+                            channelParticipant = ((TLRPC.TL_chatChannelParticipant) participant).channelParticipant;
+                            canEditAdmin = ChatObject.canAddAdmins(currentChat);
+                            if (canEditAdmin && (channelParticipant instanceof TLRPC.TL_channelParticipantCreator || channelParticipant instanceof TLRPC.TL_channelParticipantAdmin && !channelParticipant.can_edit)) {
+                                canEditAdmin = false;
+                            }
+                            canRestrict = ChatObject.canBlockUsers(currentChat) && (!(channelParticipant instanceof TLRPC.TL_channelParticipantAdmin || channelParticipant instanceof TLRPC.TL_channelParticipantCreator) || channelParticipant.can_edit);
+                            editingAdmin = channelParticipant instanceof TLRPC.TL_channelParticipantAdmin;
+                        } else {
+                            canEditAdmin = currentChat.creator;
+                            canRestrict = currentChat.creator;
+                            editingAdmin = participant instanceof TLRPC.TL_chatParticipantAdmin;
+                        }
+
+                        if (canEditAdmin && MomoConfig.showAdminActions.Bool()) {
+                            items.add(editingAdmin ? LocaleController.getString(R.string.EditAdminRights) : LocaleController.getString(R.string.SetAsAdmin));
+                            icons.add(R.drawable.baseline_stars_24);
+                            options.add(nkbtn_editAdmin);
+                            selectedParticipant = participant;
+                        }
+                        if (canRestrict && MomoConfig.showChangePermissions.Bool()) {
+                            items.add(LocaleController.getString(R.string.ChangePermissions));
+                            icons.add(R.drawable.baseline_block_24);
+                            options.add(nkbtn_editPermission);
+                            selectedParticipant = participant;
+                        }
+                    }
+                }
             } else {
                 if (allowChatActions && !isInsideContainer) {
                     items.add(LocaleController.getString(R.string.Reply));
@@ -48424,49 +48467,6 @@ public class ChatActivity extends BaseFragment implements
                 items.add(LocaleController.getString(chatMode == MODE_SAVED && threadMessageId != getUserConfig().getClientUserId() ? R.string.Remove : R.string.Delete));
                 options.add(OPTION_DELETE);
                 icons.add(deleteIconRes);
-
-                if (chatInfo != null && chatInfo.participants != null && chatInfo.participants.participants != null && selectedObject.messageOwner.from_id != null) {
-                    selectedParticipant = null;
-                    long user_id = selectedObject.messageOwner.from_id.user_id;
-                    for (int a = 0; a < chatInfo.participants.participants.size(); a++) {
-                        TLRPC.ChatParticipant participant = chatInfo.participants.participants.get(a);
-                        if (participant.user_id != user_id || participant.user_id == getUserConfig().getCurrentUser().id) {
-                            continue;
-                        }
-
-                        boolean canEditAdmin;
-                        boolean canRestrict;
-                        boolean editingAdmin;
-                        final TLRPC.ChannelParticipant channelParticipant;
-
-                        if (ChatObject.isChannel(currentChat) && (participant instanceof TLRPC.TL_chatChannelParticipant)) {
-                            channelParticipant = ((TLRPC.TL_chatChannelParticipant) participant).channelParticipant;
-                            canEditAdmin = ChatObject.canAddAdmins(currentChat);
-                            if (canEditAdmin && (channelParticipant instanceof TLRPC.TL_channelParticipantCreator || channelParticipant instanceof TLRPC.TL_channelParticipantAdmin && !channelParticipant.can_edit)) {
-                                canEditAdmin = false;
-                            }
-                            canRestrict = ChatObject.canBlockUsers(currentChat) && (!(channelParticipant instanceof TLRPC.TL_channelParticipantAdmin || channelParticipant instanceof TLRPC.TL_channelParticipantCreator) || channelParticipant.can_edit);
-                            editingAdmin = channelParticipant instanceof TLRPC.TL_channelParticipantAdmin;
-                        } else {
-                            canEditAdmin = currentChat.creator;
-                            canRestrict = currentChat.creator;
-                            editingAdmin = participant instanceof TLRPC.TL_chatParticipantAdmin;
-                        }
-
-                        if (canEditAdmin && MomoConfig.showAdminActions.Bool()) {
-                            items.add(editingAdmin ? LocaleController.getString(R.string.EditAdminRights) : LocaleController.getString(R.string.SetAsAdmin));
-                            icons.add(R.drawable.baseline_stars_24);
-                            options.add(nkbtn_editAdmin);
-                            selectedParticipant = participant;
-                        }
-                        if (canRestrict && MomoConfig.showChangePermissions.Bool()) {
-                            items.add(LocaleController.getString(R.string.ChangePermissions));
-                            icons.add(R.drawable.baseline_block_24);
-                            options.add(nkbtn_editPermission);
-                            selectedParticipant = participant;
-                        }
-                    }
-                }
             }
         }
         if (currentEncryptedChat == null) {
