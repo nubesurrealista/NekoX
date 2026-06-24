@@ -33211,7 +33211,12 @@ public class ChatActivity extends BaseFragment implements
                 scrimPopupWindow.setAnimationStyle(0);
             }
             scrimPopupWindow.setFocusable(true);
-            scrimPopupContainerLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST));
+            int totalHeight = contentView.getHeight();
+            int keyboardHeight = contentView.measureKeyboardHeight();
+            if (keyboardHeight > AndroidUtilities.dp(20)) {
+                totalHeight += keyboardHeight;
+            }
+            scrimPopupContainerLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(100), (int) (totalHeight * 0.5f)), View.MeasureSpec.AT_MOST));
             scrimPopupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);
             scrimPopupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
             scrimPopupWindow.getContentView().setFocusableInTouchMode(true);
@@ -33228,15 +33233,10 @@ public class ChatActivity extends BaseFragment implements
                 fragmentView.getLocationInWindow(location);
                 popupX += location[0];
             }
-            int totalHeight = contentView.getHeight();
             int height = scrimPopupContainerLayout.getMeasuredHeight() + AndroidUtilities.dp(48);
-            int keyboardHeight = contentView.measureKeyboardHeight();
-            if (keyboardHeight > AndroidUtilities.dp(20)) {
-                totalHeight += keyboardHeight;
-            }
             int popupY;
             int minY = (int) (chatListView.getY() + dp(24));
-            int maxY = totalHeight - height - dp(8);
+            int maxY = totalHeight - height - dp(8) - AndroidUtilities.navigationBarHeight;
             if (height < totalHeight) {
                 popupY = (int) (chatListView.getY() + v.getTop() + y);
                 if (isInsideContainer) {
@@ -33246,7 +33246,7 @@ public class ChatActivity extends BaseFragment implements
 
                     chatListView.getLocationInWindow(location);
                     minY = dp(24);
-                    maxY = Math.min(location[1] + chatListView.getMeasuredHeight(), AndroidUtilities.displaySize.y) - dp(8) - height;
+                    maxY = Math.min(location[1] + chatListView.getMeasuredHeight(), AndroidUtilities.displaySize.y) - dp(8) - height - AndroidUtilities.navigationBarHeight;
                 } else if (height - backgroundPaddings.top - backgroundPaddings.bottom > AndroidUtilities.dp(240)) {
                     popupY += AndroidUtilities.dp(240) - height;
                 }
