@@ -17,6 +17,7 @@ import android.net.ConnectivityManager;
 import android.os.Build;
 import android.util.Pair;
 import android.util.SparseArray;
+import java.util.concurrent.ConcurrentHashMap;
 
 import androidx.collection.LongSparseArray;
 
@@ -74,7 +75,7 @@ public class DownloadController extends BaseController implements NotificationCe
 
     private HashMap<String, ArrayList<WeakReference<FileDownloadProgressListener>>> loadingFileObservers = new HashMap<>();
     private HashMap<String, ArrayList<MessageObject>> loadingFileMessagesObservers = new HashMap<>();
-    private SparseArray<String> observersByTag = new SparseArray<>();
+    private ConcurrentHashMap<Integer, String> observersByTag = new ConcurrentHashMap<>();
     private boolean listenerInProgress = false;
     private HashMap<String, FileDownloadProgressListener> addLaterArray = new HashMap<>();
     private ArrayList<FileDownloadProgressListener> deleteLaterArray = new ArrayList<>();
