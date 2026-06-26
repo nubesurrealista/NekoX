@@ -6691,7 +6691,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         if (checkUI && messageObject != null && (isRoundVideo || messageObject.isVideo())) {
             checkVideoPlayback(true, null);
         }
-        if (messageObject != null && !messageObject.mediaExists) {
+        if (messageObject != null && !messageObject.mediaExists && !"1".equals(messageObject.messageOwner.params != null ? messageObject.messageOwner.params.get("send_by_ref") : null)) {
             int canDownload = DownloadController.getInstance(currentAccount).canDownloadMediaType(messageObject);
             TLRPC.Document document = messageObject.getDocument();
             boolean loadDocumentFromImageReceiver = MessageObject.isStickerDocument(document) || MessageObject.isAnimatedStickerDocument(document, true) || MessageObject.isGifDocument(document) || MessageObject.isRoundVideoDocument(document) || messageObject.hasVideoQualities();

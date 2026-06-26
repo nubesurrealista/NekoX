@@ -12950,10 +12950,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         canSearchMembers = true;
                         otherItem.addSubItem(search_members, R.drawable.msg_search, LocaleController.getString(R.string.SearchMembers));
                     }
-                    if (!chat.creator && !chat.left && !chat.kicked && !isTopic) {
-                        otherItem.addSubItem(leave_group, R.drawable.baseline_exit_to_app_24, LocaleController.getString(R.string.LeaveMegaMenu));
-                        leaveAction = true;
-                    }
                     if (isTopic && ChatObject.canDeleteTopic(currentAccount, chat, topicId)) {
                         otherItem.addSubItem(delete_topic, R.drawable.msg_delete, LocaleController.getPluralString("DeleteTopics", 1));
                     }

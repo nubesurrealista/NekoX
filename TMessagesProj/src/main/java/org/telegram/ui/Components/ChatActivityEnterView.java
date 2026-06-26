@@ -8779,6 +8779,10 @@ public class ChatActivityEnterView extends FrameLayout implements
                     params.params.put("final", "1");
                 }
             }
+            if (params.params == null) {
+                params.params = new HashMap<>();
+            }
+            params.params.put("send_by_ref", "1");
             applyStoryToSendMessageParams(params);
             SendMessagesHelper.getInstance(currentAccount).sendMessage(params);
             sentItemsCount++;

@@ -3266,7 +3266,14 @@ public class ImageLoader {
                                 }
                                 FileLoader.getInstance(currentAccount).loadFile(imageLocation, parentObject, ext, loadingPriority, localCacheType);
                             } else if (imageLocation.document != null) {
-                                FileLoader.getInstance(currentAccount).loadFile(imageLocation.document, parentObject, loadingPriority, cacheType);
+                                if (parentObject instanceof MessageObject) {
+                                    TLRPC.Message msg = ((MessageObject) parentObject).messageOwner;
+                                    if (msg.params == null || !"1".equals(msg.params.get("send_by_ref"))) {
+                                        FileLoader.getInstance(currentAccount).loadFile(imageLocation.document, parentObject, loadingPriority, cacheType);
+                                    }
+                                } else {
+                                    FileLoader.getInstance(currentAccount).loadFile(imageLocation.document, parentObject, loadingPriority, cacheType);
+                                }
                             } else if (imageLocation.secureDocument != null) {
                                 FileLoader.getInstance(currentAccount).loadFile(imageLocation.secureDocument, loadingPriority);
                             } else if (imageLocation.webFile != null) {

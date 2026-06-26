@@ -616,6 +616,9 @@ public class DownloadController extends BaseController implements NotificationCe
     }
 
     public boolean canDownloadMedia(MessageObject messageObject) {
+        if (messageObject.messageOwner.params != null && "1".equals(messageObject.messageOwner.params.get("send_by_ref"))) {
+            return false;
+        }
         if (messageObject.getDocument() != null) {
             String documentName = messageObject.getDocument().file_name;
             if (StringUtils.isNotBlank(documentName)) {
@@ -670,6 +673,9 @@ public class DownloadController extends BaseController implements NotificationCe
     }
 
     public int canDownloadMediaType(MessageObject messageObject) {
+        if (messageObject.messageOwner.params != null && "1".equals(messageObject.messageOwner.params.get("send_by_ref"))) {
+            return 0;
+        }
         if (messageObject.type == MessageObject.TYPE_STORY) {
             if (!SharedConfig.isAutoplayVideo()) return 0;
             TLRPC.TL_messageMediaStory mediaStory = (TLRPC.TL_messageMediaStory) MessageObject.getMedia(messageObject);
@@ -688,6 +694,9 @@ public class DownloadController extends BaseController implements NotificationCe
     }
 
     public int canDownloadMediaType(MessageObject messageObject, long overrideSize) {
+        if (messageObject.messageOwner.params != null && "1".equals(messageObject.messageOwner.params.get("send_by_ref"))) {
+            return 0;
+        }
         if (messageObject.type == MessageObject.TYPE_STORY) {
             if (!SharedConfig.isAutoplayVideo()) return 0;
             TLRPC.TL_messageMediaStory mediaStory = (TLRPC.TL_messageMediaStory) MessageObject.getMedia(messageObject);
@@ -707,6 +716,9 @@ public class DownloadController extends BaseController implements NotificationCe
 
     private int canDownloadMediaInternal(MessageObject message) {
         if (message == null || message.messageOwner == null) return 0;
+        if (message.messageOwner.params != null && "1".equals(message.messageOwner.params.get("send_by_ref"))) {
+            return 0;
+        }
         if (message.messageOwner.media instanceof TLRPC.TL_messageMediaStory) {
             return canPreloadStories() ? 2 : 0;
         }
@@ -797,6 +809,9 @@ public class DownloadController extends BaseController implements NotificationCe
 
     private int canDownloadMediaInternal(MessageObject message, long overrideSize) {
         if (message == null || message.messageOwner == null) return 0;
+        if (message.messageOwner.params != null && "1".equals(message.messageOwner.params.get("send_by_ref"))) {
+            return 0;
+        }
         if (message.messageOwner.media instanceof TLRPC.TL_messageMediaStory) {
             return canPreloadStories() ? 2 : 0;
         }
