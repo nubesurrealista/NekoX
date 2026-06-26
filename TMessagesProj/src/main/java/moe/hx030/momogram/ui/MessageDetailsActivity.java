@@ -725,7 +725,7 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                         long date = getEditDate();
                         String dateStr = (date == 1) ? "Unknown" :
                                 LocaleController.formatString(R.string.formatDateAtTime,
-                                    LocaleController.getInstance().getFormatterYear().format(new Date(date * 1000)), LocaleController.getInstance().getFormatterDay().format(new Date(date)));
+                                    LocaleController.getInstance().getFormatterYear().format(new Date(date * 1000)), LocaleController.getInstance().getFormatterDay().format(new Date(date * 1000)));
                         textCell.setTextAndValue("Edited", dateStr, divider);
                     } else if (position == forwardRow) {
                         StringBuilder builder = new StringBuilder();
