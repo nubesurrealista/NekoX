@@ -131,6 +131,7 @@ public class MomoAppearanceSettingsActivity extends MomoSettingsBaseActivity {
     }, null));
     private final AbstractConfigCell usePersianCalendarRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.usePersianCalendar, LocaleController.getString(R.string.UsePersiancalendarInfo)));
     private final AbstractConfigCell displayPersianCalendarByLatinRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.displayPersianCalendarByLatin));
+    private final AbstractConfigCell hideFABRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.hideFAB));
     private final AbstractConfigCell newYearRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.newYear));
     private final AbstractConfigCell actionBarDecorationRow = cellGroup.appendCell(new ConfigCellSelectBox(null, MomoConfig.actionBarDecoration, new String[]{
             LocaleController.getString(R.string.DependsOnDate),
