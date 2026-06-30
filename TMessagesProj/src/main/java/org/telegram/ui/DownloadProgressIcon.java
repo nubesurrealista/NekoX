@@ -22,6 +22,8 @@ import org.telegram.ui.Components.RLottieDrawable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import moe.hx030.momogram.MomoConfig;
+
 public class DownloadProgressIcon extends View implements NotificationCenter.NotificationCenterDelegate {
 
     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -56,6 +58,8 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
         downloadImageReceiver.setAutoRepeat(1);
         downloadDrawable.setAutoRepeat(1);
         downloadDrawable.start();
+
+        if (MomoConfig.alwaysShowDownloads.Bool()) forceCompleted();
     }
 
     public void updateColors() {
@@ -172,12 +176,12 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
                 currentListeners.add(progressObserver);
             }
         }
-        if (currentListeners.size() == 0 && !wasDrawn) {
+        if (currentListeners.isEmpty() && !wasDrawn) {
             if (DownloadController.getInstance(currentAccount).hasUnviewedDownloads()) {
                 progress = 1f;
                 currentProgress = 1f;
                 showCompletedIcon = true;
-            } else {
+            } else if (!MomoConfig.alwaysShowDownloads.Bool()) {
                 progress = 0;
                 currentProgress = 0;
                 showCompletedIcon = false;
@@ -186,7 +190,6 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
     }
 
     public void updateProgress() {
-        MessagesStorage messagesStorage = MessagesStorage.getInstance(currentAccount);
         long total = 0;
         long downloaded = 0;
         for (int i = 0; i < currentListeners.size(); i++) {
