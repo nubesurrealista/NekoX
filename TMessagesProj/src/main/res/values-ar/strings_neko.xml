@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">إعدادات نيكو</string>
+    <string name="NekoSettings">إعدادات نيكوجرام</string>
     <string name="IPv6">الاتصال من خلال IPv6</string>
     <string name="MessageMenu">قائمة الرسائل</string>
     <string name="HidePhone">إخفاء رقم هاتفي</string>
@@ -146,7 +146,7 @@
     <string name="enhancedFileLoader">حسن سرعة التحميل</string>
     <string name="mapDriftingFixForGoogleMaps">اصلح انحراف Google Maps في الصين</string>
     <string name="useOSMDroidMap">استخدم OSMDroid Map</string>
-    <string name="MomoSettings">اعدادات مومو</string>
+    <string name="MomoSettings">اعدادات موموجرام</string>
     <string name="DeleteAllFromSelfAlertBefore">تحذير! سيتم **حذف كل رسائلك قبل %s**في هذة المحادثة **لكل** المشاركين.</string>
     <string name="DeleteAllFromSelfBefore">قبل...</string>
     <string name="DeleteAllFromSelfAdmin">بصلاحيات المدير</string>
@@ -157,13 +157,13 @@
     <string name="DisableSendReadStories">تعطيل إرسال مشاهدة القصة</string>
     <string name="IgnoreAllReactions">تجاهل جميع ردود الفعل</string>
     <string name="ConfirmToSendCommandToggle">أكد قبل إرسال الأمر بالنقر</string>
-    <string name="ConfirmToSendCommand">هل أنت متأكد من رغبتك في إرسال هذا الأمر</string>
+    <string name="ConfirmToSendCommand">هل أنت متأكد من رغبتك في إرسال هذا الأمر؟</string>
     <string name="CopyPhoto">نسخ الصورة</string>
     <string name="PhotoCopied">تم نسخ الصورة</string>
     <string name="CopyPhotoAsSticker">نسخ الصورة كملصق</string>
     <string name="IncreasedMaxPhotoResolution">زيادة الحد الأقصى لعُرض دقة الصورة (2560 بكسل)</string>
     <string name="AutoArchiveAndMute">أرشفة الرسائل الخاصة غير المعروفة سابقًا وكتم صوتها تلقائيًا</string>
-    <string name="AutoArchiveAndMuteAbout">الآثار الجانبية: يستخدم هذا قاعدة بيانات محلية للتحقق، وهي ليست دقيقة بنسبة 100%، بمعنى آخر، قد تعطي نتائج إيجابية خاطئة.</string>
+    <string name="AutoArchiveAndMuteAbout">الآثار الجانبية: يستخدم هذا قاعدة بيانات محلية للتحقق، وهي ليست دقيقة بنسبة 100%، بمعنى آخر، قد تعطي نتائج إيجابية خاطئة</string>
     <string name="AutoArchiveAndMuteNoCommonGroupOnly">قم فقط بأرشفة وكتم المستخدمين من المجموعات الغير معروفة (لست عضوا فيها)</string>
     <string name="AutoArchiveAndMuteNoCommonGroupOnlyAbout">يتطلب ذلك الاستعلام من خادم بعيد، وقد ينتج عنه تأخير قبل تنفيذ الإجراء.</string>
     <string name="CloseWebViewWithoutConfirmation">أغلق تطبيق الويب دائمًا دون تأكيد</string>
@@ -215,8 +215,8 @@
     <string name="BlacklistUrlQueryTitle">إضافة معاملات GET المحددة إلى القائمة السوداء</string>
     <string name="Blacklist">القائمة السوداء</string>
     <string name="BlacklistedQuery">المعاملات المحددة المدرجة في القائمة السوداء</string>
-    <string name="BlacklistedQueryAllAdded">جميع معاملات الاستعلام في الرابط الحالي مدرجة بالفعل في القائمة السوداء</string>
-    <string name="BlacklistedQueryRemoved">أُزيلت معاملات الاستعلام التي ألغيتَ تحديدها من القائمة السوداء</string>
+    <string name="BlacklistedQueryAllAdded">جميع معاملات الاستعلام في الرابط الحالي مدرجة بالفعل في القائمة السوداء.</string>
+    <string name="BlacklistedQueryRemoved">أُزيلت معاملات الاستعلام التي ألغيتَ تحديدها من القائمة السوداء.</string>
     <string name="TranslateBeforeSend">الترجمة قبل الإرسال</string>
     <string name="SearchByMessageType">البحث حسب نوع الرسالة</string>
     <string name="MarqueeForLongChatTitles">استخدام التمرير التلقائي لعناوين الدردشات الطويلة</string>
@@ -231,7 +231,7 @@
     <string name="ViewStats">الإحصائيات</string>
     <string name="ConvertGroupAlert">هذا الإجراء لا يمكن التراجع عنه. من المستحيل تحويل المجموعة الفائقة مرة أخرى إلى مجموعة عادية.</string>
     <string name="UploadImage">رفع صورة</string>
-    <string name="DebugMenuDisablePauseMusic">إيقاف إيقاف تشغيل الوسائط مؤقتًا أثناء التسجيل</string>
+    <string name="DebugMenuDisablePauseMusic">إيقاف \"إيقاف تشغيل الوسائط مؤقتًا أثناء التسجيل\"</string>
     <string name="DebugMenuEnablePauseMusic">تفعيل إيقاف التشغيل الوسائط مؤقتًا أثناء التسجيل</string>
     <string name="NoFilesFound">غير موجود</string>
     <string name="NoFilesInfo">هذا المجلد فارغ</string>
