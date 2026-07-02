@@ -351,4 +351,14 @@
     <string name="UseSlowWhisperModel">استخدام نموذج Whisper أكبر</string>
     <string name="UseSlowWhisperModelDesc">يتطلب مقدارًا كبيرًا من الذاكرة (RAM)، عطّل هذا الخيار إذا كان التطبيق يتعطل أثناء تحويل الصوت إلى نص</string>
     <string name="ConfirmDismissAllJoinRequests">رفض جميع طلبات الانضمام؟</string>
+    <string name="UnroundedChatView">عرض الدردشة بدون زوايا مستديرة</string>
+    <string name="RemoveChatViewPadding">إزالة الهوامش الداخلية من عرض الدردشة</string>
+    <string name="PermUseInlineBots">استخدام البوتات المضمنة (inline)</string>
+    <string name="CopyFileRef">نسخ مرجع الملف</string>
+    <string name="CopyFileRefFailed">فشل نسخ مرجع الملف</string>
+    <string name="CopyFileRefDone">تم نسخ %1$d من الملفات</string>
+    <string name="PasteFileRef">إرسال الملفات باستخدام المرجع</string>
+    <string name="AttachCopiedFileRef">هل تريد إرفاق الملفات المنسوخة وتحديث الرسالة؟\n(ملاحظة: لا يمكن إرفاق سوى الملف الأول.)</string>
+    <string name="ConfirmBamHammer">هل تريد حظر المرسل المحدد، وحذف جميع رسائله، والإبلاغ عنه كرسائل مزعجة؟</string>
+    <string name="HigherMinimumMenuHeight">زيادة الحد الأدنى لارتفاع القائمة المنبثقة</string>
 </resources>
