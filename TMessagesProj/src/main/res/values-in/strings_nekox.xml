@@ -352,4 +352,12 @@
     <string name="SendWithoutCaption">Kirim Tanpa Keterangan</string>
     <string name="AlwaysTryHevcCodec">Selalu coba gunakan HEVC saat mengompresi video</string>
     <string name="AlwaysSaveToDownloads">Selalu simpan ke folder Unduhan</string>
+    <string name="PermUseInlineBots">Gunakan Bot Inline</string>
+    <string name="CopyFileRef">Salin berkas referensi</string>
+    <string name="CopyFileRefFailed">Gagal menyalin berkas referensi</string>
+    <string name="CopyFileRefDone">Telah menyalin %1$d berkas</string>
+    <string name="PasteFileRef">Kirim berkas berdasarkan referensi</string>
+    <string name="AttachCopiedFileRef">Lampirkan berkas yang telah disalin dan perbarui pesan?\n(Catatan: hanya berkas pertama yang dapat dilampirkan)</string>
+    <string name="ConfirmBamHammer">Memblokir + menghapus semua pesan + melaporkan sebagai spam untuk pengirim yang dipilih?</string>
+    <string name="HigherMinimumMenuHeight">Tinggi minimum menu popup yang lebih tinggi</string>
 </resources>
