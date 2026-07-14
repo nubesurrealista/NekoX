@@ -284,6 +284,7 @@ public class ChatActivityEnterView extends FrameLayout implements
     public boolean voiceOnce;
     public boolean onceVisible;
     private String translateUUID;
+    private boolean sendAsRichMsg = false;
 
     public void drawRecordedPannel(Canvas canvas) {
         if (getAlpha() == 0 || recordedAudioPanel == null || recordedAudioPanel.getParent() == null || recordedAudioPanel.getVisibility() != View.VISIBLE) {
@@ -5636,6 +5637,18 @@ public class ChatActivityEnterView extends FrameLayout implements
                     Theme.key_actionBarDefaultSubmenuItemIcon, Theme.key_actionBarDefaultSubmenuItem, r, r);
         }
 
+        if (containsSendMessage && (UserConfig.getInstance(currentAccount).isPremium() || UserConfig.getInstance(currentAccount).isBot())) {
+            Runnable r = () -> {
+                if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
+                    sendPopupWindow.dismiss();
+                }
+                sendAsRichMsg = true;
+                sendMessageInternal(true, 0, 0, 0, true);
+            };
+            options.add(R.drawable.msg_send, null, getString(R.string.SendAsRichMsg),
+                    Theme.key_actionBarDefaultSubmenuItemIcon, Theme.key_actionBarDefaultSubmenuItem, r, r);
+        }
+
         options.setupSelectors();
         if (sendWhenOnlineButton != null) {
             TLRPC.User user = parentFragment == null ? null : parentFragment.getCurrentUser();
@@ -8676,6 +8689,20 @@ public class ChatActivityEnterView extends FrameLayout implements
                     setWebPage(null, true);
                     parentFragment.fallbackFieldPanel();
                 }
+                if (sendAsRichMsg) {
+                    ArrayList<TL_iv.PageBlock> richBlocks = new ArrayList<>();
+                    MarkdownParser.parse(text.toString(), richBlocks);
+                    if (MarkdownParser.isMarkdown(richBlocks)) {
+                        SendMessagesHelper.prepareSendingArticle(accountInstance, richBlocks, false, dialog_id,
+                                replyingMessageObject, replyToTopMsg, notify, scheduleDate, scheduleRepeatPeriod,
+                                parentFragment != null ? parentFragment.quickReplyShortcut : null,
+                                parentFragment != null ? parentFragment.getQuickReplyId() : 0,
+                                effectId, getSendMonoForumPeerId(), payStars);
+                        start = end + 1;
+                        continue;
+                    }
+                }
+                sendAsRichMsg = false;
                 SendMessagesHelper.getInstance(currentAccount).sendMessage(params);
                 start = end + 1;
             } while (end != text.length());
