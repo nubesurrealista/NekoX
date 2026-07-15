@@ -35248,6 +35248,7 @@ public class ChatActivity extends BaseFragment implements
                 return 2;
             }
             case OPTION_DELETE: {
+                if (currentChat == null) return 3;
                 long clientUserId = UserConfig.getInstance(currentAccount).getClientUserId();
                 long targetId = selectedObject.getSenderId();
                 boolean isMod = getMessagesController().isOwner(currentChat.id, targetId) || getMessagesController().isAdmin(currentChat.id, targetId);
