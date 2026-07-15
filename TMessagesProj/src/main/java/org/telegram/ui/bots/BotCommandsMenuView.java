@@ -2,6 +2,7 @@ package org.telegram.ui.bots;
 
 import static org.telegram.messenger.LocaleController.getString;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,6 +12,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.provider.Settings;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -251,6 +253,12 @@ public class BotCommandsMenuView extends View {
     }
 
     public void setExpanded(boolean expanded, boolean animated) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            animated &= (ValueAnimator.getDurationScale() > 0f);
+        } else {
+            animated &= (Settings.Global.getFloat(getContext().getContentResolver(),
+                    Settings.Global.ANIMATOR_DURATION_SCALE, 1.0f) > 0f);
+        }
         if (this.expanded != expanded) {
             this.expanded = expanded;
             if (!animated) {

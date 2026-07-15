@@ -5,12 +5,15 @@ import static org.telegram.messenger.AndroidUtilities.dp;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.provider.Settings;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
@@ -234,6 +237,21 @@ public class BotCommandsMenuContainer extends FrameLayout implements NestedScrol
         if (dismissed) {
             return;
         }
+
+        final boolean animated;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            animated = (ValueAnimator.getDurationScale() > 0f);
+        } else {
+            animated = (Settings.Global.getFloat(getContext().getContentResolver(),
+                    Settings.Global.ANIMATOR_DURATION_SCALE, 1.0f) > 0f);
+        }
+        if (!animated) {
+            listView.setTranslationY(0f);
+            if (currentAnimation != null)
+                currentAnimation.cancel();
+            return;
+        }
+
         currentAnimation = ObjectAnimator.ofFloat(listView, TRANSLATION_Y, listView.getTranslationY(), 0);
         if (firstTime) {
             currentAnimation.setDuration(320);
