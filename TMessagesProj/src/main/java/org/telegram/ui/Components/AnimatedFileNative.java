@@ -6,6 +6,7 @@ import android.os.Trace;
 
 import org.telegram.messenger.AnimatedFileDrawableStream;
 import org.telegram.messenger.BuildConfig;
+import org.telegram.messenger.BuildVars;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -80,7 +81,7 @@ public class AnimatedFileNative {
 
     private void checkNotDestroyed() {
         if (mRecycled.get()) {
-            if (BuildConfig.DEBUG_PRIVATE_VERSION) {
+            if (BuildVars.DEBUG_PRIVATE_VERSION) {
                 throw new IllegalStateException("Called method on a destroyed AnimatedFileNative instance");
             }
         }

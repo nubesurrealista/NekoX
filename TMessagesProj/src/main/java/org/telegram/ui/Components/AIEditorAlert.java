@@ -689,14 +689,6 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
 
     public AIEditorAlert setText(TL_iv.RichMessage richMessage) {
         this.textRich = richMessage;
-        if (LanguageDetector.hasSupport()) {
-            LanguageDetector.detectLanguage(format(textRich), lng -> {
-                from_lang = lng;
-                adapter.update(true);
-            }, e -> {
-                FileLog.e(e);
-            });
-        }
         updateStyles();
         return this;
     }

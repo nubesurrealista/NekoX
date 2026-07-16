@@ -15,6 +15,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.tl.TL_iv;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextSelectionHelper;
+import org.telegram.ui.Components.EditTextCaption;
 
 import java.util.ArrayList;
 
@@ -81,9 +82,17 @@ class RichCaptionController {
                 });
             }
         });
-        editText.setDelegate(() -> {
-            persist();
-            host.onCaptionSpansChanged();
+        editText.setDelegate(new EditTextCaption.EditTextCaptionDelegate() {
+            @Override
+            public void onSpansChanged() {
+                persist();
+                host.onCaptionSpansChanged();
+            }
+
+            @Override
+            public long getCurrentChat() {
+                return 0;
+            }
         });
         applyColors();
     }

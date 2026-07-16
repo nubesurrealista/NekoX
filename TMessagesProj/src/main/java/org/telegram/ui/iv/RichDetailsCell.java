@@ -20,6 +20,7 @@ import org.telegram.tgnet.tl.TL_iv;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextSelectionHelper;
 import org.telegram.ui.Components.AnimatedArrowDrawable;
+import org.telegram.ui.Components.EditTextCaption;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UItem;
@@ -147,11 +148,19 @@ public class RichDetailsCell extends FrameLayout implements Theme.Colorable, Tex
                 });
             }
         });
-        editText.setDelegate(() -> {
-            if (currentRow != null && currentRow.block instanceof TL_iv.pageBlockDetails) {
-                ((TL_iv.pageBlockDetails) currentRow.block).title = RichTextStyle.fromSpannable(editText.getText());
+        editText.setDelegate(new EditTextCaption.EditTextCaptionDelegate() {
+            @Override
+            public void onSpansChanged() {
+                if (currentRow != null && currentRow.block instanceof TL_iv.pageBlockDetails) {
+                    ((TL_iv.pageBlockDetails) currentRow.block).title = RichTextStyle.fromSpannable(editText.getText());
+                }
+                if (delegate != null && currentRow != null) delegate.onSpansChanged(currentRow);
             }
-            if (delegate != null && currentRow != null) delegate.onSpansChanged(currentRow);
+
+            @Override
+            public long getCurrentChat() {
+                return 0;
+            }
         });
         addView(editText, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 28 + 6, 0, 0, 0));
 

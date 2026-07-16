@@ -20,6 +20,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.tl.TL_iv;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextSelectionHelper;
+import org.telegram.ui.Components.EditTextCaption;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UItem;
@@ -122,9 +123,17 @@ public class RichTableCell extends RichBlockCell implements Theme.Colorable, Tex
                 });
             }
         });
-        titleEditText.setDelegate(() -> {
-            persistTitle();
-            if (delegate != null && currentRow != null) delegate.onSpansChanged(currentRow);
+        titleEditText.setDelegate(new EditTextCaption.EditTextCaptionDelegate() {
+            @Override
+            public void onSpansChanged() {
+                persistTitle();
+                if (delegate != null && currentRow != null) delegate.onSpansChanged(currentRow);
+            }
+
+            @Override
+            public long getCurrentChat() {
+                return 0;
+            }
         });
         addView(titleEditText);
 
@@ -782,12 +791,20 @@ public class RichTableCell extends RichBlockCell implements Theme.Colorable, Tex
                     });
                 }
             });
-            host.editText.setDelegate(() -> {
-                if (host.cell != null) {
-                    TableModel.applyStyledText(host.cell, host.editText.getText());
+            host.editText.setDelegate(new EditTextCaption.EditTextCaptionDelegate() {
+                @Override
+                public void onSpansChanged() {
+                    if (host.cell != null) {
+                        TableModel.applyStyledText(host.cell, host.editText.getText());
+                    }
+                    if (delegate != null && currentRow != null) {
+                        delegate.onSpansChanged(currentRow);
+                    }
                 }
-                if (delegate != null && currentRow != null) {
-                    delegate.onSpansChanged(currentRow);
+
+                @Override
+                public long getCurrentChat() {
+                    return 0;
                 }
             });
         }

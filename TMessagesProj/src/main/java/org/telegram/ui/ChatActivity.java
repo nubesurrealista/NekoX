@@ -32067,15 +32067,18 @@ public class ChatActivity extends BaseFragment implements
             final boolean nekoXShowReactionsView = (MomoConfig.reactions.Int() != 1 || onDoubleTapped); // Show reactions and hide them from tap
             final boolean isEphemeral = message != null && message.isEphemeral();
             final boolean isReactionsViewAvailable = !isEphemeral && !suggestEdit && !isSecretChat() && !isInScheduleMode() && currentUser == null && primaryMessage.hasReactions() && (!ChatObject.isChannel(currentChat) || currentChat.megagroup) && !ChatObject.isMonoForum(currentChat) && !availableReacts.isEmpty() && primaryMessage.messageOwner.reactions.can_see_list && !primaryMessage.isSecretMedia();
+            final boolean isPremium = getUserConfig().isPremium();
+            final boolean tags = getUserConfig().getClientUserId() == getDialogId();
             final boolean isReactionsAvailable;
             if (suggestEdit || isEphemeral) {
                 isReactionsAvailable = false;
             } else if (message.isForwardedChannelPost()) {
                 TLRPC.ChatFull chatInfo = getMessagesController().getChatFull(-message.getFromChatId());
                 if (chatInfo == null) {
-                    isReactionsAvailable = true;
+                    isReactionsAvailable = !tags || isPremium;
                 } else {
                     isReactionsAvailable = nekoXShowReactionsView && !isSecretChat()
+                        && (!tags || isPremium)
                         && chatMode != MODE_QUICK_REPLIES
                         && !isInScheduleMode()
                         && primaryMessage.isReactionsAvailable()
@@ -32087,6 +32090,7 @@ public class ChatActivity extends BaseFragment implements
                 }
             } else {
                 isReactionsAvailable = nekoXShowReactionsView && !isSecretChat()
+                    && (!tags || isPremium)
                     && chatMode != MODE_QUICK_REPLIES
                     && !isInScheduleMode()
                     && primaryMessage.isReactionsAvailable()
@@ -32993,10 +32997,6 @@ public class ChatActivity extends BaseFragment implements
             if (optionsView != null) {
                 scrimPopupContainerLayout.addView(optionsView);
             } else {
-                final boolean isPremium = getUserConfig().isPremium();
-                final boolean tags = getUserConfig().getClientUserId() == getDialogId();
-
-                if (tags && !isPremium) isReactionsAvailable = false;
 
                 reactionsLayout = new ReactionsContainerLayout(tags ? ReactionsContainerLayout.TYPE_TAGS : ReactionsContainerLayout.TYPE_DEFAULT, ChatActivity.this, contentView.getContext(), currentAccount, getResourceProvider());
                 if (tags) {

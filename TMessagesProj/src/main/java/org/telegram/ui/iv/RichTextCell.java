@@ -35,6 +35,7 @@ import org.telegram.ui.ActionBar.FloatingToolbar;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextSelectionHelper;
 import org.telegram.ui.Components.CheckBoxBase;
+import org.telegram.ui.Components.EditTextCaption;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.ReplyMessageLine;
@@ -276,10 +277,18 @@ public class RichTextCell extends FrameLayout implements Theme.Colorable, TextSe
                 });
             }
         });
-        editText.setDelegate(() -> {
-            if (currentRow == null) return;
-            applyStyledTextToBlock(currentRow.block, editText.getText());
-            if (delegate != null) delegate.onSpansChanged(currentRow);
+        editText.setDelegate(new EditTextCaption.EditTextCaptionDelegate() {
+            @Override
+            public void onSpansChanged() {
+                if (currentRow == null) return;
+                applyStyledTextToBlock(currentRow.block, editText.getText());
+                if (delegate != null) delegate.onSpansChanged(currentRow);
+            }
+
+            @Override
+            public long getCurrentChat() {
+                return 0;
+            }
         });
         editText.setOnFocusChangeListener((v, hasFocus) -> {
             editText.setHint(getHint());
@@ -366,10 +375,18 @@ public class RichTextCell extends FrameLayout implements Theme.Colorable, TextSe
                 });
             }
         });
-        authorEditText.setDelegate(() -> {
-            if (currentRow == null) return;
-            persistAuthor();
-            if (delegate != null) delegate.onSpansChanged(currentRow);
+        authorEditText.setDelegate(new EditTextCaption.EditTextCaptionDelegate() {
+            @Override
+            public void onSpansChanged() {
+                if (currentRow == null) return;
+                persistAuthor();
+                if (delegate != null) delegate.onSpansChanged(currentRow);
+            }
+
+            @Override
+            public long getCurrentChat() {
+                return 0;
+            }
         });
         authorEditText.setVisibility(View.GONE);
         addView(authorEditText, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP));

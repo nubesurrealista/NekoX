@@ -4232,7 +4232,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     checkListFullyLoaded(count -> {
                         HashSet<Pair<Long, Integer>> ids = new HashSet<>(count);
                         for (int i = 0; i < count; ++i) {
-                            TLObject obj = viewPages[0].dialogsAdapter.getItem(i);
+                            Object obj = viewPages[0].dialogsAdapter.getItem(i);
                             if (!(obj instanceof TLRPC.Dialog)) continue;
 
                             long did = ((TLRPC.Dialog) obj).id;

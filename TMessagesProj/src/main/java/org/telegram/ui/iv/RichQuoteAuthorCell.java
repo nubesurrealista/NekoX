@@ -18,6 +18,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.tl.TL_iv;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextSelectionHelper;
+import org.telegram.ui.Components.EditTextCaption;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UItem;
@@ -93,7 +94,17 @@ public class RichQuoteAuthorCell extends RichBlockCell
                 });
             }
         });
-        authorEditText.setDelegate(this::persist);
+        authorEditText.setDelegate(new EditTextCaption.EditTextCaptionDelegate() {
+            @Override
+            public void onSpansChanged() {
+                persist();
+            }
+
+            @Override
+            public long getCurrentChat() {
+                return 0;
+            }
+        });
         addView(authorEditText, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP));
 
         updateColors();
