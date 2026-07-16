@@ -1742,7 +1742,6 @@
     <string name="AccDescrChanSilentOff">إرسال الإشعارات</string>
     <string name="AccDescrBotCommands">أوامر البوت</string>
     <string name="AccDescrBotKeyboard">لوحة مفاتيح البوت</string>
-    <string name="AccDescrShowKeyboard">إظهار لوحة المفاتيح</string>
     <string name="AccDescrVoiceMessage">تسجيل رسالة صوتية</string>
     <string name="AccDescrVideoMessage">تسجيل رسالة مرئية</string>
     <string name="AccDescrOpenChat">فتح المحادثة</string>
