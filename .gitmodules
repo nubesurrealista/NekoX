@@ -20,3 +20,6 @@
 	path = TMessagesProj/jni/third_party/dav1d
 	url = https://code.videolan.org/videolan/dav1d
 	branch = 1.5.4
+[submodule "TMessagesProj/jni/tdlib"]
+	path = TMessagesProj/jni/tdlib
+	url = https://github.com/tdlib/td
