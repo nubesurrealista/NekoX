@@ -104,6 +104,7 @@ import androidx.core.math.MathUtils;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.AppGlobalConfig;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BotForumHelper;
 import org.telegram.messenger.BotInlineKeyboard;
@@ -18545,7 +18546,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         } else if (currentMessageObject.isRepostPreview) {
             timeString = LocaleController.formatSmallDateChat(messageObject.messageOwner.date) + ", " + LocaleController.getInstance().getFormatterDay().format((long) (messageObject.messageOwner.date) * 1000);
         } else if (edited) {
-            timeString = editStr + " " + LocaleController.getInstance().getFormatterDay().format((long) (messageObject.messageOwner.date) * 1000);
+            final boolean primaryEditedDate = AppGlobalConfig.getInstance(currentAccount).messagePrimaryEditedDate.get();
+            timeString = primaryEditedDate && !MomoConfig.useEmojiForEdited.Bool() ?
+                LocaleController.formatPmEditedDate(messageObject.messageOwner.edit_date) :
+                (editStr + " " + LocaleController.getInstance().getFormatterDay().format(
+                        (long) (primaryEditedDate ? messageObject.messageOwner.edit_date : messageObject.messageOwner.date) * 1000));
         } else if (currentMessageObject.isSaved && currentMessageObject.messageOwner.fwd_from != null && (currentMessageObject.messageOwner.fwd_from.date != 0 || currentMessageObject.messageOwner.fwd_from.saved_date != 0)) {
             int date = currentMessageObject.messageOwner.fwd_from.saved_date;
             if (date == 0) {
