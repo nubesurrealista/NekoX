@@ -74,8 +74,8 @@ import moe.hx030.momogram.util.ReflectUtil;
 
 @SuppressLint("RtlHardcoded")
 public class MomoChatSettingsActivity extends MomoSettingsBaseActivity implements NotificationCenter.NotificationCenterDelegate {
-    private final String MSG_MENU_KEY = "msgMenu";
-    private final String PROFILE_MENU_KEY = "profileMenu";
+    public final static String MSG_MENU_KEY = "msgMenu";
+    public final static String PROFILE_MENU_KEY = "profileMenu";
 
     // Sticker Size
     private final AbstractConfigCell header0 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.StickerSize)));

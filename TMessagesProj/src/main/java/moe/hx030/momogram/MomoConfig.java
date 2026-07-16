@@ -1154,6 +1154,8 @@ public class MomoConfig {
                 }
             }
         }
+        ret.put(MomoChatSettingsActivity.MSG_MENU_KEY, Pair.create(CHAT, null));
+        ret.put(MomoChatSettingsActivity.PROFILE_MENU_KEY, Pair.create(CHAT, null));
         momoConfigKeyMap = ret;
         return ret.get(key);
     }
