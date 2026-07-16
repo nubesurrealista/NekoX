@@ -1,6 +1,7 @@
 package org.telegram.ui.Components;
 
 import static org.telegram.messenger.AndroidUtilities.dp;
+import static org.telegram.messenger.AndroidUtilities.replaceSingleTag;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -52,6 +53,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
@@ -61,10 +63,15 @@ import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Cells.IMessageCell;
 import org.telegram.ui.Cells.TextSelectionHelper;
 import org.telegram.ui.ChatActivity;
+import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
+import org.telegram.ui.Components.Premium.PremiumPreviewBottomSheet;
 import org.telegram.ui.Components.blur3.BlurredBackgroundDrawableViewFactory;
 import org.telegram.ui.Components.blur3.drawable.color.impl.BlurredBackgroundProviderImpl;
+import org.telegram.ui.PremiumPreviewFragment;
 
 import java.util.ArrayList;
+
+import moe.hx030.momogram.MomoConfig;
 
 public class MessagePreviewView extends FrameLayout {
 
@@ -1003,13 +1010,16 @@ public class MessagePreviewView extends FrameLayout {
 
             } else if (tab == TAB_FORWARD && messagePreviewParams.forwardMessages != null) {
 
-                boolean canHideSenderName = true;
-                for (int i = 0; i < messagePreviewParams.forwardMessages.messages.size(); ++i) {
-                    if (messagePreviewParams.forwardMessages.messages.get(i).type == MessageObject.TYPE_ARTICLE) {
-                        canHideSenderName = false;
-                        break;
+                boolean _canHideSenderName = true;
+                if (!UserConfig.getInstance(currentAccount).isPremium()) {
+                    for (int i = 0; i < messagePreviewParams.forwardMessages.messages.size(); ++i) {
+                        if (messagePreviewParams.forwardMessages.messages.get(i).type == MessageObject.TYPE_ARTICLE) {
+                            _canHideSenderName = false;
+                            break;
+                        }
                     }
                 }
+                final boolean canHideSenderName = _canHideSenderName;
 
                 ToggleButton sendersNameButton = new ToggleButton(
                     context,
@@ -1017,7 +1027,7 @@ public class MessagePreviewView extends FrameLayout {
                     R.raw.name_show, messagePreviewParams.multipleUsers ? LocaleController.getString(R.string.HideSenderNames) : LocaleController.getString(R.string.HideSendersName),
                     resourcesProvider
                 );
-                if (canHideSenderName) {
+                if (canHideSenderName || !MomoConfig.removePremiumAnnoyance.Bool()) {
                     menu.addView(sendersNameButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
                 }
 
@@ -1059,7 +1069,20 @@ public class MessagePreviewView extends FrameLayout {
 
                 sendersNameButton.setState(messagePreviewParams.hideForwardSendersName, false);
                 sendersNameButton.setOnClickListener(view -> {
+                    if (!canHideSenderName) {
+                        BulletinFactory.of(MessagePreviewView.this, resourcesProvider)
+                            .createSimpleBulletin(R.raw.star_premium_2, replaceSingleTag("Subscribe to **Telegram Premium** to forward formatted messages without the sender’s name.", () -> {
+                                dismiss(false);
+                                AndroidUtilities.runOnUIThread(() -> {
+                                    if (!AndroidUtilities.isContextSafe(context)) return;
+                                    new PremiumFeatureBottomSheet(context, PremiumPreviewFragment.PREMIUM_FEATURE_RICH_EDITOR, true, resourcesProvider).show();
+                                });
+                            }))
+                            .show();
+                        return;
+                    }
                     ChatActivity.noForwardQuote = messagePreviewParams.hideForwardSendersName = !messagePreviewParams.hideForwardSendersName;
+                    messagePreviewParams.hideForwardSendersName = !messagePreviewParams.hideForwardSendersName;
                     returnSendersNames = false;
                     if (!messagePreviewParams.hideForwardSendersName) {
                         messagePreviewParams.hideCaption = false;

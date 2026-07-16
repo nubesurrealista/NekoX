@@ -538,7 +538,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         };
         drawerLayoutContainer.setClipChildren(false);
         drawerLayoutContainer.setClipToPadding(false);
-        drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(Theme.key_windowBackgroundWhite));
 
         frameLayout.addView(drawerLayoutContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
@@ -940,7 +939,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         if (ArticleViewer.hasInstance() && ArticleViewer.getInstance().isVisible()) {
             ArticleViewer.getInstance().updateThemeColors(progress);
         }
-        drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         if (PhotoViewer.hasInstance()) {
             PhotoViewer.getInstance().updateColors();
         }
@@ -5144,7 +5142,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                         AndroidUtilities.runOnUIThread(() -> {
                             MessagesController.getInstance(currentAccount).putUsers(resultWebView.users, false);
                             BotGuardHelper.getInstance(currentAccount).openGuardBotWebApp(resultWebView.bot_id,
-                                    resultWebView.bot_id, resultWebView.webview);
+                                    resultWebView.bot_id, resultWebView.query_id);
                         });
 
                         updates = null;
@@ -7493,7 +7491,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
                 }
             }
-            drawerLayoutContainer.setBehindKeyboardColor(Theme.getColor(Theme.key_windowBackgroundWhite));
             boolean checkNavigationBarColor = true;
             if (args.length > 1) {
                 checkNavigationBarColor = (boolean) args[1];
