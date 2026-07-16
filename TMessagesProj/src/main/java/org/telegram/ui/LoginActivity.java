@@ -1684,7 +1684,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         SharedConfig.activeAccounts.add(currentAccount);
         SharedConfig.saveAccounts();
         if (getParentActivity() != null) {
-            AndroidUtilities.setLightStatusBar(getParentActivity().getWindow(), false);
+            AndroidUtilities.setLightStatusBar(getParentActivity(), false);
         }
         clearCurrentState();
         if (getParentActivity() instanceof LaunchActivity) {
