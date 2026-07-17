@@ -2081,7 +2081,7 @@ public class ChatActivity extends BaseFragment implements
                         }
                         if (hasText)
                             nkbtn_onclick(nkbtn_translate);
-                        else
+                        else if (!translateRichMessage(selectedObject, false))
                             BulletinFactory.of(ChatActivity.this).createSimpleBulletin(R.raw.error, getString(R.string.NoTextToTranslate)).show();
                         break;
                     }
