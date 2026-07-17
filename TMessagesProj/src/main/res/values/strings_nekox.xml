@@ -366,5 +366,4 @@
     <string name="ConfirmBamHammer">Ban + delete all messages + report spam for selected sender?</string>
     <string name="HigherMinimumMenuHeight">Higher minimum popup menu height</string>
     <string name="HideFAB">Hide floating buttons in chat list</string>
-    <string name="SendAsRichMsg">Send as rich message</string>
 </resources>
