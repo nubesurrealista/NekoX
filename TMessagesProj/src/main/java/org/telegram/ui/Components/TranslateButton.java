@@ -56,6 +56,9 @@ import org.telegram.ui.Stories.recorder.HintView2;
 import java.util.ArrayList;
 import java.util.List;
 
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.transtale.Translator;
+
 public class TranslateButton extends FrameLayout implements Theme.Colorable {
 
     private final int currentAccount;
@@ -350,7 +353,8 @@ public class TranslateButton extends FrameLayout implements Theme.Colorable {
         });
         popupLayout.addView(hideButton);
 
-        popupLayout.addView(new ActionBarPopupWindow.GapView(getContext(), resourcesProvider), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 8));
+        if (MomoConfig.translationProvider.Int() == Translator.providerTelegram)
+            popupLayout.addView(new ActionBarPopupWindow.GapView(getContext(), resourcesProvider), LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 8));
 
         final LinkSpanDrawable.LinksTextView cocoonButton = new LinkSpanDrawable.LinksTextView(getContext());
         cocoonButton.setPadding(dp(13), dp(8.33f), dp(13), dp(8.33f));
@@ -375,6 +379,8 @@ public class TranslateButton extends FrameLayout implements Theme.Colorable {
             showCocoonAlert(getContext(), resourcesProvider);
         });
         popupLayout.addView(cocoonButton);
+        if (MomoConfig.translationProvider.Int() != Translator.providerTelegram)
+            cocoonButton.setVisibility(View.GONE);
 
         popupWindow.setPauseNotifications(true);
         popupWindow.setDismissAnimationDuration(220);
