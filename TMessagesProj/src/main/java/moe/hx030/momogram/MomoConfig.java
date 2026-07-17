@@ -253,6 +253,7 @@ public class MomoConfig {
     public static ConfigItem rearVideoMessages = addConfig(R.string.RearVideoMessages, "RearVideoMessages", configTypeBool, CHAT, false);
 //    public static ConfigItem pressTitleToOpenAllChats = addConfig("pressTitleToOpenAllChats", configTypeBool, false);
     public static ConfigItem disableChatAction = addConfig(R.string.DisableChatAction, "DisableChatAction", configTypeBool, false);
+    public static ConfigItem hideMessageSideButtons = addConfig(R.string.HideMessageSideButtons, "HideMessageSideButtons", configTypeBool, CHAT, false);
 
     public static ConfigItem showAddToSavedMessages = addConfig("showAddToSavedMessages", configTypeBool, CHAT, true);
     public static ConfigItem showReport = addConfig("showReport", configTypeBool, CHAT, true);

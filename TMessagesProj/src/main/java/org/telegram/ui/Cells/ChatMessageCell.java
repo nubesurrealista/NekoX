@@ -21675,7 +21675,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     public void drawSideButton(Canvas canvas, boolean fromQuickShare) {
-        if (hideSideButtonByQuickShare && !fromQuickShare || drawSideButton == 0) {
+        if (hideSideButtonByQuickShare && !fromQuickShare || drawSideButton == 0 || (MomoConfig.hideMessageSideButtons.Bool() && drawSideButton != 4 && drawSideButton != 5)) {
             return;
         }
 
