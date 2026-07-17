@@ -1299,7 +1299,7 @@ public class DownloadController extends BaseController implements NotificationCe
             messageObjects.add(messageObject);
         }
 
-        observersByTag.put(observer.getObserverTag(), fileName);
+        observersByTag.put(observer.getObserverTag(), (fileName == null) ? "" : fileName);
     }
 
     public void removeLoadingFileObserver(FileDownloadProgressListener observer) {
@@ -1308,7 +1308,7 @@ public class DownloadController extends BaseController implements NotificationCe
             return;
         }
         String fileName = observersByTag.get(observer.getObserverTag());
-        if (fileName != null) {
+        if (fileName != null && !fileName.isEmpty()) {
             ArrayList<WeakReference<FileDownloadProgressListener>> arrayList = loadingFileObservers.get(fileName);
             if (arrayList != null) {
                 for (int a = 0; a < arrayList.size(); a++) {
