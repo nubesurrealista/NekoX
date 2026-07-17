@@ -12056,7 +12056,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             }
             emojiButton.setVisibility(View.GONE);
             deleteRichDraftButton.setVisibility(View.VISIBLE);
-            sendButton.setLocked(!UserConfig.getInstance(currentAccount).isPremium());
+            sendButton.setLocked(!UserConfig.getInstance(currentAccount).isPremium() && !UserConfig.getInstance(currentAccount).isBot());
         } else {
             richDraftPreview.setVisibility(View.GONE);
             if (messageEditText != null) {
@@ -15023,7 +15023,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             sendTranslatedForwardingMessages(args);
         } else if (id == NotificationCenter.currentUserPremiumStatusChanged) {
             if (richDraftActive && sendButton != null) {
-                sendButton.setLocked(!UserConfig.getInstance(currentAccount).isPremium());
+                sendButton.setLocked(!UserConfig.getInstance(currentAccount).isPremium() && !UserConfig.getInstance(currentAccount).isBot());
             }
         }
     }

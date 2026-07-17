@@ -6466,6 +6466,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 TLRPC.User user = baseFragment instanceof ChatActivity ? ((ChatActivity) baseFragment).getCurrentUser() : null;
                 TLRPC.Chat chat = baseFragment instanceof ChatActivity ? ((ChatActivity) baseFragment).getCurrentChat() : null;
                 final boolean paidUser = user != null && ((ChatActivity) baseFragment).getMessagesController().getSendPaidMessagesStars(user.id) > 0;
+                final boolean richMsgAllowed = MessagesController.getInstance(currentAccount).richEditorAllowed() ||
+                        UserConfig.getInstance(currentAccount).isBot() || UserConfig.getInstance(currentAccount).isPremium();
                 galleryButton = buttonsCount++;
                 if ((photosEnabled || videosEnabled) && !paidUser && (chat == null || !ChatObject.isMonoForum(chat))) {
                     if (baseFragment instanceof ChatActivity && !((ChatActivity) baseFragment).isInScheduleMode() && !((ChatActivity) baseFragment).isSecretChat() && ((ChatActivity) baseFragment).getChatMode() != ChatActivity.MODE_QUICK_REPLIES) {
@@ -6488,7 +6490,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 if (plainTextEnabled) {
                     locationButton = buttonsCount++;
                 }
-                if (plainTextEnabled && MessagesController.getInstance(currentAccount).richEditorAvailable()) {
+                if (plainTextEnabled && MessagesController.getInstance(currentAccount).richEditorAvailable() && richMsgAllowed) {
                     richButton = buttonsCount++;
                 }
 

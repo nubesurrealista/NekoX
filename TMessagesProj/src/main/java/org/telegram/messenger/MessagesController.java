@@ -23907,7 +23907,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public boolean richEditorAllowed() {
         switch (config.richMessagePosting.get()) {
             case "premium":
-                return getUserConfig().isPremium();
+                return getUserConfig().isPremium() || getUserConfig().isBot();
             case "enabled":
                 return true;
             default:

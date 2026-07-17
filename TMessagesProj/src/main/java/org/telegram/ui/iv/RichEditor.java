@@ -1834,8 +1834,8 @@ public class RichEditor extends BaseFragment implements NotificationCenter.Notif
     }
 
     private boolean isSendLocked() {
-        return !MessagesController.getInstance(currentAccount).richEditorAllowed()
-            && !UserConfig.getInstance(currentAccount).isPremium()
+        return !(MessagesController.getInstance(currentAccount).richEditorAllowed()
+            || UserConfig.getInstance(currentAccount).isPremium() || UserConfig.getInstance(currentAccount).isBot())
             && listView.isLossy();
     }
 
