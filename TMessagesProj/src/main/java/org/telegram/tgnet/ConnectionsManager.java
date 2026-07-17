@@ -442,10 +442,9 @@ public class ConnectionsManager extends BaseController {
     static AtomicInteger cnt = new AtomicInteger(0);
     private void sendRequestInternal(TLObject object, RequestDelegate onComplete, RequestDelegateTimestamp onCompleteTimestamp, QuickAckDelegate onQuickAck, WriteToSocketDelegate onWriteToSocket, int flags, int datacenterId, int connectionType, boolean immediate, int requestToken, Runnable onError) {
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.d("send request " + object + " with token = " + requestToken);
+            Log.d("tgnet", " send request " + object + " with token = " + requestToken);
         }
         try {
-            final String stack = BuildVars.DEBUG_VERSION ? TelegramUtil.getStackTraceAsString(null) : null;
             NativeByteBuffer buffer = new NativeByteBuffer(object.getObjectSize());
             object.serializeToStream(buffer);
             object.freeResources();
@@ -480,7 +479,7 @@ public class ConnectionsManager extends BaseController {
                         error.code = errorCode;
                         error.text = errorText;
                         if (BuildVars.LOGS_ENABLED && error.code != -2000) {
-                            FileLog.e(object + " got error " + error.code + " " + error.text);
+                            Log.e("tgnet", object + " got error " + error.code + " " + error.text);
                             if (onError != null) onError.run();
                         }
                     }
@@ -502,7 +501,7 @@ public class ConnectionsManager extends BaseController {
                         resp.networkType = networkType;
                     }
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.d("java received " + resp + (error != null ? " error = " + error : "") + " messageId = 0x" + Long.toHexString(requestMsgId));
+                        Log.d("tgnet", "java received " + resp + (error != null ? " error = " + error : "") + " messageId = 0x" + Long.toHexString(requestMsgId));
                         FileLog.dumpResponseAndRequest(currentAccount, object, resp, error, requestMsgId, finalStartRequestTime, requestToken);
                     }
                     final TLObject finalResponse = resp;
