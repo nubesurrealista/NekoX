@@ -314,7 +314,8 @@ public class TranslateAlert2 extends BottomSheet implements NotificationCenter.N
         }
 
         final String method = MessagesController.getInstance(currentAccount).translationsManualEnabled;
-        if ("alternative".equalsIgnoreCase(method)) {
+        Log.d("030-tx", "method=" + method);
+        if ("alternative".equalsIgnoreCase(method) && reqRichMessage == null) {
             translateAlt();
             return;
         }/* else if ("system".equalsIgnoreCase(method)) {
@@ -337,6 +338,13 @@ public class TranslateAlert2 extends BottomSheet implements NotificationCenter.N
             req.id.add(reqMessageId);
             req.to_lang = normalizeLanguage(lang);
             reqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (res, err) -> {
+                if (err != null) Log.e("030-tx", String.format("%d - %s", err.code, err.text));
+                if (res != null) {
+                    Log.d("030-tx", res.getClass().getName());
+                    if (res instanceof TLRPC.TL_messages_translatedRichMessage m) {
+                        Log.d("030-tx", String.format("translatedRichMessage: size=%d", m.result.size()));
+                    }
+                }
                 AndroidUtilities.runOnUIThread(() -> {
                     reqId = null;
                     if (res instanceof TLRPC.TL_messages_translatedRichMessage &&

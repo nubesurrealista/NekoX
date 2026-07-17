@@ -166,6 +166,9 @@ fun ChatActivity.translateMessages(target: Locale = MomoConfig.translateToLang.S
 
             messageObject.messageOwner.translated = false
 
+            if (this.translateRichMessage(messageObject, true))
+                return
+
             if (messageObject.messageOwner.originalEntities != null) {
                 messageObject.messageOwner.entities = messageObject.messageOwner.originalEntities
             }

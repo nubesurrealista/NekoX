@@ -4768,6 +4768,10 @@ public class ChatActivity extends BaseFragment implements
                 headerItem.lazilyAddSubItem(nkheaderbtn_show_pinned, R.drawable.deproko_baseline_pin_24, LocaleController.getString(R.string.PinnedMessage));
             }
             checkOpenAppMenuButton();
+            if (UserObject.isUserSelf(currentUser)) {
+                getMessagesController().getTranslateController().setHideTranslateDialog(getDialogId(), true, false);
+                getMessagesController().getTranslateController().toggleTranslatingDialog(getDialogId(), false);
+            }
             // NekoX - end
             if (ChatObject.isBoostSupported(currentChat) && (getUserConfig().isPremium() || ChatObject.isBoosted(chatInfo) || ChatObject.hasAdminRights(currentChat))) {
                 RLottieDrawable drawable = new RLottieDrawable(R.raw.boosts, "" + R.raw.boosts, dp(24), dp(24));
@@ -32003,7 +32007,7 @@ public class ChatActivity extends BaseFragment implements
             } else if (type >= 0 || type == -1 && single && (message.isSending() || message.isEditing()) && currentEncryptedChat == null) {
                 selectedObject = message;
                 selectedObjectGroup = groupedMessages;
-                fillMessageMenu(primaryMessage, icons, items, options);
+                fillMessageMenu(primaryMessage, icons, items, options, v);
             }
 
             if (selectedObject != null && selectedObject.isHiddenSensitive() && !selectedObject.isMediaSpoilersRevealed) {
@@ -41409,7 +41413,7 @@ public class ChatActivity extends BaseFragment implements
                 ArrayList<Integer> icons = new ArrayList<>();
                 ArrayList<CharSequence> items = new ArrayList<>();
                 final ArrayList<Integer> options = new ArrayList<>();
-                fillMessageMenu(messageObject, icons, items, options);
+                fillMessageMenu(messageObject, icons, items, options, cell);
                 menu.setupMessageOptions(ChatActivity.this, icons, items, options, ChatActivity.this::processSelectedOption);
                 menu.setOnDismissListener(() -> {
                     selectedObject = null;
@@ -41712,7 +41716,7 @@ public class ChatActivity extends BaseFragment implements
             ArrayList<Integer> icons = new ArrayList<>();
             ArrayList<CharSequence> items = new ArrayList<>();
             final ArrayList<Integer> options = new ArrayList<>();
-            fillMessageMenu(messageObject, icons, items, options);
+            fillMessageMenu(messageObject, icons, items, options, cell);
             menu.setupMessageOptions(ChatActivity.this, icons, items, options, ChatActivity.this::processSelectedOption);
             menu.setOnDismissListener(() -> {
                 selectedObject = null;
@@ -45643,9 +45647,11 @@ public class ChatActivity extends BaseFragment implements
             }
         } else if (id == nkbtn_translate) {
             ArrayList<MessageObject> msgs = getSelectedMessages();
-            if (msgs.isEmpty()) return;
-            if (!translateRichMessage(msgs.get(0), false))
-                MessageTransKt.translateMessages(ChatActivity.this, getSelectedMessages());
+            if (msgs.isEmpty() && selectedObjectGroup != null) {
+                msgs = selectedObjectGroup.messages;
+            }
+            if (msgs == null || msgs.isEmpty()) return;
+            MessageTransKt.translateMessages(ChatActivity.this, msgs);
         } else if (id == nkbtn_unpin) {
             for (MessageObject selectedMessage : getSelectedMessages()) {
                 if (selectedMessage.messageOwner.pinned) {
@@ -47708,14 +47714,18 @@ public class ChatActivity extends BaseFragment implements
                 .show();
     }
 
-    private boolean translateRichMessage(MessageObject message, boolean longPress) {
+    public boolean translateRichMessage(MessageObject message, boolean test) {
+        if (message == null) message = selectedObject;
+        if (message == null) return false;
+
+        Log.e("030-rich", String.format("id=%d, test=%s", message.getId(), test), new Exception());
         TLRPC.InputPeer inputPeer = selectedObject != null && (selectedObject.isPoll() || selectedObject.isVoiceTranscriptionOpen() || selectedObject.isSponsored() || selectedObject.scheduled || chatMode == MODE_QUICK_REPLIES) ? null : getMessagesController().getInputPeer(dialog_id);
         int[] messageIdToTranslate = new int[] { message.getId() };
         String toLangDefault = LocaleController.getInstance().getCurrentLocale().getLanguage();
         String toLang = TranslateAlert2.getToLanguage();
         final TL_iv.RichMessage richMessageToTranslate = selectedObject != null && selectedObject.type == MessageObject.TYPE_ARTICLE && selectedObject.messageOwner != null ? selectedObject.messageOwner.rich_message : null;
         if (richMessageToTranslate != null) {
-            if (longPress) return true;
+            if (test) return true;
             Utilities.CallbackReturn<URLSpan, Boolean> onLinkPress = (link) -> {
                 didPressMessageUrl(link, false, selectedObject, null);
                 return true;
@@ -47745,9 +47755,20 @@ public class ChatActivity extends BaseFragment implements
 
         ArrayList<Integer> icons,
         ArrayList<CharSequence> items,
-        ArrayList<Integer> options
+        ArrayList<Integer> options,
+        View v
     ) {
-        final MessageObject message = selectedObject;
+        MessageObject message;
+        if (v instanceof ChatMessageCell) {
+            message = ((ChatMessageCell) v).getMessageObject();
+            primaryMessage = ((ChatMessageCell) v).getPrimaryMessageObject();
+        } else if (v instanceof ChatActionCell) {
+            message = ((ChatActionCell) v).getMessageObject();
+            primaryMessage = message;
+        } else {
+            message = selectedObject;
+        }
+
         final MessageObject.GroupedMessages groupedMessages = selectedObjectGroup;
         final int type = getMessageType(message);
         final boolean alwaysSaveToDownloads = MomoConfig.alwaysSaveToDownloads.Bool();
@@ -48319,12 +48340,14 @@ public class ChatActivity extends BaseFragment implements
                         }
                     }
                     if (MomoConfig.showTranslate.Bool()) {
-                        if (messageObject != null || docsWithMessages) {
+                        if (messageObject != null || docsWithMessages || translateRichMessage(message, true)) {
                             boolean td;
                             if (messageObject != null) {
                                 td = messageObject.messageOwner.translated;
-                            } else {
+                            } else if (selectedObjectGroup != null) {
                                 td = selectedObjectGroup.messages.get(0).messageOwner.translated;
+                            } else {
+                                td = message.messageOwner.translated;
                             }
                             items.add(td ? LocaleController.getString(R.string.UndoTranslate) : LocaleController.getString(R.string.Translate));
                             options.add(nkbtn_translate);
