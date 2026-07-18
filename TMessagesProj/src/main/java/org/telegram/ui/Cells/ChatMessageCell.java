@@ -1922,9 +1922,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
         }
         return false;
-//                || MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(currentMessageObject.getFromChatId()) >= 0
-//                && MomoConfig.ignoreBlocked.Bool()
-//                && !(getParent() != null && getParent().getClass().getName().contains("ChannelAdminLogActivity"));
     }
 
     public ChatMessageCell(Context context, int currentAccount) {
@@ -6784,6 +6781,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 messageObject.translated != lastTranslated;
         boolean groupChanged = groupedMessages != currentMessagesGroup;
         boolean pollChanged = false;
+        messageObject.maybeEnsureSpoiler();
 
         if (!messageIdChanged && currentMessageObject != null) {
             int oldStableId = messageObject.stableId;

@@ -671,8 +671,25 @@ public class MessageObject {
         return isCustomSpoiler = is;
     }
 
+    public void maybeEnsureSpoiler() {
+        if (!isCustomSpoiler() || messageOwner.message == null) return;
+        boolean covered = false;
+        for (TLRPC.MessageEntity e : messageOwner.entities) {
+            if (e instanceof TLRPC.TL_messageEntitySpoiler s && s.offset == 0 && s.length == messageOwner.message.length()) {
+                covered = true;
+                break;
+            }
+        }
+        if (!covered) {
+            TLRPC.TL_messageEntitySpoiler s = new TLRPC.TL_messageEntitySpoiler();
+            s.length = messageOwner.message.length();
+            messageOwner.entities.add(s);
+        }
+    }
+
     public boolean reloadCustomSpoiler() {
         isCustomSpoiler = null;
+        isCustomMediaSpoiler = null;
         isSpoilersRevealed = MomoConfig.showSpoilersDirectly.Bool() && !isCustomSpoiler();
         return isCustomSpoiler();
     }
@@ -1968,6 +1985,7 @@ public class MessageObject {
         eventId = eid;
         wasUnread = !messageOwner.out && messageOwner.unread;
         reloadCustomSpoiler();
+        maybeEnsureSpoiler();
 
         if (message.replyMessage != null) {
             replyMessageObject = new MessageObject(currentAccount, message.replyMessage, null, users, chats, sUsers, sChats, false, checkMediaExists, eid);
