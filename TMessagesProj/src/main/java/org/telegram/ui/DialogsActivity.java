@@ -13153,7 +13153,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     @Override
     public boolean isSwipeBackEnabled(MotionEvent event) {
-        return !(initialDialogsType == DIALOGS_TYPE_FORWARD && viewPages[0].selectedType != filterTabsView.getFirstTabId()) || forceHideTabs;
+        return (filterTabsView == null) || (communityId != 0) || !(initialDialogsType == DIALOGS_TYPE_FORWARD && viewPages[0].selectedType != filterTabsView.getFirstTabId()) || forceHideTabs;
     }
 
     public void setShowSearch(String query, int i) {
