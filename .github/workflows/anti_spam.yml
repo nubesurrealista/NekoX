@@ -1,11 +1,14 @@
-name: Issue Spam Protection
+name: Anti-Spam
 
 on:
   issues:
     types: [opened]
+  pull_request_target:
+    types: [opened]
 
 permissions:
   issues: write
+  pull-requests: write
   contents: read
 
 jobs:
@@ -19,18 +22,18 @@ jobs:
         with:
           script: |
             const username = context.payload.sender.login;
-            const issue = context.payload.issue;
+            const target = context.payload.issue || context.payload.pull_request;
 
             let spam = false;
 
-            const title = (issue.title || "").toLowerCase();
-            const body = (issue.body || "").toLowerCase();
+            const title = (target.title || "").toLowerCase();
+            const body = (target.body || "").toLowerCase();
             const { data: user } = await github.rest.users.getByUsername({
               username
             });
             const created = new Date(user.created_at);
             const ageDays = (Date.now() - created.getTime()) / (1000 * 60 * 60 * 24);
-            core.setOutput("is_new", ageDays < 30);
+            core.setOutput("is_new_acc", ageDays < 30);
 
             const patterns = [
               /\baerogram\b/i,
@@ -42,7 +45,7 @@ jobs:
 
             core.setOutput("spam", spam);
 
-      - name: Close issue
+      - name: Close issue or PR
         if: ${{steps.spam.outputs.spam == 'true' || steps.spam.outputs.is_new_acc == 'true'}}
         uses: actions/github-script@v7
         with:
@@ -54,7 +57,7 @@ jobs:
               state: "closed"
             });
 
-      - name: Lock issue
+      - name: Lock issue or PR
         if: ${{steps.spam.outputs.spam == 'true' || steps.spam.outputs.is_new_acc == 'true'}}
         uses: actions/github-script@v7
         with:
@@ -92,4 +95,3 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2026-03-10" \
             https://api.github.com/user/blocks/$USERNAME
-
