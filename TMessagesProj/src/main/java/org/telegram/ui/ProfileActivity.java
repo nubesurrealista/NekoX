@@ -8288,9 +8288,19 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     if (finalProgressDialog != null) {
                         finalProgressDialog.dismiss();
                     }
-                    bulletinFactory.createSimpleBulletin(R.raw.done,
+
+                    BaseFragment frag = LaunchActivity.getSafeLastFragment();
+                    if (frag == ProfileActivity.this) {
+                        new AlertDialog.Builder(LaunchActivity.getSafeLastFragment().getContext())
+                                .setTitle(getAppName())
+                                .setMessage(formatString(R.string.BannedForChats, name, amount))
+                                .setPositiveButton(getString(R.string.OK), null)
+                                .show();
+                    } else {
+                        BulletinFactory.of(frag).createSimpleBulletin(R.raw.done,
                                     LocaleController.formatString(R.string.BannedForChats, name, amount))
                             .show(true);
+                    }
                 });
             } else {
                 AndroidUtilities.runOnUIThread(() -> {
