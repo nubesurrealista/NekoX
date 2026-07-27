@@ -1615,6 +1615,48 @@ public class DownloadController extends BaseController implements NotificationCe
 
     }
 
+    public void removeDownloadByFileName(String fileName) {
+        if (fileName == null) return;
+
+        // Remove from auto-download queue
+        DownloadObject downloadObject = downloadQueueKeys.get(fileName);
+        if (downloadObject != null) {
+            checkDownloadFinished(fileName, 1);
+        }
+
+        boolean[] sql = new boolean[]{ false };
+        for (ArrayList<MessageObject> files : new ArrayList[]{recentDownloadingFiles, downloadingFiles}) {
+            // Remove from manual download list
+            for (int i = 0; i < files.size(); i++) {
+                MessageObject messageObject = files.get(i);
+                if (messageObject != null && fileName.equals(messageObject.getFileName())) {
+                    TLRPC.Document document = messageObject.getDocument();
+                    files.remove(i);
+
+                    if (document != null && !sql[0]) {
+                        int dcId = document.dc_id;
+                        long docId = document.id;
+                        getMessagesStorage().getStorageQueue().postRunnable(() -> {
+                            try {
+                                SQLitePreparedStatement state = getMessagesStorage().getDatabase().executeFast("DELETE FROM downloading_documents WHERE hash = ? AND id = ?");
+                                state.bindInteger(1, dcId);
+                                state.bindLong(2, docId);
+                                state.step();
+                                state.dispose();
+                                sql[0] = true;
+                            } catch (Exception e) {
+                                FileLog.e(e);
+                            }
+                        });
+                    }
+                    break;
+                }
+            }
+        }
+
+        getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged);
+    }
+
     public void onDownloadFail(MessageObject parentObject, int reason) {
         if (parentObject == null) {
             return;

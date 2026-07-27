@@ -44,6 +44,8 @@ public class FileLoader extends BaseController {
     public static final int PRIORITY_NORMAL = 1;
     public static final int PRIORITY_LOW = 0;
 
+    private static final ConcurrentHashMap<String, Integer> failedToLoad = new ConcurrentHashMap<>();
+
     private int priorityIncreasePointer;
 
     private static Pattern sentPattern;
@@ -844,18 +846,7 @@ public class FileLoader extends BaseController {
 
 
     private FileLoadOperation loadFileInternal(final TLRPC.Document document, final SecureDocument secureDocument, final WebFile webDocument, TLRPC.TL_fileLocationToBeDeprecated location, final ImageLocation imageLocation, Object parentObject, final String locationExt, final long locationSize, int priority, FileLoadOperationStream stream, final long streamOffset, boolean streamPriority, final int cacheType) {
-        String fileName;
-        if (location != null) {
-            fileName = getAttachFileName(location, locationExt);
-        } else if (secureDocument != null) {
-            fileName = getAttachFileName(secureDocument);
-        } else if (document != null) {
-            fileName = getAttachFileName(document);
-        } else if (webDocument != null) {
-            fileName = getAttachFileName(webDocument);
-        } else {
-            fileName = null;
-        }
+        String fileName = getFilename(document, secureDocument, webDocument, location, locationExt);
         if (fileName == null || fileName.contains("" + Integer.MIN_VALUE)) {
             return null;
         }
@@ -1064,7 +1055,12 @@ public class FileLoader extends BaseController {
                 }
 
                 if (document != null && parentObject instanceof MessageObject && (reason == 0 || reason == 1)) {
-                    getDownloadController().onDownloadFail((MessageObject) parentObject, reason);
+                    int c = 0;
+                    if (reason == 0) {
+                        c = failedToLoad.compute(fileName,  (k, v) -> (v == null) ? 1 : v + 1);
+                        if (c > 4) getDownloadController().removeDownloadByFileName(fileName);
+                    }
+                    if (reason != 0 || c > 4) getDownloadController().onDownloadFail((MessageObject) parentObject, reason);
                 } else if (reason == -1) {
                     LaunchActivity.checkFreeDiscSpaceStatic(2);
                 }
@@ -1180,16 +1176,9 @@ public class FileLoader extends BaseController {
     }
 
     private void loadFile(final TLRPC.Document document, final SecureDocument secureDocument, final WebFile webDocument, TLRPC.TL_fileLocationToBeDeprecated location, final ImageLocation imageLocation, final Object parentObject, final String locationExt, final long locationSize, final int priority, final int cacheType) {
-        String fileName;
-        if (location != null) {
-            fileName = getAttachFileName(location, locationExt);
-        } else if (document != null) {
-            fileName = getAttachFileName(document);
-        } else if (webDocument != null) {
-            fileName = getAttachFileName(webDocument);
-        } else {
-            fileName = null;
-        }
+        String fileName = getFilename(document, secureDocument, webDocument, location, locationExt);
+        if (fileName == null) return;
+
         Runnable runnable = () -> loadFileInternal(document, secureDocument, webDocument, location, imageLocation, parentObject, locationExt, locationSize, priority, null, 0, false, cacheType);
         if (cacheType != 10 && !TextUtils.isEmpty(fileName) && !fileName.contains("" + Integer.MIN_VALUE)) {
             LoadOperationUIObject uiObject = new FileLoader.LoadOperationUIObject();
@@ -1995,5 +1984,24 @@ public class FileLoader extends BaseController {
         getNotificationCenter().addObserver(observer[0], NotificationCenter.fileUploaded);
         getNotificationCenter().addObserver(observer[0], NotificationCenter.fileUploadFailed);
         uploadFile(path, false, false, ConnectionsManager.FileTypeFile);
+    }
+
+    private String getFilename(final TLRPC.Document document, final SecureDocument secureDocument, final WebFile webDocument, TLRPC.TL_fileLocationToBeDeprecated location, final String locationExt) {
+        String fileName;
+        if (location != null) {
+            fileName = getAttachFileName(location, locationExt);
+        } else if (secureDocument != null) {
+            fileName = getAttachFileName(secureDocument);
+        } else if (document != null) {
+            fileName = getAttachFileName(document);
+        } else if (webDocument != null) {
+            fileName = getAttachFileName(webDocument);
+        } else {
+            return null;
+        }
+
+        Integer failedCount = failedToLoad.getOrDefault(fileName, 0);
+        if (failedCount != null && failedCount > 5) return null;
+        return fileName;
     }
 }
