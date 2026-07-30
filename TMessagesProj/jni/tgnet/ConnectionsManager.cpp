@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <fcntl.h>
 #include <memory.h>
+#include <mutex>
 #include <openssl/rand.h>
 #include <zlib.h>
 #include <memory>
@@ -137,19 +138,15 @@ ConnectionsManager::~ConnectionsManager() {
 }
 
 std::vector<ConnectionsManager*> ConnectionsManager::_instances = std::vector<ConnectionsManager*>(10);
+static std::mutex _instances_mutex;
 
 ConnectionsManager& ConnectionsManager::getInstance(int32_t instanceNum) {
-    static std::mutex _new_mutex;
-
-    if (instanceNum >= _instances.capacity()) {
+    std::lock_guard<std::mutex> lock(_instances_mutex);
+    if (instanceNum >= _instances.size()) {
         _instances.resize(instanceNum + 10, nullptr);
     }
-
-    if(_instances[instanceNum] == nullptr) {
-        _new_mutex.lock();
-        if(_instances[instanceNum] == nullptr)
-            _instances[instanceNum] = new ConnectionsManager(instanceNum);
-        _new_mutex.unlock();
+    if (_instances[instanceNum] == nullptr) {
+        _instances[instanceNum] = new ConnectionsManager(instanceNum);
     }
     return *_instances[instanceNum];
 }

@@ -1,4 +1,5 @@
 #include <jni.h>
+#include <mutex>
 #include "tgnet/ApiScheme.h"
 #include "tgnet/BuffersStorage.h"
 #include "tgnet/NativeByteBuffer.h"
@@ -577,9 +578,14 @@ void setJava(JNIEnv *env, jclass c, jboolean useJavaByteBuffers) {
     ConnectionsManager::useJavaVM(java, useJavaByteBuffers);
 }
 
+static std::mutex _jniEnv_mutex;
+
 void setJava1(JNIEnv *env, jclass c, jint instanceNum) {
-    if (instanceNum >= jniEnv.capacity()) {
-        jniEnv.resize(instanceNum + 10, nullptr);
+    {
+        std::lock_guard<std::mutex> lock(_jniEnv_mutex);
+        if (instanceNum >= jniEnv.size()) {
+            jniEnv.resize(instanceNum + 10, nullptr);
+        }
     }
     ConnectionsManager::getInstance(instanceNum).setDelegate(new Delegate());
 }
