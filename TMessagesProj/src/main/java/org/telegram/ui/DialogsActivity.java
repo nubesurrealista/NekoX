@@ -10430,6 +10430,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
             } else {
                 createActionMode(null);
+                if (actionBar.getBackButton() != null && !(actionBar.getBackButton().getDrawable() instanceof BackDrawable)) {
+                    actionBar.setBackButtonDrawable(backDrawable = new BackDrawable(false));
+                }
             }
             AndroidUtilities.hideKeyboard(fragmentView.findFocus());
             actionBar.setActionModeOverrideColor(getThemedColor(Theme.key_windowBackgroundWhite));

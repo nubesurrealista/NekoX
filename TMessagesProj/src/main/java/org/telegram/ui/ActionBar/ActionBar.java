@@ -317,7 +317,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
         checkBackButtonVisibility();
     }
     public void checkBackButtonVisibility() {
-        if ((parentFragment instanceof DialogsActivity dialogsActivity) && !dialogsActivity.onlySelect) {
+        if ((parentFragment instanceof DialogsActivity dialogsActivity) && !dialogsActivity.onlySelect && !isActionModeShowed()) {
             hideBackButton = true;
         } else {
             hideBackButton = false;
@@ -336,7 +336,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
             createBackButtonImage();
         }
         backButtonImageView.setVisibility((drawable == null || hideBackButton) ? GONE : VISIBLE);
-        if ((parentFragment instanceof DialogsActivity dialogsActivity) && !dialogsActivity.onlySelect) backButtonImageView.setVisibility(GONE);
+        if ((parentFragment instanceof DialogsActivity dialogsActivity) && !dialogsActivity.onlySelect && !isActionModeShowed()) backButtonImageView.setVisibility(GONE);
         backButtonImageView.setImageDrawable(backButtonDrawable = drawable);
         if (drawable instanceof BackDrawable) {
             BackDrawable backDrawable = (BackDrawable) drawable;
