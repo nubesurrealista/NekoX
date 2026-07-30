@@ -25,6 +25,7 @@ import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -1082,7 +1083,6 @@ public class MessagePreviewView extends FrameLayout {
                         return;
                     }
                     ChatActivity.noForwardQuote = messagePreviewParams.hideForwardSendersName = !messagePreviewParams.hideForwardSendersName;
-                    messagePreviewParams.hideForwardSendersName = !messagePreviewParams.hideForwardSendersName;
                     returnSendersNames = false;
                     if (!messagePreviewParams.hideForwardSendersName) {
                         messagePreviewParams.hideCaption = false;
