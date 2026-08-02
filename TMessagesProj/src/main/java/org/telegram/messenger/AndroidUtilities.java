@@ -135,8 +135,10 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.graphics.Insets;
 import androidx.core.math.MathUtils;
 import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.SpringAnimation;
@@ -1490,59 +1492,10 @@ public class AndroidUtilities {
         if (context == null || (AndroidUtilities.statusBarHeight > 0 && !force)) {
             return;
         }
-
-        if (BuildVars.USE_LEGACY_SYSTEM_INSETS) {
-            AndroidUtilities.statusBarHeight = getStatusBarHeight(context);
-            AndroidUtilities.navigationBarHeight = getNavigationBarHeight(context);
-        }
-
-        if (!MomoConfig.tempDebug.Bool()) return;
-        int newStatusBarHeight = getStatusBarHeight(context);
-        if (!statusBarHeightOverridden || (newStatusBarHeight > AndroidUtilities.statusBarHeight)) {
-            AndroidUtilities.statusBarHeight = newStatusBarHeight;
-        }
-        AndroidUtilities.navigationBarHeight = getNavigationBarHeight(context);
-        Log.d("030-sb", "final status bar height = " + statusBarHeight);
-    }
-
-    private static boolean statusBarHeightOverridden = false;
-    public static void overrideStatusBarHeight(int height, int type) {
-        if (!MomoConfig.tempDebug.Bool()) return;
-        if (statusBarHeightOverridden) {
-            if (height > AndroidUtilities.statusBarHeight)
-                AndroidUtilities.statusBarHeight = height;
-        } else {
-            AndroidUtilities.statusBarHeight = height;
-        }
-        statusBarHeightOverridden = true;
-        Log.d("030-sb", String.format("statusBarHeight set to %d (overrideStatusBarHeight %d)", height, type));
-    }
-
-    public static void fillStatusBarHeight(View view) {
-        if (!MomoConfig.tempDebug.Bool()) return;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-            view.setOnApplyWindowInsetsListener((__, insets) -> {
-                try {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        overrideStatusBarHeight(insets.getSystemWindowInsetTop(), 2);
-                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        overrideStatusBarHeight(insets.getInsets(WindowInsets.Type.systemBars()).top, 1);
-                    }
-                } catch (Exception e) {
-                    Log.e("030-sb", "getSystemWindowInsetTop", e);
-                }
-                return insets;
-            });
-        }
     }
 
     public static int getStatusBarHeight(Context context) {
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        return resourceId > 0 ? context.getResources().getDimensionPixelSize(resourceId) : 0;
-    }
-
-    private static int getNavigationBarHeight(Context context) {
-        int resourceId = context.getResources().getIdentifier("navigation_bar_height", "dimen", "android");
         return resourceId > 0 ? context.getResources().getDimensionPixelSize(resourceId) : 0;
     }
 
@@ -2001,7 +1954,7 @@ public class AndroidUtilities {
 
     @SuppressLint("WrongConstant")
     public static void lockOrientation(Activity activity) {
-        if (activity == null || prevOrientation != -10) {
+        if (activity == null || prevOrientation != -10 || isTabletInternal()) {
             return;
         }
         try {
@@ -2045,7 +1998,7 @@ public class AndroidUtilities {
 
     @SuppressLint("WrongConstant")
     public static void lockOrientation(Activity activity, int orientation) {
-        if (activity == null) {
+        if (activity == null || isTabletInternal()) {
             return;
         }
         try {
@@ -2957,6 +2910,15 @@ public class AndroidUtilities {
         return layer & 0x0000ffff | (version << 16);
     }
 
+    public static void executeOnUIThread(Runnable runnable) {
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            AndroidUtilities.runOnUIThread(runnable);
+            return;
+        }
+
+        runnable.run();
+    }
+
     public static void runOnUIThread(Runnable runnable) {
         runOnUIThread(runnable, 0);
     }
@@ -3043,21 +3005,19 @@ public class AndroidUtilities {
 
     public static int getMinTabletSide() {
         if (!isSmallTablet()) {
-            int smallSide = Math.min(displaySize.x, displaySize.y);
-            int leftSide = smallSide * 35 / 100;
-            if (leftSide < dp(320)) {
-                leftSide = dp(320);
-            }
+            final int smallSide = Math.min(displaySize.x, displaySize.y);
+            final int leftSide = getTabletLeftFragmentSize(smallSide, 0, 0);
             return smallSide - leftSide;
         } else {
-            int smallSide = Math.min(displaySize.x, displaySize.y);
-            int maxSide = Math.max(displaySize.x, displaySize.y);
-            int leftSide = maxSide * 35 / 100;
-            if (leftSide < dp(320)) {
-                leftSide = dp(320);
-            }
+            final int smallSide = Math.min(displaySize.x, displaySize.y);
+            final int maxSide = Math.max(displaySize.x, displaySize.y);
+            final int leftSide = getTabletLeftFragmentSize(maxSide, 0, 0);
             return Math.min(smallSide, maxSide - leftSide);
         }
+    }
+
+    public static int getTabletLeftFragmentSize(final int fullWidth, final int insetLeft, final int insetRight) {
+        return insetLeft + Math.max(dp(320), (fullWidth - insetLeft - insetRight) * 35 / 100);
     }
 
     public static int getPhotoSize() {
@@ -6995,6 +6955,47 @@ public class AndroidUtilities {
         if (Build.VERSION.SDK_INT >= 29) {
             window.setStatusBarContrastEnforced(false);
             window.setNavigationBarContrastEnforced(false);
+        }
+    }
+
+    public static void applyEdgeToEdgeLayoutParams(WindowManager.LayoutParams windowLayoutParams) {
+        if (Build.VERSION.SDK_INT >= 28) {
+            windowLayoutParams.layoutInDisplayCutoutMode = Build.VERSION.SDK_INT >= 30
+                    ? WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
+                    : WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+        }
+    }
+
+
+
+    public static Insets getDefaultWindowInsets(WindowInsetsCompat insets, boolean withIme) {
+        final int insetsType = WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout();
+        final Insets systemInsets = insets.getInsetsIgnoringVisibility(insetsType);
+
+        if (withIme) {
+            final Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
+            return Insets.max(systemInsets, imeInsets);
+        }
+
+        return systemInsets;
+    }
+
+    public static void setViewLayoutMargins(View v, int l, int t, int r, int b) {
+        if (v == null) {
+            return;
+        }
+
+        final ViewGroup.LayoutParams lp = v.getLayoutParams();
+        if (lp instanceof ViewGroup.MarginLayoutParams) {
+            final ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) lp;
+
+            if (mlp.leftMargin != l || mlp.topMargin != t || mlp.rightMargin != r || mlp.bottomMargin != b) {
+                mlp.leftMargin = l;
+                mlp.topMargin = t;
+                mlp.rightMargin = r;
+                mlp.bottomMargin = b;
+                v.requestLayout();
+            }
         }
     }
 

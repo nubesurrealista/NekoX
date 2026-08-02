@@ -30,6 +30,7 @@ import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.AppGlobalConfig;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BillingController;
 import org.telegram.messenger.BirthdayController;
@@ -588,6 +589,18 @@ public class StarsController {
         new StarsIntroActivity.StarsNeededSheet(activity, null, amount, StarsIntroActivity.StarsNeededSheet.TYPE_LINK, purpose, () -> {
 
         }, 0).show();
+    }
+
+    private boolean isInvoiceBillingDisabled(TLRPC.InputPeer purposePeer) {
+        return AppGlobalConfig.getInstance(currentAccount).starsSpendTopUpInvoiceDisabled.get() && purposePeer != null;
+    }
+
+    public boolean canBuy(TLRPC.InputPeer purposePeer) {
+        if (purposePeer != null && isInvoiceBillingDisabled(purposePeer)) {
+            return BillingController.getInstance().isReady();
+        }
+
+        return true;
     }
 
     public void buy(

@@ -63,19 +63,7 @@ public class BotCommandsMenuView extends View {
             invalidate();
         }
     };
-    RLottieDrawable webViewAnimation = new RLottieDrawable(R.raw.bot_webview_sheet_to_cross, String.valueOf(R.raw.bot_webview_sheet_to_cross) + hashCode(), AndroidUtilities.dp(20), AndroidUtilities.dp(20)) {
-        @Override
-        public void invalidateSelf() {
-            super.invalidateSelf();
-            invalidate();
-        }
-
-        @Override
-        protected void invalidateInternal() {
-            super.invalidateInternal();
-            invalidate();
-        }
-    };
+    RLottieDrawable webViewAnimation = new RLottieDrawable(R.raw.bot_webview_sheet_to_cross, String.valueOf(R.raw.bot_webview_sheet_to_cross) + hashCode(), AndroidUtilities.dp(20), AndroidUtilities.dp(20));
     public boolean expanded;
     float expandProgress;
 
@@ -101,25 +89,14 @@ public class BotCommandsMenuView extends View {
         if (!MomoConfig.unroundedChatView.Bool()) backDrawable.setRoundCap();
         backgroundDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(16), Color.TRANSPARENT, Theme.getColor(Theme.key_featuredStickers_addButtonPressed));
         backgroundDrawable.setCallback(this);
+        webViewAnimation.setCallback(this);
+        webViewAnimation.setMasterParent(this);
         setContentDescription(getString(R.string.AccDescrBotMenu));
     }
 
     public void setDrawBackgroundDrawable(boolean drawBackgroundDrawable) {
         this.drawBackgroundDrawable = drawBackgroundDrawable;
         invalidate();
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        webViewAnimation.setMasterParent(this);
-        webViewAnimation.setCurrentParentView(this);
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        webViewAnimation.setMasterParent(this);
     }
 
     public void setWebView(boolean webView) {
