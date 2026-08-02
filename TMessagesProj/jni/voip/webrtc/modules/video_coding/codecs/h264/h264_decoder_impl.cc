@@ -383,6 +383,8 @@ int32_t H264DecoderImpl::Decode(const EncodedImage& input_image,
   packet->size = static_cast<int>(input_image.size());
   int64_t frame_timestamp_us = input_image.ntp_time_ms_ * 1000;  // ms -> μs
   av_context_->opaque = reinterpret_cast<void*>(frame_timestamp_us);
+  packet->pts = frame_timestamp_us;
+  packet->dts = frame_timestamp_us;
 
   int result = avcodec_send_packet(av_context_.get(), packet.get());
 
@@ -402,6 +404,8 @@ int32_t H264DecoderImpl::Decode(const EncodedImage& input_image,
   // We don't expect reordering. Decoded frame timestamp should match
   // the input one.
   RTC_DCHECK_EQ(av_frame_->opaque, reinterpret_cast<void*>(frame_timestamp_us));
+  RTC_DCHECK_NE(av_frame_->pts, AV_NOPTS_VALUE);
+  RTC_DCHECK_EQ(av_frame_->pts, frame_timestamp_us);
 
   // TODO(sakal): Maybe it is possible to get QP directly from FFmpeg.
   h264_bitstream_parser_.ParseBitstream(input_image);
