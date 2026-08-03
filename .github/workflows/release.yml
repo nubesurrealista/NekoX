@@ -29,18 +29,18 @@ jobs:
           submodules: recursive
       - name: Fetch Status
         run: |
-          git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
-          git submodule status TMessagesProj/jni/libvpx > libvpx_status
-          git submodule status TMessagesProj/jni/dav1d > dav1d_status
+          git submodule status TMessagesProj/jni/third_party/ffmpeg > ffmpeg_status
+          git submodule status TMessagesProj/jni/third_party/libvpx > libvpx_status
+          git submodule status TMessagesProj/jni/third_party/dav1d > dav1d_status
       - name: FFmpeg Cache
         id: cache
         uses: actions/cache@v5
         with:
           path: |
-            TMessagesProj/jni/ffmpeg/build
-            TMessagesProj/jni/libvpx/build
-            TMessagesProj/jni/dav1d/build
-          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'dav1d_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
+            TMessagesProj/jni/third_party/ffmpeg/build
+            TMessagesProj/jni/third_party/libvpx/build
+            TMessagesProj/jni/third_party/dav1d/build
+          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'dav1d_status', 'TMessagesProj/jni/third_party/*ffmpeg*.sh', 'TMessagesProj/jni/third_party/*libvpx*.sh', 'TMessagesProj/jni/third_party/*dav1d*.sh', 'TMessagesProj/jni/third_party/patches/ffmpeg/*') }}
       - name: Setup Android SDK Tools
         uses: android-actions/setup-android@v3
         if: steps.cache.outputs.cache-hit != 'true'
@@ -116,9 +116,9 @@ jobs:
           submodules: recursive
       - name: Fetch Status
         run: |
-          git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
-          git submodule status TMessagesProj/jni/libvpx > libvpx_status
-          git submodule status TMessagesProj/jni/dav1d > dav1d_status
+          git submodule status TMessagesProj/jni/third_party/ffmpeg > ffmpeg_status
+          git submodule status TMessagesProj/jni/third_party/libvpx > libvpx_status
+          git submodule status TMessagesProj/jni/third_party/dav1d > dav1d_status
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
       - name: Native Cache
         id: cache
@@ -126,20 +126,21 @@ jobs:
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status', 'dav1d_status') }}-${{ matrix.flavor }}
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status') }}-${{ matrix.flavor }}
       - name: Checkout Library
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          git submodule update --init 'TMessagesProj/jni/*' || true
+          git submodule update --init --recursive 'TMessagesProj/jni/*' || true
+          git submodule update --init --recursive 'TMessagesProj/jni/third_party/*' || true
       - name: FFmpeg Cache
         uses: actions/cache@v5
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           path: |
-            TMessagesProj/jni/ffmpeg/build
-            TMessagesProj/jni/libvpx/build
-            TMessagesProj/jni/dav1d/build
-          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'dav1d_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
+            TMessagesProj/jni/third_party/ffmpeg/build
+            TMessagesProj/jni/third_party/libvpx/build
+            TMessagesProj/jni/third_party/dav1d/build
+          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'dav1d_status', 'TMessagesProj/jni/third_party/*ffmpeg*.sh', 'TMessagesProj/jni/third_party/*libvpx*.sh', 'TMessagesProj/jni/third_party/*dav1d*.sh', 'TMessagesProj/jni/third_party/patches/ffmpeg/*') }}
       - name: BoringSSL Cache
         uses: actions/cache@v5
         if: steps.cache.outputs.cache-hit != 'true'
@@ -168,7 +169,7 @@ jobs:
       - name: Fix ffmpeg
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          cd TMessagesProj/jni
+          cd TMessagesProj/jni/third_party
           ./patch_ffmpeg.sh || true
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
@@ -204,42 +205,42 @@ jobs:
           echo "ndk.dir=${ANDROID_HOME}/ndk/27.2.12479018" >> local.properties
       - name: Fetch Status
         run: |
-          git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
-          git submodule status TMessagesProj/jni/libvpx > libvpx_status
-          git submodule status TMessagesProj/jni/dav1d > dav1d_status
+          git submodule status TMessagesProj/jni/third_party/ffmpeg > ffmpeg_status
+          git submodule status TMessagesProj/jni/third_party/libvpx > libvpx_status
+          git submodule status TMessagesProj/jni/third_party/dav1d > dav1d_status
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
       - name: Native Cache (armeabi-v7a)
         uses: actions/cache@v5
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status', 'dav1d_status') }}-armeabi-v7a
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status') }}-armeabi-v7a
       - name: Native Cache (arm64-v8a)
         uses: actions/cache@v5
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status', 'dav1d_status') }}-arm64-v8a
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status') }}-arm64-v8a
       - name: Native Cache (x86)
         uses: actions/cache@v5
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status', 'dav1d_status') }}-x86
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status') }}-x86
       - name: Native Cache (x86_64)
         uses: actions/cache@v5
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status', 'dav1d_status') }}-x86_64
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status') }}-x86_64
       - name: FFmpeg Cache
         uses: actions/cache@v5
         with:
           path: |
-            TMessagesProj/jni/ffmpeg/build
-            TMessagesProj/jni/libvpx/build
-            TMessagesProj/jni/dav1d/build
-          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'dav1d_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
+            TMessagesProj/jni/third_party/ffmpeg/build
+            TMessagesProj/jni/third_party/libvpx/build
+            TMessagesProj/jni/third_party/dav1d/build
+          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'dav1d_status', 'TMessagesProj/jni/third_party/*ffmpeg*.sh', 'TMessagesProj/jni/third_party/*libvpx*.sh', 'TMessagesProj/jni/third_party/*dav1d*.sh', 'TMessagesProj/jni/third_party/patches/ffmpeg/*') }}
       - name: BoringSSL Cache
         uses: actions/cache@v5
         with:

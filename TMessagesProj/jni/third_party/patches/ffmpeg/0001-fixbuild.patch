@@ -7,8 +7,7 @@ Subject: [PATCH] fixbuild
  libavcodec/get_bits.h | 16 ++++++++--------
  libavcodec/golomb.h   |  2 +-
  libavformat/isom.h    |  2 +-
- libavutil/cpu.c       |  6 +++---
- 4 files changed, 13 insertions(+), 13 deletions(-)
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/libavcodec/get_bits.h b/libavcodec/get_bits.h
 index a22c9755ae..354adb64c8 100644
@@ -98,23 +97,6 @@ index c7264defb6..e9d75dee6b 100644
      AVFormatContext *fc;
      int time_scale;
      int64_t duration;     ///< duration of the longest track
-diff --git a/libavutil/cpu.c b/libavutil/cpu.c
-index 07b90aa90a..19d1324fda 100644
---- a/libavutil/cpu.c
-+++ b/libavutil/cpu.c
-@@ -307,9 +307,9 @@ size_t av_cpu_max_align(void)
- #if !ARCH_X86
- unsigned long ff_getauxval(unsigned long type)
- {
--#if HAVE_GETAUXVAL
--    return getauxval(type);
--#elif HAVE_ELF_AUX_INFO
-+// #if HAVE_GETAUXVAL
-+//     return getauxval(type);
-+#if HAVE_ELF_AUX_INFO
-     unsigned long aux = 0;
-     int ret = elf_aux_info(type, &aux, sizeof(aux));
-     if (ret != 0) {
 -- 
 2.55.0
 
