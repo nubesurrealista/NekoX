@@ -4,7 +4,7 @@ source "bin/init/env.sh"
 
 yasm --version || exit 1
 
-cd TMessagesProj/jni || exit 1
+cd TMessagesProj/jni/third_party || exit 1
 git submodule update --init libvpx
 
 cd libvpx

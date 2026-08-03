@@ -1,19 +1,22 @@
 [submodule "TMessagesProj/jni/libwebp"]
 	path = TMessagesProj/jni/libwebp
 	url = https://github.com/webmproject/libwebp
+	branch = v1.3.2
 [submodule "TMessagesProj/jni/ffmpeg"]
-	path = TMessagesProj/jni/ffmpeg
+	path = TMessagesProj/jni/third_party/ffmpeg
 	url = https://github.com/FFmpeg/FFmpeg
 	ignore = dirty
-	branch = n7.1.1
+	branch = n8.1.2-30-g45f1910444
 [submodule "TMessagesProj/jni/boringssl"]
 	path = TMessagesProj/jni/boringssl
 	url = https://github.com/google/boringssl
 	ignore = all
-[submodule "TMessagesProj/jni/libvpx"]
-	path = TMessagesProj/jni/libvpx
+[submodule "TMessagesProj/jni/third_party/libvpx"]
+	path = TMessagesProj/jni/third_party/libvpx
 	url = https://github.com/webmproject/libvpx
+	branch = v1.16.0
 	ignore = dirty
 [submodule "TMessagesProj/jni/dav1d"]
-	path = TMessagesProj/jni/dav1d
+	path = TMessagesProj/jni/third_party/dav1d
 	url = https://code.videolan.org/videolan/dav1d
+	branch = 1.5.4

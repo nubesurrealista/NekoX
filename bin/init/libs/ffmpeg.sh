@@ -2,7 +2,7 @@
 
 source "bin/init/env.sh"
 
-cd TMessagesProj/jni || exit 1
+cd TMessagesProj/jni/third_party || exit 1
 git submodule update --init ffmpeg dav1d
 
 cd ffmpeg
@@ -10,6 +10,6 @@ git reset --hard
 git clean -fdx
 cd ..
 
-./build_dav1d.sh || exit 1
+#./build_dav1d.sh || exit 1
 ./build_ffmpeg_clang.sh || exit 1
 ./patch_ffmpeg.sh || exit 1
