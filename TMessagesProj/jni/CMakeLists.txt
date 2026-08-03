@@ -631,9 +631,9 @@ target_include_directories(${NATIVE_LIB} PUBLIC
         opus/opusfile
         third_party/libyuv/include
         boringssl/include
-        ffmpeg/
-        ffmpeg/build/${ANDROID_ABI}/include
-        libvpx/build/${ANDROID_ABI}/include
+        third_party/ffmpeg/
+        third_party/ffmpeg/build/${ANDROID_ABI}/include
+        third_party/libvpx/build/${ANDROID_ABI}/include
         emoji
         exoplayer/include
         exoplayer/libFLAC/include

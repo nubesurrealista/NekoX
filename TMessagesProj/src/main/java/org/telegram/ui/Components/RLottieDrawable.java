@@ -23,6 +23,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.JsonReader;
 import android.util.Log;
