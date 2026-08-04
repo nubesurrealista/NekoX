@@ -4,7 +4,9 @@ import static org.telegram.messenger.AndroidUtilities.dp;
 import static org.telegram.messenger.LocaleController.getString;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC;
@@ -29,12 +32,14 @@ import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.CubicBezierInterpolator;
+import org.telegram.ui.Components.ItemOptions;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.StickerEmptyView;
 import org.telegram.ui.Components.UItem;
 import org.telegram.ui.Components.UniversalAdapter;
 import org.telegram.ui.Components.UniversalRecyclerView;
 import org.telegram.ui.Components.chat.layouts.ChatActivityFadeView;
+import org.telegram.ui.ProfileActivity;
 import org.telegram.ui.Stories.recorder.ButtonWithCounterView;
 import org.telegram.ui.community.cells.CommunityPendingRequestCell;
 import org.telegram.ui.community.sheet.CommunityInviteOnlySheet;
@@ -211,6 +216,30 @@ public class CommunityPendingRequestsActivity extends BaseFragment implements Fa
     }
 
     private boolean onLongClick(UItem item, View view, int position, float x, float y) {
+        if (item.object instanceof CommunityPendingRequestCell.Data) {
+            final CommunityPendingRequestCell.Data data = (CommunityPendingRequestCell.Data) item.object;
+            final TLRPC.User user = data.requestFromUser;
+            ItemOptions.makeOptions(this, view)
+                    .setScrimViewBackground(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundWhite)))
+                    .add(R.drawable.msg_filled_menu_users, LocaleController.getString(R.string.OpenProfile), () -> {
+                        Bundle args = new Bundle();
+                        args.putLong("user_id", user.id);
+                        if (MessagesController.getInstance(currentAccount).checkCanOpenChat(args, this)) {
+                            presentFragment(new ProfileActivity(args));
+                        } else {
+                            BulletinFactory.of(this).createSimpleBulletin(R.raw.error, getString(R.string.CantOpenProfile));
+                        }
+                    })
+                    .add(R.drawable.msg_remove, LocaleController.getString(R.string.Ban), true, () -> {
+                        Log.d("030-community", "ban " + user.id + " from " + communityId);
+                        getMessagesController().deleteParticipantFromChat(communityId, user);
+                        if (item.object2 instanceof CommunityPendingRequestCell.ClickDelegate delegate)
+                            delegate.onClickDecline(communityId);
+                    })
+                    .setMinWidth(190)
+                    .show();
+            return true;
+        }
         return false;
     }
 

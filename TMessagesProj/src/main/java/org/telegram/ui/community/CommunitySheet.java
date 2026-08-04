@@ -9,11 +9,13 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,6 +45,7 @@ import org.telegram.messenger.utils.FBool;
 import org.telegram.messenger.utils.GradientProtectionDrawable;
 import org.telegram.messenger.utils.TextWatcherImpl;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.tl.TL_communities;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -77,6 +80,7 @@ import org.telegram.ui.Components.chat.layouts.ChatActivityFadeView;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.FilteredSearchView;
 import org.telegram.ui.LaunchActivity;
+import org.telegram.ui.ProfileActivity;
 import org.telegram.ui.Stories.StoriesListPlaceProvider;
 import org.telegram.ui.Stories.recorder.ButtonWithCounterView;
 import org.telegram.ui.TopicsFragment;
@@ -189,7 +193,7 @@ public class CommunitySheet extends BottomSheet implements NotificationCenter.No
         chatsSearchView.setVisibility(View.GONE);
 
         foundChatsView = new UniversalRecyclerView(context, currentAccount, 0, CommunitySheet.this::fillItemsChatsToAddSearch,
-                CommunitySheet.this::onClickChatToAdd, null, resourcesProvider);
+                CommunitySheet.this::onClickChatToAdd, CommunitySheet.this::onLongClickChatToAdd, resourcesProvider);
         foundChatsView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -442,8 +446,36 @@ public class CommunitySheet extends BottomSheet implements NotificationCenter.No
                 return;
             }
             new CommunityAddOptionsSheet(getContext(), currentCommunity, -chat.id,
-                (isHidden) -> linkToCommunity(chat, communityId, isHidden)).show();
+                    (isHidden) -> linkToCommunity(chat, communityId, isHidden)).show();
         }
+    }
+
+    private boolean onLongClickChatToAdd(UItem item, View view, int position, float x, float y) {
+        if (item.object instanceof CommunityPendingRequestCell.Data) {
+            final CommunityPendingRequestCell.Data data = (CommunityPendingRequestCell.Data) item.object;
+            final TLRPC.User user = data.requestFromUser;
+            ItemOptions.makeOptions(container, view)
+                    .setScrimViewBackground(new ColorDrawable(Theme.getColor(Theme.key_windowBackgroundWhite)))
+                    .add(R.drawable.msg_filled_menu_users, LocaleController.getString(R.string.OpenProfile), () -> {
+                        Bundle args = new Bundle();
+                        args.putLong("user_id", user.id);
+                        if (MessagesController.getInstance(currentAccount).checkCanOpenChat(args, parentFragment)) {
+                            parentFragment.presentFragment(new ProfileActivity(args));
+                        } else {
+                            BulletinFactory.of(parentFragment).createSimpleBulletin(R.raw.error, getString(R.string.CantOpenProfile));
+                        }
+                    })
+                    .add(R.drawable.msg_remove, LocaleController.getString(R.string.Ban), true, () -> {
+                        Log.d("030-community", "ban " + user.id + " from " + (-communityId));
+                        parentFragment.getMessagesController().deleteParticipantFromChat(communityId, user);
+                        if (item.object2 instanceof CommunityPendingRequestCell.ClickDelegate delegate2)
+                            delegate2.onClickDecline(communityId);
+                    })
+                    .setMinWidth(190)
+                    .show();
+            return true;
+        }
+        return false;
     }
 
 
@@ -537,6 +569,10 @@ public class CommunitySheet extends BottomSheet implements NotificationCenter.No
     }
 
     private boolean onLongClickCommunity(UItem item, View view, int position, float x, float y) {
+        if (item.object instanceof CommunityPendingRequestCell.Data) {
+            return onLongClickChatToAdd(item, view, position, x, y);
+        }
+
         final long dialogId;
         final boolean isChannel;
         final boolean isBot;
@@ -855,7 +891,7 @@ public class CommunitySheet extends BottomSheet implements NotificationCenter.No
             AndroidUtilities.removeFromParent(fadeView);
 
             listView = new UniversalRecyclerView(context, currentAccount, 0, CommunitySheet.this::fillItemsChatsToAdd,
-                    CommunitySheet.this::onClickChatToAdd, null, resourcesProvider);
+                    CommunitySheet.this::onClickChatToAdd, CommunitySheet.this::onLongClickChatToAdd, resourcesProvider);
             listView.setSections();
             listView.adapter.setApplyBackground(false);
             listView.setClipToPadding(false);
@@ -932,7 +968,7 @@ public class CommunitySheet extends BottomSheet implements NotificationCenter.No
             super(context);
 
             listView = new UniversalRecyclerView(context, currentAccount, 0, CommunitySheet.this::fillItemsRequests,
-                    CommunitySheet.this::onClickRequest, null, resourcesProvider);
+                    CommunitySheet.this::onClickRequest, CommunitySheet.this::onLongClickChatToAdd, resourcesProvider);
             listView.setSections();
             listView.adapter.setApplyBackground(false);
             listView.setClipToPadding(false);
