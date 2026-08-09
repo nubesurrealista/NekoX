@@ -96,12 +96,60 @@ jobs:
         run: |
           ./run init action boringssl
           ./run init libs boringssl
+  tdlib:
+    name: Native Build (TDLib)
+    runs-on: ubuntu-latest
+    needs:
+      - boringssl
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+      - name: Fetch Status
+        run: |
+          git submodule status TMessagesProj/jni/boringssl > boringssl_status
+          git submodule status TMessagesProj/jni/tdlib > tdlib_status
+      - name: TDLib Cache
+        id: cache
+        uses: actions/cache@v5
+        with:
+          path: |
+            TMessagesProj/jni/tde2e
+            TMessagesProj/jni/tdlib/build
+          key: ${{ hashFiles('boringssl_status', 'tdlib_status') }}-03030
+      - name: Setup Android SDK Tools
+        uses: android-actions/setup-android@v2
+        if: steps.cache.outputs.cache-hit != 'true'
+      - name: Install NDK and gperf
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          SDK_MANAGER=$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager
+          if [ ! -f "$SDK_MANAGER" ]; then
+            SDK_MANAGER=$ANDROID_HOME/tools/bin/sdkmanager
+          fi
+          echo "y" | sudo $SDK_MANAGER --install "ndk;27.2.12479018" --sdk_root=${ANDROID_SDK_ROOT}
+          echo "sdk.dir=${ANDROID_HOME}" > local.properties
+          echo "ndk.dir=${ANDROID_HOME}/ndk/27.2.12479018" >> local.properties
+          sudo apt install -y gperf
+      - name: BoringSSL Cache
+        uses: actions/cache@v5
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          path: |
+            TMessagesProj/jni/boringssl/build
+          key: ${{ hashFiles('boringssl_status') }}
+      - name: Native Build
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          ./run init libs tde2e
+          find -name libtde2e.a
   native:
     name: Native Build (Telegram)
     runs-on: ubuntu-latest
     needs:
       - ffmpeg
-      - boringssl
+      - tdlib
     strategy:
       matrix:
         flavor:
@@ -120,13 +168,14 @@ jobs:
           git submodule status TMessagesProj/jni/third_party/libvpx > libvpx_status
           git submodule status TMessagesProj/jni/third_party/dav1d > dav1d_status
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
+          git submodule status TMessagesProj/jni/tdlib > tdlib_status
       - name: Native Cache
         id: cache
         uses: actions/cache@v5
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status') }}-${{ matrix.flavor }}
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status', 'tdlib_status') }}-${{ matrix.flavor }}
       - name: Checkout Library
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
@@ -148,6 +197,14 @@ jobs:
           path: |
             TMessagesProj/jni/boringssl/build
           key: ${{ hashFiles('boringssl_status') }}
+      - name: TDLib Cache
+        uses: actions/cache@v5
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          path: |
+            TMessagesProj/jni/tde2e
+            TMessagesProj/jni/tdlib/build
+          key: ${{ hashFiles('boringssl_status', 'tdlib_status') }}-03030
       - name: Setup Android SDK Tools
         uses: android-actions/setup-android@v2
         if: steps.cache.outputs.cache-hit != 'true'
@@ -171,6 +228,15 @@ jobs:
         run: |
           cd TMessagesProj/jni/third_party
           ./patch_ffmpeg.sh || true
+      - name: Build TDE2E
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          if ! ls TMessagesProj/jni/tde2e/*/libtde2e.a >/dev/null 2>&1; then
+            echo ">> libtde2e.a not restored from cache, building from source..."
+            ./run init libs tde2e
+          else
+            echo ">> libtde2e.a present, skip build"
+          fi
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
@@ -209,30 +275,31 @@ jobs:
           git submodule status TMessagesProj/jni/third_party/libvpx > libvpx_status
           git submodule status TMessagesProj/jni/third_party/dav1d > dav1d_status
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
+          git submodule status TMessagesProj/jni/tdlib > tdlib_status
       - name: Native Cache (armeabi-v7a)
         uses: actions/cache@v5
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status') }}-armeabi-v7a
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status', 'tdlib_status') }}-armeabi-v7a
       - name: Native Cache (arm64-v8a)
         uses: actions/cache@v5
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status') }}-arm64-v8a
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status', 'tdlib_status') }}-arm64-v8a
       - name: Native Cache (x86)
         uses: actions/cache@v5
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status') }}-x86
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status', 'tdlib_status') }}-x86
       - name: Native Cache (x86_64)
         uses: actions/cache@v5
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status') }}-x86_64
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status', 'tdlib_status') }}-x86_64
       - name: FFmpeg Cache
         uses: actions/cache@v5
         with:
@@ -247,6 +314,13 @@ jobs:
           path: |
             TMessagesProj/jni/boringssl/build
           key: ${{ hashFiles('boringssl_status') }}
+      - name: TDLib Cache
+        uses: actions/cache@v5
+        with:
+          path: |
+            TMessagesProj/jni/tde2e
+            TMessagesProj/jni/tdlib/build
+          key: ${{ hashFiles('boringssl_status', 'tdlib_status') }}-03030
       - name: Fix Gradle Memory
         run: |
           sed -i -e "s/16384/6144/g" gradle.properties
@@ -263,6 +337,9 @@ jobs:
           printf "%s" "$APK_CERT" > /tmp/ci.jks.b64
           base64 -d /tmp/ci.jks.b64 > /tmp/ci.jks
           ./gradlew TMessagesProj:assemble${{ matrix.flavor }}
+          
+          # tmp
+          ls -l TMessagesProj/jni/tde2e/* TMessagesProj/jni/tdlib/build/* || true
 
           APK=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')
           APK=$(dirname $APK)
