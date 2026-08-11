@@ -135,6 +135,9 @@ public class MomoChatSettingsActivity extends MomoSettingsBaseActivity implement
     private final AbstractConfigCell autoSendMessageIfBlockedBySlowModeRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.autoSendMessageIfBlockedBySlowMode, LocaleController.getString(R.string.AutoSendMessageIfBlockedBySlowModeDesc)));
     private final AbstractConfigCell replyAsQuoteByDefaultRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.replyAsQuoteByDefault));
     private final AbstractConfigCell hideMessageSideButtonsRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.hideMessageSideButtons));
+    private final AbstractConfigCell reactionsRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.doubleTapAndReactions),
+            MomoConfig.reactions, MomoConfig.reactionsOptions, null));
+    private final AbstractConfigCell disableReactionsWhenSelectingRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.disableReactionsWhenSelecting));
 
     private final AbstractConfigCell increasedMaxPhotoResolutionRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.increasedMaxPhotoResolution));
     private final AbstractConfigCell enhancedVideoBitrateRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.enhancedVideoBitrate, LocaleController.getString(R.string.EnhancedVideoBitrateInfo)));
@@ -151,14 +154,6 @@ public class MomoChatSettingsActivity extends MomoSettingsBaseActivity implement
     private final AbstractConfigCell maxRecentStickerCountRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true, R.string.maxRecentStickerCount));
     private final AbstractConfigCell maxRecentEmojiCountRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true, R.string.maxRecentEmojiCount));
     private final AbstractConfigCell dividerSticker = cellGroup.appendCell(new ConfigCellDivider());
-
-    // Reaction
-    private final AbstractConfigCell headerReaction = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.ReactionSettings)));
-    private final AbstractConfigCell reactionsRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString(R.string.doubleTapAndReactions),
-            MomoConfig.reactions, MomoConfig.reactionsOptions, null));
-    private final AbstractConfigCell disableReactionsWhenSelectingRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.disableReactionsWhenSelecting));
-    private final AbstractConfigCell ignoreAllReactionsRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.ignoreAllReactions));
-    private final AbstractConfigCell dividerReaction = cellGroup.appendCell(new ConfigCellDivider());
 
     // Operation Confirmatation
     private final AbstractConfigCell headerConfirms = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.ConfirmSettings)));

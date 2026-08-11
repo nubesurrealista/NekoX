@@ -368,4 +368,5 @@
     <string name="HideFAB">Hide floating buttons in chat list</string>
     <string name="HideMessageSideButtons">Hide side button next to messages</string>
     <string name="CantOpenProfile">Can\'t open profile of target user</string>
+    <string name="AntiSpamSettings">Anti-spam</string>
 </resources>

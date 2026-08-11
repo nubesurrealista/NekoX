@@ -355,6 +355,7 @@ import java.util.zip.ZipOutputStream;
 
 import kotlin.Unit;
 import me.vkryl.android.animator.BoolAnimator;
+import moe.hx030.momogram.settings.MomoAntiSpamSettingsActivity;
 import moe.hx030.momogram.util.ThreadUtil;
 import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.MomoUpdater;
@@ -15666,6 +15667,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     String.format("%s - %s", modSettings, LocaleController.getString(R.string.Chat)),
                     String.format("%s - %s", modSettings, LocaleController.getString(R.string.Experiment)),
                     String.format("%s - %s", modSettings, LocaleController.getString(R.string.AppearanceSettings)),
+                    String.format("%s - %s", modSettings, LocaleController.getString(R.string.AntiSpamSettings)),
             };
             for (Map.Entry<Integer, ArrayList<Pair<Integer, String>>> e : strMap.entrySet()) {
                 for (Pair<Integer, String> v : e.getValue()) {
@@ -15681,6 +15683,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 break;
                             case ConfigItem.CHAT:
                                 f.presentFragment(new MomoChatSettingsActivity().setScrollTo(v.second, v.first, false));
+                                break;
+                            case ConfigItem.ANTI_SPAM:
+                                f.presentFragment(new MomoAntiSpamSettingsActivity().setScrollTo(v.second, v.first, false));
                                 break;
                             case ConfigItem.EXPERIMENTAL:
                                 f.presentFragment(new MomoExperimentalSettingsActivity().setScrollTo(v.second, v.first, false));
@@ -16328,7 +16333,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             return;
         }
 
-        if (!triedInLayout && listView.isInLayout()) {
+        if (!triedInLayout && listView != null && listView.isInLayout()) {
             if (!listView.isAttachedToWindow()) return;
             listView.post(() -> updateListAnimated(updateOnlineCount, true));
             return;

@@ -107,8 +107,6 @@ public class MomoExperimentalSettingsActivity extends MomoSettingsBaseActivity {
     private final AbstractConfigCell customAudioBitrateRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractConfigCell fasterReconnectHackRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.fasterReconnectHack, LocaleController.getString(R.string.FasterReconnectHackAbout)));
     private final AbstractConfigCell showQuickReconnectRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.showQuickReconnect, LocaleController.getString(R.string.ShowQuickReconnectDesc)));
-    private final AbstractConfigCell autoArchiveAndMuteRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.autoArchiveAndMute, LocaleController.getString(R.string.AutoArchiveAndMuteAbout)));
-    private final AbstractConfigCell autoArchiveAndMuteNoCommonGroupOnlyRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.autoArchiveAndMuteNoCommonGroupOnly, LocaleController.getString(R.string.AutoArchiveAndMuteNoCommonGroupOnlyAbout)));
     private final AbstractConfigCell removePremiumAnnoyanceRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.removePremiumAnnoyance, LocaleController.getString(R.string.RemovePremiumAnnoyanceDesc)));
     private final AbstractConfigCell chatListFontSizeFollowChatRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.chatListFontSizeFollowChat));
     private final AbstractConfigCell alwaysDestroyPhotoViewerRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.alwaysDestroyPhotoViewer));
@@ -116,12 +114,6 @@ public class MomoExperimentalSettingsActivity extends MomoSettingsBaseActivity {
     private final AbstractConfigCell resumeAudioPlaybackOnLaunchRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.resumeAudioPlaybackOnLaunch));
     private final AbstractConfigCell aidlOnLaunchRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.aidlOnLaunch));
     private final AbstractConfigCell autoDecryptPGPMessagesRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.autoDecryptPGPMessages));
-    private final AbstractConfigCell autoBanDelAccFromReqRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.autoDismissJoinReq, LocaleController.getString(R.string.AutoDismissJoinReqDesc)));
-    private final AbstractConfigCell autoBanAccNameRegexRow = cellGroup.appendCell(new ConfigCellTextInput(null, MomoConfig.autoDismissRegex, null));
-    private final AbstractConfigCell autoBanDelAccBioFromReqRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.autoDismissJoinReqBio));
-    private final AbstractConfigCell autoBanNameUseOpenCCRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.autoDismissNameUseOpenCC));
-    private final AbstractConfigCell autoDismissDummyRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.autoDismissDummy));
-    private final AbstractConfigCell debugAntiSpamRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.debugAntiSpam));
     private final AbstractConfigCell tempDebugRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.tempDebug));
     private final AbstractConfigCell divider0 = cellGroup.appendCell(new ConfigCellDivider());
 

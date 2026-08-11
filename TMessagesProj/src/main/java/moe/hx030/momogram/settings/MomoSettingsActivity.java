@@ -349,14 +349,15 @@ public class MomoSettingsActivity extends BaseFragment {
         items.add(SettingsActivity.SettingCell.Factory.of(1, 0xFF1CA5ED, 0xFF1488E1, R.drawable.msg_filled_general, getString(R.string.General)));
         items.add(SettingsActivity.SettingCell.Factory.of(2, 0xFF32C0CE, 0xFF1D9CC6, R.drawable.menu_feature_color_profile, getString(R.string.AppearanceSettings)));
         items.add(SettingsActivity.SettingCell.Factory.of(3, 0xFFF09F1B, 0xFFE18A11, R.drawable.ic_chat_bubble_white_24dp, getString(R.string.Chat)));
-        items.add(SettingsActivity.SettingCell.Factory.of(4, 0xFFF45255, 0xFFDF3955, R.drawable.menu_contacts, getString(R.string.Account)));
-        items.add(SettingsActivity.SettingCell.Factory.of(5, 0xFFC46EF4, 0xFF9F55DF, R.drawable.warning_sign, getString(R.string.Experiment)));
+        items.add(SettingsActivity.SettingCell.Factory.of(4, 0xFFB6D7A8, 0xFF889988, R.drawable.msg_notspam, getString(R.string.AntiSpamSettings)));
+        items.add(SettingsActivity.SettingCell.Factory.of(5, 0xFFF45255, 0xFFDF3955, R.drawable.menu_contacts, getString(R.string.Account)));
+        items.add(SettingsActivity.SettingCell.Factory.of(6, 0xFFC46EF4, 0xFF9F55DF, R.drawable.warning_sign, getString(R.string.Experiment)));
         items.add(UItem.asShadow(null));
 
         items.add(UItem.asHeader(LocaleController.getString(R.string.About)));
-        items.add(UItem.asSettingsCell(6, LocaleController.getString(R.string.OfficialChannel), "@momogram_update"));
-        items.add(UItem.asSettingsCell(7, LocaleController.getString(R.string.SourceCode), ""));
-        items.add(UItem.asSettingsCell(8, LocaleController.getString(R.string.TransSite), ""));
+        items.add(UItem.asSettingsCell(7, LocaleController.getString(R.string.OfficialChannel), "@momogram_update"));
+        items.add(UItem.asSettingsCell(8, LocaleController.getString(R.string.SourceCode), ""));
+        items.add(UItem.asSettingsCell(9, LocaleController.getString(R.string.TransSite), ""));
         items.add(UItem.asShadow(null));
     }
 
@@ -372,18 +373,21 @@ public class MomoSettingsActivity extends BaseFragment {
                 presentFragment(new MomoChatSettingsActivity());
                 break;
             case 4:
-                presentFragment(new MomoAccountSettingsActivity());
+                presentFragment(new MomoAntiSpamSettingsActivity());
                 break;
             case 5:
-                presentFragment(new MomoExperimentalSettingsActivity());
+                presentFragment(new MomoAccountSettingsActivity());
                 break;
             case 6:
-                MessagesController.getInstance(currentAccount).openByUserName("momogram_update", this, 1);
+                presentFragment(new MomoExperimentalSettingsActivity());
                 break;
             case 7:
-                Browser.openUrl(getParentActivity(), "https://github.com/im030/Momogram");
+                MessagesController.getInstance(currentAccount).openByUserName("momogram_update", this, 1);
                 break;
             case 8:
+                Browser.openUrl(getParentActivity(), "https://github.com/im030/Momogram");
+                break;
+            case 9:
                 Browser.openUrl(getParentActivity(), "https://hosted.weblate.org/engage/nekox_030/");
                 break;
         }

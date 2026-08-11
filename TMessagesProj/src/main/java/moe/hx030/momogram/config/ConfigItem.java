@@ -27,6 +27,7 @@ public class ConfigItem {
     public static final int CHAT = 2;
     public static final int EXPERIMENTAL = 3;
     public static final int APPEARANCE = 4;
+    public static final int ANTI_SPAM = 5;
 
     public final String key;
     public final int id;

@@ -83,6 +83,10 @@ public class MomoConfig {
     public static final int TRANSCRIBE_WORKERSAI = 2;
     public static final int TRANSCRIBE_LOCAL = 3;
 
+    public static final int AUTO_DISMISS_DISABLED = 0;
+    public static final int AUTO_DISMISS_ALL = 1;
+    public static final int AUTO_DISMISS_BY_RULE = 2;
+
     private static boolean configLoaded = false;
     private static final ArrayList<ConfigItem> configs = new ArrayList<>();
 
@@ -242,9 +246,6 @@ public class MomoConfig {
     public static ConfigItem overrideForumStyle = addConfig(R.string.OverrideForumStyle, "OverrideForumStyle", configTypeInt, APPEARANCE, 0);
     public static String[] overrideForumStyleOptions = null;
 
-    public static ConfigItem ignoreBlocked = addConfig(R.string.IgnoreBlocked, "IgnoreBlocked", configTypeBool, CHAT, false);
-    public static ConfigItem muteBlockedFromGroup = addConfig(R.string.MuteBlockedFromGroup, "MuteBlockedFromGroup", configTypeBool, CHAT, false);
-    public static ConfigItem muteBotsFromGroup = addConfig(R.string.MuteBotsFromGroup, "MuteBotsFromGroup", configTypeBool, CHAT, false);
     public static ConfigItem smoothKeyboard = addConfig("DebugMenuEnableSmoothKeyboard", configTypeBool, false);// fake
     public static ConfigItem hideProxySponsorChannel = addConfig(R.string.HideProxySponsorChannel, "HideProxySponsorChannel", configTypeBool, false);
     public static ConfigItem stickerSize = addConfig(R.string.StickerSize, "stickerSize", configTypeFloat, CHAT, 14.0f);
@@ -321,7 +322,6 @@ public class MomoConfig {
     public static ConfigItem disableStories = addConfig(R.string.DisableStories, "DisableStories", ConfigItem.configTypeBool, CHAT, false);
     public static ConfigItem onlyShowStoriesFromUsers = addConfig(R.string.OnlyShowStoriesFromUsers, "OnlyShowStoriesFromUsers", ConfigItem.configTypeBool, CHAT, false);
     public static ConfigItem disableSendReadStories = addConfig(R.string.DisableSendReadStories, "DisableSendReadStories", ConfigItem.configTypeBool, CHAT, false);
-    public static ConfigItem ignoreAllReactions = addConfig(R.string.IgnoreAllReactions, "IgnoreAllReactions", ConfigItem.configTypeBool, CHAT, false);
     public static ConfigItem confirmToSendCommandByClick = addConfig(R.string.ConfirmToSendCommandToggle, "ConfirmToSendCommandToggle", ConfigItem.configTypeBool, CHAT, false);
     public static ConfigItem showCopyPhoto = addConfig(R.string.CopyPhoto, "CopyPhoto", ConfigItem.configTypeBool, CHAT, false);
     public static ConfigItem increasedMaxPhotoResolution = addConfig(R.string.IncreasedMaxPhotoResolution, "IncreasedMaxPhotoResolution", ConfigItem.configTypeBool, CHAT, false);
@@ -389,8 +389,6 @@ public class MomoConfig {
     public static ConfigItem customAudioBitrate = addConfig(R.string.customGroupVoipAudioBitrate, "customAudioBitrate", configTypeInt, EXPERIMENTAL, 32);
     public static ConfigItem enhancedFileLoader = addConfig(R.string.enhancedFileLoader, "enhancedFileLoader", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem fasterReconnectHack = addConfig(R.string.FasterReconnectHack, "FasterReconnectHack", ConfigItem.configTypeBool, EXPERIMENTAL, false);
-    public static ConfigItem autoArchiveAndMute = addConfig(R.string.AutoArchiveAndMute, "AutoArchiveAndMute", ConfigItem.configTypeBool, EXPERIMENTAL, false);
-    public static ConfigItem autoArchiveAndMuteNoCommonGroupOnly = addConfig(R.string.AutoArchiveAndMuteNoCommonGroupOnly, "AutoArchiveAndMuteNoCommonGroupOnly", ConfigItem.configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem removePremiumAnnoyance = addConfig(R.string.RemovePremiumAnnoyance, "RemovePremiumAnnoyance", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem overrideSettingBoolean = addConfig(R.string.OverrideSettingBoolean, "OverrideSettingBoolean", configTypeString, EXPERIMENTAL, "");
     public static ConfigItem overrideSettingInteger = addConfig(R.string.OverrideSettingInteger, "OverrideSettingInteger", configTypeString, EXPERIMENTAL, "");
@@ -407,16 +405,27 @@ public class MomoConfig {
     public static ConfigItem ignoreTranslatorCache = addConfig(R.string.IgnoreTranslatorCache, "IgnoreTranslatorCache", configTypeBool, EXPERIMENTAL, false);
     public static ConfigItem aidlOnLaunch = addConfig(R.string.AIDLOnLaunch, "AIDLOnLaunch", configTypeBool, EXPERIMENTAL, true);
     public static ConfigItem autoDecryptPGPMessages = addConfig(R.string.AutoDecryptPGPMsg, "AutoDecryptPGPMsg", configTypeBool, EXPERIMENTAL, false);
-    public static ConfigItem debugAntiSpam = addConfig(R.string.DebugAntiSpam, "DebugAntiSpam", configTypeBool, EXPERIMENTAL, false);
-    public static ConfigItem autoDismissJoinReq = addConfig(R.string.AutoDismissJoinReq, "AutoDismissJoinReq", configTypeBool, EXPERIMENTAL, false);
-    public static ConfigItem autoDismissJoinReqBio = addConfig(R.string.AutoDismissJoinReqBio, "AutoDismissJoinReqBio", configTypeBool, EXPERIMENTAL, false);
-    public static ConfigItem autoDismissNameUseOpenCC = addConfig(R.string.AutoDismissUseOpenCC, "AutoDismissNameUseOpenCC", configTypeBool, EXPERIMENTAL, false);
-    public static ConfigItem autoDismissRegex = addConfig(R.string.AutoDismissReqRegex, "AutoDismissReqRegex", configTypeString, EXPERIMENTAL, "群发|纸飞机|跑U|棋牌|招商|变现|群發|稳赚|全网").setOnConfigChanged(MomoConfig::applyAutoBanByRegex);
-    public static ConfigItem autoDismissDummy = addConfig(R.string.AutoDismissReqDummy, "AutoDismissReqDummy", configTypeBool, EXPERIMENTAL, false);
-    public static String autoDismissRegexString;
-    public static Pattern autoDismissRegexPattern;
     public static ConfigItem bufferCleaner = addConfig(R.string.BufferCleaner, "BufferCleaner", configTypeBool, EXPERIMENTAL, true);
     public static ConfigItem tempDebug = addConfig(R.string.SettingsDebug, "TempDebug", configTypeBool, EXPERIMENTAL, false);
+
+    // anti-spam
+    public static ConfigItem autoArchiveAndMute = addConfig(R.string.AutoArchiveAndMute, "AutoArchiveAndMute", ConfigItem.configTypeBool, ANTI_SPAM, false);
+    public static ConfigItem autoArchiveAndMuteNoCommonGroupOnly = addConfig(R.string.AutoArchiveAndMuteNoCommonGroupOnly, "AutoArchiveAndMuteNoCommonGroupOnly", ConfigItem.configTypeBool, ANTI_SPAM, false);
+    public static ConfigItem ignoreBlocked = addConfig(R.string.IgnoreBlocked, "IgnoreBlocked", configTypeBool, ANTI_SPAM, false);
+    public static ConfigItem muteBlockedFromGroup = addConfig(R.string.MuteBlockedFromGroup, "MuteBlockedFromGroup", configTypeBool, ANTI_SPAM, false);
+    public static ConfigItem muteBotsFromGroup = addConfig(R.string.MuteBotsFromGroup, "MuteBotsFromGroup", configTypeBool, ANTI_SPAM, false);
+    public static ConfigItem ignoreAllReactions = addConfig(R.string.IgnoreAllReactions, "IgnoreAllReactions", ConfigItem.configTypeBool, ANTI_SPAM, false);
+    public static ConfigItem debugAntiSpam = addConfig(R.string.DebugAntiSpam, "DebugAntiSpam", configTypeBool, ANTI_SPAM, false);
+    public static ConfigItem autoDismissJoinReq = addConfig(R.string.AutoDismissJoinReq, "AutoDismissJoinReq", configTypeBool, ANTI_SPAM, false);
+    public static ConfigItem autoDismissJoinReqBio = addConfig(R.string.AutoDismissJoinReqBio, "AutoDismissJoinReqBio", configTypeBool, ANTI_SPAM, false);
+    public static ConfigItem autoDismissNameUseOpenCC = addConfig(R.string.AutoDismissUseOpenCC, "AutoDismissNameUseOpenCC", configTypeBool, ANTI_SPAM, false);
+    public static ConfigItem autoDismissRegex = addConfig(R.string.AutoDismissReqRegex, "AutoDismissReqRegex", configTypeString, ANTI_SPAM,
+            "群发|纸飞机|跑U|棋牌|招商|变现|群發|稳赚|全网").setOnConfigChanged(MomoConfig::applyAutoBanByRegex);
+    public static ConfigItem autoDismissDummy = addConfig(R.string.AutoDismissReqDummy, "AutoDismissReqDummy", configTypeBool, ANTI_SPAM, false);
+    public static String autoDismissRegexString;
+    public static Pattern autoDismissRegexPattern;
+    public static ConfigItem autoDismissSuggestedChats = addConfig(R.string.AutoDismissSuggestedChats, "AutoDismissSuggestedChats", configTypeInt, ANTI_SPAM, AUTO_DISMISS_DISABLED);
+    public static String[] autoDismissSuggestedChatsOptions = null;
 
     // internal
     public static ConfigItem nextPromptUpdateTime = addConfig("nextPromptUpdateTime", configTypeLong, 0L);
@@ -822,6 +831,11 @@ public class MomoConfig {
                 getString(R.string.OverrideForumStyleDefault),
                 getString(R.string.OverrideForumStyleClassic),
                 getString(R.string.OverrideForumStyleTab)
+        };
+        autoDismissSuggestedChatsOptions = new String[] {
+                getString(R.string.Disable),
+                getString(R.string.AllChatsShort),
+                getString(R.string.AutoDismissSuggestedChatsByRule)
         };
         applyHideMsgRegex();
         applyAutoBanByRegex();
