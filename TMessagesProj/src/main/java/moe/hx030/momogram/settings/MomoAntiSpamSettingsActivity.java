@@ -157,7 +157,21 @@ public class MomoAntiSpamSettingsActivity extends MomoSettingsBaseActivity {
         listView.setOnItemClickListener((view, position, x, y) -> {
             AbstractConfigCell a = cellGroup.rows.get(position);
             if (a instanceof ConfigCellTextCheck) {
-                ((ConfigCellTextCheck) a).onClick((TextCheckCell) view);
+                if (position == cellGroup.rows.indexOf(debugAntiSpamRow) && !MomoConfig.debugAntiSpam.Bool()) {
+                    AlertDialog.Builder dlg = new AlertDialog.Builder(context)
+                            .setTitle(StrUtil.getAppName())
+                            .setMessage(LocaleController.getString(R.string.DebugWarning))
+                            .setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) -> {
+                                ((ConfigCellTextCheck) a).onClick((TextCheckCell) view);
+                            })
+                            .setNegativeButton(LocaleController.getString(R.string.Cancel), null);
+                    if (!NekoXConfig.isDeveloper() || MomoConfig.tempDebug.Bool()) {
+                        dlg.setTimeout(5, DialogInterface.BUTTON_POSITIVE);
+                    }
+                    dlg.show();
+                } else {
+                    ((ConfigCellTextCheck) a).onClick((TextCheckCell) view);
+                }
             } else if (a instanceof ConfigCellSelectBox) {
                 ((ConfigCellSelectBox) a).onClick(view);
             } else if (a instanceof ConfigCellTextInput) {
