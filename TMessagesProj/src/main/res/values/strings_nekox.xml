@@ -369,4 +369,6 @@
     <string name="HideMessageSideButtons">Hide side button next to messages</string>
     <string name="CantOpenProfile">Can\'t open profile of target user</string>
     <string name="AntiSpamSettings">Anti-spam</string>
+    <string name="AutoDismissSuggestedChats">Auto decline add chat suggestions in community</string>
+    <string name="AutoDismissSuggestedChatsByRule">Rules from above</string>
 </resources>

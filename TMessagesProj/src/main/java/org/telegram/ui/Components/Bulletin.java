@@ -742,7 +742,6 @@ public class Bulletin {
         }
 
         default int getTopOffset(int tag) {
-            Log.d("030-sb", "default getTopOffset, returning 0");
             return 0;
         }
 

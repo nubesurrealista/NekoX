@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.LongSparseArray;
 
+import org.apache.commons.lang3.function.TriConsumer;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
@@ -13,6 +14,7 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.tl.TL_communities;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.LaunchActivity;
@@ -20,10 +22,12 @@ import org.telegram.ui.LaunchActivity;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
 import moe.hx030.momogram.MomoConfig;
@@ -146,6 +150,75 @@ public class ModUtil {
                     if (last.get() > 0) banAllJoinRequests(currentAccount, chatId, onDone);
                     else if (onDone != null) onDone.run();
                 });
+    }
+
+    public static boolean maybeFilterChatSuggestion(int currentAccount, List<TL_communities.CommunityPeerRequest> reqs, BiConsumer<Long, Boolean> callback) {
+        final int mode = MomoConfig.autoDismissSuggestedChats.Int();
+        if (mode == MomoConfig.AUTO_DISMISS_DISABLED) return false;
+        else if (mode == MomoConfig.AUTO_DISMISS_ALL) return true;
+        final MessagesController messagesController = MessagesController.getInstance(currentAccount);
+
+        final boolean bio = MomoConfig.autoDismissJoinReqBio.Bool();
+        final boolean dummy = MomoConfig.autoDismissDummy.Bool();
+        final boolean regex = MomoConfig.autoDismissRegexPattern != null;
+        final boolean useOpenCC = MomoConfig.autoDismissNameUseOpenCC.Bool();
+
+        BiConsumer<TLRPC.User, TLRPC.ChatFull> handler = (user, chat) -> {
+
+        };
+
+        reqs.stream().forEach(req -> {
+            Log.d("030-filter", String.format("req by %d | chat id %d | channel id %d | user id %d", req.requested_by, req.peer.chat_id, req.peer.channel_id, req.peer.user_id));
+            long reqChatId = -req.peer.chat_id;
+            if (reqChatId == 0) reqChatId = -req.peer.channel_id;
+            if (reqChatId == 0) reqChatId = req.peer.user_id;
+            long chatId = Math.abs(reqChatId);
+
+
+            TLRPC.User user = messagesController.getUser(req.requested_by);
+            TLRPC.Chat chat = messagesController.getChat(chatId);
+            TLRPC.ChatFull chatFull = messagesController.getChatFull(chatId);
+
+            if (user == null && chat == null) {
+                Log.w("030-filter", String.format("null user(%d) & chat(%d), skipping", req.requested_by, chatId));
+                return;
+            }
+            if (user != null) {
+                if (dummy && TextUtils.isEmpty(user.username) && !ImageLocation.isUserHasPhoto(user)) {
+                    Log.d("030-filter", String.format("rejected %d by no username + no pfp", chatId));
+                    callback.accept(reqChatId, false);
+                    return;
+                } else if (user.deleted || (regex &&
+                        FilterUtils.checkName(MomoConfig.autoDismissRegexPattern, user.first_name, user.last_name, useOpenCC))) {
+                    Log.d("030-filter", String.format("rejected %d by name pattern(%s %s)", chatId, user.first_name, user.last_name));
+                    callback.accept(reqChatId, false);
+                    return;
+                } else if (bio) {
+                    TLRPC.UserFull userFull = messagesController.getUserFull(req.requested_by);
+                    if (userFull == null) {
+                        long finalReqChatId = reqChatId;
+                        messagesController.loadFullUser(user, 0, true, u -> {
+                            if (FilterUtils.checkString(MomoConfig.autoDismissRegexPattern, u.about, useOpenCC)) {
+                                Log.d("030-filter", String.format("rejected %d by bio(%s)", chatId, u.about));
+                                callback.accept(finalReqChatId, false);
+                            }
+                        });
+                    } else if (FilterUtils.checkString(MomoConfig.autoDismissRegexPattern, userFull.about, useOpenCC)) {
+                        callback.accept(reqChatId, false);
+                        return;
+                    }
+                }
+            }
+            Log.d("030-filter", String.format("chat: %d | name: %s | bio: %s",
+                    chatId, (chat != null ? chat.title : "N/A (chat == null)"),
+                    (chatFull != null ? chatFull.about : "N/A (chatFull == null)")));
+            if ((chat != null && FilterUtils.checkString(MomoConfig.autoDismissRegexPattern, chat.title, useOpenCC)) ||
+                    (chatFull != null && FilterUtils.checkString(MomoConfig.autoDismissRegexPattern, chatFull.about, useOpenCC))) {
+                callback.accept(reqChatId, false);
+            }
+        });
+
+        return false;
     }
 
     private static final Runnable showStats = () -> {

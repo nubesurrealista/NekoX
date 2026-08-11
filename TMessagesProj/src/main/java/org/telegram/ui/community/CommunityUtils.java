@@ -9,6 +9,7 @@ import static org.telegram.messenger.LocaleController.getString;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,9 @@ import org.telegram.ui.community.sheet.CommunityAddOptionsSheet;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.util.ModUtil;
 
 public class CommunityUtils {
     public static final boolean COLLAPSED_SUPPORT = true;
@@ -121,6 +125,9 @@ public class CommunityUtils {
 
             final TLRPC.User requestedBy = MessagesController.getInstance(currentAccount).getUser(request.requested_by);
             items.add(CommunityPendingRequestCell.Factory.asPendingRequest(dialogId, requestedBy, !request.visible, delegate, a < N - 1));
+            if (MomoConfig.autoDismissSuggestedChats.Int() != MomoConfig.AUTO_DISMISS_DISABLED) {
+                MessagesController.getInstance(currentAccount).loadFullUser(requestedBy, 0, false);
+            }
         }
     }
 
@@ -260,7 +267,16 @@ public class CommunityUtils {
                     totalCount = res.total_count;
                     finished = res.next_offset == null;
 
-                    calcUnreadPendingRequests();
+                    if (!pendingRequests.isEmpty() && ModUtil.maybeFilterChatSuggestion(currentAccount, pendingRequests, this::onResolveJoinRequest)) {
+                        Log.d("030-filter", "dismiss all suggested chat(s)");
+                        onResolveAllJoinRequests(false, false, true);
+                        pendingRequests.clear();
+                        unreadPendingRequests = 0;
+                        totalCount = 0;
+                    } else {
+                        calcUnreadPendingRequests();
+                    }
+
                     if (delegate != null) {
                         delegate.updateAdapter();
                     }
@@ -380,6 +396,10 @@ public class CommunityUtils {
         }
 
         private void onResolveAllJoinRequests(boolean add, boolean ask) {
+            onResolveAllJoinRequests(add, ask, false);
+        }
+
+        private void onResolveAllJoinRequests(boolean add, boolean ask, boolean auto) {
             if (progressDialog != null || reqId != 0) {
                 return;
             }
@@ -420,7 +440,7 @@ public class CommunityUtils {
                     return;
                 }
 
-                if (delegate != null) {
+                if (delegate != null && !auto) {
                     delegate.close();
                 }
             });
