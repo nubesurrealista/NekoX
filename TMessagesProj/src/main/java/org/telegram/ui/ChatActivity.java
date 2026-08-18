@@ -977,6 +977,7 @@ public class ChatActivity extends BaseFragment implements
     private SparseArray<ArrayList<MessageObject>> messagesByDaysSorted = new SparseArray<>();
     private LongSparseArray<MessageObject> conversionMessages = new LongSparseArray<>();
     public ArrayList<MessageObject> messages = new ArrayList<>();
+    public ArrayList<MessageObject> lastSentMessageObjects = new ArrayList<>();
     private SparseArray<MessageObject> waitingForReplies = new SparseArray<>();
     private LongSparseArray<ArrayList<MessageObject>> polls = new LongSparseArray<>();
     private LongSparseArray<MessageObject.GroupedMessages> groupedMessagesMap = new LongSparseArray<>();

@@ -124,6 +124,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -5128,6 +5129,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 }
                 MessagesStorage.getInstance(currentAccount).putMessages(arr, false, true, false, 0, mode, threadMessageId);
                 MessagesController.getInstance(currentAccount).updateInterfaceWithMessages(peer, objArr, mode);
+                if (sendMessageParams.messageObjectsListener != null) {
+                    sendMessageParams.messageObjectsListener.accept(objArr);
+                }
                 if (scheduleDate == 0) {
                     NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.dialogsNeedReload);
                 }
@@ -12136,6 +12140,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         public long ephemeralReceiverBotId;
         public TL_iv.RichMessage richMessage;
         public ArrayList<TLRPC.InputUser> richMessageInputUsers;
+
+        public Consumer<ArrayList<MessageObject>> messageObjectsListener;
 
         public static SendMessageParams ofRichMessage(TL_iv.RichMessage richMessage, long peer, MessageObject replyToMsg, MessageObject replyToTopMsg, TLRPC.ReplyMarkup replyMarkup, HashMap<String, String> params, boolean notify, int scheduleDate, int scheduleRepeatPeriod) {
             SendMessageParams p = of(null, null, null, null, null, null, null, null, null, null, peer, null, replyToMsg, replyToTopMsg, null, true, null, null, replyMarkup, params, notify, scheduleDate, scheduleRepeatPeriod, 0, null, null, false);

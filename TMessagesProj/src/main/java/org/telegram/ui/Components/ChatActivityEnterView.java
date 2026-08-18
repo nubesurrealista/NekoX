@@ -777,6 +777,9 @@ public class ChatActivityEnterView extends FrameLayout implements
     private boolean allowStickers;
     private boolean allowGifs;
 
+    private boolean collectDeleteAfterSendIds;
+    private final HashSet<Integer> deleteAfterSendMessageIds = new HashSet<>();
+
     private int lastSizeChangeValue1;
     private boolean lastSizeChangeValue2;
 
@@ -2641,6 +2644,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.featuredStickersDidLoad);
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.messageReceivedByServer2);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.messageSendError);
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.sendingMessagesChanged);
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.audioRecordTooShort);
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.updateBotMenuButton);
@@ -3649,6 +3653,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                                     msgText, dialogId, replyTo, replyTop, null,
                                     true, null, null, null, true, 0, 0,
                                     new MessageObject.SendAnimationData(), false);
+                            attachSentMessageListener(params);
                             SendMessagesHelper.getInstance(currentAccount).sendMessage(params);
                             if (SendMessagesHelper.hasPendingSlowModeMessage.containsKey(currentAccount))
                                 SendMessagesHelper.hasPendingSlowModeMessage.get(currentAccount).put(dialogId, false);
@@ -5377,6 +5382,19 @@ public class ChatActivityEnterView extends FrameLayout implements
                     sendPopupLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
                 }
 
+                if (NekoXConfig.isDeveloper()) {
+                    ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getContext(), false, true, resourcesProvider);
+                    cell.setTextAndIcon(LocaleController.getString(R.string.DeleteAfterSend), R.drawable.msg_delete);
+                    cell.setOnClickListener(v -> {
+                        if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
+                            sendPopupWindow.dismiss();
+                        }
+                        sendAndDelete();
+                    });
+                    cell.setMinimumWidth(AndroidUtilities.dp(196));
+                    sendPopupLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
+                }
+
                 sendPopupLayout.setupRadialSelectors(getThemedColor(Theme.key_dialogButtonSelector));
 
                 sendPopupWindow = new ActionBarPopupWindow(sendPopupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT) {
@@ -5721,6 +5739,17 @@ public class ChatActivityEnterView extends FrameLayout implements
                 sendFileRefsFromClipboard();
             };
             options.add(R.drawable.baseline_content_paste_24, null, getString(R.string.PasteFileRef),
+                    Theme.key_actionBarDefaultSubmenuItemIcon, Theme.key_actionBarDefaultSubmenuItem, r, r);
+        }
+
+        if (NekoXConfig.isDeveloper()) {
+            Runnable r = () -> {
+                if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
+                    sendPopupWindow.dismiss();
+                }
+                sendAndDelete();
+            };
+            options.add(R.drawable.msg_delete, null, getString(R.string.DeleteAfterSend),
                     Theme.key_actionBarDefaultSubmenuItemIcon, Theme.key_actionBarDefaultSubmenuItem, r, r);
         }
 
@@ -7385,6 +7414,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.featuredStickersDidLoad);
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.messageReceivedByServer2);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.messageSendError);
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.sendingMessagesChanged);
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.audioRecordTooShort);
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.updateBotMenuButton);
@@ -7562,6 +7592,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.featuredStickersDidLoad);
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.messageReceivedByServer2);
+            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.messageSendError);
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.sendingMessagesChanged);
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.outgoingMessageTranslated);
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.forwardingMessageTranslated);
@@ -7580,6 +7611,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
             NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.featuredStickersDidLoad);
             NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.messageReceivedByServer2);
+            NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.messageSendError);
             NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.sendingMessagesChanged);
             NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.outgoingMessageTranslated);
             NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.forwardingMessageTranslated);
@@ -8350,6 +8382,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                     params.sendAnimationData = sendAnimationData;
                 }
                 applyStoryToSendMessageParams(params);
+                attachSentMessageListener(params);
                 SendMessagesHelper.getInstance(currentAccount).sendMessage(params);
                 if (delegate != null) {
                     delegate.onMessageSend(null, notify, scheduleDate, scheduleRepeatPeriod, payStars);
@@ -8765,6 +8798,16 @@ public class ChatActivityEnterView extends FrameLayout implements
         setEditingMessageObject(null, null, false);
     }
 
+    private void attachSentMessageListener(SendMessagesHelper.SendMessageParams sendMessageParams) {
+        sendMessageParams.messageObjectsListener = messages -> {
+            if (collectDeleteAfterSendIds) {
+                for (MessageObject message : messages) {
+                    deleteAfterSendMessageIds.add(message.getId());
+                }
+            }
+        };
+    }
+
     public boolean processSendingText(CharSequence text, boolean notify, int scheduleDate, int scheduleRepeatPeriod, long payStars) {
         if (replyingQuote != null && parentFragment != null && replyingQuote.outdated) {
             parentFragment.showQuoteMessageUpdate();
@@ -8883,6 +8926,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                     setWebPage(null, true);
                     parentFragment.fallbackFieldPanel();
                 }
+                attachSentMessageListener(params);
                 SendMessagesHelper.getInstance(currentAccount).sendMessage(params);
                 start = end + 1;
             } while (end != text.length());
@@ -9003,6 +9047,19 @@ public class ChatActivityEnterView extends FrameLayout implements
         if (messageSendPreview != null) messageSendPreview.dismiss(false);
         if (messageEditText != null) {
             messageEditText.setText("");
+        }
+    }
+
+    public void sendAndDelete() {
+        if (messageEditText == null || messageEditText.length() == 0) {
+            return;
+        }
+        collectDeleteAfterSendIds = true;
+        sendMessage();
+        collectDeleteAfterSendIds = false;
+        if (messageSendPreview != null) messageSendPreview.dismiss(false);
+        if (delegate != null) {
+            delegate.onMessageSend(null, true, 0, 0, 0);
         }
     }
 
@@ -14920,6 +14977,13 @@ public class ChatActivityEnterView extends FrameLayout implements
             }
             long did = (Long) args[3];
             Integer newMsgId = (Integer) args[1];
+            Integer oldMsgId = (Integer) args[0];
+            if (did == dialog_id && oldMsgId != null && oldMsgId < 0 && deleteAfterSendMessageIds.contains(oldMsgId)) {
+                deleteAfterSendMessageIds.remove(oldMsgId);
+                ArrayList<Integer> ids = new ArrayList<>();
+                ids.add(newMsgId);
+                accountInstance.getMessagesController().deleteMessages(ids, null, null, dialog_id, getThreadMessageId(), true, 0);
+            }
             if (did == dialog_id && info != null && info.slowmode_seconds != 0 && !MessageObject.isEphemeralMessageId(newMsgId)) {
                 TLRPC.Chat chat = accountInstance.getMessagesController().getChat(info.id);
                 if (chat != null && !ChatObject.hasAdminRights(chat) && !ChatObject.isIgnoredChatRestrictionsForBoosters(chat)) {
@@ -14931,6 +14995,11 @@ public class ChatActivityEnterView extends FrameLayout implements
         } else if (id == NotificationCenter.sendingMessagesChanged) {
             if (info != null) {
                 updateSlowModeText();
+            }
+        } else if (id == NotificationCenter.messageSendError) {
+            Integer msgId = (Integer) args[0];
+            if (msgId != null) {
+                deleteAfterSendMessageIds.remove(msgId);
             }
         } else if (id == NotificationCenter.audioRecordTooShort) {
             audioToSend = null;

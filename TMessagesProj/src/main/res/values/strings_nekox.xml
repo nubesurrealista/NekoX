@@ -372,4 +372,5 @@
     <string name="AutoDismissSuggestedChats">Auto decline add chat suggestions in community</string>
     <string name="AutoDismissSuggestedChatsByRule">Rules from above</string>
     <string name="DebugWarning">Enable debug option like this one may introduce unexpected problems, proceed?</string>
+    <string name="DeleteAfterSend">Del. after send</string>
 </resources>
