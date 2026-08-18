@@ -9,8 +9,10 @@
 package org.telegram.ui;
 
 import static org.telegram.messenger.AndroidUtilities.dp;
+import static org.telegram.messenger.LocaleController.formatString;
 import static org.telegram.messenger.LocaleController.getString;
 import static org.telegram.messenger.MessageObject.replaceWithLink;
+import static org.telegram.ui.ChatActivity.fileRefClipboard;
 
 import android.Manifest;
 import android.animation.Animator;
@@ -116,7 +118,6 @@ import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -145,7 +146,6 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.ShareAlert;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.StickersAlert;
-import org.telegram.ui.Components.TopicsTabsView;
 import org.telegram.ui.Components.URLSpanMono;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.Components.URLSpanReplacement;
@@ -156,7 +156,6 @@ import org.telegram.ui.Components.blur3.DownscaleScrollableNoiseSuppressor;
 import org.telegram.ui.Components.blur3.drawable.color.impl.BlurredBackgroundProviderImpl;
 import org.telegram.ui.Components.blur3.source.BlurredBackgroundSource;
 import org.telegram.ui.Components.blur3.source.BlurredBackgroundSourceBitmap;
-import org.telegram.ui.Components.blur3.source.BlurredBackgroundSourceColor;
 import org.telegram.ui.Components.blur3.source.BlurredBackgroundSourceRenderNode;
 import org.telegram.ui.Components.blur3.source.BlurredBackgroundSourceWrapped;
 import org.telegram.ui.Components.chat.ViewPositionWatcher;
@@ -178,7 +177,6 @@ import me.vkryl.core.reference.ReferenceList;
 import kotlin.Unit;
 import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.ui.BottomBuilder;
-import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.ui.MessageDetailsActivity;
 import moe.hx030.momogram.utils.AlertUtil;
 import moe.hx030.momogram.utils.ProxyUtil;
@@ -1639,6 +1637,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     private final static int OPTION_BAN = 35;
 
     private final static int OPTION_DETAILS = 1001;
+    private final static int OPTION_COPY_REF = 1002;
 
     private boolean createMenu(View v) {
         return createMenu(v, 0, 0);
@@ -1970,6 +1969,13 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             scrimPopupWindow.showAtLocation(chatListView, Gravity.LEFT | Gravity.TOP, finalPopupX, finalPopupY);
             scrimPopupWindow.dimBehind();
         };
+
+
+        if (MomoConfig.showCopyFileRef.Bool()) {
+            items.add(getString(R.string.CopyFileRef));
+            icons.add(R.drawable.msg_copy);
+            options.add(OPTION_COPY_REF);
+        }
 
         if (MomoConfig.showMessageDetails.Bool()) {
             items.add(getString(R.string.MessageDetails));
@@ -2356,6 +2362,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             }
             case OPTION_DETAILS:
                 presentFragment(new MessageDetailsActivity(selectedObject));
+                break;
+            case OPTION_COPY_REF:
+                copyFileReferences();
                 break;
         }
         selectedObject = null;
@@ -4453,6 +4462,20 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
         tmpViewRectF.set(child.getX(), child.getY() + chatListView.getY(), child.getX() + child.getWidth(), child.getY() + chatListView.getY() + child.getHeight());
         return !tmpViewRectF.intersect(position);
+    }
+
+    private void copyFileReferences() {
+        MessageObject msg = selectedObject;
+        if (msg == null) return;
+        fileRefClipboard.clear();
+        TLRPC.Document doc = msg.getDocument();
+        if (doc instanceof TLRPC.TL_document) {
+            fileRefClipboard.add(new ChatActivity.FileRefClipboardItem((TLRPC.TL_document) doc));
+        } else if (msg.messageOwner != null && msg.messageOwner.media != null && msg.messageOwner.media.photo instanceof TLRPC.TL_photo) {
+            fileRefClipboard.add(new ChatActivity.FileRefClipboardItem((TLRPC.TL_photo) msg.messageOwner.media.photo));
+        }
+        if (fileRefClipboard.isEmpty()) BulletinFactory.of(this).createErrorBulletin(getString(R.string.CopyFileRefFailed)).show();
+        else BulletinFactory.of(this).createSimpleBulletin(R.raw.info, formatString(R.string.CopyFileRefDone, fileRefClipboard.size())).show();
     }
 
     public class ChatActivityFragmentView extends SizeNotifierFrameLayout {
