@@ -369,7 +369,7 @@
     <string name="HideMessageSideButtons">Hide side button next to messages</string>
     <string name="CantOpenProfile">Can\'t open profile of target user</string>
     <string name="AntiSpamSettings">Anti-spam</string>
-    <string name="AutoDismissSuggestedChats">Auto decline add chat suggestions in community</string>
+    <string name="AutoDismissSuggestedChats">Auto dismiss add chat suggestions in community</string>
     <string name="AutoDismissSuggestedChatsByRule">Rules from above</string>
     <string name="DebugWarning">Enable debug option like this one may introduce unexpected problems, proceed?</string>
     <string name="DeleteAfterSend">Del. after send</string>
