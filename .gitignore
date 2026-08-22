@@ -22,3 +22,4 @@ TMessagesProj/jni/ffmpeg/build_android
 TMessagesProj/jni/tde2e/x86*
 TMessagesProj/jni/tde2e/arm*
 TMessagesProj/jni/tdlib/build/
+TMessagesProj/jni/ffmpeg/*/*.a
