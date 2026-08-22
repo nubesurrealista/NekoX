@@ -1,4 +1,5 @@
 include ':TMessagesProj'
 include ':TMessagesProj_App'
 include ':openpgp-api'
+include ':TMessagesProj:lib:jlatexmath'
 //include ':relaybaton'

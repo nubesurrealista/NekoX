@@ -30,7 +30,7 @@ import androidx.core.view.GestureDetectorCompat;
 import androidx.dynamicanimation.animation.FloatValueHolder;
 import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
-import androidx.recyclerview.widget.ChatListItemAnimator;
+import org.telegram.ui.recyclerview.ChatListItemAnimator;
 
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
@@ -62,6 +62,7 @@ import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SimpleFloatPropertyCompat;
 import org.telegram.ui.LaunchActivity;
+import org.telegram.ui.ReportBottomSheet;
 import org.telegram.ui.web.BotWebViewContainer;
 
 import moe.hx030.momogram.MomoConfig;
@@ -211,6 +212,8 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
                 fragment.presentFragment(new ChatActivity(args));
             });
             sheet.show();
+        } else if (id == R.id.menu_report_bot) {
+            ReportBottomSheet.openChat(currentAccount, getContext(), BulletinFactory.of(Bulletin.BulletinWindow.make(getContext()), resourcesProvider), botId);
         }
     }
 
@@ -226,6 +229,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
         addToHomeScreenItem = otherItem.addSubItem(R.id.menu_add_to_home_screen_bot, R.drawable.msg_home, LocaleController.getString(R.string.AddShortcut));
         addToHomeScreenItem.setVisibility(View.GONE);
         otherItem.addSubItem(R.id.menu_tos_bot, R.drawable.menu_intro, LocaleController.getString(R.string.BotWebViewToS));
+        otherItem.addSubItem(R.id.menu_report_bot, R.drawable.msg_report, LocaleController.getString(R.string.BotWebViewReportBot));
         otherItem.addSubItem(R.id.menu_delete_bot, R.drawable.msg_delete, LocaleController.getString(R.string.BotWebViewDeleteBot));
 
         otherItem.addSubItem(R.id.menu_copy_url, R.drawable.msg_copy, LocaleController.getString(R.string.CopyLink));
@@ -580,6 +584,9 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
             if (response instanceof TLRPC.TL_webViewResultUrl) {
                 TLRPC.TL_webViewResultUrl resultUrl = (TLRPC.TL_webViewResultUrl) response;
                 queryId = resultUrl.query_id;
+                if (resultUrl.same_origin) {
+                    webViewContainer.setTrustedOrigin(resultUrl.url);
+                }
                 webViewContainer.loadUrl(currentAccount, resultUrl.url);
 
                 AndroidUtilities.runOnUIThread(pollRunnable);

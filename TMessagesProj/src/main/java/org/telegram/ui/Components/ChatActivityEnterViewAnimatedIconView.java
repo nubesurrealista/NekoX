@@ -20,7 +20,7 @@ public class ChatActivityEnterViewAnimatedIconView extends RLottieImageView {
     private TransitState animatingState;
     private final int sizeDp;
 
-    private Map<TransitState, RLottieDrawable> stateMap = new HashMap<TransitState, RLottieDrawable>() {
+    private final Map<TransitState, RLottieDrawable> stateMap = new HashMap<TransitState, RLottieDrawable>() {
         @Nullable
         @Override
         public RLottieDrawable get(@Nullable Object key) {
@@ -32,7 +32,9 @@ public class ChatActivityEnterViewAnimatedIconView extends RLottieImageView {
                     res = R.drawable.ic_ab_other;
                 }
                 else res = state.resource;
-                return new RLottieDrawable(res, String.valueOf(res), AndroidUtilities.dp(sizeDp), AndroidUtilities.dp(sizeDp));
+                RLottieDrawable rLottieDrawable = new RLottieDrawable(res, String.valueOf(res), AndroidUtilities.dp(sizeDp), AndroidUtilities.dp(sizeDp));
+                put(state, rLottieDrawable);
+                return rLottieDrawable;
             }
             return obj;
         }
