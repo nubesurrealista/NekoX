@@ -263,7 +263,7 @@ public abstract class BaseFragment {
     }
 
     public View performCreateView(Context context) {
-        if (!BuildConfig.DEBUG_PRIVATE_VERSION) {
+        if (!BuildVars.DEBUG_PRIVATE_VERSION) {
             return createView(context);
         }
 

@@ -13367,8 +13367,8 @@ public class ChatActivityEnterView extends FrameLayout implements
                                 .sendSticker(sticker, query, dialog_id, null, null,
                                         replyingMessageObject, getThreadMessage(), null, replyingQuote, sendAnimationData, notify,
                                         scheduleDate, scheduleRepeatPeriod, parent instanceof TLRPC.TL_messages_stickerSet,
-                                        parent, parentFragment != null ? parentFragment.quickReplyShortcut : null,
-                                        parentFragment != null ? parentFragment.getQuickReplyId() : 0, 0, getSendMonoForumPeerId(),
+                                        parent, parentFragment != null ? parentFragment.getMessageChatSendParams() : null,
+                                        parentFragment != null ? parentFragment.getQuickReplyId() : 0,  getSendMonoForumPeerId(),
                                         null, slowModeTimer);
                             parentFragment.showSlowModeAutoSendHint(view == null ? slowModeButton : view, true, true);
                         }
@@ -13689,8 +13689,8 @@ public class ChatActivityEnterView extends FrameLayout implements
                                                 .sendSticker(document, query, dialog_id, null, null,
                                                         replyingMessageObject, getThreadMessage(), storyItem, replyingQuote, null, notify,
                                                         scheduleDate, scheduleRepeatPeriod, parent instanceof TLRPC.TL_messages_stickerSet,
-                                                        parent, parentFragment != null ? parentFragment.quickReplyShortcut : null,
-                                                        parentFragment != null ? parentFragment.getQuickReplyId() : 0, 0, getSendMonoForumPeerId(),
+                                                        parent, parentFragment != null ? parentFragment.getMessageChatSendParams() : null,
+                                                        parentFragment != null ? parentFragment.getQuickReplyId() : 0, getSendMonoForumPeerId(),
                                                         null, slowModeTimer);
                                     });
                                 }
@@ -13754,7 +13754,7 @@ public class ChatActivityEnterView extends FrameLayout implements
 
                                     SendMessagesHelper.prepareSendingMedia(AccountInstance.getInstance(currentAccount), photos, dialog_id, replyingMessageObject, getThreadMessage(), null, replyingQuote, false, false, editingMessageObject, notify, scheduleDate, scheduleRepeatPeriod, 0, false, null, parentFragment != null ? parentFragment.getMessageChatSendParams() : null, effectId, invertMedia, stars, getSendMonoForumPeerId(),  getSendMessageSuggestionParams());
                                 } else {
-                                    SendMessagesHelper.getInstance(currentAccount).sendSticker(document, query, dialog_id, entry != null ? entry.caption : null, videoEditedInfo, replyingMessageObject, getThreadMessage(), storyItem, replyingQuote, null, notify, scheduleDate, scheduleRepeatPeriod, false, parent, parentFragment != null ? parentFragment.getMessageChatSendParams() : null, stars, getSendMonoForumPeerId(), getSendMessageSuggestionParams(), invertMedia);
+                                    SendMessagesHelper.getInstance(currentAccount).sendSticker(document, query, dialog_id, entry != null ? entry.caption : null, videoEditedInfo, replyingMessageObject, getThreadMessage(), storyItem, replyingQuote, null, notify, scheduleDate, scheduleRepeatPeriod, false, parent, parentFragment != null ? parentFragment.getMessageChatSendParams() : null, stars, getSendMonoForumPeerId(), getSendMessageSuggestionParams());
                                     MediaDataController.getInstance(currentAccount).addRecentGif(document, (int) (System.currentTimeMillis() / 1000), true);
                                     if (DialogObject.isEncryptedDialog(dialog_id)) {
                                         accountInstance.getMessagesController().saveGif(parent, document);
@@ -14061,8 +14061,8 @@ public class ChatActivityEnterView extends FrameLayout implements
                                         .sendSticker(sticker, query, dialog_id, null, null,
                                                 replyingMessageObject, getThreadMessage(), null, replyingQuote, null, notify,
                                                 scheduleDate, scheduleRepeatPeriod, parent instanceof TLRPC.TL_messages_stickerSet,
-                                                parent, parentFragment != null ? parentFragment.quickReplyShortcut : null,
-                                                parentFragment != null ? parentFragment.getQuickReplyId() : 0, 0, getSendMonoForumPeerId(),
+                                                parent, parentFragment != null ? parentFragment.getMessageChatSendParams() : null,
+                                                parentFragment != null ? parentFragment.getQuickReplyId() : 0, getSendMonoForumPeerId(),
                                                 null, slowModeTimer);
                                 parentFragment.showSlowModeAutoSendHint(slowModeButton, true, true);
                             }

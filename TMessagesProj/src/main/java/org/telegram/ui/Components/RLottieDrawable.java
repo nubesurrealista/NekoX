@@ -37,6 +37,7 @@ import androidx.annotation.WorkerThread;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildConfig;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.DispatchQueuePoolBackground;
 import org.telegram.messenger.FileLog;
@@ -612,7 +613,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
         } else {
             isSingleChannel = false;
 
-            if (BuildConfig.DEBUG_PRIVATE_VERSION) {
+            if (BuildVars.DEBUG_PRIVATE_VERSION) {
                 throw new IllegalArgumentException("rawRes not found");
             }
 

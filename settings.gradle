@@ -2,4 +2,5 @@ include ':TMessagesProj'
 include ':TMessagesProj_App'
 include ':openpgp-api'
 include ':TMessagesProj:lib:jlatexmath'
+project(':TMessagesProj:lib:jlatexmath').projectDir = file('TMessagesProj/lib/jlatexmath/jlatexmath')
 //include ':relaybaton'

@@ -87,6 +87,8 @@
 -dontwarn java.lang.management.OperatingSystemMXBean
 -dontwarn lombok.Generated
 -dontwarn sun.net.spi.nameservice.NameServiceDescriptor
+# dnsjava registers this service on Java 18+; java.net.spi.* does not exist on Android
+-dontwarn org.xbill.DNS.spi.DnsjavaInetAddressResolverProvider
 
 ## https://developers.google.com/ml-kit/known-issues#android_issues
 #-keep class com.google.mlkit.nl.languageid.internal.LanguageIdentificationJni { *; }

@@ -12,6 +12,8 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Rect
 import android.os.Build
 import android.os.Environment
 import android.view.Gravity
@@ -33,6 +35,7 @@ import moe.hx030.momogram.ui.BottomBuilder
 import moe.hx030.momogram.utils.AlertUtil.showToast
 import java.io.File
 import java.util.*
+import androidx.core.graphics.set
 
 
 object ProxyUtil {
@@ -223,8 +226,27 @@ object ProxyUtil {
     fun createQRCode(text: String, size: Int = 768, icon: ((Int) -> Bitmap)? = null): Bitmap {
         return try {
             val hints = HashMap<EncodeHintType, Any>()
-            hints[EncodeHintType.ERROR_CORRECTION] = ErrorCorrectionLevel.M
-            QRCodeWriter().encode(text, BarcodeFormat.QR_CODE, size, size, hints, null, null, icon)
+            hints[EncodeHintType.ERROR_CORRECTION] = ErrorCorrectionLevel.H
+            val matrix = QRCodeWriter().encode(text, BarcodeFormat.QR_CODE, size, size, hints)
+            val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+            for (x in 0 until size) {
+                for (y in 0 until size) {
+                    bitmap[x, y] = if (matrix[x, y]) Color.BLACK else Color.WHITE
+                }
+            }
+            val canvas = Canvas(bitmap)
+
+            val iconSize = 180
+
+            val dst = Rect(
+                (size - iconSize) / 2,
+                (size - iconSize) / 2,
+                (size + iconSize) / 2,
+                (size + iconSize) / 2
+            )
+
+            if (icon != null) canvas.drawBitmap(icon(size), dst, dst, Paint(Paint.ANTI_ALIAS_FLAG))
+            return bitmap
         } catch (e: WriterException) {
             FileLog.e(e);
             Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)

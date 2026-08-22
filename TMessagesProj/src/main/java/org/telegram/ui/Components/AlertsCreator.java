@@ -5540,7 +5540,7 @@ public class AlertsCreator {
 
         int[] flagArr = new int[1];
         /*
-        if (BuildConfig.DEBUG_PRIVATE_VERSION) {
+        if (BuildVars.DEBUG_PRIVATE_VERSION) {
             String[] flagsStr = {"relative", "short_time", "long_time", "short_date", "long_date", "day_of_week"};
             for (int a = 0; a < flagsStr.length; a++) {
                 final int flag = a;

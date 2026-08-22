@@ -12,6 +12,7 @@ import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildConfig;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.pip.activity.IPipActivityActionListener;
 import org.telegram.messenger.pip.activity.IPipActivityAnimationListener;
 import org.telegram.messenger.pip.activity.IPipActivityHandler;
@@ -31,7 +32,7 @@ public class PipActivityController {
         this.activity = activity;
         this.handler = new PipActivityHandler(activity);
 
-        if (BuildConfig.DEBUG_PRIVATE_VERSION) {
+        if (BuildVars.DEBUG_PRIVATE_VERSION) {
             handler.addPipListener(new IPipActivityListener() {
                 @Override
                 public void onStartEnterToPip() {
