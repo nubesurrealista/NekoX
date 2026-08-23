@@ -24,7 +24,7 @@
     <string name="TransparentStatusBar">نوار وضعیت شفاف</string>
     <string name="EnableResidentNotification">نشان دادن اعلان ساکن</string>
     <string name="DisableResidentNotification">غیرفعال کردن اعلان ساکن</string>
-    <string name="NekogramRunning">نكوگرام در حال اجرا است</string>
+    <string name="NekogramRunning">موموگرام در حال اجرا است</string>
     <string name="EventType">مجموعه آیکون‌های نوار کناری</string>
     <string name="ChristmasHat">نمایش همیشگی کلاه کریسمس</string>
     <string name="ActionBarDecoration">دکوراسیون نوار عنوان</string>
@@ -145,4 +145,15 @@
     <string name="useOSMDroidMap">بکارگیری نقشه OSMDroid</string>
     <string name="mapDriftingFixForGoogleMaps">رفع بگایی نقشه گوگل در چین</string>
     <string name="MomoSettings">تنظیمات Momo</string>
+    <string name="DeleteAllFromSelfBefore">قبل...</string>
+    <string name="ProviderTelegramAPI">رابط برنامه‌نویسی تلگرام</string>
+    <string name="DisableStories">غیرفعال کردن استوری‌ها</string>
+    <string name="IgnoreAllReactions">نادیده گرفتن تمامی واکنش‌ها</string>
+    <string name="ConfirmToSendCommand">آیا از ارسال این دستور اطمینان دارید؟</string>
+    <string name="CopyPhoto">کپی عکس</string>
+    <string name="PhotoCopied">عکس کپی شد</string>
+    <string name="CopyPhotoAsSticker">کپی عکس به عنوان استیکر</string>
+    <string name="AutoArchiveAndMuteNoCommonGroupOnly">فقط کاربران بدون گروه‌های مشترک را بایگانی کنید</string>
+    <string name="DeleteAllFromSelfAdmin">با اختیارات مدیر</string>
+    <string name="CloseWebViewWithoutConfirmation">برنامه وب همیشه بدون تأیید بسته شود</string>
 </resources>
