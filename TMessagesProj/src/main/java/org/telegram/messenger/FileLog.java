@@ -509,7 +509,7 @@ public class FileLog {
         return sb.toString();
     }
 
-    private static void dumpANR() {
+    public static void dumpANR() {
         dumpThreads(true);
         getInstance().dumpMemory(false);
     }
