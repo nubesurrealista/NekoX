@@ -69,7 +69,7 @@ public class BillingController /* implements PurchasesUpdatedListener, BillingCl
 
     private BillingController(Context ctx) {
 //        billingClient = BillingClient.newBuilder(ctx)
-//                .enablePendingPurchases()
+//                .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
 //                .setListener(this)
 //                .build();
     }
@@ -148,7 +148,7 @@ public class BillingController /* implements PurchasesUpdatedListener, BillingCl
             return;
         }
         billingClientEmpty = true;
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.billingProductDetailsUpdated);
+        NotificationCenter.getGlobalInstance().postNotificationNameOnUIThread(NotificationCenter.billingProductDetailsUpdated);
     }
 
     private void switchBackFromInvoice() {
@@ -160,14 +160,18 @@ public class BillingController /* implements PurchasesUpdatedListener, BillingCl
             return;
         }
         billingClientEmpty = false;
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.billingProductDetailsUpdated);
+        NotificationCenter.getGlobalInstance().postNotificationNameOnUIThread(NotificationCenter.billingProductDetailsUpdated);
     }
 
     public boolean isReady() {
         return billingClientEmpty;
     }
 
-    public void queryProductDetails(List<QueryProductDetailsParams.Product> products, ProductDetailsResponseListener responseListener) {
+    public interface ProductDetailsResponseListenerLegacy {
+        void onProductDetailsResponse(BillingResult billingResult, List<ProductDetails> list);
+    }
+
+    public void queryProductDetails(List<QueryProductDetailsParams.Product> products, ProductDetailsResponseListenerLegacy responseListener) {
         if (!isReady()) {
             throw new IllegalStateException("Billing: Controller should be ready for this call!");
         }
