@@ -19,8 +19,8 @@ jobs:
 #          permission: "write"
 #        env:
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  ffmpeg:
-    name: Native Build (FFmpeg)
+  opus:
+    name: Native Build (Opus)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,18 +29,16 @@ jobs:
           submodules: recursive
       - name: Fetch Status
         run: |
-          git submodule status TMessagesProj/jni/third_party/ffmpeg > ffmpeg_status
-          git submodule status TMessagesProj/jni/third_party/libvpx > libvpx_status
-          git submodule status TMessagesProj/jni/third_party/dav1d > dav1d_status
-      - name: FFmpeg Cache
+          git submodule status TMessagesProj/jni/third_party/xiph/ogg > ogg_status
+          git submodule status TMessagesProj/jni/third_party/xiph/opus > opus_status
+          git submodule status TMessagesProj/jni/third_party/xiph/opusfile > opusfile_status
+      - name: Opus Cache
         id: cache
         uses: actions/cache@v5
         with:
           path: |
-            TMessagesProj/jni/third_party/ffmpeg/build
-            TMessagesProj/jni/third_party/libvpx/build
-            TMessagesProj/jni/third_party/dav1d/build
-          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'dav1d_status', 'TMessagesProj/jni/third_party/*ffmpeg*.sh', 'TMessagesProj/jni/third_party/*libvpx*.sh', 'TMessagesProj/jni/third_party/*dav1d*.sh', 'TMessagesProj/jni/third_party/patches/ffmpeg/*') }}
+            TMessagesProj/jni/ffmpeg/build/opus
+          key: ${{ hashFiles('ogg_status', 'opus_status', 'opusfile_status', 'TMessagesProj/jni/ffmpeg/build_opus.sh') }}
       - name: Setup Android SDK Tools
         uses: android-actions/setup-android@v3
         if: steps.cache.outputs.cache-hit != 'true'
@@ -51,7 +49,55 @@ jobs:
           if [ ! -f "$SDK_MANAGER" ]; then
             SDK_MANAGER=$(find $ANDROID_HOME -name sdkmanager | head -n 1)
           fi
-          echo "y" | sudo $SDK_MANAGER --install "ndk;27.2.12479018" --sdk_root=${ANDROID_SDK_ROOT}
+          yes | sudo $SDK_MANAGER --install "ndk;27.2.12479018" --sdk_root=${ANDROID_SDK_ROOT}
+          echo "sdk.dir=${ANDROID_HOME}" > local.properties
+          echo "ndk.dir=${ANDROID_HOME}/ndk/27.2.12479018" >> local.properties
+      - name: Native Build
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install yasm nasm meson ninja-build -y || true
+          ./run init libs opus
+
+  ffmpeg:
+    name: Native Build (FFmpeg)
+    runs-on: ubuntu-latest
+    needs:
+      - opus
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+      - name: Fetch Status
+        run: |
+          git submodule status TMessagesProj/jni/third_party/xiph/ogg > ogg_status
+          git submodule status TMessagesProj/jni/third_party/xiph/opus > opus_status
+          git submodule status TMessagesProj/jni/third_party/xiph/opusfile > opusfile_status
+          git submodule status TMessagesProj/jni/third_party/ffmpeg > ffmpeg_status
+          git submodule status TMessagesProj/jni/third_party/libvpx > libvpx_status
+          git submodule status TMessagesProj/jni/third_party/dav1d > dav1d_status
+      - name: FFmpeg Cache
+        id: cache
+        uses: actions/cache@v5
+        with:
+          path: |
+            TMessagesProj/jni/ffmpeg
+            TMessagesProj/jni/third_party/ffmpeg/build
+            TMessagesProj/jni/third_party/libvpx/build
+            TMessagesProj/jni/third_party/dav1d/build
+          key: ${{ hashFiles('ogg_status', 'opus_status', 'opusfile_status', 'ffmpeg_status', 'libvpx_status', 'dav1d_status', 'TMessagesProj/jni/third_party/*ffmpeg*.sh', 'TMessagesProj/jni/third_party/*libvpx*.sh', 'TMessagesProj/jni/third_party/*dav1d*.sh', 'TMessagesProj/jni/third_party/patches/ffmpeg/*') }}
+      - name: Setup Android SDK Tools
+        uses: android-actions/setup-android@v3
+        if: steps.cache.outputs.cache-hit != 'true'
+      - name: Install NDK
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          SDK_MANAGER=$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager
+          if [ ! -f "$SDK_MANAGER" ]; then
+            SDK_MANAGER=$(find $ANDROID_HOME -name sdkmanager | head -n 1)
+          fi
+          yes | sudo $SDK_MANAGER --install "ndk;27.2.12479018" --sdk_root=${ANDROID_SDK_ROOT}
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
           echo "ndk.dir=${ANDROID_HOME}/ndk/27.2.12479018" >> local.properties
       - name: Native Build
@@ -88,7 +134,7 @@ jobs:
           if [ ! -f "$SDK_MANAGER" ]; then
             SDK_MANAGER=$ANDROID_HOME/tools/bin/sdkmanager
           fi
-          echo "y" | sudo $SDK_MANAGER --install "ndk;27.2.12479018" --sdk_root=${ANDROID_SDK_ROOT}
+          yes | sudo $SDK_MANAGER --install "ndk;27.2.12479018" --sdk_root=${ANDROID_SDK_ROOT}
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
           echo "ndk.dir=${ANDROID_HOME}/ndk/27.2.12479018" >> local.properties
       - name: Native Build
@@ -96,6 +142,43 @@ jobs:
         run: |
           ./run init action boringssl
           ./run init libs boringssl
+  tlottie:
+    name: Native Build (tlottie)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+      - name: Fetch Status
+        run: git submodule status TMessagesProj/jni/tlottie > tlottie_status
+      - name: tlottie Cache
+        id: cache
+        uses: actions/cache@v5
+        with:
+          path: |
+            TMessagesProj/jni/tlottie_lib
+          key: ${{ hashFiles('tlottie_status') }}
+      - name: Setup Android SDK Tools
+        uses: android-actions/setup-android@v2
+        if: steps.cache.outputs.cache-hit != 'true'
+      - name: Install NDK & Rust
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          SDK_MANAGER=$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager
+          if [ ! -f "$SDK_MANAGER" ]; then
+            SDK_MANAGER=$ANDROID_HOME/tools/bin/sdkmanager
+          fi
+          yes | sudo $SDK_MANAGER --install "ndk;27.2.12479018" --sdk_root=${ANDROID_SDK_ROOT}
+          echo "sdk.dir=${ANDROID_HOME}" > local.properties
+          echo "ndk.dir=${ANDROID_HOME}/ndk/27.2.12479018" >> local.properties
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+          source "$HOME/.cargo/env"
+          rustup target add --toolchain stable aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+      - name: Native Build
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          ./run init libs tlottie
   tdlib:
     name: Native Build (TDLib)
     runs-on: ubuntu-latest
@@ -128,7 +211,7 @@ jobs:
           if [ ! -f "$SDK_MANAGER" ]; then
             SDK_MANAGER=$ANDROID_HOME/tools/bin/sdkmanager
           fi
-          echo "y" | sudo $SDK_MANAGER --install "ndk;27.2.12479018" --sdk_root=${ANDROID_SDK_ROOT}
+          yes | sudo $SDK_MANAGER --install "ndk;27.2.12479018" --sdk_root=${ANDROID_SDK_ROOT}
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
           echo "ndk.dir=${ANDROID_HOME}/ndk/27.2.12479018" >> local.properties
           sudo apt install -y gperf
@@ -150,6 +233,7 @@ jobs:
     needs:
       - ffmpeg
       - tdlib
+      - tlottie
     strategy:
       matrix:
         flavor:
@@ -164,11 +248,15 @@ jobs:
           submodules: recursive
       - name: Fetch Status
         run: |
+          git submodule status TMessagesProj/jni/third_party/xiph/ogg > ogg_status
+          git submodule status TMessagesProj/jni/third_party/xiph/opus > opus_status
+          git submodule status TMessagesProj/jni/third_party/xiph/opusfile > opusfile_status
           git submodule status TMessagesProj/jni/third_party/ffmpeg > ffmpeg_status
           git submodule status TMessagesProj/jni/third_party/libvpx > libvpx_status
           git submodule status TMessagesProj/jni/third_party/dav1d > dav1d_status
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
           git submodule status TMessagesProj/jni/tdlib > tdlib_status
+          git submodule status TMessagesProj/jni/tlottie > tlottie_status
       - name: Native Cache
         id: cache
         uses: actions/cache@v5
@@ -186,10 +274,11 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           path: |
+            TMessagesProj/jni/ffmpeg
             TMessagesProj/jni/third_party/ffmpeg/build
             TMessagesProj/jni/third_party/libvpx/build
             TMessagesProj/jni/third_party/dav1d/build
-          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'dav1d_status', 'TMessagesProj/jni/third_party/*ffmpeg*.sh', 'TMessagesProj/jni/third_party/*libvpx*.sh', 'TMessagesProj/jni/third_party/*dav1d*.sh', 'TMessagesProj/jni/third_party/patches/ffmpeg/*') }}
+          key: ${{ hashFiles('ogg_status', 'opus_status', 'opusfile_status', 'ffmpeg_status', 'libvpx_status', 'dav1d_status', 'TMessagesProj/jni/third_party/*ffmpeg*.sh', 'TMessagesProj/jni/third_party/*libvpx*.sh', 'TMessagesProj/jni/third_party/*dav1d*.sh', 'TMessagesProj/jni/third_party/patches/ffmpeg/*') }}
       - name: BoringSSL Cache
         uses: actions/cache@v5
         if: steps.cache.outputs.cache-hit != 'true'
@@ -205,6 +294,13 @@ jobs:
             TMessagesProj/jni/tde2e
             TMessagesProj/jni/tdlib/build
           key: ${{ hashFiles('boringssl_status', 'tdlib_status') }}-03030
+      - name: tlottie Cache
+        uses: actions/cache@v5
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          path: |
+            TMessagesProj/jni/tlottie_lib
+          key: ${{ hashFiles('tlottie_status') }}
       - name: Setup Android SDK Tools
         uses: android-actions/setup-android@v2
         if: steps.cache.outputs.cache-hit != 'true'
@@ -215,7 +311,7 @@ jobs:
           if [ ! -f "$SDK_MANAGER" ]; then
             SDK_MANAGER=$ANDROID_HOME/tools/bin/sdkmanager
           fi
-          echo "y" | sudo $SDK_MANAGER --install "ndk;27.2.12479018" --sdk_root=${ANDROID_SDK_ROOT}
+          yes | sudo $SDK_MANAGER --install "ndk;27.2.12479018" --sdk_root=${ANDROID_SDK_ROOT}
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
           echo "ndk.dir=${ANDROID_HOME}/ndk/27.2.12479018" >> local.properties
       - name: Fix BoringSSL
@@ -241,6 +337,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           export NATIVE_TARGET="${{ matrix.flavor }}"
+          for a in arm64-v8a armeabi-v7a x86 x86_64; do mkdir -p TMessagesProj/jni/ffmpeg/$a; cp -fv TMessagesProj/jni/third_party/ffmpeg/build/$a/lib/*.a TMessagesProj/jni/ffmpeg/$a/; done 
           ./run libs native
           mkdir -p ~/apks || true
           cp -rfv TMessagesProj/build/outputs/apk ~/apks || true
@@ -266,7 +363,7 @@ jobs:
           if [ ! -f "$SDK_MANAGER" ]; then
             SDK_MANAGER=$ANDROID_HOME/tools/bin/sdkmanager
           fi
-          echo "y" | sudo $SDK_MANAGER --install "ndk;27.2.12479018" --sdk_root=${ANDROID_SDK_ROOT}
+          yes | sudo $SDK_MANAGER --install "ndk;27.2.12479018" --sdk_root=${ANDROID_SDK_ROOT}
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
           echo "ndk.dir=${ANDROID_HOME}/ndk/27.2.12479018" >> local.properties
       - name: Fetch Status
@@ -276,38 +373,40 @@ jobs:
           git submodule status TMessagesProj/jni/third_party/dav1d > dav1d_status
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
           git submodule status TMessagesProj/jni/tdlib > tdlib_status
+          git submodule status TMessagesProj/jni/tlottie > tlottie_status
       - name: Native Cache (armeabi-v7a)
         uses: actions/cache@v5
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status', 'tdlib_status') }}-armeabi-v7a
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status', 'tdlib_status', 'tlottie_status') }}-armeabi-v7a
       - name: Native Cache (arm64-v8a)
         uses: actions/cache@v5
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status', 'tdlib_status') }}-arm64-v8a
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status', 'tdlib_status', 'tlottie_status') }}-arm64-v8a
       - name: Native Cache (x86)
         uses: actions/cache@v5
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status', 'tdlib_status') }}-x86
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status', 'tdlib_status', 'tlottie_status') }}-x86
       - name: Native Cache (x86_64)
         uses: actions/cache@v5
         with:
           path: |
             TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status', 'tdlib_status') }}-x86_64
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'libvpx_status', 'boringssl_status', 'dav1d_status', 'tdlib_status', 'tlottie_status') }}-x86_64
       - name: FFmpeg Cache
         uses: actions/cache@v5
         with:
           path: |
+            TMessagesProj/jni/ffmpeg
             TMessagesProj/jni/third_party/ffmpeg/build
             TMessagesProj/jni/third_party/libvpx/build
             TMessagesProj/jni/third_party/dav1d/build
-          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'dav1d_status', 'TMessagesProj/jni/third_party/*ffmpeg*.sh', 'TMessagesProj/jni/third_party/*libvpx*.sh', 'TMessagesProj/jni/third_party/*dav1d*.sh', 'TMessagesProj/jni/third_party/patches/ffmpeg/*') }}
+          key: ${{ hashFiles('ogg_status', 'opus_status', 'opusfile_status', 'ffmpeg_status', 'libvpx_status', 'dav1d_status', 'TMessagesProj/jni/third_party/*ffmpeg*.sh', 'TMessagesProj/jni/third_party/*libvpx*.sh', 'TMessagesProj/jni/third_party/*dav1d*.sh', 'TMessagesProj/jni/third_party/patches/ffmpeg/*') }}
       - name: BoringSSL Cache
         uses: actions/cache@v5
         with:
@@ -321,6 +420,12 @@ jobs:
             TMessagesProj/jni/tde2e
             TMessagesProj/jni/tdlib/build
           key: ${{ hashFiles('boringssl_status', 'tdlib_status') }}-03030
+      - name: tlottie Cache
+        uses: actions/cache@v5
+        with:
+          path: |
+            TMessagesProj/jni/tlottie_lib
+          key: ${{ hashFiles('tlottie_status') }}
       - name: Fix Gradle Memory
         run: |
           sed -i -e "s/16384/6144/g" gradle.properties
