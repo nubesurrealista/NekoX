@@ -1821,7 +1821,11 @@ public class MessageSendPreview extends Dialog implements NotificationCenter.Not
         if (anchorSendButton != null) {
             anchorSendButton.setAlpha(0.0f);
         }
-        if (SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_LOW) return;
+        if (SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_LOW) {
+            ScrimOptions.setDimBehind(getWindow(), true);
+            return;
+        }
+        ScrimOptions.setDimBehind(getWindow(), false);
 
         ScrimOptions.makeGlobalBlurBitmaps((bitmapBg, bitmapOptions) -> {
             if (anchorSendButton != null) {

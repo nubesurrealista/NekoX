@@ -50,6 +50,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
 import org.telegram.messenger.RichMessageLayout;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
@@ -331,6 +332,12 @@ public class ScrimOptions extends Dialog {
             withoutView.setVisibility(View.INVISIBLE);
         }
 
+        if (SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_LOW) {
+            setDimBehind(getWindow(), true);
+            return;
+        }
+        setDimBehind(getWindow(), false);
+
         makeGlobalBlurBitmaps((bitmapBg, bitmapOptions) -> {
             if (withoutView != null) {
                 withoutView.setVisibility(View.VISIBLE);
@@ -344,6 +351,19 @@ public class ScrimOptions extends Dialog {
             iBlur3SourceBitmap.setBitmap(bitmapOptions);
             checkBitmapMatrix();
         });
+    }
+
+    public static void setDimBehind(Window window, boolean dim) {
+        if (window == null) return;
+        WindowManager.LayoutParams params = window.getAttributes();
+        if (dim) {
+            params.dimAmount = 0.4f;
+            params.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        } else {
+            params.dimAmount = 0f;
+            params.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        }
+        window.setAttributes(params);
     }
 
     public static void makeGlobalBlurBitmaps(Utilities.Callback2<Bitmap, Bitmap> bitmaps) {
