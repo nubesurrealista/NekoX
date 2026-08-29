@@ -71,11 +71,7 @@
     java.lang.Object readResolve();
 }
 
--keep class tw.nekomimi.nekogram.InternalUpdater$ReleaseMetadata { *; }
--keep class tw.nekomimi.nekogram.InternalUpdater$ApkMetadata { *; }
--keep class tw.nekomimi.nekogram.InternalUpdater$GithubApiContents { *; }
--keep class tw.nekomimi.nekogram.InternalUpdater$NekoXReleaseNote { *; }
--keep class tw.nekomimi.nekogram.InternalUpdater$NekoXAPK { *; }
+-keep class moe.hx030.momogram.transtale.** { *; }
 
 #-keep class java.beans.Transient { *; }
 #-keep class java.lang.management.** { *; }
