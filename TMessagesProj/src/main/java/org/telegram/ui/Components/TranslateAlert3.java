@@ -521,8 +521,9 @@ public class TranslateAlert3 extends BottomSheetWithRecyclerListView {
         }
     }
 
-    public void setOKToDismiss() {
+    public TranslateAlert3 setOKToDismiss() {
         button.setOnClickListener(v -> dismiss());
+        return this;
     }
 
     public static class Header extends FrameLayout implements Theme.Colorable {

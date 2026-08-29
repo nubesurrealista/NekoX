@@ -40450,6 +40450,7 @@ public class ChatActivity extends BaseFragment implements
                         .setMessage(dialog_id, 0, false)
                         .setToLanguage(toLang)
                         .setOnLinkPress(onLinkPress)
+                        .setOKToDismiss()
                         .show();
             }
         });
