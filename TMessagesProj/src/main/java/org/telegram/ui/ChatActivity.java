@@ -40424,6 +40424,38 @@ public class ChatActivity extends BaseFragment implements
         return msg;
     }
 
+    private void didLongPressBotButton(String text) {
+        if (getParentActivity() == null || text == null || text.isEmpty()) {
+            return;
+        }
+        BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity(), false, themeDelegate);
+        builder.setTitle(text);
+        builder.setTitleMultipleLines(true);
+        builder.setItems(new CharSequence[] {
+            getString(R.string.Copy),
+            getString(R.string.Translate)
+        }, (dialog, which) -> {
+            if (which == 0) {
+                AndroidUtilities.addToClipboard(text);
+                BulletinFactory.of(ChatActivity.this).createCopyBulletin(formatString(R.string.ExactTextCopied, text)).show();
+            } else {
+                String toLang = MomoConfig.translateToLang.String();
+                if (StringUtils.isBlank(toLang)) toLang = LocaleController.getInstance().getCurrentLocale().getLanguage();
+                Utilities.CallbackReturn<URLSpan, Boolean> onLinkPress = (link) -> {
+                    didPressMessageUrl(link, false, selectedObject, null);
+                    return true;
+                };
+                new TranslateAlert3(getContext(), resourceProvider)
+                        .setText(text)
+                        .setMessage(dialog_id, 0, false)
+                        .setToLanguage(toLang)
+                        .setOnLinkPress(onLinkPress)
+                        .show();
+            }
+        });
+        showDialog(builder.create());
+    }
+
     private class ChatMessageCellDelegate implements ChatMessageCell.ChatMessageCellDelegate {
         @Override
         public boolean isReplyOrSelf() {
@@ -41702,6 +41734,8 @@ public class ChatActivity extends BaseFragment implements
                     if (!MomoConfig.disableVibration.Bool())
                         cell.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                 } catch (Exception ignore) {}
+            } else {
+                ChatActivity.this.didLongPressBotButton(button.getText());
             }
         }
 

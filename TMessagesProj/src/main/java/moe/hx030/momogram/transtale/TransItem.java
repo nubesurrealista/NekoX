@@ -1,19 +1,10 @@
 package moe.hx030.momogram.transtale;
 
-//import org.dizitart.no2.Document;
-//import org.dizitart.no2.IndexType;
-//import org.dizitart.no2.mapper.Mappable;
-//import org.dizitart.no2.mapper.NitriteMapper;
-//import org.dizitart.no2.objects.Id;
-//import org.dizitart.no2.objects.Index;
-//import org.dizitart.no2.objects.Indices;
-
 import org.dizitart.no2.collection.Document;
 import org.dizitart.no2.common.mapper.NitriteMapper;
 import org.dizitart.no2.repository.annotations.Id;
 import org.dizitart.no2.repository.annotations.Index;
 
-//@Index(value = "text")
 @Index(fields = "text")
 public class TransItem {
 
