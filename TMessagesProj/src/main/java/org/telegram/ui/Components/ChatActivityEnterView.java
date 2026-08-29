@@ -785,6 +785,7 @@ public class ChatActivityEnterView extends FrameLayout implements
 
     private boolean collectDeleteAfterSendIds;
     private final HashSet<Integer> deleteAfterSendMessageIds = new HashSet<>();
+    private final HashMap<Integer, long[]> deleteAfterSendRetries = new HashMap<>();
 
     private int lastSizeChangeValue1;
     private boolean lastSizeChangeValue2;
@@ -8837,6 +8838,33 @@ public class ChatActivityEnterView extends FrameLayout implements
         };
     }
 
+    private void scheduleDeleteAfterSend(int serverId, long dialogId, int attempt) {
+        AndroidUtilities.runOnUIThread(() -> {
+            long[] data = deleteAfterSendRetries.get(serverId);
+            if (data != null && (long) data[0] != dialogId) {
+                return;
+            }
+            if (data == null) {
+                deleteAfterSendRetries.put(serverId, new long[]{dialogId});
+            }
+            ArrayList<Integer> ids = new ArrayList<>();
+            ids.add(serverId);
+            accountInstance.getMessagesController().deleteMessages(ids, null, null, dialogId, true, 0, false, 0, null, (int) parentFragment.getTopicId(), false, 0, (success, error) -> {
+                if (success) {
+                    AndroidUtilities.runOnUIThread(() -> deleteAfterSendRetries.remove(serverId));
+                    return;
+                }
+                String err = error != null ? error.text : "unknown";
+                Log.d("030-del", "delete-after-send retry: dialog=" + dialogId + " msgId=" + serverId + " attempt=" + (attempt + 1) + " error=" + err);
+                if (attempt + 1 >= 10) {
+                    AndroidUtilities.runOnUIThread(() -> deleteAfterSendRetries.remove(serverId));
+                    return;
+                }
+                scheduleDeleteAfterSend(serverId, dialogId, attempt + 1);
+            });
+        }, 300L + Math.min(attempt, 6) * 69L);
+    }
+
     public boolean processSendingText(CharSequence text, boolean notify, int scheduleDate, int scheduleRepeatPeriod, long payStars) {
         if (replyingQuote != null && parentFragment != null && replyingQuote.outdated) {
             parentFragment.showQuoteMessageUpdate();
@@ -15030,12 +15058,6 @@ public class ChatActivityEnterView extends FrameLayout implements
             long did = (Long) args[3];
             Integer newMsgId = (Integer) args[1];
             Integer oldMsgId = (Integer) args[0];
-            if (did == dialog_id && oldMsgId != null && oldMsgId < 0 && deleteAfterSendMessageIds.contains(oldMsgId)) {
-                deleteAfterSendMessageIds.remove(oldMsgId);
-                ArrayList<Integer> ids = new ArrayList<>();
-                ids.add(newMsgId);
-                accountInstance.getMessagesController().deleteMessages(ids, null, null, dialog_id, getThreadMessageId(), true, 0);
-            }
             if (did == dialog_id && info != null && info.slowmode_seconds != 0 && !MessageObject.isEphemeralMessageId(newMsgId)) {
                 TLRPC.Chat chat = accountInstance.getMessagesController().getChat(info.id);
                 if (chat != null && !ChatObject.hasAdminRights(chat) && !ChatObject.isIgnoredChatRestrictionsForBoosters(chat)) {
@@ -15043,6 +15065,10 @@ public class ChatActivityEnterView extends FrameLayout implements
                     info.flags |= 262144;
                     setSlowModeTimer(info.slowmode_next_send_date);
                 }
+            }
+            if (did == dialog_id && oldMsgId != null && oldMsgId < 0 && deleteAfterSendMessageIds.contains(oldMsgId)) {
+                deleteAfterSendMessageIds.remove(oldMsgId);
+                scheduleDeleteAfterSend(newMsgId, did, 0);
             }
         } else if (id == NotificationCenter.sendingMessagesChanged) {
             if (info != null) {

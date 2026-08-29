@@ -9517,6 +9517,10 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void deleteMessages(ArrayList<Integer> messages, ArrayList<Long> randoms, TLRPC.EncryptedChat encryptedChat, long dialogId, boolean forAll, int mode, boolean cacheOnly, long taskId, TLObject taskRequest, int topicId, boolean movedToScheduled, int movedToScheduledMessageId) {
+        deleteMessages(messages, randoms, encryptedChat, dialogId, forAll, mode, cacheOnly, taskId, taskRequest, topicId, movedToScheduled, movedToScheduledMessageId, null);
+    }
+
+    public void deleteMessages(ArrayList<Integer> messages, ArrayList<Long> randoms, TLRPC.EncryptedChat encryptedChat, long dialogId, boolean forAll, int mode, boolean cacheOnly, long taskId, TLObject taskRequest, int topicId, boolean movedToScheduled, int movedToScheduledMessageId, BiConsumer<Boolean, TLRPC.TL_error> onResult) {
         final boolean scheduled = mode == ChatActivity.MODE_SCHEDULED;
         final boolean quickReplies = mode == ChatActivity.MODE_QUICK_REPLIES;
         final boolean welcomeMessages = mode == ChatActivity.MODE_WELCOME_MESSAGES;
@@ -9668,6 +9672,11 @@ public class MessagesController extends BaseController implements NotificationCe
                 if (error == null) {
                     TLRPC.TL_messages_affectedMessages res = (TLRPC.TL_messages_affectedMessages) response;
                     processNewChannelDifferenceParams(res.pts, res.pts_count, channelId);
+                    if (onResult != null) {
+                        onResult.accept(true, null);
+                    }
+                } else if (onResult != null) {
+                    onResult.accept(false, error);
                 }
                 if (newTaskId != 0) {
                     getMessagesStorage().removePendingTask(newTaskId);
@@ -9702,6 +9711,11 @@ public class MessagesController extends BaseController implements NotificationCe
                 if (error == null) {
                     TLRPC.TL_messages_affectedMessages res = (TLRPC.TL_messages_affectedMessages) response;
                     processNewDifferenceParams(-1, res.pts, -1, res.pts_count);
+                    if (onResult != null) {
+                        onResult.accept(true, null);
+                    }
+                } else if (onResult != null) {
+                    onResult.accept(false, error);
                 }
                 if (newTaskId != 0) {
                     getMessagesStorage().removePendingTask(newTaskId);
