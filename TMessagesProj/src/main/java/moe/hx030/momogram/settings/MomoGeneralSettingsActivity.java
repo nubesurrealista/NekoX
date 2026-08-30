@@ -147,6 +147,7 @@ public class MomoGeneralSettingsActivity extends MomoSettingsBaseActivity {
     private final AbstractConfigCell unarchiveOnSwipeRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.unarchiveOnSwipe));
     private final AbstractConfigCell swipeActionInTopicListRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.swipeActionInTopicList));
     private final AbstractConfigCell ignoreFilterEmoticonUpdateRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.ignoreFilterEmoticonUpdate));
+    private final AbstractConfigCell swipeLoopChatFilterRow = cellGroup.appendCell(new ConfigCellTextCheck(MomoConfig.swipeLoopChatFilter));
     private final AbstractConfigCell dividerFolder = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header_notification = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.NekoGeneralNotification)));

@@ -853,6 +853,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         private boolean prepareForMoving(MotionEvent ev, boolean forward) {
             int id = filterTabsView.getNextPageId(forward);
+            if (id < 0 && MomoConfig.swipeLoopChatFilter.Bool() && filterTabsView.getTabsCount() >= 2) {
+                FilterTabsView.Tab tab = filterTabsView.getTab(forward ? 0 : filterTabsView.getTabsCount() - 1);
+                if (tab != null) {
+                    id = tab.id;
+                }
+            }
             if (id < 0) {
                 return false;
             }
@@ -14113,6 +14119,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         final boolean isFirstTab = filterTabsView == null || filterTabsView.getTabsCount() < 2 || filterTabsView.getCurrentTabId() == filterTabsView.getFirstTabId();
         final boolean isLastTab = filterTabsView == null || filterTabsView.getTabsCount() < 2 || filterTabsView.getCurrentTabId() == filterTabsView.getLastTabId();
         final int chatSwipeAction = SharedConfig.getChatSwipeAction(currentAccount);
+        if (MomoConfig.swipeLoopChatFilter.Bool() && filterTabsView != null && filterTabsView.getTabsCount() >= 2) {
+            return false;
+        }
         if (forward) {
             return isLastTab && !isFirstTab;
         } else {
