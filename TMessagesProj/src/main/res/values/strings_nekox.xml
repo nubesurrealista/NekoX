@@ -363,7 +363,7 @@
     <string name="CopyFileRefDone">Copied %1$d file(s)</string>
     <string name="PasteFileRef">Send files by ref</string>
     <string name="AttachCopiedFileRef">Attach copied file(s) and update message?\n(Note. only the first file could be attached)</string>
-    <string name="ConfirmBamHammer">Ban + delete all messages + report spam for selected sender?</string>
+    <string name="ConfirmBamHammerName">Ban%1$s and delete all messages from the account + report spam?</string>
     <string name="HigherMinimumMenuHeight">Higher minimum popup menu height</string>
     <string name="HideFAB">Hide floating buttons in chat list</string>
     <string name="HideMessageSideButtons">Hide side button next to messages</string>

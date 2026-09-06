@@ -358,6 +358,5 @@
     <string name="CopyFileRefDone">Telah menyalin %1$d berkas</string>
     <string name="PasteFileRef">Kirim berkas berdasarkan referensi</string>
     <string name="AttachCopiedFileRef">Lampirkan berkas yang telah disalin dan perbarui pesan?\n(Catatan: hanya berkas pertama yang dapat dilampirkan)</string>
-    <string name="ConfirmBamHammer">Memblokir + menghapus semua pesan + melaporkan sebagai spam untuk pengirim yang dipilih?</string>
     <string name="HigherMinimumMenuHeight">Tinggi minimum menu popup yang lebih tinggi</string>
 </resources>

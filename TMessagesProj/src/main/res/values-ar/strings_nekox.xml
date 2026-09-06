@@ -359,6 +359,5 @@
     <string name="CopyFileRefDone">تم نسخ %1$d من الملفات</string>
     <string name="PasteFileRef">إرسال الملفات باستخدام المرجع</string>
     <string name="AttachCopiedFileRef">هل تريد إرفاق الملفات المنسوخة وتحديث الرسالة؟\n(ملاحظة: لا يمكن إرفاق سوى الملف الأول.)</string>
-    <string name="ConfirmBamHammer">هل تريد حظر المرسل المحدد، وحذف جميع رسائله، والإبلاغ عنه كرسائل مزعجة؟</string>
     <string name="HigherMinimumMenuHeight">زيادة الحد الأدنى لارتفاع القائمة المنبثقة</string>
 </resources>

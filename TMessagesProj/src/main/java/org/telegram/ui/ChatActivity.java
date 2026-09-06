@@ -35539,10 +35539,16 @@ public class ChatActivity extends BaseFragment implements
                 boolean isMod = getMessagesController().isOwner(currentChat.id, targetId) || getMessagesController().isAdmin(currentChat.id, targetId);
                 if (clientUserId == targetId || isMod) return 3;
                 TLObject target = selectedObject.getFromPeerObject();
+                String name = "";
+                if (target instanceof TLRPC.User u && !StringUtils.isEmpty(u.first_name)) {
+                    name = " " + u.first_name;
+                } else if (target instanceof TLRPC.Chat c && !StringUtils.isEmpty(c.title)) {
+                    name = " " + c.title;
+                }
 
                 new AlertDialog.Builder(getContext())
                         .setTitle(getAppName())
-                        .setMessage(getString(R.string.ConfirmBamHammer))
+                        .setMessage(formatString(R.string.ConfirmBamHammerName, name))
                         .setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.OK), (a, i) -> {
                             // ban
                             if (target == null) {
