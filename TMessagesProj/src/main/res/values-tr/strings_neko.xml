@@ -313,4 +313,8 @@
     <string name="CloudflareCredentialsDialog">Cloudflare Hesap ID ve API anahtarını ayarlayın.\n**Nasıl elde edebilirim?**</string>
     <string name="CloudflareCredentialsObtainDesc">1. Cloudflare panelini açın ve kendi hesabınızla oturum açın\n\n2. AI seçeneğini yan menüden genişletin ve Workers AI seçeneğine tıklayın\n\n3. REST API Kullan seçeneğine tıklayın\n\n4. Bu ekrandaki Hesap ID\'yi not edin ve bir API anahtarı oluşturun.</string>
     <string name="SwipeActionInTopicList">Konu listesinde kaydırma eylemi (Gizle/Göster)</string>
+    <string name="DisablePullDownSearch">Aramak için Aşağı Kaydırmayı Devre Dışı Bırak</string>
+    <string name="AllowBotInDirectShare">Botları direkt paylaşım hedefi olarak kabul et</string>
+    <string name="AllowTestingUpdate">Test sürümlerini de güncelleme kontrolüne dahil et</string>
+    <string name="enhancedFileLoaderWarning">Bu özellik indirme hızınızda özellikle Premium hesabınız yoksa negatif etkilere sebep olabilir, emin misiniz?</string>
 </resources>
