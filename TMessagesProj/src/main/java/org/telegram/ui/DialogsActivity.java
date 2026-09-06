@@ -16,6 +16,8 @@ import static org.telegram.messenger.LocaleController.formatPluralStringComma;
 import static org.telegram.messenger.LocaleController.formatString;
 import static org.telegram.messenger.LocaleController.getString;
 import static org.telegram.ui.Components.AlertsCreator.createClearOrDeleteDialogsAlert;
+import static org.telegram.ui.Components.ChatActivityEnterView.deleteAfterSendMessageIds;
+import static org.telegram.ui.Components.ChatActivityEnterView.deleteAfterSendRetries;
 
 import android.Manifest;
 import android.animation.Animator;
@@ -285,6 +287,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11144,6 +11147,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             updateVisibleRows(0);
         } else if (id == NotificationCenter.messageReceivedByAck || id == NotificationCenter.messageReceivedByServer || id == NotificationCenter.messageSendError) {
             updateVisibleRows(MessagesController.UPDATE_MASK_SEND_STATE);
+            if (id != NotificationCenter.messageSendError) maybeDeleteMessages(args);
         } else if (id == NotificationCenter.didSetPasscode) {
             checkUi_itemPasscodeVisibility();
         } else if (id == NotificationCenter.needReloadRecentDialogsSearch) {
@@ -15014,5 +15018,58 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             actionBar.createMenu().requestLayout();
             actionBar.requestLayout();
         }
+    }
+    private void maybeDeleteMessages(Object... args) {
+        if (args.length < 4) return;
+        long did = (Long) args[3];
+        Integer newMsgId = (Integer) args[1];
+        Integer oldMsgId = (Integer) args[0];
+        HashSet<Integer> idSet = deleteAfterSendMessageIds.getOrDefault(did, new HashSet<>());
+
+        if (oldMsgId != null && oldMsgId < 0 && idSet != null && idSet.contains(oldMsgId)) {
+            idSet.remove(oldMsgId);
+            scheduleDeleteAfterSend(newMsgId, did, 0);
+        }
+    }
+
+    private void scheduleDeleteAfterSend(int serverId, long dialogId, int attempt) {
+        AndroidUtilities.runOnUIThread(() -> {
+            long[] data = deleteAfterSendRetries.getOrDefault(dialogId, new HashMap<>()).get(serverId);
+            if (data != null && (long) data[0] != dialogId) {
+                return;
+            }
+            if (data == null) {
+                deleteAfterSendRetries.compute(dialogId, (k, v) -> {
+                    if (v == null) v = new HashMap<>();
+                    v.put(serverId, new long[]{dialogId});
+                    return v;
+                });
+            }
+            ArrayList<Integer> ids = new ArrayList<>();
+            ids.add(serverId);
+            getMessagesController().deleteMessages(ids, null, null, dialogId, true, 0, false, 0, null, /*(int) parentFragment.getTopicId()*/ 0, false, 0, (success, error) -> {
+                if (success) {
+                    AndroidUtilities.runOnUIThread(() -> {
+                        HashMap<Integer, long[]> m = deleteAfterSendRetries.get(dialogId);
+                        if (m != null) synchronized (m) {
+                            m.remove(serverId);
+                        }
+                    });
+                    return;
+                }
+                String err = error != null ? error.text : "unknown";
+                Log.d("030-del", "delete-after-send retry: dialog=" + dialogId + " msgId=" + serverId + " attempt=" + (attempt + 1) + " error=" + err);
+                if (attempt + 1 >= 10) {
+                    AndroidUtilities.runOnUIThread(() -> {
+                        HashMap<Integer, long[]> m = deleteAfterSendRetries.get(dialogId);
+                        if (m != null) synchronized (m) {
+                            m.remove(serverId);
+                        }
+                    });
+                    return;
+                }
+                scheduleDeleteAfterSend(serverId, dialogId, attempt + 1);
+            });
+        }, 300L + Math.min(attempt, 6) * 69L);
     }
 }

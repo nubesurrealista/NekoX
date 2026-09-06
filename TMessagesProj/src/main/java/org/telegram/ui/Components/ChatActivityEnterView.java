@@ -237,6 +237,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import kotlin.Unit;
@@ -784,8 +785,8 @@ public class ChatActivityEnterView extends FrameLayout implements
     private boolean allowGifs;
 
     private boolean collectDeleteAfterSendIds;
-    private final HashSet<Integer> deleteAfterSendMessageIds = new HashSet<>();
-    private final HashMap<Integer, long[]> deleteAfterSendRetries = new HashMap<>();
+    public static final ConcurrentHashMap<Long, HashSet<Integer>> deleteAfterSendMessageIds = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<Long, HashMap<Integer, long[]>> deleteAfterSendRetries = new ConcurrentHashMap<>();
 
     private int lastSizeChangeValue1;
     private boolean lastSizeChangeValue2;
@@ -8832,7 +8833,11 @@ public class ChatActivityEnterView extends FrameLayout implements
         sendMessageParams.messageObjectsListener = messages -> {
             if (collectDeleteAfterSendIds) {
                 for (MessageObject message : messages) {
-                    deleteAfterSendMessageIds.add(message.getId());
+                    deleteAfterSendMessageIds.compute(dialog_id, (k, v) -> {
+                        if (v == null) v = new HashSet<>();
+                        v.add(message.getId());
+                        return v;
+                    });
                 }
             }
         };
@@ -8840,24 +8845,38 @@ public class ChatActivityEnterView extends FrameLayout implements
 
     private void scheduleDeleteAfterSend(int serverId, long dialogId, int attempt) {
         AndroidUtilities.runOnUIThread(() -> {
-            long[] data = deleteAfterSendRetries.get(serverId);
+            long[] data = deleteAfterSendRetries.getOrDefault(dialogId, new HashMap<>()).get(serverId);
             if (data != null && (long) data[0] != dialogId) {
                 return;
             }
             if (data == null) {
-                deleteAfterSendRetries.put(serverId, new long[]{dialogId});
+                deleteAfterSendRetries.compute(dialogId, (k, v) -> {
+                    if (v == null) v = new HashMap<>();
+                    v.put(serverId, new long[]{dialogId});
+                    return v;
+                });
             }
             ArrayList<Integer> ids = new ArrayList<>();
             ids.add(serverId);
             accountInstance.getMessagesController().deleteMessages(ids, null, null, dialogId, true, 0, false, 0, null, (int) parentFragment.getTopicId(), false, 0, (success, error) -> {
                 if (success) {
-                    AndroidUtilities.runOnUIThread(() -> deleteAfterSendRetries.remove(serverId));
+                    AndroidUtilities.runOnUIThread(() -> {
+                        HashMap<Integer, long[]> m = deleteAfterSendRetries.get(dialogId);
+                        if (m != null) synchronized (m) {
+                            m.remove(serverId);
+                        }
+                    });
                     return;
                 }
                 String err = error != null ? error.text : "unknown";
                 Log.d("030-del", "delete-after-send retry: dialog=" + dialogId + " msgId=" + serverId + " attempt=" + (attempt + 1) + " error=" + err);
                 if (attempt + 1 >= 10) {
-                    AndroidUtilities.runOnUIThread(() -> deleteAfterSendRetries.remove(serverId));
+                    AndroidUtilities.runOnUIThread(() -> {
+                        HashMap<Integer, long[]> m = deleteAfterSendRetries.get(dialogId);
+                        if (m != null) synchronized (m) {
+                            m.remove(serverId);
+                        }
+                    });
                     return;
                 }
                 scheduleDeleteAfterSend(serverId, dialogId, attempt + 1);
@@ -15066,8 +15085,9 @@ public class ChatActivityEnterView extends FrameLayout implements
                     setSlowModeTimer(info.slowmode_next_send_date);
                 }
             }
-            if (did == dialog_id && oldMsgId != null && oldMsgId < 0 && deleteAfterSendMessageIds.contains(oldMsgId)) {
-                deleteAfterSendMessageIds.remove(oldMsgId);
+            HashSet<Integer> idSet = deleteAfterSendMessageIds.getOrDefault(did, new HashSet<>());
+            if (did == dialog_id && oldMsgId != null && oldMsgId < 0 && idSet.contains(oldMsgId)) {
+                idSet.remove(oldMsgId);
                 scheduleDeleteAfterSend(newMsgId, did, 0);
             }
         } else if (id == NotificationCenter.sendingMessagesChanged) {
@@ -15077,7 +15097,14 @@ public class ChatActivityEnterView extends FrameLayout implements
         } else if (id == NotificationCenter.messageSendError) {
             Integer msgId = (Integer) args[0];
             if (msgId != null) {
-                deleteAfterSendMessageIds.remove(msgId);
+                if (args.length > 1 && args[1] instanceof Long) {
+                    HashSet<Integer> set = deleteAfterSendMessageIds.get((Long) args[1]);
+                    if (set != null) {
+                        set.remove(msgId);
+                    }
+                } else {
+                    deleteAfterSendMessageIds.forEach((dialogId, set) -> set.remove(msgId));
+                }
             }
         } else if (id == NotificationCenter.audioRecordTooShort) {
             audioToSend = null;

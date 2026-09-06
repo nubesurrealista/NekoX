@@ -189,6 +189,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import kotlin.Unit;
 import moe.hx030.momogram.MomoConfig;
 import moe.hx030.momogram.MomoConfig;
+import moe.hx030.momogram.NekoXConfig;
 import moe.hx030.momogram.transtale.TranslateDb;
 import moe.hx030.momogram.transtale.Translator;
 import moe.hx030.momogram.transtale.TranslatorKt;
@@ -3747,6 +3748,14 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                             return Unit.INSTANCE;
                         });
                     });
+
+            if (NekoXConfig.isDeveloper()) {
+                Runnable r = () -> {
+                    // TODO
+                };
+                options.add(R.drawable.msg_delete, null, getString(R.string.DeleteAfterSend),
+                        Theme.key_actionBarDefaultSubmenuItemIcon, Theme.key_actionBarDefaultSubmenuItem, r, r);
+            }
 
             options.setupSelectors();
             messageSendPreview.setItemOptions(options);

@@ -936,7 +936,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     obj.messageOwner.send_state = MessageObject.MESSAGE_SEND_STATE_SEND_ERROR;
                     obj.messageOwner.errorAllowedPriceStars = 0;
                     obj.messageOwner.errorNewPriceStars = 0;
-                    getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, obj.getId());
+                    getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, obj.getId(), obj.getDialogId());
                     processSentMessage(obj.getId());
                     removeFromUploadingMessages(obj.getId(), scheduled);
                 }
@@ -946,7 +946,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 obj.messageOwner.send_state = MessageObject.MESSAGE_SEND_STATE_SEND_ERROR;
                 obj.messageOwner.errorAllowedPriceStars = 0;
                 obj.messageOwner.errorNewPriceStars = 0;
-                getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, obj.getId());
+                getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, obj.getId(), obj.getDialogId());
                 processSentMessage(obj.getId());
                 removeFromUploadingMessages(obj.getId(), scheduled);
             }
@@ -1724,7 +1724,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             if (encryptedChat == null) {
                 getMessagesStorage().markMessageAsSendError(messageObject.messageOwner, messageObject.scheduled ? 1 : 0);
                 messageObject.messageOwner.send_state = MessageObject.MESSAGE_SEND_STATE_SEND_ERROR;
-                getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, messageObject.getId());
+                getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, messageObject.getId(), messageObject.getDialogId());
                 processSentMessage(messageObject.getId());
                 return false;
             }
@@ -2805,7 +2805,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                                 }
                                 AndroidUtilities.runOnUIThread(() -> {
                                     newMsgObj1.send_state = MessageObject.MESSAGE_SEND_STATE_SEND_ERROR;
-                                    getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, newMsgObj1.id);
+                                    getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, newMsgObj1.id, newMsgObj1.dialog_id);
                                     processSentMessage(newMsgObj1.id);
                                     removeFromSendingMessages(newMsgObj1.id, scheduleDate != 0);
                                 });
@@ -4435,7 +4435,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     retryMessageObject.messageOwner.send_state = MessageObject.MESSAGE_SEND_STATE_SEND_ERROR;
                     retryMessageObject.messageOwner.errorNewPriceStars = 0;
                     retryMessageObject.messageOwner.errorAllowedPriceStars = 0;
-                    getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, retryMessageObject.getId());
+                    getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, retryMessageObject.getId(), retryMessageObject.getDialogId());
                     processSentMessage(retryMessageObject.getId());
                 }
                 return;
@@ -6447,7 +6447,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 newMsgObj.messageOwner.errorAllowedPriceStars = 0;
                 newMsgObj.messageOwner.errorNewPriceStars = 0;
             }
-            getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, newMsg.id);
+            getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, newMsg.id, newMsg.dialog_id);
             processSentMessage(newMsg.id);
         }
     }
@@ -7666,7 +7666,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                                 newMsgObj.send_state = MessageObject.MESSAGE_SEND_STATE_SEND_ERROR;
                                 newMsgObj.errorAllowedPriceStars = 0;
                                 newMsgObj.errorNewPriceStars = 0;
-                                getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, newMsgObj.id);
+                                getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, newMsgObj.id, newMsgObj.dialog_id);
                                 processSentMessage(newMsgObj.id);
                                 removeFromSendingMessages(newMsgObj.id, scheduled);
                             }
@@ -7882,7 +7882,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                             StarsController.getInstance(currentAccount).showPriceChangedToast(Arrays.asList(msgObj));
                             getMessagesStorage().updateMessageCustomParams(MessageObject.getDialogId(newMsgObj), newMsgObj);
                         }
-                        getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, newMsgObj.id);
+                        getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, newMsgObj.id, newMsgObj.dialog_id);
                         processSentMessage(newMsgObj.id);
                         removeFromSendingMessages(newMsgObj.id, scheduled);
                     }
@@ -8421,7 +8421,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                             StarsController.getInstance(currentAccount).showPriceChangedToast(Arrays.asList(msgObj));
                             getMessagesStorage().updateMessageCustomParams(MessageObject.getDialogId(newMsgObj), newMsgObj);
                         }
-                        getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, newMsgObj.id);
+                        getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, newMsgObj.id, newMsgObj.dialog_id);
                         processSentMessage(newMsgObj.id);
                         removeFromSendingMessages(newMsgObj.id, scheduled);
                     }

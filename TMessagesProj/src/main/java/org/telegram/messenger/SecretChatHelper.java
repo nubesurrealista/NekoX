@@ -780,7 +780,7 @@ public class SecretChatHelper extends BaseController {
                         getMessagesStorage().markMessageAsSendError(newMsgObj, 0);
                         AndroidUtilities.runOnUIThread(() -> {
                             newMsgObj.send_state = MessageObject.MESSAGE_SEND_STATE_SEND_ERROR;
-                            getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, newMsgObj.id);
+                            getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, newMsgObj.id, newMsgObj.dialog_id);
                             getSendMessagesHelper().processSentMessage(newMsgObj.id);
                             getSendMessagesHelper().removeFromSendingMessages(newMsgObj.id, false);
                         });
