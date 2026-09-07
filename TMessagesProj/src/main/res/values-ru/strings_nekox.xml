@@ -350,4 +350,7 @@
     <string name="SecretChatRestorePasswordPrompt">Введите пароль, используемый для шифрования этой резервной копии.</string>
     <string name="SecretChatRestoreSuccess">Восстановить секретные чаты</string>
     <string name="MomoSettingNotFound">Указанная опция не существует</string>
+    <string name="AlwaysTryHevcCodec">Использовать HEVC для сжатия видео</string>
+    <string name="AlwaysSaveToDownloads">Всегда сохранять в папку downloads</string>
+    <string name="HideFAB">Скрыть плавающие кнопки в списке чатов</string>
 </resources>

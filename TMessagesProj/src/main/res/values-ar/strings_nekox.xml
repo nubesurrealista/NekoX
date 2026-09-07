@@ -360,4 +360,6 @@
     <string name="PasteFileRef">إرسال الملفات باستخدام المرجع</string>
     <string name="AttachCopiedFileRef">هل تريد إرفاق الملفات المنسوخة وتحديث الرسالة؟\n(ملاحظة: لا يمكن إرفاق سوى الملف الأول.)</string>
     <string name="HigherMinimumMenuHeight">زيادة الحد الأدنى لارتفاع القائمة المنبثقة</string>
+    <string name="HideFAB">إخفاء الأزرار العائمة في قائمة الدردشة</string>
+    <string name="HideMessageSideButtons">إخفاء الزر الجانبي بجوار الرسائل</string>
 </resources>

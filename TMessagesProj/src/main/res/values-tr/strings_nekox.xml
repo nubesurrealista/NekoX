@@ -219,4 +219,20 @@
     <string name="UseCamera2API">Camera 2 altyapısına geç</string>
     <string name="UnblockDeleted">Silinenleri Kısıtlamayı Bırak</string>
     <string name="PGPEncrypt">Şifrele</string>
+    <string name="UnblockDeletedWarn">**Bütün silinmiş kullanıcıların/botların** engelini kaldırmak istediğinize emin misiniz?</string>
+    <string name="PGPDecryptErr">Şifre çözme başarısız oldu, OpenKeychain UI ile tekrar denemek için Tamam tuşuna basın.</string>
+    <string name="DebugSendLogsExt">Günlükleri harici uygulamayla paylaş</string>
+    <string name="FeatureRemoved">Bu özellik kaldırıldı.</string>
+    <string name="FeatureRemovedWhy">Neden?</string>
+    <string name="FeatureRemovedWhyDetail">11.7.0 sürümünde başlayan üst kaynak değişimleriyle birlikte bazı sunucu bağımlı özellikler artık çalışmamaya başladı ve bu da istemcinin kararlılığının bozulmasına yol açtı. Bu sorun ileride belki çözülebilir ancak bunun ne zaman çözüleceğini sormayın.</string>
+    <string name="ShowQuickReconnect">Yeniden bağlanırken hızlıca yeniden bağlanma tuşunu göster</string>
+    <string name="ShowQuickReconnectDesc">Önceki yeniden bağlanma hilesi gibi ancak elle tetiklenir.</string>
+    <string name="ShowPhoneNumTemp">Telefon numarasını göster</string>
+    <string name="PauseInactiveTabAnimation">Aktif olmayan sekmelerin animasyonlarını duraklat</string>
+    <string name="MuteBlockedFromGroup">Grup içinde engellenmiş bir kullanıcıdan gelen mesajları sustur</string>
+    <string name="MuteBotsFromGroup">Grup içinde botlardan gelen mesajları sustur</string>
+    <string name="MuteBotsFromGroupDesc">Yöneticiler için bilinen mesajlar susturulmayacak</string>
+    <string name="BanForAllModeratingChats">Bu kullanıcıyı yönettiğiniz bütün sohbetlerde engellemek ister misiniz?</string>
+    <string name="BannedForChats">%1$s %2$d sohbette engellendi</string>
+    <string name="FBan">FBan</string>
 </resources>
